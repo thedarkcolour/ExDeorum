@@ -1,0 +1,9 @@
+{
+  "parent": "exnihiloreborn:block/template_crucible",
+  "textures": {
+    "inside": "minecraft:block/spruce_log",
+    "top": "minecraft:block/spruce_log",
+    "bottom": "minecraft:block/spruce_log",
+    "side": "minecraft:block/spruce_log"
+  }
+}

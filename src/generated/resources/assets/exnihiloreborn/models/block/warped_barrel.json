@@ -1,0 +1,6 @@
+{
+  "parent": "exnihiloreborn:block/template_barrel",
+  "textures": {
+    "barrel": "minecraft:block/warped_planks"
+  }
+}

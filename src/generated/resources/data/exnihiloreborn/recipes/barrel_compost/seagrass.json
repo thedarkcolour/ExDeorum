@@ -1,0 +1,7 @@
+{
+  "type": "exnihiloreborn:barrel_compost",
+  "ingredient": {
+    "item": "minecraft:seagrass"
+  },
+  "volume": 80
+}

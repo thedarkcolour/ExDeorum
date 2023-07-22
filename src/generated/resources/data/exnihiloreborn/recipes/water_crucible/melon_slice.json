@@ -1,0 +1,10 @@
+{
+  "type": "exnihiloreborn:water_crucible",
+  "ingredient": {
+    "item": "minecraft:melon_slice"
+  },
+  "fluid": {
+    "FluidName": "minecraft:water",
+    "Amount": 50
+  }
+}

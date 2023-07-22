@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "x x",
+    "x x",
+    "xzx"
+  ],
+  "key": {
+    "x": {
+      "item": "minecraft:spruce_planks"
+    },
+    "z": {
+      "item": "minecraft:spruce_slab"
+    }
+  },
+  "result": {
+    "item": "exnihiloreborn:spruce_barrel"
+  }
+}

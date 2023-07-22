@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "x x",
+    "x x",
+    "xzx"
+  ],
+  "key": {
+    "x": {
+      "item": "minecraft:crimson_planks"
+    },
+    "z": {
+      "item": "minecraft:crimson_slab"
+    }
+  },
+  "result": {
+    "item": "exnihiloreborn:crimson_barrel"
+  }
+}

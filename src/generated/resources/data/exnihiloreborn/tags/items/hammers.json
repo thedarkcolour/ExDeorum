@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "exnihiloreborn:wooden_hammer",
+    "exnihiloreborn:stone_hammer",
+    "exnihiloreborn:golden_hammer",
+    "exnihiloreborn:iron_hammer",
+    "exnihiloreborn:diamond_hammer",
+    "exnihiloreborn:netherite_hammer"
+  ]
+}

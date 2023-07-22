@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "x x",
+    "x x",
+    "xzx"
+  ],
+  "key": {
+    "x": {
+      "item": "minecraft:jungle_planks"
+    },
+    "z": {
+      "item": "minecraft:jungle_slab"
+    }
+  },
+  "result": {
+    "item": "exnihiloreborn:jungle_barrel"
+  }
+}

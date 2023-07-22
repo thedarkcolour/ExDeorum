@@ -1,0 +1,3 @@
+@net.minecraft.MethodsReturnNonnullByDefault
+@javax.annotation.ParametersAreNonnullByDefault
+package thedarkcolour.exnihiloreborn.block;

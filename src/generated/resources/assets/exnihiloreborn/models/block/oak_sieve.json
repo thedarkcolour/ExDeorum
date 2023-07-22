@@ -1,0 +1,6 @@
+{
+  "parent": "exnihiloreborn:block/template_sieve",
+  "textures": {
+    "texture": "minecraft:block/oak_planks"
+  }
+}

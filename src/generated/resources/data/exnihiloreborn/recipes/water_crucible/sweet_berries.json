@@ -1,0 +1,10 @@
+{
+  "type": "exnihiloreborn:water_crucible",
+  "ingredient": {
+    "item": "minecraft:sweet_berries"
+  },
+  "fluid": {
+    "FluidName": "minecraft:water",
+    "Amount": 50
+  }
+}

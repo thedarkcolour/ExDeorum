@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "exnihiloreborn:compressed_wooden_hammer",
+    "exnihiloreborn:compressed_stone_hammer",
+    "exnihiloreborn:compressed_golden_hammer",
+    "exnihiloreborn:compressed_iron_hammer",
+    "exnihiloreborn:compressed_diamond_hammer",
+    "exnihiloreborn:compressed_netherite_hammer"
+  ]
+}

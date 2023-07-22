@@ -1,0 +1,10 @@
+{
+  "type": "exnihiloreborn:water_crucible",
+  "ingredient": {
+    "tag": "minecraft:saplings"
+  },
+  "fluid": {
+    "FluidName": "minecraft:water",
+    "Amount": 100
+  }
+}

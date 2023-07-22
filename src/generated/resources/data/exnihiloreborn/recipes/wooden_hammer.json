@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " x ",
+    "xv ",
+    "  v"
+  ],
+  "key": {
+    "x": {
+      "tag": "minecraft:planks"
+    },
+    "v": {
+      "tag": "forge:rods/wooden"
+    }
+  },
+  "result": {
+    "item": "exnihiloreborn:wooden_hammer"
+  }
+}

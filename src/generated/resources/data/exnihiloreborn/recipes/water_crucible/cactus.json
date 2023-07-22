@@ -1,0 +1,10 @@
+{
+  "type": "exnihiloreborn:water_crucible",
+  "ingredient": {
+    "item": "minecraft:cactus"
+  },
+  "fluid": {
+    "FluidName": "minecraft:water",
+    "Amount": 250
+  }
+}

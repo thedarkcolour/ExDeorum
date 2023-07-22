@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " x ",
+    "xv ",
+    "  v"
+  ],
+  "key": {
+    "x": {
+      "tag": "minecraft:stone_crafting_materials"
+    },
+    "v": {
+      "tag": "forge:rods/wooden"
+    }
+  },
+  "result": {
+    "item": "exnihiloreborn:stone_hammer"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "x x",
+    "x x",
+    "xzx"
+  ],
+  "key": {
+    "x": {
+      "tag": "minecraft:oak_logs"
+    },
+    "z": {
+      "item": "minecraft:oak_slab"
+    }
+  },
+  "result": {
+    "item": "exnihiloreborn:oak_crucible"
+  }
+}

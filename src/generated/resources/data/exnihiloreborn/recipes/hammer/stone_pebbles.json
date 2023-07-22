@@ -1,0 +1,55 @@
+{
+  "type": "exnihiloreborn:hammer",
+  "ingredient": [
+    {
+      "item": "minecraft:stone"
+    },
+    {
+      "item": "minecraft:cracked_stone_bricks"
+    }
+  ],
+  "rewards": [
+    {
+      "item": {
+        "id": "exnihiloreborn:stone_pebble",
+        "Count": 1
+      },
+      "chance": 1.0
+    },
+    {
+      "item": {
+        "id": "exnihiloreborn:stone_pebble",
+        "Count": 1
+      },
+      "chance": 0.75
+    },
+    {
+      "item": {
+        "id": "exnihiloreborn:stone_pebble",
+        "Count": 1
+      },
+      "chance": 0.75
+    },
+    {
+      "item": {
+        "id": "exnihiloreborn:stone_pebble",
+        "Count": 1
+      },
+      "chance": 0.5
+    },
+    {
+      "item": {
+        "id": "exnihiloreborn:stone_pebble",
+        "Count": 1
+      },
+      "chance": 0.25
+    },
+    {
+      "item": {
+        "id": "exnihiloreborn:stone_pebble",
+        "Count": 1
+      },
+      "chance": 0.05
+    }
+  ]
+}

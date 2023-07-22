@@ -1,0 +1,26 @@
+{
+  "type": "exnihiloreborn:hammer",
+  "ingredient": [
+    {
+      "item": "minecraft:sandstone"
+    },
+    {
+      "item": "minecraft:cut_sandstone"
+    },
+    {
+      "item": "minecraft:chiseled_sandstone"
+    },
+    {
+      "item": "minecraft:smooth_sandstone"
+    }
+  ],
+  "rewards": [
+    {
+      "item": {
+        "id": "minecraft:sand",
+        "Count": 1
+      },
+      "chance": 1.0
+    }
+  ]
+}

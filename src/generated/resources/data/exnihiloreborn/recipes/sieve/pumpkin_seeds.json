@@ -1,0 +1,16 @@
+{
+  "type": "exnihiloreborn:sieve",
+  "mesh": "exnihiloreborn:string_mesh",
+  "ingredient": {
+    "item": "minecraft:dirt"
+  },
+  "rewards": [
+    {
+      "item": {
+        "id": "minecraft:pumpkin_seeds",
+        "Count": 1
+      },
+      "chance": 0.35
+    }
+  ]
+}

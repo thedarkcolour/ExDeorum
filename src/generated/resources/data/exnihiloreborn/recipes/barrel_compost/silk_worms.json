@@ -1,0 +1,12 @@
+{
+  "type": "exnihiloreborn:barrel_compost",
+  "ingredient": [
+    {
+      "item": "exnihiloreborn:silk_worm"
+    },
+    {
+      "item": "exnihiloreborn:cooked_silk_worm"
+    }
+  ],
+  "volume": 40
+}

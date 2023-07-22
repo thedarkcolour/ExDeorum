@@ -1,0 +1,15 @@
+{
+  "type": "exnihiloreborn:hammer",
+  "ingredient": {
+    "item": "minecraft:gravel"
+  },
+  "rewards": [
+    {
+      "item": {
+        "id": "minecraft:sand",
+        "Count": 1
+      },
+      "chance": 1.0
+    }
+  ]
+}

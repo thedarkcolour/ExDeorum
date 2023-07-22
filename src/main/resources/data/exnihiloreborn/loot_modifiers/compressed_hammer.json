@@ -1,0 +1,10 @@
+{
+    "conditions": [
+        {
+            "condition": "minecraft:match_tool",
+            "predicate": {
+                "tag": "exnihiloreborn:compressed_hammers"
+            }
+        }
+    ]
+}

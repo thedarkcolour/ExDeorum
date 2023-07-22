@@ -1,0 +1,58 @@
+{
+  "type": "exnihiloreborn:sieve",
+  "mesh": "exnihiloreborn:string_mesh",
+  "ingredient": {
+    "item": "minecraft:dirt"
+  },
+  "rewards": [
+    {
+      "item": {
+        "id": "exnihiloreborn:stone_pebble",
+        "Count": 1
+      },
+      "chance": 1.0
+    },
+    {
+      "item": {
+        "id": "exnihiloreborn:stone_pebble",
+        "Count": 1
+      },
+      "chance": 1.0
+    },
+    {
+      "item": {
+        "id": "exnihiloreborn:stone_pebble",
+        "Count": 1
+      },
+      "chance": 1.0
+    },
+    {
+      "item": {
+        "id": "exnihiloreborn:stone_pebble",
+        "Count": 1
+      },
+      "chance": 0.5
+    },
+    {
+      "item": {
+        "id": "exnihiloreborn:stone_pebble",
+        "Count": 1
+      },
+      "chance": 0.5
+    },
+    {
+      "item": {
+        "id": "exnihiloreborn:stone_pebble",
+        "Count": 1
+      },
+      "chance": 0.1
+    },
+    {
+      "item": {
+        "id": "exnihiloreborn:stone_pebble",
+        "Count": 1
+      },
+      "chance": 0.1
+    }
+  ]
+}

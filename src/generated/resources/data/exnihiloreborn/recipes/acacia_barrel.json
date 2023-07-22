@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "x x",
+    "x x",
+    "xzx"
+  ],
+  "key": {
+    "x": {
+      "item": "minecraft:acacia_planks"
+    },
+    "z": {
+      "item": "minecraft:acacia_slab"
+    }
+  },
+  "result": {
+    "item": "exnihiloreborn:acacia_barrel"
+  }
+}

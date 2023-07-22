@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "x x",
+    "x x",
+    "xzx"
+  ],
+  "key": {
+    "x": {
+      "tag": "minecraft:acacia_logs"
+    },
+    "z": {
+      "item": "minecraft:acacia_slab"
+    }
+  },
+  "result": {
+    "item": "exnihiloreborn:acacia_crucible"
+  }
+}

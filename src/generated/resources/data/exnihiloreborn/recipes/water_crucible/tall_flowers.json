@@ -1,0 +1,10 @@
+{
+  "type": "exnihiloreborn:water_crucible",
+  "ingredient": {
+    "tag": "minecraft:tall_flowers"
+  },
+  "fluid": {
+    "FluidName": "minecraft:water",
+    "Amount": 200
+  }
+}

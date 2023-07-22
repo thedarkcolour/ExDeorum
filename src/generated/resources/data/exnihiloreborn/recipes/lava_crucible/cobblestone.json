@@ -1,0 +1,10 @@
+{
+  "type": "exnihiloreborn:lava_crucible",
+  "ingredient": {
+    "item": "minecraft:cobblestone"
+  },
+  "fluid": {
+    "FluidName": "minecraft:lava",
+    "Amount": 250
+  }
+}

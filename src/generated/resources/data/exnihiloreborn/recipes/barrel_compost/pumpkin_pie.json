@@ -1,0 +1,7 @@
+{
+  "type": "exnihiloreborn:barrel_compost",
+  "ingredient": {
+    "item": "minecraft:pumpkin_pie"
+  },
+  "volume": 150
+}

@@ -1,0 +1,9 @@
+{
+  "parent": "exnihiloreborn:block/template_crucible",
+  "textures": {
+    "inside": "minecraft:block/acacia_log",
+    "top": "minecraft:block/acacia_log",
+    "bottom": "minecraft:block/acacia_log",
+    "side": "minecraft:block/acacia_log"
+  }
+}

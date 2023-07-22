@@ -1,0 +1,10 @@
+{
+  "type": "exnihiloreborn:lava_crucible",
+  "ingredient": {
+    "item": "minecraft:netherrack"
+  },
+  "fluid": {
+    "FluidName": "minecraft:lava",
+    "Amount": 1000
+  }
+}

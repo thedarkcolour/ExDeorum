@@ -1,0 +1,26 @@
+modLoader="javafml"
+loaderVersion="[36,)"
+license="All rights reserved"
+
+[[mods]]
+modId="exnihiloreborn"
+version="${file.jarVersion}"
+displayName="Ex Nihilo Reborn"
+credits="Herobrine knows all."
+authors="TheDarkColour"
+description='''
+Gives life to the original Ex Nihilo.
+'''
+[[dependencies.exnihiloreborn]]
+    modId="forge"
+    mandatory=true
+    versionRange="[36,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.exnihiloreborn]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.16.5,1.17)"
+    ordering="NONE"
+    side="BOTH"

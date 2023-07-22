@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "x x",
+    "x x",
+    "xzx"
+  ],
+  "key": {
+    "x": {
+      "tag": "minecraft:jungle_logs"
+    },
+    "z": {
+      "item": "minecraft:jungle_slab"
+    }
+  },
+  "result": {
+    "item": "exnihiloreborn:jungle_crucible"
+  }
+}

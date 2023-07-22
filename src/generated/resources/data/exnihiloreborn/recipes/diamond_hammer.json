@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " x ",
+    "xv ",
+    "  v"
+  ],
+  "key": {
+    "x": {
+      "tag": "forge:gems/diamond"
+    },
+    "v": {
+      "tag": "forge:rods/wooden"
+    }
+  },
+  "result": {
+    "item": "exnihiloreborn:diamond_hammer"
+  }
+}
