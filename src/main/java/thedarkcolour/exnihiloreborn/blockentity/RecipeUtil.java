@@ -6,7 +6,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import thedarkcolour.exnihiloreborn.recipe.SingleIngredientRecipe;
-import thedarkcolour.exnihiloreborn.recipe.sieve.AbstractSieveRecipe;
+import thedarkcolour.exnihiloreborn.recipe.sieve.SieveRecipe;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,7 +14,7 @@ import java.util.Collections;
 import java.util.List;
 
 public final class RecipeUtil {
-    public static <T extends AbstractSieveRecipe> List<T> getSieveResults(MinecraftServer server, RecipeType<T> type, ItemStack mesh, ItemStack item) {
+    public static <T extends SieveRecipe> List<T> getSieveResults(MinecraftServer server, RecipeType<T> type, ItemStack mesh, ItemStack item) {
         ArrayList<T> recipes = new ArrayList<>();
 
         for (T recipe : byType(server, type)) {

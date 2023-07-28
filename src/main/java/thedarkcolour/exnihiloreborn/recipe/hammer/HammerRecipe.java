@@ -22,6 +22,6 @@ public class HammerRecipe extends RewardRecipe {
 
     @Override
     public RecipeType<?> getType() {
-        return ERecipeTypes.HAMMER;
+        return ERecipeTypes.HAMMER.get();
     }
 }

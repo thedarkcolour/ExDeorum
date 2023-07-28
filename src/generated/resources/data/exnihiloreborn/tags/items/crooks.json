@@ -1,8 +1,6 @@
 {
-  "replace": false,
   "values": [
     "exnihiloreborn:crook",
-    "exnihiloreborn:compressed_crook",
     "exnihiloreborn:bone_crook"
   ]
 }

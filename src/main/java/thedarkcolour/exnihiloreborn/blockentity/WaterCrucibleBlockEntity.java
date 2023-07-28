@@ -2,23 +2,20 @@ package thedarkcolour.exnihiloreborn.blockentity;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
 import net.minecraft.core.BlockPos;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import org.apache.commons.lang3.tuple.Pair;
 import thedarkcolour.exnihiloreborn.recipe.crucible.CrucibleRecipe;
 import thedarkcolour.exnihiloreborn.registry.EBlockEntities;
 import thedarkcolour.exnihiloreborn.registry.ERecipeTypes;
 
 public class WaterCrucibleBlockEntity extends AbstractCrucibleBlockEntity {
-    public static final Cache<Pair<Item, CompoundNBT>, CrucibleRecipe> RECIPES_CACHE = CacheBuilder.newBuilder().maximumSize(12).build();
+    public static final Cache<CacheKey, CrucibleRecipe> RECIPES_CACHE = CacheBuilder.newBuilder().maximumSize(12).build();
 
     public WaterCrucibleBlockEntity(BlockPos pos, BlockState state) {
         super(EBlockEntities.WATER_CRUCIBLE.get(), pos, state);
@@ -31,7 +28,7 @@ public class WaterCrucibleBlockEntity extends AbstractCrucibleBlockEntity {
 
     @Override
     protected RecipeType<CrucibleRecipe> getRecipeType() {
-        return ERecipeTypes.WATER_CRUCIBLE;
+        return ERecipeTypes.WATER_CRUCIBLE.get();
     }
 
     @Override

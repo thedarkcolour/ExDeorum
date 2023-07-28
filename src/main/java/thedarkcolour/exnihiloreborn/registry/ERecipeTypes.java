@@ -1,27 +1,24 @@
 package thedarkcolour.exnihiloreborn.registry;
 
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.RegistryObject;
 import thedarkcolour.exnihiloreborn.ExNihiloReborn;
 import thedarkcolour.exnihiloreborn.recipe.barrel.BarrelCompostRecipe;
 import thedarkcolour.exnihiloreborn.recipe.crucible.CrucibleRecipe;
-import thedarkcolour.exnihiloreborn.recipe.hammer.CompressedHammerRecipe;
 import thedarkcolour.exnihiloreborn.recipe.hammer.HammerRecipe;
-import thedarkcolour.exnihiloreborn.recipe.sieve.CompressedSieveRecipe;
 import thedarkcolour.exnihiloreborn.recipe.sieve.SieveRecipe;
 
 public class ERecipeTypes {
-    public static final RecipeType<BarrelCompostRecipe> BARREL_COMPOST = RecipeType.register(ExNihiloReborn.ID + ":barrel_compost");
+    public static final DeferredRegister<RecipeType<?>> RECIPE_TYPES = DeferredRegister.create(Registries.RECIPE_TYPE, ExNihiloReborn.ID);
 
-    public static final RecipeType<CrucibleRecipe> LAVA_CRUCIBLE = RecipeType.register(ExNihiloReborn.ID + ":lava_crucible");
-    public static final RecipeType<CrucibleRecipe> WATER_CRUCIBLE = RecipeType.register(ExNihiloReborn.ID + ":water_crucible");
+    public static final RegistryObject<RecipeType<BarrelCompostRecipe>> BARREL_COMPOST = RECIPE_TYPES.register("barrel_compost", () -> RecipeType.simple(ERecipeTypes.BARREL_COMPOST.getId()));
 
-    public static final RecipeType<HammerRecipe> HAMMER = RecipeType.register(ExNihiloReborn.ID + ":hammer");
-    public static final RecipeType<CompressedHammerRecipe> COMPRESSED_HAMMER = RecipeType.register(ExNihiloReborn.ID + ":compressed_hammer");
+    public static final RegistryObject<RecipeType<CrucibleRecipe>> LAVA_CRUCIBLE = RECIPE_TYPES.register("lava_crucible", () -> RecipeType.simple(ERecipeTypes.LAVA_CRUCIBLE.getId()));
+    public static final RegistryObject<RecipeType<CrucibleRecipe>> WATER_CRUCIBLE = RECIPE_TYPES.register("water_crucible", () -> RecipeType.simple(ERecipeTypes.WATER_CRUCIBLE.getId()));
 
+    public static final RegistryObject<RecipeType<HammerRecipe>> HAMMER = RECIPE_TYPES.register("hammer", () -> RecipeType.simple(ERecipeTypes.HAMMER.getId()));
 
-    public static final RecipeType<SieveRecipe> SIEVE = RecipeType.register(ExNihiloReborn.ID + ":sieve");
-    public static final RecipeType<CompressedSieveRecipe> COMPRESSED_SIEVE = RecipeType.register(ExNihiloReborn.ID + ":compressed_sieve");
-
-    // Trigger classloading
-    public static void init() {}
+    public static final RegistryObject<RecipeType<SieveRecipe>> SIEVE = RECIPE_TYPES.register("sieve", () -> RecipeType.simple(ERecipeTypes.SIEVE.getId()));
 }

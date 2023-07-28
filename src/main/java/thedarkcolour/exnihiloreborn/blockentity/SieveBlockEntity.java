@@ -17,7 +17,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import thedarkcolour.exnihiloreborn.recipe.Reward;
-import thedarkcolour.exnihiloreborn.recipe.sieve.AbstractSieveRecipe;
+import thedarkcolour.exnihiloreborn.recipe.sieve.SieveRecipe;
 import thedarkcolour.exnihiloreborn.registry.EBlockEntities;
 import thedarkcolour.exnihiloreborn.registry.EItems;
 import thedarkcolour.exnihiloreborn.registry.ERecipeTypes;
@@ -37,7 +37,7 @@ public class SieveBlockEntity extends EBlockEntity {
 
     // Does not persist in NBT, just a cache
     // todo invalidate on /reload
-    private List<? extends AbstractSieveRecipe> currentRecipe = Collections.emptyList();
+    private List<? extends SieveRecipe> currentRecipe = Collections.emptyList();
 
     public SieveBlockEntity(BlockPos pos, BlockState state) {
         super(EBlockEntities.SIEVE.get(), pos, state);
@@ -100,7 +100,7 @@ public class SieveBlockEntity extends EBlockEntity {
             if (!isClientSide) {
                 // Check against cached recipe
                 if (!currentRecipe.isEmpty()) {
-                    for (AbstractSieveRecipe recipe : currentRecipe) {
+                    for (SieveRecipe recipe : currentRecipe) {
                         if (!recipe.test(mesh.getItem(), playerItem)) {
                             return InteractionResult.CONSUME;
                         }
@@ -114,7 +114,7 @@ public class SieveBlockEntity extends EBlockEntity {
                 }
             }
         } else {
-            // todo mesh efficiency
+            // todo mesh efficiency enchantment
             progress -= SIEVE_INTERVAL;
 
             if (progress <= 0) {
@@ -140,7 +140,7 @@ public class SieveBlockEntity extends EBlockEntity {
         var pos = getBlockPos();
         var rand = level.random;
 
-        for (AbstractSieveRecipe recipe : currentRecipe) {
+        for (SieveRecipe recipe : currentRecipe) {
             for (Reward reward : recipe.getRewards()) {
                 if (rand.nextFloat() < reward.getChance()) {
                     var itemEntity = new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, reward.getItem().copy());
@@ -167,12 +167,12 @@ public class SieveBlockEntity extends EBlockEntity {
         return item.getStackInSlot(0);
     }
 
-    public List<? extends AbstractSieveRecipe> getResults(ItemStack stack) {
+    public List<? extends SieveRecipe> getResults(ItemStack stack) {
         return RecipeUtil.getSieveResults(level.getServer(), getRecipeType(), mesh, stack);
     }
 
-    public RecipeType<? extends AbstractSieveRecipe> getRecipeType() {
-        return ERecipeTypes.SIEVE;
+    public RecipeType<? extends SieveRecipe> getRecipeType() {
+        return ERecipeTypes.SIEVE.get();
     }
 
     private class ItemHandler extends ItemStackHandler {

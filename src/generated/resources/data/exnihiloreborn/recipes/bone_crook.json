@@ -1,16 +1,18 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "xx",
-    " x",
-    " x"
-  ],
+  "category": "equipment",
   "key": {
     "x": {
       "item": "minecraft:bone"
     }
   },
+  "pattern": [
+    "xx",
+    " x",
+    " x"
+  ],
   "result": {
     "item": "exnihiloreborn:bone_crook"
-  }
+  },
+  "show_notification": true
 }

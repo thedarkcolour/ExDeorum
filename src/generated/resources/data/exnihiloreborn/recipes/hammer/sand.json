@@ -5,11 +5,11 @@
   },
   "rewards": [
     {
+      "chance": 1.0,
       "item": {
-        "id": "minecraft:sand",
-        "Count": 1
-      },
-      "chance": 1.0
+        "Count": 1,
+        "id": "minecraft:sand"
+      }
     }
   ]
 }

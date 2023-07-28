@@ -75,6 +75,11 @@ repositories {
         url = 'https://maven.blamejared.com/'
         content { includeGroup "mezz.jei" }
     }
+    maven {
+        name = 'ModKit'
+        url 'https://jitpack.io'
+        content { includeGroup 'com.github.thedarkcolour' }
+    }
 }
 
 dependencies {
@@ -89,6 +94,8 @@ dependencies {
     compileOnly(fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}"))
     // at runtime, use the full JEI jar for Forge
     runtimeOnly(fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}"))
+    // not required for players
+    implementation fg.deobf('com.github.thedarkcolour:ModKit:ea67392fd6')
 }
 
 def replaceProperties = [ mc_version: mc_version, mod_version: version ]
@@ -107,7 +114,12 @@ processResources {
         fileTree(dir: outputs.files.asPath, include: "**/*.json").each {
             File file ->
                 //noinspection UnnecessaryQualifiedReference
-                file.text = groovy.json.JsonOutput.toJson(new groovy.json.JsonSlurper().parse(file))
+                try {
+                    file.text = groovy.json.JsonOutput.toJson(new groovy.json.JsonSlurper().parse(file))
+                } catch (Exception e) {
+                    println "Unable to minify file ${file.name}"
+                    throw new RuntimeException(e)
+                }
         }
     }
 }

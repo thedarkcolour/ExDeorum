@@ -2,10 +2,10 @@
   "type": "exnihiloreborn:barrel_compost",
   "ingredient": [
     {
-      "item": "minecraft:dried_kelp"
+      "item": "minecraft:kelp"
     },
     {
-      "item": "minecraft:kelp"
+      "item": "minecraft:dried_kelp"
     }
   ],
   "volume": 40

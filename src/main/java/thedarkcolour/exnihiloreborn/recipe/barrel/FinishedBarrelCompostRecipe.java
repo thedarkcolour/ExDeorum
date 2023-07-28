@@ -2,15 +2,15 @@ package thedarkcolour.exnihiloreborn.recipe.barrel;
 
 import com.google.gson.JsonObject;
 import net.minecraft.advancements.Advancement;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import thedarkcolour.exnihiloreborn.registry.ERecipeSerializers;
 
 import javax.annotation.Nullable;
 
-public class FinishedBarrelCompostRecipe implements IFinishedRecipe {
+public class FinishedBarrelCompostRecipe implements FinishedRecipe {
     private final Advancement.Builder advancement = Advancement.Builder.advancement();
     private final ResourceLocation id;
     private final Ingredient ingredient;
@@ -34,7 +34,7 @@ public class FinishedBarrelCompostRecipe implements IFinishedRecipe {
     }
 
     @Override
-    public IRecipeSerializer<?> getType() {
+    public RecipeSerializer<?> getType() {
         return ERecipeSerializers.BARREL_COMPOST.get();
     }
 

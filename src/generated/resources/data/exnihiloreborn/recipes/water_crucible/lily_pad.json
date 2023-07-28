@@ -1,0 +1,10 @@
+{
+  "type": "exnihiloreborn:water_crucible",
+  "fluid": {
+    "Amount": 100,
+    "FluidName": "minecraft:water"
+  },
+  "ingredient": {
+    "item": "minecraft:lily_pad"
+  }
+}

@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:smoking",
-  "ingredient": {
-    "item": "exnihiloreborn:silk_worm"
-  },
-  "result": "exnihiloreborn:cooked_silk_worm",
-  "experience": 0.1,
-  "cookingtime": 200
-}

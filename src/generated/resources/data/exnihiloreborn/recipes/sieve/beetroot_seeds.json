@@ -1,16 +1,16 @@
 {
   "type": "exnihiloreborn:sieve",
-  "mesh": "exnihiloreborn:string_mesh",
   "ingredient": {
     "item": "minecraft:dirt"
   },
+  "mesh": "exnihiloreborn:string_mesh",
   "rewards": [
     {
+      "chance": 0.35,
       "item": {
-        "id": "minecraft:beetroot_seeds",
-        "Count": 1
-      },
-      "chance": 0.35
+        "Count": 1,
+        "id": "minecraft:beetroot_seeds"
+      }
     }
   ]
 }

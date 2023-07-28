@@ -1,0 +1,38 @@
+{
+  "parent": "exnihiloreborn:core/silk_worm",
+  "criteria": {
+    "has_string_mesh": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "exnihiloreborn:string_mesh"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.exnihiloreborn.core.string_mesh.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "exnihiloreborn:string_mesh"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.exnihiloreborn.core.string_mesh.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_string_mesh"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,0 +1,12 @@
+{
+  "type": "exnihiloreborn:barrel_compost",
+  "ingredient": [
+    {
+      "item": "minecraft:mutton"
+    },
+    {
+      "item": "minecraft:cooked_mutton"
+    }
+  ],
+  "volume": 125
+}

@@ -1,50 +1,43 @@
 package thedarkcolour.exnihiloreborn.item;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.LeavesBlock;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemUseContext;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.block.LeavesBlock;
 import thedarkcolour.exnihiloreborn.blockentity.InfestedLeavesBlockEntity;
 import thedarkcolour.exnihiloreborn.registry.EBlocks;
 
 public class SilkWormItem extends Item {
-    public SilkWormItem(Properties properties) {
+    public SilkWormItem(Item.Properties properties) {
         super(properties);
     }
 
     @Override
-    public ActionResultType useOn(ItemUseContext context) {
-        BlockPos pos = context.getClickedPos();
-        World level = context.getLevel();
-        BlockState state = level.getBlockState(pos);
+    public InteractionResult useOn(UseOnContext context) {
+        var pos = context.getClickedPos();
+        var level = context.getLevel();
+        var state = level.getBlockState(pos);
 
         if (!state.isAir()) {
             if (state.is(BlockTags.LEAVES)) {
-                // Replace with infested block
-                level.setBlock(pos, EBlocks.INFESTED_LEAVES.get().defaultBlockState()
-                        .setValue(LeavesBlock.DISTANCE, state.getValue(LeavesBlock.DISTANCE))
-                        .setValue(LeavesBlock.PERSISTENT, state.getValue(LeavesBlock.PERSISTENT)), 2);
+                if (!level.isClientSide) {
+                    // Replace with infested block
+                    level.setBlock(pos, EBlocks.INFESTED_LEAVES.get().defaultBlockState()
+                            .setValue(LeavesBlock.DISTANCE, state.getValue(LeavesBlock.DISTANCE))
+                            .setValue(LeavesBlock.PERSISTENT, state.getValue(LeavesBlock.PERSISTENT)), 2);
 
-                // Set mimic
-                TileEntity te = level.getBlockEntity(pos);
-                if (te instanceof InfestedLeavesBlockEntity) {
-                    ((InfestedLeavesBlockEntity) te).setMimic(state);
-                } else {
-                    return ActionResultType.FAIL;
+                    // Set mimic
+                    if (level.getBlockEntity(pos) instanceof InfestedLeavesBlockEntity leaves) {
+                        leaves.setMimic(state);
+                    }
+                    context.getItemInHand().shrink(1);
                 }
 
-                // Decrease item
-                context.getItemInHand().shrink(1);
-
-                return ActionResultType.sidedSuccess(level.isClientSide);
+                return InteractionResult.sidedSuccess(level.isClientSide);
             }
         }
 
-        return ActionResultType.FAIL;
+        return InteractionResult.PASS;
     }
 }

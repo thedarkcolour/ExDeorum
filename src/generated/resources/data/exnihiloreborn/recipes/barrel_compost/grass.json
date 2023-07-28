@@ -1,0 +1,12 @@
+{
+  "type": "exnihiloreborn:barrel_compost",
+  "ingredient": [
+    {
+      "item": "minecraft:grass"
+    },
+    {
+      "item": "minecraft:fern"
+    }
+  ],
+  "volume": 100
+}

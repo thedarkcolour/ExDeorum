@@ -1,0 +1,12 @@
+{
+  "type": "exnihiloreborn:barrel_compost",
+  "ingredient": [
+    {
+      "item": "minecraft:cod"
+    },
+    {
+      "item": "minecraft:cooked_cod"
+    }
+  ],
+  "volume": 100
+}

@@ -3,22 +3,22 @@ package thedarkcolour.exnihiloreborn.recipe.hammer;
 import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import thedarkcolour.exnihiloreborn.recipe.CodecUtil;
 import thedarkcolour.exnihiloreborn.recipe.Reward;
 
 import javax.annotation.Nullable;
 
-public class FinishedHammerRecipe implements IFinishedRecipe {
+public class FinishedHammerRecipe implements FinishedRecipe {
     private final ResourceLocation id;
     private final Ingredient ingredient;
     private final ImmutableList<Reward> rewards;
-    private final IRecipeSerializer<?> serializer;
+    private final RecipeSerializer<?> serializer;
 
-    public FinishedHammerRecipe(IRecipeSerializer<?> serializer, ResourceLocation id, Ingredient ingredient, ImmutableList<Reward> rewards) {
+    public FinishedHammerRecipe(RecipeSerializer<?> serializer, ResourceLocation id, Ingredient ingredient, ImmutableList<Reward> rewards) {
         this.serializer = serializer;
         this.id = id;
         this.ingredient = ingredient;
@@ -44,7 +44,7 @@ public class FinishedHammerRecipe implements IFinishedRecipe {
     }
 
     @Override
-    public IRecipeSerializer<?> getType() {
+    public RecipeSerializer<?> getType() {
         return serializer;
     }
 

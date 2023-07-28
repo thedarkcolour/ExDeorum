@@ -1,19 +1,21 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "x x",
-    "x x",
-    "xzx"
-  ],
+  "category": "misc",
   "key": {
-    "x": {
-      "item": "minecraft:stone"
-    },
-    "z": {
+    "m": {
       "item": "minecraft:stone_slab"
+    },
+    "s": {
+      "item": "minecraft:stone"
     }
   },
+  "pattern": [
+    "s s",
+    "s s",
+    "sms"
+  ],
   "result": {
     "item": "exnihiloreborn:stone_barrel"
-  }
+  },
+  "show_notification": true
 }

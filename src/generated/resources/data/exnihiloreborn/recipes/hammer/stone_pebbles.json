@@ -10,46 +10,46 @@
   ],
   "rewards": [
     {
+      "chance": 1.0,
       "item": {
-        "id": "exnihiloreborn:stone_pebble",
-        "Count": 1
-      },
-      "chance": 1.0
+        "Count": 1,
+        "id": "exnihiloreborn:stone_pebble"
+      }
     },
     {
+      "chance": 0.75,
       "item": {
-        "id": "exnihiloreborn:stone_pebble",
-        "Count": 1
-      },
-      "chance": 0.75
+        "Count": 1,
+        "id": "exnihiloreborn:stone_pebble"
+      }
     },
     {
+      "chance": 0.75,
       "item": {
-        "id": "exnihiloreborn:stone_pebble",
-        "Count": 1
-      },
-      "chance": 0.75
+        "Count": 1,
+        "id": "exnihiloreborn:stone_pebble"
+      }
     },
     {
+      "chance": 0.5,
       "item": {
-        "id": "exnihiloreborn:stone_pebble",
-        "Count": 1
-      },
-      "chance": 0.5
+        "Count": 1,
+        "id": "exnihiloreborn:stone_pebble"
+      }
     },
     {
+      "chance": 0.25,
       "item": {
-        "id": "exnihiloreborn:stone_pebble",
-        "Count": 1
-      },
-      "chance": 0.25
+        "Count": 1,
+        "id": "exnihiloreborn:stone_pebble"
+      }
     },
     {
+      "chance": 0.05,
       "item": {
-        "id": "exnihiloreborn:stone_pebble",
-        "Count": 1
-      },
-      "chance": 0.05
+        "Count": 1,
+        "id": "exnihiloreborn:stone_pebble"
+      }
     }
   ]
 }

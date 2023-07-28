@@ -6,8 +6,8 @@ import java.util.function.Function;
 
 public class TopCompatExNihiloReborn implements Function<ITheOneProbe, Void> {
     @Override
-    public Void apply(ITheOneProbe iTheOneProbe) {
-        iTheOneProbe.registerProvider(new InfestedLeavesInfoProvider());
+    public Void apply(ITheOneProbe top) {
+        top.registerProvider(new InfestedLeavesInfoProvider());
 
         return null;
     }

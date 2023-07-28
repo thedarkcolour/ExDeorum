@@ -1,34 +1,27 @@
 package thedarkcolour.exnihiloreborn.client.ter;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.RenderTypeLookup;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.client.model.data.EmptyModelData;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraftforge.client.RenderTypeHelper;
+import net.minecraftforge.client.model.data.ModelData;
 import thedarkcolour.exnihiloreborn.blockentity.InfestedLeavesBlockEntity;
 
-public class InfestedLeavesRenderer extends TileEntityRenderer<InfestedLeavesBlockEntity> {
-    public InfestedLeavesRenderer(TileEntityRendererDispatcher dispatcher) {
-        super(dispatcher);
-    }
-
+public class InfestedLeavesRenderer implements BlockEntityRenderer<InfestedLeavesBlockEntity> {
     @Override
-    public void render(InfestedLeavesBlockEntity te, float partialTicks, MatrixStack stack, IRenderTypeBuffer buffer, int light, int overlay) {
-        Minecraft mc = Minecraft.getInstance();
-        BlockState state = te.getMimic();
+    public void render(InfestedLeavesBlockEntity te, float partialTicks, PoseStack stack, MultiBufferSource buffer, int light, int overlay) {
+        var mc = Minecraft.getInstance();
+        var state = te.getMimic();
 
         // Default to oak leaves
         if (state == null) state = Blocks.OAK_LEAVES.defaultBlockState();
 
         // If something is wrong render default leaves
         if (!te.hasLevel()) {
-            Minecraft.getInstance().getBlockRenderer().renderBlock(state, stack, buffer, light, overlay, EmptyModelData.INSTANCE);
+            Minecraft.getInstance().getBlockRenderer().renderSingleBlock(state, stack, buffer, light, overlay, ModelData.EMPTY, null);
             return;
         }
 
@@ -39,9 +32,9 @@ public class InfestedLeavesRenderer extends TileEntityRenderer<InfestedLeavesBlo
         int col = mc.getBlockColors().getColor(state, te.getLevel(), te.getBlockPos(), 0);
 
         // Average the white color with the biome color
-        float r = MathHelper.lerp(progress, (col >> 16) & 0xff, 255.0f);
-        float g = MathHelper.lerp(progress, (col >> 8 ) & 0xff, 255.0f);
-        float b = MathHelper.lerp(progress, (col >> 0 ) & 0xff, 255.0f);
+        float r = Mth.lerp(progress, (col >> 16) & 0xff, 255.0f);
+        float g = Mth.lerp(progress, (col >> 8 ) & 0xff, 255.0f);
+        float b = Mth.lerp(progress, (col) & 0xff, 255.0f);
 
         // Cap to 255
         float red = (Math.min(255, r)) / 255.0f;
@@ -49,7 +42,9 @@ public class InfestedLeavesRenderer extends TileEntityRenderer<InfestedLeavesBlo
         float blue = (Math.min(255, b)) / 255.0f;
 
         // Render
-        IBakedModel model = mc.getBlockRenderer().getBlockModel(state);
-        mc.getBlockRenderer().getModelRenderer().renderModel(stack.last(), buffer.getBuffer(RenderTypeLookup.getRenderType(state, false)), state, model, red, green, blue, light, overlay, EmptyModelData.INSTANCE);
+        var model = mc.getBlockRenderer().getBlockModel(state);
+        for (var renderType : model.getRenderTypes(state, te.getLevel().random, ModelData.EMPTY)) {
+            mc.getBlockRenderer().getModelRenderer().renderModel(stack.last(), buffer.getBuffer(RenderTypeHelper.getEntityRenderType(renderType, false)), state, model, red, green, blue, light, overlay, ModelData.EMPTY, renderType);
+        }
     }
 }

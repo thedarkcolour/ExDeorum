@@ -1,19 +1,21 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "x x",
-    "x x",
-    "xzx"
-  ],
+  "category": "misc",
   "key": {
-    "x": {
+    "m": {
       "item": "exnihiloreborn:porcelain_clay"
     },
-    "z": {
+    "s": {
       "item": "exnihiloreborn:porcelain_clay"
     }
   },
+  "pattern": [
+    "s s",
+    "s s",
+    "sms"
+  ],
   "result": {
     "item": "exnihiloreborn:unfired_crucible"
-  }
+  },
+  "show_notification": true
 }

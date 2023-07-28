@@ -1,19 +1,21 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "x x",
-    "x x",
-    "xzx"
-  ],
+  "category": "misc",
   "key": {
-    "x": {
-      "tag": "minecraft:oak_logs"
-    },
-    "z": {
+    "m": {
       "item": "minecraft:oak_slab"
+    },
+    "s": {
+      "item": "minecraft:oak_log"
     }
   },
+  "pattern": [
+    "s s",
+    "s s",
+    "sms"
+  ],
   "result": {
     "item": "exnihiloreborn:oak_crucible"
-  }
+  },
+  "show_notification": true
 }

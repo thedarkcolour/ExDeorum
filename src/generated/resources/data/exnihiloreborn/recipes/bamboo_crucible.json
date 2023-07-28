@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "m": {
+      "item": "minecraft:bamboo_slab"
+    },
+    "s": {
+      "item": "minecraft:bamboo_block"
+    }
+  },
+  "pattern": [
+    "s s",
+    "s s",
+    "sms"
+  ],
+  "result": {
+    "item": "exnihiloreborn:bamboo_crucible"
+  },
+  "show_notification": true
+}

@@ -1,10 +1,13 @@
 package thedarkcolour.exnihiloreborn.data;
 
-import net.minecraft.data.DataGenerator;
-import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
+import thedarkcolour.exnihiloreborn.ExNihiloReborn;
+import thedarkcolour.modkit.data.DataHelper;
 
 // these two annotations basically mean modEventBus.addListener(Data::generateData)
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -12,20 +15,25 @@ public class Data {
     @SubscribeEvent
     public static void generateData(GatherDataEvent event) {
         // Two things used by data generators
-        DataGenerator gen = event.getGenerator(); // writes to json
-        ExistingFileHelper helper = event.getExistingFileHelper(); // reads existing files like pngs and parent models
+        var gen = event.getGenerator(); // writes to json
+        var output = gen.getPackOutput();
+        var lookup = event.getLookupProvider();
+        var helper = event.getExistingFileHelper(); // reads existing files like pngs and parent models
 
-        if (event.includeServer()) {
-            EBlockTagsProvider blockTags = new EBlockTagsProvider(gen, helper);
+        var dataHelper = new DataHelper(ExNihiloReborn.ID, event);
+        dataHelper.createEnglish(true, English::addTranslations);
+        dataHelper.createBlockModels(BlockModels::addBlockModels);
+        dataHelper.createItemModels(true, true, false, ItemModels::addItemModels);
 
-            gen.addProvider(new ERecipeProvider(gen));
-            gen.addProvider(new ELootProvider(gen));
-            gen.addProvider(blockTags);
-            gen.addProvider(new EItemTagProvider(gen, blockTags, helper));
-        }
-        if (event.includeClient()) {
-            gen.addProvider(new EModelProvider(gen, helper));
-            gen.addProvider(new ELangProvider(gen));
-        }
+        dataHelper.createRecipes(Recipes::addRecipes);
+
+        var blockTags = new BlockTags(output, lookup, helper);
+
+        gen.addProvider(true, new LootTables(output));
+        gen.addProvider(true, blockTags);
+        gen.addProvider(true, new ItemTags(output, lookup, blockTags.contentsGetter(), helper));
+        gen.addProvider(true, new StructureTags(output, lookup, helper));
+        gen.addProvider(true, new WorldPresetTags(output, lookup, helper));
+        gen.addProvider(true, new Advancements(output, lookup, helper));
     }
 }

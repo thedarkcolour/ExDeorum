@@ -3,25 +3,25 @@ package thedarkcolour.exnihiloreborn.recipe.sieve;
 import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.Item;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraftforge.registries.ForgeRegistries;
 import thedarkcolour.exnihiloreborn.recipe.CodecUtil;
 import thedarkcolour.exnihiloreborn.recipe.Reward;
 
 import javax.annotation.Nullable;
 
-public class FinishedSieveRecipe implements IFinishedRecipe {
+public class FinishedSieveRecipe implements FinishedRecipe {
     private final ResourceLocation id;
     private final Item mesh;
     private final Ingredient ingredient;
     private final ImmutableList<Reward> rewards;
-    private final IRecipeSerializer<?> serializer;
+    private final RecipeSerializer<?> serializer;
 
-    public FinishedSieveRecipe(IRecipeSerializer<?> serializer, ResourceLocation id, Item mesh, Ingredient ingredient, ImmutableList<Reward> rewards) {
+    public FinishedSieveRecipe(RecipeSerializer<?> serializer, ResourceLocation id, Item mesh, Ingredient ingredient, ImmutableList<Reward> rewards) {
         this.serializer = serializer;
         this.id = id;
         this.mesh = mesh;
@@ -49,7 +49,7 @@ public class FinishedSieveRecipe implements IFinishedRecipe {
     }
 
     @Override
-    public IRecipeSerializer<?> getType() {
+    public RecipeSerializer<?> getType() {
         return serializer;
     }
 

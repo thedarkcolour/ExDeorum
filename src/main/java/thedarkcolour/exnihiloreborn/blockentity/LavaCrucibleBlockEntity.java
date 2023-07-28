@@ -16,7 +16,7 @@ import thedarkcolour.exnihiloreborn.registry.ERecipeTypes;
 public class LavaCrucibleBlockEntity extends AbstractCrucibleBlockEntity {
     public static final Cache<CacheKey, CrucibleRecipe> RECIPES_CACHE = CacheBuilder.newBuilder().maximumSize(12).build();
 
-    // todo split this off somewhere else
+    // todo add KubeJS support for this
     private static final Object2IntMap<Block> HEAT_REGISTRY = new Object2IntOpenHashMap<>();
 
     static {
@@ -28,7 +28,6 @@ public class LavaCrucibleBlockEntity extends AbstractCrucibleBlockEntity {
         HEAT_REGISTRY.put(Blocks.FIRE, 5);
         HEAT_REGISTRY.put(Blocks.SOUL_FIRE, 7);
     }
-
 
     public LavaCrucibleBlockEntity(BlockPos pos, BlockState state) {
         super(EBlockEntities.LAVA_CRUCIBLE.get(), pos, state);
@@ -43,7 +42,7 @@ public class LavaCrucibleBlockEntity extends AbstractCrucibleBlockEntity {
 
     @Override
     protected RecipeType<CrucibleRecipe> getRecipeType() {
-        return ERecipeTypes.LAVA_CRUCIBLE;
+        return ERecipeTypes.LAVA_CRUCIBLE.get();
     }
 
     @Override

@@ -1,19 +1,21 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "x x",
-    "x x",
-    "xzx"
-  ],
+  "category": "misc",
   "key": {
-    "x": {
-      "item": "minecraft:birch_planks"
-    },
-    "z": {
+    "m": {
       "item": "minecraft:birch_slab"
+    },
+    "s": {
+      "item": "minecraft:birch_planks"
     }
   },
+  "pattern": [
+    "s s",
+    "s s",
+    "sms"
+  ],
   "result": {
     "item": "exnihiloreborn:birch_barrel"
-  }
+  },
+  "show_notification": true
 }

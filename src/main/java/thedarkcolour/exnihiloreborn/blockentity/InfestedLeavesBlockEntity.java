@@ -1,7 +1,14 @@
 package thedarkcolour.exnihiloreborn.blockentity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.state.BlockState;
 import thedarkcolour.exnihiloreborn.registry.EBlockEntities;
 import thedarkcolour.exnihiloreborn.registry.EBlocks;
@@ -21,25 +28,6 @@ public class InfestedLeavesBlockEntity extends EBlockEntity {
         super(EBlockEntities.INFESTED_LEAVES.get(), pos, state);
     }
 
-    @Override
-    public void tick() {
-        // Do progress
-        if (progress < 1.0f) {
-            progress = Math.min(1.0f, progress + PROGRESS_INTERVAL);
-        }
-
-        // If the leave is infested enough, advance the spread timer
-        if (!level.isClientSide && progress > 0.6f) {
-            ++spreadTimer;
-
-            // Attempt to spread and reset the timer
-            if (spreadTimer >= SPREAD_INTERVAL) {
-                trySpread();
-                spreadTimer = level.random.nextInt(10);
-            }
-        }
-    }
-
     // Attempt to convert a leaf block within 1 block radius around this block
     private void trySpread() {
         // Get random offset
@@ -53,53 +41,38 @@ public class InfestedLeavesBlockEntity extends EBlockEntity {
 
         // Test block at the position
         if (state.is(BlockTags.LEAVES)) {
-
             // Spread and keep distance/persistent properties
             level.setBlock(targetPos, EBlocks.INFESTED_LEAVES.get().defaultBlockState()
                     .setValue(LeavesBlock.DISTANCE, state.getValue(LeavesBlock.DISTANCE))
                     .setValue(LeavesBlock.PERSISTENT, state.getValue(LeavesBlock.PERSISTENT)),
                     2);
-            TileEntity te = level.getBlockEntity(targetPos);
+            var te = level.getBlockEntity(targetPos);
 
             // Set mimic state of other block
-            if (te instanceof InfestedLeavesBlockEntity) {
-                ((InfestedLeavesBlockEntity) te).setMimic(state);
-                te.setChanged();
+            if (te instanceof InfestedLeavesBlockEntity leaves) {
+                leaves.setMimic(state);
+                leaves.setChanged();
             }
         }
     }
 
     @Override
-    public void load(BlockState state, CompoundNBT nbt) {
-        super.load(state, nbt);
+    public void load(CompoundTag nbt) {
+        super.load(nbt);
 
-        mimic = NBTUtil.readBlockState(nbt.getCompound("Mimic"));
-        progress = nbt.getFloat("Progress");
+        // From PistonMovingBlockEntity
+        @SuppressWarnings("deprecation")
+        var holderLookup = this.level != null ? this.level.holderLookup(Registries.BLOCK) : BuiltInRegistries.BLOCK.asLookup();
+        mimic = NbtUtils.readBlockState(holderLookup, nbt.getCompound("mimic"));
+        progress = nbt.getFloat("progress");
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT nbt) {
-        nbt.put("Mimic", NBTUtil.writeBlockState(mimic));
-        nbt.putFloat("Progress", progress);
-        return super.save(nbt);
-    }
+    public void saveAdditional(CompoundTag nbt) {
+        super.saveAdditional(nbt);
 
-    @Override
-    public CompoundNBT getUpdateTag() {
-        // Used in getUpdatePacket
-        return save(new CompoundNBT());
-    }
-
-    @Override
-    public SUpdateTileEntityPacket getUpdatePacket() {
-        // Sends a packet with updated NBT whenever setChanged is called
-        return new SUpdateTileEntityPacket(getBlockPos(), 244, getUpdateTag());
-    }
-
-    @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-        // load properties from server's NBT
-        load(null, pkt.getTag());
+        nbt.put("mimic", NbtUtils.writeBlockState(mimic));
+        nbt.putFloat("progress", progress);
     }
 
     public float getProgress() {
@@ -112,5 +85,26 @@ public class InfestedLeavesBlockEntity extends EBlockEntity {
 
     public void setMimic(BlockState mimic) {
         this.mimic = mimic;
+    }
+
+    public static class Ticker implements BlockEntityTicker<InfestedLeavesBlockEntity> {
+        @Override
+        public void tick(Level level, BlockPos pos, BlockState state, InfestedLeavesBlockEntity leaves) {
+            // Do progress
+            if (leaves.progress < 1.0f) {
+                leaves.progress = Math.min(1.0f, leaves.progress + PROGRESS_INTERVAL);
+            }
+
+            // If the leave is infested enough, advance the spread timer
+            if (!level.isClientSide && leaves.progress > 0.6f) {
+                ++leaves.spreadTimer;
+
+                // Attempt to spread and reset the timer
+                if (leaves.spreadTimer >= SPREAD_INTERVAL) {
+                    leaves.trySpread();
+                    leaves.spreadTimer = level.random.nextInt(10);
+                }
+            }
+        }
     }
 }

@@ -1,56 +1,79 @@
 package thedarkcolour.exnihiloreborn.loot;
 
-import com.google.gson.JsonObject;
-import net.minecraft.block.BlockState;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.LootParameters;
-import net.minecraft.loot.conditions.ILootCondition;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
+import net.minecraft.util.Mth;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraftforge.common.loot.IGlobalLootModifier;
 import net.minecraftforge.common.loot.LootModifier;
+import org.jetbrains.annotations.NotNull;
 import thedarkcolour.exnihiloreborn.registry.EItems;
 
-import javax.annotation.Nonnull;
-import java.util.List;
-import java.util.Random;
-
 public class CrookLootModifier extends LootModifier {
+    public static final Codec<CrookLootModifier> CODEC = RecordCodecBuilder.create(inst -> {
+        return LootModifier.codecStart(inst).apply(inst, CrookLootModifier::new);
+    });
+
     private static final float[] SILK_WORM_FORTUNE_CHANCES = new float[] { 0.01f, 0.0111111114f, 0.0125f, 0.016666668f, 0.05f };
 
-    protected CrookLootModifier(ILootCondition[] conditionsIn) {
-        super(conditionsIn);
+    protected CrookLootModifier(LootItemCondition[] conditions) {
+        super(conditions);
     }
 
-    @Nonnull
     @Override
-    protected List<ItemStack> doApply(List<ItemStack> generatedLoot, LootContext context) {
-        BlockState state = context.getParamOrNull(LootParameters.BLOCK_STATE);
+    protected @NotNull ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
+        var state = context.getParamOrNull(LootContextParams.BLOCK_STATE);
+        var stack = context.getParamOrNull(LootContextParams.TOOL);
 
-        if (state.is(BlockTags.LEAVES)) {
-            Random level = context.getRandom();
-            ItemStack stack = context.getParamOrNull(LootParameters.TOOL);
+        if (state != null && stack != null && state.is(BlockTags.LEAVES)) {
+            var rand = context.getRandom();
 
-            if (level.nextFloat() < SILK_WORM_FORTUNE_CHANCES[EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, stack)]) {
-                generatedLoot.add(new ItemStack(EItems.SILK_WORM.get()));
+            if (stack.getEnchantmentLevel(Enchantments.SILK_TOUCH) == 0) {
+                var fortune = stack.getEnchantmentLevel(Enchantments.BLOCK_FORTUNE);
+                var repeats = Math.max(1, Mth.ceil(fortune / 3f));
+
+                if (rand.nextInt(100) == 0) {
+                    generatedLoot.add(new ItemStack(EItems.SILK_WORM.get()));
+                }
+
+                for (int i = 0; i < repeats; i++) {
+                    if (rand.nextFloat() < SILK_WORM_FORTUNE_CHANCES[fortune % 3]) {
+                        generatedLoot.add(new ItemStack(EItems.SILK_WORM.get()));
+                    }
+
+                    // crook gives an additional roll for drops
+                    var builder = new LootParams.Builder(context.getLevel());
+                    builder.withParameter(LootContextParams.BLOCK_STATE, context.getParam(LootContextParams.BLOCK_STATE));
+                    // avoid recursion
+                    var dummy = new ItemStack(Items.DEAD_BUSH);
+                    dummy.setTag(stack.getTag());
+                    builder.withParameter(LootContextParams.TOOL, dummy);
+
+                    if (context.hasParam(LootContextParams.THIS_ENTITY)) {
+                        builder.withParameter(LootContextParams.THIS_ENTITY, context.getParam(LootContextParams.THIS_ENTITY));
+                    }
+                    if (context.hasParam(LootContextParams.ORIGIN)) {
+                        builder.withParameter(LootContextParams.ORIGIN, context.getParam(LootContextParams.ORIGIN));
+                    }
+                    var reRoll = state.getDrops(builder);
+                    generatedLoot.addAll(reRoll);
+                }
             }
         }
 
         return generatedLoot;
     }
 
-    public static class Serializer extends GlobalLootModifierSerializer<CrookLootModifier> {
-        @Override
-        public CrookLootModifier read(ResourceLocation location, JsonObject object, ILootCondition[] conditions) {
-            return new CrookLootModifier(conditions);
-        }
-
-        @Override
-        public JsonObject write(CrookLootModifier instance) {
-            return makeConditions(instance.conditions);
-        }
+    @Override
+    public Codec<? extends IGlobalLootModifier> codec() {
+        return CODEC;
     }
 }

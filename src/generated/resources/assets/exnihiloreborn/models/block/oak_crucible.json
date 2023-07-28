@@ -1,9 +1,9 @@
 {
   "parent": "exnihiloreborn:block/template_crucible",
   "textures": {
-    "inside": "minecraft:block/oak_log",
-    "top": "minecraft:block/oak_log",
     "bottom": "minecraft:block/oak_log",
-    "side": "minecraft:block/oak_log"
+    "inside": "minecraft:block/oak_log",
+    "side": "minecraft:block/oak_log",
+    "top": "minecraft:block/oak_log"
   }
 }

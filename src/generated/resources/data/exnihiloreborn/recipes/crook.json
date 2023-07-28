@@ -1,16 +1,18 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "xx",
-    " x",
-    " x"
-  ],
+  "category": "equipment",
   "key": {
     "x": {
       "tag": "forge:rods/wooden"
     }
   },
+  "pattern": [
+    "xx",
+    " x",
+    " x"
+  ],
   "result": {
     "item": "exnihiloreborn:crook"
-  }
+  },
+  "show_notification": true
 }

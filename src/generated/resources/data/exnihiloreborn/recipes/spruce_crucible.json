@@ -1,19 +1,21 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "x x",
-    "x x",
-    "xzx"
-  ],
+  "category": "misc",
   "key": {
-    "x": {
-      "tag": "minecraft:spruce_logs"
-    },
-    "z": {
+    "m": {
       "item": "minecraft:spruce_slab"
+    },
+    "s": {
+      "item": "minecraft:spruce_log"
     }
   },
+  "pattern": [
+    "s s",
+    "s s",
+    "sms"
+  ],
   "result": {
     "item": "exnihiloreborn:spruce_crucible"
-  }
+  },
+  "show_notification": true
 }

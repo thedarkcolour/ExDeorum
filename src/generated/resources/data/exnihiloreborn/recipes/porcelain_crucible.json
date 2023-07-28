@@ -1,9 +1,10 @@
 {
   "type": "minecraft:smelting",
+  "category": "blocks",
+  "cookingtime": 200,
+  "experience": 0.1,
   "ingredient": {
     "item": "exnihiloreborn:unfired_crucible"
   },
-  "result": "exnihiloreborn:porcelain_crucible",
-  "experience": 0.1,
-  "cookingtime": 200
+  "result": "exnihiloreborn:porcelain_crucible"
 }

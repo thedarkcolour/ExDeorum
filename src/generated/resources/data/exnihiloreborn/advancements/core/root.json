@@ -1,0 +1,29 @@
+{
+  "criteria": {
+    "in_void_world": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "background": "exnihiloreborn:textures/gui/advancements/backgrounds/void.png",
+    "description": {
+      "translate": "advancements.exnihiloreborn.core.root.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "minecraft:oak_sapling"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.exnihiloreborn.core.root.title"
+    }
+  },
+  "requirements": [
+    [
+      "in_void_world"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

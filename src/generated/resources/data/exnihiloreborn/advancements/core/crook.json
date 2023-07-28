@@ -1,0 +1,33 @@
+{
+  "parent": "exnihiloreborn:core/root",
+  "criteria": {
+    "craft_crook": {
+      "conditions": {
+        "recipe_id": "exnihiloreborn:crook"
+      },
+      "trigger": "minecraft:recipe_crafted"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.exnihiloreborn.core.crook.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "exnihiloreborn:crook",
+      "nbt": "{Damage:0}"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.exnihiloreborn.core.crook.title"
+    }
+  },
+  "requirements": [
+    [
+      "craft_crook"
+    ]
+  ],
+  "sends_telemetry_event": true
+}
