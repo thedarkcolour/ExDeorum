@@ -1,67 +1,45 @@
 package thedarkcolour.exnihiloreborn.blockentity;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
-import thedarkcolour.exnihiloreborn.recipe.Reward;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
+import thedarkcolour.exnihiloreborn.recipe.RecipeUtil;
 import thedarkcolour.exnihiloreborn.recipe.sieve.SieveRecipe;
 import thedarkcolour.exnihiloreborn.registry.EBlockEntities;
-import thedarkcolour.exnihiloreborn.registry.EItems;
-import thedarkcolour.exnihiloreborn.registry.ERecipeTypes;
+import thedarkcolour.exnihiloreborn.tag.EItemTags;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.List;
+import java.util.Map;
 
 public class SieveBlockEntity extends EBlockEntity {
     public static final short MAX_SIEVE_CAPACITY = 100;
     public static final short SIEVE_INTERVAL = 10;
 
-    private final SieveBlockEntity.ItemHandler item = new SieveBlockEntity.ItemHandler();
+    private ItemStack contents = ItemStack.EMPTY;
     private ItemStack mesh = ItemStack.EMPTY;
     private short progress = 0; // Max is 100
-
-    // Does not persist in NBT, just a cache
-    // todo invalidate on /reload
-    private List<? extends SieveRecipe> currentRecipe = Collections.emptyList();
+    private float efficiency = 1f;
+    private float fortune = 1f;
 
     public SieveBlockEntity(BlockPos pos, BlockState state) {
         super(EBlockEntities.SIEVE.get(), pos, state);
-    }
-
-    // Capabilities
-    private final LazyOptional<IItemHandler> itemHandler = LazyOptional.of(() -> item);
-
-    @Nonnull
-    @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-        if (cap == ForgeCapabilities.ITEM_HANDLER) {
-            return itemHandler.cast();
-        }
-
-        return super.getCapability(cap, side);
     }
 
     @Override
     protected void saveAdditional(CompoundTag nbt) {
         super.saveAdditional(nbt);
 
-        nbt.put("item", item.serializeNBT());
-        nbt.putShort("Progress", progress);
+        nbt.put("contents", contents.serializeNBT());
+        nbt.putShort("progress", progress);
         if (!mesh.isEmpty()) {
             nbt.put("mesh", mesh.save(new CompoundTag()));
         }
@@ -69,10 +47,16 @@ public class SieveBlockEntity extends EBlockEntity {
 
     @Override
     public void load(CompoundTag nbt) {
-        item.deserializeNBT(nbt.getCompound("item"));
-        progress = nbt.getShort("progress");
+        if (nbt.contains("contents")) {
+            this.contents = ItemStack.of(nbt.getCompound("contents"));
+        } else {
+            this.contents = ItemStack.EMPTY;
+        }
+        this.progress = nbt.getShort("progress");
         if (nbt.contains("mesh")) {
-            mesh = ItemStack.of(nbt.getCompound("Mesh"));
+            setMesh(ItemStack.of(nbt.getCompound("mesh")));
+        } else {
+            setMesh(ItemStack.EMPTY);
         }
 
         super.load(nbt);
@@ -85,111 +69,183 @@ public class SieveBlockEntity extends EBlockEntity {
         // Try insert mesh
         if (mesh.isEmpty()) {
             if (isMesh(playerItem)) {
-                mesh = playerItem.copy();
-                mesh.setCount(1);
+                if (!level.isClientSide) {
+                    var meshCopy = playerItem.copy();
+                    meshCopy.setCount(1);
+                    setMesh(meshCopy);
 
-                // Remove stack
-                if (!player.isCreative()) {
-                    player.setItemInHand(hand, ItemStack.EMPTY);
+                    markUpdated();
+
+                    if (!player.getAbilities().instabuild) {
+                        playerItem.shrink(1);
+                    }
+                    return InteractionResult.CONSUME;
+                } else {
+                    return InteractionResult.SUCCESS;
                 }
+            }
+        } else if (contents.isEmpty()) {
+            // remove mesh with sneak right click
+            if (player.isShiftKeyDown() && player.getMainHandItem().isEmpty()) {
+                removeMesh();
             }
         }
 
-        if (progress == 0) {
+        if (contents.isEmpty()) {
             // Insert an item
             if (!isClientSide) {
-                // Check against cached recipe
-                if (!currentRecipe.isEmpty()) {
-                    for (SieveRecipe recipe : currentRecipe) {
-                        if (!recipe.test(mesh.getItem(), playerItem)) {
-                            return InteractionResult.CONSUME;
-                        }
-                    }
+                if (RecipeUtil.hasSieveResult(level.getRecipeManager(), mesh.getItem(), playerItem)) {
+                    playerItem = this.insertContents(player, hand);
+                    markUpdated();
 
-                    player.setItemInHand(hand, fillWithItem(playerItem));
-                    markUpdated();
-                } else if (!(currentRecipe = getResults(playerItem)).isEmpty()) {
-                    player.setItemInHand(hand, fillWithItem(playerItem));
-                    markUpdated();
+                    var cursor = worldPosition.mutable().move(-1, 0, -1);
+
+                    // Fill adjacent sieves
+                    otherSieves:
+                    for (int x = -1; x <= 1; x++) {
+                        for (int z = -1; z <= 1; z++) {
+                            if (playerItem.isEmpty()) {
+                                break otherSieves;
+                            }
+
+                            if ((x | z) != 0) {
+                                if (level.getBlockEntity(cursor) instanceof SieveBlockEntity other) {
+                                    if (other.contents.isEmpty()) {
+                                        if (this.mesh.getItem() == other.mesh.getItem()) {
+                                            playerItem = other.insertContents(player, hand);
+                                            other.markUpdated();
+                                        }
+                                    }
+                                }
+                            }
+
+                            cursor.move(0, 0, 1);
+                        }
+                        cursor.move(1, 0, -3);
+                    }
                 }
             }
         } else {
-            // todo mesh efficiency enchantment
-            progress -= SIEVE_INTERVAL;
+            var cursor = worldPosition.mutable().move(-1, 0, -1);
 
-            if (progress <= 0) {
-                progress = 0;
+            // Sieve with adjacent sieves
+            for (int x = -1; x <= 1; x++) {
+                for (int z = -1; z <= 1; z++) {
+                    if (level.getBlockEntity(cursor) instanceof SieveBlockEntity other) {
+                        if (!other.contents.isEmpty()) {
+                            if (this.mesh.getItem() == other.mesh.getItem()) {
+                                other.performSift(player);
+                            }
+                        }
+                    }
 
-                if (!isClientSide) {
-                    giveItems();
+                    cursor.move(0, 0, 1);
                 }
+                cursor.move(1, 0, -3);
             }
         }
 
         return InteractionResult.sidedSuccess(isClientSide);
     }
 
-    // Consumes an item and fills the sieve.
-    private ItemStack fillWithItem(ItemStack stack) {
-        progress = MAX_SIEVE_CAPACITY;
+    // Fills the sieve (assumes contents is EMPTY) and returns the remaining item, putting it in the player's hand
+    private ItemStack insertContents(Player player, InteractionHand hand) {
+        var consume = !player.getAbilities().instabuild;
+        var playerItem = player.getItemInHand(hand);
 
-        return item.insertItem(0, stack, false);
+        if (consume) {
+            if (playerItem.getCount() == 1) {
+                this.contents = playerItem;
+                player.setItemInHand(hand, ItemStack.EMPTY);
+                playerItem = ItemStack.EMPTY;
+            } else {
+                this.contents = singleCopy(playerItem);
+                playerItem.shrink(1);
+            }
+        } else {
+            this.contents = singleCopy(playerItem);
+        }
+
+        this.progress = MAX_SIEVE_CAPACITY;
+
+        return playerItem;
     }
 
-    private void giveItems() {
-        var pos = getBlockPos();
-        var rand = level.random;
+    private static ItemStack singleCopy(ItemStack stack) {
+        var copy = stack.copy();
+        copy.setCount(1);
+        return copy;
+    }
 
-        for (SieveRecipe recipe : currentRecipe) {
-            for (Reward reward : recipe.getRewards()) {
-                if (rand.nextFloat() < reward.getChance()) {
-                    var itemEntity = new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, reward.getItem().copy());
-                    itemEntity.setDeltaMovement(rand.nextGaussian() * 0.05, 0.2, rand.nextGaussian() * 0.05);
-                    level.addFreshEntity(itemEntity);
-                }
+    private void performSift(Player player) {
+        progress -= efficiency * SIEVE_INTERVAL;
+
+        if (progress <= 0) {
+            progress = 0;
+
+            if (!level.isClientSide) {
+                giveItems(player);
+            }
+        }
+    }
+
+    private InteractionResult removeMesh() {
+        if (!level.isClientSide) {
+            // Pop out item
+            var itemEntity = new ItemEntity(level, worldPosition.getX() + 0.5, worldPosition.getY() + 1.5, worldPosition.getZ() + 0.5, mesh);
+            var rand = level.random;
+            itemEntity.setDeltaMovement(rand.nextGaussian() * 0.05, 0.2, rand.nextGaussian() * 0.05);
+            level.addFreshEntity(itemEntity);
+
+            // Empty contents
+            setMesh(ItemStack.EMPTY);
+            markUpdated();
+        }
+
+        return InteractionResult.sidedSuccess(level.isClientSide);
+    }
+
+    private void setMesh(ItemStack mesh) {
+        this.mesh = mesh;
+        this.efficiency = 1f + mesh.getEnchantmentLevel(Enchantments.BLOCK_EFFICIENCY) * 0.08f;
+        // Fortune III increases drops by 120% (you should enchant your meshes!)
+        this.fortune = 1f + mesh.getEnchantmentLevel(Enchantments.BLOCK_FORTUNE) * 0.4f;
+    }
+
+    private void giveItems(Player player) {
+        var pos = this.worldPosition;
+        var context = new LootContext.Builder(new LootParams((ServerLevel) this.level, Map.of(), Map.of(), player.getLuck())).create(null);
+        var rand = this.level.random;
+
+        for (SieveRecipe recipe : RecipeUtil.getSieveRecipes(level.getRecipeManager(), this.mesh.getItem(), this.contents)) {
+            var amount = recipe.resultAmount.getInt(context);
+
+            if (amount >= 1) {
+                var itemEntity = new ItemEntity(this.level, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, new ItemStack(recipe.result, amount));
+                itemEntity.setDeltaMovement(rand.nextGaussian() * 0.05, 0.2, rand.nextGaussian() * 0.05);
+                this.level.addFreshEntity(itemEntity);
             }
         }
 
-        item.setStackInSlot(0, ItemStack.EMPTY);
+        this.contents = ItemStack.EMPTY;
         markUpdated();
     }
 
     private boolean isMesh(ItemStack stack) {
-        var item = stack.getItem();
-        return item == EItems.STRING_MESH.get() || item == EItems.FLINT_MESH.get() || item == EItems.IRON_MESH.get() || item == EItems.DIAMOND_MESH.get() || item == EItems.NETHERITE_MESH.get();
+        return stack.is(EItemTags.SIEVE_MESHES);
     }
 
+    public ItemStack getMesh() {
+        return this.mesh;
+    }
+
+    // Used for rendering
     public short getProgress() {
-        return progress;
+        return this.progress;
     }
 
-    public ItemStack getItem() {
-        return item.getStackInSlot(0);
-    }
-
-    public List<? extends SieveRecipe> getResults(ItemStack stack) {
-        return RecipeUtil.getSieveResults(level.getServer(), getRecipeType(), mesh, stack);
-    }
-
-    public RecipeType<? extends SieveRecipe> getRecipeType() {
-        return ERecipeTypes.SIEVE.get();
-    }
-
-    private class ItemHandler extends ItemStackHandler {
-        @Override
-        public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-            return !getResults(stack).isEmpty();
-        }
-
-        @Override
-        protected int getStackLimit(int slot, @Nonnull ItemStack stack) {
-            return 1;
-        }
-
-        @Nonnull
-        @Override
-        public ItemStack extractItem(int slot, int amount, boolean simulate) {
-            return ItemStack.EMPTY;
-        }
+    // Used for rendering
+    public ItemStack getContents() {
+        return this.contents;
     }
 }

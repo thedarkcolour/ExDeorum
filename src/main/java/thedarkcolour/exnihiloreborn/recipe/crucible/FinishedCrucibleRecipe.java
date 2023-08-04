@@ -8,10 +8,11 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import thedarkcolour.exnihiloreborn.recipe.CodecUtil;
+import thedarkcolour.exnihiloreborn.recipe.EFinishedRecipe;
 
 import javax.annotation.Nullable;
 
-public class FinishedCrucibleRecipe implements FinishedRecipe {
+public class FinishedCrucibleRecipe implements EFinishedRecipe {
     private final ResourceLocation id;
     private final RecipeSerializer<?> serializer;
     private final Ingredient ingredient;
@@ -43,17 +44,5 @@ public class FinishedCrucibleRecipe implements FinishedRecipe {
     @Override
     public RecipeSerializer<?> getType() {
         return serializer;
-    }
-
-    @Nullable
-    @Override
-    public JsonObject serializeAdvancement() {
-        return null;
-    }
-
-    @Nullable
-    @Override
-    public ResourceLocation getAdvancementId() {
-        return null;
     }
 }

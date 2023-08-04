@@ -3,9 +3,13 @@
   "criteria": {
     "craft_crook": {
       "conditions": {
-        "recipe_id": "exnihiloreborn:crook"
+        "items": [
+          {
+            "tag": "exnihiloreborn:crooks"
+          }
+        ]
       },
-      "trigger": "minecraft:recipe_crafted"
+      "trigger": "minecraft:inventory_changed"
     }
   },
   "display": {

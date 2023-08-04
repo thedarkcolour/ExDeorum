@@ -3,13 +3,6 @@
   "ingredient": {
     "item": "minecraft:cobblestone"
   },
-  "rewards": [
-    {
-      "chance": 1.0,
-      "item": {
-        "Count": 1,
-        "id": "minecraft:gravel"
-      }
-    }
-  ]
+  "result": "minecraft:gravel",
+  "result_amount": 1.0
 }

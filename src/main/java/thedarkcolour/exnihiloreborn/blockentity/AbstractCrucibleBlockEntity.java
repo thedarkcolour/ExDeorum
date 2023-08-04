@@ -1,6 +1,5 @@
 package thedarkcolour.exnihiloreborn.blockentity;
 
-import com.google.common.cache.Cache;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -12,7 +11,6 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -111,22 +109,7 @@ public abstract class AbstractCrucibleBlockEntity extends EBlockEntity {
     }
 
     // Gets a crucible recipe, using the cache if possible
-    public CrucibleRecipe getRecipe(ItemStack item) {
-        var pair = new CacheKey(item.getItem(), item.getTag());
-        var recipe = getRecipeCache().getIfPresent(pair);
-
-        if (recipe != null) {
-            return recipe;
-        } else {
-            CrucibleRecipe newRecipe = RecipeUtil.getRecipe(level.getServer(), getRecipeType(), item);
-
-            if (newRecipe != null) {
-                getRecipeCache().put(pair, newRecipe); // You can't put null values in a cache...
-            }
-
-            return newRecipe;
-        }
-    }
+    protected abstract CrucibleRecipe getRecipe(ItemStack item);
 
     /**
      * Tries to melt the specified item into the crucible.
@@ -167,7 +150,7 @@ public abstract class AbstractCrucibleBlockEntity extends EBlockEntity {
         }
     }
 
-    public int getMelt() {
+    public int getMeltingRate() {
         return 1;
     }
 
@@ -179,11 +162,7 @@ public abstract class AbstractCrucibleBlockEntity extends EBlockEntity {
         return tank;
     }
 
-    protected abstract RecipeType<CrucibleRecipe> getRecipeType();
-
     protected abstract Block getDefaultMeltBlock();
-
-    protected abstract Cache<CacheKey, CrucibleRecipe> getRecipeCache();
 
     public Block getLastMelted() {
         return lastMelted;
@@ -205,9 +184,6 @@ public abstract class AbstractCrucibleBlockEntity extends EBlockEntity {
         overrides.put(Items.BIRCH_SAPLING, Blocks.BIRCH_LEAVES);
         overrides.put(Items.CHERRY_SAPLING, Blocks.CHERRY_LEAVES);
         overrides.put(Items.MANGROVE_PROPAGULE, Blocks.MANGROVE_LEAVES);
-    }
-
-    public record CacheKey(Item item, CompoundTag tag) {
     }
 
     private static class FluidHandler extends FluidTank {
@@ -249,7 +225,7 @@ public abstract class AbstractCrucibleBlockEntity extends EBlockEntity {
         public void tick(Level level, BlockPos pos, BlockState state, AbstractCrucibleBlockEntity crucible) {
             // Update twice per tick
             if ((level.getGameTime() % 10L) == 0L) {
-                int delta = Math.min(crucible.solids, crucible.getMelt());
+                int delta = Math.min(crucible.solids, crucible.getMeltingRate());
 
                 // Skip if no heat
                 if (delta <= 0) return;

@@ -1,10 +1,8 @@
 package thedarkcolour.exnihiloreborn.recipe;
 
-import com.google.gson.JsonObject;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -21,11 +19,13 @@ import net.minecraft.world.level.Level;
  */
 public abstract class SingleIngredientRecipe implements Recipe<Container> {
     private final ResourceLocation id;
-    private final Ingredient ingredient;
+    protected final Ingredient ingredient;
+    public final boolean dependsOnNbt;
 
     public SingleIngredientRecipe(ResourceLocation id, Ingredient ingredient) {
         this.id = id;
         this.ingredient = ingredient;
+        this.dependsOnNbt = !ingredient.isSimple();
     }
 
     public Ingredient getIngredient() {
@@ -43,16 +43,6 @@ public abstract class SingleIngredientRecipe implements Recipe<Container> {
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer() {
-        return null;
-    }
-
-    @Override
-    public RecipeType<?> getType() {
-        return null;
-    }
-
-    @Override
     public boolean canCraftInDimensions(int width, int height) {
         return true;
     }
@@ -67,17 +57,12 @@ public abstract class SingleIngredientRecipe implements Recipe<Container> {
         return ItemStack.EMPTY;
     }
 
+    /**
+     * @deprecated Only used in Vanilla recipe books, and my blocks do not use the recipe book!
+     */
     @Deprecated
     @Override
     public NonNullList<Ingredient> getIngredients() {
         return NonNullList.create();
-    }
-
-    public static Ingredient readIngredient(JsonObject json, String key) {
-        if (GsonHelper.isArrayNode(json, key)) {
-            return Ingredient.fromJson(GsonHelper.getAsJsonArray(json, key));
-        } else {
-            return Ingredient.fromJson(GsonHelper.getAsJsonObject(json, key));
-        }
     }
 }

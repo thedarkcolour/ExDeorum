@@ -24,6 +24,7 @@ public class HammerItem extends DiggerItem {
     }
 
     public static void refreshValidBlocks(RecipeManager recipes) {
+        VALID_BLOCKS.clear();
         for (var recipe : recipes.byType(ERecipeTypes.HAMMER.get()).values()) {
             for (var item : recipe.getIngredient().getItems()) {
                 if (item.getItem() instanceof BlockItem blockItem) {

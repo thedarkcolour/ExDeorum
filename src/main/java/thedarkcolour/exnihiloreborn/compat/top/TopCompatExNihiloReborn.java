@@ -7,7 +7,7 @@ import java.util.function.Function;
 public class TopCompatExNihiloReborn implements Function<ITheOneProbe, Void> {
     @Override
     public Void apply(ITheOneProbe top) {
-        top.registerProvider(new InfestedLeavesInfoProvider());
+        top.registerProvider(new ExNihiloRebornInfoProvider());
 
         return null;
     }

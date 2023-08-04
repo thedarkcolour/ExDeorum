@@ -13,6 +13,7 @@ import net.minecraftforge.registries.RegistryObject;
 import thedarkcolour.exnihiloreborn.ExNihiloReborn;
 import thedarkcolour.exnihiloreborn.item.CrookItem;
 import thedarkcolour.exnihiloreborn.item.HammerItem;
+import thedarkcolour.exnihiloreborn.item.MeshItem;
 import thedarkcolour.exnihiloreborn.item.PorcelainBucketItem;
 import thedarkcolour.exnihiloreborn.item.SilkWormItem;
 import thedarkcolour.exnihiloreborn.item.WitchWaterBucketItem;
@@ -29,11 +30,12 @@ public class EItems {
     public static final RegistryObject<Item> BONE_CROOK = ITEMS.register("bone_crook", () -> new CrookItem(props().durability(312)));
 
     // Sieve Meshes
-    public static final RegistryObject<Item> STRING_MESH = ITEMS.register("string_mesh", () -> new Item(props().stacksTo(1)));
-    public static final RegistryObject<Item> FLINT_MESH = ITEMS.register("flint_mesh", () -> new Item(props().stacksTo(1)));
-    public static final RegistryObject<Item> IRON_MESH = ITEMS.register("iron_mesh", () -> new Item(props().stacksTo(1)));
-    public static final RegistryObject<Item> DIAMOND_MESH = ITEMS.register("diamond_mesh", () -> new Item(props().stacksTo(1)));
-    public static final RegistryObject<Item> NETHERITE_MESH = ITEMS.register("netherite_mesh", () -> new Item(props().stacksTo(1)));
+    public static final RegistryObject<Item> STRING_MESH = ITEMS.register("string_mesh", () -> new MeshItem(props().stacksTo(1)));
+    public static final RegistryObject<Item> FLINT_MESH = ITEMS.register("flint_mesh", () -> new MeshItem(props().stacksTo(1)));
+    public static final RegistryObject<Item> IRON_MESH = ITEMS.register("iron_mesh", () -> new MeshItem(props().stacksTo(1)));
+    public static final RegistryObject<Item> GOLDEN_MESH = ITEMS.register("golden_mesh", () -> new MeshItem(props().stacksTo(1)));
+    public static final RegistryObject<Item> DIAMOND_MESH = ITEMS.register("diamond_mesh", () -> new MeshItem(props().stacksTo(1)));
+    public static final RegistryObject<Item> NETHERITE_MESH = ITEMS.register("netherite_mesh", () -> new MeshItem(props().stacksTo(1)));
 
     // Hammers
     public static final RegistryObject<Item> WOODEN_HAMMER = ITEMS.register("wooden_hammer", () -> new HammerItem(Tiers.WOOD, props()));
@@ -43,14 +45,18 @@ public class EItems {
     public static final RegistryObject<Item> DIAMOND_HAMMER = ITEMS.register("diamond_hammer", () -> new HammerItem(Tiers.DIAMOND, props()));
     public static final RegistryObject<Item> NETHERITE_HAMMER = ITEMS.register("netherite_hammer", () -> new HammerItem(Tiers.NETHERITE, props()));
 
-    // Ore Pieces todo re evaluate
-    public static final RegistryObject<Item> IRON_ORE_PIECES = registerSimpleItem("iron_ore_pieces");
-    public static final RegistryObject<Item> COPPER_ORE_PIECES = registerSimpleItem("copper_ore_pieces");
-    public static final RegistryObject<Item> GOLD_ORE_PIECES = registerSimpleItem("gold_ore_pieces");
+    // Ore Chunks
+    public static final RegistryObject<Item> IRON_ORE_CHUNK = registerSimpleItem("iron_ore_chunk");
+    public static final RegistryObject<Item> COPPER_ORE_CHUNK = registerSimpleItem("copper_ore_chunk");
+    public static final RegistryObject<Item> GOLD_ORE_CHUNK = registerSimpleItem("gold_ore_chunk");
 
     // Pebbles
     public static final RegistryObject<Item> STONE_PEBBLE = registerSimpleItem("stone_pebble");
+    public static final RegistryObject<Item> DIORITE_PEBBLE = registerSimpleItem("diorite_pebble");
+    public static final RegistryObject<Item> GRANITE_PEBBLE = registerSimpleItem("granite_pebble");
+    public static final RegistryObject<Item> ANDESITE_PEBBLE = registerSimpleItem("andesite_pebble");
     public static final RegistryObject<Item> DEEPSLATE_PEBBLE = registerSimpleItem("deepslate_pebble");
+    public static final RegistryObject<Item> TUFF_PEBBLE = registerSimpleItem("tuff_pebble");
 
     // Misc
     public static final RegistryObject<Item> PORCELAIN_CLAY = registerSimpleItem("porcelain_clay");
@@ -170,6 +176,7 @@ public class EItems {
         output.accept(STRING_MESH.get());
         output.accept(FLINT_MESH.get());
         output.accept(IRON_MESH.get());
+        output.accept(GOLDEN_MESH.get());
         output.accept(DIAMOND_MESH.get());
         output.accept(NETHERITE_MESH.get());
         output.accept(WOODEN_HAMMER.get());
@@ -178,10 +185,14 @@ public class EItems {
         output.accept(IRON_HAMMER.get());
         output.accept(DIAMOND_HAMMER.get());
         output.accept(NETHERITE_HAMMER.get());
-        output.accept(IRON_ORE_PIECES.get());
-        output.accept(COPPER_ORE_PIECES.get());
-        output.accept(GOLD_ORE_PIECES.get());
+        output.accept(IRON_ORE_CHUNK.get());
+        output.accept(COPPER_ORE_CHUNK.get());
+        output.accept(GOLD_ORE_CHUNK.get());
         output.accept(STONE_PEBBLE.get());
+        output.accept(DIORITE_PEBBLE.get());
+        output.accept(GRANITE_PEBBLE.get());
+        output.accept(ANDESITE_PEBBLE.get());
+        output.accept(TUFF_PEBBLE.get());
         output.accept(DEEPSLATE_PEBBLE.get());
         output.accept(PORCELAIN_CLAY.get());
         output.accept(PORCELAIN_BUCKET.get());

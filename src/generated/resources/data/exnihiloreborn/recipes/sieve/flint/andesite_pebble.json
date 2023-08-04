@@ -1,0 +1,13 @@
+{
+  "type": "exnihiloreborn:sieve",
+  "ingredient": {
+    "item": "minecraft:dirt"
+  },
+  "mesh": "exnihiloreborn:flint_mesh",
+  "result": "exnihiloreborn:andesite_pebble",
+  "result_amount": {
+    "type": "minecraft:binomial",
+    "n": 7.0,
+    "p": 0.4
+  }
+}

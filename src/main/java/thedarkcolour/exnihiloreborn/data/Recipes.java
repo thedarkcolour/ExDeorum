@@ -1,46 +1,56 @@
 package thedarkcolour.exnihiloreborn.data;
 
-import com.google.common.collect.ImmutableList;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.storage.loot.providers.number.BinomialDistributionGenerator;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
+import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import thedarkcolour.exnihiloreborn.ExNihiloReborn;
-import thedarkcolour.exnihiloreborn.recipe.Reward;
 import thedarkcolour.exnihiloreborn.recipe.barrel.FinishedBarrelCompostRecipe;
+import thedarkcolour.exnihiloreborn.recipe.barrel.FinishedBarrelMixingRecipe;
 import thedarkcolour.exnihiloreborn.recipe.crucible.FinishedCrucibleRecipe;
 import thedarkcolour.exnihiloreborn.recipe.hammer.FinishedHammerRecipe;
 import thedarkcolour.exnihiloreborn.recipe.sieve.FinishedSieveRecipe;
 import thedarkcolour.exnihiloreborn.registry.EBlocks;
+import thedarkcolour.exnihiloreborn.registry.EFluids;
 import thedarkcolour.exnihiloreborn.registry.EItems;
 import thedarkcolour.exnihiloreborn.registry.ERecipeSerializers;
 import thedarkcolour.modkit.data.MKRecipeProvider;
 
+import java.util.Objects;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import static net.minecraft.data.recipes.SimpleCookingRecipeBuilder.*;
 import static net.minecraft.data.recipes.SmithingTransformRecipeBuilder.smithing;
+import static net.minecraft.world.level.storage.loot.providers.number.BinomialDistributionGenerator.binomial;
+import static thedarkcolour.modkit.data.MKRecipeProvider.unlockedByHaving;
 
 class Recipes {
     public static void addRecipes(Consumer<FinishedRecipe> writer, MKRecipeProvider recipes) {
         craftingRecipes(writer, recipes);
-        smeltingRecipes(writer, recipes);
-        sieveRecipes(writer, recipes);
+        smeltingRecipes(writer);
+        sieveRecipes(writer);
         crucibleRecipes(writer);
         hammerRecipes(writer);
         barrelCompostRecipes(writer);
+        barrelMixingRecipes(writer);
     }
 
     private static void craftingRecipes(Consumer<FinishedRecipe> writer, MKRecipeProvider recipes) {
@@ -54,7 +64,7 @@ class Recipes {
         shapedHammer(recipes, EItems.GOLDEN_HAMMER, Ingredient.of(Tags.Items.INGOTS_GOLD));
         shapedHammer(recipes, EItems.IRON_HAMMER, Ingredient.of(Tags.Items.INGOTS_IRON));
         shapedHammer(recipes, EItems.DIAMOND_HAMMER, Ingredient.of(Tags.Items.GEMS_DIAMOND));
-        MKRecipeProvider.unlockedByHaving(smithing(
+        unlockedByHaving(smithing(
                         Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
                         Ingredient.of(EItems.DIAMOND_HAMMER.get()),
                         Ingredient.of(Tags.Items.INGOTS_NETHERITE),
@@ -91,6 +101,20 @@ class Recipes {
         uShaped(recipes, EItems.CRIMSON_BARREL, Ingredient.of(Items.CRIMSON_PLANKS), Ingredient.of(Items.CRIMSON_SLAB));
         uShaped(recipes, EItems.WARPED_BARREL, Ingredient.of(Items.WARPED_PLANKS), Ingredient.of(Items.WARPED_SLAB));
         uShaped(recipes, EItems.STONE_BARREL, Ingredient.of(Items.STONE), Ingredient.of(Items.STONE_SLAB));
+
+        twoByTwo(recipes, Items.COBBLESTONE, Ingredient.of(EItems.STONE_PEBBLE.get()));
+        twoByTwo(recipes, Items.ANDESITE, Ingredient.of(EItems.ANDESITE_PEBBLE.get()));
+        twoByTwo(recipes, Items.DIORITE, Ingredient.of(EItems.DIORITE_PEBBLE.get()));
+        twoByTwo(recipes, Items.GRANITE, Ingredient.of(EItems.GRANITE_PEBBLE.get()));
+        twoByTwo(recipes, Items.IRON_ORE, Ingredient.of(EItems.IRON_ORE_CHUNK.get()));
+        twoByTwo(recipes, Items.GOLD_ORE, Ingredient.of(EItems.GOLD_ORE_CHUNK.get()));
+        twoByTwo(recipes, Items.COPPER_ORE, Ingredient.of(EItems.COPPER_ORE_CHUNK.get()));
+        recipes.shapedCrafting(RecipeCategory.MISC, EItems.STRING_MESH.get(), recipe -> {
+            recipe.define('s', Tags.Items.STRING);
+            recipe.pattern("sss");
+            recipe.pattern("sss");
+            recipe.pattern("sss");
+        });
     }
 
     private static void shapedCrook(MKRecipeProvider recipes, RegistryObject<? extends Item> crook, Ingredient stick) {
@@ -122,40 +146,72 @@ class Recipes {
         });
     }
 
+    private static void twoByTwo(MKRecipeProvider recipes, Item result, Ingredient ingredient) {
+        recipes.shapedCrafting(RecipeCategory.MISC, result, recipe -> {
+            recipe.define('#', ingredient);
+            recipe.pattern("##");
+            recipe.pattern("##");
+        });
+    }
+
     // todo add support in modkit
-    private static void smeltingRecipes(Consumer<FinishedRecipe> writer, MKRecipeProvider recipes) {
-        MKRecipeProvider.unlockedByHaving(
+    private static void smeltingRecipes(Consumer<FinishedRecipe> writer) {
+        unlockedByHaving(
                 smelting(Ingredient.of(EItems.UNFIRED_CRUCIBLE.get()), RecipeCategory.MISC, EItems.PORCELAIN_CRUCIBLE.get(), 0.1f, 200),
                 EItems.UNFIRED_CRUCIBLE.get()
         ).save(writer, EItems.PORCELAIN_CRUCIBLE.getId());
-        MKRecipeProvider.unlockedByHaving(
+        unlockedByHaving(
                 smelting(Ingredient.of(EItems.SILK_WORM.get()), RecipeCategory.FOOD, EItems.COOKED_SILK_WORM.get(), 0.1f, 200),
                 EItems.SILK_WORM.get()
         ).save(writer, EItems.COOKED_SILK_WORM.getId());
-        MKRecipeProvider.unlockedByHaving(
+        unlockedByHaving(
                 smoking(Ingredient.of(EItems.SILK_WORM.get()), RecipeCategory.FOOD, EItems.COOKED_SILK_WORM.get(), 0.1f, 100),
                 EItems.SILK_WORM.get()
         ).save(writer, EItems.COOKED_SILK_WORM.getId().withSuffix("_from_smoking"));
-        MKRecipeProvider.unlockedByHaving(
+        unlockedByHaving(
                 campfireCooking(Ingredient.of(EItems.SILK_WORM.get()), RecipeCategory.FOOD, EItems.COOKED_SILK_WORM.get(), 0.1f, 600),
                 EItems.SILK_WORM.get()
         ).save(writer, EItems.PORCELAIN_CRUCIBLE.getId().withSuffix("_from_campfire_cooking"));
     }
 
-    private static void sieveRecipes(Consumer<FinishedRecipe> writer, MKRecipeProvider recipes) {
-        sieveRecipe(writer, "stone_pebble", Ingredient.of(Items.DIRT), EItems.STRING_MESH, Reward.withExtraChances(EItems.STONE_PEBBLE, new float[] {1.0f, 1.0f, 0.5f, 0.5f, 0.1f, 0.1f }));
-        sieveRecipe(writer, "wheat_seeds", Ingredient.of(Items.DIRT), EItems.STRING_MESH, Reward.of(Items.WHEAT_SEEDS, 0.7f));
-        sieveRecipe(writer, "beetroot_seeds", Ingredient.of(Items.DIRT), EItems.STRING_MESH, Reward.of(Items.BEETROOT_SEEDS, 0.35f));
-        sieveRecipe(writer, "melon_seeds", Ingredient.of(Items.DIRT), EItems.STRING_MESH, Reward.of(Items.MELON_SEEDS, 0.35f));
-        sieveRecipe(writer, "pumpkin_seeds", Ingredient.of(Items.DIRT), EItems.STRING_MESH, Reward.of(Items.PUMPKIN_SEEDS, 0.35f));
+    private static void sieveRecipes(Consumer<FinishedRecipe> writer) {
+        // Dirt -> String mesh
+        forMesh(writer, Ingredient.of(Items.DIRT), EItems.STRING_MESH, addDrop -> {
+            addDrop.accept(EItems.STONE_PEBBLE.get(), binomial(7, 0.6f));
+            addDrop.accept(Items.WHEAT_SEEDS, chance(0.7f));
+            addDrop.accept(Items.BEETROOT_SEEDS, chance(0.35f));
+            addDrop.accept(Items.MELON_SEEDS, chance(0.35f));
+            addDrop.accept(Items.PUMPKIN_SEEDS, chance(0.35f));
+            addDrop.accept(Items.FLINT, chance(0.25f));
+        });
+
+        // Flint mesh will be used to get a larger variety of outputs from dirt, and
+        // is the lowest mesh tier where ore will start to drop.
+        // Gravel -> String mesh
+        forMesh(writer, Ingredient.of(Items.DIRT), EItems.FLINT_MESH, addDrop -> {
+            addDrop.accept(EItems.STONE_PEBBLE.get(), binomial(7, 0.6f));
+            addDrop.accept(EItems.ANDESITE_PEBBLE.get(), binomial(7, 0.4f));
+            addDrop.accept(EItems.GRANITE_PEBBLE.get(), binomial(7, 0.4f));
+            addDrop.accept(EItems.DIORITE_PEBBLE.get(), binomial(7, 0.4f));
+            addDrop.accept(Items.WHEAT_SEEDS, chance(0.5f));
+            addDrop.accept(Items.BEETROOT_SEEDS, chance(0.1f));
+            addDrop.accept(Items.MELON_SEEDS, chance(0.1f));
+            addDrop.accept(Items.PUMPKIN_SEEDS, chance(0.1f));
+            addDrop.accept(Items.FLINT, chance(0.2f));
+        });
     }
 
-    private static void sieveRecipe(Consumer<FinishedRecipe> consumer, String name, Ingredient block, Supplier<Item> mesh, ImmutableList<Reward> rewards) {
-        consumer.accept(new FinishedSieveRecipe(ERecipeSerializers.SIEVE.get(), new ResourceLocation(ExNihiloReborn.ID, "sieve/" + name), mesh.get(), block, rewards));
+    private static BinomialDistributionGenerator chance(float p) {
+        return binomial(1, p);
     }
 
-    private static void sieveRecipe(Consumer<FinishedRecipe> consumer, String name, Ingredient block, Supplier<Item> mesh, Reward rewards) {
-        consumer.accept(new FinishedSieveRecipe(ERecipeSerializers.SIEVE.get(), new ResourceLocation(ExNihiloReborn.ID, "sieve/" + name), mesh.get(), block, ImmutableList.of(rewards)));
+    private static void forMesh(Consumer<FinishedRecipe> writer, Ingredient block, RegistryObject<? extends Item> mesh, Consumer<BiConsumer<Item, NumberProvider>> addDrops) {
+        var folder = mesh.getId().getPath().replace("_mesh", "/");
+        addDrops.accept((result, resultAmount) -> sieveRecipe(writer, folder + path(result), block, mesh, result, resultAmount));
+    }
+
+    private static void sieveRecipe(Consumer<FinishedRecipe> consumer, String name, Ingredient block, Supplier<? extends Item> mesh, Item result, NumberProvider chance) {
+        consumer.accept(new FinishedSieveRecipe(new ResourceLocation(ExNihiloReborn.ID, "sieve/" + name), mesh.get(), block, result, chance));
     }
 
     private static void crucibleRecipes(Consumer<FinishedRecipe> writer) {
@@ -190,31 +246,25 @@ class Recipes {
 
     private static void hammerRecipes(Consumer<FinishedRecipe> writer) {
         // Cobblestone -> Gravel -> Sand -> Dust
-        hammerRecipe(writer, "gravel", Blocks.COBBLESTONE, new Reward(Blocks.GRAVEL));
-        hammerRecipe(writer, "sand", Blocks.GRAVEL, new Reward(Blocks.SAND));
-        hammerRecipe(writer, "dust", Blocks.SAND, new Reward(EBlocks.DUST.get()));
+        hammerRecipe(writer, "gravel", Ingredient.of(Items.COBBLESTONE), Blocks.GRAVEL);
+        hammerRecipe(writer, "sand", Ingredient.of(Items.GRAVEL), Blocks.SAND);
+        hammerRecipe(writer, "dust", Ingredient.of(Items.SAND), EBlocks.DUST.get());
 
-        hammerRecipe(writer, "crushed_netherrack", Blocks.NETHERRACK, new Reward(EBlocks.CRUSHED_NETHERRACK.get()));
+        hammerRecipe(writer, "crushed_netherrack", Ingredient.of(Blocks.NETHERRACK), EBlocks.CRUSHED_NETHERRACK.get());
 
-        hammerRecipe(writer, "crushing_sandstone", Ingredient.of(Items.SANDSTONE, Items.CUT_SANDSTONE, Items.CHISELED_SANDSTONE, Items.SMOOTH_SANDSTONE), ImmutableList.of(new Reward(Items.SAND)));
-        hammerRecipe(writer, "crushing_red_sandstone", Ingredient.of(Items.RED_SANDSTONE, Items.CUT_RED_SANDSTONE, Items.CHISELED_RED_SANDSTONE, Items.SMOOTH_RED_SANDSTONE), ImmutableList.of(new Reward(Items.RED_SAND)));
-        hammerRecipe(writer, "crushing_stone_bricks", Items.STONE_BRICKS, new Reward(Items.CRACKED_STONE_BRICKS));
+        hammerRecipe(writer, "crushing_sandstone", Ingredient.of(Items.SANDSTONE, Items.CUT_SANDSTONE, Items.CHISELED_SANDSTONE, Items.SMOOTH_SANDSTONE), Items.SAND);
+        hammerRecipe(writer, "crushing_red_sandstone", Ingredient.of(Items.RED_SANDSTONE, Items.CUT_RED_SANDSTONE, Items.CHISELED_RED_SANDSTONE, Items.SMOOTH_RED_SANDSTONE), Items.RED_SAND);
+        hammerRecipe(writer, "crushing_stone_bricks", Ingredient.of(Items.STONE_BRICKS), Items.CRACKED_STONE_BRICKS);
 
-        hammerRecipe(writer, "stone_pebbles",
-                Ingredient.of(Items.STONE, Items.CRACKED_STONE_BRICKS),
-                Reward.withExtraChances(EItems.STONE_PEBBLE, new float[] { 0.75f, 0.75f, 0.5f, 0.25f, 0.05f }));
+        hammerRecipe(writer, "stone_pebbles", Ingredient.of(Items.STONE, Items.STONE_BRICKS, Items.CHISELED_STONE_BRICKS, Items.CRACKED_STONE_BRICKS), EItems.STONE_PEBBLE.get(), new UniformGenerator(ConstantValue.exactly(1), ConstantValue.exactly(6)));
     }
 
-    private static void hammerRecipe(Consumer<FinishedRecipe> consumer, String name, Ingredient block, ImmutableList<Reward> rewards) {
-        consumer.accept(new FinishedHammerRecipe(ERecipeSerializers.HAMMER.get(), new ResourceLocation(ExNihiloReborn.ID, "hammer/" + name), block, rewards));
+    private static void hammerRecipe(Consumer<FinishedRecipe> writer, String name, Ingredient block, ItemLike result) {
+        hammerRecipe(writer, name, block, result, ConstantValue.exactly(1f));
     }
 
-    private static void hammerRecipe(Consumer<FinishedRecipe> consumer, String name, ItemLike block, Reward... rewards) {
-        hammerRecipe(consumer, name, Ingredient.of(block), ImmutableList.<Reward>builder().add(rewards).build());
-    }
-
-    private static void hammerRecipe(Consumer<FinishedRecipe> consumer, TagKey<Item> tag, Reward rewards) {
-        consumer.accept(new FinishedHammerRecipe(ERecipeSerializers.HAMMER.get(), new ResourceLocation(ExNihiloReborn.ID, tag.location().getPath() + "_to_" + ForgeRegistries.ITEMS.getKey(rewards.getItem().getItem()).getPath()), Ingredient.of(tag), ImmutableList.of(rewards)));
+    private static void hammerRecipe(Consumer<FinishedRecipe> consumer, String name, Ingredient block, ItemLike result, NumberProvider resultAmount) {
+        consumer.accept(new FinishedHammerRecipe(new ResourceLocation(ExNihiloReborn.ID, "hammer/" + name), block, result.asItem(), resultAmount));
     }
 
     private static void barrelCompostRecipes(Consumer<FinishedRecipe> writer) {
@@ -264,7 +314,25 @@ class Recipes {
         barrelCompost(writer, "pumpkin_pie", Ingredient.of(Items.PUMPKIN_PIE), 150);
     }
 
-    private static void barrelCompost(Consumer<FinishedRecipe> consumer, String id, Ingredient ingredient, int volume) {
-        consumer.accept(new FinishedBarrelCompostRecipe(new ResourceLocation(ExNihiloReborn.ID, "barrel_compost/" + id), ingredient, volume));
+    private static void barrelCompost(Consumer<FinishedRecipe> writer, String id, Ingredient ingredient, int volume) {
+        writer.accept(new FinishedBarrelCompostRecipe(new ResourceLocation(ExNihiloReborn.ID, "barrel_compost/" + id), ingredient, volume));
+    }
+
+    private static void barrelMixingRecipes(Consumer<FinishedRecipe> writer) {
+        barrelMixing(writer, Ingredient.of(Items.MILK_BUCKET), ForgeMod.WATER_TYPE, Items.SLIME_BLOCK);
+        barrelMixing(writer, Ingredient.of(Items.SNOWBALL), ForgeMod.WATER_TYPE, Items.ICE);
+        barrelMixing(writer, Ingredient.of(Items.SAND), EFluids.WITCH_WATER_TYPE, Items.SOUL_SAND);
+        barrelMixing(writer, Ingredient.of(Items.REDSTONE), ForgeMod.LAVA_TYPE, Items.NETHERRACK);
+        barrelMixing(writer, Ingredient.of(Items.GLOWSTONE_DUST), ForgeMod.LAVA_TYPE, Items.END_STONE);
+        barrelMixing(writer, Ingredient.of(Items.WATER_BUCKET), ForgeMod.LAVA_TYPE, Items.OBSIDIAN);
+        barrelMixing(writer, Ingredient.of(Items.LAVA_BUCKET), ForgeMod.WATER_TYPE, Items.STONE);
+    }
+
+    private static void barrelMixing(Consumer<FinishedRecipe> writer, Ingredient ingredient, Supplier<FluidType> fluidType, Item result) {
+        writer.accept(new FinishedBarrelMixingRecipe(new ResourceLocation(ExNihiloReborn.ID, "barrel_mixing/" + path(result)), ingredient, fluidType.get(), 1000, result));
+    }
+
+    private static String path(Item item) {
+        return Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(item).getPath());
     }
 }

@@ -38,13 +38,14 @@ public class InfestedLeavesBlock extends LeavesBlock implements EntityBlock {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return !state.getValue(FULLY_INFESTED) ? new InfestedLeavesBlockEntity(pos, state) : null;
+        return new InfestedLeavesBlockEntity(pos, state);
     }
 
+    @SuppressWarnings("unchecked")
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState state, BlockEntityType<T> type) {
-        return (type == EBlockEntities.INFESTED_LEAVES.get() && !state.getValue(FULLY_INFESTED)) ? (BlockEntityTicker<T>) new InfestedLeavesBlockEntity.Ticker() : null;
+        return (type == EBlockEntities.INFESTED_LEAVES.get()) ? (BlockEntityTicker<T>) new InfestedLeavesBlockEntity.Ticker() : null;
     }
 
     @Override

@@ -7,6 +7,7 @@ import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
+import thedarkcolour.exnihiloreborn.recipe.RecipeUtil;
 import thedarkcolour.exnihiloreborn.recipe.SingleIngredientRecipe;
 import thedarkcolour.exnihiloreborn.registry.ERecipeSerializers;
 import thedarkcolour.exnihiloreborn.registry.ERecipeTypes;
@@ -37,14 +38,7 @@ public class BarrelCompostRecipe extends SingleIngredientRecipe {
     public static class Serializer implements RecipeSerializer<BarrelCompostRecipe> {
         @Override // Creates the recipe object from a JSON file
         public BarrelCompostRecipe fromJson(ResourceLocation name, JsonObject json) {
-            Ingredient ingredient;
-
-            if (GsonHelper.isArrayNode(json, "ingredient")) {
-                ingredient = Ingredient.fromJson(GsonHelper.getAsJsonArray(json, "ingredient"));
-            } else {
-                ingredient = Ingredient.fromJson(GsonHelper.getAsJsonObject(json, "ingredient"));
-            }
-
+            Ingredient ingredient = RecipeUtil.readIngredient(json, "ingredient");
             int volume = GsonHelper.getAsInt(json, "volume");
 
             return new BarrelCompostRecipe(name, ingredient, volume);
@@ -52,7 +46,7 @@ public class BarrelCompostRecipe extends SingleIngredientRecipe {
 
         @Override
         public void toNetwork(FriendlyByteBuf buffer, BarrelCompostRecipe recipe) {
-            recipe.getIngredient().toNetwork(buffer);
+            recipe.ingredient.toNetwork(buffer);
             buffer.writeVarInt(recipe.getVolume());
         }
 

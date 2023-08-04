@@ -64,7 +64,7 @@ class Advancements extends ForgeAdvancementProvider {
                             true,
                             false
                     )
-                    .addCriterion("craft_crook", RecipeCraftedTrigger.TriggerInstance.craftedItem(EItems.CROOK.getId()))
+                    .addCriterion("craft_crook", hasItems(item().of(EItemTags.CROOKS).build()))
                     .save(saver, modLoc("core/crook"), helper);
             var barrel = advancement()
                     .parent(root)

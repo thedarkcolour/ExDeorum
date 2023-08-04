@@ -1,0 +1,10 @@
+{
+  "values": [
+    "exnihiloreborn:string_mesh",
+    "exnihiloreborn:flint_mesh",
+    "exnihiloreborn:iron_mesh",
+    "exnihiloreborn:golden_mesh",
+    "exnihiloreborn:diamond_mesh",
+    "exnihiloreborn:netherite_mesh"
+  ]
+}

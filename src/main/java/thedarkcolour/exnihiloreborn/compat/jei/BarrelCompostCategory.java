@@ -13,30 +13,24 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.Blocks;
-import thedarkcolour.exnihiloreborn.block.EBlock;
 import thedarkcolour.exnihiloreborn.data.TranslationKeys;
 import thedarkcolour.exnihiloreborn.recipe.barrel.BarrelCompostRecipe;
 import thedarkcolour.exnihiloreborn.registry.EBlocks;
 
-import java.util.Arrays;
-
-public class BarrelCompostCategory implements IRecipeCategory<BarrelCompostRecipe> {
+class BarrelCompostCategory implements IRecipeCategory<BarrelCompostRecipe> {
     public static final int WIDTH = 120;
     public static final int HEIGHT = 18;
 
     private final IDrawable background;
     private final IDrawable slot;
     private final IDrawable icon;
-    private final Component localizedName;
+    private final Component title;
 
-    public BarrelCompostCategory(IJeiHelpers helpers) {
-        IGuiHelper guiHelpers = helpers.getGuiHelper();
-
-        this.background = guiHelpers.createBlankDrawable(WIDTH, HEIGHT);
-        this.slot = guiHelpers.getSlotDrawable();
-        this.icon = guiHelpers.createDrawableItemStack(new ItemStack(EBlocks.OAK_BARREL.get()));
-        this.localizedName = Component.translatable(TranslationKeys.BARREL_COMPOST_CATEGORY_TITLE);
+    public BarrelCompostCategory(IGuiHelper helper) {
+        this.background = helper.createBlankDrawable(WIDTH, HEIGHT);
+        this.slot = helper.getSlotDrawable();
+        this.icon = helper.createDrawableItemStack(new ItemStack(EBlocks.OAK_BARREL.get()));
+        this.title = Component.translatable(TranslationKeys.BARREL_COMPOST_CATEGORY_TITLE);
     }
 
     @Override
@@ -46,17 +40,17 @@ public class BarrelCompostCategory implements IRecipeCategory<BarrelCompostRecip
 
     @Override
     public Component getTitle() {
-        return localizedName;
+        return this.title;
     }
 
     @Override
     public IDrawable getBackground() {
-        return background;
+        return this.background;
     }
 
     @Override
     public IDrawable getIcon() {
-        return icon;
+        return this.icon;
     }
 
     @Override

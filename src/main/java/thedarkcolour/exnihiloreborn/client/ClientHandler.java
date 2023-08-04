@@ -5,6 +5,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.util.Mth;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.event.RegisterClientReloadListenersEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -17,6 +18,7 @@ import thedarkcolour.exnihiloreborn.registry.EBlockEntities;
 import thedarkcolour.exnihiloreborn.registry.EFluids;
 
 import java.awt.Color;
+import java.util.concurrent.CompletableFuture;
 
 public class ClientHandler {
     public static void register() {
@@ -25,8 +27,15 @@ public class ClientHandler {
 
         modBus.addListener(ClientHandler::clientSetup);
         modBus.addListener(ClientHandler::registerRenderers);
+        modBus.addListener(ClientHandler::addClientReloadListeners);
         fmlBus.addListener(ClientHandler::onPlayerRespawn);
         fmlBus.addListener(ClientHandler::onPlayerLogout);
+    }
+
+    private static void addClientReloadListeners(RegisterClientReloadListenersEvent event) {
+        event.registerReloadListener((prepBarrier, resourceManager, prepProfiler, reloadProfiler, backgroundExecutor, gameExecutor) -> {
+            return CompletableFuture.allOf().thenCompose(prepBarrier::wait).thenRunAsync(RenderUtil::reload, gameExecutor);
+        });
     }
 
     private static void clientSetup(FMLClientSetupEvent event) {

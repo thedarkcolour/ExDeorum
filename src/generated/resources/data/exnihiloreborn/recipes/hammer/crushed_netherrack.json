@@ -3,13 +3,6 @@
   "ingredient": {
     "item": "minecraft:netherrack"
   },
-  "rewards": [
-    {
-      "chance": 1.0,
-      "item": {
-        "Count": 1,
-        "id": "exnihiloreborn:crushed_netherrack"
-      }
-    }
-  ]
+  "result": "exnihiloreborn:crushed_netherrack",
+  "result_amount": 1.0
 }

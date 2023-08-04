@@ -1,21 +1,17 @@
 package thedarkcolour.exnihiloreborn.blockentity;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import thedarkcolour.exnihiloreborn.recipe.RecipeUtil;
 import thedarkcolour.exnihiloreborn.recipe.crucible.CrucibleRecipe;
 import thedarkcolour.exnihiloreborn.registry.EBlockEntities;
-import thedarkcolour.exnihiloreborn.registry.ERecipeTypes;
 
 public class LavaCrucibleBlockEntity extends AbstractCrucibleBlockEntity {
-    public static final Cache<CacheKey, CrucibleRecipe> RECIPES_CACHE = CacheBuilder.newBuilder().maximumSize(12).build();
-
     // todo add KubeJS support for this
     private static final Object2IntMap<Block> HEAT_REGISTRY = new Object2IntOpenHashMap<>();
 
@@ -34,24 +30,19 @@ public class LavaCrucibleBlockEntity extends AbstractCrucibleBlockEntity {
     }
 
     @Override
-    public int getMelt() {
+    public int getMeltingRate() {
         BlockState state = level.getBlockState(getBlockPos().below());
 
         return HEAT_REGISTRY.getInt(state.getBlock());
     }
 
     @Override
-    protected RecipeType<CrucibleRecipe> getRecipeType() {
-        return ERecipeTypes.LAVA_CRUCIBLE.get();
+    protected CrucibleRecipe getRecipe(ItemStack item) {
+        return RecipeUtil.getLavaCrucibleRecipe(item);
     }
 
     @Override
     protected Block getDefaultMeltBlock() {
         return Blocks.COBBLESTONE;
-    }
-
-    @Override
-    protected Cache<CacheKey, CrucibleRecipe> getRecipeCache() {
-        return RECIPES_CACHE;
     }
 }

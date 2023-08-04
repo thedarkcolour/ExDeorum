@@ -27,14 +27,6 @@ public class EBlocks {
     public static final RegistryObject<Block> CRUSHED_NETHERRACK = BLOCKS.register("crushed_netherrack", () -> new Block(of().sound(SoundType.WOOL).strength(0.6f)));
     public static final RegistryObject<Block> CRUSHED_END_STONE = BLOCKS.register("crushed_end_stone", () -> new Block(of().sound(SoundType.WOOL).strength(0.6f)));
 
-    // Compressed Blocks
-    public static final RegistryObject<Block> COMPRESSED_COBBLESTONE = BLOCKS.register("compressed_cobblestone", () -> new Block(copy(Blocks.STONE)));
-    public static final RegistryObject<Block> COMPRESSED_DIRT = BLOCKS.register("compressed_dirt", () -> new Block(copy(Blocks.DIRT)));
-    public static final RegistryObject<Block> COMPRESSED_SAND = BLOCKS.register("compressed_sand", () -> new Block(copy(Blocks.SAND)));
-    public static final RegistryObject<Block> COMPRESSED_DUST = BLOCKS.register("compressed_dust", () -> new Block(copy(DUST.get())));
-    public static final RegistryObject<Block> COMPRESSED_CRUSHED_NETHERRACK = BLOCKS.register("compressed_crushed_netherrack", () -> new Block(copy(CRUSHED_NETHERRACK.get())));
-    public static final RegistryObject<Block> COMPRESSED_CRUSHED_END_STONE = BLOCKS.register("compressed_crushed_end_stone", () -> new Block(copy(CRUSHED_END_STONE.get())));
-
     // Barrels
     public static final RegistryObject<BarrelBlock> OAK_BARREL = registerBarrel("oak_barrel", false, false);
     public static final RegistryObject<BarrelBlock> SPRUCE_BARREL = registerBarrel("spruce_barrel", false, false);
@@ -61,16 +53,6 @@ public class EBlocks {
     public static final RegistryObject<SieveBlock> BAMBOO_SIEVE = registerSieve("bamboo_sieve");
     public static final RegistryObject<SieveBlock> CRIMSON_SIEVE = registerSieve("crimson_sieve");
     public static final RegistryObject<SieveBlock> WARPED_SIEVE = registerSieve("warped_sieve");
-
-    // Compressed Sieves
-    //public static final RegistryObject<HeavySieveBlock> HEAVY_OAK_SIEVE = registerHeavySieve("heavy_oak_sieve", Material.WOOD);
-    //public static final RegistryObject<HeavySieveBlock> HEAVY_SPRUCE_SIEVE = registerHeavySieve("heavy_spruce_sieve", Material.WOOD);
-    //public static final RegistryObject<HeavySieveBlock> HEAVY_BIRCH_SIEVE = registerHeavySieve("heavy_birch_sieve", Material.WOOD);
-    //public static final RegistryObject<HeavySieveBlock> HEAVY_JUNGLE_SIEVE = registerHeavySieve("heavy_jungle_sieve", Material.WOOD);
-    //public static final RegistryObject<HeavySieveBlock> HEAVY_ACACIA_SIEVE = registerHeavySieve("heavy_acacia_sieve", Material.WOOD);
-    //public static final RegistryObject<HeavySieveBlock> HEAVY_DARK_OAK_SIEVE = registerHeavySieve("heavy_dark_oak_sieve", Material.WOOD);
-    //public static final RegistryObject<HeavySieveBlock> HEAVY_CRIMSON_SIEVE = registerHeavySieve("heavy_crimson_sieve", Material.NETHER_WOOD);
-    //public static final RegistryObject<HeavySieveBlock> HEAVY_WARPED_SIEVE = registerHeavySieve("heavy_warped_sieve", Material.NETHER_WOOD);
 
     // Lava Crucibles
     public static final RegistryObject<LavaCrucibleBlock> PORCELAIN_CRUCIBLE = registerLavaCrucible("porcelain_crucible", false);

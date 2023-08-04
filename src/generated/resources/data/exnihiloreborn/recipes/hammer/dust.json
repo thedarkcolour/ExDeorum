@@ -3,13 +3,6 @@
   "ingredient": {
     "item": "minecraft:sand"
   },
-  "rewards": [
-    {
-      "chance": 1.0,
-      "item": {
-        "Count": 1,
-        "id": "exnihiloreborn:dust"
-      }
-    }
-  ]
+  "result": "exnihiloreborn:dust",
+  "result_amount": 1.0
 }

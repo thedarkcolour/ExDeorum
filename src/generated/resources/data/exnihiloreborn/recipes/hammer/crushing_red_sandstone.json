@@ -14,13 +14,6 @@
       "item": "minecraft:smooth_red_sandstone"
     }
   ],
-  "rewards": [
-    {
-      "chance": 1.0,
-      "item": {
-        "Count": 1,
-        "id": "minecraft:red_sand"
-      }
-    }
-  ]
+  "result": "minecraft:red_sand",
+  "result_amount": 1.0
 }

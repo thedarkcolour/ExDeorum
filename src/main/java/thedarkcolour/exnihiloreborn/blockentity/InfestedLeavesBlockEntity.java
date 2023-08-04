@@ -10,12 +10,13 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.state.BlockState;
+import thedarkcolour.exnihiloreborn.block.InfestedLeavesBlock;
 import thedarkcolour.exnihiloreborn.registry.EBlockEntities;
 import thedarkcolour.exnihiloreborn.registry.EBlocks;
 
 public class InfestedLeavesBlockEntity extends EBlockEntity {
     public static final float PROGRESS_INTERVAL = 0.005f;
-    public static final int SPREAD_INTERVAL = 100;
+    public static final int SPREAD_INTERVAL = 50;
 
     // A percentage of how much this leaf is infested
     private float progress;
@@ -93,6 +94,9 @@ public class InfestedLeavesBlockEntity extends EBlockEntity {
             // Do progress
             if (leaves.progress < 1.0f) {
                 leaves.progress = Math.min(1.0f, leaves.progress + PROGRESS_INTERVAL);
+                if (leaves.progress == 1.0f) {
+                    level.setBlock(pos, state.setValue(InfestedLeavesBlock.FULLY_INFESTED, true), 3);
+                }
             }
 
             // If the leave is infested enough, advance the spread timer

@@ -1,7 +1,5 @@
 package thedarkcolour.exnihiloreborn.data;
 
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -9,7 +7,7 @@ import net.minecraftforge.fml.common.Mod;
 import thedarkcolour.exnihiloreborn.ExNihiloReborn;
 import thedarkcolour.modkit.data.DataHelper;
 
-// these two annotations basically mean modEventBus.addListener(Data::generateData)
+// these two annotations are equivalent to modEventBus.addListener(Data::generateData)
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class Data {
     @SubscribeEvent
@@ -18,7 +16,8 @@ public class Data {
         var gen = event.getGenerator(); // writes to json
         var output = gen.getPackOutput();
         var lookup = event.getLookupProvider();
-        var helper = event.getExistingFileHelper(); // reads existing files like pngs and parent models
+        // reads existing files like pngs and parent models
+        var helper = event.getExistingFileHelper();
 
         var dataHelper = new DataHelper(ExNihiloReborn.ID, event);
         dataHelper.createEnglish(true, English::addTranslations);
@@ -26,14 +25,13 @@ public class Data {
         dataHelper.createItemModels(true, true, false, ItemModels::addItemModels);
 
         dataHelper.createRecipes(Recipes::addRecipes);
-
-        var blockTags = new BlockTags(output, lookup, helper);
+        dataHelper.createTags(Registries.BLOCK, ModTags::createBlockTags);
+        dataHelper.createTags(Registries.ITEM, ModTags::createItemTags);
+        dataHelper.createTags(Registries.FLUID, ModTags::createFluidTags);
+        dataHelper.createTags(Registries.STRUCTURE_SET, ModTags::createStructureSetTags);
+        dataHelper.createTags(Registries.WORLD_PRESET, ModTags::createWorldPresetTags);
 
         gen.addProvider(true, new LootTables(output));
-        gen.addProvider(true, blockTags);
-        gen.addProvider(true, new ItemTags(output, lookup, blockTags.contentsGetter(), helper));
-        gen.addProvider(true, new StructureTags(output, lookup, helper));
-        gen.addProvider(true, new WorldPresetTags(output, lookup, helper));
         gen.addProvider(true, new Advancements(output, lookup, helper));
     }
 }

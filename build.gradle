@@ -76,6 +76,16 @@ repositories {
         content { includeGroup "mezz.jei" }
     }
     maven {
+        name = 'Architectury API'
+        url = "https://maven.architectury.dev"
+        content { includeGroup "dev.architectury" }
+    }
+    maven {
+        name = 'KubeJS and Rhino'
+        url = "https://maven.saps.dev/minecraft"
+        content { includeGroup "dev.latvian.mods" }
+    }
+    maven {
         name = 'ModKit'
         url 'https://jitpack.io'
         content { includeGroup 'com.github.thedarkcolour' }
@@ -85,17 +95,21 @@ repositories {
 dependencies {
     minecraft("net.minecraftforge:forge:${mc_version}-${forge_version}")
 
-    // TOP
-    implementation(fg.deobf("mcjty.theoneprobe:theoneprobe:1.20.0-${top_version}") {
+    // TOP OPTIONAL
+    implementation(fg.deobf("mcjty.theoneprobe:theoneprobe:1.20.1-${top_version}") {
         transitive = false
     })
     // JEI OPTIONAL
     compileOnly(fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}"))
     compileOnly(fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}"))
-    // at runtime, use the full JEI jar for Forge
     runtimeOnly(fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}"))
-    // not required for players
-    implementation fg.deobf('com.github.thedarkcolour:ModKit:ea67392fd6')
+    // KubeJS OPTIONAL
+    //implementation fg.deobf("dev.latvian.mods:kubejs-forge:${kubejs_version}")
+    //implementation fg.deobf("dev.latvian.mods:rhino-forge:${rhino_version}")
+    //implementation fg.deobf("dev.architectury:architectury-forge:${architectury_version}")
+
+    // ModKit DEV ONLY
+    implementation fg.deobf('com.github.thedarkcolour:ModKit:0aab5a727b')
 }
 
 def replaceProperties = [ mc_version: mc_version, mod_version: version ]

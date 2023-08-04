@@ -8,6 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -45,7 +46,7 @@ public class CompostColors {
     }
 
     public static boolean isLoaded() {
-        return COLORS.isEmpty();
+        return !COLORS.isEmpty();
     }
 
     private static void loadVanilla() {
@@ -130,7 +131,15 @@ public class CompostColors {
                         }
 
                         if (pixels > 0 && (r | g | b) != 0) {
-                            Color c = new Color(r / pixels, g / pixels, b / pixels).brighter();
+                            var tint = Minecraft.getInstance().getItemColors().getColor(new ItemStack(item), 0);
+                            Color c = new Color(
+                                    r / pixels * (tint >> 16) & 0xff,
+                                    g / pixels * (tint >> 8) & 0xff,
+                                    b / pixels * tint & 0xff
+                            );
+                            // do not brighten a tinted texture
+                            if (tint == 0) c = c.brighter();
+
                             Vector3i color = new Vector3i(c.getRed(), c.getGreen(), c.getBlue());
                             ExNihiloReborn.LOGGER.debug("Item '{}' has color ({}, {}, {})\n", entry.getKey().location(), color.x, color.y, color.z);
                             CompostColors.COLORS.put(item, color);

@@ -1,7 +1,6 @@
 package thedarkcolour.exnihiloreborn.client.ter;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -9,7 +8,6 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.inventory.InventoryMenu;
@@ -21,6 +19,7 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import thedarkcolour.exnihiloreborn.ExNihiloReborn;
 import thedarkcolour.exnihiloreborn.blockentity.BarrelBlockEntity;
 import thedarkcolour.exnihiloreborn.client.ClientHandler;
+import thedarkcolour.exnihiloreborn.client.RenderUtil;
 
 public class BarrelRenderer implements BlockEntityRenderer<BarrelBlockEntity> {
     public static final ResourceLocation COMPOST_DIRT_TEXTURE = new ResourceLocation(ExNihiloReborn.ID, "block/compost_dirt");
@@ -79,7 +78,7 @@ public class BarrelRenderer implements BlockEntityRenderer<BarrelBlockEntity> {
                 // Setup rendering
                 var builder = buffers.getBuffer(ItemBlockRenderTypes.getRenderLayer(fluid.defaultFluidState()));
 
-                renderContents(builder, stack, fluidStack.getAmount() / 1000.0f, r, g, b, sprite, light, 2.0f, 1.0f, 14.0f);
+                RenderUtil.renderFlatSpriteLerp(builder, stack, fluidStack.getAmount() / 1000.0f, r, g, b, sprite, light, 2.0f, 1.0f, 14.0f);
             }
         });
 
@@ -107,44 +106,7 @@ public class BarrelRenderer implements BlockEntityRenderer<BarrelBlockEntity> {
             g = (int) Mth.lerp(compostProgress, g, 169);  // default green is
             b = (int) Mth.lerp(compostProgress, b,  109);  // default green is
 
-            renderContents(builder, stack, barrel.compost / 1000.0f, r, g, b, sprite, light, 2.0f, 1.0f, 14.0f);
+            RenderUtil.renderFlatSpriteLerp(builder, stack, barrel.compost / 1000.0f, r, g, b, sprite, light, 2.0f, 1.0f, 14.0f);
         }
-    }
-
-    public static void renderContents(VertexConsumer builder, PoseStack stack, float percentage, int color, TextureAtlasSprite sprite, int light, float edge, float yMin, float yMax) {
-        renderContents(builder, stack, percentage, (color >> 16) & 0xff, (color >> 8) & 0xff, (color >> 0) & 0xff, sprite, light, edge, yMin, yMax);
-    }
-
-    // Renders a sprite inside the barrel with the height determined by how full the barrel is.
-    public static void renderContents(VertexConsumer builder, PoseStack stack, float percentage, int r, int g, int b, TextureAtlasSprite sprite, int light, float edge, float yMin, float yMax) {
-        // Height
-        float height = ((yMax - yMin) / 16.0f) * percentage;
-
-        // Offset by specified number of pixels
-        stack.pushPose();
-        stack.translate(0.0, yMin / 16.0, 0.0);
-
-        putQuad(builder, stack, height, r, g, b, sprite, light, edge);
-
-        stack.popPose();
-    }
-
-    // Renders a sprite
-    private static void putQuad(VertexConsumer builder, PoseStack stack, float quadHeight, int r, int g, int b, TextureAtlasSprite sprite, int light, float edge) {
-        var pose = stack.last().pose();
-
-        // Texture coordinates
-        float uMin = sprite.getU0();
-        float uMax = sprite.getU1();
-        float vMin = sprite.getV0();
-        float vMax = sprite.getV1();
-
-        float edgeMin = edge / 16.0f;
-        float edgeMax = (16.0f - edge) / 16.0f;
-
-        builder.vertex(pose, edgeMin, quadHeight, edgeMin).color(r, g, b, 255).uv(uMin, vMin).uv2(light).normal(0.0f, 1.0f, 0.0f).endVertex();
-        builder.vertex(pose, edgeMin, quadHeight, edgeMax).color(r, g, b, 255).uv(uMin, vMax).uv2(light).normal(0.0f, 1.0f, 0.0f).endVertex();
-        builder.vertex(pose, edgeMax, quadHeight, edgeMax).color(r, g, b, 255).uv(uMax, vMax).uv2(light).normal(0.0f, 1.0f, 0.0f).endVertex();
-        builder.vertex(pose, edgeMax, quadHeight, edgeMin).color(r, g, b, 255).uv(uMax, vMin).uv2(light).normal(0.0f, 1.0f, 0.0f).endVertex();
     }
 }

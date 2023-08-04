@@ -19,7 +19,7 @@ public class WitchWaterFluid extends FluidType {
     private static final ResourceLocation OVERLAY_TEXTURE = new ResourceLocation("block/water_overlay");
 
     public static ForgeFlowingFluid.Properties properties() {
-        return new ForgeFlowingFluid.Properties(EFluids.WITCH_WATER, EFluids.WITCH_WATER_STILL, EFluids.WITCH_WATER_FLOWING).block(EBlocks.WITCH_WATER).bucket(EItems.WITCH_WATER_BUCKET);
+        return new ForgeFlowingFluid.Properties(EFluids.WITCH_WATER_TYPE, EFluids.WITCH_WATER_STILL, EFluids.WITCH_WATER_FLOWING).block(EBlocks.WITCH_WATER).bucket(EItems.WITCH_WATER_BUCKET);
     }
 
     public WitchWaterFluid() {

@@ -6,12 +6,12 @@ import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
+import thedarkcolour.exnihiloreborn.recipe.EFinishedRecipe;
 import thedarkcolour.exnihiloreborn.registry.ERecipeSerializers;
 
 import javax.annotation.Nullable;
 
-public class FinishedBarrelCompostRecipe implements FinishedRecipe {
-    private final Advancement.Builder advancement = Advancement.Builder.advancement();
+public class FinishedBarrelCompostRecipe implements EFinishedRecipe {
     private final ResourceLocation id;
     private final Ingredient ingredient;
     private final int volume;
@@ -36,17 +36,5 @@ public class FinishedBarrelCompostRecipe implements FinishedRecipe {
     @Override
     public RecipeSerializer<?> getType() {
         return ERecipeSerializers.BARREL_COMPOST.get();
-    }
-
-    @Nullable
-    @Override
-    public JsonObject serializeAdvancement() {
-        return null;
-    }
-
-    @Nullable
-    @Override
-    public ResourceLocation getAdvancementId() {
-        return null;
     }
 }

@@ -20,7 +20,8 @@ public class InfestedLeavesRenderer implements BlockEntityRenderer<InfestedLeave
         if (state == null) state = Blocks.OAK_LEAVES.defaultBlockState();
 
         // If something is wrong render default leaves
-        if (!te.hasLevel()) {
+        var level = te.getLevel();
+        if (level == null) {
             Minecraft.getInstance().getBlockRenderer().renderSingleBlock(state, stack, buffer, light, overlay, ModelData.EMPTY, null);
             return;
         }
@@ -29,7 +30,7 @@ public class InfestedLeavesRenderer implements BlockEntityRenderer<InfestedLeave
         float progress = te.getProgress();
 
         // Get colors
-        int col = mc.getBlockColors().getColor(state, te.getLevel(), te.getBlockPos(), 0);
+        int col = mc.getBlockColors().getColor(state, level, te.getBlockPos(), 0);
 
         // Average the white color with the biome color
         float r = Mth.lerp(progress, (col >> 16) & 0xff, 255.0f);
@@ -43,7 +44,7 @@ public class InfestedLeavesRenderer implements BlockEntityRenderer<InfestedLeave
 
         // Render
         var model = mc.getBlockRenderer().getBlockModel(state);
-        for (var renderType : model.getRenderTypes(state, te.getLevel().random, ModelData.EMPTY)) {
+        for (var renderType : model.getRenderTypes(state, level.random, ModelData.EMPTY)) {
             mc.getBlockRenderer().getModelRenderer().renderModel(stack.last(), buffer.getBuffer(RenderTypeHelper.getEntityRenderType(renderType, false)), state, model, red, green, blue, light, overlay, ModelData.EMPTY, renderType);
         }
     }

@@ -21,8 +21,7 @@ import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import thedarkcolour.exnihiloreborn.ExNihiloReborn;
-import thedarkcolour.exnihiloreborn.blockentity.LavaCrucibleBlockEntity;
-import thedarkcolour.exnihiloreborn.blockentity.WaterCrucibleBlockEntity;
+import thedarkcolour.exnihiloreborn.recipe.RecipeUtil;
 import thedarkcolour.exnihiloreborn.client.CompostColors;
 import thedarkcolour.exnihiloreborn.voidworld.VoidChunkGenerator;
 import thedarkcolour.exnihiloreborn.compat.top.TopCompatExNihiloReborn;
@@ -99,13 +98,12 @@ public final class EventHandler {
         InterModComms.sendTo("theoneprobe", "getTheOneProbe", TopCompatExNihiloReborn::new);
     }
 
-    public static void addReloadListeners(AddReloadListenerEvent event) {
+    private static void addReloadListeners(AddReloadListenerEvent event) {
         var recipes = event.getServerResources().getRecipeManager();
         event.addListener((prepBarrier, resourceManager, prepProfiler, reloadProfiler, backgroundExecutor, gameExecutor) -> {
             return CompletableFuture.allOf().thenCompose(prepBarrier::wait).thenRunAsync(() -> {
-                LavaCrucibleBlockEntity.RECIPES_CACHE.invalidateAll();
-                WaterCrucibleBlockEntity.RECIPES_CACHE.invalidateAll();
                 HammerItem.refreshValidBlocks(recipes);
+                RecipeUtil.reload(recipes);
             }, gameExecutor);
         });
     }

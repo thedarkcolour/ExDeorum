@@ -48,7 +48,7 @@ public class BarrelBlock extends Block implements EntityBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState pState, BlockEntityType<T> type) {
-        return !level.isClientSide && type == EBlockEntities.BARREL.get() ? (BlockEntityTicker<T>) new BarrelBlockEntity.Ticker() : null;
+        return type == EBlockEntities.BARREL.get() ? (BlockEntityTicker<T>) new BarrelBlockEntity.Ticker() : null;
     }
 
     @Override
@@ -73,7 +73,7 @@ public class BarrelBlock extends Block implements EntityBlock {
                     var item = barrel.getItem();
 
                     if (!item.isEmpty()) {
-                        Containers.dropContents(level, pos, NonNullList.of(ItemStack.EMPTY, item));
+                        EBlock.dropItem(level, pos, item);
                     }
                 }
             }

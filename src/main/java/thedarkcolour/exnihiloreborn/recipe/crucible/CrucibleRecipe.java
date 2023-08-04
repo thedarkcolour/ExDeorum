@@ -7,6 +7,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.fluids.FluidStack;
+import thedarkcolour.exnihiloreborn.recipe.RecipeUtil;
 import thedarkcolour.exnihiloreborn.recipe.CodecUtil;
 import thedarkcolour.exnihiloreborn.recipe.SingleIngredientRecipe;
 import thedarkcolour.exnihiloreborn.registry.ERecipeSerializers;
@@ -21,6 +22,10 @@ public class CrucibleRecipe extends SingleIngredientRecipe {
         super(id, ingredient);
         this.type = type;
         this.result = result;
+
+        if (this.dependsOnNbt) {
+            throw new IllegalArgumentException("Cannot use NBT to determine Ex Nihilo Reborn Crucible output");
+        }
     }
 
     public FluidStack getResult() {
@@ -46,7 +51,7 @@ public class CrucibleRecipe extends SingleIngredientRecipe {
 
         @Override
         public CrucibleRecipe fromJson(ResourceLocation id, JsonObject json) {
-            Ingredient ingredient = readIngredient(json, "ingredient");
+            Ingredient ingredient = RecipeUtil.readIngredient(json, "ingredient");
             FluidStack stack = CodecUtil.decode(FluidStack.CODEC, json.get("fluid"));
 
             return new CrucibleRecipe(id, type, ingredient, stack);

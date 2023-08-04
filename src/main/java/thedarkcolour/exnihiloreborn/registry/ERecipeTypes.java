@@ -6,6 +6,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 import thedarkcolour.exnihiloreborn.ExNihiloReborn;
 import thedarkcolour.exnihiloreborn.recipe.barrel.BarrelCompostRecipe;
+import thedarkcolour.exnihiloreborn.recipe.barrel.BarrelMixingRecipe;
 import thedarkcolour.exnihiloreborn.recipe.crucible.CrucibleRecipe;
 import thedarkcolour.exnihiloreborn.recipe.hammer.HammerRecipe;
 import thedarkcolour.exnihiloreborn.recipe.sieve.SieveRecipe;
@@ -14,6 +15,7 @@ public class ERecipeTypes {
     public static final DeferredRegister<RecipeType<?>> RECIPE_TYPES = DeferredRegister.create(Registries.RECIPE_TYPE, ExNihiloReborn.ID);
 
     public static final RegistryObject<RecipeType<BarrelCompostRecipe>> BARREL_COMPOST = RECIPE_TYPES.register("barrel_compost", () -> RecipeType.simple(ERecipeTypes.BARREL_COMPOST.getId()));
+    public static final RegistryObject<RecipeType<BarrelMixingRecipe>> BARREL_MIXING = RECIPE_TYPES.register("barrel_mixing", () -> RecipeType.simple(ERecipeTypes.BARREL_MIXING.getId()));
 
     public static final RegistryObject<RecipeType<CrucibleRecipe>> LAVA_CRUCIBLE = RECIPE_TYPES.register("lava_crucible", () -> RecipeType.simple(ERecipeTypes.LAVA_CRUCIBLE.getId()));
     public static final RegistryObject<RecipeType<CrucibleRecipe>> WATER_CRUCIBLE = RECIPE_TYPES.register("water_crucible", () -> RecipeType.simple(ERecipeTypes.WATER_CRUCIBLE.getId()));

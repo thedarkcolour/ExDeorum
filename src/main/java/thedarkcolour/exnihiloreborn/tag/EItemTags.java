@@ -9,6 +9,9 @@ import thedarkcolour.exnihiloreborn.ExNihiloReborn;
 public class EItemTags {
     public static final TagKey<Item> CROOKS = tag("crooks");
     public static final TagKey<Item> HAMMERS = tag("hammers");
+    public static final TagKey<Item> SIEVE_MESHES = tag("sieve_meshes");
+    public static final TagKey<Item> PEBBLES = tag("pebbles");
+
     public static final TagKey<Item> WOODEN_BARRELS = tag("wooden_barrels");
     public static final TagKey<Item> STONE_BARRELS = tag("stone_barrels");
     public static final TagKey<Item> BARRELS = tag("barrels");

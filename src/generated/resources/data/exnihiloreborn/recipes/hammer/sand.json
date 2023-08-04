@@ -3,13 +3,6 @@
   "ingredient": {
     "item": "minecraft:gravel"
   },
-  "rewards": [
-    {
-      "chance": 1.0,
-      "item": {
-        "Count": 1,
-        "id": "minecraft:sand"
-      }
-    }
-  ]
+  "result": "minecraft:sand",
+  "result_amount": 1.0
 }
