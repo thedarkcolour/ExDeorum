@@ -1,0 +1,9 @@
+{
+  "parent": "exdeorum:block/template_crucible",
+  "textures": {
+    "bottom": "minecraft:block/spruce_log",
+    "inside": "minecraft:block/spruce_log",
+    "side": "minecraft:block/spruce_log",
+    "top": "minecraft:block/spruce_log"
+  }
+}

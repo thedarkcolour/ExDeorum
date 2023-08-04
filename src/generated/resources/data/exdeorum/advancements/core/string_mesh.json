@@ -1,0 +1,38 @@
+{
+  "parent": "exdeorum:core/silk_worm",
+  "criteria": {
+    "has_string_mesh": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "exdeorum:string_mesh"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.exdeorum.core.string_mesh.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "exdeorum:string_mesh"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.exdeorum.core.string_mesh.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_string_mesh"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

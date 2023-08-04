@@ -1,0 +1,9 @@
+{
+  "parent": "exdeorum:block/template_crucible",
+  "textures": {
+    "bottom": "exdeorum:block/unfired_crucible",
+    "inside": "exdeorum:block/unfired_crucible",
+    "side": "exdeorum:block/unfired_crucible",
+    "top": "exdeorum:block/unfired_crucible"
+  }
+}

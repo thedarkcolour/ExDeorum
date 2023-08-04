@@ -1,0 +1,9 @@
+{
+  "parent": "exdeorum:block/template_crucible",
+  "textures": {
+    "bottom": "minecraft:block/mangrove_log",
+    "inside": "minecraft:block/mangrove_log",
+    "side": "minecraft:block/mangrove_log",
+    "top": "minecraft:block/mangrove_log"
+  }
+}

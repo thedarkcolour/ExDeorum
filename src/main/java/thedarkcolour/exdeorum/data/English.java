@@ -22,7 +22,7 @@ class English {
         english.add(TranslationKeys.STRING_MESH_ADVANCEMENT_DESCRIPTION, "Craft a string mesh to use in a sieve");
 
         english.add(TranslationKeys.SILK_WORM_JEI_INFO, "Silk worms have a 1 in 100 chance to drop from leaves harvested with a Crook. Using a silk worm on a tree's leaves will infest them, gradually spreading through the entire tree. 100% infested leaves can be harvested for string, but do not drop saplings.");
-        english.add(TranslationKeys.SIEVE_JEI_INFO, "Sieves are used to filter out certain items from soft blocks like gravel and dirt. A mesh is required to use the sieve, and it can be enchanted with Fortune and Efficiency. Adjacent sieves can be used simultaneously, with a maximum of 9 sieves at a time in a 3x3 shape.");
+        english.add(TranslationKeys.SIEVE_JEI_INFO, "Sieves are used to sift for items from soft blocks like gravel and dirt. A mesh is required to use the sieve. Meshes can be enchanted with Fortune and Efficiency. Adjacent sieves in a 3x3 area can be used simultaneously.");
         english.add(TranslationKeys.BARREL_COMPOST_CATEGORY_TITLE, "Barrel Compost");
         english.add(TranslationKeys.BARREL_COMPOST_RECIPE_VOLUME, "Compost: %s");
         english.add(TranslationKeys.WATER_CRUCIBLE_CATEGORY_TITLE, "Water Crucible");

@@ -1,0 +1,7 @@
+{
+  "type": "exdeorum:barrel_compost",
+  "ingredient": {
+    "item": "minecraft:melon_slice"
+  },
+  "volume": 40
+}

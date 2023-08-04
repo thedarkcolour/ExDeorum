@@ -1,0 +1,36 @@
+{
+  "parent": "exdeorum:core/root",
+  "criteria": {
+    "has_barrel": {
+      "conditions": {
+        "items": [
+          {
+            "tag": "exdeorum:barrels"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.exdeorum.core.barrel.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "exdeorum:oak_barrel"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.exdeorum.core.barrel.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_barrel"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

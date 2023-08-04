@@ -1,0 +1,10 @@
+{
+  "type": "exdeorum:water_crucible",
+  "fluid": {
+    "Amount": 250,
+    "FluidName": "minecraft:water"
+  },
+  "ingredient": {
+    "item": "minecraft:cactus"
+  }
+}

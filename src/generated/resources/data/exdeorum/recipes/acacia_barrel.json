@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "m": {
+      "item": "minecraft:acacia_slab"
+    },
+    "s": {
+      "item": "minecraft:acacia_planks"
+    }
+  },
+  "pattern": [
+    "s s",
+    "s s",
+    "sms"
+  ],
+  "result": {
+    "item": "exdeorum:acacia_barrel"
+  },
+  "show_notification": true
+}

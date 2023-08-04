@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "m": {
+      "item": "minecraft:oak_slab"
+    },
+    "s": {
+      "item": "minecraft:oak_log"
+    }
+  },
+  "pattern": [
+    "s s",
+    "s s",
+    "sms"
+  ],
+  "result": {
+    "item": "exdeorum:oak_crucible"
+  },
+  "show_notification": true
+}

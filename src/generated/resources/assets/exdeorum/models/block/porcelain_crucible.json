@@ -1,0 +1,9 @@
+{
+  "parent": "exdeorum:block/template_crucible",
+  "textures": {
+    "bottom": "exdeorum:block/porcelain_crucible",
+    "inside": "exdeorum:block/porcelain_crucible",
+    "side": "exdeorum:block/porcelain_crucible",
+    "top": "exdeorum:block/porcelain_crucible"
+  }
+}

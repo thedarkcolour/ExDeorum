@@ -1,0 +1,15 @@
+{
+  "type": "exdeorum:barrel_compost",
+  "ingredient": [
+    {
+      "item": "minecraft:potato"
+    },
+    {
+      "item": "minecraft:baked_potato"
+    },
+    {
+      "item": "minecraft:poisonous_potato"
+    }
+  ],
+  "volume": 80
+}

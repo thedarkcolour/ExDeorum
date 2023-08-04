@@ -1,0 +1,37 @@
+{
+  "parent": "exdeorum:core/root",
+  "criteria": {
+    "craft_crook": {
+      "conditions": {
+        "items": [
+          {
+            "tag": "exdeorum:crooks"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.exdeorum.core.crook.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "exdeorum:crook",
+      "nbt": "{Damage:0}"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.exdeorum.core.crook.title"
+    }
+  },
+  "requirements": [
+    [
+      "craft_crook"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

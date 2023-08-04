@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "m": {
+      "item": "minecraft:spruce_slab"
+    },
+    "s": {
+      "item": "minecraft:spruce_log"
+    }
+  },
+  "pattern": [
+    "s s",
+    "s s",
+    "sms"
+  ],
+  "result": {
+    "item": "exdeorum:spruce_crucible"
+  },
+  "show_notification": true
+}

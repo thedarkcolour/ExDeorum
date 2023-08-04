@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "exdeorum:item/iron_ore_chunk"
+  }
+}

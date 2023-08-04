@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "m": {
+      "tag": "forge:ingots/iron"
+    },
+    "s": {
+      "tag": "forge:rods/wooden"
+    }
+  },
+  "pattern": [
+    " m ",
+    " sm",
+    "s  "
+  ],
+  "result": {
+    "item": "exdeorum:iron_hammer"
+  },
+  "show_notification": true
+}

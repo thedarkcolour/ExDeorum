@@ -1,0 +1,9 @@
+{
+  "parent": "exdeorum:block/template_crucible",
+  "textures": {
+    "bottom": "minecraft:block/cherry_log",
+    "inside": "minecraft:block/cherry_log",
+    "side": "minecraft:block/cherry_log",
+    "top": "minecraft:block/cherry_log"
+  }
+}

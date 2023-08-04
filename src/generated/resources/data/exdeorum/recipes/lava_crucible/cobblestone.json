@@ -1,0 +1,10 @@
+{
+  "type": "exdeorum:lava_crucible",
+  "fluid": {
+    "Amount": 250,
+    "FluidName": "minecraft:lava"
+  },
+  "ingredient": {
+    "item": "minecraft:cobblestone"
+  }
+}

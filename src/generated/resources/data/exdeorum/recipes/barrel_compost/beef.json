@@ -1,0 +1,12 @@
+{
+  "type": "exdeorum:barrel_compost",
+  "ingredient": [
+    {
+      "item": "minecraft:beef"
+    },
+    {
+      "item": "minecraft:cooked_beef"
+    }
+  ],
+  "volume": 150
+}

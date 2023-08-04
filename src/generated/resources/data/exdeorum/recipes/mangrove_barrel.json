@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "m": {
+      "item": "minecraft:mangrove_slab"
+    },
+    "s": {
+      "item": "minecraft:mangrove_planks"
+    }
+  },
+  "pattern": [
+    "s s",
+    "s s",
+    "sms"
+  ],
+  "result": {
+    "item": "exdeorum:mangrove_barrel"
+  },
+  "show_notification": true
+}

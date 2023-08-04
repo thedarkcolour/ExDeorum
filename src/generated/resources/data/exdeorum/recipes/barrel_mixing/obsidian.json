@@ -1,0 +1,9 @@
+{
+  "type": "exdeorum:barrel_mixing",
+  "fluid_amount": 1000,
+  "fluid_type": "minecraft:lava",
+  "ingredient": {
+    "item": "minecraft:water_bucket"
+  },
+  "result": "minecraft:obsidian"
+}

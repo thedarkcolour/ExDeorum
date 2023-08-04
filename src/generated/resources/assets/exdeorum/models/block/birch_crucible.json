@@ -1,0 +1,9 @@
+{
+  "parent": "exdeorum:block/template_crucible",
+  "textures": {
+    "bottom": "minecraft:block/birch_log",
+    "inside": "minecraft:block/birch_log",
+    "side": "minecraft:block/birch_log",
+    "top": "minecraft:block/birch_log"
+  }
+}

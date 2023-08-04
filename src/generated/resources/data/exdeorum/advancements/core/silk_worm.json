@@ -1,0 +1,38 @@
+{
+  "parent": "exdeorum:core/crook",
+  "criteria": {
+    "has_silk_worm": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "exdeorum:silk_worm"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.exdeorum.core.silk_worm.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "exdeorum:silk_worm"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.exdeorum.core.silk_worm.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_silk_worm"
+    ]
+  ],
+  "sends_telemetry_event": true
+}
