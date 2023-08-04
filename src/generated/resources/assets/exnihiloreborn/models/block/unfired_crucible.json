@@ -1,9 +1,0 @@
-{
-  "parent": "exnihiloreborn:block/template_crucible",
-  "textures": {
-    "bottom": "exnihiloreborn:block/unfired_crucible",
-    "inside": "exnihiloreborn:block/unfired_crucible",
-    "side": "exnihiloreborn:block/unfired_crucible",
-    "top": "exnihiloreborn:block/unfired_crucible"
-  }
-}

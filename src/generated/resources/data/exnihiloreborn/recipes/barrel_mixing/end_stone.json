@@ -1,9 +1,0 @@
-{
-  "type": "exnihiloreborn:barrel_mixing",
-  "fluid_amount": 1000,
-  "fluid_type": "minecraft:lava",
-  "ingredient": {
-    "item": "minecraft:glowstone_dust"
-  },
-  "result": "minecraft:end_stone"
-}

@@ -1,9 +1,0 @@
-{
-  "parent": "exnihiloreborn:block/template_crucible",
-  "textures": {
-    "bottom": "minecraft:block/jungle_log",
-    "inside": "minecraft:block/jungle_log",
-    "side": "minecraft:block/jungle_log",
-    "top": "minecraft:block/jungle_log"
-  }
-}

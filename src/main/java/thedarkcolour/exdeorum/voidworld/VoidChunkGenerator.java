@@ -1,0 +1,133 @@
+package thedarkcolour.exdeorum.voidworld;
+
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.WorldGenRegion;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.level.LevelHeightAccessor;
+import net.minecraft.world.level.NoiseColumn;
+import net.minecraft.world.level.StructureManager;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.biome.BiomeManager;
+import net.minecraft.world.level.biome.BiomeSource;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.ChunkAccess;
+import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.chunk.ChunkGeneratorStructureState;
+import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator;
+import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
+import net.minecraft.world.level.levelgen.RandomState;
+import net.minecraft.world.level.levelgen.blending.Blender;
+import net.minecraft.world.level.levelgen.structure.StructureSet;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.util.stream.Stream;
+
+public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
+    public static final Codec<VoidChunkGenerator> CODEC = RecordCodecBuilder.create((inst) -> {
+        return inst.group(
+                BiomeSource.CODEC.fieldOf("biome_source").forGetter(gen -> gen.biomeSource),
+                NoiseGeneratorSettings.CODEC.fieldOf("settings").forGetter(gen -> gen.settings),
+                TagKey.codec(Registries.STRUCTURE_SET).fieldOf("allowed_structure_sets").forGetter(gen ->  gen.allowedStructureSets)
+        ).apply(inst, inst.stable(VoidChunkGenerator::new));
+    });
+    private final Holder<NoiseGeneratorSettings> settings;
+    private final TagKey<StructureSet> allowedStructureSets;
+
+    public VoidChunkGenerator(BiomeSource biomeSource, Holder<NoiseGeneratorSettings> settings, TagKey<StructureSet> allowedStructureSets) {
+        super(biomeSource, settings);
+        this.settings = settings;
+        this.allowedStructureSets = allowedStructureSets;
+    }
+
+    @Override
+    protected Codec<? extends ChunkGenerator> codec() {
+        return CODEC;
+    }
+
+    @Override
+    public void applyCarvers(WorldGenRegion pLevel, long pSeed, RandomState pRandom, BiomeManager pBiomeManager, StructureManager pStructureManager, ChunkAccess pChunk, GenerationStep.Carving pStep) {
+    }
+
+    // Filter structures
+    @Override
+    public ChunkGeneratorStructureState createState(HolderLookup<StructureSet> lookup, RandomState pRandomState, long pSeed) {
+        return super.createState(new FilteredLookup(lookup, allowedStructureSets), pRandomState, pSeed);
+    }
+
+    @Override
+    public void buildSurface(WorldGenRegion pLevel, StructureManager pStructureManager, RandomState pRandom, ChunkAccess pChunk) {
+    }
+
+    @Override
+    public void spawnOriginalMobs(WorldGenRegion pLevel) {
+    }
+
+    @Override
+    public CompletableFuture<ChunkAccess> fillFromNoise(Executor pExecutor, Blender pBlender, RandomState pRandom, StructureManager pStructureManager, ChunkAccess chunk) {
+        return CompletableFuture.completedFuture(chunk);
+    }
+
+    @Override
+    public int getBaseHeight(int pX, int pZ, Heightmap.Types pType, LevelHeightAccessor pLevel, RandomState pRandom) {
+        return getMinY();
+    }
+
+    @Override
+    public NoiseColumn getBaseColumn(int pX, int pZ, LevelHeightAccessor pHeight, RandomState pRandom) {
+        return new NoiseColumn(0, new BlockState[0]);
+    }
+
+    @Override
+    public void addDebugScreenInfo(List<String> pInfo, RandomState pRandom, BlockPos pPos) {
+    }
+
+    @Override
+    public void createReferences(WorldGenLevel level, StructureManager pStructureManager, ChunkAccess pChunk) {
+        if (hasStructures(level.registryAccess())) {
+            super.createReferences(level, pStructureManager, pChunk);
+        }
+    }
+
+    @Override
+    public void createStructures(RegistryAccess registries, ChunkGeneratorStructureState pStructureState, StructureManager pStructureManager, ChunkAccess pChunk, StructureTemplateManager pStructureTemplateManager) {
+        if (hasStructures(registries)) {
+            super.createStructures(registries, pStructureState, pStructureManager, pChunk, pStructureTemplateManager);
+        }
+    }
+
+    private boolean hasStructures(RegistryAccess registries) {
+        return registries.registryOrThrow(Registries.STRUCTURE_SET).getTagOrEmpty(allowedStructureSets).iterator().hasNext();
+    }
+
+    private static class FilteredLookup extends HolderLookup.Delegate<StructureSet> {
+        private final TagKey<StructureSet> allowedValues;
+
+        private FilteredLookup(HolderLookup<StructureSet> pParent, TagKey<StructureSet> allowedValues) {
+            super(pParent);
+            this.allowedValues = allowedValues;
+        }
+
+        @Override
+        public Optional<Holder.Reference<StructureSet>> get(ResourceKey<StructureSet> key) {
+            return this.parent.get(key).filter(obj -> obj.is(allowedValues));
+        }
+
+        @Override
+        public Stream<Holder.Reference<StructureSet>> listElements() {
+            return this.parent.listElements().filter(obj -> obj.is(allowedValues));
+        }
+    }
+}

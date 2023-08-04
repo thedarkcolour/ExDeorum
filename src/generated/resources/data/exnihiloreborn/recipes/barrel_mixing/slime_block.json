@@ -1,9 +1,0 @@
-{
-  "type": "exnihiloreborn:barrel_mixing",
-  "fluid_amount": 1000,
-  "fluid_type": "minecraft:water",
-  "ingredient": {
-    "item": "minecraft:milk_bucket"
-  },
-  "result": "minecraft:slime_block"
-}

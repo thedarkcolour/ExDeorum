@@ -3,22 +3,22 @@ loaderVersion="[47,)"
 license="All rights reserved"
 
 [[mods]]
-modId="exnihiloreborn"
+modId="exdeorum"
 version="${mod_version}"
-displayName="Ex Nihilo Reborn"
+displayName="Ex Deorum"
 credits="Herobrine knows all. Thanks to Erasmus_Crowley for the original 1.7 mod"
 authors="TheDarkColour"
 description='''
 Bringing back the original Ex Nihilo.
 '''
-[[dependencies.exnihiloreborn]]
+[[dependencies.exdeorum]]
     modId="forge"
     mandatory=true
     versionRange="[47,)"
     ordering="NONE"
     side="BOTH"
 
-[[dependencies.exnihiloreborn]]
+[[dependencies.exdeorum]]
     modId="minecraft"
     mandatory=true
     versionRange="[${mc_version}]"

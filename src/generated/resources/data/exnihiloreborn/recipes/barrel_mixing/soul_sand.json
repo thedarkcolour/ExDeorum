@@ -1,9 +1,0 @@
-{
-  "type": "exnihiloreborn:barrel_mixing",
-  "fluid_amount": 1000,
-  "fluid_type": "exnihiloreborn:witch_water",
-  "ingredient": {
-    "item": "minecraft:sand"
-  },
-  "result": "minecraft:soul_sand"
-}

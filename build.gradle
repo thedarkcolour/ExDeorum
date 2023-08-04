@@ -6,9 +6,9 @@ plugins {
 }
 
 version = '1.0'
-group = 'team.rusty.exnihiloreborn'
+group = 'thedarkcolour.exdeorum'
 base {
-    archivesName = 'exnihiloreborn'
+    archivesName = 'exdeorum'
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
@@ -26,7 +26,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                exnihiloreborn {
+                exdeorum {
                     source sourceSets.main
                 }
             }
@@ -38,7 +38,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                exnihiloreborn {
+                exdeorum {
                     source sourceSets.main
                 }
             }
@@ -49,10 +49,10 @@ minecraft {
 
             property 'forge.logging.console.level', 'debug'
 
-            args '--mod', 'exnihiloreborn', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            args '--mod', 'exdeorum', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
 
             mods {
-                exnihiloreborn {
+                exdeorum {
                     source sourceSets.main
                 }
             }
@@ -141,12 +141,12 @@ processResources {
 jar {
     manifest {
         attributes([
-            "Specification-Title": "exnihiloreborn",
-            "Specification-Vendor": "exnihilorebornsareus",
+            "Specification-Title": "exdeorum",
+            "Specification-Vendor": "exdeorumsareus",
             "Specification-Version": "1", // We are version 1 of ourselves
             "Implementation-Title": project.name,
             "Implementation-Version": "${version}",
-            "Implementation-Vendor" :"exnihilorebornsareus",
+            "Implementation-Vendor" :"exdeorumsareus",
             "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }

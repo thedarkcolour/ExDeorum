@@ -1,6 +1,0 @@
-{
-  "parent": "exnihiloreborn:block/template_barrel",
-  "textures": {
-    "barrel": "minecraft:block/acacia_planks"
-  }
-}

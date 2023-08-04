@@ -1,8 +1,0 @@
-{
-  "type": "exnihiloreborn:hammer",
-  "ingredient": {
-    "item": "minecraft:sand"
-  },
-  "result": "exnihiloreborn:dust",
-  "result_amount": 1.0
-}

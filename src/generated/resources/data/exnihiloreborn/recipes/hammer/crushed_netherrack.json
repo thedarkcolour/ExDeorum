@@ -1,8 +1,0 @@
-{
-  "type": "exnihiloreborn:hammer",
-  "ingredient": {
-    "item": "minecraft:netherrack"
-  },
-  "result": "exnihiloreborn:crushed_netherrack",
-  "result_amount": 1.0
-}
