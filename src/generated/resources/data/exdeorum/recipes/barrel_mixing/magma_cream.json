@@ -1,0 +1,9 @@
+{
+  "type": "exdeorum:barrel_mixing",
+  "fluid": "minecraft:lava",
+  "fluid_amount": 1000,
+  "ingredient": {
+    "item": "minecraft:slime_ball"
+  },
+  "result": "minecraft:magma_cream"
+}

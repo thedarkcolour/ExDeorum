@@ -4,7 +4,12 @@
     "Amount": 50,
     "FluidName": "minecraft:water"
   },
-  "ingredient": {
-    "item": "minecraft:sweet_berries"
-  }
+  "ingredient": [
+    {
+      "item": "minecraft:sweet_berries"
+    },
+    {
+      "item": "minecraft:glow_berries"
+    }
+  ]
 }

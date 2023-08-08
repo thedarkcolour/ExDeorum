@@ -1,0 +1,13 @@
+{
+  "type": "exdeorum:sieve",
+  "ingredient": {
+    "item": "exdeorum:crushed_netherrack"
+  },
+  "mesh": "exdeorum:string_mesh",
+  "result": "minecraft:magma_cream",
+  "result_amount": {
+    "type": "minecraft:binomial",
+    "n": 1.0,
+    "p": 0.05
+  }
+}

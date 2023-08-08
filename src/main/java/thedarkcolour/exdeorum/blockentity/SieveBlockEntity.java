@@ -1,3 +1,21 @@
+/*
+ * Ex Deorum
+ * Copyright (c) 2023 thedarkcolour
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package thedarkcolour.exdeorum.blockentity;
 
 import net.minecraft.core.BlockPos;
@@ -13,6 +31,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
+import thedarkcolour.exdeorum.config.EConfig;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.recipe.sieve.SieveRecipe;
 import thedarkcolour.exdeorum.registry.EBlockEntities;
@@ -28,7 +47,7 @@ public class SieveBlockEntity extends EBlockEntity {
     private ItemStack mesh = ItemStack.EMPTY;
     private short progress = 0; // Max is 100
     private float efficiency = 1f;
-    private float fortune = 1f;
+    private int fortune = 0;
 
     public SieveBlockEntity(BlockPos pos, BlockState state) {
         super(EBlockEntities.SIEVE.get(), pos, state);
@@ -98,50 +117,56 @@ public class SieveBlockEntity extends EBlockEntity {
                     playerItem = this.insertContents(player, hand);
                     markUpdated();
 
-                    var cursor = worldPosition.mutable().move(-1, 0, -1);
+                    if (EConfig.SERVER.simultaneousSieveUsage.get()) {
+                        var cursor = worldPosition.mutable().move(-1, 0, -1);
 
-                    // Fill adjacent sieves
-                    otherSieves:
-                    for (int x = -1; x <= 1; x++) {
-                        for (int z = -1; z <= 1; z++) {
-                            if (playerItem.isEmpty()) {
-                                break otherSieves;
-                            }
+                        // Fill adjacent sieves
+                        otherSieves:
+                        for (int x = -1; x <= 1; x++) {
+                            for (int z = -1; z <= 1; z++) {
+                                if (playerItem.isEmpty()) {
+                                    break otherSieves;
+                                }
 
-                            if ((x | z) != 0) {
-                                if (level.getBlockEntity(cursor) instanceof SieveBlockEntity other) {
-                                    if (other.contents.isEmpty()) {
-                                        if (this.mesh.getItem() == other.mesh.getItem()) {
-                                            playerItem = other.insertContents(player, hand);
-                                            other.markUpdated();
+                                if ((x | z) != 0) {
+                                    if (level.getBlockEntity(cursor) instanceof SieveBlockEntity other) {
+                                        if (other.contents.isEmpty()) {
+                                            if (this.mesh.getItem() == other.mesh.getItem()) {
+                                                playerItem = other.insertContents(player, hand);
+                                                other.markUpdated();
+                                            }
                                         }
                                     }
                                 }
-                            }
 
-                            cursor.move(0, 0, 1);
+                                cursor.move(0, 0, 1);
+                            }
+                            cursor.move(1, 0, -3);
                         }
-                        cursor.move(1, 0, -3);
                     }
                 }
             }
         } else {
-            var cursor = worldPosition.mutable().move(-1, 0, -1);
+            if (EConfig.SERVER.simultaneousSieveUsage.get()) {
+                var cursor = worldPosition.mutable().move(-1, 0, -1);
 
-            // Sieve with adjacent sieves
-            for (int x = -1; x <= 1; x++) {
-                for (int z = -1; z <= 1; z++) {
-                    if (level.getBlockEntity(cursor) instanceof SieveBlockEntity other) {
-                        if (!other.contents.isEmpty()) {
-                            if (this.mesh.getItem() == other.mesh.getItem()) {
-                                other.performSift(player);
+                // Sieve with adjacent sieves
+                for (int x = -1; x <= 1; x++) {
+                    for (int z = -1; z <= 1; z++) {
+                        if (level.getBlockEntity(cursor) instanceof SieveBlockEntity other) {
+                            if (!other.contents.isEmpty()) {
+                                if (this.mesh.getItem() == other.mesh.getItem()) {
+                                    other.performSift(player);
+                                }
                             }
                         }
-                    }
 
-                    cursor.move(0, 0, 1);
+                        cursor.move(0, 0, 1);
+                    }
+                    cursor.move(1, 0, -3);
                 }
-                cursor.move(1, 0, -3);
+            } else {
+                performSift(player);
             }
         }
 
@@ -207,9 +232,8 @@ public class SieveBlockEntity extends EBlockEntity {
 
     private void setMesh(ItemStack mesh) {
         this.mesh = mesh;
-        this.efficiency = 1f + mesh.getEnchantmentLevel(Enchantments.BLOCK_EFFICIENCY) * 0.08f;
-        // Fortune III increases drops by 120% (you should enchant your meshes!)
-        this.fortune = 1f + mesh.getEnchantmentLevel(Enchantments.BLOCK_FORTUNE) * 0.4f;
+        this.efficiency = 1f + mesh.getEnchantmentLevel(Enchantments.BLOCK_EFFICIENCY) * 0.17f;
+        this.fortune = mesh.getEnchantmentLevel(Enchantments.BLOCK_FORTUNE);
     }
 
     private void giveItems(Player player) {
@@ -219,6 +243,12 @@ public class SieveBlockEntity extends EBlockEntity {
 
         for (SieveRecipe recipe : RecipeUtil.getSieveRecipes(level.getRecipeManager(), this.mesh.getItem(), this.contents)) {
             var amount = recipe.resultAmount.getInt(context);
+
+            for (int i = 0; i < this.fortune; i++) {
+                if (rand.nextFloat() < 0.3f) {
+                    amount += recipe.resultAmount.getInt(context);
+                }
+            }
 
             if (amount >= 1) {
                 var itemEntity = new ItemEntity(this.level, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, new ItemStack(recipe.result, amount));

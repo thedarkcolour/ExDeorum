@@ -1,0 +1,13 @@
+{
+  "type": "exdeorum:hammer",
+  "ingredient": [
+    {
+      "item": "minecraft:polished_basalt"
+    },
+    {
+      "item": "minecraft:smooth_basalt"
+    }
+  ],
+  "result": "minecraft:basalt",
+  "result_amount": 1.0
+}

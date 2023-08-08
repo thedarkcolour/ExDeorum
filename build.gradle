@@ -109,7 +109,10 @@ dependencies {
     //implementation fg.deobf("dev.architectury:architectury-forge:${architectury_version}")
 
     // ModKit DEV ONLY
-    implementation fg.deobf('com.github.thedarkcolour:ModKit:0aab5a727b')
+    implementation fg.deobf('com.github.thedarkcolour:ModKit:5ba6a76c4a')
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
 }
 
 def replaceProperties = [ mc_version: mc_version, mod_version: version ]

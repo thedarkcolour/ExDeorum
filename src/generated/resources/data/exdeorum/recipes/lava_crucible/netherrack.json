@@ -5,6 +5,6 @@
     "FluidName": "minecraft:lava"
   },
   "ingredient": {
-    "item": "minecraft:netherrack"
+    "tag": "forge:netherrack"
   }
 }

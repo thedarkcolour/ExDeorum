@@ -1,3 +1,21 @@
+/*
+ * Ex Deorum
+ * Copyright (c) 2023 thedarkcolour
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package thedarkcolour.exdeorum.compat.jei;
 
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -11,7 +29,6 @@ import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.providers.number.BinomialDistributionGenerator;
@@ -44,7 +61,7 @@ class SieveCategory implements IRecipeCategory<JeiSieveRecipeGroup> {
     public SieveCategory(IGuiHelper helper) {
         this.background = Lazy.of(() -> helper.createBlankDrawable(WIDTH, ROW_START + 18 * JeiSieveRecipeGroup.maxSieveRows));
         this.slot = helper.getSlotDrawable();
-        this.row = helper.createDrawable(ExDeorumJeiPlugin.ENH_JEI_TEXTURE, 0, 0, 162, 18);
+        this.row = helper.createDrawable(ExDeorumJeiPlugin.EX_DEORUM_JEI_TEXTURE, 0, 0, 162, 18);
         this.icon = helper.createDrawableItemStack(new ItemStack(EBlocks.OAK_SIEVE.get()));
         this.title = Component.translatable(TranslationKeys.SIEVE_CATEGORY_TITLE);
     }
@@ -115,20 +132,20 @@ class SieveCategory implements IRecipeCategory<JeiSieveRecipeGroup> {
         var maxFormatted = FORMATTER.format(RecipeUtil.getExpectedValue(max));
 
         slot.addTooltipCallback((slotView, tooltip) -> {
-            if (Screen.hasShiftDown()) {
-                tooltip.add(Component.translatable(TranslationKeys.SIEVE_RECIPE_MIN_OUTPUT, minFormatted).withStyle(ChatFormatting.GRAY));
-                tooltip.add(Component.translatable(TranslationKeys.SIEVE_RECIPE_MAX_OUTPUT, maxFormatted).withStyle(ChatFormatting.GRAY));
-            }
+            //if (Screen.hasShiftDown()) {
+            tooltip.add(Component.translatable(TranslationKeys.SIEVE_RECIPE_MIN_OUTPUT, minFormatted).withStyle(ChatFormatting.GRAY));
+            tooltip.add(Component.translatable(TranslationKeys.SIEVE_RECIPE_MAX_OUTPUT, maxFormatted).withStyle(ChatFormatting.GRAY));
+            //}
         });
     }
 
     @Override
     public void draw(JeiSieveRecipeGroup recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
-        slot.draw(graphics, 58, 0);
-        slot.draw(graphics, 86, 0);
+        this.slot.draw(graphics, 58, 0);
+        this.slot.draw(graphics, 86, 0);
 
         for (int i = 0; i < JeiSieveRecipeGroup.maxSieveRows; i++) {
-            row.draw(graphics, 0, 28 + i * 18);
+            this.row.draw(graphics, 0, 28 + i * 18);
         }
     }
 }

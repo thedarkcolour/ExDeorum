@@ -1,5 +1,24 @@
+/*
+ * Ex Deorum
+ * Copyright (c) 2023 thedarkcolour
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package thedarkcolour.exdeorum.blockentity;
 
+import com.mojang.serialization.codecs.EitherMapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -30,6 +49,7 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.registries.ForgeRegistries;
 import thedarkcolour.exdeorum.recipe.crucible.CrucibleRecipe;
+import thedarkcolour.exdeorum.registry.EItems;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -136,8 +156,8 @@ public abstract class AbstractCrucibleBlockEntity extends EBlockEntity {
                 var melts = MELT_OVERRIDES.get();
                 if (melts.containsKey(meltItem)) {
                     lastMelted = melts.get(meltItem);
-                } else if (meltItem instanceof BlockItem blockItem) {
-                    lastMelted = blockItem.getBlock();
+                } else if (meltItem.getClass() == BlockItem.class) {
+                    lastMelted = ((BlockItem) meltItem).getBlock();
                 } else {
                     // If we already have something else inside just use that instead of switching to default
                     if (lastMelted == null) {
@@ -162,7 +182,7 @@ public abstract class AbstractCrucibleBlockEntity extends EBlockEntity {
         return tank;
     }
 
-    protected abstract Block getDefaultMeltBlock();
+    public abstract Block getDefaultMeltBlock();
 
     public Block getLastMelted() {
         return lastMelted;
@@ -184,6 +204,12 @@ public abstract class AbstractCrucibleBlockEntity extends EBlockEntity {
         overrides.put(Items.BIRCH_SAPLING, Blocks.BIRCH_LEAVES);
         overrides.put(Items.CHERRY_SAPLING, Blocks.CHERRY_LEAVES);
         overrides.put(Items.MANGROVE_PROPAGULE, Blocks.MANGROVE_LEAVES);
+        overrides.put(Items.SWEET_BERRIES, Blocks.SPRUCE_LEAVES);
+        overrides.put(Items.GLOW_BERRIES, Blocks.MOSS_BLOCK);
+        overrides.put(EItems.GRASS_SEEDS.get(), Blocks.GRASS_BLOCK);
+        overrides.put(EItems.MYCELIUM_SPORES.get(), Blocks.MYCELIUM);
+        overrides.put(EItems.WARPED_NYLIUM_SPORES.get(), Blocks.WARPED_NYLIUM);
+        overrides.put(EItems.CRIMSON_NYLIUM_SPORES.get(), Blocks.WARPED_NYLIUM);
     }
 
     private static class FluidHandler extends FluidTank {

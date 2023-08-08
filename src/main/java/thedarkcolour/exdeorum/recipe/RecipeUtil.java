@@ -1,3 +1,21 @@
+/*
+ * Ex Deorum
+ * Copyright (c) 2023 thedarkcolour
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package thedarkcolour.exdeorum.recipe;
 
 import com.google.common.cache.Cache;
@@ -5,6 +23,7 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonObject;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
@@ -155,59 +174,32 @@ public final class RecipeUtil {
         };
     }
 
+    // todo support Forge's ingredient types
     public static boolean areIngredientsEqual(Ingredient first, Ingredient second) {
         // although unlikely, we should check this anyway
         if (first == second) return true;
 
         if (first.isVanilla() && second.isVanilla()) {
-            Ingredient.Value[] firstValues = first.values;
-            Ingredient.Value[] secondValues = second.values;
+            var firstValues = new ObjectArrayList<>(first.values);
+            var secondValues = new ObjectArrayList<>(second.values);
 
-            // if arrays are same size, check if their contents are equal (order matters)
-            if (firstValues.length == secondValues.length) {
-                for (int i = 0; i < firstValues.length; i++) {
-                    Ingredient.Value firstValue = firstValues[i];
-                    Ingredient.Value secondValue = secondValues[i];
-                    Class<?> firstKlass = firstValue.getClass();
-                    Class<?> secondKlass = secondValue.getClass();
+            // if arrays are same size, check if their contents are equal (order does not matter)
+            if (firstValues.size() == secondValues.size()) {
+                outer:
+                for (int i = 0; i < firstValues.size(); i++) {
+                    var firstValue = firstValues.get(i);
 
-                    // if values are the same type of class
-                    if (firstKlass == secondKlass) {
-                        if (firstKlass == Ingredient.ItemValue.class) {
-                            // if items are different, return false
-                            if (!ItemStack.matches(((Ingredient.ItemValue) firstValue).item, ((Ingredient.ItemValue) secondValue).item)) {
-                                return false;
-                            }
-                        } else if (firstKlass == Ingredient.TagValue.class) {
-                            // if tags are different, return false
-                            // identity comparison is okay because tags are always interned in vanilla
-                            if (((Ingredient.TagValue) firstValue).tag != ((Ingredient.TagValue) secondValue).tag) {
-                                return false;
-                            }
-                        } else {
-                            var firstItems = firstValue.getItems();
-                            var secondItems = secondValue.getItems();
-                            var len = firstItems.size();
+                    for (int j = 0; j < firstValues.size(); j++) {
+                        if (areValuesEqual(firstValue, secondValues.get(j))) {
+                            firstValues.remove(i);
+                            secondValues.remove(j);
+                            i--;
 
-                            if (len == secondItems.size()) {
-                                Iterator<ItemStack> firstIter = firstItems.iterator();
-                                Iterator<ItemStack> secondIter = secondItems.iterator();
-
-                                while (firstIter.hasNext()) {
-                                    if (!ItemStack.matches(firstIter.next(), secondIter.next())) {
-                                        // if one of the items is different, return false
-                                        return false;
-                                    }
-                                }
-                            } else {
-                                // if values have different amounts of items, return false
-                                return false;
-                            }
+                            continue outer;
                         }
-                    } else {
-                        // if the values are different types, return false
-                        return false;
                     }
+
+                    return false;
                 }
 
                 // return true if everything was equal
@@ -216,6 +208,48 @@ public final class RecipeUtil {
         }
 
         return false;
+    }
+
+    private static boolean areValuesEqual(Ingredient.Value firstValue, Ingredient.Value secondValue) {
+        Class<?> firstKlass = firstValue.getClass();
+        Class<?> secondKlass = secondValue.getClass();
+
+        // if values are the same type of class
+        if (firstKlass == secondKlass) {
+            if (firstKlass == Ingredient.ItemValue.class) {
+                // if items are different, return false
+                return ItemStack.matches(((Ingredient.ItemValue) firstValue).item, ((Ingredient.ItemValue) secondValue).item);
+            } else if (firstKlass == Ingredient.TagValue.class) {
+                // if tags are different, return false
+                // identity comparison is okay because tags are always interned in vanilla
+                return ((Ingredient.TagValue) firstValue).tag == ((Ingredient.TagValue) secondValue).tag;
+            } else {
+                var firstItems = firstValue.getItems();
+                var secondItems = secondValue.getItems();
+                var len = firstItems.size();
+
+                if (len == secondItems.size()) {
+                    Iterator<ItemStack> firstIter = firstItems.iterator();
+                    Iterator<ItemStack> secondIter = secondItems.iterator();
+
+                    while (firstIter.hasNext()) {
+                        if (!ItemStack.matches(firstIter.next(), secondIter.next())) {
+                            // if one of the items is different, return false
+                            return false;
+                        }
+                    }
+                } else {
+                    // if values have different amounts of items, return false
+                    return false;
+                }
+
+                // if all items are the same, return true
+                return true;
+            }
+        } else {
+            // if the values are different types, return false
+            return false;
+        }
     }
 
     public static boolean hasSieveResult(RecipeManager recipes, Item mesh, ItemStack stack) {

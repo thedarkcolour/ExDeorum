@@ -1,6 +1,6 @@
 modLoader="javafml"
 loaderVersion="[47,)"
-license="All rights reserved"
+license="GNU GPLv3"
 
 [[mods]]
 modId="exdeorum"

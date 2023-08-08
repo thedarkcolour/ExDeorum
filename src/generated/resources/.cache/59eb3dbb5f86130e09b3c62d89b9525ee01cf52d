@@ -1,4 +1,4 @@
-// 1.20.1	2023-08-03T18:32:13.5934373	Loot Tables
+// 1.20.1	2023-08-07T23:41:30.8347002	Loot Tables
 105d8a61ea7145d7798146d385d4aad24fd1588d data/exdeorum/loot_tables/blocks/acacia_barrel.json
 1e77127a82cbba0937bb02694f65cf1893aeffcb data/exdeorum/loot_tables/blocks/acacia_crucible.json
 fcc00910a8cc94bed6339d6833fcec53c501a0d7 data/exdeorum/loot_tables/blocks/acacia_sieve.json
@@ -14,6 +14,8 @@ e11b759a2311950d60e0f825393b8e25d11918df data/exdeorum/loot_tables/blocks/birch_
 d52a2d3bcb85c58e549248d5205f863c40d3bd87 data/exdeorum/loot_tables/blocks/crimson_barrel.json
 78b361a27788eeda88a1228a5c813d9106ec038e data/exdeorum/loot_tables/blocks/crimson_crucible.json
 149b1a730939c3a3b2823b77e1b3771ff6397679 data/exdeorum/loot_tables/blocks/crimson_sieve.json
+15d8b5d739f5093cbb11b37b94abd29fd5560cf4 data/exdeorum/loot_tables/blocks/crushed_blackstone.json
+84e81d576fb09922cdebe758b52ffccf56284b10 data/exdeorum/loot_tables/blocks/crushed_deepslate.json
 d15f9ed4837d0015efb7688c9b10716084c78337 data/exdeorum/loot_tables/blocks/crushed_end_stone.json
 cb1d2e4511ad98f974192f5a60161a30472808aa data/exdeorum/loot_tables/blocks/crushed_netherrack.json
 cc2ff4d4632fcffee0d3e06529670a102c280410 data/exdeorum/loot_tables/blocks/dark_oak_barrel.json
@@ -35,7 +37,7 @@ f94bc97efbfd26ccf7dba32d414fb5e33decd5f6 data/exdeorum/loot_tables/blocks/oak_cr
 7e243b44eb3d9f15b983807225da7cb2839dee01 data/exdeorum/loot_tables/blocks/spruce_crucible.json
 091d26076d526bff6bdc730f8a45297996ac6f56 data/exdeorum/loot_tables/blocks/spruce_sieve.json
 82063725ffe92af96bb2502547ba8cc9d3fd411e data/exdeorum/loot_tables/blocks/stone_barrel.json
-ee5d8ec76737c477ad09658042531ff7b91785e2 data/exdeorum/loot_tables/blocks/unfired_crucible.json
+fcd9e1fa1e8ec5c5fe7bb25f300284de6dd8b880 data/exdeorum/loot_tables/blocks/unfired_porcelain_crucible.json
 7433a7a398f38a949f9ef3231f87853505f797da data/exdeorum/loot_tables/blocks/warped_barrel.json
 fe639e82446330279c3ab3d66a576931a62516e5 data/exdeorum/loot_tables/blocks/warped_crucible.json
 c3db3b96077eba364cb012f49e25fa98b98a71ab data/exdeorum/loot_tables/blocks/warped_sieve.json

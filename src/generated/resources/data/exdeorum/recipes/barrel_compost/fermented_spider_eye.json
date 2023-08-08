@@ -1,0 +1,7 @@
+{
+  "type": "exdeorum:barrel_compost",
+  "ingredient": {
+    "item": "minecraft:fermented_spider_eye"
+  },
+  "volume": 100
+}

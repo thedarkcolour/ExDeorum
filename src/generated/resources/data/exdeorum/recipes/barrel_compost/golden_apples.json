@@ -1,0 +1,12 @@
+{
+  "type": "exdeorum:barrel_compost",
+  "ingredient": [
+    {
+      "item": "minecraft:golden_apple"
+    },
+    {
+      "item": "minecraft:enchanted_golden_apple"
+    }
+  ],
+  "volume": 1000
+}

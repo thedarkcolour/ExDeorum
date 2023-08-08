@@ -1,0 +1,22 @@
+{
+    "textures": {
+        "particle": "exdeorum:block/end_cake_side",
+        "bottom": "exdeorum:block/end_cake_bottom",
+        "top": "exdeorum:block/end_cake_top",
+        "side": "exdeorum:block/end_cake_side",
+        "inside": "exdeorum:block/end_cake_inner"
+    },
+    "elements": [
+        {   "from": [ 11, 0, 1 ],
+            "to": [ 15, 8, 15 ],
+            "faces": {
+                "down":  { "texture": "#bottom", "cullface": "down" },
+                "up":    { "texture": "#top" },
+                "north": { "texture": "#side" },
+                "south": { "texture": "#side" },
+                "west":  { "texture": "#inside" },
+                "east":  { "texture": "#side" }
+            }
+        }
+    ]
+}

@@ -4,7 +4,7 @@
   "cookingtime": 200,
   "experience": 0.1,
   "ingredient": {
-    "item": "exdeorum:unfired_crucible"
+    "item": "exdeorum:unfired_porcelain_crucible"
   },
   "result": "exdeorum:porcelain_crucible"
 }

@@ -1,29 +1,72 @@
+/*
+ * Ex Deorum
+ * Copyright (c) 2023 thedarkcolour
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package thedarkcolour.exdeorum.client;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.blaze3d.vertex.VertexFormat;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.ShaderInstance;
+import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.LegacyRandomSource;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraftforge.client.ChunkRenderTypeSet;
+import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.client.model.data.ModelData;
+import net.minecraftforge.fml.unsafe.UnsafeHacks;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.joml.Vector3f;
+import sun.misc.Unsafe;
+import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.client.ter.SieveRenderer;
+
+import java.awt.Color;
+import java.util.Map;
 
 public class RenderUtil {
     public static final LoadingCache<Block, RenderType> TOP_RENDER_TYPES;
     public static final LoadingCache<Block, TextureAtlasSprite> TOP_TEXTURES;
+    public static final RenderStateShard.ShaderStateShard RENDER_TYPE_TINTED_CUTOUT_MIPPED_SHADER = new RenderStateShard.ShaderStateShard(RenderUtil::getRenderTypeTintedCutoutMippedShader);
+    public static final RenderType TINTED_CUTOUT_MIPPED = RenderType.create(ExDeorum.ID + ":tinted_cutout_mipped", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, RenderType.SMALL_BUFFER_SIZE, false, false, RenderType.CompositeState.builder().setLightmapState(RenderStateShard.LIGHTMAP).setShaderState(RENDER_TYPE_TINTED_CUTOUT_MIPPED_SHADER).setTextureState(RenderStateShard.BLOCK_SHEET_MIPPED).createCompositeState(true));
     public static TextureAtlas blockAtlas;
+    public static ShaderInstance renderTypeTintedCutoutMippedShader;
+    private static final Map<BlockState, BakedModel> LEAF_BAKED_MODELS = new Object2ObjectOpenHashMap<>();
 
     static {
         TOP_RENDER_TYPES = CacheBuilder.newBuilder().maximumSize(10).build(new CacheLoader<>() {
@@ -37,17 +80,52 @@ public class RenderUtil {
         TOP_TEXTURES = CacheBuilder.newBuilder().weakValues().build(new CacheLoader<>() {
             @Override
             public TextureAtlasSprite load(Block key) {
-                ResourceLocation registryName = ForgeRegistries.BLOCKS.getKey(key);
-                var textureLoc = new ResourceLocation(registryName.getNamespace(), "block/" + registryName.getPath());
+                var registryName = ForgeRegistries.BLOCKS.getKey(key);
+                var textureLoc = registryName.withPrefix("block/");
                 var sprite = blockAtlas.getSprite(textureLoc);
                 // for stuff like azalea bush, retry to get the top texture
-                if (sprite.contents().name() == MissingTextureAtlasSprite.getLocation()) {
+                if (isMissingTexture(sprite)) {
                     textureLoc = new ResourceLocation(registryName.getNamespace(), "block/" + registryName.getPath() + "_top");
                     sprite = blockAtlas.getSprite(textureLoc);
                 }
                 return sprite;
             }
         });
+
+        // shut up Forge
+        //var set = UnsafeHacks.newInstance(ChunkRenderTypeSet.class);
+        //try {
+        //    UnsafeHacks.setField(ChunkRenderTypeSet.class.getDeclaredField("bits"), set, );
+        //} catch (NoSuchFieldException e) {}
+    }
+
+    public static BakedModel getMimicModel(BlockState state) {
+        var model = LEAF_BAKED_MODELS.get(state);
+
+        if (model == null) {
+            model = Minecraft.getInstance().getBlockRenderer().getBlockModel(state);
+
+            if (model == Minecraft.getInstance().getModelManager().getMissingModel()) {
+                model = Minecraft.getInstance().getBlockRenderer().getBlockModel(Blocks.OAK_LEAVES.defaultBlockState());
+            }
+
+            LEAF_BAKED_MODELS.put(state, model);
+        }
+        return model;
+    }
+
+    public static boolean isMissingTexture(TextureAtlasSprite sprite) {
+        return sprite.contents().name() == MissingTextureAtlasSprite.getLocation();
+    }
+
+    public static TextureAtlasSprite getTopTexture(Block block, Block defaultBlock) {
+        var sprite = TOP_TEXTURES.getUnchecked(block);
+
+        if (isMissingTexture(sprite)) {
+            return TOP_TEXTURES.getUnchecked(defaultBlock);
+        } else {
+            return sprite;
+        }
     }
 
     public static void reload() {
@@ -58,11 +136,15 @@ public class RenderUtil {
     public static void invalidateCaches() {
         SieveRenderer.MESH_TEXTURES.invalidateAll();
         blockAtlas = null;
+        LEAF_BAKED_MODELS.clear();
     }
 
-    // uses a RGB color instead of three color components
-    public static void renderFlatSpriteLerp(VertexConsumer builder, PoseStack stack, float percentage, int color, TextureAtlasSprite sprite, int light, float edge, float yMin, float yMax) {
-        renderFlatSpriteLerp(builder, stack, percentage, (color >> 16) & 0xff, (color >> 8) & 0xff, (color >> 0) & 0xff, sprite, light, edge, yMin, yMax);
+    public static void renderFlatFluidSprite(MultiBufferSource buffers, PoseStack stack, Level level, BlockPos pos, float y, float edge, int light, int r, int g, int b, Fluid fluid) {
+        var extensions = IClientFluidTypeExtensions.of(fluid);
+        var state = fluid.defaultFluidState();
+        var builder = buffers.getBuffer(Sheets.translucentCullBlockSheet());
+
+        RenderUtil.renderFlatSprite(builder, stack, y, r, g, b, RenderUtil.blockAtlas.getSprite(extensions.getStillTexture(state, level, pos)), light, edge);
     }
 
     // Renders a sprite inside the barrel with the height determined by how full the barrel is.
@@ -89,9 +171,17 @@ public class RenderUtil {
         float vMax = sprite.getV1();
 
         // overlayCoords(0, 10) is NO_OVERLAY (0xA0000)
-        builder.vertex(pose, edgeMin, y, edgeMin).color(r, g, b, 255).overlayCoords(0, 10).uv(uMin, vMin).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
-        builder.vertex(pose, edgeMin, y, edgeMax).color(r, g, b, 255).overlayCoords(0, 10).uv(uMin, vMax).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
-        builder.vertex(pose, edgeMax, y, edgeMax).color(r, g, b, 255).overlayCoords(0, 10).uv(uMax, vMax).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
-        builder.vertex(pose, edgeMax, y, edgeMin).color(r, g, b, 255).overlayCoords(0, 10).uv(uMax, vMin).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.vertex(pose, edgeMin, y, edgeMin).color(r, g, b, 255).uv(uMin, vMin).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.vertex(pose, edgeMin, y, edgeMax).color(r, g, b, 255).uv(uMin, vMax).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.vertex(pose, edgeMax, y, edgeMax).color(r, g, b, 255).uv(uMax, vMax).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.vertex(pose, edgeMax, y, edgeMin).color(r, g, b, 255).uv(uMax, vMin).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
+    }
+
+    public static Color getRainbowColor(long time, float partialTicks) {
+        return Color.getHSBColor((180 * Mth.sin((time + partialTicks) / 16.0f) - 180) / 360.0f, 0.7f, 0.8f);
+    }
+
+    public static ShaderInstance getRenderTypeTintedCutoutMippedShader() {
+        return renderTypeTintedCutoutMippedShader;
     }
 }

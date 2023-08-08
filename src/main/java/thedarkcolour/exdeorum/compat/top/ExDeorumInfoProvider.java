@@ -1,19 +1,42 @@
+/*
+ * Ex Deorum
+ * Copyright (c) 2023 thedarkcolour
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package thedarkcolour.exdeorum.compat.top;
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import mcjty.theoneprobe.api.CompoundText;
+import mcjty.theoneprobe.api.ElementAlignment;
 import mcjty.theoneprobe.api.IProbeHitData;
 import mcjty.theoneprobe.api.IProbeInfo;
 import mcjty.theoneprobe.api.IProbeInfoProvider;
 import mcjty.theoneprobe.api.ProbeMode;
 import mcjty.theoneprobe.api.TextStyleClass;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.blockentity.AbstractCrucibleBlockEntity;
 import thedarkcolour.exdeorum.blockentity.BarrelBlockEntity;
 import thedarkcolour.exdeorum.blockentity.InfestedLeavesBlockEntity;
+import thedarkcolour.exdeorum.blockentity.SieveBlockEntity;
 import thedarkcolour.exdeorum.registry.EBlocks;
 
 public class ExDeorumInfoProvider implements IProbeInfoProvider {
@@ -50,6 +73,22 @@ public class ExDeorumInfoProvider implements IProbeInfoProvider {
             }
         } else if (te instanceof AbstractCrucibleBlockEntity crucible) {
             info.text(CompoundText.create().style(TextStyleClass.LABEL).text("Rate: ").style(TextStyleClass.WARNING).text(crucible.getMeltingRate() + "x"));
+        } else if (te instanceof SieveBlockEntity sieve) {
+            if (playerEntity.isShiftKeyDown()) {
+                var mesh = sieve.getMesh();
+                info.horizontal(info.defaultLayoutStyle().spacing(10).alignment(ElementAlignment.ALIGN_CENTER))
+                        .item(sieve.getMesh(), info.defaultItemStyle().width(16).height(16))
+                        .text(CompoundText.create().info(sieve.getMesh().getDescriptionId()));
+                if (mesh.isEnchanted()) {
+                    var list = new ObjectArrayList<Component>();
+                    var style = info.defaultTextStyle().height(10);
+                    ItemStack.appendEnchantmentNames(list, mesh.getEnchantmentTags());
+
+                    for (var component : list) {
+                        info.text(component, style);
+                    }
+                }
+            }
         }
     }
 }

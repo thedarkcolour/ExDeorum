@@ -1,6 +1,25 @@
+/*
+ * Ex Deorum
+ * Copyright (c) 2023 thedarkcolour
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package thedarkcolour.exdeorum.item;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -20,8 +39,16 @@ import thedarkcolour.exdeorum.registry.EItems;
 // Infested leaves have a 1 in 4 * progress to drop 1 string
 // Infested leaves have a 1 in 16 * progress to drop another string
 public class CrookItem extends Item {
-    public CrookItem(Properties properties) {
+    private final float speed;
+
+    public CrookItem(Properties properties, float speed) {
         super(properties);
+        this.speed = speed;
+    }
+
+    @Override
+    public float getDestroySpeed(ItemStack pStack, BlockState pState) {
+        return pState.is(BlockTags.LEAVES) ? speed : 1.0f;
     }
 
     @Override

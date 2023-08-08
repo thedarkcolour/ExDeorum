@@ -1,0 +1,13 @@
+{
+  "type": "exdeorum:sieve",
+  "ingredient": {
+    "item": "minecraft:sand"
+  },
+  "mesh": "exdeorum:string_mesh",
+  "result": "minecraft:dead_bush",
+  "result_amount": {
+    "type": "minecraft:binomial",
+    "n": 1.0,
+    "p": 0.08
+  }
+}

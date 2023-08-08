@@ -1,8 +1,13 @@
 {
   "type": "exdeorum:hammer",
-  "ingredient": {
-    "item": "minecraft:sand"
-  },
+  "ingredient": [
+    {
+      "item": "minecraft:sand"
+    },
+    {
+      "item": "minecraft:red_sand"
+    }
+  ],
   "result": "exdeorum:dust",
   "result_amount": 1.0
 }

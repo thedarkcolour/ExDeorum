@@ -1,3 +1,21 @@
+/*
+ * Ex Deorum
+ * Copyright (c) 2023 thedarkcolour
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package thedarkcolour.exdeorum.tag;
 
 import net.minecraft.resources.ResourceLocation;
@@ -11,6 +29,7 @@ public class EItemTags {
     public static final TagKey<Item> HAMMERS = tag("hammers");
     public static final TagKey<Item> SIEVE_MESHES = tag("sieve_meshes");
     public static final TagKey<Item> PEBBLES = tag("pebbles");
+    public static final TagKey<Item> END_CAKE_MATERIAL = tag("end_cake_materials");
 
     public static final TagKey<Item> WOODEN_BARRELS = tag("wooden_barrels");
     public static final TagKey<Item> STONE_BARRELS = tag("stone_barrels");

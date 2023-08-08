@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "exdeorum:item/diamond_watering_can"
+  }
+}

@@ -1,4 +1,4 @@
-// 1.20.1	2023-08-03T18:32:13.5924363	ModKit Block Models for mod 'exdeorum'
+// 1.20.1	2023-08-08T11:59:32.0397483	ModKit Block Models for mod 'exdeorum'
 c73197f2dc770a353883c387b2b1f0b082283576 assets/exdeorum/blockstates/acacia_barrel.json
 a3ef4562a4c7833439d8d66ff9c210406d317995 assets/exdeorum/blockstates/acacia_crucible.json
 b3383c530978c5f67d897ba16fda9a2a359482cd assets/exdeorum/blockstates/acacia_sieve.json
@@ -14,6 +14,8 @@ a7af62e0deedaca41a7ea2d12b53a25aef4b5f6b assets/exdeorum/blockstates/cherry_siev
 67c6e741ca0043db513343036e03e279e9c7baa6 assets/exdeorum/blockstates/crimson_barrel.json
 ed5687c99bd36a19685bbf84251f70c6b8a864df assets/exdeorum/blockstates/crimson_crucible.json
 4d5b5d78fb5e510c2d8f7fa7f53eaafbe392624d assets/exdeorum/blockstates/crimson_sieve.json
+91fc3a2da22ffb9d6cf1902acf25b4b92b4bd615 assets/exdeorum/blockstates/crushed_blackstone.json
+02946489dea8f7ed1aa421fb5272e085b5914d0f assets/exdeorum/blockstates/crushed_deepslate.json
 8d10a465486ff5fcaf4bac892c7b77116b0dce07 assets/exdeorum/blockstates/crushed_end_stone.json
 4c54ec759e85353b770c699f8378d3df25166a74 assets/exdeorum/blockstates/crushed_netherrack.json
 2da1a307b707e9c60df5a3edcd05a0dde1e9b2ad assets/exdeorum/blockstates/dark_oak_barrel.json
@@ -34,7 +36,7 @@ bae1185e471e1fd7593558d45f325890d3ac22af assets/exdeorum/blockstates/mangrove_si
 44010d261124a2cda9ca8ed887aba9f766b3e71f assets/exdeorum/blockstates/spruce_crucible.json
 4782482871677bfe372816bc8f17dbdfc9eb21f9 assets/exdeorum/blockstates/spruce_sieve.json
 fc4d16f61cb43aeff11df5a91ca40b5225cd4617 assets/exdeorum/blockstates/stone_barrel.json
-f40cc38c256fdd75a979c4e3f2675b88b1ee0b26 assets/exdeorum/blockstates/unfired_crucible.json
+195aa2f301ea71f0fbd65e7922d7f58b94bc019c assets/exdeorum/blockstates/unfired_porcelain_crucible.json
 400b9a28200d52814574db828e4124ca976dfd4b assets/exdeorum/blockstates/warped_barrel.json
 11027cbd3ed36bf76336dcfc4693790c844f9f67 assets/exdeorum/blockstates/warped_crucible.json
 a37d9738f75a9b432f59be365a0a5368b23e76aa assets/exdeorum/blockstates/warped_sieve.json
@@ -53,6 +55,8 @@ faab9f9cc9d1e7e780238c2333b43bedad5699d0 assets/exdeorum/models/block/cherry_cru
 324f6871a85dc8e050e69cfe01efda5d286d3d29 assets/exdeorum/models/block/crimson_barrel.json
 75c5fa5eb3bb4e50dcde0f08e2a6fe7ba02f6f19 assets/exdeorum/models/block/crimson_crucible.json
 42d62c6d3f7e59550bf84ffd4648ce4ee4f82bb1 assets/exdeorum/models/block/crimson_sieve.json
+446dad4f174dfab9b64ac559adf23ac299f4681b assets/exdeorum/models/block/crushed_blackstone.json
+a2af67f20500b713eca8f7fe16172aa63a2247ef assets/exdeorum/models/block/crushed_deepslate.json
 771591ba50a804b9e40f5677f8a342fdb4cc7f2f assets/exdeorum/models/block/crushed_end_stone.json
 7e365e2125de3671a2463d65da8ecdb49dde7349 assets/exdeorum/models/block/crushed_netherrack.json
 de9aa8b53fa49340ee517f1ba0d3fbdc438803b8 assets/exdeorum/models/block/dark_oak_barrel.json
@@ -73,7 +77,7 @@ c61e5a082d800671fe55031495511fa716f99183 assets/exdeorum/models/block/porcelain_
 37c045fb5d4dab5cc648986bbbd3532e0a47500c assets/exdeorum/models/block/spruce_crucible.json
 b089184195ded615924623228fd356d87784d080 assets/exdeorum/models/block/spruce_sieve.json
 a1bfa20c0c4314fdfd75b2f04533fef81a949bcd assets/exdeorum/models/block/stone_barrel.json
-e40141553173bec342db3c7538a4ac9d9ad5bbd7 assets/exdeorum/models/block/unfired_crucible.json
+79ac0044d90aaf89aa1141b7eacbf1c592c9167d assets/exdeorum/models/block/unfired_porcelain_crucible.json
 8d724bdf66e9383106b7e78f45b9dec332d821b8 assets/exdeorum/models/block/warped_barrel.json
 9f5e229dada9bfcbcccb6da4379ad63dfd6dc94c assets/exdeorum/models/block/warped_crucible.json
 4a771578288c4ac4522f2f3d3373fc290cf4ca64 assets/exdeorum/models/block/warped_sieve.json

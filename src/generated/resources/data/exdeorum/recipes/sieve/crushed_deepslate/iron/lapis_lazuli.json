@@ -1,0 +1,13 @@
+{
+  "type": "exdeorum:sieve",
+  "ingredient": {
+    "item": "exdeorum:crushed_deepslate"
+  },
+  "mesh": "exdeorum:iron_mesh",
+  "result": "minecraft:lapis_lazuli",
+  "result_amount": {
+    "type": "minecraft:binomial",
+    "n": 1.0,
+    "p": 0.08
+  }
+}

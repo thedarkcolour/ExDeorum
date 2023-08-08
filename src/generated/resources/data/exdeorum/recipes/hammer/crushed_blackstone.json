@@ -1,0 +1,8 @@
+{
+  "type": "exdeorum:hammer",
+  "ingredient": {
+    "item": "minecraft:blackstone"
+  },
+  "result": "exdeorum:crushed_blackstone",
+  "result_amount": 1.0
+}

@@ -1,0 +1,13 @@
+{
+  "type": "exdeorum:sieve",
+  "ingredient": {
+    "item": "exdeorum:crushed_blackstone"
+  },
+  "mesh": "exdeorum:string_mesh",
+  "result": "minecraft:black_dye",
+  "result_amount": {
+    "type": "minecraft:binomial",
+    "n": 1.0,
+    "p": 0.07
+  }
+}

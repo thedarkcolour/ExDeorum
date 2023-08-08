@@ -1,3 +1,21 @@
+/*
+ * Ex Deorum
+ * Copyright (c) 2023 thedarkcolour
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package thedarkcolour.exdeorum.blockentity;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
@@ -6,23 +24,49 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.recipe.crucible.CrucibleRecipe;
 import thedarkcolour.exdeorum.registry.EBlockEntities;
 
+import java.util.function.Predicate;
+
 public class LavaCrucibleBlockEntity extends AbstractCrucibleBlockEntity {
     // todo add KubeJS support for this
-    private static final Object2IntMap<Block> HEAT_REGISTRY = new Object2IntOpenHashMap<>();
+    private static final Object2IntMap<BlockState> HEAT_REGISTRY = new Object2IntOpenHashMap<>();
 
     static {
-        HEAT_REGISTRY.put(Blocks.TORCH, 1);
-        HEAT_REGISTRY.put(Blocks.WALL_TORCH, 1);
-        HEAT_REGISTRY.put(Blocks.SOUL_TORCH, 2);
-        HEAT_REGISTRY.put(Blocks.SOUL_WALL_TORCH, 2);
-        HEAT_REGISTRY.put(Blocks.LAVA, 3);
-        HEAT_REGISTRY.put(Blocks.FIRE, 5);
-        HEAT_REGISTRY.put(Blocks.SOUL_FIRE, 7);
+        putDefaultHeatValues();
+    }
+
+    private static void putDefaultHeatValues() {
+        HEAT_REGISTRY.clear();
+
+        putAllStates(Blocks.TORCH, 1);
+        putAllStates(Blocks.WALL_TORCH, 1);
+        putAllStates(Blocks.LANTERN, 1);
+        putAllStates(Blocks.SOUL_TORCH, 2);
+        putAllStates(Blocks.SOUL_WALL_TORCH, 2);
+        putAllStates(Blocks.SOUL_LANTERN, 2);
+        putAllStates(Blocks.LAVA, 3);
+        putAllStates(Blocks.FIRE, 5);
+        putAllStates(Blocks.SOUL_FIRE, 5);
+
+        putStates(Blocks.CAMPFIRE, 2, state -> state.getValue(CampfireBlock.LIT));
+        putStates(Blocks.SOUL_CAMPFIRE, 2, state -> state.getValue(CampfireBlock.LIT));
+    }
+
+    public static void putAllStates(Block block, int heat) {
+        putStates(block, heat, state -> true);
+    }
+
+    public static void putStates(Block block, int heat, Predicate<BlockState> predicate) {
+        for (var state : block.getStateDefinition().getPossibleStates()) {
+            if (predicate.test(state)) {
+                HEAT_REGISTRY.put(state, heat);
+            }
+        }
     }
 
     public LavaCrucibleBlockEntity(BlockPos pos, BlockState state) {
@@ -33,7 +77,7 @@ public class LavaCrucibleBlockEntity extends AbstractCrucibleBlockEntity {
     public int getMeltingRate() {
         BlockState state = level.getBlockState(getBlockPos().below());
 
-        return HEAT_REGISTRY.getInt(state.getBlock());
+        return HEAT_REGISTRY.getInt(state);
     }
 
     @Override
@@ -42,7 +86,7 @@ public class LavaCrucibleBlockEntity extends AbstractCrucibleBlockEntity {
     }
 
     @Override
-    protected Block getDefaultMeltBlock() {
+    public Block getDefaultMeltBlock() {
         return Blocks.COBBLESTONE;
     }
 }

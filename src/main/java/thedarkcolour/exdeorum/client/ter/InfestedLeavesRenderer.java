@@ -1,18 +1,38 @@
+/*
+ * Ex Deorum
+ * Copyright (c) 2023 thedarkcolour
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package thedarkcolour.exdeorum.client.ter;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
-import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.client.RenderTypeHelper;
 import net.minecraftforge.client.model.data.ModelData;
 import thedarkcolour.exdeorum.blockentity.InfestedLeavesBlockEntity;
+import thedarkcolour.exdeorum.client.RenderUtil;
+import thedarkcolour.exdeorum.config.EConfig;
 
 public class InfestedLeavesRenderer implements BlockEntityRenderer<InfestedLeavesBlockEntity> {
     @Override
-    public void render(InfestedLeavesBlockEntity te, float partialTicks, PoseStack stack, MultiBufferSource buffer, int light, int overlay) {
+    public void render(InfestedLeavesBlockEntity te, float partialTicks, PoseStack stack, MultiBufferSource buffer, int light, int unused) {
+        if (EConfig.CLIENT.useFastInfestedLeaves.get()) return;
+
         var mc = Minecraft.getInstance();
         var state = te.getMimic();
 
@@ -22,30 +42,15 @@ public class InfestedLeavesRenderer implements BlockEntityRenderer<InfestedLeave
         // If something is wrong render default leaves
         var level = te.getLevel();
         if (level == null) {
-            Minecraft.getInstance().getBlockRenderer().renderSingleBlock(state, stack, buffer, light, overlay, ModelData.EMPTY, null);
+            Minecraft.getInstance().getBlockRenderer().renderSingleBlock(state, stack, buffer, light, unused, ModelData.EMPTY, null);
             return;
         }
 
         // Get infested percentage
-        float progress = te.getProgress();
-
-        // Get colors
-        int col = mc.getBlockColors().getColor(state, level, te.getBlockPos(), 0);
-
-        // Average the white color with the biome color
-        float r = Mth.lerp(progress, (col >> 16) & 0xff, 255.0f);
-        float g = Mth.lerp(progress, (col >> 8 ) & 0xff, 255.0f);
-        float b = Mth.lerp(progress, (col) & 0xff, 255.0f);
-
-        // Cap to 255
-        float red = (Math.min(255, r)) / 255.0f;
-        float green = (Math.min(255, g)) / 255.0f;
-        float blue = (Math.min(255, b)) / 255.0f;
-
+        int progress = Math.min((int) (te.getProgress() * 16000), 16000);
         // Render
         var model = mc.getBlockRenderer().getBlockModel(state);
-        for (var renderType : model.getRenderTypes(state, level.random, ModelData.EMPTY)) {
-            mc.getBlockRenderer().getModelRenderer().renderModel(stack.last(), buffer.getBuffer(RenderTypeHelper.getEntityRenderType(renderType, false)), state, model, red, green, blue, light, overlay, ModelData.EMPTY, renderType);
-        }
+        //noinspection deprecation
+        mc.getBlockRenderer().getModelRenderer().tesselateBlock(level, model, state, te.getBlockPos(), stack, buffer.getBuffer(RenderUtil.TINTED_CUTOUT_MIPPED), false, level.random, 42L, progress);
     }
 }

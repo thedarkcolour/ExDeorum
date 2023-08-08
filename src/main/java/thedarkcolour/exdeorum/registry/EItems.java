@@ -1,3 +1,21 @@
+/*
+ * Ex Deorum
+ * Copyright (c) 2023 thedarkcolour
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package thedarkcolour.exdeorum.registry;
 
 import net.minecraft.world.food.FoodProperties;
@@ -7,35 +25,54 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Tiers;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import thedarkcolour.exdeorum.ExDeorum;
+import thedarkcolour.exdeorum.item.CookedSilkWormItem;
 import thedarkcolour.exdeorum.item.CrookItem;
+import thedarkcolour.exdeorum.item.GrassSpreaderItem;
 import thedarkcolour.exdeorum.item.HammerItem;
 import thedarkcolour.exdeorum.item.MeshItem;
-import thedarkcolour.exdeorum.item.PorcelainBucketItem;
+import thedarkcolour.exdeorum.item.NyliumSpreaderItem;
+import thedarkcolour.exdeorum.item.PorcelainBucket;
+import thedarkcolour.exdeorum.item.PorcelainMilkBucket;
+import thedarkcolour.exdeorum.item.SculkCoreItem;
 import thedarkcolour.exdeorum.item.SilkWormItem;
+import thedarkcolour.exdeorum.item.WateringCanItem;
+import thedarkcolour.exdeorum.item.WideWateringCanItem;
 import thedarkcolour.exdeorum.item.WitchWaterBucketItem;
+
+import java.util.List;
 
 public class EItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, ExDeorum.ID);
 
     // Silk Worm
     public static final RegistryObject<SilkWormItem> SILK_WORM = ITEMS.register("silk_worm", () -> new SilkWormItem(props()));
-    public static final RegistryObject<Item> COOKED_SILK_WORM = ITEMS.register("cooked_silk_worm", () -> new Item(props().food(new FoodProperties.Builder().nutrition(2).saturationMod(0.6f).build())));
+    public static final RegistryObject<Item> COOKED_SILK_WORM = ITEMS.register("cooked_silk_worm", () -> new CookedSilkWormItem(props().food(new FoodProperties.Builder().nutrition(2).saturationMod(0.6f).build())));
 
     // Crooks
-    public static final RegistryObject<Item> CROOK = ITEMS.register("crook", () -> new CrookItem(props().durability(128)));
-    public static final RegistryObject<Item> BONE_CROOK = ITEMS.register("bone_crook", () -> new CrookItem(props().durability(312)));
+    public static final RegistryObject<Item> CROOK = ITEMS.register("crook", () -> new CrookItem(props().durability(128), 2.0f));
+    public static final RegistryObject<Item> BONE_CROOK = ITEMS.register("bone_crook", () -> new CrookItem(props().durability(312), 4.0f));
+
+    // Watering cans
+    public static final RegistryObject<Item> WOODEN_WATERING_CAN = ITEMS.register("wooden_watering_can", () -> new WateringCanItem(300, props().stacksTo(1)));
+    public static final RegistryObject<Item> STONE_WATERING_CAN = ITEMS.register("stone_watering_can", () -> new WateringCanItem(1000, props().stacksTo(1)));
+    public static final RegistryObject<Item> IRON_WATERING_CAN = ITEMS.register("iron_watering_can", () -> new WateringCanItem(2000, props().stacksTo(1)));
+    public static final RegistryObject<Item> GOLDEN_WATERING_CAN = ITEMS.register("golden_watering_can", () -> new WateringCanItem(4000, props().stacksTo(1)));
+    public static final RegistryObject<Item> DIAMOND_WATERING_CAN = ITEMS.register("diamond_watering_can", () -> new WideWateringCanItem(false, props().stacksTo(1)));
+    public static final RegistryObject<Item> NETHERITE_WATERING_CAN = ITEMS.register("netherite_watering_can", () -> new WideWateringCanItem(true, props().stacksTo(1)));
 
     // Sieve Meshes
-    public static final RegistryObject<Item> STRING_MESH = ITEMS.register("string_mesh", () -> new MeshItem(props().stacksTo(1)));
-    public static final RegistryObject<Item> FLINT_MESH = ITEMS.register("flint_mesh", () -> new MeshItem(props().stacksTo(1)));
-    public static final RegistryObject<Item> IRON_MESH = ITEMS.register("iron_mesh", () -> new MeshItem(props().stacksTo(1)));
-    public static final RegistryObject<Item> GOLDEN_MESH = ITEMS.register("golden_mesh", () -> new MeshItem(props().stacksTo(1)));
-    public static final RegistryObject<Item> DIAMOND_MESH = ITEMS.register("diamond_mesh", () -> new MeshItem(props().stacksTo(1)));
-    public static final RegistryObject<Item> NETHERITE_MESH = ITEMS.register("netherite_mesh", () -> new MeshItem(props().stacksTo(1)));
+    public static final RegistryObject<Item> STRING_MESH = ITEMS.register("string_mesh", () -> new MeshItem(props().stacksTo(16)));
+    public static final RegistryObject<Item> FLINT_MESH = ITEMS.register("flint_mesh", () -> new MeshItem(props().stacksTo(16)));
+    public static final RegistryObject<Item> IRON_MESH = ITEMS.register("iron_mesh", () -> new MeshItem(props().stacksTo(16)));
+    public static final RegistryObject<Item> GOLDEN_MESH = ITEMS.register("golden_mesh", () -> new MeshItem(props().stacksTo(16)));
+    public static final RegistryObject<Item> DIAMOND_MESH = ITEMS.register("diamond_mesh", () -> new MeshItem(props().stacksTo(16)));
+    public static final RegistryObject<Item> NETHERITE_MESH = ITEMS.register("netherite_mesh", () -> new MeshItem(props().stacksTo(16)));
 
     // Hammers
     public static final RegistryObject<Item> WOODEN_HAMMER = ITEMS.register("wooden_hammer", () -> new HammerItem(Tiers.WOOD, props()));
@@ -57,10 +94,25 @@ public class EItems {
     public static final RegistryObject<Item> ANDESITE_PEBBLE = registerSimpleItem("andesite_pebble");
     public static final RegistryObject<Item> DEEPSLATE_PEBBLE = registerSimpleItem("deepslate_pebble");
     public static final RegistryObject<Item> TUFF_PEBBLE = registerSimpleItem("tuff_pebble");
+    public static final RegistryObject<Item> CALCITE_PEBBLE = registerSimpleItem("calcite_pebble");
+    public static final RegistryObject<Item> BLACKSTONE_PEBBLE = registerSimpleItem("blackstone_pebble");
+    public static final RegistryObject<Item> BASALT_PEBBLE = registerSimpleItem("basalt_pebble");
 
     // Misc
-    public static final RegistryObject<Item> PORCELAIN_CLAY = registerSimpleItem("porcelain_clay");
-    public static final RegistryObject<Item> PORCELAIN_BUCKET = ITEMS.register("porcelain_bucket", () -> new PorcelainBucketItem(props().stacksTo(1)));
+    public static final RegistryObject<Item> PORCELAIN_CLAY_BALL = registerSimpleItem("porcelain_clay_ball");
+    public static final RegistryObject<Item> GRASS_SEEDS = ITEMS.register("grass_seeds", () -> new GrassSpreaderItem(props(), Blocks.GRASS_BLOCK::defaultBlockState));
+    public static final RegistryObject<Item> MYCELIUM_SPORES = ITEMS.register("mycelium_spores", () -> new GrassSpreaderItem(props(), Blocks.MYCELIUM::defaultBlockState));
+    public static final RegistryObject<Item> WARPED_NYLIUM_SPORES = ITEMS.register("warped_nylium_spores", () -> new NyliumSpreaderItem(props(), Blocks.WARPED_NYLIUM::defaultBlockState));
+    public static final RegistryObject<Item> CRIMSON_NYLIUM_SPORES = ITEMS.register("crimson_nylium_spores", () -> new NyliumSpreaderItem(props(), Blocks.CRIMSON_NYLIUM::defaultBlockState));
+    public static final RegistryObject<Item> SCULK_CORE = ITEMS.register("sculk_core", () -> new SculkCoreItem(props().stacksTo(1)));
+
+    // Buckets
+    public static final RegistryObject<Item> UNFIRED_PORCELAIN_BUCKET = registerSimpleItem("unfired_porcelain_bucket");
+    public static final RegistryObject<Item> PORCELAIN_BUCKET = ITEMS.register("porcelain_bucket", () -> new PorcelainBucket(() -> Fluids.EMPTY, props().stacksTo(16)));
+    public static final RegistryObject<Item> PORCELAIN_WATER_BUCKET = ITEMS.register("porcelain_water_bucket", () -> new PorcelainBucket(() -> Fluids.WATER, props().craftRemainder(PORCELAIN_BUCKET.get()).stacksTo(1)));
+    public static final RegistryObject<Item> PORCELAIN_LAVA_BUCKET = ITEMS.register("porcelain_lava_bucket", () -> new PorcelainBucket(() -> Fluids.LAVA, props().stacksTo(1)));
+    public static final RegistryObject<Item> PORCELAIN_MILK_BUCKET = ITEMS.register("porcelain_milk_bucket", () -> new PorcelainMilkBucket(props().craftRemainder(PORCELAIN_BUCKET.get()).stacksTo(1)));
+    public static final RegistryObject<Item> PORCELAIN_WITCH_WATER_BUCKET = ITEMS.register("porcelain_witch_water_bucket", () -> new PorcelainBucket(EFluids.WITCH_WATER, props().craftRemainder(PORCELAIN_BUCKET.get()).stacksTo(1)));
 
     // Fluids
     public static final RegistryObject<Item> WITCH_WATER_BUCKET = ITEMS.register("witch_water_bucket", () -> new WitchWaterBucketItem(props().craftRemainder(Items.BUCKET).stacksTo(1)));
@@ -80,53 +132,57 @@ public class EItems {
     }
 
     // BlockItems
-    public static final RegistryObject<BlockItem> DUST;
-    public static final RegistryObject<BlockItem> CRUSHED_NETHERRACK;
-    public static final RegistryObject<BlockItem> CRUSHED_END_STONE;
+    public static final RegistryObject<BlockItem> DUST = registerItemBlock(EBlocks.DUST);
+    public static final RegistryObject<BlockItem> CRUSHED_NETHERRACK = registerItemBlock(EBlocks.CRUSHED_NETHERRACK);
+    public static final RegistryObject<BlockItem> CRUSHED_END_STONE = registerItemBlock(EBlocks.CRUSHED_END_STONE);
+    public static final RegistryObject<BlockItem> CRUSHED_DEEPSLATE = registerItemBlock(EBlocks.CRUSHED_DEEPSLATE);
+    public static final RegistryObject<BlockItem> CRUSHED_BLACKSTONE = registerItemBlock(EBlocks.CRUSHED_BLACKSTONE);
 
     // Barrels
-    public static final RegistryObject<BlockItem> OAK_BARREL;
-    public static final RegistryObject<BlockItem> SPRUCE_BARREL;
-    public static final RegistryObject<BlockItem> BIRCH_BARREL;
-    public static final RegistryObject<BlockItem> JUNGLE_BARREL;
-    public static final RegistryObject<BlockItem> ACACIA_BARREL;
-    public static final RegistryObject<BlockItem> DARK_OAK_BARREL;
-    public static final RegistryObject<BlockItem> MANGROVE_BARREL;
-    public static final RegistryObject<BlockItem> CHERRY_BARREL;
-    public static final RegistryObject<BlockItem> BAMBOO_BARREL;
-    public static final RegistryObject<BlockItem> CRIMSON_BARREL;
-    public static final RegistryObject<BlockItem> WARPED_BARREL;
-    public static final RegistryObject<BlockItem> STONE_BARREL;
+    public static final RegistryObject<BlockItem> OAK_BARREL = registerItemBlock(EBlocks.OAK_BARREL);
+    public static final RegistryObject<BlockItem> SPRUCE_BARREL = registerItemBlock(EBlocks.SPRUCE_BARREL);
+    public static final RegistryObject<BlockItem> BIRCH_BARREL = registerItemBlock(EBlocks.BIRCH_BARREL);
+    public static final RegistryObject<BlockItem> JUNGLE_BARREL = registerItemBlock(EBlocks.JUNGLE_BARREL);
+    public static final RegistryObject<BlockItem> ACACIA_BARREL = registerItemBlock(EBlocks.ACACIA_BARREL);
+    public static final RegistryObject<BlockItem> DARK_OAK_BARREL = registerItemBlock(EBlocks.DARK_OAK_BARREL);
+    public static final RegistryObject<BlockItem> MANGROVE_BARREL = registerItemBlock(EBlocks.MANGROVE_BARREL);
+    public static final RegistryObject<BlockItem> CHERRY_BARREL = registerItemBlock(EBlocks.CHERRY_BARREL);
+    public static final RegistryObject<BlockItem> BAMBOO_BARREL = registerItemBlock(EBlocks.BAMBOO_BARREL);
+    public static final RegistryObject<BlockItem> CRIMSON_BARREL = registerItemBlock(EBlocks.CRIMSON_BARREL);
+    public static final RegistryObject<BlockItem> WARPED_BARREL = registerItemBlock(EBlocks.WARPED_BARREL);
+    public static final RegistryObject<BlockItem> STONE_BARREL = registerItemBlock(EBlocks.STONE_BARREL);
 
     // Sieves
-    public static final RegistryObject<BlockItem> OAK_SIEVE;
-    public static final RegistryObject<BlockItem> SPRUCE_SIEVE;
-    public static final RegistryObject<BlockItem> BIRCH_SIEVE;
-    public static final RegistryObject<BlockItem> JUNGLE_SIEVE;
-    public static final RegistryObject<BlockItem> ACACIA_SIEVE;
-    public static final RegistryObject<BlockItem> DARK_OAK_SIEVE;
-    public static final RegistryObject<BlockItem> MANGROVE_SIEVE;
-    public static final RegistryObject<BlockItem> CHERRY_SIEVE;
-    public static final RegistryObject<BlockItem> BAMBOO_SIEVE;
-    public static final RegistryObject<BlockItem> CRIMSON_SIEVE;
-    public static final RegistryObject<BlockItem> WARPED_SIEVE;
+    public static final RegistryObject<BlockItem> OAK_SIEVE = registerItemBlock(EBlocks.OAK_SIEVE);
+    public static final RegistryObject<BlockItem> SPRUCE_SIEVE = registerItemBlock(EBlocks.SPRUCE_SIEVE);
+    public static final RegistryObject<BlockItem> BIRCH_SIEVE = registerItemBlock(EBlocks.BIRCH_SIEVE);
+    public static final RegistryObject<BlockItem> JUNGLE_SIEVE = registerItemBlock(EBlocks.JUNGLE_SIEVE);
+    public static final RegistryObject<BlockItem> ACACIA_SIEVE = registerItemBlock(EBlocks.ACACIA_SIEVE);
+    public static final RegistryObject<BlockItem> DARK_OAK_SIEVE = registerItemBlock(EBlocks.DARK_OAK_SIEVE);
+    public static final RegistryObject<BlockItem> MANGROVE_SIEVE = registerItemBlock(EBlocks.MANGROVE_SIEVE);
+    public static final RegistryObject<BlockItem> CHERRY_SIEVE = registerItemBlock(EBlocks.CHERRY_SIEVE);
+    public static final RegistryObject<BlockItem> BAMBOO_SIEVE = registerItemBlock(EBlocks.BAMBOO_SIEVE);
+    public static final RegistryObject<BlockItem> CRIMSON_SIEVE = registerItemBlock(EBlocks.CRIMSON_SIEVE);
+    public static final RegistryObject<BlockItem> WARPED_SIEVE = registerItemBlock(EBlocks.WARPED_SIEVE);
 
     // Lava Crucibles
-    public static final RegistryObject<BlockItem> PORCELAIN_CRUCIBLE;
-    public static final RegistryObject<BlockItem> WARPED_CRUCIBLE;
-    public static final RegistryObject<BlockItem> CRIMSON_CRUCIBLE;
-    public static final RegistryObject<BlockItem> UNFIRED_CRUCIBLE;
+    public static final RegistryObject<BlockItem> PORCELAIN_CRUCIBLE = registerItemBlock(EBlocks.PORCELAIN_CRUCIBLE);
+    public static final RegistryObject<BlockItem> WARPED_CRUCIBLE = registerItemBlock(EBlocks.WARPED_CRUCIBLE);
+    public static final RegistryObject<BlockItem> CRIMSON_CRUCIBLE = registerItemBlock(EBlocks.CRIMSON_CRUCIBLE);
+    public static final RegistryObject<BlockItem> UNFIRED_PORCELAIN_CRUCIBLE = registerItemBlock(EBlocks.UNFIRED_PORCELAIN_CRUCIBLE);
 
     // Water Crucibles
-    public static final RegistryObject<BlockItem> OAK_CRUCIBLE;
-    public static final RegistryObject<BlockItem> SPRUCE_CRUCIBLE;
-    public static final RegistryObject<BlockItem> BIRCH_CRUCIBLE;
-    public static final RegistryObject<BlockItem> JUNGLE_CRUCIBLE;
-    public static final RegistryObject<BlockItem> ACACIA_CRUCIBLE;
-    public static final RegistryObject<BlockItem> DARK_OAK_CRUCIBLE;
-    public static final RegistryObject<BlockItem> MANGROVE_CRUCIBLE;
-    public static final RegistryObject<BlockItem> CHERRY_CRUCIBLE;
-    public static final RegistryObject<BlockItem> BAMBOO_CRUCIBLE;
+    public static final RegistryObject<BlockItem> OAK_CRUCIBLE = registerItemBlock(EBlocks.OAK_CRUCIBLE);
+    public static final RegistryObject<BlockItem> SPRUCE_CRUCIBLE = registerItemBlock(EBlocks.SPRUCE_CRUCIBLE);
+    public static final RegistryObject<BlockItem> BIRCH_CRUCIBLE = registerItemBlock(EBlocks.BIRCH_CRUCIBLE);
+    public static final RegistryObject<BlockItem> JUNGLE_CRUCIBLE = registerItemBlock(EBlocks.JUNGLE_CRUCIBLE);
+    public static final RegistryObject<BlockItem> ACACIA_CRUCIBLE = registerItemBlock(EBlocks.ACACIA_CRUCIBLE);
+    public static final RegistryObject<BlockItem> DARK_OAK_CRUCIBLE = registerItemBlock(EBlocks.DARK_OAK_CRUCIBLE);
+    public static final RegistryObject<BlockItem> MANGROVE_CRUCIBLE = registerItemBlock(EBlocks.MANGROVE_CRUCIBLE);
+    public static final RegistryObject<BlockItem> CHERRY_CRUCIBLE = registerItemBlock(EBlocks.CHERRY_CRUCIBLE);
+    public static final RegistryObject<BlockItem> BAMBOO_CRUCIBLE = registerItemBlock(EBlocks.BAMBOO_CRUCIBLE);
+
+    public static final RegistryObject<BlockItem> END_CAKE = registerItemBlock(EBlocks.END_CAKE);
 
     public static void addItemsToMainTab(CreativeModeTab.Output output) {
         output.accept(OAK_BARREL.get());
@@ -155,7 +211,7 @@ public class EItems {
         output.accept(PORCELAIN_CRUCIBLE.get());
         output.accept(WARPED_CRUCIBLE.get());
         output.accept(CRIMSON_CRUCIBLE.get());
-        output.accept(UNFIRED_CRUCIBLE.get());
+        output.accept(UNFIRED_PORCELAIN_CRUCIBLE.get());
         output.accept(OAK_CRUCIBLE.get());
         output.accept(SPRUCE_CRUCIBLE.get());
         output.accept(BIRCH_CRUCIBLE.get());
@@ -168,11 +224,20 @@ public class EItems {
         output.accept(DUST.get());
         output.accept(CRUSHED_NETHERRACK.get());
         output.accept(CRUSHED_END_STONE.get());
+        output.accept(CRUSHED_DEEPSLATE.get());
+        output.accept(CRUSHED_BLACKSTONE.get());
+        output.accept(END_CAKE.get());
 
         output.accept(SILK_WORM.get());
         output.accept(COOKED_SILK_WORM.get());
         output.accept(CROOK.get());
         output.accept(BONE_CROOK.get());
+        var wateringCans = List.of(WOODEN_WATERING_CAN, STONE_WATERING_CAN, IRON_WATERING_CAN, GOLDEN_WATERING_CAN, DIAMOND_WATERING_CAN, NETHERITE_WATERING_CAN);
+        for (var wateringCan : wateringCans) {
+            var full = WateringCanItem.getFull(wateringCan);
+            output.accept(wateringCan.get());
+            output.accept(full);
+        }
         output.accept(STRING_MESH.get());
         output.accept(FLINT_MESH.get());
         output.accept(IRON_MESH.get());
@@ -192,60 +257,23 @@ public class EItems {
         output.accept(DIORITE_PEBBLE.get());
         output.accept(GRANITE_PEBBLE.get());
         output.accept(ANDESITE_PEBBLE.get());
-        output.accept(TUFF_PEBBLE.get());
         output.accept(DEEPSLATE_PEBBLE.get());
-        output.accept(PORCELAIN_CLAY.get());
-        output.accept(PORCELAIN_BUCKET.get());
+        output.accept(TUFF_PEBBLE.get());
+        output.accept(CALCITE_PEBBLE.get());
+        output.accept(BLACKSTONE_PEBBLE.get());
+        output.accept(BASALT_PEBBLE.get());
+        output.accept(GRASS_SEEDS.get());
+        output.accept(MYCELIUM_SPORES.get());
+        output.accept(WARPED_NYLIUM_SPORES.get());
+        output.accept(CRIMSON_NYLIUM_SPORES.get());
+        output.accept(SCULK_CORE.get());
         output.accept(WITCH_WATER_BUCKET.get());
-    }
-
-    static {
-        DUST = registerItemBlock(EBlocks.DUST);
-        CRUSHED_NETHERRACK = registerItemBlock(EBlocks.CRUSHED_NETHERRACK);
-        CRUSHED_END_STONE = registerItemBlock(EBlocks.CRUSHED_END_STONE);
-        OAK_BARREL = registerItemBlock(EBlocks.OAK_BARREL);
-        SPRUCE_BARREL = registerItemBlock(EBlocks.SPRUCE_BARREL);
-        BIRCH_BARREL = registerItemBlock(EBlocks.BIRCH_BARREL);
-        JUNGLE_BARREL = registerItemBlock(EBlocks.JUNGLE_BARREL);
-        ACACIA_BARREL = registerItemBlock(EBlocks.ACACIA_BARREL);
-        DARK_OAK_BARREL = registerItemBlock(EBlocks.DARK_OAK_BARREL);
-        MANGROVE_BARREL = registerItemBlock(EBlocks.MANGROVE_BARREL);
-        CHERRY_BARREL = registerItemBlock(EBlocks.CHERRY_BARREL);
-        BAMBOO_BARREL = registerItemBlock(EBlocks.BAMBOO_BARREL);
-        CRIMSON_BARREL = registerItemBlock(EBlocks.CRIMSON_BARREL);
-        WARPED_BARREL = registerItemBlock(EBlocks.WARPED_BARREL);
-        STONE_BARREL = registerItemBlock(EBlocks.STONE_BARREL);
-        OAK_SIEVE = registerItemBlock(EBlocks.OAK_SIEVE);
-        SPRUCE_SIEVE = registerItemBlock(EBlocks.SPRUCE_SIEVE);
-        BIRCH_SIEVE = registerItemBlock(EBlocks.BIRCH_SIEVE);
-        JUNGLE_SIEVE = registerItemBlock(EBlocks.JUNGLE_SIEVE);
-        ACACIA_SIEVE = registerItemBlock(EBlocks.ACACIA_SIEVE);
-        DARK_OAK_SIEVE = registerItemBlock(EBlocks.DARK_OAK_SIEVE);
-        MANGROVE_SIEVE = registerItemBlock(EBlocks.MANGROVE_SIEVE);
-        CHERRY_SIEVE = registerItemBlock(EBlocks.CHERRY_SIEVE);
-        BAMBOO_SIEVE = registerItemBlock(EBlocks.BAMBOO_SIEVE);
-        CRIMSON_SIEVE = registerItemBlock(EBlocks.CRIMSON_SIEVE);
-        WARPED_SIEVE = registerItemBlock(EBlocks.WARPED_SIEVE);
-        //HEAVY_OAK_SIEVE = registerItemBlock(EBlocks.HEAVY_OAK_SIEVE);
-        //HEAVY_SPRUCE_SIEVE = registerItemBlock(EBlocks.HEAVY_SPRUCE_SIEVE);
-        //HEAVY_BIRCH_SIEVE = registerItemBlock(EBlocks.HEAVY_BIRCH_SIEVE);
-        //HEAVY_JUNGLE_SIEVE = registerItemBlock(EBlocks.HEAVY_JUNGLE_SIEVE);
-        //HEAVY_ACACIA_SIEVE = registerItemBlock(EBlocks.HEAVY_ACACIA_SIEVE);
-        //HEAVY_DARK_OAK_SIEVE = registerItemBlock(EBlocks.HEAVY_DARK_OAK_SIEVE);
-        //HEAVY_CRIMSON_SIEVE = registerItemBlock(EBlocks.HEAVY_CRIMSON_SIEVE);
-        //HEAVY_WARPED_SIEVE = registerItemBlock(EBlocks.HEAVY_WARPED_SIEVE);
-        PORCELAIN_CRUCIBLE = registerItemBlock(EBlocks.PORCELAIN_CRUCIBLE);
-        WARPED_CRUCIBLE = registerItemBlock(EBlocks.WARPED_CRUCIBLE);
-        CRIMSON_CRUCIBLE = registerItemBlock(EBlocks.CRIMSON_CRUCIBLE);
-        UNFIRED_CRUCIBLE = registerItemBlock(EBlocks.UNFIRED_CRUCIBLE);
-        OAK_CRUCIBLE = registerItemBlock(EBlocks.OAK_CRUCIBLE);
-        SPRUCE_CRUCIBLE = registerItemBlock(EBlocks.SPRUCE_CRUCIBLE);
-        BIRCH_CRUCIBLE = registerItemBlock(EBlocks.BIRCH_CRUCIBLE);
-        JUNGLE_CRUCIBLE = registerItemBlock(EBlocks.JUNGLE_CRUCIBLE);
-        ACACIA_CRUCIBLE = registerItemBlock(EBlocks.ACACIA_CRUCIBLE);
-        DARK_OAK_CRUCIBLE = registerItemBlock(EBlocks.DARK_OAK_CRUCIBLE);
-        MANGROVE_CRUCIBLE = registerItemBlock(EBlocks.MANGROVE_CRUCIBLE);
-        CHERRY_CRUCIBLE = registerItemBlock(EBlocks.CHERRY_CRUCIBLE);
-        BAMBOO_CRUCIBLE = registerItemBlock(EBlocks.BAMBOO_CRUCIBLE);
+        output.accept(PORCELAIN_CLAY_BALL.get());
+        output.accept(UNFIRED_PORCELAIN_BUCKET.get());
+        output.accept(PORCELAIN_BUCKET.get());
+        output.accept(PORCELAIN_WATER_BUCKET.get());
+        output.accept(PORCELAIN_LAVA_BUCKET.get());
+        output.accept(PORCELAIN_MILK_BUCKET.get());
+        output.accept(PORCELAIN_WITCH_WATER_BUCKET.get());
     }
 }

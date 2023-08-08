@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "exdeorum:block/crushed_blackstone"
+  }
+}

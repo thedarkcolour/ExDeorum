@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "I": {
+      "tag": "forge:rods/wooden"
+    },
+    "O": {
+      "item": "minecraft:jungle_planks"
+    },
+    "_": {
+      "item": "minecraft:jungle_slab"
+    }
+  },
+  "pattern": [
+    "O O",
+    "O_O",
+    "I I"
+  ],
+  "result": {
+    "item": "exdeorum:jungle_sieve"
+  },
+  "show_notification": true
+}

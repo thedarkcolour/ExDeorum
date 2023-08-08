@@ -1,3 +1,21 @@
+/*
+ * Ex Deorum
+ * Copyright (c) 2023 thedarkcolour
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package thedarkcolour.exdeorum.data;
 
 import thedarkcolour.exdeorum.ExDeorum;
@@ -5,6 +23,7 @@ import thedarkcolour.exdeorum.ExDeorum;
 public class TranslationKeys {
     public static final String MAIN_CREATIVE_TAB = "itemGroup." + ExDeorum.ID + ".main";
     public static final String VOID_WORLD_TYPE = "generator." + ExDeorum.ID + ".void_world";
+    public static final String WATERING_CAN_FLUID_DISPLAY = "item." + ExDeorum.ID + ".watering_can_fluid_display";
 
     // Advancements
     public static final String ROOT_ADVANCEMENT_TITLE = "advancements." + ExDeorum.ID + ".core.root.title";
@@ -21,10 +40,18 @@ public class TranslationKeys {
     // JEI descriptions
     public static final String SILK_WORM_JEI_INFO = "info." + ExDeorum.ID + ".silk_worm";
     public static final String SIEVE_JEI_INFO = "info." + ExDeorum.ID + ".sieve";
+    public static final String WATERING_CAN_JEI_INFO = "info." + ExDeorum.ID + ".watering_can";
+    public static final String WITCH_WATER_JEI_INFO = "info." + ExDeorum.ID + ".witch_water";
+    public static final String MYCELIUM_SPORES_JEI_INFO = "info." + ExDeorum.ID + ".mycelium_spores";
+    public static final String GRASS_SEEDS_JEI_INFO = "info." + ExDeorum.ID + ".grass_seeds";
+    public static final String WARPED_NYLIUM_SPORES_JEI_INFO = "info." + ExDeorum.ID + ".warped_nylium_spores";
+    public static final String CRIMSON_NYLIUM_SPORES_JEI_INFO = "info." + ExDeorum.ID + ".crimson_nylium_spores";
+    public static final String SCULK_CORE_JEI_INFO = "info." + ExDeorum.ID + ".sculk_core";
 
     // JEI recipe categories
     public static final String BARREL_COMPOST_CATEGORY_TITLE = "gui." + ExDeorum.ID + ".category.barrel_compost";
     public static final String BARREL_COMPOST_RECIPE_VOLUME = "gui." + ExDeorum.ID + ".category.barrel_compost.volume";
+    public static final String BARREL_MIXING_CATEGORY_TITLE = "gui." + ExDeorum.ID + ".category.barrel_mixing";
     public static final String WATER_CRUCIBLE_CATEGORY_TITLE = "gui." + ExDeorum.ID + ".category.water_crucible";
     public static final String LAVA_CRUCIBLE_CATEGORY_TITLE = "gui." + ExDeorum.ID + ".category.lava_crucible";
     public static final String HAMMER_CATEGORY_TITLE = "gui." + ExDeorum.ID + ".category.hammer";

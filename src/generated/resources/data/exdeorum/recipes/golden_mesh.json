@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "tag": "forge:ingots/gold"
+    },
+    "S": {
+      "tag": "forge:string"
+    }
+  },
+  "pattern": [
+    "S#S",
+    "#S#",
+    "S#S"
+  ],
+  "result": {
+    "item": "exdeorum:golden_mesh"
+  },
+  "show_notification": true
+}

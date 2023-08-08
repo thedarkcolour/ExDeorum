@@ -1,0 +1,8 @@
+{
+  "type": "exdeorum:hammer",
+  "ingredient": {
+    "item": "minecraft:brain_coral"
+  },
+  "result": "minecraft:brain_coral_fan",
+  "result_amount": 1.0
+}

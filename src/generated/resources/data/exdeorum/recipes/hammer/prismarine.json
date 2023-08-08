@@ -1,0 +1,20 @@
+{
+  "type": "exdeorum:hammer",
+  "ingredient": [
+    {
+      "item": "minecraft:prismarine"
+    },
+    {
+      "item": "minecraft:prismarine_bricks"
+    },
+    {
+      "item": "minecraft:dark_prismarine"
+    }
+  ],
+  "result": "minecraft:prismarine_shard",
+  "result_amount": {
+    "type": "minecraft:uniform",
+    "max": 4.0,
+    "min": 1.0
+  }
+}

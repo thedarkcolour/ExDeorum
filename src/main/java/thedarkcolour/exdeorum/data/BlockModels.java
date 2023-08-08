@@ -1,3 +1,21 @@
+/*
+ * Ex Deorum
+ * Copyright (c) 2023 thedarkcolour
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package thedarkcolour.exdeorum.data;
 
 import net.minecraft.world.level.block.Block;
@@ -12,6 +30,8 @@ class BlockModels {
         models.simpleBlock(EBlocks.DUST.get());
         models.simpleBlock(EBlocks.CRUSHED_NETHERRACK.get());
         models.simpleBlock(EBlocks.CRUSHED_END_STONE.get());
+        models.simpleBlock(EBlocks.CRUSHED_DEEPSLATE.get());
+        models.simpleBlock(EBlocks.CRUSHED_BLACKSTONE.get());
 
         // Barrels
         barrel(models, EBlocks.OAK_BARREL.get(), Blocks.OAK_PLANKS);
@@ -40,7 +60,7 @@ class BlockModels {
         sieve(models, EBlocks.WARPED_SIEVE.get(), Blocks.WARPED_PLANKS);
 
         // Lava Crucible
-        crucible(models, EBlocks.UNFIRED_CRUCIBLE.get());
+        crucible(models, EBlocks.UNFIRED_PORCELAIN_CRUCIBLE.get());
         crucible(models, EBlocks.PORCELAIN_CRUCIBLE.get());
         crucible(models, EBlocks.CRIMSON_CRUCIBLE.get(), Blocks.CRIMSON_STEM);
         crucible(models, EBlocks.WARPED_CRUCIBLE.get(), Blocks.WARPED_STEM);

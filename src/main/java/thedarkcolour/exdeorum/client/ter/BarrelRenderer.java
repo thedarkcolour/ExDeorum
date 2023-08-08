@@ -1,8 +1,25 @@
+/*
+ * Ex Deorum
+ * Copyright (c) 2023 thedarkcolour
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package thedarkcolour.exdeorum.client.ter;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
@@ -12,13 +29,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.BlockItem;
-import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.blockentity.BarrelBlockEntity;
-import thedarkcolour.exdeorum.client.ClientHandler;
 import thedarkcolour.exdeorum.client.RenderUtil;
 
 public class BarrelRenderer implements BlockEntityRenderer<BarrelBlockEntity> {
@@ -55,30 +70,25 @@ public class BarrelRenderer implements BlockEntityRenderer<BarrelBlockEntity> {
             if (!fluidStack.isEmpty()) { // Get texture
                 var fluid = fluidStack.getFluid();
                 var level = barrel.getLevel();
-                var blockPos = barrel.getBlockPos();
-                var sprite = ForgeHooksClient.getFluidSprites(level, blockPos, fluid.defaultFluidState())[0];
-
-                // Get color
+                var pos = barrel.getBlockPos();
+                var percentage = fluidStack.getAmount() / 1000.0f;
+                var y = Mth.lerp(percentage, 1.0f, 14.0f) / 16f;
                 var col = IClientFluidTypeExtensions.of(fluid).getTintColor(fluidStack);
                 // Split into RGB components
                 var r = (col >> 16) & 0xff;
                 var g = (col >> 8) & 0xff;
-                var b = (col >> 0) & 0xff;
+                var b = col & 0xff;
 
                 if (barrel.isBrewing()) {
                     float progress = barrel.progress;
 
-                    // Transition between water color and witch water color (551ec6)
-                    r = (int) Mth.lerp(progress, r, 85);
-                    g = (int) Mth.lerp(progress, g, 30);
-                    b = (int) Mth.lerp(progress, b, 198);
+                    // Transition between water color and witch water color (1F0C4C)
+                    r = (int) Mth.lerp(progress, r, 31);
+                    g = (int) Mth.lerp(progress, g, 12);
+                    b = (int) Mth.lerp(progress, b, 76);
                 }
 
-
-                // Setup rendering
-                var builder = buffers.getBuffer(ItemBlockRenderTypes.getRenderLayer(fluid.defaultFluidState()));
-
-                RenderUtil.renderFlatSpriteLerp(builder, stack, fluidStack.getAmount() / 1000.0f, r, g, b, sprite, light, 2.0f, 1.0f, 14.0f);
+                RenderUtil.renderFlatFluidSprite(buffers, stack, level, pos, y, 2.0f, light, r, g, b, fluid);
             }
         });
 
@@ -91,7 +101,7 @@ public class BarrelRenderer implements BlockEntityRenderer<BarrelBlockEntity> {
             int r, g, b;
 
             if (ExDeorum.IS_JUNE && barrel.getLevel() != null) {
-                var rainbow = ClientHandler.getRainbowColor(barrel.getLevel().getGameTime(), partialTicks);
+                var rainbow = RenderUtil.getRainbowColor(barrel.getLevel().getGameTime(), partialTicks);
                 r = rainbow.getRed();
                 g = rainbow.getGreen();
                 b = rainbow.getBlue();

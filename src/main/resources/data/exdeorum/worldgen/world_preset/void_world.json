@@ -20,7 +20,7 @@
                     "type": "minecraft:the_end"
                 },
                 "settings": "minecraft:end",
-                "allowed_structure_sets": "exdeorum:the_nether_void_structure_sets"
+                "allowed_structure_sets": "exdeorum:the_end_void_structure_sets"
             }
         },
         "minecraft:the_nether": {
@@ -32,7 +32,7 @@
                     "preset": "minecraft:nether"
                 },
                 "settings": "minecraft:nether",
-                "allowed_structure_sets": "exdeorum:the_end_void_structure_sets"
+                "allowed_structure_sets": "exdeorum:the_nether_void_structure_sets"
             }
         }
     }

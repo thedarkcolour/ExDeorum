@@ -1,8 +1,19 @@
 {
   "type": "exdeorum:hammer",
-  "ingredient": {
-    "item": "minecraft:cobblestone"
-  },
+  "ingredient": [
+    {
+      "item": "minecraft:cobblestone"
+    },
+    {
+      "item": "minecraft:diorite"
+    },
+    {
+      "item": "minecraft:granite"
+    },
+    {
+      "item": "minecraft:andesite"
+    }
+  ],
   "result": "minecraft:gravel",
   "result_amount": 1.0
 }

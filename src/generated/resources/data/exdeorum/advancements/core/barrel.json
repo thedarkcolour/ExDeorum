@@ -18,7 +18,7 @@
       "translate": "advancements.exdeorum.core.barrel.description"
     },
     "frame": "task",
-    "hidden": false,
+    "hidden": true,
     "icon": {
       "item": "exdeorum:oak_barrel"
     },

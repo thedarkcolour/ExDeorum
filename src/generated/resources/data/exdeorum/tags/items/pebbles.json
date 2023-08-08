@@ -5,6 +5,9 @@
     "exdeorum:granite_pebble",
     "exdeorum:andesite_pebble",
     "exdeorum:deepslate_pebble",
-    "exdeorum:tuff_pebble"
+    "exdeorum:tuff_pebble",
+    "exdeorum:calcite_pebble",
+    "exdeorum:blackstone_pebble",
+    "exdeorum:basalt_pebble"
   ]
 }

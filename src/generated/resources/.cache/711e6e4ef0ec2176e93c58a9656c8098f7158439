@@ -1,3 +1,5 @@
-// 1.20.1	2023-08-03T18:32:13.5914372	Tags for minecraft:block mod id exdeorum
+// 1.20.1	2023-08-07T23:41:30.832699	Tags for minecraft:block mod id exdeorum
+f6a9610ebae09549baf17e27200037cd17318055 data/minecraft/tags/blocks/leaves.json
 2fb8f4567073001f8a70968950e8a728144e1214 data/minecraft/tags/blocks/mineable/axe.json
-88a5d8536b1757308ce053ed08cd1d034f0be1f3 data/minecraft/tags/blocks/mineable/pickaxe.json
+f6a9610ebae09549baf17e27200037cd17318055 data/minecraft/tags/blocks/mineable/hoe.json
+a23ae1801375c0c9525c3d712cb0eeb87174c219 data/minecraft/tags/blocks/mineable/pickaxe.json
