@@ -47,6 +47,7 @@ import net.minecraft.world.level.block.BucketPickup;
 import net.minecraft.world.level.block.FarmBlock;
 import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.SpreadingSnowyDirtBlock;
+import net.minecraft.world.level.block.SugarCaneBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
@@ -61,7 +62,9 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import thedarkcolour.exdeorum.blockentity.BarrelBlockEntity;
 import thedarkcolour.exdeorum.data.TranslationKeys;
+import thedarkcolour.exdeorum.tag.EBlockTags;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -222,17 +225,29 @@ public class WateringCanItem extends Item {
     }
 
     protected void tryWatering(ServerLevel level, BlockPos pos, BlockState state) {
-        if (state.is(BlockTags.SAPLINGS)) {
-            if (level.random.nextInt(3) == 0) {
+        if (state.is(EBlockTags.WATERING_CAN_TICKABLE)) {
+            if (state.is(BlockTags.SAPLINGS)) {
+                if (level.random.nextInt(3) == 0) {
+                    state.randomTick(level, pos, level.random);
+                    level.levelEvent(LevelEvent.PARTICLES_AND_SOUND_PLANT_GROWTH, pos, 0);
+                }
+            } else if (state.getBlock() instanceof SugarCaneBlock block) {
+                var cursor = pos.mutable();
+                while (level.isInWorldBounds(cursor.move(0, 1, 0)) && level.getBlockState(cursor).getBlock() == block) {
+                    // just keep looping
+                }
+                // randomTick only works on the top sugarcane block
+                var topState = level.getBlockState(cursor.move(0, -1, 0));
+                topState.randomTick(level, cursor, level.random);
+            } else {
                 state.randomTick(level, pos, level.random);
-                level.levelEvent(LevelEvent.PARTICLES_AND_SOUND_PLANT_GROWTH, pos, 0);
             }
-        } else if (state.is(BlockTags.CROPS) || state.getBlock() instanceof SpreadingSnowyDirtBlock) {
-            state.randomTick(level, pos, level.random);
-        } else if (state.getBlock() == Blocks.LAVA) {
-            level.levelEvent(LevelEvent.LAVA_FIZZ, pos, 0);
-        } else if (state.getBlock() == Blocks.FARMLAND) {
-            hydrateFarmland(level, pos, state);
+        } else {
+            if (BarrelBlockEntity.isHotFluid(state.getFluidState().getFluidType())) {
+                level.levelEvent(LevelEvent.LAVA_FIZZ, pos, 0);
+            } else if (state.getBlock() == Blocks.FARMLAND) {
+                hydrateFarmland(level, pos, state);
+            }
         }
         var below = pos.below();
         var belowState = level.getBlockState(below);

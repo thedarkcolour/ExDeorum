@@ -46,5 +46,6 @@ class RecipeUtilTest {
         assertFalse(RecipeUtil.areIngredientsEqual(Ingredient.of(Tags.Items.INGOTS_IRON), Ingredient.of(Tags.Items.GEMS_DIAMOND)));
         assertTrue(RecipeUtil.areIngredientsEqual(Ingredient.of(Items.OAK_SLAB, Items.SPRUCE_SLAB), Ingredient.of(Items.OAK_SLAB, Items.SPRUCE_SLAB)));
         assertTrue(RecipeUtil.areIngredientsEqual(Ingredient.of(Items.OAK_SLAB, Items.SPRUCE_SLAB), Ingredient.of(Items.SPRUCE_SLAB, Items.OAK_SLAB)));
+        assertFalse(RecipeUtil.areIngredientsEqual(Ingredient.of(Items.OAK_SLAB, Items.SPRUCE_SLAB), Ingredient.of(Items.SPRUCE_SLAB, Items.OAK_SLAB, Items.OAK_SLAB)));
     }
 }

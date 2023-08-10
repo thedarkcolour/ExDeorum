@@ -838,6 +838,7 @@ class Recipes {
                 addDrop.accept(Items.GLOW_BERRIES, chance(0.04f + j * 0.075f));
                 addDrop.accept(Items.SMALL_DRIPLEAF, chance(0.07f + j * 0.025f));
                 addDrop.accept(Items.BIG_DRIPLEAF, chance(0.05f + j * 0.02f));
+                addDrop.accept(Items.SPORE_BLOSSOM, chance(0.03f + j * 0.015f));
             });
         }
         forMesh(writer, ingredient(Items.MOSS_BLOCK), EItems.FLINT_MESH, addDrop -> {
@@ -864,27 +865,34 @@ class Recipes {
         lavaCrucible(writer, "cobblestone", ingredient(Tags.Items.COBBLESTONE), 250);
         lavaCrucible(writer, "stone", ingredient(Tags.Items.STONE), 250);
         lavaCrucible(writer, "gravel", ingredient(Tags.Items.GRAVEL), 250);
-        lavaCrucible(writer, "netherrack", ingredient(Tags.Items.NETHERRACK), 1000);
-
-        waterCrucible(writer, "sweet_berries", ingredient(Items.SWEET_BERRIES, Items.GLOW_BERRIES), 50);
-        waterCrucible(writer, "melon_slice", ingredient(Items.MELON_SLICE), 50);
+        lavaCrucible(writer, "netherrack", ingredient(Tags.Items.NETHERRACK), 500);
 
         waterCrucible(writer, "saplings", ingredient(ItemTags.SAPLINGS), 100);
+        waterCrucible(writer, "leaves", ingredient(ItemTags.LEAVES), 250);
         waterCrucible(writer, "small_flowers", ingredient(ItemTags.SMALL_FLOWERS), 100);
-        waterCrucible(writer, "apple", ingredient(Items.APPLE), 100);
-
         waterCrucible(writer, "tall_flowers", ingredient(ItemTags.TALL_FLOWERS), 200);
-
+        waterCrucible(writer, "mushrooms", ingredient(Tags.Items.MUSHROOMS), 100);
+        waterCrucible(writer, "lily_pad", ingredient(Items.LILY_PAD), 150);
+        waterCrucible(writer, "sugar_cane", ingredient(Items.SUGAR_CANE), 100);
+        waterCrucible(writer, "vine", ingredient(Items.VINE), 100);
+        waterCrucible(writer, "seeds_and_spores", SPORES_AND_SEEDS, 50);
+        waterCrucible(writer, "seeds", ingredient(Tags.Items.SEEDS), 50);
+        waterCrucible(writer, "grass", ingredient(Items.GRASS, Items.TALL_GRASS), 100);
+        waterCrucible(writer, "grass_block", ingredient(Items.GRASS_BLOCK), 150);
+        waterCrucible(writer, "sweet_berries", ingredient(Items.SWEET_BERRIES, Items.GLOW_BERRIES), 50);
+        waterCrucible(writer, "melon_slice", ingredient(Items.MELON_SLICE), 50);
+        waterCrucible(writer, "potato", ingredient(Items.POTATO), 100);
+        waterCrucible(writer, "carrot", ingredient(Items.CARROT), 100);
+        waterCrucible(writer, "beetroot", ingredient(Items.BEETROOT), 100);
+        waterCrucible(writer, "apple", ingredient(Items.APPLE), 100);
         waterCrucible(writer, "cactus", ingredient(Items.CACTUS), 250);
         waterCrucible(writer, "pumpkin", ingredient(Items.PUMPKIN), 250);
         waterCrucible(writer, "melon", ingredient(Items.MELON), 250);
-        waterCrucible(writer, "leaves", ingredient(ItemTags.LEAVES), 250);
-        waterCrucible(writer, "lily_pad", ingredient(Items.LILY_PAD), 100);
-
+        waterCrucible(writer, "seagrass", ingredient(Items.SEAGRASS), 100);
+        waterCrucible(writer, "sea_pickle", ingredient(Items.SEA_PICKLE), 200);
         waterCrucible(writer, "moss", ingredient(Items.MOSS_BLOCK), 150);
         waterCrucible(writer, "moss_carpet", ingredient(Items.MOSS_CARPET), 100);
-
-        waterCrucible(writer, "seeds_and_spores", SPORES_AND_SEEDS, 100);
+        waterCrucible(writer, "spore_blossom", ingredient(Items.SPORE_BLOSSOM), 150);
     }
 
     private static void lavaCrucible(Consumer<FinishedRecipe> writer, String id, Ingredient ingredient, int volume) {
@@ -961,12 +969,23 @@ class Recipes {
         barrelCompost(writer, "moss_block", ingredient(Items.MOSS_BLOCK), 150);
         barrelCompost(writer, "moss_carpet", ingredient(Items.MOSS_CARPET), 100);
         barrelCompost(writer, "spores_and_seeds", SPORES_AND_SEEDS, 80);
+        barrelCompost(writer, "bamboo", ingredient(Items.BAMBOO), 100);
+        barrelCompost(writer, "cactus", ingredient(Items.CACTUS), 125);
+        barrelCompost(writer, "dead_bush", ingredient(Items.DEAD_BUSH), 80);
+        barrelCompost(writer, "chorus_flower", ingredient(Items.CHORUS_FLOWER), 150);
+        barrelCompost(writer, "chorus_fruit", ingredient(Items.CHORUS_FRUIT), 80);
+        barrelCompost(writer, "chorus_plant", ingredient(Items.CHORUS_PLANT), 150);
+        barrelCompost(writer, "kelp", ingredient(Items.KELP, Items.DRIED_KELP), 80);
+        barrelCompost(writer, "sea_pickle", ingredient(Items.SEA_PICKLE), 80);
+        barrelCompost(writer, "spore_blossom", ingredient(Items.SPORE_BLOSSOM), 125);
+        barrelCompost(writer, "weeping_vines", ingredient(Items.WEEPING_VINES), 100);
+        barrelCompost(writer, "twisting_vines", ingredient(Items.TWISTING_VINES), 100);
         // flesh
         barrelCompost(writer, "rotten_flesh", ingredient(Items.ROTTEN_FLESH), 100);
         barrelCompost(writer, "spider_eye", ingredient(Items.SPIDER_EYE), 80);
         barrelCompost(writer, "fermented_spider_eye", ingredient(Items.FERMENTED_SPIDER_EYE), 100);
         barrelCompost(writer, "string", ingredient(Items.STRING), 40);
-        barrelCompost(writer, "rabbit_foot", ingredient(Items.RABBIT_FOOT), 40);
+        barrelCompost(writer, "rabbit_foot", ingredient(Items.RABBIT_FOOT), 100);
         // meats
         barrelCompost(writer, "pork", ingredient(Items.PORKCHOP, Items.COOKED_PORKCHOP), 150);
         barrelCompost(writer, "beef", ingredient(Items.BEEF, Items.COOKED_BEEF), 150);
@@ -980,7 +999,6 @@ class Recipes {
         barrelCompost(writer, "egg", ingredient(Items.EGG), 100);
         // foods
         barrelCompost(writer, "melon_slice", ingredient(Items.MELON_SLICE), 40);
-        barrelCompost(writer, "kelp", ingredient(Items.KELP, Items.DRIED_KELP), 40);
         barrelCompost(writer, "silk_worms", ingredient(EItems.SILK_WORM.get(), EItems.COOKED_SILK_WORM.get()), 40);
         barrelCompost(writer, "apple", ingredient(Items.APPLE), 100);
         barrelCompost(writer, "cookie", ingredient(Items.COOKIE), 100);

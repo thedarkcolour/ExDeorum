@@ -49,11 +49,14 @@ public class SculkCoreItem extends Item {
                 }
                 level.setBlock(pos, state.setValue(SculkShriekerBlock.CAN_SUMMON, true), 3);
             } else {
+                var rand = level.random;
                 for (int i = 0; i < 10; i++) {
                     int j = i * 36;
                     double radians = Math.toRadians(j);
-                    level.addParticle(ParticleTypes.PORTAL, pos.getX() + 0.5, pos.getY() + 0.5625, pos.getZ() + 0.5,
-                            Math.cos(radians) * 0.15, 0.15, Math.sin(radians) * 0.15);
+                    for (int k = 0; k < 3; k++) {
+                        level.addParticle(ParticleTypes.PORTAL, pos.getX() + 0.5 + 0.3 * (-0.5 + rand.nextFloat()), pos.getY() + 0.5625, pos.getZ() + 0.5 + 0.3 * (-0.5 + rand.nextFloat()),
+                                Math.cos(radians) * 0.15, 0.15, Math.sin(radians) * 0.15);
+                    }
                 }
             }
             level.playSound(null, pos, SoundEvents.SCULK_SHRIEKER_SHRIEK, SoundSource.BLOCKS, 1.0f, 1.0f);

@@ -50,6 +50,19 @@ public class EConfig {
         public final DoubleValue barrelProgressStep;
         public final BooleanValue witchWaterNetherrackGenerator;
 
+        // todo preferred ores
+        //public final ConfigValue<ResourceLocation> preferredAluminumOre;
+        //public final ConfigValue<ResourceLocation> preferredSilverOre;
+        //public final ConfigValue<ResourceLocation> preferredLeadOre;
+        //public final ConfigValue<ResourceLocation> preferredNickelOre;
+        //public final ConfigValue<ResourceLocation> preferredUraniumOre;
+        //public final ConfigValue<ResourceLocation> preferredOsmiumOre;
+        //public final ConfigValue<ResourceLocation> preferredTinOre;
+        //public final ConfigValue<ResourceLocation> preferredZincOre;
+        //public final ConfigValue<ResourceLocation> preferredCobaltOre;
+        //public final ConfigValue<ResourceLocation> preferredIridiumOre;
+
+
         public Server(ForgeConfigSpec.Builder builder) {
             builder.comment("Server configuration for Ex Deorum").push("server");
 
@@ -64,11 +77,19 @@ public class EConfig {
                     .define("simultaneous_sieve_usage", true);
             this.barrelProgressStep = builder
                     .comment("The progress to increment by each tick for barrel composting and witch water transformation.")
-                    .defineInRange("barrel_progress_step", 0.004f, 0.0f, 1.0f);
+                    .defineInRange("barrel_progress_step", 0.004, 0.0f, 1.0f);
             this.witchWaterNetherrackGenerator = builder
                     .comment("Whether Witch Water forms netherrack when lava flows into it, allowing for a netherrack version of a cobblestone generator.")
                     .define("witch_water_netherrack_generator", true);
 
+            // Preferred ore items
+            //builder.push("preferred_tag_items");
+
+            //this.preferredTinOre = builder
+            //        .comment("The ID of the item to use for Ex Deorum recipes that craft into tin ore.")
+            //        .define("preferred_tin_ore", (ResourceLocation) null);
+
+            //builder.pop();
             builder.pop();
         }
     }

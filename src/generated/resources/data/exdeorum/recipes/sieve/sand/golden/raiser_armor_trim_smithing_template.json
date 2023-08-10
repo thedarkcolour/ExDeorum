@@ -1,0 +1,13 @@
+{
+  "type": "exdeorum:sieve",
+  "ingredient": {
+    "item": "minecraft:sand"
+  },
+  "mesh": "exdeorum:golden_mesh",
+  "result": "minecraft:raiser_armor_trim_smithing_template",
+  "result_amount": {
+    "type": "minecraft:binomial",
+    "n": 1.0,
+    "p": 0.01
+  }
+}

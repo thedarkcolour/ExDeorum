@@ -49,8 +49,8 @@ public class BarrelMixingCategory implements IRecipeCategory<BarrelMixingRecipe>
         this.slot = helper.getSlotDrawable();
         this.plus = plus;
         this.arrow = arrow;
-        this.icon = helper.createDrawableItemStack(new ItemStack(EBlocks.OAK_BARREL.get()));
-        this.title = Component.literal(TranslationKeys.BARREL_MIXING_CATEGORY_TITLE);
+        this.icon = helper.createDrawableItemStack(new ItemStack(EBlocks.STONE_BARREL.get()));
+        this.title = Component.translatable(TranslationKeys.BARREL_MIXING_CATEGORY_TITLE);
     }
 
     @Override

@@ -21,9 +21,11 @@ package thedarkcolour.exdeorum.registry;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.FallingBlock;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.PushReaction;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -43,11 +45,11 @@ public class EBlocks {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, ExDeorum.ID);
 
     // Materials
-    public static final RegistryObject<Block> DUST = BLOCKS.register("dust", () -> new Block(of().sound(SoundType.SAND).strength(0.4f)));
-    public static final RegistryObject<Block> CRUSHED_NETHERRACK = BLOCKS.register("crushed_netherrack", () -> new Block(of().mapColor(MapColor.NETHER).sound(SoundType.SAND).strength(0.6f)));
-    public static final RegistryObject<Block> CRUSHED_END_STONE = BLOCKS.register("crushed_end_stone", () -> new Block(of().mapColor(MapColor.SAND).sound(SoundType.SAND).strength(0.6f)));
-    public static final RegistryObject<Block> CRUSHED_DEEPSLATE = BLOCKS.register("crushed_deepslate", () -> new Block(of().mapColor(DyeColor.GRAY).sound(SoundType.SAND).strength(0.8f)));
-    public static final RegistryObject<Block> CRUSHED_BLACKSTONE = BLOCKS.register("crushed_blackstone", () -> new Block(of().mapColor(DyeColor.BLACK).sound(SoundType.SAND).strength(0.6f)));
+    public static final RegistryObject<Block> DUST = BLOCKS.register("dust", () -> new FallingBlock(of().sound(SoundType.SAND).strength(0.4f)));
+    public static final RegistryObject<Block> CRUSHED_NETHERRACK = BLOCKS.register("crushed_netherrack", () -> new FallingBlock(of().mapColor(MapColor.NETHER).sound(SoundType.SAND).strength(0.6f)));
+    public static final RegistryObject<Block> CRUSHED_END_STONE = BLOCKS.register("crushed_end_stone", () -> new FallingBlock(of().mapColor(MapColor.SAND).sound(SoundType.SAND).strength(0.6f)));
+    public static final RegistryObject<Block> CRUSHED_DEEPSLATE = BLOCKS.register("crushed_deepslate", () -> new FallingBlock(of().mapColor(DyeColor.GRAY).sound(SoundType.SAND).strength(0.8f)));
+    public static final RegistryObject<Block> CRUSHED_BLACKSTONE = BLOCKS.register("crushed_blackstone", () -> new FallingBlock(of().mapColor(DyeColor.BLACK).sound(SoundType.SAND).strength(0.6f)));
 
     // Barrels
     public static final RegistryObject<BarrelBlock> OAK_BARREL = registerBarrel("oak_barrel", false, false, MapColor.WOOD);
@@ -96,15 +98,17 @@ public class EBlocks {
     // Misc
     public static final RegistryObject<InfestedLeavesBlock> INFESTED_LEAVES = BLOCKS.register("infested_leaves", () -> new InfestedLeavesBlock(copy(Blocks.OAK_LEAVES)));
     public static final RegistryObject<LiquidBlock> WITCH_WATER = BLOCKS.register("witch_water", () -> new LiquidBlock(EFluids.WITCH_WATER, copy(Blocks.WATER).mapColor(MapColor.COLOR_PURPLE)));
-    public static final RegistryObject<EndCakeBlock> END_CAKE = BLOCKS.register("end_cake", () -> new EndCakeBlock(of().noLootTable().mapColor(MapColor.COLOR_BLACK)));
+    public static final RegistryObject<EndCakeBlock> END_CAKE = BLOCKS.register("end_cake", () -> new EndCakeBlock(of().noLootTable().mapColor(MapColor.COLOR_BLACK).forceSolidOn().strength(0.5F).sound(SoundType.WOOL).pushReaction(PushReaction.BLOCK)));
 
     public static RegistryObject<SieveBlock> registerSieve(String name) {
-        return BLOCKS.register(name, () -> new SieveBlock(of().strength(2.0f).noOcclusion().sound(SoundType.WOOD)));
+        var bamboo = name.equals("bamboo_sieve");
+        return BLOCKS.register(name, () -> new SieveBlock(of().strength(2.0f).noOcclusion().sound(bamboo ? SoundType.BAMBOO_WOOD : SoundType.WOOD)));
     }
 
     public static RegistryObject<BarrelBlock> registerBarrel(String name, boolean stone, boolean fireproof, MapColor color) {
+        var bamboo = name.equals("bamboo_barrel");
         return BLOCKS.register(name, () -> {
-            var props = of().noOcclusion().strength(stone ? 4.0f : 2.0f).sound(stone ? SoundType.STONE : SoundType.WOOD);
+            var props = of().noOcclusion().strength(stone ? 4.0f : 2.0f).sound(stone ? SoundType.STONE : (bamboo ? SoundType.BAMBOO_WOOD : SoundType.WOOD));
             if (!stone) {
                 if (!fireproof) {
                     props.ignitedByLava();
@@ -128,6 +132,7 @@ public class EBlocks {
     }
 
     public static RegistryObject<WaterCrucibleBlock> registerWaterCrucible(String name) {
-        return BLOCKS.register(name, () -> new WaterCrucibleBlock(of().strength(1.5f).sound(SoundType.WOOD)));
+        var bamboo = name.equals("bamboo_crucible");
+        return BLOCKS.register(name, () -> new WaterCrucibleBlock(of().strength(1.5f).sound(bamboo ? SoundType.BAMBOO_WOOD : SoundType.WOOD)));
     }
 }

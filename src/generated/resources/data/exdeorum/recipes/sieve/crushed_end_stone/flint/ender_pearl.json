@@ -1,0 +1,13 @@
+{
+  "type": "exdeorum:sieve",
+  "ingredient": {
+    "item": "exdeorum:crushed_end_stone"
+  },
+  "mesh": "exdeorum:flint_mesh",
+  "result": "minecraft:ender_pearl",
+  "result_amount": {
+    "type": "minecraft:binomial",
+    "n": 1.0,
+    "p": 0.08
+  }
+}

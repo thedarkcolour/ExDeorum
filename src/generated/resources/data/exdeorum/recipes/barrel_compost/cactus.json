@@ -1,0 +1,7 @@
+{
+  "type": "exdeorum:barrel_compost",
+  "ingredient": {
+    "item": "minecraft:cactus"
+  },
+  "volume": 125
+}

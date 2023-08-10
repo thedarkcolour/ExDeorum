@@ -1,0 +1,7 @@
+{
+  "type": "exdeorum:barrel_compost",
+  "ingredient": {
+    "item": "minecraft:spore_blossom"
+  },
+  "volume": 125
+}

@@ -32,6 +32,9 @@ public class CrucibleRenderer implements BlockEntityRenderer<AbstractCrucibleBlo
     @Override
     public void render(AbstractCrucibleBlockEntity crucible, float partialTicks, PoseStack stack, MultiBufferSource buffers, int light, int overlay) {
         crucible.getCapability(ForgeCapabilities.FLUID_HANDLER).ifPresent(tank -> {
+            var level = crucible.getLevel();
+            if (level == null) return;
+
             var fluidStack = tank.getFluidInTank(0);
 
             // These are percentages
@@ -39,12 +42,11 @@ public class CrucibleRenderer implements BlockEntityRenderer<AbstractCrucibleBlo
             var liquid = (float) fluidStack.getAmount() / (float) tank.getTankCapacity(0);
 
             if (solids != 0 || liquid != 0) {
-                var level = crucible.getLevel();
                 var pos = crucible.getBlockPos();
 
                 if (liquid != 0) {
                     var fluid = fluidStack.getFluid();
-                    var color = IClientFluidTypeExtensions.of(fluid).getTintColor(fluid.defaultFluidState(), level, pos);
+                    var color = RenderUtil.getFluidColor(fluid, level, pos);
                     float y = Mth.lerp(liquid, 4.0f, 14.0f) / 16f;
 
                     RenderUtil.renderFlatFluidSprite(buffers, stack, level, pos, y, 2.0f, light, (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff, fluid);

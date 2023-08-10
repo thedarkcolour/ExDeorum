@@ -18,7 +18,6 @@
 
 package thedarkcolour.exdeorum.blockentity;
 
-import com.mojang.serialization.codecs.EitherMapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -33,6 +32,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SaplingBlock;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -210,6 +210,19 @@ public abstract class AbstractCrucibleBlockEntity extends EBlockEntity {
         overrides.put(EItems.MYCELIUM_SPORES.get(), Blocks.MYCELIUM);
         overrides.put(EItems.WARPED_NYLIUM_SPORES.get(), Blocks.WARPED_NYLIUM);
         overrides.put(EItems.CRIMSON_NYLIUM_SPORES.get(), Blocks.WARPED_NYLIUM);
+
+        for (var sapling : ForgeRegistries.BLOCKS.getEntries()) {
+            var key = sapling.getKey().location();
+
+            if (key.getPath().endsWith("sapling")) {
+                try {
+                    var item = sapling.getValue().asItem();
+                    ForgeRegistries.BLOCKS.getValue(new ResourceLocation(key.getNamespace(), key.getPath().replace("sapling", "leaves")));
+                    overrides.put(item, Blocks.OAK_LEAVES);
+                } catch (Exception ignored) {
+                }
+            }
+        }
     }
 
     private static class FluidHandler extends FluidTank {

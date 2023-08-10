@@ -46,13 +46,10 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.LegacyRandomSource;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.client.ChunkRenderTypeSet;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.client.model.data.ModelData;
-import net.minecraftforge.fml.unsafe.UnsafeHacks;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.joml.Vector3f;
-import sun.misc.Unsafe;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.client.ter.SieveRenderer;
 
@@ -81,22 +78,16 @@ public class RenderUtil {
             @Override
             public TextureAtlasSprite load(Block key) {
                 var registryName = ForgeRegistries.BLOCKS.getKey(key);
-                var textureLoc = registryName.withPrefix("block/");
-                var sprite = blockAtlas.getSprite(textureLoc);
+                var blockLoc = registryName.withPrefix("block/");
+                var sprite = blockAtlas.getSprite(blockLoc);
                 // for stuff like azalea bush, retry to get the top texture
                 if (isMissingTexture(sprite)) {
-                    textureLoc = new ResourceLocation(registryName.getNamespace(), "block/" + registryName.getPath() + "_top");
-                    sprite = blockAtlas.getSprite(textureLoc);
+                    blockLoc = new ResourceLocation(registryName.getNamespace(), "block/" + registryName.getPath() + "_top");
+                    sprite = blockAtlas.getSprite(blockLoc);
                 }
                 return sprite;
             }
         });
-
-        // shut up Forge
-        //var set = UnsafeHacks.newInstance(ChunkRenderTypeSet.class);
-        //try {
-        //    UnsafeHacks.setField(ChunkRenderTypeSet.class.getDeclaredField("bits"), set, );
-        //} catch (NoSuchFieldException e) {}
     }
 
     public static BakedModel getMimicModel(BlockState state) {
@@ -183,5 +174,9 @@ public class RenderUtil {
 
     public static ShaderInstance getRenderTypeTintedCutoutMippedShader() {
         return renderTypeTintedCutoutMippedShader;
+    }
+
+    public static int getFluidColor(Fluid fluid, Level level, BlockPos pos) {
+        return IClientFluidTypeExtensions.of(fluid).getTintColor(fluid.defaultFluidState(), level, pos);
     }
 }

@@ -152,7 +152,7 @@ public class CompostColors {
 
             if (!readMods.contains(modid)) {
                 var id = entry.getKey().location().getPath();
-                var jarFile = ModList.get().getModFileById(ExDeorum.ID).getFile();
+                var jarFile = ModList.get().getModFileById(modid).getFile();
                 var modelPath = jarFile.findResource("assets/" + modid + "/models/item/" + id + ".json");
 
                 if (Files.exists(modelPath)) {
@@ -180,7 +180,8 @@ public class CompostColors {
 
                                         for (int x = 0; x < width; x++) {
                                             for (int y = 0; y < height; y++) {
-                                                int pixel = img.getRGB(x, y);if (pixel != 0) {
+                                                int pixel = img.getRGB(x, y);
+                                                if (pixel != 0) {
                                                     totalR += (pixel >> 16) & 0xff;
                                                     totalG += (pixel >> 8) & 0xff;
                                                     totalB += (pixel) & 0xff;

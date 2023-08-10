@@ -23,11 +23,13 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 import thedarkcolour.exdeorum.ExDeorum;
+import thedarkcolour.exdeorum.recipe.TagResultRecipe;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelCompostRecipe;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelMixingRecipe;
 import thedarkcolour.exdeorum.recipe.crucible.CrucibleRecipe;
 import thedarkcolour.exdeorum.recipe.hammer.HammerRecipe;
 import thedarkcolour.exdeorum.recipe.sieve.SieveRecipe;
+import thedarkcolour.exdeorum.voidworld.VoidChunkGenerator;
 
 public class ERecipeTypes {
     public static final DeferredRegister<RecipeType<?>> RECIPE_TYPES = DeferredRegister.create(Registries.RECIPE_TYPE, ExDeorum.ID);
@@ -41,4 +43,5 @@ public class ERecipeTypes {
     public static final RegistryObject<RecipeType<HammerRecipe>> HAMMER = RECIPE_TYPES.register("hammer", () -> RecipeType.simple(ERecipeTypes.HAMMER.getId()));
 
     public static final RegistryObject<RecipeType<SieveRecipe>> SIEVE = RECIPE_TYPES.register("sieve", () -> RecipeType.simple(ERecipeTypes.SIEVE.getId()));
+    public static final RegistryObject<RecipeType<TagResultRecipe>> TAG_RESULT = RECIPE_TYPES.register("tag_result", () -> RecipeType.simple(ERecipeTypes.TAG_RESULT.getId()));
 }

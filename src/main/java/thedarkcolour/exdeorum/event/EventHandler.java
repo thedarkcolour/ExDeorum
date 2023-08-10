@@ -42,13 +42,13 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.level.LevelEvent;
-import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.fluids.FluidInteractionRegistry;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import thedarkcolour.exdeorum.ExDeorum;
+import thedarkcolour.exdeorum.compat.ModIds;
 import thedarkcolour.exdeorum.config.EConfig;
 import thedarkcolour.exdeorum.item.WateringCanItem;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
@@ -114,7 +114,7 @@ public final class EventHandler {
     private static void onCommonSetup(FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
             FluidInteractionRegistry.addInteraction(ForgeMod.LAVA_TYPE.get(), new FluidInteractionRegistry.InteractionInformation(
-                    ForgeMod.WATER_TYPE.get(),
+                    EFluids.WITCH_WATER_TYPE.get(),
                     fluidState -> fluidState.isSource() ? Blocks.OBSIDIAN.defaultBlockState() : (EConfig.SERVER.witchWaterNetherrackGenerator.get() ? Blocks.NETHERRACK.defaultBlockState() : Blocks.COBBLESTONE.defaultBlockState())
             ));
         });
@@ -125,19 +125,17 @@ public final class EventHandler {
             if (player.serverLevel().getChunkSource().getGenerator() instanceof VoidChunkGenerator) {
                 NetworkHandler.sendVoidWorld(player);
                 var advancement = player.server.getAdvancements().getAdvancement(new ResourceLocation(ExDeorum.ID, "core/root"));
-                if (advancement != null) {
-                    player.getAdvancements().award(advancement, "in_void_world");
-                } else {
-                    ExDeorum.LOGGER.error("Unable to grant player the Void World advancement. Ex Nihilo Reborn advancements will not show");
-                }
 
-                if (player.getStats().getValue(Stats.CUSTOM.get(Stats.DEATHS)) == 0 && player.tickCount == 0) {
+                if (advancement != null && !player.getAdvancements().getOrStartProgress(advancement).isDone()) {
+                    player.getAdvancements().award(advancement, "in_void_world");
                     if (EConfig.SERVER.startingTorch.get()) {
                         player.getInventory().add(new ItemStack(Items.TORCH));
                     }
                     if (EConfig.SERVER.startingWateringCan.get()) {
                         player.getInventory().add(WateringCanItem.getFull(EItems.WOODEN_WATERING_CAN));
                     }
+                } else {
+                    ExDeorum.LOGGER.error("Unable to grant player the Void World advancement. Ex Nihilo Reborn advancements will not show");
                 }
             }
         }
@@ -145,7 +143,7 @@ public final class EventHandler {
 
     // Send messages to other mods
     public static void interModEnqueue(InterModEnqueueEvent event) {
-        InterModComms.sendTo("theoneprobe", "getTheOneProbe", ExDeorumTopCompat::new);
+        InterModComms.sendTo(ModIds.THE_ONE_PROBE, "getTheOneProbe", ExDeorumTopCompat::new);
     }
 
     private static void addReloadListeners(AddReloadListenerEvent event) {

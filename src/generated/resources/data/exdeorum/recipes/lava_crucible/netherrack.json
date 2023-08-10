@@ -1,7 +1,7 @@
 {
   "type": "exdeorum:lava_crucible",
   "fluid": {
-    "Amount": 1000,
+    "Amount": 500,
     "FluidName": "minecraft:lava"
   },
   "ingredient": {

@@ -73,7 +73,7 @@ public class BarrelRenderer implements BlockEntityRenderer<BarrelBlockEntity> {
                 var pos = barrel.getBlockPos();
                 var percentage = fluidStack.getAmount() / 1000.0f;
                 var y = Mth.lerp(percentage, 1.0f, 14.0f) / 16f;
-                var col = IClientFluidTypeExtensions.of(fluid).getTintColor(fluidStack);
+                var col = RenderUtil.getFluidColor(fluid, level, pos);
                 // Split into RGB components
                 var r = (col >> 16) & 0xff;
                 var g = (col >> 8) & 0xff;
