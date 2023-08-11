@@ -835,6 +835,7 @@ class Recipes {
                 addDrop.accept(Items.JUNGLE_SAPLING, chance(0.11f));
                 addDrop.accept(Items.CHERRY_SAPLING, chance(0.11f));
                 addDrop.accept(Items.MANGROVE_PROPAGULE, chance(0.11f));
+                addDrop.accept(Items.AZALEA, chance(0.08f + j * 0.01f));
                 addDrop.accept(Items.GLOW_BERRIES, chance(0.04f + j * 0.075f));
                 addDrop.accept(Items.SMALL_DRIPLEAF, chance(0.07f + j * 0.025f));
                 addDrop.accept(Items.BIG_DRIPLEAF, chance(0.05f + j * 0.02f));
@@ -843,6 +844,7 @@ class Recipes {
         }
         forMesh(writer, ingredient(Items.MOSS_BLOCK), EItems.FLINT_MESH, addDrop -> {
             addDrop.accept(Items.SWEET_BERRIES, chance(0.03f));
+            addDrop.accept(Items.FLOWERING_AZALEA, chance(0.03f));
             addDrop.accept(Items.GLOW_LICHEN, chance(0.04f));
             addDrop.accept(Items.LILY_PAD, chance(0.04f));
         });

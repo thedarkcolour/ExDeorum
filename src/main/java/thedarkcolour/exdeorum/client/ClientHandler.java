@@ -21,15 +21,20 @@ package thedarkcolour.exdeorum.client;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.worldselection.CreateWorldScreen;
+import net.minecraft.client.gui.screens.worldselection.WorldCreationUiState;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.ShaderInstance;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Unit;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterClientReloadListenersEvent;
 import net.minecraftforge.client.event.RegisterShadersEvent;
+import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -43,6 +48,7 @@ import thedarkcolour.exdeorum.config.EConfig;
 import thedarkcolour.exdeorum.network.ClientMessageHandler;
 import thedarkcolour.exdeorum.registry.EBlockEntities;
 import thedarkcolour.exdeorum.registry.EFluids;
+import thedarkcolour.exdeorum.registry.EWorldPresets;
 
 import java.io.IOException;
 import java.io.ObjectInputFilter;
@@ -59,6 +65,7 @@ public class ClientHandler {
         fmlBus.addListener(ClientHandler::onPlayerRespawn);
         fmlBus.addListener(ClientHandler::onPlayerLogout);
         modBus.addListener(ClientHandler::onConfigChanged);
+        fmlBus.addListener(ClientHandler::onScreenOpen);
     }
 
     private static void addClientReloadListeners(RegisterClientReloadListenersEvent event) {
@@ -105,6 +112,15 @@ public class ClientHandler {
             });
         } catch (IOException e) {
             ExDeorum.LOGGER.error("Unable to load tinted shader", e);
+        }
+    }
+
+    private static void onScreenOpen(ScreenEvent.Opening event) {
+        if (EConfig.CLIENT.setVoidWorldAsDefault.get()) {
+            if (event.getNewScreen() instanceof CreateWorldScreen screen) {
+                var ctx = screen.getUiState().getSettings();
+                screen.getUiState().setWorldType(new WorldCreationUiState.WorldTypeEntry(ctx.worldgenLoadContext().registryOrThrow(Registries.WORLD_PRESET).getHolder(EWorldPresets.VOID_WORLD).orElse(null)));
+            }
         }
     }
 

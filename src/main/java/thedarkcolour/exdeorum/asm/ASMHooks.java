@@ -22,6 +22,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import thedarkcolour.exdeorum.voidworld.VoidChunkGenerator;
 
+@SuppressWarnings("unused")
 public final class ASMHooks {
     /**
      * Called in {@link net.minecraft.world.level.levelgen.structure.structures.EndCityStructure#findGenerationPoint(Structure.GenerationContext)}

@@ -31,6 +31,7 @@ public class EConfig {
 
     public static class Client {
         public final BooleanValue useFastInfestedLeaves;
+        public final BooleanValue setVoidWorldAsDefault;
 
         public Client(ForgeConfigSpec.Builder builder) {
             builder.comment("Client configuration for Ex Deorum").push("client");
@@ -38,6 +39,9 @@ public class EConfig {
             this.useFastInfestedLeaves = builder
                     .comment("Whether to use a simplified renderer for infested leaves (reduces FPS lag with lots of infested trees)")
                     .define("use_fast_infested_leaves", false);
+            this.setVoidWorldAsDefault = builder
+                    .comment("Whether the Void World type is set as the default world preset in the world creation screen.")
+                    .define("set_void_world_as_default", true);
 
             builder.pop();
         }
@@ -49,6 +53,7 @@ public class EConfig {
         public final BooleanValue simultaneousSieveUsage;
         public final DoubleValue barrelProgressStep;
         public final BooleanValue witchWaterNetherrackGenerator;
+        public final BooleanValue setVoidWorldAsDefault;
 
         // todo preferred ores
         //public final ConfigValue<ResourceLocation> preferredAluminumOre;
@@ -81,6 +86,9 @@ public class EConfig {
             this.witchWaterNetherrackGenerator = builder
                     .comment("Whether Witch Water forms netherrack when lava flows into it, allowing for a netherrack version of a cobblestone generator.")
                     .define("witch_water_netherrack_generator", true);
+            this.setVoidWorldAsDefault = builder
+                    .comment("Whether the Void World type is used by default in the \"server.properties\" file when creating a server.")
+                    .define("set_void_world_as_default", true);
 
             // Preferred ore items
             //builder.push("preferred_tag_items");

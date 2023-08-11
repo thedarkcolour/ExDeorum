@@ -11,6 +11,7 @@ var ASMAPI = Java.type('net.minecraftforge.coremod.api.ASMAPI');
 
 function initializeCoreMod() {
     return {
+        // inserts a hook into EndCityStructure#findGenerationPoint to fix the position of the city if it is in a void world
         'EndCityPatch': {
             'target': {
                 'type': 'METHOD',
@@ -36,6 +37,33 @@ function initializeCoreMod() {
                 }
 
                 ASMAPI.log('ERROR', 'Unable to patch End City generation, void worlds will have no end cities!!!');
+                return method;
+            }
+        },
+        // Redirects a field access in the constructor of DedicatedServerProperties from WorldPresets.NORMAL to EWorldPresets.VOID_WORLD
+        'DedicatedServerPropertiesPatch': {
+            'target': {
+                'type': 'METHOD',
+                'class': 'net.minecraft.server.dedicated.DedicatedServerProperties',
+                'methodName': '<init>',
+                'methodDesc': '(Ljava/util/Properties;)V'
+            },
+            'transformer': function (method) {
+                var insnList = method.instructions;
+
+                for (var i = 0; i < insnList.size(); ++i) {
+                    var insn = insnList.get(i);
+
+                    if (insn.getOpcode() === Opcodes.GETSTATIC && (insn.name.equals('f_226437_') || insn.name.equals('NORMAL'))) {
+                        insn.owner = 'thedarkcolour/exdeorum/registry/EWorldPresets';
+                        insn.name = 'VOID_WORLD';
+
+                        ASMAPI.log('INFO', 'Successfully patched server.properties to use void world type by default');
+                        return method;
+                    }
+                }
+
+                ASMAPI.log('ERROR', 'Unable to patch server.properties, you will have to set "level-type" to "exdeorum:void_world" manually.');
                 return method;
             }
         }

@@ -1,6 +1,15 @@
-## Ex Nihilo Reborn - 1.0
-- Ex Nihilo Reborn is a port mixed of the original Ex Nihilo from 1.7.10
-  and Ex Nihilo Adscensio for 1.10.2. I was unimpressed with Ex Nihilo Sequentia,
-  so I made this.
-- Removed Andesite, Granite, and Diorite pebbles
-- No coral seeds
+## Ex Deorum 1.0  
+*Ex Deorum*'s new additions are listed first, then the additions from original *Ex Nihilo*.
+- Added the Watering Can, which can be used to hydrate farmland and speed up plant and tree growth. It is intended to be
+an alternative to mods like Twerk or Tree Growing Simulator, as a Wooden Watering Can is given to the player at the start (configurable).
+The list of blocks that Watering Cans can be used on is defined by the tag `exdeorum:watering_can_blocks`.
+- Added the Sculk Core, which can be used to enable player-placed Sculk Shriekers to spawn Wardens.
+- Added Witch Water, which can be used to create a variety of blocks with the barrel AND it can be used to create a Netherrack generator,
+replacing where regular Water would be used. (configurable)
+- Added the Sieve, which uses sieve meshes to filter items. (drops are configurable through data pack)
+- Added the Porcelain, Crimson, and Warped Crucibles which melt cobblestone into lava when placed above a heat source. (configurable through data pack, supports modded fluids)
+- Added Wooden Crucibles which melt plant material into water. (configurable through data pack, supports modded fluids)
+- Added the Barrel, which has all of its functionality from Ex Nihilo. (Composting and Mixing recipes are configurable through data pack)
+- Added the Silk Worm, which can infest a tree so that can be harvested for string. It can also be cooked and eaten... if you're desperate.
+- Added the Crook, which can be used to break leaves and infested leaves for increased drop rates.
+- Added the Hammer, which can be used to crush and smash blocks. (recipes are configurable through data pack)
