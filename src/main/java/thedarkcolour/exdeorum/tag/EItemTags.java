@@ -35,7 +35,23 @@ public class EItemTags {
     public static final TagKey<Item> STONE_BARRELS = tag("stone_barrels");
     public static final TagKey<Item> BARRELS = tag("barrels");
 
+    public static final TagKey<Item> ORES_ALUMINUM = tag("ores/aluminum");
+    public static final TagKey<Item> ORES_COBALT = tag("ores/cobalt");
+    public static final TagKey<Item> ORES_SILVER = tag("ores/silver");
+    public static final TagKey<Item> ORES_LEAD = tag("ores/lead");
+    public static final TagKey<Item> ORES_PLATINUM = tag("ores/platinum");
+    public static final TagKey<Item> ORES_NICKEL = tag("ores/nickel");
+    public static final TagKey<Item> ORES_URANIUM = tag("ores/uranium");
+    public static final TagKey<Item> ORES_OSMIUM = tag("ores/osmium");
+    public static final TagKey<Item> ORES_TIN = tag("ores/tin");
+    public static final TagKey<Item> ORES_ZINC = tag("ores/zinc");
+    public static final TagKey<Item> ORES_IRIDIUM = tag("ores/iridium");
+
     public static TagKey<Item> tag(String name) {
         return ItemTags.create(new ResourceLocation(ExDeorum.ID, name));
+    }
+
+    public static TagKey<Item> forgeTag(String name) {
+        return ItemTags.create(new ResourceLocation("forge", name));
     }
 }

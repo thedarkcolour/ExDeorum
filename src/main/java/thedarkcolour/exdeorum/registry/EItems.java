@@ -86,6 +86,18 @@ public class EItems {
     public static final RegistryObject<Item> IRON_ORE_CHUNK = registerSimpleItem("iron_ore_chunk");
     public static final RegistryObject<Item> COPPER_ORE_CHUNK = registerSimpleItem("copper_ore_chunk");
     public static final RegistryObject<Item> GOLD_ORE_CHUNK = registerSimpleItem("gold_ore_chunk");
+    // Modded Ore Chunks
+    public static final RegistryObject<Item> ALUMINUM_ORE_CHUNK = registerSimpleItem("aluminum_ore_chunk");
+    public static final RegistryObject<Item> COBALT_ORE_CHUNK = registerSimpleItem("cobalt_ore_chunk");
+    public static final RegistryObject<Item> SILVER_ORE_CHUNK = registerSimpleItem("silver_ore_chunk");
+    public static final RegistryObject<Item> LEAD_ORE_CHUNK = registerSimpleItem("lead_ore_chunk");
+    public static final RegistryObject<Item> PLATINUM_ORE_CHUNK = registerSimpleItem("platinum_ore_chunk");
+    public static final RegistryObject<Item> NICKEL_ORE_CHUNK = registerSimpleItem("nickel_ore_chunk");
+    public static final RegistryObject<Item> URANIUM_ORE_CHUNK = registerSimpleItem("uranium_ore_chunk");
+    public static final RegistryObject<Item> OSMIUM_ORE_CHUNK = registerSimpleItem("osmium_ore_chunk");
+    public static final RegistryObject<Item> TIN_ORE_CHUNK = registerSimpleItem("tin_ore_chunk");
+    public static final RegistryObject<Item> ZINC_ORE_CHUNK = registerSimpleItem("zinc_ore_chunk");
+    public static final RegistryObject<Item> IRIDIUM_ORE_CHUNK = registerSimpleItem("iridium_ore_chunk");
 
     // Pebbles
     public static final RegistryObject<Item> STONE_PEBBLE = registerSimpleItem("stone_pebble");

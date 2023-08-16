@@ -19,6 +19,6 @@
 package thedarkcolour.exdeorum.compat;
 
 public class ModIds {
-    public static final String THERMAL_FOUNDATION = "thermalfoundation";
     public static final String THE_ONE_PROBE = "theoneprobe";
+    public static final String TINKERS_CONSTRUCT = "tconstruct";
 }

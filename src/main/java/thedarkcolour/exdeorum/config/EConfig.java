@@ -18,15 +18,21 @@
 
 package thedarkcolour.exdeorum.config;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
+import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
 import net.minecraftforge.common.ForgeConfigSpec.DoubleValue;
+import org.apache.commons.lang3.text.WordUtils;
 import org.apache.commons.lang3.tuple.Pair;
+import thedarkcolour.exdeorum.compat.ModIds;
 
 public class EConfig {
     public static final ForgeConfigSpec CLIENT_SPEC;
+    public static final ForgeConfigSpec COMMON_SPEC;
     public static final ForgeConfigSpec SERVER_SPEC;
     public static final Client CLIENT;
+    public static final Common COMMON;
     public static final Server SERVER;
 
     public static class Client {
@@ -47,6 +53,44 @@ public class EConfig {
         }
     }
 
+    // Needed because common configs load before Tags
+    public static class Common {
+        public final ConfigValue<ResourceLocation> preferredAluminumOre;
+        public final ConfigValue<ResourceLocation> preferredCobaltOre;
+        public final ConfigValue<ResourceLocation> preferredSilverOre;
+        public final ConfigValue<ResourceLocation> preferredLeadOre;
+        public final ConfigValue<ResourceLocation> preferredPlatinumOre;
+        public final ConfigValue<ResourceLocation> preferredNickelOre;
+        public final ConfigValue<ResourceLocation> preferredUraniumOre;
+        public final ConfigValue<ResourceLocation> preferredOsmiumOre;
+        public final ConfigValue<ResourceLocation> preferredTinOre;
+        public final ConfigValue<ResourceLocation> preferredZincOre;
+        public final ConfigValue<ResourceLocation> preferredIridiumOre;
+
+        public Common(ForgeConfigSpec.Builder builder) {
+            // Preferred items
+            builder.comment("Common configuration for Ex Deorum").push("common");
+
+            builder.comment("For recipes automatically added by Ex Deorum for other mods, some mods may add two of the same item (ex. Tin Ore). When Ex Deorum adds a recipe for those kinds of items, you may choose which item of the two (or more) is chosen as the crafting result.").push("preferred_tag_items");
+
+            var airId = new ResourceLocation("air");
+
+            this.preferredAluminumOre = preferredOreConfig(builder, "aluminum_ore", airId);
+            this.preferredCobaltOre = preferredOreConfig(builder, "cobalt_ore", new ResourceLocation(ModIds.TINKERS_CONSTRUCT, "cobalt_ore"));
+            this.preferredSilverOre = preferredOreConfig(builder, "silver_ore", airId);
+            this.preferredLeadOre = preferredOreConfig(builder, "lead_ore", airId);
+            this.preferredPlatinumOre = preferredOreConfig(builder, "platinum_ore", airId);
+            this.preferredNickelOre = preferredOreConfig(builder, "nickel_ore", airId);
+            this.preferredUraniumOre = preferredOreConfig(builder, "uranium_ore", airId);
+            this.preferredOsmiumOre = preferredOreConfig(builder, "osmium_ore", airId);
+            this.preferredTinOre = preferredOreConfig(builder, "tin_ore", airId);
+            this.preferredZincOre = preferredOreConfig(builder, "zinc_ore", airId);
+            this.preferredIridiumOre = preferredOreConfig(builder, "iridium_ore", airId);
+
+            builder.pop(2);
+        }
+    }
+
     public static class Server {
         public final BooleanValue startingTorch;
         public final BooleanValue startingWateringCan;
@@ -54,19 +98,6 @@ public class EConfig {
         public final DoubleValue barrelProgressStep;
         public final BooleanValue witchWaterNetherrackGenerator;
         public final BooleanValue setVoidWorldAsDefault;
-
-        // todo preferred ores
-        //public final ConfigValue<ResourceLocation> preferredAluminumOre;
-        //public final ConfigValue<ResourceLocation> preferredSilverOre;
-        //public final ConfigValue<ResourceLocation> preferredLeadOre;
-        //public final ConfigValue<ResourceLocation> preferredNickelOre;
-        //public final ConfigValue<ResourceLocation> preferredUraniumOre;
-        //public final ConfigValue<ResourceLocation> preferredOsmiumOre;
-        //public final ConfigValue<ResourceLocation> preferredTinOre;
-        //public final ConfigValue<ResourceLocation> preferredZincOre;
-        //public final ConfigValue<ResourceLocation> preferredCobaltOre;
-        //public final ConfigValue<ResourceLocation> preferredIridiumOre;
-
 
         public Server(ForgeConfigSpec.Builder builder) {
             builder.comment("Server configuration for Ex Deorum").push("server");
@@ -90,28 +121,32 @@ public class EConfig {
                     .comment("Whether the Void World type is used by default in the \"server.properties\" file when creating a server.")
                     .define("set_void_world_as_default", true);
 
-            // Preferred ore items
-            //builder.push("preferred_tag_items");
-
-            //this.preferredTinOre = builder
-            //        .comment("The ID of the item to use for Ex Deorum recipes that craft into tin ore.")
-            //        .define("preferred_tin_ore", (ResourceLocation) null);
-
-            //builder.pop();
             builder.pop();
         }
     }
 
+    @SuppressWarnings("deprecation")
+    private static ConfigValue<ResourceLocation> preferredOreConfig(ForgeConfigSpec.Builder builder, String name, ResourceLocation defaultId) {
+        return builder
+                .comment("The ID of the item to use for Ex Deorum recipes that craft into " + WordUtils.capitalize(name.replace('_', ' ')) + ". Leave as air for default preference, which chooses alphabetically by mod name.")
+                .define("preferred_" + name, defaultId);
+    }
+
     static {
-        {
-            Pair<Server, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(Server::new);
-            SERVER = specPair.getLeft();
-            SERVER_SPEC = specPair.getRight();
-        }
         {
             Pair<Client, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(Client::new);
             CLIENT = specPair.getLeft();
             CLIENT_SPEC = specPair.getRight();
+        }
+        {
+            Pair<Common, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(Common::new);
+            COMMON = specPair.getLeft();
+            COMMON_SPEC = specPair.getRight();
+        }
+        {
+            Pair<Server, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(Server::new);
+            SERVER = specPair.getLeft();
+            SERVER_SPEC = specPair.getRight();
         }
     }
 }

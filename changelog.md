@@ -13,3 +13,4 @@ replacing where regular Water would be used. (configurable)
 - Added the Silk Worm, which can infest a tree so that can be harvested for string. It can also be cooked and eaten... if you're desperate.
 - Added the Crook, which can be used to break leaves and infested leaves for increased drop rates.
 - Added the Hammer, which can be used to crush and smash blocks. (recipes are configurable through data pack)
+- Added the porcelain bucket, a cheap alternative to a regular bucket in the early game with the catch that it breaks after pouring out lava.

@@ -24,49 +24,45 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.GsonHelper;
 import net.minecraft.world.Container;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
-import org.apache.http.impl.client.StandardHttpRequestRetryHandler;
 import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.registry.ERecipeSerializers;
-import thedarkcolour.exdeorum.registry.ERecipeTypes;
 
+// A recipe whose result is an item tag. Tag can be empty.
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class TagResultRecipe implements Recipe<Container> {
     private final ResourceLocation id;
-    private final Recipe<Container> wrapped;
-    private final TagKey<Item> result;
+    private final Recipe<Container> originalRecipe;
 
-    public TagResultRecipe(ResourceLocation id, Recipe wrapped, TagKey<Item> result) {
+    public TagResultRecipe(ResourceLocation id, Recipe originalRecipe) {
         this.id = id;
-        this.wrapped = wrapped;
-        this.result = result;
+        this.originalRecipe = originalRecipe;
     }
 
     @Override
     public boolean matches(Container container, Level level) {
-        return this.wrapped.matches(container, level);
+        return this.originalRecipe.matches(container, level);
     }
 
     @Override
     public ItemStack assemble(Container container, RegistryAccess access) {
-        access.registryOrThrow(Registries.ITEM).getTag(result);
-        throw new UnsupportedOperationException("TagResultRecipe#assemble");
+        return this.originalRecipe.assemble(container, access);
     }
 
     @Override
     public boolean canCraftInDimensions(int width, int height) {
-        return this.wrapped.canCraftInDimensions(width, height);
+        return this.originalRecipe.canCraftInDimensions(width, height);
     }
 
     @Override
     public ItemStack getResultItem(RegistryAccess access) {
-        throw new UnsupportedOperationException("TagResultRecipe#getResultItem");
+        return this.getResultItem(access);
     }
 
     @Override
@@ -81,13 +77,23 @@ public class TagResultRecipe implements Recipe<Container> {
 
     @Override
     public RecipeType<?> getType() {
-        return ERecipeTypes.TAG_RESULT.get();
+        return this.originalRecipe.getType();
     }
 
     public static class Serializer implements RecipeSerializer<TagResultRecipe> {
         @Override
         public TagResultRecipe fromJson(ResourceLocation id, JsonObject json) {
-            return null;
+            var tag = TagKey.create(Registries.ITEM, new ResourceLocation(GsonHelper.getAsString(json, "result_tag")));
+            var newResult = RecipeUtil.getPreferredItem(tag);
+            var originalRecipeJson = GsonHelper.getAsJsonObject(json, "original_recipe");
+
+            if (json.has("result")) {
+                var resultElement = json.get("result");
+                if (resultElement.isJsonObject()) {
+
+                }
+            }
+            return null;//return new TagResultRecipe(id, );
         }
 
         @Override
@@ -97,7 +103,7 @@ public class TagResultRecipe implements Recipe<Container> {
 
         @Override
         public void toNetwork(FriendlyByteBuf buffer, TagResultRecipe recipe) {
-            ((RecipeSerializer) recipe.wrapped.getSerializer()).toNetwork(buffer, recipe.wrapped);
+            ((RecipeSerializer) recipe.originalRecipe.getSerializer()).toNetwork(buffer, recipe.originalRecipe);
             //buffer.writeResourceLocation(recipe.tag.location());
         }
     }

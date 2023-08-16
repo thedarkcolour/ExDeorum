@@ -18,13 +18,23 @@
 
 package thedarkcolour.exdeorum.item;
 
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.Cow;
+import net.minecraft.world.entity.animal.MushroomCow;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.state.BlockState;
+import thedarkcolour.exdeorum.registry.EItems;
 
 import java.util.function.Supplier;
 
@@ -60,6 +70,39 @@ public class GrassSpreaderItem extends Item {
 
 
             return InteractionResult.SUCCESS;
+        }
+
+        return InteractionResult.PASS;
+    }
+
+    @Override
+    public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity target, InteractionHand pUsedHand) {
+        if (stack.getItem() == EItems.MYCELIUM_SPORES.get() && target instanceof Cow cow) {
+            var mushroomCow = EntityType.MOOSHROOM.create(cow.level());
+
+            if (mushroomCow != null) {
+                if (!player.getAbilities().instabuild) {
+                    stack.shrink(1);
+                }
+                cow.discard();
+                mushroomCow.moveTo(cow.getX(), cow.getY(), cow.getZ());
+                mushroomCow.setHealth(cow.getHealth());
+                mushroomCow.yBodyRot = cow.yBodyRot;
+
+                if (cow.hasCustomName()) {
+                    mushroomCow.setCustomName(cow.getCustomName());
+                    mushroomCow.setCustomNameVisible(cow.isCustomNameVisible());
+                }
+                if (cow.isPersistenceRequired()) {
+                    mushroomCow.setPersistenceRequired();
+                }
+                mushroomCow.setInvulnerable(cow.isInvulnerable());
+                cow.level().addFreshEntity(mushroomCow);
+
+                ((ServerLevel)cow.level()).sendParticles(ParticleTypes.EXPLOSION, cow.getX(), cow.getY(0.5D), cow.getZ(), 1, 0.0D, 0.0D, 0.0D, 0.0D);
+                cow.playSound(SoundEvents.MOOSHROOM_CONVERT, 2.0F, 1.0F);
+            }
+
         }
 
         return InteractionResult.PASS;
