@@ -20,6 +20,7 @@ package thedarkcolour.exdeorum.compat.jei;
 
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
+import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
@@ -35,6 +36,7 @@ import net.minecraftforge.fluids.FluidStack;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.data.TranslationKeys;
 import thedarkcolour.exdeorum.item.WateringCanItem;
+import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelCompostRecipe;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelMixingRecipe;
 import thedarkcolour.exdeorum.recipe.crucible.CrucibleRecipe;
@@ -43,7 +45,9 @@ import thedarkcolour.exdeorum.registry.EBlocks;
 import thedarkcolour.exdeorum.registry.EFluids;
 import thedarkcolour.exdeorum.registry.EItems;
 import thedarkcolour.exdeorum.registry.ERecipeTypes;
+import thedarkcolour.exdeorum.tag.EItemTags;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Supplier;
@@ -52,12 +56,12 @@ import java.util.function.Supplier;
 public class ExDeorumJeiPlugin implements IModPlugin {
     public static final ResourceLocation EX_DEORUM_JEI_TEXTURE = new ResourceLocation(ExDeorum.ID, "textures/gui/jei/enr_jei.png");
 
-    public static final RecipeType<BarrelCompostRecipe> BARREL_COMPOST = RecipeType.create(ExDeorum.ID, "barrel_compost", BarrelCompostRecipe.class);
-    public static final RecipeType<BarrelMixingRecipe> BARREL_MIXING = RecipeType.create(ExDeorum.ID, "barrel_mixing", BarrelMixingRecipe.class);
-    public static final RecipeType<CrucibleRecipe> LAVA_CRUCIBLE = RecipeType.create(ExDeorum.ID, "lava_crucible", CrucibleRecipe.class);
-    public static final RecipeType<CrucibleRecipe> WATER_CRUCIBLE = RecipeType.create(ExDeorum.ID, "water_crucible", CrucibleRecipe.class);
-    public static final RecipeType<JeiSieveRecipeGroup> SIEVE = RecipeType.create(ExDeorum.ID, "sieve", JeiSieveRecipeGroup.class);
-    public static final RecipeType<HammerRecipe> HAMMER = RecipeType.create(ExDeorum.ID, "hammer", HammerRecipe.class);
+    static final RecipeType<BarrelCompostRecipe> BARREL_COMPOST = RecipeType.create(ExDeorum.ID, "barrel_compost", BarrelCompostRecipe.class);
+    static final RecipeType<BarrelMixingRecipe> BARREL_MIXING = RecipeType.create(ExDeorum.ID, "barrel_mixing", BarrelMixingRecipe.class);
+    static final RecipeType<CrucibleRecipe> LAVA_CRUCIBLE = RecipeType.create(ExDeorum.ID, "lava_crucible", CrucibleRecipe.class);
+    static final RecipeType<CrucibleRecipe> WATER_CRUCIBLE = RecipeType.create(ExDeorum.ID, "water_crucible", CrucibleRecipe.class);
+    static final RecipeType<JeiSieveRecipeGroup> SIEVE = RecipeType.create(ExDeorum.ID, "sieve", JeiSieveRecipeGroup.class);
+    static final RecipeType<HammerRecipe> HAMMER = RecipeType.create(ExDeorum.ID, "hammer", HammerRecipe.class);
 
     @Override
     public ResourceLocation getPluginUid() {
@@ -146,6 +150,22 @@ public class ExDeorumJeiPlugin implements IModPlugin {
         registration.addItemStackInfo(new ItemStack(EItems.WARPED_NYLIUM_SPORES.get()), Component.translatable(TranslationKeys.WARPED_NYLIUM_SPORES_JEI_INFO));
         registration.addItemStackInfo(new ItemStack(EItems.CRIMSON_NYLIUM_SPORES.get()), Component.translatable(TranslationKeys.CRIMSON_NYLIUM_SPORES_JEI_INFO));
         registration.addItemStackInfo(new ItemStack(EItems.SCULK_CORE.get()), Component.translatable(TranslationKeys.SCULK_CORE_JEI_INFO));
+
+        var toRemove = new ArrayList<ItemStack>();
+
+        if (RecipeUtil.isTagEmpty(EItemTags.ORES_ALUMINUM)) toRemove.add(new ItemStack(EItems.ALUMINUM_ORE_CHUNK.get()));
+        if (RecipeUtil.isTagEmpty(EItemTags.ORES_COBALT)) toRemove.add(new ItemStack(EItems.COBALT_ORE_CHUNK.get()));
+        if (RecipeUtil.isTagEmpty(EItemTags.ORES_SILVER)) toRemove.add(new ItemStack(EItems.SILVER_ORE_CHUNK.get()));
+        if (RecipeUtil.isTagEmpty(EItemTags.ORES_LEAD)) toRemove.add(new ItemStack(EItems.LEAD_ORE_CHUNK.get()));
+        if (RecipeUtil.isTagEmpty(EItemTags.ORES_PLATINUM)) toRemove.add(new ItemStack(EItems.PLATINUM_ORE_CHUNK.get()));
+        if (RecipeUtil.isTagEmpty(EItemTags.ORES_NICKEL)) toRemove.add(new ItemStack(EItems.NICKEL_ORE_CHUNK.get()));
+        if (RecipeUtil.isTagEmpty(EItemTags.ORES_URANIUM)) toRemove.add(new ItemStack(EItems.URANIUM_ORE_CHUNK.get()));
+        if (RecipeUtil.isTagEmpty(EItemTags.ORES_OSMIUM)) toRemove.add(new ItemStack(EItems.OSMIUM_ORE_CHUNK.get()));
+        if (RecipeUtil.isTagEmpty(EItemTags.ORES_TIN)) toRemove.add(new ItemStack(EItems.TIN_ORE_CHUNK.get()));
+        if (RecipeUtil.isTagEmpty(EItemTags.ORES_ZINC)) toRemove.add(new ItemStack(EItems.ZINC_ORE_CHUNK.get()));
+        if (RecipeUtil.isTagEmpty(EItemTags.ORES_IRIDIUM)) toRemove.add(new ItemStack(EItems.IRIDIUM_ORE_CHUNK.get()));
+
+        registration.getIngredientManager().removeIngredientsAtRuntime(VanillaTypes.ITEM_STACK, toRemove);
 
         addRecipes(registration, BARREL_COMPOST, ERecipeTypes.BARREL_COMPOST);
         addRecipes(registration, BARREL_MIXING, ERecipeTypes.BARREL_MIXING);

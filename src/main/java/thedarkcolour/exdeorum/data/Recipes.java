@@ -1021,6 +1021,7 @@ class Recipes {
 
     private static void barrelMixingRecipes(Consumer<FinishedRecipe> writer) {
         // water
+        barrelMixing(writer, ingredient(EItems.DUST.get()), Fluids.WATER, Items.CLAY);
         barrelMixing(writer, ingredient(Items.MILK_BUCKET), Fluids.WATER, Items.SLIME_BLOCK);
         barrelMixing(writer, "_from_porcelain_bucket", ingredient(EItems.PORCELAIN_MILK_BUCKET.get()), Fluids.WATER, Items.SLIME_BLOCK);
         barrelMixing(writer, ingredient(Items.SNOWBALL), Fluids.WATER, Items.ICE);

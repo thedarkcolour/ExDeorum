@@ -27,6 +27,8 @@ import org.apache.commons.lang3.text.WordUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import thedarkcolour.exdeorum.compat.ModIds;
 
+import java.util.List;
+
 public class EConfig {
     public static final ForgeConfigSpec CLIENT_SPEC;
     public static final ForgeConfigSpec COMMON_SPEC;
@@ -55,17 +57,17 @@ public class EConfig {
 
     // Needed because common configs load before Tags
     public static class Common {
-        public final ConfigValue<ResourceLocation> preferredAluminumOre;
-        public final ConfigValue<ResourceLocation> preferredCobaltOre;
-        public final ConfigValue<ResourceLocation> preferredSilverOre;
-        public final ConfigValue<ResourceLocation> preferredLeadOre;
-        public final ConfigValue<ResourceLocation> preferredPlatinumOre;
-        public final ConfigValue<ResourceLocation> preferredNickelOre;
-        public final ConfigValue<ResourceLocation> preferredUraniumOre;
-        public final ConfigValue<ResourceLocation> preferredOsmiumOre;
-        public final ConfigValue<ResourceLocation> preferredTinOre;
-        public final ConfigValue<ResourceLocation> preferredZincOre;
-        public final ConfigValue<ResourceLocation> preferredIridiumOre;
+        public final ConfigValue<String> preferredAluminumOre;
+        public final ConfigValue<String> preferredCobaltOre;
+        public final ConfigValue<String> preferredSilverOre;
+        public final ConfigValue<String> preferredLeadOre;
+        public final ConfigValue<String> preferredPlatinumOre;
+        public final ConfigValue<String> preferredNickelOre;
+        public final ConfigValue<String> preferredUraniumOre;
+        public final ConfigValue<String> preferredOsmiumOre;
+        public final ConfigValue<String> preferredTinOre;
+        public final ConfigValue<String> preferredZincOre;
+        public final ConfigValue<String> preferredIridiumOre;
 
         public Common(ForgeConfigSpec.Builder builder) {
             // Preferred items
@@ -73,10 +75,10 @@ public class EConfig {
 
             builder.comment("For recipes automatically added by Ex Deorum for other mods, some mods may add two of the same item (ex. Tin Ore). When Ex Deorum adds a recipe for those kinds of items, you may choose which item of the two (or more) is chosen as the crafting result.").push("preferred_tag_items");
 
-            var airId = new ResourceLocation("air");
+            var airId = ModIds.MINECRAFT + ":air";
 
             this.preferredAluminumOre = preferredOreConfig(builder, "aluminum_ore", airId);
-            this.preferredCobaltOre = preferredOreConfig(builder, "cobalt_ore", new ResourceLocation(ModIds.TINKERS_CONSTRUCT, "cobalt_ore"));
+            this.preferredCobaltOre = preferredOreConfig(builder, "cobalt_ore", ModIds.TINKERS_CONSTRUCT + ":cobalt_ore");
             this.preferredSilverOre = preferredOreConfig(builder, "silver_ore", airId);
             this.preferredLeadOre = preferredOreConfig(builder, "lead_ore", airId);
             this.preferredPlatinumOre = preferredOreConfig(builder, "platinum_ore", airId);
@@ -126,10 +128,10 @@ public class EConfig {
     }
 
     @SuppressWarnings("deprecation")
-    private static ConfigValue<ResourceLocation> preferredOreConfig(ForgeConfigSpec.Builder builder, String name, ResourceLocation defaultId) {
+    private static ConfigValue<String> preferredOreConfig(ForgeConfigSpec.Builder builder, String name, String defaultId) {
         return builder
                 .comment("The ID of the item to use for Ex Deorum recipes that craft into " + WordUtils.capitalize(name.replace('_', ' ')) + ". Leave as air for default preference, which chooses alphabetically by mod name.")
-                .define("preferred_" + name, defaultId);
+                .define(List.of("preferred_" + name), defaultId, o -> o != null && o.getClass() == String.class && ResourceLocation.isValidResourceLocation((String) o));
     }
 
     static {

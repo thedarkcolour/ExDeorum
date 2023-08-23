@@ -91,17 +91,17 @@ public final class RecipeUtil {
         waterCrucibleRecipeCache = Lazy.of(() -> loadSimpleRecipeCache(recipes, ERecipeTypes.WATER_CRUCIBLE));
 
         preferredTagItems.clear();
-        preferredTagItems.put(EItemTags.ORES_ALUMINUM, ForgeRegistries.ITEMS.getValue(EConfig.SERVER.preferredAluminumOre.get()));
-        preferredTagItems.put(EItemTags.ORES_COBALT, ForgeRegistries.ITEMS.getValue(EConfig.SERVER.preferredCobaltOre.get()));
-        preferredTagItems.put(EItemTags.ORES_SILVER, ForgeRegistries.ITEMS.getValue(EConfig.SERVER.preferredSilverOre.get()));
-        preferredTagItems.put(EItemTags.ORES_LEAD, ForgeRegistries.ITEMS.getValue(EConfig.SERVER.preferredLeadOre.get()));
-        preferredTagItems.put(EItemTags.ORES_PLATINUM, ForgeRegistries.ITEMS.getValue(EConfig.SERVER.preferredPlatinumOre.get()));
-        preferredTagItems.put(EItemTags.ORES_NICKEL, ForgeRegistries.ITEMS.getValue(EConfig.SERVER.preferredNickelOre.get()));
-        preferredTagItems.put(EItemTags.ORES_URANIUM, ForgeRegistries.ITEMS.getValue(EConfig.SERVER.preferredUraniumOre.get()));
-        preferredTagItems.put(EItemTags.ORES_OSMIUM, ForgeRegistries.ITEMS.getValue(EConfig.SERVER.preferredOsmiumOre.get()));
-        preferredTagItems.put(EItemTags.ORES_TIN, ForgeRegistries.ITEMS.getValue(EConfig.SERVER.preferredTinOre.get()));
-        preferredTagItems.put(EItemTags.ORES_ZINC, ForgeRegistries.ITEMS.getValue(EConfig.SERVER.preferredZincOre.get()));
-        preferredTagItems.put(EItemTags.ORES_IRIDIUM, ForgeRegistries.ITEMS.getValue(EConfig.SERVER.preferredIridiumOre.get()));
+        preferredTagItems.put(EItemTags.ORES_ALUMINUM, ForgeRegistries.ITEMS.getValue(new ResourceLocation(EConfig.COMMON.preferredAluminumOre.get())));
+        preferredTagItems.put(EItemTags.ORES_COBALT, ForgeRegistries.ITEMS.getValue(new ResourceLocation(EConfig.COMMON.preferredCobaltOre.get())));
+        preferredTagItems.put(EItemTags.ORES_SILVER, ForgeRegistries.ITEMS.getValue(new ResourceLocation(EConfig.COMMON.preferredSilverOre.get())));
+        preferredTagItems.put(EItemTags.ORES_LEAD, ForgeRegistries.ITEMS.getValue(new ResourceLocation(EConfig.COMMON.preferredLeadOre.get())));
+        preferredTagItems.put(EItemTags.ORES_PLATINUM, ForgeRegistries.ITEMS.getValue(new ResourceLocation(EConfig.COMMON.preferredPlatinumOre.get())));
+        preferredTagItems.put(EItemTags.ORES_NICKEL, ForgeRegistries.ITEMS.getValue(new ResourceLocation(EConfig.COMMON.preferredNickelOre.get())));
+        preferredTagItems.put(EItemTags.ORES_URANIUM, ForgeRegistries.ITEMS.getValue(new ResourceLocation(EConfig.COMMON.preferredUraniumOre.get())));
+        preferredTagItems.put(EItemTags.ORES_OSMIUM, ForgeRegistries.ITEMS.getValue(new ResourceLocation(EConfig.COMMON.preferredOsmiumOre.get())));
+        preferredTagItems.put(EItemTags.ORES_TIN, ForgeRegistries.ITEMS.getValue(new ResourceLocation(EConfig.COMMON.preferredTinOre.get())));
+        preferredTagItems.put(EItemTags.ORES_ZINC, ForgeRegistries.ITEMS.getValue(new ResourceLocation(EConfig.COMMON.preferredZincOre.get())));
+        preferredTagItems.put(EItemTags.ORES_IRIDIUM, ForgeRegistries.ITEMS.getValue(new ResourceLocation(EConfig.COMMON.preferredIridiumOre.get())));
     }
 
     // Copied from ServerLifecycleHooks.getServerConfigPath
@@ -347,6 +347,10 @@ public final class RecipeUtil {
                 return collection.get(0).get();
             }
         }
+    }
+
+    public static boolean isTagEmpty(TagKey<Item> tag) {
+        return BuiltInRegistries.ITEM.getTag(tag).map(set -> set.iterator().hasNext()).orElse(true);
     }
 
     private record SieveCacheKey(Item mesh, Item ingredient) {

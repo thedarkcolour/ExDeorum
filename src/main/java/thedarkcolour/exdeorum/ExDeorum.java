@@ -61,6 +61,7 @@ public class ExDeorum {
         DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> ClientHandlerRegistrar::register);
         // Config init
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, EConfig.SERVER_SPEC);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, EConfig.COMMON_SPEC);
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, EConfig.CLIENT_SPEC);
     }
 

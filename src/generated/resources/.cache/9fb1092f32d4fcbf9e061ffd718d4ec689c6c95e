@@ -1,4 +1,4 @@
-// 1.20.1	2023-08-10T17:08:20.1669002	Recipes
+// 1.20.1	2023-08-23T14:30:35.0841104	Recipes
 5ad481a0c376c1a1785a5d3b992064d0ec0bf3b0 data/exdeorum/advancements/recipes/food/end_cake.json
 25dd027e844a72b03c95dbe5e3c3dd8c738ceb00 data/exdeorum/advancements/recipes/misc/acacia_barrel.json
 376be94a64c9ca97a9ea2346547b6e617f13a815 data/exdeorum/advancements/recipes/misc/acacia_crucible.json
@@ -144,6 +144,7 @@ f17f12ac67e700f7838cb3bab740ec254bbfe13c data/exdeorum/recipes/barrel_compost/tw
 653a42a46a6bd977a2eddea7336df4beabbbeecf data/exdeorum/recipes/barrel_compost/vine.json
 c4ecb4272c220282de403852031b3ca92651d91c data/exdeorum/recipes/barrel_compost/weeping_vines.json
 5677e23fdc74130523d602ebf9e557f659af57c5 data/exdeorum/recipes/barrel_compost/wheat.json
+bdcdeae9d06028ce943d06c367b58677efe03fa8 data/exdeorum/recipes/barrel_mixing/clay.json
 72f969f4db1f82a627df573c866a1b291e540a0a data/exdeorum/recipes/barrel_mixing/end_stone.json
 37f73e219fda3c6f56bf55f8ec7f97586ecdbae1 data/exdeorum/recipes/barrel_mixing/ice.json
 6c31cd3a1b2204561b123875fae0f7aebcdf7b16 data/exdeorum/recipes/barrel_mixing/magma_cream.json

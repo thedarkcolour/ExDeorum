@@ -1,7 +1,8 @@
-// 1.20.1	2023-08-08T16:04:12.9142287	ModKit Item Models for mod 'exdeorum'
+// 1.20.1	2023-08-23T14:30:35.0821114	ModKit Item Models for mod 'exdeorum'
 4ba3bb2c6174ac3728a4b85e34681f118ec8eb34 assets/exdeorum/models/item/acacia_barrel.json
 c03ce41f7c071498fcbd5f5225e91dcb2f365fbb assets/exdeorum/models/item/acacia_crucible.json
 3b4f1d45c0d9c4cd1d9a5cdf6ddc8d2c9791bca5 assets/exdeorum/models/item/acacia_sieve.json
+27529fa4c6d045bef18966b8c418bb8357cf2043 assets/exdeorum/models/item/aluminum_ore_chunk.json
 75b0f3740a14d74089e29d059bf2100549f527d4 assets/exdeorum/models/item/andesite_pebble.json
 fd1850138a04a6651f4a79cdc93b52b3ddcd88ab assets/exdeorum/models/item/bamboo_barrel.json
 ef8aec7c31e2d11e5b2e653aea90eaf4d672258e assets/exdeorum/models/item/bamboo_crucible.json
@@ -16,6 +17,7 @@ d3f7de31d0fba8578c3e36a16ab39ac0a4d54af9 assets/exdeorum/models/item/calcite_peb
 95b067616dfc39ad8f72bab6d2cf40c6c05a3748 assets/exdeorum/models/item/cherry_barrel.json
 9480047be2df6b628b18f1102699ed8f24de4deb assets/exdeorum/models/item/cherry_crucible.json
 8e6c3863c2c6f6fc4039d8157cb9850b193a56be assets/exdeorum/models/item/cherry_sieve.json
+4f5fa166847ceacc60abaa11bc70bb947be20c27 assets/exdeorum/models/item/cobalt_ore_chunk.json
 e0a5c7f6e6ec0cd9aa99175d3bca27b88ac299d4 assets/exdeorum/models/item/cooked_silk_worm.json
 a24ee1ee422f8460afec77474608b988d52ea42d assets/exdeorum/models/item/copper_ore_chunk.json
 d6109df4904776aca591e7dfc8ee8da50664e1df assets/exdeorum/models/item/crimson_barrel.json
@@ -44,6 +46,7 @@ f2138f982e5ee62ca1ed52c3a64a7813fd91ead9 assets/exdeorum/models/item/golden_mesh
 ee9de2285230b32b42585283793b265c4bb14773 assets/exdeorum/models/item/gold_ore_chunk.json
 5c80508cc8b27f55f91efc58efb7955e70dd2592 assets/exdeorum/models/item/granite_pebble.json
 f558ddd632278ad3ab548ce85cdc4661a2d70684 assets/exdeorum/models/item/grass_seeds.json
+abd9901aa00893690461a6c6e276bb6bc96a60bb assets/exdeorum/models/item/iridium_ore_chunk.json
 b91a19335ff248805cf0861cae82b93d71a9e805 assets/exdeorum/models/item/iron_hammer.json
 3398985db718bd990d9f7cfdf4bacf67a858b906 assets/exdeorum/models/item/iron_mesh.json
 5016a7f832edb2ccfa9de7c85aa9ecf7ce45cb69 assets/exdeorum/models/item/iron_ore_chunk.json
@@ -51,6 +54,7 @@ a4a83946b9cb63dfa2a6fa22dcc3c3a4773bf79f assets/exdeorum/models/item/iron_wateri
 e4719451e58406787ac0d5fb40416b76b2a03002 assets/exdeorum/models/item/jungle_barrel.json
 746006f07a42bc786ccab5c6f5849f175e117183 assets/exdeorum/models/item/jungle_crucible.json
 eebf19c29a53f46c26a33bb9e2052190c88ecc50 assets/exdeorum/models/item/jungle_sieve.json
+5b40d64710f86ff702001cf658e4928f8195f2fa assets/exdeorum/models/item/lead_ore_chunk.json
 40db3277bce3f5291d16740d6dd0d96661e04197 assets/exdeorum/models/item/mangrove_barrel.json
 9d8b0cd120a6965dcba6cc3753d76b7171bbddbc assets/exdeorum/models/item/mangrove_crucible.json
 319ea63595a7f9ceff1818414c8250f777f087f4 assets/exdeorum/models/item/mangrove_sieve.json
@@ -58,9 +62,12 @@ d543d3e18bdcf2bf79a762b52cc61a4161124db1 assets/exdeorum/models/item/mycelium_sp
 1f48b2ce3452ce5d02142c9f663ae7bdb7d1d934 assets/exdeorum/models/item/netherite_hammer.json
 248ebed818e2e4a5eb7ce78363f56433a3066646 assets/exdeorum/models/item/netherite_mesh.json
 44004d850da735a9f239d07a615813f8badb373f assets/exdeorum/models/item/netherite_watering_can.json
+0a582fabe391718c2492ee3979791e0561f74202 assets/exdeorum/models/item/nickel_ore_chunk.json
 c8b55bd8b222b2914d0b21d847788abce42c1d06 assets/exdeorum/models/item/oak_barrel.json
 dd1d9002a22eb6f5a187d53e041cd498f4ef998b assets/exdeorum/models/item/oak_crucible.json
 4de21205436d30940d690f457a3614c9235f5e88 assets/exdeorum/models/item/oak_sieve.json
+08409f22e4cf59c658f80029e1c3c00b015a86ac assets/exdeorum/models/item/osmium_ore_chunk.json
+2c7baa04ad1b1310e219359fc8a7d2453e05548e assets/exdeorum/models/item/platinum_ore_chunk.json
 0e330ed6d5ef4af907bb537a42282a41b1e7698a assets/exdeorum/models/item/porcelain_bucket.json
 f843e3bbc432c370ea62f421580b5447807e8b8b assets/exdeorum/models/item/porcelain_clay_ball.json
 acb7c543d965cfc01ba4cb7b2dc0577ebd1e0eba assets/exdeorum/models/item/porcelain_crucible.json
@@ -70,6 +77,7 @@ acb7c543d965cfc01ba4cb7b2dc0577ebd1e0eba assets/exdeorum/models/item/porcelain_c
 8012448a03d9a5a439daa36ae8f76f9fe13c3629 assets/exdeorum/models/item/porcelain_witch_water_bucket.json
 3818c896e463945cc5081644bc1ed52edbde6ebb assets/exdeorum/models/item/sculk_core.json
 52d8514e585524122e32cae1c18a838da5eb6f09 assets/exdeorum/models/item/silk_worm.json
+f7ca92f0d009a188c037bf129356b6f493564853 assets/exdeorum/models/item/silver_ore_chunk.json
 a017f369bb5bf2dde7ebc1134fc89f96a725ea8d assets/exdeorum/models/item/spruce_barrel.json
 03dac3d7dec527c4a9efbb6c28d23815252b9c39 assets/exdeorum/models/item/spruce_crucible.json
 a1acf7f34360d0710f0f0bceb83f5028c4c93710 assets/exdeorum/models/item/spruce_sieve.json
@@ -78,9 +86,11 @@ b71e04a912b620bfebfd309bf5d61cee8fba35b9 assets/exdeorum/models/item/stone_hamme
 9cf157cd0b41f89c9291be6b6383e0494369c6ef assets/exdeorum/models/item/stone_pebble.json
 3d848c2d1f094ceab9fb3f951f140b85cea2a6ab assets/exdeorum/models/item/stone_watering_can.json
 d9561f75ac700cf33abf8e1f7684d1c5fec85a89 assets/exdeorum/models/item/string_mesh.json
+d2f8f4dad969d875e4e455dc1cdc58e80c84e45e assets/exdeorum/models/item/tin_ore_chunk.json
 b7b483e30fc97f7f307f5b09249bbdd03e980caa assets/exdeorum/models/item/tuff_pebble.json
 b56c539af5e9e562830143e9c32f10b33a26eb5a assets/exdeorum/models/item/unfired_porcelain_bucket.json
 a83a24ae2611430c290b4f866c73769aacdb9c92 assets/exdeorum/models/item/unfired_porcelain_crucible.json
+be960745ad88b8bf2277dc3ba8308ec3707edbe1 assets/exdeorum/models/item/uranium_ore_chunk.json
 bb3b00cc253bc23b65d775bcb9134f38b049e3ce assets/exdeorum/models/item/warped_barrel.json
 1c4832816b0a69ff0e422bd21e20dd05e3c40090 assets/exdeorum/models/item/warped_crucible.json
 8b76cf494636338cceec59d252dd4145f046cc58 assets/exdeorum/models/item/warped_nylium_spores.json
@@ -88,3 +98,4 @@ bb3b00cc253bc23b65d775bcb9134f38b049e3ce assets/exdeorum/models/item/warped_barr
 c72e7359dd4934c756c49350682ac667fffe009b assets/exdeorum/models/item/witch_water_bucket.json
 7089629f8033bd4e52780fe88437aa684f4ee0a9 assets/exdeorum/models/item/wooden_hammer.json
 d6c652c6828ed14e33c4e948afc1c9a29f977853 assets/exdeorum/models/item/wooden_watering_can.json
+b2118d142d87e5956865096bd2dc16b3f533e783 assets/exdeorum/models/item/zinc_ore_chunk.json

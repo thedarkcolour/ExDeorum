@@ -44,6 +44,8 @@ import thedarkcolour.exdeorum.item.SilkWormItem;
 import thedarkcolour.exdeorum.item.WateringCanItem;
 import thedarkcolour.exdeorum.item.WideWateringCanItem;
 import thedarkcolour.exdeorum.item.WitchWaterBucketItem;
+import thedarkcolour.exdeorum.recipe.RecipeUtil;
+import thedarkcolour.exdeorum.tag.EItemTags;
 
 import java.util.List;
 
@@ -265,6 +267,19 @@ public class EItems {
         output.accept(IRON_ORE_CHUNK.get());
         output.accept(COPPER_ORE_CHUNK.get());
         output.accept(GOLD_ORE_CHUNK.get());
+
+        if (!RecipeUtil.isTagEmpty(EItemTags.ORES_ALUMINUM)) output.accept(ALUMINUM_ORE_CHUNK.get());
+        if (!RecipeUtil.isTagEmpty(EItemTags.ORES_COBALT)) output.accept(COBALT_ORE_CHUNK.get());
+        if (!RecipeUtil.isTagEmpty(EItemTags.ORES_SILVER)) output.accept(SILVER_ORE_CHUNK.get());
+        if (!RecipeUtil.isTagEmpty(EItemTags.ORES_LEAD)) output.accept(LEAD_ORE_CHUNK.get());
+        if (!RecipeUtil.isTagEmpty(EItemTags.ORES_PLATINUM)) output.accept(PLATINUM_ORE_CHUNK.get());
+        if (!RecipeUtil.isTagEmpty(EItemTags.ORES_NICKEL)) output.accept(NICKEL_ORE_CHUNK.get());
+        if (!RecipeUtil.isTagEmpty(EItemTags.ORES_URANIUM)) output.accept(URANIUM_ORE_CHUNK.get());
+        if (!RecipeUtil.isTagEmpty(EItemTags.ORES_OSMIUM)) output.accept(OSMIUM_ORE_CHUNK.get());
+        if (!RecipeUtil.isTagEmpty(EItemTags.ORES_TIN)) output.accept(TIN_ORE_CHUNK.get());
+        if (!RecipeUtil.isTagEmpty(EItemTags.ORES_ZINC)) output.accept(ZINC_ORE_CHUNK.get());
+        if (!RecipeUtil.isTagEmpty(EItemTags.ORES_IRIDIUM)) output.accept(IRIDIUM_ORE_CHUNK.get());
+
         output.accept(STONE_PEBBLE.get());
         output.accept(DIORITE_PEBBLE.get());
         output.accept(GRANITE_PEBBLE.get());

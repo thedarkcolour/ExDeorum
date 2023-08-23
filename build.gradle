@@ -91,6 +91,9 @@ repositories {
         url 'https://jitpack.io'
         content { includeGroup 'com.github.thedarkcolour' }
     }
+    flatDir {
+        dir 'libs'
+    }
 }
 
 dependencies {
