@@ -291,6 +291,7 @@ class Recipes {
         // Dirt -> Iron mesh
         forMesh(writer, ingredient(Items.DIRT), EItems.IRON_MESH, addDrop -> {
             addDrop.accept(EItems.STONE_PEBBLE.get(), binomial(8, 0.65f));
+            addDrop.accept(EItems.DEEPSLATE_PEBBLE.get(), binomial(3, 0.45f));
             addDrop.accept(Items.FLINT, chance(0.3f));
             addDrop.accept(Items.WHEAT_SEEDS, chance(0.175f));
             addDrop.accept(Items.MELON_SEEDS, chance(0.15f));
@@ -307,6 +308,7 @@ class Recipes {
         // Dirt -> Gold mesh
         forMesh(writer, ingredient(Items.DIRT), EItems.GOLDEN_MESH, addDrop -> {
             addDrop.accept(EItems.STONE_PEBBLE.get(), binomial(8, 0.7f));
+            addDrop.accept(EItems.DEEPSLATE_PEBBLE.get(), binomial(3, 0.55f));
             addDrop.accept(Items.FLINT, chance(0.2f));
             addDrop.accept(Items.WHEAT_SEEDS, chance(0.2f));
             addDrop.accept(Items.MELON_SEEDS, chance(0.165f));
@@ -324,6 +326,7 @@ class Recipes {
         // Dirt -> Diamond mesh
         forMesh(writer, ingredient(Items.DIRT), EItems.DIAMOND_MESH, addDrop -> {
             addDrop.accept(EItems.STONE_PEBBLE.get(), binomial(8, 0.7f));
+            addDrop.accept(EItems.DEEPSLATE_PEBBLE.get(), binomial(3, 0.60f));
             addDrop.accept(Items.FLINT, binomial(3, 0.3f));
             addDrop.accept(Items.POTATO, chance(0.25f));
             addDrop.accept(Items.CARROT, chance(0.25f));
@@ -335,6 +338,7 @@ class Recipes {
         // Dirt -> Netherite mesh
         forMesh(writer, ingredient(Items.DIRT), EItems.NETHERITE_MESH, addDrop -> {
             addDrop.accept(EItems.STONE_PEBBLE.get(), binomial(5, 0.4f));
+            addDrop.accept(EItems.DEEPSLATE_PEBBLE.get(), binomial(4, 0.65f));
             addDrop.accept(Items.FLINT, binomial(3, 0.4f));
             addDrop.accept(Items.POTATO, chance(0.3f));
             addDrop.accept(Items.CARROT, chance(0.3f));
@@ -378,6 +382,7 @@ class Recipes {
         // Gravel -> Iron mesh
         forMesh(writer, ingredient(Items.GRAVEL), EItems.IRON_MESH, addDrop -> {
             addDrop.accept(EItems.STONE_PEBBLE.get(), binomial(4, 0.5f));
+            addDrop.accept(EItems.DEEPSLATE_PEBBLE.get(), binomial(3, 0.55f));
             addDrop.accept(Items.FLINT, chance(0.15f));
             addDrop.accept(Items.COAL, chance(0.15f));
             addDrop.accept(Items.LAPIS_LAZULI, chance(0.08f));
@@ -392,6 +397,7 @@ class Recipes {
         // Gravel -> Golden mesh
         forMesh(writer, ingredient(Items.GRAVEL), EItems.GOLDEN_MESH, addDrop -> {
             addDrop.accept(EItems.STONE_PEBBLE.get(), binomial(4, 0.5f));
+            addDrop.accept(EItems.DEEPSLATE_PEBBLE.get(), binomial(3, 0.55f));
             addDrop.accept(Items.FLINT, chance(0.13f));
             addDrop.accept(Items.COAL, chance(0.2f));
             addDrop.accept(Items.LAPIS_LAZULI, chance(0.1f));
@@ -406,6 +412,7 @@ class Recipes {
         });
         // Gravel -> Diamond mesh
         forMesh(writer, ingredient(Items.GRAVEL), EItems.DIAMOND_MESH, addDrop -> {
+            addDrop.accept(EItems.DEEPSLATE_PEBBLE.get(), binomial(5, 0.6f));
             addDrop.accept(Items.FLINT, chance(0.05f));
             addDrop.accept(Items.COAL, chance(0.06f));
             addDrop.accept(Items.LAPIS_LAZULI, chance(0.11f));
@@ -418,6 +425,7 @@ class Recipes {
         });
         // Gravel -> Netherite mesh
         forMesh(writer, ingredient(Items.GRAVEL), EItems.NETHERITE_MESH, addDrop -> {
+            addDrop.accept(EItems.DEEPSLATE_PEBBLE.get(), binomial(6, 0.625f));
             addDrop.accept(Items.COAL, chance(0.06f));
             addDrop.accept(Items.LAPIS_LAZULI, chance(0.11f));
             addDrop.accept(EItems.COPPER_ORE_CHUNK.get(), chance(0.1f));

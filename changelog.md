@@ -1,3 +1,9 @@
+## Ex Deorum 1.2
+- Fixed the missing recipes for Deepslate pebbles
+
+## Ex Deorum 1.1
+- Fixed the missing barrel mixing recipe for Clay Block
+
 ## Ex Deorum 1.0  
 *Ex Deorum*'s new additions are listed first, then the additions from original *Ex Nihilo*.
 - Added the Watering Can, which can be used to hydrate farmland and speed up plant and tree growth. It is intended to be

@@ -1,4 +1,4 @@
-// 1.20.1	2023-08-23T14:30:35.0841104	Recipes
+// 1.20.1	2023-08-24T11:58:58.0334165	Recipes
 5ad481a0c376c1a1785a5d3b992064d0ec0bf3b0 data/exdeorum/advancements/recipes/food/end_cake.json
 25dd027e844a72b03c95dbe5e3c3dd8c738ceb00 data/exdeorum/advancements/recipes/misc/acacia_barrel.json
 376be94a64c9ca97a9ea2346547b6e617f13a815 data/exdeorum/advancements/recipes/misc/acacia_crucible.json
@@ -408,6 +408,7 @@ b2aed8b5743778fc4b324a119518e2f371a3f562 data/exdeorum/recipes/sieve/crushed_net
 dcf4f1f2c349ff326d0a268ad1ad2132cd0fa395 data/exdeorum/recipes/sieve/crushed_netherrack/string/warped_nylium_spores.json
 c3fe397a7a244c2a5e35ee8ca2ec2c75042f0ab0 data/exdeorum/recipes/sieve/dirt/diamond/bamboo.json
 916ae1a22802f7556087dfcb0acc56e18afb75c2 data/exdeorum/recipes/sieve/dirt/diamond/carrot.json
+1a22ee41b9fc94b8f0e7da40e871c3a482e40347 data/exdeorum/recipes/sieve/dirt/diamond/deepslate_pebble.json
 008cf810b02d3c3b4f143689700bff93459c7c0a data/exdeorum/recipes/sieve/dirt/diamond/flint.json
 f03ca1ca9a7c65e8d8dfc75a7b67b75eae73fbd3 data/exdeorum/recipes/sieve/dirt/diamond/grass_seeds.json
 c73c65cb11229f8503c0b6538226d25e4e5df8af data/exdeorum/recipes/sieve/dirt/diamond/mycelium_spores.json
@@ -432,6 +433,7 @@ ec4834ce0ce84232e9148bec9e28efbb069cd75d data/exdeorum/recipes/sieve/dirt/flint/
 79cffcc848eedd47af0253f7a81aad7d59c5d2c4 data/exdeorum/recipes/sieve/dirt/flint/wheat_seeds.json
 e9794e764d78e3f3d9d78efef77fd87e337b6e8d data/exdeorum/recipes/sieve/dirt/golden/bamboo.json
 a862e209f75ab9471b9e0363df02a5da85938a8c data/exdeorum/recipes/sieve/dirt/golden/carrot.json
+d99dc8580f5784ebbf050f5ddd593c73706497d6 data/exdeorum/recipes/sieve/dirt/golden/deepslate_pebble.json
 4ffc594c106031d16c21a7ce0f69aac07d91c646 data/exdeorum/recipes/sieve/dirt/golden/flint.json
 cb082897a5bae9c96ea6fb99471a9e3b6085ef85 data/exdeorum/recipes/sieve/dirt/golden/golden_carrot.json
 9407b9d579920c169f571f10464ab6a4e0a13715 data/exdeorum/recipes/sieve/dirt/golden/gold_nugget.json
@@ -445,6 +447,7 @@ f7f99bd08630569098e1d6c16e1f9c890f73b060 data/exdeorum/recipes/sieve/dirt/golden
 cfb337239d5048bdece6c8a75a91350fa5a9999b data/exdeorum/recipes/sieve/dirt/golden/wheat_seeds.json
 7c3f1547cf0e259adcc21ce90b581b5e6693bd2d data/exdeorum/recipes/sieve/dirt/iron/bamboo.json
 e3ffa817094b35b55cc8ab6a30c561a2fa282de0 data/exdeorum/recipes/sieve/dirt/iron/carrot.json
+01b24b011f032fafbb449cce113c4001218c0179 data/exdeorum/recipes/sieve/dirt/iron/deepslate_pebble.json
 a693256a8aa436cd72a8a87dba480e6d125b5ffa data/exdeorum/recipes/sieve/dirt/iron/flint.json
 dea187f4380c38f352314c92ec1a860d39e55e09 data/exdeorum/recipes/sieve/dirt/iron/grass_seeds.json
 5e86aabd145526c39912e7265411663820356f98 data/exdeorum/recipes/sieve/dirt/iron/iron_nugget.json
@@ -457,6 +460,7 @@ eeb82b2d67f2dd454e91d7663886bf3c2e6b306a data/exdeorum/recipes/sieve/dirt/iron/s
 36d2197704323f5efdb11571d563c1da82df6251 data/exdeorum/recipes/sieve/dirt/iron/wheat_seeds.json
 92a2926a7eb824c6372a1b60d4dd0a629db9c151 data/exdeorum/recipes/sieve/dirt/netherite/bamboo.json
 ac743f0ff430b518ff47265e5e44ba5e1595f5a6 data/exdeorum/recipes/sieve/dirt/netherite/carrot.json
+e3682c57b4576053e3f97e9aa08640046cb8ee33 data/exdeorum/recipes/sieve/dirt/netherite/deepslate_pebble.json
 948d6198b974300d677e783acc1e0460a1fa68c4 data/exdeorum/recipes/sieve/dirt/netherite/flint.json
 c02b969bcb6be18939c8630ad89b09b8b267d182 data/exdeorum/recipes/sieve/dirt/netherite/golden_apple.json
 dac06de4836c7f0c5456ceb1c608ae284978b8bf data/exdeorum/recipes/sieve/dirt/netherite/golden_carrot.json
@@ -516,6 +520,7 @@ e1a8558df8270d57cbcdf7255b93b40d0c05d33b data/exdeorum/recipes/sieve/dust/string
 b1b1c231670f2622dc2227fac65aff0ebbd2ea19 data/exdeorum/recipes/sieve/gravel/diamond/amethyst_shard.json
 2284efd2a38ecb63f694ba0586c478b26207adce data/exdeorum/recipes/sieve/gravel/diamond/coal.json
 ac9139345f1b1d4bd8fb48350d3a6df9a33c2a93 data/exdeorum/recipes/sieve/gravel/diamond/copper_ore_chunk.json
+9fe46afab01028b2b1aebe51ade62ba774f2d8fc data/exdeorum/recipes/sieve/gravel/diamond/deepslate_pebble.json
 10a86e68b3bf75143de369588e5c9e8f33abd436 data/exdeorum/recipes/sieve/gravel/diamond/diamond.json
 60a052b488bee7fb028a94b6004af3fe994565ea data/exdeorum/recipes/sieve/gravel/diamond/emerald.json
 66d27aa930f24ab223056cd8e306a62b0d7c91c9 data/exdeorum/recipes/sieve/gravel/diamond/flint.json
@@ -539,6 +544,7 @@ fe663f47d5e16267a61b6f7111a6f588209888e7 data/exdeorum/recipes/sieve/gravel/flin
 28678c0ce921c7b884db3d0e49a54b20deec4825 data/exdeorum/recipes/sieve/gravel/golden/amethyst_shard.json
 b5af4ec46beb6a5957a2099eaecac55b6a0a6637 data/exdeorum/recipes/sieve/gravel/golden/coal.json
 0ec8d93ded300ec6fec985ee171466b42ed6eaa0 data/exdeorum/recipes/sieve/gravel/golden/copper_ore_chunk.json
+ac30b323cc9450fad45b67f9b9c382dc1d2b7803 data/exdeorum/recipes/sieve/gravel/golden/deepslate_pebble.json
 300e5b260b0f25f47b7164170e109a8f5d5afc4c data/exdeorum/recipes/sieve/gravel/golden/diamond.json
 b910213c60616555b2701eab2e6ed6c10ab2996d data/exdeorum/recipes/sieve/gravel/golden/emerald.json
 85d089c35627a16344c652f9a347b930fbac779d data/exdeorum/recipes/sieve/gravel/golden/flint.json
@@ -551,6 +557,7 @@ d1e92452ba4285a9b65f93cdec1cf65f31883c9f data/exdeorum/recipes/sieve/gravel/gold
 bc5e582d21730a7b0744f957e0388108742fba77 data/exdeorum/recipes/sieve/gravel/iron/amethyst_shard.json
 4310e908dd8439964e6da95cb433e676f13788ef data/exdeorum/recipes/sieve/gravel/iron/coal.json
 49952882ee7d8650f0ec83e9fed338c095e74b6b data/exdeorum/recipes/sieve/gravel/iron/copper_ore_chunk.json
+2565a18d4abac7ae44e8f7e1bcec7d639b25725a data/exdeorum/recipes/sieve/gravel/iron/deepslate_pebble.json
 d809f81374f8a3e3d23e63ed788761b9a6ca845e data/exdeorum/recipes/sieve/gravel/iron/diamond.json
 e28dd0cc2ae440c324a78b97757266ef0243b94e data/exdeorum/recipes/sieve/gravel/iron/emerald.json
 6610b8fb3cb40f1d5e149fe3831d82063add8b5d data/exdeorum/recipes/sieve/gravel/iron/flint.json
@@ -561,6 +568,7 @@ b8b54b1de7034163b0f679f7e0368530dc15e159 data/exdeorum/recipes/sieve/gravel/iron
 1b01b51ac49be8b288d78eed9f13976947ba85b4 data/exdeorum/recipes/sieve/gravel/netherite/amethyst_shard.json
 6e483128177c19df169f37efdfd778178d86f740 data/exdeorum/recipes/sieve/gravel/netherite/coal.json
 75cf3e4a04f845e991a4eb7c664e54fb547574ce data/exdeorum/recipes/sieve/gravel/netherite/copper_ore_chunk.json
+71911ac28a8d167282bbb24e87524572e591a10b data/exdeorum/recipes/sieve/gravel/netherite/deepslate_pebble.json
 5c1c63f8c5297acbd98445187617fedd81707952 data/exdeorum/recipes/sieve/gravel/netherite/diamond.json
 60e296a99d2512f9af539f312234f0f694b01d8a data/exdeorum/recipes/sieve/gravel/netherite/emerald.json
 41aaa9c5a1b61ea79b231528a6e76c9c1d273331 data/exdeorum/recipes/sieve/gravel/netherite/gold_nugget.json
