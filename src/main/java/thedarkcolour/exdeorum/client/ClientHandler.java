@@ -27,7 +27,6 @@ import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Unit;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
@@ -51,7 +50,6 @@ import thedarkcolour.exdeorum.registry.EFluids;
 import thedarkcolour.exdeorum.registry.EWorldPresets;
 
 import java.io.IOException;
-import java.io.ObjectInputFilter;
 
 public class ClientHandler {
     public static void register() {
@@ -115,6 +113,7 @@ public class ClientHandler {
         }
     }
 
+    // Sets Ex Deorum world type as default
     private static void onScreenOpen(ScreenEvent.Opening event) {
         if (EConfig.CLIENT.setVoidWorldAsDefault.get()) {
             if (event.getNewScreen() instanceof CreateWorldScreen screen) {

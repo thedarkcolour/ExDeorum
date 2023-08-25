@@ -48,17 +48,17 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import thedarkcolour.exdeorum.ExDeorum;
-import thedarkcolour.exdeorum.compat.ModIds;
-import thedarkcolour.exdeorum.config.EConfig;
-import thedarkcolour.exdeorum.item.WateringCanItem;
-import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.client.CompostColors;
+import thedarkcolour.exdeorum.compat.ModIds;
+import thedarkcolour.exdeorum.compat.top.ExDeorumTopCompat;
+import thedarkcolour.exdeorum.config.EConfig;
+import thedarkcolour.exdeorum.item.HammerItem;
+import thedarkcolour.exdeorum.item.WateringCanItem;
+import thedarkcolour.exdeorum.network.NetworkHandler;
+import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.registry.EFluids;
 import thedarkcolour.exdeorum.registry.EItems;
 import thedarkcolour.exdeorum.voidworld.VoidChunkGenerator;
-import thedarkcolour.exdeorum.compat.top.ExDeorumTopCompat;
-import thedarkcolour.exdeorum.item.HammerItem;
-import thedarkcolour.exdeorum.network.NetworkHandler;
 
 public final class EventHandler {
     public static void register() {
