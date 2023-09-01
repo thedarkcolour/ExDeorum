@@ -22,26 +22,20 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
 import com.google.gson.JsonObject;
-import it.unimi.dsi.fastutil.Hash;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.level.storage.LevelResource;
 import net.minecraft.world.level.storage.loot.LootDataType;
 import net.minecraft.world.level.storage.loot.providers.number.BinomialDistributionGenerator;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
@@ -52,23 +46,14 @@ import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
-import thedarkcolour.exdeorum.config.EConfig;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelCompostRecipe;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelMixingRecipe;
 import thedarkcolour.exdeorum.recipe.crucible.CrucibleRecipe;
 import thedarkcolour.exdeorum.recipe.sieve.SieveRecipe;
 import thedarkcolour.exdeorum.registry.ERecipeTypes;
-import thedarkcolour.exdeorum.tag.EItemTags;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.time.Duration;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Supplier;
 
 public final class RecipeUtil {
@@ -81,7 +66,6 @@ public final class RecipeUtil {
     private static Lazy<Map<Item, BarrelCompostRecipe>> barrelCompostRecipeCache;
     private static Lazy<Map<Item, CrucibleRecipe>> lavaCrucibleRecipeCache;
     private static Lazy<Map<Item, CrucibleRecipe>> waterCrucibleRecipeCache;
-    private static final Map<TagKey<Item>, Item> preferredTagItems = new Object2ObjectOpenHashMap<>(11, Hash.DEFAULT_LOAD_FACTOR);
 
     public static void reload(RecipeManager recipes) {
         SIEVE_RECIPE_CACHE.invalidateAll();
@@ -89,32 +73,6 @@ public final class RecipeUtil {
         barrelCompostRecipeCache = Lazy.of(() -> loadSimpleRecipeCache(recipes, ERecipeTypes.BARREL_COMPOST));
         lavaCrucibleRecipeCache = Lazy.of(() -> loadSimpleRecipeCache(recipes, ERecipeTypes.LAVA_CRUCIBLE));
         waterCrucibleRecipeCache = Lazy.of(() -> loadSimpleRecipeCache(recipes, ERecipeTypes.WATER_CRUCIBLE));
-
-        preferredTagItems.clear();
-        preferredTagItems.put(EItemTags.ORES_ALUMINUM, ForgeRegistries.ITEMS.getValue(new ResourceLocation(EConfig.COMMON.preferredAluminumOre.get())));
-        preferredTagItems.put(EItemTags.ORES_COBALT, ForgeRegistries.ITEMS.getValue(new ResourceLocation(EConfig.COMMON.preferredCobaltOre.get())));
-        preferredTagItems.put(EItemTags.ORES_SILVER, ForgeRegistries.ITEMS.getValue(new ResourceLocation(EConfig.COMMON.preferredSilverOre.get())));
-        preferredTagItems.put(EItemTags.ORES_LEAD, ForgeRegistries.ITEMS.getValue(new ResourceLocation(EConfig.COMMON.preferredLeadOre.get())));
-        preferredTagItems.put(EItemTags.ORES_PLATINUM, ForgeRegistries.ITEMS.getValue(new ResourceLocation(EConfig.COMMON.preferredPlatinumOre.get())));
-        preferredTagItems.put(EItemTags.ORES_NICKEL, ForgeRegistries.ITEMS.getValue(new ResourceLocation(EConfig.COMMON.preferredNickelOre.get())));
-        preferredTagItems.put(EItemTags.ORES_URANIUM, ForgeRegistries.ITEMS.getValue(new ResourceLocation(EConfig.COMMON.preferredUraniumOre.get())));
-        preferredTagItems.put(EItemTags.ORES_OSMIUM, ForgeRegistries.ITEMS.getValue(new ResourceLocation(EConfig.COMMON.preferredOsmiumOre.get())));
-        preferredTagItems.put(EItemTags.ORES_TIN, ForgeRegistries.ITEMS.getValue(new ResourceLocation(EConfig.COMMON.preferredTinOre.get())));
-        preferredTagItems.put(EItemTags.ORES_ZINC, ForgeRegistries.ITEMS.getValue(new ResourceLocation(EConfig.COMMON.preferredZincOre.get())));
-        preferredTagItems.put(EItemTags.ORES_IRIDIUM, ForgeRegistries.ITEMS.getValue(new ResourceLocation(EConfig.COMMON.preferredIridiumOre.get())));
-    }
-
-    // Copied from ServerLifecycleHooks.getServerConfigPath
-    private static Path getServerConfigPath(final MinecraftServer server) {
-        final Path serverConfig = server.getWorldPath(new LevelResource("serverconfig"));
-        if (!Files.isDirectory(serverConfig)) {
-            try {
-                Files.createDirectories(serverConfig);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return serverConfig;
     }
 
     private static <T extends SingleIngredientRecipe> ImmutableMap<Item, T> loadSimpleRecipeCache(RecipeManager recipes, Supplier<RecipeType<T>> recipeType) {
@@ -209,8 +167,10 @@ public final class RecipeUtil {
     public static NumberProvider fromNetworkNumberProvider(FriendlyByteBuf buffer) {
         return switch (buffer.readByte()) {
             case CONSTANT_TYPE -> ConstantValue.exactly(buffer.readFloat());
-            case UNIFORM_TYPE -> new UniformGenerator(fromNetworkNumberProvider(buffer), fromNetworkNumberProvider(buffer));
-            case BINOMIAL_TYPE -> new BinomialDistributionGenerator(fromNetworkNumberProvider(buffer), fromNetworkNumberProvider(buffer));
+            case UNIFORM_TYPE ->
+                    new UniformGenerator(fromNetworkNumberProvider(buffer), fromNetworkNumberProvider(buffer));
+            case BINOMIAL_TYPE ->
+                    new BinomialDistributionGenerator(fromNetworkNumberProvider(buffer), fromNetworkNumberProvider(buffer));
             default -> ConstantValue.exactly(1f);
         };
     }
@@ -330,27 +290,8 @@ public final class RecipeUtil {
         }
     }
 
-    @SuppressWarnings("deprecation")
-    public static Item getPreferredItem(TagKey<Item> tag) {
-        Item preferred = preferredTagItems.get(tag);
-
-        if (preferred != null && preferred != Items.AIR) {
-            return preferred;
-        } else {
-            var collection = Lists.newArrayList(BuiltInRegistries.ITEM.getTagOrEmpty(tag));
-
-            if (collection.isEmpty()) {
-                return Items.AIR;
-            } else {
-                collection.sort(Comparator.comparing(holder -> BuiltInRegistries.ITEM.getKey(holder.get())));
-
-                return collection.get(0).get();
-            }
-        }
-    }
-
     public static boolean isTagEmpty(TagKey<Item> tag) {
-        return BuiltInRegistries.ITEM.getTag(tag).map(set -> set.iterator().hasNext()).orElse(true);
+        return BuiltInRegistries.ITEM.getTag(tag).map(set -> !set.iterator().hasNext()).orElse(true);
     }
 
     private record SieveCacheKey(Item mesh, Item ingredient) {

@@ -268,6 +268,7 @@ public class EItems {
         output.accept(COPPER_ORE_CHUNK.get());
         output.accept(GOLD_ORE_CHUNK.get());
 
+        // todo remove
         if (!RecipeUtil.isTagEmpty(EItemTags.ORES_ALUMINUM)) output.accept(ALUMINUM_ORE_CHUNK.get());
         if (!RecipeUtil.isTagEmpty(EItemTags.ORES_COBALT)) output.accept(COBALT_ORE_CHUNK.get());
         if (!RecipeUtil.isTagEmpty(EItemTags.ORES_SILVER)) output.accept(SILVER_ORE_CHUNK.get());

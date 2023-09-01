@@ -86,6 +86,8 @@ public final class EventHandler {
             } catch (Exception e) {
                 ExDeorum.LOGGER.error("Failed to load vanilla compost colors", e);
             }
+        } else if (event.getMessage().equals(".breakpoint")) {
+            event.setCanceled(true);
         }
     }
 

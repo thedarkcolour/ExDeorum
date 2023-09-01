@@ -1,0 +1,29 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:tag_empty",
+            "tag": "forge:ores/platinum"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "exdeorum:sieve",
+        "ingredient": {
+          "item": "exdeorum:crushed_deepslate"
+        },
+        "mesh": "exdeorum:string_mesh",
+        "result": "exdeorum:platinum_ore_chunk",
+        "result_amount": {
+          "type": "minecraft:binomial",
+          "n": 1.0,
+          "p": 0.03
+        }
+      }
+    }
+  ]
+}

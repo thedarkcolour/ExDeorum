@@ -22,4 +22,14 @@ public class ModIds {
     public static final String MINECRAFT = "minecraft";
     public static final String THE_ONE_PROBE = "theoneprobe";
     public static final String TINKERS_CONSTRUCT = "tconstruct";
+    public static final String ALL_THE_ORES = "alltheores";
+    public static final String THERMAL = "thermal";
+    public static final String CHEM_LIB = "chemlib";
+    public static final String OCCULTISM = "occultism";
+    public static final String RAILCRAFT = "railcraft";
+    public static final String GREG = "gtceu";
+    public static final String BIG_REACTORS = "bigreactors";
+    public static final String MEKANISM = "mekanism";
+    public static final String CREATE = "create";
+    public static final String ENDERIO = "enderio";
 }

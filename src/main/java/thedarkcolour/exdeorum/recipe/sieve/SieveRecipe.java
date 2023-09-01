@@ -20,15 +20,21 @@ package thedarkcolour.exdeorum.recipe.sieve;
 
 import com.google.gson.JsonObject;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
+import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import org.jetbrains.annotations.Nullable;
+import thedarkcolour.exdeorum.ExDeorum;
+import thedarkcolour.exdeorum.compat.ModdedTags;
 import thedarkcolour.exdeorum.recipe.ProbabilityRecipe;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.registry.ERecipeSerializers;
@@ -62,7 +68,23 @@ public class SieveRecipe extends ProbabilityRecipe {
         public SieveRecipe fromJson(ResourceLocation id, JsonObject json) {
             Ingredient ingredient = RecipeUtil.readIngredient(json, "ingredient");
             Item mesh = RecipeUtil.readItem(json, "mesh");
-            Item result = RecipeUtil.readItem(json, "result");
+            Item result;
+
+            if (json.has("result")) {
+                result = RecipeUtil.readItem(json, "result");
+            } else if (json.has("result_tag")) {
+                TagKey<Item> tag = TagKey.create(Registries.ITEM, new ResourceLocation(GsonHelper.getAsString(json, "result_tag")));
+                result = ModdedTags.getPreferredOre(tag);
+
+                if (result == Items.AIR) {
+                    ExDeorum.LOGGER.info("Skipped loading recipe {} as result_tag {} was empty", id, tag);
+                    return null;
+                }
+            } else {
+                ExDeorum.LOGGER.error("Failed to load recipe {}, missing \"result\" item location or \"result_tag\" tag location", id);
+                return null;
+            }
+
             NumberProvider resultAmount = RecipeUtil.readNumberProvider(json, "result_amount");
             return new SieveRecipe(id, ingredient, mesh, result, resultAmount);
         }

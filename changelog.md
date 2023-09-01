@@ -1,3 +1,8 @@
+## Ex Deorum 1.3
+- Allow modded ores to drop from sieving Gravel and Crushed Deepslate if a mod with that ore is installed. Supported ores are Aluminum, Cobalt, Silver, Lead, Platinum, Nickel, Uranium, Osmium, Tin, Zinc, and Iridium.
+- Allow some modded drops from sieving if a mod with those resources is installed. Currently, only Grains of Infinity from Ender IO is supported.
+- If you would like to see some more mod compatibility related additions to Ex Deorum, open an issue on GitHub or let me know on Discord.
+
 ## Ex Deorum 1.2
 - Fixed the missing recipes for Deepslate pebbles
 

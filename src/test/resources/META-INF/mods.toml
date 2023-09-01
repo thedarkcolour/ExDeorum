@@ -1,0 +1,13 @@
+modLoader="javafml"
+loaderVersion="[45,)"
+license='MIT License'
+
+[[mods]]
+modId="orestestmod"
+version="${file.jarVersion}"
+displayName="TestMod"
+credits=""
+authors="TheDarkColour"
+description='''
+Blah
+'''

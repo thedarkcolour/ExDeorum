@@ -19,8 +19,11 @@
 package thedarkcolour.exdeorum.data;
 
 import net.minecraft.core.registries.Registries;
+import net.minecraft.data.DataGenerator;
 import net.minecraftforge.data.event.GatherDataEvent;
+import net.minecraftforge.data.loading.DatagenModLoader;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModLoader;
 import net.minecraftforge.fml.common.Mod;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.modkit.data.DataHelper;
@@ -28,6 +31,12 @@ import thedarkcolour.modkit.data.DataHelper;
 // these two annotations are equivalent to modEventBus.addListener(Data::generateData)
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class Data {
+    static {
+        if (DatagenModLoader.isRunningDataGen()) {
+            ModCompatData.registerModData();
+        }
+    }
+
     @SubscribeEvent
     public static void generateData(GatherDataEvent event) {
         // Two things used by data generators

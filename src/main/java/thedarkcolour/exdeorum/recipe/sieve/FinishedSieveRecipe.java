@@ -19,12 +19,15 @@
 package thedarkcolour.exdeorum.recipe.sieve;
 
 import com.google.gson.JsonObject;
+import com.mojang.datafixers.util.Either;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.storage.loot.LootDataType;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.registries.ForgeRegistries;
 import thedarkcolour.exdeorum.recipe.EFinishedRecipe;
 import thedarkcolour.exdeorum.registry.ERecipeSerializers;
@@ -33,10 +36,10 @@ public class FinishedSieveRecipe implements EFinishedRecipe {
     private final ResourceLocation id;
     private final Ingredient ingredient;
     private final Item mesh;
-    private final Item result;
+    private final Either<Item, TagKey<Item>> result;
     private final NumberProvider resultAmount;
 
-    public FinishedSieveRecipe(ResourceLocation id, Item mesh, Ingredient ingredient, Item result, NumberProvider resultAmount) {
+    public FinishedSieveRecipe(ResourceLocation id, Item mesh, Ingredient ingredient, Either<Item, TagKey<Item>> result, NumberProvider resultAmount) {
         this.id = id;
         this.mesh = mesh;
         this.ingredient = ingredient;
@@ -48,7 +51,11 @@ public class FinishedSieveRecipe implements EFinishedRecipe {
     public void serializeRecipeData(JsonObject object) {
         object.add("ingredient", ingredient.toJson());
         object.addProperty("mesh", ForgeRegistries.ITEMS.getKey(this.mesh).toString());
-        object.addProperty("result", ForgeRegistries.ITEMS.getKey(this.result).toString());
+        this.result.ifLeft(item -> {
+            object.addProperty("result", ForgeRegistries.ITEMS.getKey(item).toString());
+        }).ifRight(tag -> {
+            object.addProperty("result_tag", tag.location().toString());
+        });
         object.add("result_amount", LootDataType.PREDICATE.parser().toJsonTree(resultAmount));
     }
 

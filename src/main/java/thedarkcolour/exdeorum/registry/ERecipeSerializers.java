@@ -43,5 +43,5 @@ public class ERecipeSerializers {
 
     public static final RegistryObject<RecipeSerializer<SieveRecipe>> SIEVE = RECIPE_SERIALIZERS.register("sieve", SieveRecipe.Serializer::new);
 
-    public static final RegistryObject<RecipeSerializer<TagResultRecipe>> TAG_RESULT = RECIPE_SERIALIZERS.register("tag_result", TagResultRecipe.Serializer::new);
+    public static final RegistryObject<RecipeSerializer<?>> TAG_RESULT = RECIPE_SERIALIZERS.register("tag_result", TagResultRecipe.Serializer::new);
 }
