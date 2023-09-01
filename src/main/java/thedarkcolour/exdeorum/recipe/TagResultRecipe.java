@@ -18,7 +18,6 @@ import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.compat.ModdedTags;
 import thedarkcolour.exdeorum.registry.ERecipeSerializers;
 
-// todo fix this because tags aren't available at recipe registration time
 public class TagResultRecipe {
     public static class Serializer<T extends Recipe<?>> implements RecipeSerializer<T> {
         @SuppressWarnings({"deprecation", "unchecked"})
