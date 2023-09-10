@@ -32,7 +32,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.SaplingBlock;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -121,7 +120,7 @@ public abstract class AbstractCrucibleBlockEntity extends EBlockEntity {
             return FluidUtil.interactWithFluidHandler(player, hand, tank) ? InteractionResult.sidedSuccess(level.isClientSide) : InteractionResult.PASS;
         }
 
-        if (!level.isClientSide) {
+        if (!level.isClientSide && canInsertItem(playerItem)) {
             tryMelt(playerItem, player.getAbilities().instabuild ? stack -> {} : stack -> stack.shrink(1));
         }
 
@@ -138,36 +137,51 @@ public abstract class AbstractCrucibleBlockEntity extends EBlockEntity {
      * @param shrinkAction What to do when item is melted
      */
     private void tryMelt(ItemStack item, Consumer<ItemStack> shrinkAction) {
-        CrucibleRecipe recipe = getRecipe(item);
+        if (item.isEmpty()) return;
 
-        if (recipe != null) {
-            FluidStack result = recipe.getResult();
-            FluidStack contained = tank.getFluid();
+        var meltItem = item.getItem();
+        var recipe = getRecipe(item);
+        if (recipe == null) {
+            this.item.setStackInSlot(0, ItemStack.EMPTY);
+            return;
+        }
+        var result = recipe.getResult();
+        var contained = this.tank.getFluid();
+        shrinkAction.accept(item);
+        this.solids = (short) Math.max(solids + result.getAmount(), MAX_SOLIDS);
 
-            if (((result.isFluidEqual(contained) || contained.isEmpty()) && result.getAmount() + solids <= MAX_SOLIDS)) {
-                var meltItem = item.getItem();
-                shrinkAction.accept(item);
-                solids += result.getAmount();
+        if (contained.isEmpty()) {
+            fluid = result.getFluid();
+        }
 
-                if (contained.isEmpty()) {
-                    fluid = result.getFluid();
-                }
-
-                var melts = MELT_OVERRIDES.get();
-                if (melts.containsKey(meltItem)) {
-                    lastMelted = melts.get(meltItem);
-                } else if (meltItem.getClass() == BlockItem.class) {
-                    lastMelted = ((BlockItem) meltItem).getBlock();
-                } else {
-                    // If we already have something else inside just use that instead of switching to default
-                    if (lastMelted == null) {
-                        lastMelted = getDefaultMeltBlock();
-                    }
-                }
-
-                markUpdated();
+        var melts = MELT_OVERRIDES.get();
+        if (melts.containsKey(meltItem)) {
+            lastMelted = melts.get(meltItem);
+        } else if (meltItem.getClass() == BlockItem.class) {
+            lastMelted = ((BlockItem) meltItem).getBlock();
+        } else {
+            // If we already have something else inside just use that instead of switching to default
+            if (lastMelted == null) {
+                lastMelted = getDefaultMeltBlock();
             }
         }
+
+        markUpdated();
+    }
+
+    private boolean canInsertItem(ItemStack item) {
+        if (item.isEmpty()) return false;
+
+        var recipe = getRecipe(item);
+
+        if (recipe != null) {
+            var result = recipe.getResult();
+            var contained = tank.getFluid();
+
+            return (result.isFluidEqual(contained) || contained.isEmpty()) && result.getAmount() + solids <= MAX_SOLIDS;
+        }
+
+        return false;
     }
 
     public int getMeltingRate() {
@@ -250,7 +264,7 @@ public abstract class AbstractCrucibleBlockEntity extends EBlockEntity {
 
         @Override
         public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-            return getRecipe(stack) != null;
+            return canInsertItem(stack);
         }
 
         public ItemStack getItem() {

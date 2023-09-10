@@ -97,6 +97,7 @@ public class EConfig {
         public final BooleanValue startingTorch;
         public final BooleanValue startingWateringCan;
         public final BooleanValue simultaneousSieveUsage;
+        public final BooleanValue automatedSieves;
         public final DoubleValue barrelProgressStep;
         public final BooleanValue witchWaterNetherrackGenerator;
         public final BooleanValue setVoidWorldAsDefault;
@@ -113,6 +114,9 @@ public class EConfig {
             this.simultaneousSieveUsage = builder
                     .comment("Whether players can use multiple sieves in a 3x3 area at once.")
                     .define("simultaneous_sieve_usage", true);
+            this.automatedSieves = builder
+                    .comment("Whether machines/fake players can interact with the Sieve.")
+                    .define("automated_sieves", false);
             this.barrelProgressStep = builder
                     .comment("The progress to increment by each tick for barrel composting and witch water transformation.")
                     .defineInRange("barrel_progress_step", 0.004, 0.0f, 1.0f);

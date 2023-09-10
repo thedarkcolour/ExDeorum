@@ -19,13 +19,12 @@
 package thedarkcolour.exdeorum.data;
 
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.DataGenerator;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.data.loading.DatagenModLoader;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModLoader;
 import net.minecraftforge.fml.common.Mod;
 import thedarkcolour.exdeorum.ExDeorum;
+import thedarkcolour.exdeorum.data.recipe.Recipes;
 import thedarkcolour.modkit.data.DataHelper;
 
 // these two annotations are equivalent to modEventBus.addListener(Data::generateData)

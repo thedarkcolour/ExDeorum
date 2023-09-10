@@ -32,6 +32,7 @@ import net.minecraft.util.GsonHelper;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeManager;
@@ -46,6 +47,7 @@ import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
+import thedarkcolour.exdeorum.compat.ModdedTags;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelCompostRecipe;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelMixingRecipe;
 import thedarkcolour.exdeorum.recipe.crucible.CrucibleRecipe;
@@ -291,7 +293,7 @@ public final class RecipeUtil {
     }
 
     public static boolean isTagEmpty(TagKey<Item> tag) {
-        return BuiltInRegistries.ITEM.getTag(tag).map(set -> !set.iterator().hasNext()).orElse(true);
+        return BuiltInRegistries.ITEM.getTag(tag).map(set -> !set.iterator().hasNext()).orElse(ModdedTags.getPreferredOre(tag) == Items.AIR);
     }
 
     private record SieveCacheKey(Item mesh, Item ingredient) {

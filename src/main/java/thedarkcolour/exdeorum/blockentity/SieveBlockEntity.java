@@ -31,6 +31,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraftforge.common.util.FakePlayer;
 import thedarkcolour.exdeorum.config.EConfig;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.recipe.sieve.SieveRecipe;
@@ -147,7 +148,9 @@ public class SieveBlockEntity extends EBlockEntity {
                 }
             }
         } else {
-            if (EConfig.SERVER.simultaneousSieveUsage.get()) {
+            var realPlayer = !(player instanceof FakePlayer);
+
+            if (realPlayer && EConfig.SERVER.simultaneousSieveUsage.get()) {
                 var cursor = worldPosition.mutable().move(-1, 0, -1);
 
                 // Sieve with adjacent sieves
@@ -165,7 +168,7 @@ public class SieveBlockEntity extends EBlockEntity {
                     }
                     cursor.move(1, 0, -3);
                 }
-            } else {
+            } else if (realPlayer || EConfig.SERVER.automatedSieves.get()) {
                 performSift(player);
             }
         }
@@ -211,6 +214,8 @@ public class SieveBlockEntity extends EBlockEntity {
             if (!level.isClientSide) {
                 giveItems(player);
             }
+        } else {
+            markUpdated();
         }
     }
 

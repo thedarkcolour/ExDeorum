@@ -28,7 +28,8 @@ public class ModIds {
     public static final String OCCULTISM = "occultism";
     public static final String RAILCRAFT = "railcraft";
     public static final String GREG = "gtceu";
-    public static final String BIG_REACTORS = "bigreactors";
+    public static final String BIGGER_REACTORS = "biggerreactors";
+    public static final String EXTREME_REACTORS = "bigreactors";
     public static final String MEKANISM = "mekanism";
     public static final String CREATE = "create";
     public static final String ENDERIO = "enderio";

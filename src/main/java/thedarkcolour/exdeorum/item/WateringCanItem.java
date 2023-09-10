@@ -162,8 +162,12 @@ public class WateringCanItem extends Item {
             }
 
             if (!fluidHandler.getFluidInTank(0).isEmpty()) {
-                if (usableInMachines || !(player instanceof FakePlayer)) {
+                var realPlayer = !(player instanceof FakePlayer);
+
+                if (realPlayer) {
                     player.startUsingItem(hand);
+                } else if (this.usableInMachines) {
+                    onUseTick(level, player, itemInHand, 72000);
                 }
 
                 return InteractionResultHolder.consume(itemInHand);
@@ -176,7 +180,7 @@ public class WateringCanItem extends Item {
     public void onUseTick(Level level, LivingEntity living, ItemStack stack, int remainingTicks) {
         var useTicks = 72000 - remainingTicks;
 
-        if (useTicks >= STARTUP_TIME) {
+        if (useTicks >= STARTUP_TIME || living instanceof FakePlayer) {
             stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).ifPresent(fluidHandler -> {
                 if (!fluidHandler.getFluidInTank(0).isEmpty()) {
                     // do watering can
@@ -191,7 +195,7 @@ public class WateringCanItem extends Item {
                             if (useTicks % WATERING_INTERVAL == 0) {
                                 tryWatering((ServerLevel) level, pos, state);
 
-                                if (!renewing || fluidHandler.getFluidInTank(0).getAmount() != capacity) {
+                                if (!this.renewing || fluidHandler.getFluidInTank(0).getAmount() != capacity) {
                                     if (!(living instanceof Player player && player.getAbilities().instabuild)) {
                                         ((CapabilityProvider) fluidHandler).drain();
                                     }

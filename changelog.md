@@ -1,3 +1,10 @@
+## Ex Deorum 1.4
+- Red Sand is now obtainable by hammering crushed netherrack.
+- Sieves can no longer be automated by machines (can be re-enabled in the server config.)
+- Fixed desync bug when a machine like Create's Deployer interacts with the Sieve
+- Fixed an edge case where a modded ore wouldn't appear if the item form wasn't in the ore's tag.
+- Fixed #5, which prevented automating the Crucible
+
 ## Ex Deorum 1.3
 - Allow modded ores to drop from sieving Gravel and Crushed Deepslate if a mod with that ore is installed. Supported ores are Aluminum, Cobalt, Silver, Lead, Platinum, Nickel, Uranium, Osmium, Tin, Zinc, and Iridium.
 - Allow some modded drops from sieving if a mod with those resources is installed. Currently, only Grains of Infinity from Ender IO is supported.

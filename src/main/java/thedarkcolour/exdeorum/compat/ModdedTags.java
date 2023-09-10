@@ -98,10 +98,10 @@ public class ModdedTags {
     }
 
     public static Item getDefaultUraniumOre() {
-        var item = defaultItem("uranium_ore", ModIds.ALL_THE_ORES, ModIds.MEKANISM);
+        var item = defaultItem("uranium_ore", ModIds.ALL_THE_ORES, ModIds.MEKANISM, ModIds.BIGGER_REACTORS);
 
-        if (item == Items.AIR && ModList.get().isLoaded(ModIds.BIG_REACTORS)) {
-            item = defaultItem("yellorite_ore", ModIds.BIG_REACTORS);
+        if (item == Items.AIR && ModList.get().isLoaded(ModIds.EXTREME_REACTORS)) {
+            item = defaultItem("yellorite_ore", ModIds.EXTREME_REACTORS);
         }
 
         return item;

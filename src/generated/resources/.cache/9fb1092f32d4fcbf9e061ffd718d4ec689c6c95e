@@ -1,4 +1,4 @@
-// 1.20.1	2023-09-01T15:25:16.1558751	Recipes
+// 1.20.1	2023-09-09T11:37:17.5523493	Recipes
 5ad481a0c376c1a1785a5d3b992064d0ec0bf3b0 data/exdeorum/advancements/recipes/food/end_cake.json
 25dd027e844a72b03c95dbe5e3c3dd8c738ceb00 data/exdeorum/advancements/recipes/misc/acacia_barrel.json
 376be94a64c9ca97a9ea2346547b6e617f13a815 data/exdeorum/advancements/recipes/misc/acacia_crucible.json
@@ -222,6 +222,7 @@ df7f23b00f23a5ac255345801ac88850877a2e88 data/exdeorum/recipes/hammer/fire_coral
 808203624a792fcd4a0289975d82b3bff34af90e data/exdeorum/recipes/hammer/horn_coral.json
 5ebb5a4dfa54230abcd4cdb5af34b2b296c7eb23 data/exdeorum/recipes/hammer/horn_coral_fan.json
 19c00defa531bfbaa11f19403ff9d1694a9cd04a data/exdeorum/recipes/hammer/prismarine.json
+fdc243a5cfb1e84220cf6c41f46f454b3aff8b87 data/exdeorum/recipes/hammer/red_sand.json
 b592554bc00ab20d8affdfd1627406858ac10797 data/exdeorum/recipes/hammer/sand.json
 0e879c5bcf28023efdcd257d3e12e7153bd0bef7 data/exdeorum/recipes/hammer/stone_pebbles.json
 3bf60837b935bd09248a84fd8f22968fc244ea46 data/exdeorum/recipes/hammer/tube_coral.json
@@ -564,12 +565,14 @@ da3556d43a22a00cfba29419879f8bb1c24f76e0 data/exdeorum/recipes/sieve/dust/diamon
 0087b10cc106dc6cb22a9574567faf8096fa797e data/exdeorum/recipes/sieve/dust/diamond/grains_of_infinity.json
 aacdbedc91e09191a6fc335ed82ca481d934ebc3 data/exdeorum/recipes/sieve/dust/diamond/gunpowder.json
 00907e701451521c3ca793ec337b0b2f0166e895 data/exdeorum/recipes/sieve/dust/diamond/redstone.json
+64de5902f0aaee9c844ba1316a796e10cb0aed34 data/exdeorum/recipes/sieve/dust/diamond/yellorium_dust.json
 7eba59b03b5affdc11c937060e99949db301086a data/exdeorum/recipes/sieve/dust/flint/blaze_powder.json
 7af226b5661b96e0b8ddcb8ec902d37f429b0b48 data/exdeorum/recipes/sieve/dust/flint/bone_meal.json
 0a7d44bdff5a9b7040f702cb5ff756ce231c9a60 data/exdeorum/recipes/sieve/dust/flint/glowstone_dust.json
 c418797b65a0c67841c5e99d8fec95d1ee780065 data/exdeorum/recipes/sieve/dust/flint/grains_of_infinity.json
 52c65219279d46fe5474a8a01d69a1362cb3a2ea data/exdeorum/recipes/sieve/dust/flint/gunpowder.json
 7ecd5ae5d7f6783ff7535978352190a9af1b0ab4 data/exdeorum/recipes/sieve/dust/flint/redstone.json
+34cf976c49dbd139da48e9896d700587e0ae75e1 data/exdeorum/recipes/sieve/dust/flint/yellorium_dust.json
 bdbe4b3434ff67299b47d65eab0c442b235dc654 data/exdeorum/recipes/sieve/dust/golden/blaze_powder.json
 fab2426618c3f527ed401f1ef2cee3fa81de1969 data/exdeorum/recipes/sieve/dust/golden/bone_meal.json
 9a9eb3cc996de392e75dd9c6613af1ff382615d5 data/exdeorum/recipes/sieve/dust/golden/glowstone_dust.json
@@ -578,6 +581,7 @@ c087c3ba3bd7bda74aac13435f61a998060d4872 data/exdeorum/recipes/sieve/dust/golden
 4d28a3acd946fd55c3982e5ff9bb8876b8b0baef data/exdeorum/recipes/sieve/dust/golden/gunpowder.json
 a9c9258b74162f5132b8b47f3981b071ec6b60bf data/exdeorum/recipes/sieve/dust/golden/raw_gold.json
 65c99881294536c0f59d66d0e7429d85bbec0b9b data/exdeorum/recipes/sieve/dust/golden/redstone.json
+f5e23ee85134101ff76f64b301e7cc3d86fb87e6 data/exdeorum/recipes/sieve/dust/golden/yellorium_dust.json
 4b304a265794186e3c1fbd23acfcfde57322d615 data/exdeorum/recipes/sieve/dust/iron/blaze_powder.json
 758573f460a7f2ff2104a1bbfde2fa8392d002a4 data/exdeorum/recipes/sieve/dust/iron/bone_meal.json
 e3f7f74c6e84a149282b23f0388e25c7ae5f4352 data/exdeorum/recipes/sieve/dust/iron/glowstone_dust.json
@@ -585,6 +589,7 @@ f5c25b6ee05890bdc41ddc45a14b2015665388fe data/exdeorum/recipes/sieve/dust/iron/g
 5ffc2f95fc5a52aad02e7b063ba64c4cd41836f3 data/exdeorum/recipes/sieve/dust/iron/gunpowder.json
 eeb2ec19599044971eeff5929e7238fa398f1f08 data/exdeorum/recipes/sieve/dust/iron/iron_nugget.json
 9dc82b4a79edf9561566137af39399b1621b89a0 data/exdeorum/recipes/sieve/dust/iron/redstone.json
+9fd60c04e81943398e45a95f8f301fe4ee1f6efd data/exdeorum/recipes/sieve/dust/iron/yellorium_dust.json
 55bf627cf6c3a8eca57328cb482a6f86326a8e68 data/exdeorum/recipes/sieve/dust/netherite/blaze_powder.json
 33e35a1af71274a675498234b8dcd9834368c717 data/exdeorum/recipes/sieve/dust/netherite/bone_meal.json
 0472c65dad0e35df7397dfb2a7b53c5408f5fffc data/exdeorum/recipes/sieve/dust/netherite/glowstone_dust.json
@@ -593,12 +598,14 @@ a776c6d6946a02fea8bb346860f525bde2c835de data/exdeorum/recipes/sieve/dust/nether
 2fb062f8d8be004bd5e54a43a089c579a374abb1 data/exdeorum/recipes/sieve/dust/netherite/gunpowder.json
 c6a8996009ae3e712a2895001e96c74bb35b224c data/exdeorum/recipes/sieve/dust/netherite/iron_nugget.json
 44e98c8ce40d6f72596b009398943cb3ac6ef1b5 data/exdeorum/recipes/sieve/dust/netherite/redstone.json
+20f154dc498320be8037e23b3bdc7b1c483d2f95 data/exdeorum/recipes/sieve/dust/netherite/yellorium_dust.json
 7bed9653a0d40436bd15531ffb15eb84563cfc4d data/exdeorum/recipes/sieve/dust/string/blaze_powder.json
 74dc1675b4dc9c0d1d96bc22db0b844f322082b8 data/exdeorum/recipes/sieve/dust/string/bone_meal.json
 e4ead3b21ece1d4470c2000017586c1730acd1bb data/exdeorum/recipes/sieve/dust/string/glowstone_dust.json
 91428deb05889718e458b8cd9f6d610f1e652330 data/exdeorum/recipes/sieve/dust/string/grains_of_infinity.json
 3272a1f8b4534dd8800b07b7ec826d8f7a4fae65 data/exdeorum/recipes/sieve/dust/string/gunpowder.json
 e1a8558df8270d57cbcdf7255b93b40d0c05d33b data/exdeorum/recipes/sieve/dust/string/redstone.json
+9b5162b466041d395a2428c2c944b0a450c135b6 data/exdeorum/recipes/sieve/dust/string/yellorium_dust.json
 9df7ca0a604ab01b33dfe0b342441b9705c9ac9e data/exdeorum/recipes/sieve/gravel/diamond/aluminum_ore_chunk.json
 b1b1c231670f2622dc2227fac65aff0ebbd2ea19 data/exdeorum/recipes/sieve/gravel/diamond/amethyst_shard.json
 2284efd2a38ecb63f694ba0586c478b26207adce data/exdeorum/recipes/sieve/gravel/diamond/coal.json
@@ -798,6 +805,35 @@ ee240ebb80802c83d48985d9e431bc12410589a4 data/exdeorum/recipes/sieve/moss_block/
 e5351932ff3700bf95f2ec770cd051f08debee9c data/exdeorum/recipes/sieve/moss_block/string/small_dripleaf.json
 64280db27eca51b0aa8fddc970756c1e3a25db08 data/exdeorum/recipes/sieve/moss_block/string/spore_blossom.json
 fec8737e1aba9773807c7cd582c685e4532f488d data/exdeorum/recipes/sieve/moss_block/string/spruce_sapling.json
+156f165c67999ede3087cb52cb701f0d265a4aed data/exdeorum/recipes/sieve/red_sand/diamond/cactus.json
+c96dd108668d448619c27dafa1770b8473de904f data/exdeorum/recipes/sieve/red_sand/diamond/dead_bush.json
+cb16aa3c76c75a47abdad3a42dfdb13676525851 data/exdeorum/recipes/sieve/red_sand/diamond/gold_nugget.json
+0509eae50392db7a5d04ce937a5f3973f75d9921 data/exdeorum/recipes/sieve/red_sand/diamond/raw_gold.json
+8dc85127d9bf3d2882b5551b889cbf23eb013f7a data/exdeorum/recipes/sieve/red_sand/diamond/redstone.json
+0d883ea6b876bbf69711a3ebf367c1e465b72a24 data/exdeorum/recipes/sieve/red_sand/flint/cactus.json
+404252db62319c367d0564b18c340b66e7fafa28 data/exdeorum/recipes/sieve/red_sand/flint/dead_bush.json
+a135a5cfc5d6177ece92481fd6ba2a3ae50d28ac data/exdeorum/recipes/sieve/red_sand/flint/gold_nugget.json
+eff718d36e89f82a96d9ffdc98caa5a5c33e0a2b data/exdeorum/recipes/sieve/red_sand/flint/raw_gold.json
+9f19e4c9f625de7d3490ab3feef53e4436989a91 data/exdeorum/recipes/sieve/red_sand/flint/redstone.json
+bdd32c9a8b3fa2f379ad71289bb52b4ef68c0577 data/exdeorum/recipes/sieve/red_sand/golden/cactus.json
+6281aadf6936c3160d0e261bf1a248ebc86c7f7e data/exdeorum/recipes/sieve/red_sand/golden/dead_bush.json
+d2329615e5d3a674ff162901518bf91043c4b2bc data/exdeorum/recipes/sieve/red_sand/golden/gold_nugget.json
+238130e1482e64676b0b45a48e261bf6443fec9f data/exdeorum/recipes/sieve/red_sand/golden/raw_gold.json
+e836570ca27341f19df56ffe342957ba54fb5e38 data/exdeorum/recipes/sieve/red_sand/golden/redstone.json
+85c37a8ea69278436f5b354a098fa8dd93a269cb data/exdeorum/recipes/sieve/red_sand/iron/cactus.json
+e301aa1a48bbb0cba03d0efd4162c4ea27bcd735 data/exdeorum/recipes/sieve/red_sand/iron/dead_bush.json
+e7890d925decdcd1972508026943b52507ba6ce1 data/exdeorum/recipes/sieve/red_sand/iron/gold_nugget.json
+ad592d67fba2ae9554f7425d88c13ec106e6e08a data/exdeorum/recipes/sieve/red_sand/iron/raw_gold.json
+1b82c029f28894e2eee7ab8effca14e745dab1d5 data/exdeorum/recipes/sieve/red_sand/iron/redstone.json
+a9aa1611d994d1b3f6c4a9bbb6865d8998521a48 data/exdeorum/recipes/sieve/red_sand/netherite/cactus.json
+1294a1825ceb652ffdb1aac352a20886e4ee162c data/exdeorum/recipes/sieve/red_sand/netherite/gold_nugget.json
+f31cb4bb77b550f1239f7853ebc95f9671c0a356 data/exdeorum/recipes/sieve/red_sand/netherite/raw_gold.json
+09bfe3d4ca5ba25fe268ef680f7e1af24bf06da0 data/exdeorum/recipes/sieve/red_sand/netherite/redstone.json
+0bbec585a6a89b7eb128c2f9475e0ae4c325852f data/exdeorum/recipes/sieve/red_sand/string/cactus.json
+54b7248def54580a7e88cf538a52e721b1c872d1 data/exdeorum/recipes/sieve/red_sand/string/dead_bush.json
+b443cbaf342f0fa3a6a88d7205644792bcb47093 data/exdeorum/recipes/sieve/red_sand/string/gold_nugget.json
+e1c550f09fcddcc09da0f76458f2d2ef429bcc44 data/exdeorum/recipes/sieve/red_sand/string/raw_gold.json
+5c3788fbc13f9a25dd7e42b27210f258ec337c02 data/exdeorum/recipes/sieve/red_sand/string/redstone.json
 c63500f17bbac4d47caac5a48f3cedfe750916a5 data/exdeorum/recipes/sieve/sand/diamond/flint.json
 3b0c8920c2c19e3731e0258bd005b4d2cc2bd5ab data/exdeorum/recipes/sieve/sand/diamond/gold_nugget.json
 286085cb6ec9ed4d3fb2e84fc19887019dbe2d02 data/exdeorum/recipes/sieve/sand/diamond/iron_nugget.json

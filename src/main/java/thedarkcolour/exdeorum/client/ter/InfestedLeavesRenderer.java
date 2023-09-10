@@ -39,10 +39,9 @@ public class InfestedLeavesRenderer implements BlockEntityRenderer<InfestedLeave
         // Default to oak leaves
         if (state == null) state = Blocks.OAK_LEAVES.defaultBlockState();
 
-        // If something is wrong render default leaves
+        // If something is wrong skip rendering
         var level = te.getLevel();
         if (level == null) {
-            Minecraft.getInstance().getBlockRenderer().renderSingleBlock(state, stack, buffer, light, unused, ModelData.EMPTY, null);
             return;
         }
 
@@ -50,7 +49,6 @@ public class InfestedLeavesRenderer implements BlockEntityRenderer<InfestedLeave
         int progress = Math.min((int) (te.getProgress() * 16000), 16000);
         // Render
         var model = mc.getBlockRenderer().getBlockModel(state);
-        //noinspection deprecation
-        mc.getBlockRenderer().getModelRenderer().tesselateBlock(level, model, state, te.getBlockPos(), stack, buffer.getBuffer(RenderUtil.TINTED_CUTOUT_MIPPED), false, level.random, 42L, progress);
+        mc.getBlockRenderer().getModelRenderer().tesselateBlock(level, model, state, te.getBlockPos(), stack, buffer.getBuffer(RenderUtil.TINTED_CUTOUT_MIPPED), false, level.random, 42L, progress, ModelData.EMPTY, null);
     }
 }
