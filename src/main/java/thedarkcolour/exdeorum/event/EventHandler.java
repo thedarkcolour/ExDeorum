@@ -24,6 +24,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.features.TreeFeatures;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -48,6 +49,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import thedarkcolour.exdeorum.ExDeorum;
+import thedarkcolour.exdeorum.blockentity.LavaCrucibleBlockEntity;
 import thedarkcolour.exdeorum.client.CompostColors;
 import thedarkcolour.exdeorum.compat.ModIds;
 import thedarkcolour.exdeorum.compat.top.ExDeorumTopCompat;
@@ -58,6 +60,7 @@ import thedarkcolour.exdeorum.network.NetworkHandler;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.registry.EFluids;
 import thedarkcolour.exdeorum.registry.EItems;
+import thedarkcolour.exdeorum.tag.EBiomeTags;
 import thedarkcolour.exdeorum.voidworld.VoidChunkGenerator;
 
 public final class EventHandler {
@@ -82,7 +85,10 @@ public final class EventHandler {
 
             try {
                 CompostColors.loadColors();
-                Minecraft.getInstance().player.displayClientMessage(Component.literal("Reloaded " + CompostColors.COLORS.size() + " compost colors!"), false);
+                var player = Minecraft.getInstance().player;
+                if (player != null) {
+                    player.displayClientMessage(Component.literal("Reloaded " + CompostColors.COLORS.size() + " compost colors!"), false);
+                }
             } catch (Exception e) {
                 ExDeorum.LOGGER.error("Failed to load vanilla compost colors", e);
             }
@@ -93,23 +99,49 @@ public final class EventHandler {
 
     private static void createSpawnTree(LevelEvent.CreateSpawnPosition event) {
         if (event.getLevel() instanceof ServerLevel level && level.getChunkSource().getGenerator() instanceof VoidChunkGenerator) {
-            // todo have config option for more kinds of platforms
             var rand = new XoroshiroRandomSource(level.getSeed());
             var pos = new BlockPos.MutableBlockPos(rand.nextIntBetweenInclusive(-200, 200), 64, rand.nextIntBetweenInclusive(-200, 200));
             level.setBlock(pos, Blocks.DIRT.defaultBlockState(), 2);
             pos.move(0, 1, 0);
 
             // grow tree, has 5% chance to spawn bees based on world seed
-            var feature = TreeFeatures.OAK_BEES_005;
-            Holder<ConfiguredFeature<?, ?>> holder = level.registryAccess().registryOrThrow(Registries.CONFIGURED_FEATURE).getHolder(feature).orElse(null);
+            var configuredFeatureRegistry = level.registryAccess().registryOrThrow(Registries.CONFIGURED_FEATURE);
+            var defaultTreeFeature = TreeFeatures.OAK_BEES_005;
+            var defaultTreeFeatureLoc = ResourceLocation.tryParse(EConfig.SERVER.defaultSpawnTreeFeature.get());
+
+            Holder<ConfiguredFeature<?, ?>> holder = configuredFeatureRegistry.getHolder(defaultTreeFeature).orElse(null);
+
+            if (defaultTreeFeatureLoc != null) {
+                var value = configuredFeatureRegistry.getHolder(ResourceKey.create(Registries.CONFIGURED_FEATURE, defaultTreeFeatureLoc)).orElse(null);
+                if (value != null) {
+                    holder = value;
+                }
+            }
+
+            if (EConfig.SERVER.useBiomeAppropriateTree.get()) {
+                var biome = level.getBiome(pos);
+
+                for (var entry : EBiomeTags.TREE_TAGS.entrySet()) {
+                    if (biome.is(entry.getKey())) {
+                        var optional = entry.getValue().getHolder();
+
+                        if (optional.isPresent()) {
+                            holder = (optional.get());
+                            break;
+                        }
+                    }
+                }
+            }
+
             if (holder == null || !holder.value().place(level, level.getChunkSource().getGenerator(), rand, pos)) {
                 ExDeorum.LOGGER.error("Failed to generate spawn tree :(");
             } else {
-                ExDeorum.LOGGER.info("Generated spawn tree at {}", pos);
+                ExDeorum.LOGGER.debug("Generated spawn tree at {}", pos);
             }
+
             event.setCanceled(true);
             event.getSettings().setSpawn(level.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, pos), 90.0F);
-            ((ServerLevel) event.getLevel()).getGameRules().getRule(GameRules.RULE_SPAWN_RADIUS).set(0, level.getServer());
+            level.getGameRules().getRule(GameRules.RULE_SPAWN_RADIUS).set(0, level.getServer());
         }
     }
 
@@ -128,16 +160,18 @@ public final class EventHandler {
                 NetworkHandler.sendVoidWorld(player);
                 var advancement = player.server.getAdvancements().getAdvancement(new ResourceLocation(ExDeorum.ID, "core/root"));
 
-                if (advancement != null && !player.getAdvancements().getOrStartProgress(advancement).isDone()) {
-                    player.getAdvancements().award(advancement, "in_void_world");
-                    if (EConfig.SERVER.startingTorch.get()) {
-                        player.getInventory().add(new ItemStack(Items.TORCH));
-                    }
-                    if (EConfig.SERVER.startingWateringCan.get()) {
-                        player.getInventory().add(WateringCanItem.getFull(EItems.WOODEN_WATERING_CAN));
+                if (advancement != null) {
+                    if (!player.getAdvancements().getOrStartProgress(advancement).isDone()) {
+                        player.getAdvancements().award(advancement, "in_void_world");
+                        if (EConfig.SERVER.startingTorch.get()) {
+                            player.getInventory().add(new ItemStack(Items.TORCH));
+                        }
+                        if (EConfig.SERVER.startingWateringCan.get()) {
+                            player.getInventory().add(WateringCanItem.getFull(EItems.WOODEN_WATERING_CAN));
+                        }
                     }
                 } else {
-                    ExDeorum.LOGGER.error("Unable to grant player the Void World advancement. Ex Nihilo Reborn advancements will not show");
+                    ExDeorum.LOGGER.error("Unable to grant player the Void World advancement. Ex Deorum advancements will not show");
                 }
             }
         }
@@ -156,6 +190,7 @@ public final class EventHandler {
             return prepBarrier.wait(Unit.INSTANCE).thenRunAsync(() -> {
                 HammerItem.refreshValidBlocks(recipes);
                 RecipeUtil.reload(recipes);
+                LavaCrucibleBlockEntity.putDefaultHeatValues();
             }, gameExecutor);
         });
     }

@@ -45,7 +45,7 @@ public abstract class AbstractCrucibleBlock extends EBlock {
 
     @Override
     public int getLightEmission(BlockState state, BlockGetter level, BlockPos pos) {
-        if (level.getBlockEntity(pos) instanceof AbstractCrucibleBlockEntity crucible) {
+        if (level.getExistingBlockEntity(pos) instanceof AbstractCrucibleBlockEntity crucible) {
             return crucible.getTank().getFluid().getFluid().getFluidType().getLightLevel();
         }
         return 0;
@@ -54,6 +54,6 @@ public abstract class AbstractCrucibleBlock extends EBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState pState, BlockEntityType<T> type) {
-        return !level.isClientSide && (type == EBlockEntities.WATER_CRUCIBLE.get() || type == EBlockEntities.LAVA_CRUCIBLE.get()) ? (BlockEntityTicker<T>) new AbstractCrucibleBlockEntity.Ticker() : null;
+        return (type == EBlockEntities.WATER_CRUCIBLE.get() || type == EBlockEntities.LAVA_CRUCIBLE.get()) ? (BlockEntityTicker<T>) new AbstractCrucibleBlockEntity.Ticker() : null;
     }
 }

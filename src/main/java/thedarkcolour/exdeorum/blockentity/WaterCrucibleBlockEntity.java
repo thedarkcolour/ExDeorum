@@ -27,13 +27,15 @@ import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.recipe.crucible.CrucibleRecipe;
 import thedarkcolour.exdeorum.registry.EBlockEntities;
 
+import javax.annotation.Nullable;
+
 public class WaterCrucibleBlockEntity extends AbstractCrucibleBlockEntity {
     public WaterCrucibleBlockEntity(BlockPos pos, BlockState state) {
         super(EBlockEntities.WATER_CRUCIBLE.get(), pos, state);
     }
 
     @Override
-    protected CrucibleRecipe getRecipe(ItemStack item) {
+    protected @Nullable CrucibleRecipe getRecipe(ItemStack item) {
         return RecipeUtil.getWaterCrucibleRecipe(item);
     }
 

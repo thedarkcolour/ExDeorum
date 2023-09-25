@@ -8,6 +8,6 @@
   "result_amount": {
     "type": "minecraft:binomial",
     "n": 1.0,
-    "p": 0.05
+    "p": 0.07
   }
 }

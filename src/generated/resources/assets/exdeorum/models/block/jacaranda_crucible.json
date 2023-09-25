@@ -1,0 +1,9 @@
+{
+  "parent": "exdeorum:block/template_crucible",
+  "textures": {
+    "bottom": "biomesoplenty:block/jacaranda_log",
+    "inside": "biomesoplenty:block/jacaranda_log",
+    "side": "biomesoplenty:block/jacaranda_log",
+    "top": "biomesoplenty:block/jacaranda_log"
+  }
+}

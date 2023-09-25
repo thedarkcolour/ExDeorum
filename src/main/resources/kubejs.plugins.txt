@@ -1,0 +1,1 @@
+thedarkcolour.exdeorum.compat.kubejs.ExDeorumKubeJsPlugin

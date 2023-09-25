@@ -1,0 +1,6 @@
+{
+  "parent": "exdeorum:block/template_sieve",
+  "textures": {
+    "texture": "biomesoplenty:block/willow_planks"
+  }
+}

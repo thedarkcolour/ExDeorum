@@ -1,0 +1,9 @@
+{
+  "parent": "exdeorum:block/template_crucible",
+  "textures": {
+    "bottom": "biomesoplenty:block/mahogany_log",
+    "inside": "biomesoplenty:block/mahogany_log",
+    "side": "biomesoplenty:block/mahogany_log",
+    "top": "biomesoplenty:block/mahogany_log"
+  }
+}

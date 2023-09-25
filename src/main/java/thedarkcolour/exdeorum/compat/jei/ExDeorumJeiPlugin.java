@@ -18,6 +18,7 @@
 
 package thedarkcolour.exdeorum.compat.jei;
 
+import com.google.common.collect.Lists;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.VanillaTypes;
@@ -31,9 +32,12 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.ModList;
 import thedarkcolour.exdeorum.ExDeorum;
+import thedarkcolour.exdeorum.compat.ModIds;
 import thedarkcolour.exdeorum.data.TranslationKeys;
 import thedarkcolour.exdeorum.item.WateringCanItem;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
@@ -72,7 +76,7 @@ public class ExDeorumJeiPlugin implements IModPlugin {
     public void registerCategories(IRecipeCategoryRegistration registration) {
         var helper = registration.getJeiHelpers().getGuiHelper();
         var arrow = helper.createDrawable(ExDeorumJeiPlugin.EX_DEORUM_JEI_TEXTURE, 0, 18, 22, 15);
-        var plus = helper.createDrawable(ExDeorumJeiPlugin.EX_DEORUM_JEI_TEXTURE, 22,18, 8, 8);
+        var plus = helper.createDrawable(ExDeorumJeiPlugin.EX_DEORUM_JEI_TEXTURE, 22, 18, 8, 8);
 
         registration.addRecipeCategories(new BarrelCompostCategory(helper));
         registration.addRecipeCategories(new BarrelMixingCategory(helper, plus, arrow));
@@ -84,50 +88,95 @@ public class ExDeorumJeiPlugin implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        var barrels = new ItemStack[]{
-                new ItemStack(EItems.OAK_BARREL.get()),
-                new ItemStack(EItems.SPRUCE_BARREL.get()),
-                new ItemStack(EItems.BIRCH_BARREL.get()),
-                new ItemStack(EItems.JUNGLE_BARREL.get()),
-                new ItemStack(EItems.ACACIA_BARREL.get()),
-                new ItemStack(EItems.DARK_OAK_BARREL.get()),
-                new ItemStack(EItems.MANGROVE_BARREL.get()),
-                new ItemStack(EItems.CHERRY_BARREL.get()),
-                new ItemStack(EItems.BAMBOO_BARREL.get()),
-                new ItemStack(EItems.CRIMSON_BARREL.get()),
-                new ItemStack(EItems.WARPED_BARREL.get()),
-                new ItemStack(EItems.STONE_BARREL.get()),
-        };
-        for (var barrel : barrels) {
-            registration.addRecipeCatalyst(barrel, BARREL_COMPOST);
-            registration.addRecipeCatalyst(barrel, BARREL_MIXING);
+        var barrels = Lists.newArrayList(
+                EItems.OAK_BARREL.get(),
+                EItems.SPRUCE_BARREL.get(),
+                EItems.BIRCH_BARREL.get(),
+                EItems.JUNGLE_BARREL.get(),
+                EItems.ACACIA_BARREL.get(),
+                EItems.DARK_OAK_BARREL.get(),
+                EItems.MANGROVE_BARREL.get(),
+                EItems.CHERRY_BARREL.get(),
+                EItems.BAMBOO_BARREL.get(),
+                EItems.CRIMSON_BARREL.get(),
+                EItems.WARPED_BARREL.get(),
+                EItems.STONE_BARREL.get()
+        );
+        var sieves = Lists.newArrayList(
+                EItems.OAK_SIEVE.get(),
+                EItems.SPRUCE_SIEVE.get(),
+                EItems.BIRCH_SIEVE.get(),
+                EItems.JUNGLE_SIEVE.get(),
+                EItems.ACACIA_SIEVE.get(),
+                EItems.DARK_OAK_SIEVE.get(),
+                EItems.MANGROVE_SIEVE.get(),
+                EItems.CHERRY_SIEVE.get(),
+                EItems.BAMBOO_SIEVE.get(),
+                EItems.CRIMSON_SIEVE.get(),
+                EItems.WARPED_SIEVE.get()
+        );
+        var lavaCrucibles = Lists.newArrayList(
+                EItems.PORCELAIN_CRUCIBLE.get(),
+                EItems.WARPED_CRUCIBLE.get(),
+                EItems.CRIMSON_CRUCIBLE.get()
+        );
+        var waterCrucibles = Lists.newArrayList(
+                EItems.OAK_CRUCIBLE.get(),
+                EItems.SPRUCE_CRUCIBLE.get(),
+                EItems.BIRCH_CRUCIBLE.get(),
+                EItems.JUNGLE_CRUCIBLE.get(),
+                EItems.ACACIA_CRUCIBLE.get(),
+                EItems.DARK_OAK_CRUCIBLE.get(),
+                EItems.MANGROVE_CRUCIBLE.get(),
+                EItems.CHERRY_CRUCIBLE.get(),
+                EItems.BAMBOO_CRUCIBLE.get()
+        );
+        if (ModList.get().isLoaded(ModIds.BIOMES_O_PLENTY)) {
+            barrels.add(EItems.FIR_BARREL.get());
+            barrels.add(EItems.REDWOOD_BARREL.get());
+            barrels.add(EItems.MAHOGANY_BARREL.get());
+            barrels.add(EItems.JACARANDA_BARREL.get());
+            barrels.add(EItems.PALM_BARREL.get());
+            barrels.add(EItems.WILLOW_BARREL.get());
+            barrels.add(EItems.DEAD_BARREL.get());
+            barrels.add(EItems.MAGIC_BARREL.get());
+            barrels.add(EItems.UMBRAN_BARREL.get());
+            barrels.add(EItems.HELLBARK_BARREL.get());
+            sieves.add(EItems.FIR_SIEVE.get());
+            sieves.add(EItems.REDWOOD_SIEVE.get());
+            sieves.add(EItems.MAHOGANY_SIEVE.get());
+            sieves.add(EItems.JACARANDA_SIEVE.get());
+            sieves.add(EItems.PALM_SIEVE.get());
+            sieves.add(EItems.WILLOW_SIEVE.get());
+            sieves.add(EItems.DEAD_SIEVE.get());
+            sieves.add(EItems.MAGIC_SIEVE.get());
+            sieves.add(EItems.UMBRAN_SIEVE.get());
+            sieves.add(EItems.HELLBARK_SIEVE.get());
+            lavaCrucibles.add(EItems.HELLBARK_CRUCIBLE.get());
+            waterCrucibles.add(EItems.FIR_CRUCIBLE.get());
+            waterCrucibles.add(EItems.REDWOOD_CRUCIBLE.get());
+            waterCrucibles.add(EItems.MAHOGANY_CRUCIBLE.get());
+            waterCrucibles.add(EItems.JACARANDA_CRUCIBLE.get());
+            waterCrucibles.add(EItems.PALM_CRUCIBLE.get());
+            waterCrucibles.add(EItems.WILLOW_CRUCIBLE.get());
+            waterCrucibles.add(EItems.DEAD_CRUCIBLE.get());
+            waterCrucibles.add(EItems.MAGIC_CRUCIBLE.get());
+            waterCrucibles.add(EItems.UMBRAN_CRUCIBLE.get());
         }
-
-        registration.addRecipeCatalyst(new ItemStack(EItems.PORCELAIN_CRUCIBLE.get()), LAVA_CRUCIBLE);
-        registration.addRecipeCatalyst(new ItemStack(EItems.WARPED_CRUCIBLE.get()), LAVA_CRUCIBLE);
-        registration.addRecipeCatalyst(new ItemStack(EItems.CRIMSON_CRUCIBLE.get()), LAVA_CRUCIBLE);
-
-        registration.addRecipeCatalyst(new ItemStack(EItems.OAK_CRUCIBLE.get()), WATER_CRUCIBLE);
-        registration.addRecipeCatalyst(new ItemStack(EItems.SPRUCE_CRUCIBLE.get()), WATER_CRUCIBLE);
-        registration.addRecipeCatalyst(new ItemStack(EItems.BIRCH_CRUCIBLE.get()), WATER_CRUCIBLE);
-        registration.addRecipeCatalyst(new ItemStack(EItems.JUNGLE_CRUCIBLE.get()), WATER_CRUCIBLE);
-        registration.addRecipeCatalyst(new ItemStack(EItems.ACACIA_CRUCIBLE.get()), WATER_CRUCIBLE);
-        registration.addRecipeCatalyst(new ItemStack(EItems.DARK_OAK_CRUCIBLE.get()), WATER_CRUCIBLE);
-        registration.addRecipeCatalyst(new ItemStack(EItems.MANGROVE_CRUCIBLE.get()), WATER_CRUCIBLE);
-        registration.addRecipeCatalyst(new ItemStack(EItems.CHERRY_CRUCIBLE.get()), WATER_CRUCIBLE);
-        registration.addRecipeCatalyst(new ItemStack(EItems.BAMBOO_CRUCIBLE.get()), WATER_CRUCIBLE);
-
-        registration.addRecipeCatalyst(new ItemStack(EItems.OAK_SIEVE.get()), SIEVE);
-        registration.addRecipeCatalyst(new ItemStack(EItems.SPRUCE_SIEVE.get()), SIEVE);
-        registration.addRecipeCatalyst(new ItemStack(EItems.BIRCH_SIEVE.get()), SIEVE);
-        registration.addRecipeCatalyst(new ItemStack(EItems.JUNGLE_SIEVE.get()), SIEVE);
-        registration.addRecipeCatalyst(new ItemStack(EItems.ACACIA_SIEVE.get()), SIEVE);
-        registration.addRecipeCatalyst(new ItemStack(EItems.DARK_OAK_SIEVE.get()), SIEVE);
-        registration.addRecipeCatalyst(new ItemStack(EItems.MANGROVE_SIEVE.get()), SIEVE);
-        registration.addRecipeCatalyst(new ItemStack(EItems.CHERRY_SIEVE.get()), SIEVE);
-        registration.addRecipeCatalyst(new ItemStack(EItems.BAMBOO_SIEVE.get()), SIEVE);
-        registration.addRecipeCatalyst(new ItemStack(EItems.CRIMSON_SIEVE.get()), SIEVE);
-        registration.addRecipeCatalyst(new ItemStack(EItems.WARPED_SIEVE.get()), SIEVE);
+        for (var barrel : barrels) {
+            var stack = new ItemStack(barrel);
+            registration.addRecipeCatalyst(stack, BARREL_COMPOST);
+            registration.addRecipeCatalyst(stack, BARREL_MIXING);
+        }
+        for (var lavaCrucible : lavaCrucibles) {
+            registration.addRecipeCatalyst(new ItemStack(lavaCrucible), LAVA_CRUCIBLE);
+        }
+        for (var waterCrucible : waterCrucibles) {
+            registration.addRecipeCatalyst(new ItemStack(waterCrucible), WATER_CRUCIBLE);
+        }
+        for (var sieve : sieves) {
+            registration.addRecipeCatalyst(new ItemStack(sieve), SIEVE);
+        }
 
         registration.addRecipeCatalyst(new ItemStack(EItems.WOODEN_HAMMER.get()), HAMMER);
         registration.addRecipeCatalyst(new ItemStack(EItems.STONE_HAMMER.get()), HAMMER);
@@ -153,11 +202,13 @@ public class ExDeorumJeiPlugin implements IModPlugin {
 
         var toRemove = new ArrayList<ItemStack>();
 
-        if (RecipeUtil.isTagEmpty(EItemTags.ORES_ALUMINUM)) toRemove.add(new ItemStack(EItems.ALUMINUM_ORE_CHUNK.get()));
+        if (RecipeUtil.isTagEmpty(EItemTags.ORES_ALUMINUM))
+            toRemove.add(new ItemStack(EItems.ALUMINUM_ORE_CHUNK.get()));
         if (RecipeUtil.isTagEmpty(EItemTags.ORES_COBALT)) toRemove.add(new ItemStack(EItems.COBALT_ORE_CHUNK.get()));
         if (RecipeUtil.isTagEmpty(EItemTags.ORES_SILVER)) toRemove.add(new ItemStack(EItems.SILVER_ORE_CHUNK.get()));
         if (RecipeUtil.isTagEmpty(EItemTags.ORES_LEAD)) toRemove.add(new ItemStack(EItems.LEAD_ORE_CHUNK.get()));
-        if (RecipeUtil.isTagEmpty(EItemTags.ORES_PLATINUM)) toRemove.add(new ItemStack(EItems.PLATINUM_ORE_CHUNK.get()));
+        if (RecipeUtil.isTagEmpty(EItemTags.ORES_PLATINUM))
+            toRemove.add(new ItemStack(EItems.PLATINUM_ORE_CHUNK.get()));
         if (RecipeUtil.isTagEmpty(EItemTags.ORES_NICKEL)) toRemove.add(new ItemStack(EItems.NICKEL_ORE_CHUNK.get()));
         if (RecipeUtil.isTagEmpty(EItemTags.ORES_URANIUM)) toRemove.add(new ItemStack(EItems.URANIUM_ORE_CHUNK.get()));
         if (RecipeUtil.isTagEmpty(EItemTags.ORES_OSMIUM)) toRemove.add(new ItemStack(EItems.OSMIUM_ORE_CHUNK.get()));

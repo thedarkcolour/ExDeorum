@@ -36,6 +36,7 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.Lazy;
@@ -47,11 +48,11 @@ import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.recipe.crucible.CrucibleRecipe;
 import thedarkcolour.exdeorum.registry.EItems;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.function.Consumer;
 
@@ -70,17 +71,20 @@ public abstract class AbstractCrucibleBlockEntity extends EBlockEntity {
     private final LazyOptional<IItemHandler> itemHandler = LazyOptional.of(() -> item);
     private final LazyOptional<IFluidHandler> fluidHandler = LazyOptional.of(() -> tank);
 
+    @Nullable
     private Block lastMelted;
-    private Fluid fluid;
+    @Nullable
+    private Fluid fluid = null;
     private short solids;
+    private boolean needsLightUpdate;
 
     public AbstractCrucibleBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
         if (!remove) {
             if (cap == ForgeCapabilities.FLUID_HANDLER) {
                 return fluidHandler.cast();
@@ -111,6 +115,7 @@ public abstract class AbstractCrucibleBlockEntity extends EBlockEntity {
         lastMelted = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(nbt.getString("LastMelted")));
         fluid = ForgeRegistries.FLUIDS.getValue(new ResourceLocation(nbt.getString("Fluid")));
         solids = nbt.getShort("Solids");
+        needsLightUpdate = true;
     }
 
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
@@ -128,6 +133,7 @@ public abstract class AbstractCrucibleBlockEntity extends EBlockEntity {
     }
 
     // Gets a crucible recipe, using the cache if possible
+    @Nullable
     protected abstract CrucibleRecipe getRecipe(ItemStack item);
 
     /**
@@ -148,10 +154,11 @@ public abstract class AbstractCrucibleBlockEntity extends EBlockEntity {
         var result = recipe.getResult();
         var contained = this.tank.getFluid();
         shrinkAction.accept(item);
-        this.solids = (short) Math.max(solids + result.getAmount(), MAX_SOLIDS);
+        this.solids = (short) Math.min(solids + result.getAmount(), MAX_SOLIDS);
 
         if (contained.isEmpty()) {
             fluid = result.getFluid();
+            needsLightUpdate = true;
         }
 
         var melts = MELT_OVERRIDES.get();
@@ -198,6 +205,7 @@ public abstract class AbstractCrucibleBlockEntity extends EBlockEntity {
 
     public abstract Block getDefaultMeltBlock();
 
+    @Nullable
     public Block getLastMelted() {
         return lastMelted;
     }
@@ -258,12 +266,12 @@ public abstract class AbstractCrucibleBlockEntity extends EBlockEntity {
         }
 
         @Override
-        protected int getStackLimit(int slot, @Nonnull ItemStack stack) {
+        protected int getStackLimit(int slot, @NotNull ItemStack stack) {
             return 1;
         }
 
         @Override
-        public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
+        public boolean isItemValid(int slot, @NotNull ItemStack stack) {
             return canInsertItem(stack);
         }
 
@@ -272,13 +280,17 @@ public abstract class AbstractCrucibleBlockEntity extends EBlockEntity {
         }
     }
 
-    // Only ticks on client
+    // Only ticks on server
     public static class Ticker implements BlockEntityTicker<AbstractCrucibleBlockEntity> {
         @Override
         public void tick(Level level, BlockPos pos, BlockState state, AbstractCrucibleBlockEntity crucible) {
+            if (crucible.needsLightUpdate) {
+                level.getLightEngine().checkBlock(crucible.worldPosition);
+                crucible.needsLightUpdate = false;
+            }
             // Update twice per tick
-            if ((level.getGameTime() % 10L) == 0L) {
-                int delta = Math.min(crucible.solids, crucible.getMeltingRate());
+            if (!level.isClientSide && (level.getGameTime() % 10L) == 0L) {
+                short delta = (short) Math.min(crucible.solids, crucible.getMeltingRate());
 
                 // Skip if no heat
                 if (delta <= 0) return;
@@ -289,7 +301,10 @@ public abstract class AbstractCrucibleBlockEntity extends EBlockEntity {
 
                     // Add lava
                     if (crucible.tank.isEmpty()) {
-                        crucible.tank.setFluid(new FluidStack(crucible.fluid, delta));
+                        if (crucible.fluid != null) {
+                            crucible.tank.setFluid(new FluidStack(crucible.fluid, delta));
+                            crucible.needsLightUpdate = true;
+                        }
                     } else {
                         crucible.tank.getFluid().grow(delta);
                     }

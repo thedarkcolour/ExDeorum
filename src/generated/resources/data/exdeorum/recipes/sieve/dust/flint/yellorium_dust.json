@@ -1,0 +1,26 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "bigreactors"
+        }
+      ],
+      "recipe": {
+        "type": "exdeorum:sieve",
+        "ingredient": {
+          "item": "exdeorum:dust"
+        },
+        "mesh": "exdeorum:flint_mesh",
+        "result": "bigreactors:yellorium_dust",
+        "result_amount": {
+          "type": "minecraft:binomial",
+          "n": 1.0,
+          "p": 0.055
+        }
+      }
+    }
+  ]
+}

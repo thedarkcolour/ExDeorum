@@ -20,6 +20,7 @@ package thedarkcolour.exdeorum.data;
 
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.client.model.generators.BlockModelBuilder;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 import thedarkcolour.exdeorum.registry.EBlocks;
@@ -75,6 +76,44 @@ class BlockModels {
         crucible(models, EBlocks.MANGROVE_CRUCIBLE.get(), Blocks.MANGROVE_LOG);
         crucible(models, EBlocks.CHERRY_CRUCIBLE.get(), Blocks.CHERRY_LOG);
         crucible(models, EBlocks.BAMBOO_CRUCIBLE.get(), Blocks.BAMBOO_BLOCK);
+
+        // Mod compat
+        bopModels(models);
+    }
+
+    private static void bopModels(MKBlockModelProvider models) {
+        barrel(models, EBlocks.FIR_BARREL.get(), ModCompatData.FIR_PLANKS.get());
+        barrel(models, EBlocks.REDWOOD_BARREL.get(), ModCompatData.REDWOOD_PLANKS.get());
+        barrel(models, EBlocks.MAHOGANY_BARREL.get(), ModCompatData.MAHOGANY_PLANKS.get());
+        barrel(models, EBlocks.JACARANDA_BARREL.get(), ModCompatData.JACARANDA_PLANKS.get());
+        barrel(models, EBlocks.PALM_BARREL.get(), ModCompatData.PALM_PLANKS.get());
+        barrel(models, EBlocks.WILLOW_BARREL.get(), ModCompatData.WILLOW_PLANKS.get());
+        barrel(models, EBlocks.DEAD_BARREL.get(), ModCompatData.DEAD_PLANKS.get());
+        barrel(models, EBlocks.MAGIC_BARREL.get(), ModCompatData.MAGIC_PLANKS.get());
+        barrel(models, EBlocks.UMBRAN_BARREL.get(), ModCompatData.UMBRAN_PLANKS.get());
+        barrel(models, EBlocks.HELLBARK_BARREL.get(), ModCompatData.HELLBARK_PLANKS.get());
+
+        sieve(models, EBlocks.FIR_SIEVE.get(), ModCompatData.FIR_PLANKS.get());
+        sieve(models, EBlocks.REDWOOD_SIEVE.get(), ModCompatData.REDWOOD_PLANKS.get());
+        sieve(models, EBlocks.MAHOGANY_SIEVE.get(), ModCompatData.MAHOGANY_PLANKS.get());
+        sieve(models, EBlocks.JACARANDA_SIEVE.get(), ModCompatData.JACARANDA_PLANKS.get());
+        sieve(models, EBlocks.PALM_SIEVE.get(), ModCompatData.PALM_PLANKS.get());
+        sieve(models, EBlocks.WILLOW_SIEVE.get(), ModCompatData.WILLOW_PLANKS.get());
+        sieve(models, EBlocks.DEAD_SIEVE.get(), ModCompatData.DEAD_PLANKS.get());
+        sieve(models, EBlocks.MAGIC_SIEVE.get(), ModCompatData.MAGIC_PLANKS.get());
+        sieve(models, EBlocks.UMBRAN_SIEVE.get(), ModCompatData.UMBRAN_PLANKS.get());
+        sieve(models, EBlocks.HELLBARK_SIEVE.get(), ModCompatData.HELLBARK_PLANKS.get());
+
+        crucible(models, EBlocks.FIR_CRUCIBLE.get(), ModCompatData.FIR_LOG.get());
+        crucible(models, EBlocks.REDWOOD_CRUCIBLE.get(), ModCompatData.REDWOOD_LOG.get());
+        crucible(models, EBlocks.MAHOGANY_CRUCIBLE.get(), ModCompatData.MAHOGANY_LOG.get());
+        crucible(models, EBlocks.JACARANDA_CRUCIBLE.get(), ModCompatData.JACARANDA_LOG.get());
+        crucible(models, EBlocks.PALM_CRUCIBLE.get(), ModCompatData.PALM_LOG.get());
+        crucible(models, EBlocks.WILLOW_CRUCIBLE.get(), ModCompatData.WILLOW_LOG.get());
+        crucible(models, EBlocks.DEAD_CRUCIBLE.get(), ModCompatData.DEAD_LOG.get());
+        crucible(models, EBlocks.MAGIC_CRUCIBLE.get(), ModCompatData.MAGIC_LOG.get());
+        crucible(models, EBlocks.UMBRAN_CRUCIBLE.get(), ModCompatData.UMBRAN_LOG.get());
+        crucible(models, EBlocks.HELLBARK_CRUCIBLE.get(), ModCompatData.HELLBARK_LOG.get());
     }
 
     public static void crucible(MKBlockModelProvider models, Block block) {

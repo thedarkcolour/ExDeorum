@@ -36,7 +36,9 @@ public class EBlockEntities {
     public static final RegistryObject<BlockEntityType<LavaCrucibleBlockEntity>> LAVA_CRUCIBLE = BLOCK_ENTITIES.register("lava_crucible", () -> BlockEntityType.Builder.of(LavaCrucibleBlockEntity::new,
             EBlocks.WARPED_CRUCIBLE.get(),
             EBlocks.CRIMSON_CRUCIBLE.get(),
-            EBlocks.PORCELAIN_CRUCIBLE.get()
+            EBlocks.PORCELAIN_CRUCIBLE.get(),
+            // BOP
+            EBlocks.HELLBARK_CRUCIBLE.get()
     ).build(null));
     public static final RegistryObject<BlockEntityType<WaterCrucibleBlockEntity>> WATER_CRUCIBLE = BLOCK_ENTITIES.register("water_crucible", () -> BlockEntityType.Builder.of(WaterCrucibleBlockEntity::new,
             EBlocks.OAK_CRUCIBLE.get(),
@@ -47,7 +49,17 @@ public class EBlockEntities {
             EBlocks.DARK_OAK_CRUCIBLE.get(),
             EBlocks.MANGROVE_CRUCIBLE.get(),
             EBlocks.CHERRY_CRUCIBLE.get(),
-            EBlocks.BAMBOO_CRUCIBLE.get()
+            EBlocks.BAMBOO_CRUCIBLE.get(),
+            // BOP
+            EBlocks.FIR_CRUCIBLE.get(),
+            EBlocks.REDWOOD_CRUCIBLE.get(),
+            EBlocks.MAHOGANY_CRUCIBLE.get(),
+            EBlocks.JACARANDA_CRUCIBLE.get(),
+            EBlocks.PALM_CRUCIBLE.get(),
+            EBlocks.WILLOW_CRUCIBLE.get(),
+            EBlocks.DEAD_CRUCIBLE.get(),
+            EBlocks.MAGIC_CRUCIBLE.get(),
+            EBlocks.UMBRAN_CRUCIBLE.get()
     ).build(null));
     public static final RegistryObject<BlockEntityType<BarrelBlockEntity>> BARREL = BLOCK_ENTITIES.register("barrel", () -> BlockEntityType.Builder.of(BarrelBlockEntity::new,
             EBlocks.OAK_BARREL.get(),
@@ -61,7 +73,18 @@ public class EBlockEntities {
             EBlocks.BAMBOO_BARREL.get(),
             EBlocks.CRIMSON_BARREL.get(),
             EBlocks.WARPED_BARREL.get(),
-            EBlocks.STONE_BARREL.get()
+            EBlocks.STONE_BARREL.get(),
+            // BOP
+            EBlocks.FIR_BARREL.get(),
+            EBlocks.REDWOOD_BARREL.get(),
+            EBlocks.MAHOGANY_BARREL.get(),
+            EBlocks.JACARANDA_BARREL.get(),
+            EBlocks.PALM_BARREL.get(),
+            EBlocks.WILLOW_BARREL.get(),
+            EBlocks.DEAD_BARREL.get(),
+            EBlocks.MAGIC_BARREL.get(),
+            EBlocks.UMBRAN_BARREL.get(),
+            EBlocks.HELLBARK_BARREL.get()
     ).build(null));
     public static final RegistryObject<BlockEntityType<SieveBlockEntity>> SIEVE = BLOCK_ENTITIES.register("sieve", () -> BlockEntityType.Builder.of(SieveBlockEntity::new,
             EBlocks.OAK_SIEVE.get(),
@@ -74,6 +97,17 @@ public class EBlockEntities {
             EBlocks.CHERRY_SIEVE.get(),
             EBlocks.BAMBOO_SIEVE.get(),
             EBlocks.CRIMSON_SIEVE.get(),
-            EBlocks.WARPED_SIEVE.get()
+            EBlocks.WARPED_SIEVE.get(),
+            // BOP
+            EBlocks.FIR_SIEVE.get(),
+            EBlocks.REDWOOD_SIEVE.get(),
+            EBlocks.MAHOGANY_SIEVE.get(),
+            EBlocks.JACARANDA_SIEVE.get(),
+            EBlocks.PALM_SIEVE.get(),
+            EBlocks.WILLOW_SIEVE.get(),
+            EBlocks.DEAD_SIEVE.get(),
+            EBlocks.MAGIC_SIEVE.get(),
+            EBlocks.UMBRAN_SIEVE.get(),
+            EBlocks.HELLBARK_SIEVE.get()
     ).build(null));
 }

@@ -1,3 +1,14 @@
+## Ex Deorum 1.5
+- Added Random Pottery Sherd and Random Armor Trim items to replace the bloated sand loot tables for obtaining pottery sherds and armor trims.
+- Added compatibility with Biomes O' Plenty (sieves, barrels, crucibles, saplings obtainable from sifting moss like other saplings) 
+- Added compatibility with Extreme Reactors
+- Added WIP compatibility with Applied Energistics 2
+- Added compatibility with KubeJS for Crucibles, with methods called `exdeorum.setCrucibleHeatValue(BlockState, int)` and `exdeorum.setCrucibleHeatValueForBlock(Block, int)`
+- Fixed an incorrect error message saying "Unable to grant player the Void World advancement" when the player already has it
+- Fixed a bug with the crucible filling up too quickly.
+- Added a config option to change which configured_feature to use when generating the spawn island
+- Added a config option to use a different spawn tree based on the biome the player spawns in
+
 ## Ex Deorum 1.4
 - Red Sand is now obtainable by hammering crushed netherrack.
 - Sieves can no longer be automated by machines (can be re-enabled in the server config.)

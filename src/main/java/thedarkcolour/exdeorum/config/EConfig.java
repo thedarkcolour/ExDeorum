@@ -101,6 +101,8 @@ public class EConfig {
         public final DoubleValue barrelProgressStep;
         public final BooleanValue witchWaterNetherrackGenerator;
         public final BooleanValue setVoidWorldAsDefault;
+        public final ConfigValue<String> defaultSpawnTreeFeature;
+        public final BooleanValue useBiomeAppropriateTree;
 
         public Server(ForgeConfigSpec.Builder builder) {
             builder.comment("Server configuration for Ex Deorum").push("server");
@@ -126,6 +128,12 @@ public class EConfig {
             this.setVoidWorldAsDefault = builder
                     .comment("Whether the Void World type is used by default in the \"server.properties\" file when creating a server.")
                     .define("set_void_world_as_default", true);
+            this.defaultSpawnTreeFeature = builder
+                    .comment("The ID of the default tree feature to use when generating a spawn island (or when useBiomeAppropriateTree is true and the biome has no tree set). By default, minecraft:oak_tree_bees_005 is used.")
+                    .define("default_spawn_tree_feature", ModIds.MINECRAFT + ":oak_tree_bees_005");
+            this.useBiomeAppropriateTree = builder
+                    .comment("Whether the Spawn Tree in the void world changes based on the biome it's in. If false, Oak Tree is always used.")
+                        .define("use_biome_appropriate_tree", false);
 
             builder.pop();
         }

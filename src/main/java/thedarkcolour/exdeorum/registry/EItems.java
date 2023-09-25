@@ -27,23 +27,13 @@ import net.minecraft.world.item.Tiers;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import thedarkcolour.exdeorum.ExDeorum;
-import thedarkcolour.exdeorum.item.CookedSilkWormItem;
-import thedarkcolour.exdeorum.item.CrookItem;
-import thedarkcolour.exdeorum.item.GrassSpreaderItem;
-import thedarkcolour.exdeorum.item.HammerItem;
-import thedarkcolour.exdeorum.item.MeshItem;
-import thedarkcolour.exdeorum.item.NyliumSpreaderItem;
-import thedarkcolour.exdeorum.item.PorcelainBucket;
-import thedarkcolour.exdeorum.item.PorcelainMilkBucket;
-import thedarkcolour.exdeorum.item.SculkCoreItem;
-import thedarkcolour.exdeorum.item.SilkWormItem;
-import thedarkcolour.exdeorum.item.WateringCanItem;
-import thedarkcolour.exdeorum.item.WideWateringCanItem;
-import thedarkcolour.exdeorum.item.WitchWaterBucketItem;
+import thedarkcolour.exdeorum.compat.ModIds;
+import thedarkcolour.exdeorum.item.*;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.tag.EItemTags;
 
@@ -119,6 +109,8 @@ public class EItems {
     public static final RegistryObject<Item> WARPED_NYLIUM_SPORES = ITEMS.register("warped_nylium_spores", () -> new NyliumSpreaderItem(props(), Blocks.WARPED_NYLIUM::defaultBlockState));
     public static final RegistryObject<Item> CRIMSON_NYLIUM_SPORES = ITEMS.register("crimson_nylium_spores", () -> new NyliumSpreaderItem(props(), Blocks.CRIMSON_NYLIUM::defaultBlockState));
     public static final RegistryObject<Item> SCULK_CORE = ITEMS.register("sculk_core", () -> new SculkCoreItem(props().stacksTo(1)));
+    public static final RegistryObject<Item> RANDOM_POTTERY_SHERD = ITEMS.register("random_pottery_sherd", () -> new RandomResultItem.RandomSherd(props()));
+    public static final RegistryObject<Item> RANDOM_ARMOR_TRIM = ITEMS.register("random_armor_trim", () -> new RandomResultItem.RandomSandyArmorTrim(props()));
 
     // Buckets
     public static final RegistryObject<Item> UNFIRED_PORCELAIN_BUCKET = registerSimpleItem("unfired_porcelain_bucket");
@@ -165,6 +157,17 @@ public class EItems {
     public static final RegistryObject<BlockItem> CRIMSON_BARREL = registerItemBlock(EBlocks.CRIMSON_BARREL);
     public static final RegistryObject<BlockItem> WARPED_BARREL = registerItemBlock(EBlocks.WARPED_BARREL);
     public static final RegistryObject<BlockItem> STONE_BARREL = registerItemBlock(EBlocks.STONE_BARREL);
+    // BOP Barrels
+    public static final RegistryObject<BlockItem> FIR_BARREL = registerItemBlock(EBlocks.FIR_BARREL);
+    public static final RegistryObject<BlockItem> REDWOOD_BARREL = registerItemBlock(EBlocks.REDWOOD_BARREL);
+    public static final RegistryObject<BlockItem> MAHOGANY_BARREL = registerItemBlock(EBlocks.MAHOGANY_BARREL);
+    public static final RegistryObject<BlockItem> JACARANDA_BARREL = registerItemBlock(EBlocks.JACARANDA_BARREL);
+    public static final RegistryObject<BlockItem> PALM_BARREL = registerItemBlock(EBlocks.PALM_BARREL);
+    public static final RegistryObject<BlockItem> WILLOW_BARREL = registerItemBlock(EBlocks.WILLOW_BARREL);
+    public static final RegistryObject<BlockItem> DEAD_BARREL = registerItemBlock(EBlocks.DEAD_BARREL);
+    public static final RegistryObject<BlockItem> MAGIC_BARREL = registerItemBlock(EBlocks.MAGIC_BARREL);
+    public static final RegistryObject<BlockItem> UMBRAN_BARREL = registerItemBlock(EBlocks.UMBRAN_BARREL);
+    public static final RegistryObject<BlockItem> HELLBARK_BARREL = registerItemBlock(EBlocks.HELLBARK_BARREL);
 
     // Sieves
     public static final RegistryObject<BlockItem> OAK_SIEVE = registerItemBlock(EBlocks.OAK_SIEVE);
@@ -178,12 +181,25 @@ public class EItems {
     public static final RegistryObject<BlockItem> BAMBOO_SIEVE = registerItemBlock(EBlocks.BAMBOO_SIEVE);
     public static final RegistryObject<BlockItem> CRIMSON_SIEVE = registerItemBlock(EBlocks.CRIMSON_SIEVE);
     public static final RegistryObject<BlockItem> WARPED_SIEVE = registerItemBlock(EBlocks.WARPED_SIEVE);
+    // BOP Sieves
+    public static final RegistryObject<BlockItem> FIR_SIEVE = registerItemBlock(EBlocks.FIR_SIEVE);
+    public static final RegistryObject<BlockItem> REDWOOD_SIEVE = registerItemBlock(EBlocks.REDWOOD_SIEVE);
+    public static final RegistryObject<BlockItem> MAHOGANY_SIEVE = registerItemBlock(EBlocks.MAHOGANY_SIEVE);
+    public static final RegistryObject<BlockItem> JACARANDA_SIEVE = registerItemBlock(EBlocks.JACARANDA_SIEVE);
+    public static final RegistryObject<BlockItem> PALM_SIEVE = registerItemBlock(EBlocks.PALM_SIEVE);
+    public static final RegistryObject<BlockItem> WILLOW_SIEVE = registerItemBlock(EBlocks.WILLOW_SIEVE);
+    public static final RegistryObject<BlockItem> DEAD_SIEVE = registerItemBlock(EBlocks.DEAD_SIEVE);
+    public static final RegistryObject<BlockItem> MAGIC_SIEVE = registerItemBlock(EBlocks.MAGIC_SIEVE);
+    public static final RegistryObject<BlockItem> UMBRAN_SIEVE = registerItemBlock(EBlocks.UMBRAN_SIEVE);
+    public static final RegistryObject<BlockItem> HELLBARK_SIEVE = registerItemBlock(EBlocks.HELLBARK_SIEVE);
 
     // Lava Crucibles
     public static final RegistryObject<BlockItem> PORCELAIN_CRUCIBLE = registerItemBlock(EBlocks.PORCELAIN_CRUCIBLE);
     public static final RegistryObject<BlockItem> WARPED_CRUCIBLE = registerItemBlock(EBlocks.WARPED_CRUCIBLE);
     public static final RegistryObject<BlockItem> CRIMSON_CRUCIBLE = registerItemBlock(EBlocks.CRIMSON_CRUCIBLE);
     public static final RegistryObject<BlockItem> UNFIRED_PORCELAIN_CRUCIBLE = registerItemBlock(EBlocks.UNFIRED_PORCELAIN_CRUCIBLE);
+    // BOP Lava Crucibles
+    public static final RegistryObject<BlockItem> HELLBARK_CRUCIBLE = registerItemBlock(EBlocks.HELLBARK_CRUCIBLE);
 
     // Water Crucibles
     public static final RegistryObject<BlockItem> OAK_CRUCIBLE = registerItemBlock(EBlocks.OAK_CRUCIBLE);
@@ -195,6 +211,16 @@ public class EItems {
     public static final RegistryObject<BlockItem> MANGROVE_CRUCIBLE = registerItemBlock(EBlocks.MANGROVE_CRUCIBLE);
     public static final RegistryObject<BlockItem> CHERRY_CRUCIBLE = registerItemBlock(EBlocks.CHERRY_CRUCIBLE);
     public static final RegistryObject<BlockItem> BAMBOO_CRUCIBLE = registerItemBlock(EBlocks.BAMBOO_CRUCIBLE);
+    // BOP Water Crucible
+    public static final RegistryObject<BlockItem> FIR_CRUCIBLE = registerItemBlock(EBlocks.FIR_CRUCIBLE);
+    public static final RegistryObject<BlockItem> REDWOOD_CRUCIBLE = registerItemBlock(EBlocks.REDWOOD_CRUCIBLE);
+    public static final RegistryObject<BlockItem> MAHOGANY_CRUCIBLE = registerItemBlock(EBlocks.MAHOGANY_CRUCIBLE);
+    public static final RegistryObject<BlockItem> JACARANDA_CRUCIBLE = registerItemBlock(EBlocks.JACARANDA_CRUCIBLE);
+    public static final RegistryObject<BlockItem> PALM_CRUCIBLE = registerItemBlock(EBlocks.PALM_CRUCIBLE);
+    public static final RegistryObject<BlockItem> WILLOW_CRUCIBLE = registerItemBlock(EBlocks.WILLOW_CRUCIBLE);
+    public static final RegistryObject<BlockItem> DEAD_CRUCIBLE = registerItemBlock(EBlocks.DEAD_CRUCIBLE);
+    public static final RegistryObject<BlockItem> MAGIC_CRUCIBLE = registerItemBlock(EBlocks.MAGIC_CRUCIBLE);
+    public static final RegistryObject<BlockItem> UMBRAN_CRUCIBLE = registerItemBlock(EBlocks.UMBRAN_CRUCIBLE);
 
     public static final RegistryObject<BlockItem> END_CAKE = registerItemBlock(EBlocks.END_CAKE);
 
@@ -222,10 +248,25 @@ public class EItems {
         output.accept(BAMBOO_SIEVE.get());
         output.accept(CRIMSON_SIEVE.get());
         output.accept(WARPED_SIEVE.get());
+        if (ModList.get().isLoaded(ModIds.BIOMES_O_PLENTY)) {
+            output.accept(FIR_SIEVE.get());
+            output.accept(REDWOOD_SIEVE.get());
+            output.accept(MAHOGANY_SIEVE.get());
+            output.accept(JACARANDA_SIEVE.get());
+            output.accept(PALM_SIEVE.get());
+            output.accept(WILLOW_SIEVE.get());
+            output.accept(DEAD_SIEVE.get());
+            output.accept(MAGIC_SIEVE.get());
+            output.accept(UMBRAN_SIEVE.get());
+            output.accept(HELLBARK_SIEVE.get());
+        }
         output.accept(PORCELAIN_CRUCIBLE.get());
         output.accept(WARPED_CRUCIBLE.get());
         output.accept(CRIMSON_CRUCIBLE.get());
         output.accept(UNFIRED_PORCELAIN_CRUCIBLE.get());
+        if (ModList.get().isLoaded(ModIds.BIOMES_O_PLENTY)) {
+            output.accept(HELLBARK_CRUCIBLE.get());
+        }
         output.accept(OAK_CRUCIBLE.get());
         output.accept(SPRUCE_CRUCIBLE.get());
         output.accept(BIRCH_CRUCIBLE.get());
@@ -235,12 +276,27 @@ public class EItems {
         output.accept(MANGROVE_CRUCIBLE.get());
         output.accept(CHERRY_CRUCIBLE.get());
         output.accept(BAMBOO_CRUCIBLE.get());
+
+        if (ModList.get().isLoaded(ModIds.BIOMES_O_PLENTY)) {
+            output.accept(FIR_CRUCIBLE.get());
+            output.accept(REDWOOD_CRUCIBLE.get());
+            output.accept(MAHOGANY_CRUCIBLE.get());
+            output.accept(JACARANDA_CRUCIBLE.get());
+            output.accept(PALM_CRUCIBLE.get());
+            output.accept(WILLOW_CRUCIBLE.get());
+            output.accept(DEAD_CRUCIBLE.get());
+            output.accept(MAGIC_CRUCIBLE.get());
+            output.accept(UMBRAN_CRUCIBLE.get());
+        }
+
         output.accept(DUST.get());
         output.accept(CRUSHED_NETHERRACK.get());
         output.accept(CRUSHED_END_STONE.get());
         output.accept(CRUSHED_DEEPSLATE.get());
         output.accept(CRUSHED_BLACKSTONE.get());
         output.accept(END_CAKE.get());
+        output.accept(RANDOM_ARMOR_TRIM.get());
+        output.accept(RANDOM_POTTERY_SHERD.get());
 
         output.accept(SILK_WORM.get());
         output.accept(COOKED_SILK_WORM.get());
@@ -302,5 +358,18 @@ public class EItems {
         output.accept(PORCELAIN_LAVA_BUCKET.get());
         output.accept(PORCELAIN_MILK_BUCKET.get());
         output.accept(PORCELAIN_WITCH_WATER_BUCKET.get());
+
+        if (ModList.get().isLoaded(ModIds.BIOMES_O_PLENTY)) {
+            output.accept(FIR_BARREL.get());
+            output.accept(REDWOOD_BARREL.get());
+            output.accept(MAHOGANY_BARREL.get());
+            output.accept(JACARANDA_BARREL.get());
+            output.accept(PALM_BARREL.get());
+            output.accept(WILLOW_BARREL.get());
+            output.accept(DEAD_BARREL.get());
+            output.accept(MAGIC_BARREL.get());
+            output.accept(UMBRAN_BARREL.get());
+            output.accept(HELLBARK_BARREL.get());
+        }
     }
 }

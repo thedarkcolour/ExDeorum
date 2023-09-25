@@ -1,3 +1,21 @@
+/*
+ * Ex Deorum
+ * Copyright (c) 2023 thedarkcolour
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package thedarkcolour.exdeorum.data.recipe;
 
 import com.mojang.datafixers.util.Either;
@@ -142,7 +160,7 @@ class SieveRecipes {
             addDrop.accept(Items.COAL, chance(0.1f));
             addDrop.accept(Items.LAPIS_LAZULI, chance(0.03f));
             addDrop.accept(EItems.COPPER_ORE_CHUNK.get(), chance(0.08f));
-            addDrop.accept(EItems.IRON_ORE_CHUNK.get(), chance(0.05f));
+            addDrop.accept(EItems.IRON_ORE_CHUNK.get(), chance(0.07f));
             addDrop.accept(EItems.GOLD_ORE_CHUNK.get(), chance(0.03f));
             addDrop.accept(Items.DIAMOND, chance(0.02f));
             addDrop.accept(Items.EMERALD, chance(0.01f));
@@ -168,7 +186,7 @@ class SieveRecipes {
             addDrop.accept(Items.COAL, chance(0.125f));
             addDrop.accept(Items.LAPIS_LAZULI, chance(0.05f));
             addDrop.accept(EItems.COPPER_ORE_CHUNK.get(), chance(0.1f));
-            addDrop.accept(EItems.IRON_ORE_CHUNK.get(), chance(0.07f));
+            addDrop.accept(EItems.IRON_ORE_CHUNK.get(), chance(0.08f));
             addDrop.accept(EItems.GOLD_ORE_CHUNK.get(), chance(0.04f));
             addDrop.accept(Items.DIAMOND, chance(0.03f));
             addDrop.accept(Items.EMERALD, chance(0.015f));
@@ -287,32 +305,19 @@ class SieveRecipes {
             addDrop.accept(Items.IRON_NUGGET, chance(0.13f));
             addDrop.accept(Items.KELP, chance(0.1f));
             addDrop.accept(Items.SEA_PICKLE, chance(0.05f));
+
+            addConditionalDrop.accept(ModCompatData.CERTUS_QUARTZ_CRYSTAL.get(), chance(0.03f), modInstalled(ModIds.APPLIED_ENERGISTICS_2));
+            addConditionalDrop.accept(ModCompatData.CHARGED_CERTUS_QUARTZ_CRYSTAL.get(), chance(0.005f), modInstalled(ModIds.APPLIED_ENERGISTICS_2));
         });
         forMesh(writer, ingredient(Items.SAND), EItems.FLINT_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
             addDrop.accept(Items.FLINT, binomial(2, 0.2f));
             addDrop.accept(Items.DEAD_BUSH, chance(0.03f));
             addDrop.accept(Items.GOLD_NUGGET, chance(0.16f));
             addDrop.accept(Items.IRON_NUGGET, chance(0.16f));
-            addDrop.accept(Items.BURN_POTTERY_SHERD, chance(0.03f));
-            addDrop.accept(Items.DANGER_POTTERY_SHERD, chance(0.03f));
-            addDrop.accept(Items.FRIEND_POTTERY_SHERD, chance(0.03f));
-            addDrop.accept(Items.HEART_POTTERY_SHERD, chance(0.03f));
-            addDrop.accept(Items.HEARTBREAK_POTTERY_SHERD, chance(0.03f));
-            addDrop.accept(Items.HOWL_POTTERY_SHERD, chance(0.03f));
-            addDrop.accept(Items.SHEAF_POTTERY_SHERD, chance(0.03f));
-            addDrop.accept(Items.BLADE_POTTERY_SHERD, chance(0.03f));
-            addDrop.accept(Items.EXPLORER_POTTERY_SHERD, chance(0.03f));
-            addDrop.accept(Items.MOURNER_POTTERY_SHERD, chance(0.03f));
-            addDrop.accept(Items.PLENTY_POTTERY_SHERD, chance(0.03f));
-            addDrop.accept(Items.ANGLER_POTTERY_SHERD, chance(0.03f));
-            addDrop.accept(Items.SHELTER_POTTERY_SHERD, chance(0.03f));
-            addDrop.accept(Items.SNORT_POTTERY_SHERD, chance(0.03f));
-            addDrop.accept(Items.ARCHER_POTTERY_SHERD, chance(0.03f));
-            addDrop.accept(Items.MINER_POTTERY_SHERD, chance(0.03f));
-            addDrop.accept(Items.PRIZE_POTTERY_SHERD, chance(0.03f));
-            addDrop.accept(Items.SKULL_POTTERY_SHERD, chance(0.03f));
-            addDrop.accept(Items.ARMS_UP_POTTERY_SHERD, chance(0.03f));
-            addDrop.accept(Items.BREWER_POTTERY_SHERD, chance(0.03f));
+            addDrop.accept(EItems.RANDOM_POTTERY_SHERD.get(), chance(0.04f));
+
+            addConditionalDrop.accept(ModCompatData.CERTUS_QUARTZ_CRYSTAL.get(), chance(0.04f), modInstalled(ModIds.APPLIED_ENERGISTICS_2));
+            addConditionalDrop.accept(ModCompatData.CHARGED_CERTUS_QUARTZ_CRYSTAL.get(), chance(0.005f), modInstalled(ModIds.APPLIED_ENERGISTICS_2));
         });
         forMesh(writer, ingredient(Items.SAND), EItems.IRON_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
             addDrop.accept(Items.CACTUS, chance(0.13f));
@@ -324,6 +329,9 @@ class SieveRecipes {
             addDrop.accept(Items.SEA_PICKLE, chance(0.03f));
             addDrop.accept(Items.PRISMARINE_SHARD, chance(0.06f));
             addDrop.accept(Items.PRISMARINE_CRYSTALS, chance(0.06f));
+
+            addConditionalDrop.accept(ModCompatData.CERTUS_QUARTZ_CRYSTAL.get(), chance(0.06f), modInstalled(ModIds.APPLIED_ENERGISTICS_2));
+            addConditionalDrop.accept(ModCompatData.CHARGED_CERTUS_QUARTZ_CRYSTAL.get(), chance(0.0125f), modInstalled(ModIds.APPLIED_ENERGISTICS_2));
         });
         forMesh(writer, ingredient(Items.SAND), EItems.GOLDEN_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
             addDrop.accept(Items.CACTUS, chance(0.10f));
@@ -336,11 +344,10 @@ class SieveRecipes {
             addDrop.accept(Items.PRISMARINE_SHARD, chance(0.08f));
             addDrop.accept(Items.PRISMARINE_CRYSTALS, chance(0.08f));
             addDrop.accept(Items.RAW_GOLD, chance(0.04f));
-            addDrop.accept(Items.WAYFINDER_ARMOR_TRIM_SMITHING_TEMPLATE, chance(0.01f));
-            addDrop.accept(Items.SHAPER_ARMOR_TRIM_SMITHING_TEMPLATE, chance(0.01f));
-            addDrop.accept(Items.HOST_ARMOR_TRIM_SMITHING_TEMPLATE, chance(0.01f));
-            addDrop.accept(Items.RAISER_ARMOR_TRIM_SMITHING_TEMPLATE, chance(0.01f));
-            addDrop.accept(Items.COAST_ARMOR_TRIM_SMITHING_TEMPLATE, chance(0.01f));
+            addDrop.accept(EItems.RANDOM_ARMOR_TRIM.get(), chance(0.02f));
+
+            addConditionalDrop.accept(ModCompatData.CERTUS_QUARTZ_CRYSTAL.get(), chance(0.07f), modInstalled(ModIds.APPLIED_ENERGISTICS_2));
+            addConditionalDrop.accept(ModCompatData.CHARGED_CERTUS_QUARTZ_CRYSTAL.get(), chance(0.015f), modInstalled(ModIds.APPLIED_ENERGISTICS_2));
         });
         forMesh(writer, ingredient(Items.SAND), EItems.DIAMOND_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
             addDrop.accept(Items.FLINT, chance(0.23f));
@@ -348,6 +355,9 @@ class SieveRecipes {
             addDrop.accept(Items.IRON_NUGGET, chance(0.22f));
             addDrop.accept(Items.PRISMARINE_SHARD, chance(0.09f));
             addDrop.accept(Items.PRISMARINE_CRYSTALS, chance(0.09f));
+
+            addConditionalDrop.accept(ModCompatData.CERTUS_QUARTZ_CRYSTAL.get(), chance(0.09f), modInstalled(ModIds.APPLIED_ENERGISTICS_2));
+            addConditionalDrop.accept(ModCompatData.CHARGED_CERTUS_QUARTZ_CRYSTAL.get(), chance(0.02f), modInstalled(ModIds.APPLIED_ENERGISTICS_2));
         });
         forMesh(writer, ingredient(Items.SAND), EItems.NETHERITE_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
             addDrop.accept(Items.CACTUS, chance(0.15f));
@@ -358,6 +368,9 @@ class SieveRecipes {
             addDrop.accept(Items.SEA_PICKLE, chance(0.07f));
             addDrop.accept(Items.PRISMARINE_SHARD, chance(0.12f));
             addDrop.accept(Items.PRISMARINE_CRYSTALS, chance(0.12f));
+
+            addConditionalDrop.accept(ModCompatData.CERTUS_QUARTZ_CRYSTAL.get(), chance(0.095f), modInstalled(ModIds.APPLIED_ENERGISTICS_2));
+            addConditionalDrop.accept(ModCompatData.CHARGED_CERTUS_QUARTZ_CRYSTAL.get(), chance(0.035f), modInstalled(ModIds.APPLIED_ENERGISTICS_2));
         });
 
         // Red Sand -> String mesh
@@ -411,7 +424,7 @@ class SieveRecipes {
             addDrop.accept(Items.BLAZE_POWDER, chance(0.03f));
 
             addConditionalDrop.accept(ModCompatData.GRAINS_OF_INFINITY.get(), chance(0.06f), modInstalled(ModIds.ENDERIO));
-            addConditionalDrop.accept(ModCompatData.YELLORITE_DUST.get(), chance(0.05f), modInstalled(ModIds.EXTREME_REACTORS));
+            addConditionalDrop.accept(ModCompatData.YELLORIUM_DUST.get(), chance(0.05f), modInstalled(ModIds.EXTREME_REACTORS));
         });
         forMesh(writer, ingredient(EItems.DUST.get()), EItems.FLINT_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
             addDrop.accept(Items.GUNPOWDER, chance(0.11f));
@@ -421,7 +434,7 @@ class SieveRecipes {
             addDrop.accept(Items.BLAZE_POWDER, chance(0.04f));
 
             addConditionalDrop.accept(ModCompatData.GRAINS_OF_INFINITY.get(), chance(0.07f), modInstalled(ModIds.ENDERIO));
-            addConditionalDrop.accept(ModCompatData.YELLORITE_DUST.get(), chance(0.055f), modInstalled(ModIds.EXTREME_REACTORS));
+            addConditionalDrop.accept(ModCompatData.YELLORIUM_DUST.get(), chance(0.055f), modInstalled(ModIds.EXTREME_REACTORS));
         });
         forMesh(writer, ingredient(EItems.DUST.get()), EItems.IRON_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
             addDrop.accept(Items.GUNPOWDER, chance(0.13f));
@@ -432,7 +445,7 @@ class SieveRecipes {
             addDrop.accept(Items.IRON_NUGGET, chance(0.06f));
 
             addConditionalDrop.accept(ModCompatData.GRAINS_OF_INFINITY.get(), chance(0.09f), modInstalled(ModIds.ENDERIO));
-            addConditionalDrop.accept(ModCompatData.YELLORITE_DUST.get(), chance(0.08f), modInstalled(ModIds.EXTREME_REACTORS));
+            addConditionalDrop.accept(ModCompatData.YELLORIUM_DUST.get(), chance(0.08f), modInstalled(ModIds.EXTREME_REACTORS));
         });
         forMesh(writer, ingredient(EItems.DUST.get()), EItems.GOLDEN_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
             addDrop.accept(Items.GUNPOWDER, chance(0.13f));
@@ -444,7 +457,7 @@ class SieveRecipes {
             addDrop.accept(Items.RAW_GOLD, chance(0.02f));
 
             addConditionalDrop.accept(ModCompatData.GRAINS_OF_INFINITY.get(), chance(0.11f), modInstalled(ModIds.ENDERIO));
-            addConditionalDrop.accept(ModCompatData.YELLORITE_DUST.get(), chance(0.10f), modInstalled(ModIds.EXTREME_REACTORS));
+            addConditionalDrop.accept(ModCompatData.YELLORIUM_DUST.get(), chance(0.10f), modInstalled(ModIds.EXTREME_REACTORS));
         });
         forMesh(writer, ingredient(EItems.DUST.get()), EItems.DIAMOND_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
             addDrop.accept(Items.GUNPOWDER, chance(0.14f));
@@ -455,7 +468,7 @@ class SieveRecipes {
             addDrop.accept(Items.GOLD_NUGGET, chance(0.08f));
 
             addConditionalDrop.accept(ModCompatData.GRAINS_OF_INFINITY.get(), chance(0.12f), modInstalled(ModIds.ENDERIO));
-            addConditionalDrop.accept(ModCompatData.YELLORITE_DUST.get(), chance(0.12f), modInstalled(ModIds.EXTREME_REACTORS));
+            addConditionalDrop.accept(ModCompatData.YELLORIUM_DUST.get(), chance(0.12f), modInstalled(ModIds.EXTREME_REACTORS));
         });
         forMesh(writer, ingredient(EItems.DUST.get()), EItems.NETHERITE_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
             addDrop.accept(Items.GUNPOWDER, chance(0.14f));
@@ -467,7 +480,7 @@ class SieveRecipes {
             addDrop.accept(Items.IRON_NUGGET, chance(0.08f));
 
             addConditionalDrop.accept(ModCompatData.GRAINS_OF_INFINITY.get(), chance(0.135f), modInstalled(ModIds.ENDERIO));
-            addConditionalDrop.accept(ModCompatData.YELLORITE_DUST.get(), chance(0.14f), modInstalled(ModIds.EXTREME_REACTORS));
+            addConditionalDrop.accept(ModCompatData.YELLORIUM_DUST.get(), chance(0.14f), modInstalled(ModIds.EXTREME_REACTORS));
         });
 
         // Crushed Deepslate -> String mesh
@@ -816,6 +829,26 @@ class SieveRecipes {
                 addDrop.accept(Items.SMALL_DRIPLEAF, chance(0.07f + j * 0.025f));
                 addDrop.accept(Items.BIG_DRIPLEAF, chance(0.05f + j * 0.02f));
                 addDrop.accept(Items.SPORE_BLOSSOM, chance(0.03f + j * 0.015f));
+
+                var bop = modInstalled(ModIds.BIOMES_O_PLENTY);
+                addConditionalDrop.accept(ModCompatData.ORIGIN_SAPLING.get(), chance(0.04f), bop);
+                addConditionalDrop.accept(ModCompatData.FLOWERING_OAK_SAPLING.get(), chance(0.04f), bop);
+                addConditionalDrop.accept(ModCompatData.SNOWBLOSSOM_SAPLING.get(), chance(0.04f), bop);
+                addConditionalDrop.accept(ModCompatData.RAINBOW_BIRCH_SAPLING.get(), chance(0.04f), bop);
+                addConditionalDrop.accept(ModCompatData.YELLOW_AUTUMN_SAPLING.get(), chance(0.04f), bop);
+                addConditionalDrop.accept(ModCompatData.ORANGE_AUTUMN_SAPLING.get(), chance(0.04f), bop);
+                addConditionalDrop.accept(ModCompatData.MAPLE_SAPLING.get(), chance(0.04f), bop);
+
+                addConditionalDrop.accept(ModCompatData.FIR_SAPLING.get(), chance(0.04f), bop);
+                addConditionalDrop.accept(ModCompatData.REDWOOD_SAPLING.get(), chance(0.04f), bop);
+                addConditionalDrop.accept(ModCompatData.MAHOGANY_SAPLING.get(), chance(0.04f), bop);
+                addConditionalDrop.accept(ModCompatData.JACARANDA_SAPLING.get(), chance(0.04f), bop);
+                addConditionalDrop.accept(ModCompatData.PALM_SAPLING.get(), chance(0.04f), bop);
+                addConditionalDrop.accept(ModCompatData.WILLOW_SAPLING.get(), chance(0.04f), bop);
+                addConditionalDrop.accept(ModCompatData.DEAD_SAPLING.get(), chance(0.04f), bop);
+                addConditionalDrop.accept(ModCompatData.MAGIC_SAPLING.get(), chance(0.04f), bop);
+                addConditionalDrop.accept(ModCompatData.UMBRAN_SAPLING.get(), chance(0.04f), bop);
+                addConditionalDrop.accept(ModCompatData.HELLBARK_SAPLING.get(), chance(0.04f), bop);
             });
         }
         forMesh(writer, ingredient(Items.MOSS_BLOCK), EItems.FLINT_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
@@ -859,10 +892,6 @@ class SieveRecipes {
 
         default void accept(Item result, NumberProvider resultAmount, ICondition condition) {
             this.accept(Either.left(result), resultAmount, condition);
-        }
-
-        default void accept(TagKey<Item> result, NumberProvider resultAmount, ICondition condition) {
-            this.accept(Either.right(result), resultAmount, condition);
         }
     }
 

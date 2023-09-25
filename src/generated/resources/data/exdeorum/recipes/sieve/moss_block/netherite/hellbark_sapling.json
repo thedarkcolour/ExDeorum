@@ -1,0 +1,26 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "biomesoplenty"
+        }
+      ],
+      "recipe": {
+        "type": "exdeorum:sieve",
+        "ingredient": {
+          "item": "minecraft:moss_block"
+        },
+        "mesh": "exdeorum:netherite_mesh",
+        "result": "biomesoplenty:hellbark_sapling",
+        "result_amount": {
+          "type": "minecraft:binomial",
+          "n": 1.0,
+          "p": 0.04
+        }
+      }
+    }
+  ]
+}

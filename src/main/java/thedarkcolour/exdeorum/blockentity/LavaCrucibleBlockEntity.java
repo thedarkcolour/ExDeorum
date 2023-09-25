@@ -18,6 +18,7 @@
 
 package thedarkcolour.exdeorum.blockentity;
 
+import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.core.BlockPos;
@@ -30,17 +31,18 @@ import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.recipe.crucible.CrucibleRecipe;
 import thedarkcolour.exdeorum.registry.EBlockEntities;
 
+import javax.annotation.Nullable;
 import java.util.function.Predicate;
 
 public class LavaCrucibleBlockEntity extends AbstractCrucibleBlockEntity {
-    // todo add KubeJS support for this
-    private static final Object2IntMap<BlockState> HEAT_REGISTRY = new Object2IntOpenHashMap<>();
+    public static final Object2IntMap<BlockState> HEAT_REGISTRY = new Object2IntOpenHashMap<>();
+    public static final Object2IntMap<BlockState> KUBEJS_HEAT_VALUES = new Object2IntLinkedOpenHashMap<>();
 
     static {
         putDefaultHeatValues();
     }
 
-    private static void putDefaultHeatValues() {
+    public static void putDefaultHeatValues() {
         HEAT_REGISTRY.clear();
 
         putAllStates(Blocks.TORCH, 1);
@@ -55,10 +57,15 @@ public class LavaCrucibleBlockEntity extends AbstractCrucibleBlockEntity {
 
         putStates(Blocks.CAMPFIRE, 2, state -> state.getValue(CampfireBlock.LIT));
         putStates(Blocks.SOUL_CAMPFIRE, 2, state -> state.getValue(CampfireBlock.LIT));
+
+        HEAT_REGISTRY.putAll(KUBEJS_HEAT_VALUES);
+        KUBEJS_HEAT_VALUES.clear();
     }
 
     public static void putAllStates(Block block, int heat) {
-        putStates(block, heat, state -> true);
+        for (var state : block.getStateDefinition().getPossibleStates()) {
+            HEAT_REGISTRY.put(state, heat);
+        }
     }
 
     public static void putStates(Block block, int heat, Predicate<BlockState> predicate) {
@@ -81,7 +88,7 @@ public class LavaCrucibleBlockEntity extends AbstractCrucibleBlockEntity {
     }
 
     @Override
-    protected CrucibleRecipe getRecipe(ItemStack item) {
+    protected @Nullable CrucibleRecipe getRecipe(ItemStack item) {
         return RecipeUtil.getLavaCrucibleRecipe(item);
     }
 

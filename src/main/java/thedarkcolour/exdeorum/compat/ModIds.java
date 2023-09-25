@@ -33,4 +33,6 @@ public class ModIds {
     public static final String MEKANISM = "mekanism";
     public static final String CREATE = "create";
     public static final String ENDERIO = "enderio";
+    public static final String BIOMES_O_PLENTY = "biomesoplenty";
+    public static final String APPLIED_ENERGISTICS_2 = "ae2";
 }
