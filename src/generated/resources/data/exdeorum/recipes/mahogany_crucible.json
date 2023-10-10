@@ -1,0 +1,34 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "biomesoplenty"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "m": {
+            "item": "biomesoplenty:mahogany_slab"
+          },
+          "s": {
+            "item": "biomesoplenty:mahogany_log"
+          }
+        },
+        "pattern": [
+          "s s",
+          "s s",
+          "sms"
+        ],
+        "result": {
+          "item": "exdeorum:mahogany_crucible"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}

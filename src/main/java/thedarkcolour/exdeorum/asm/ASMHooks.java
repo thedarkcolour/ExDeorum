@@ -35,4 +35,17 @@ public final class ASMHooks {
             return pos;
         }
     }
+
+    /**
+     * Called in {@link net.minecraft.world.level.dimension.end.EndDragonFight#spawnExitPortal(boolean)}
+     * right before EndPodiumFeature.place is called to fix End Portal not spawning fully,
+     * with part of it being generated outside the world in the void.
+     */
+    public static BlockPos prePlaceEndPodium(BlockPos pos) {
+        if (pos.getY() < 4) {
+            return pos.above(32);
+        } else {
+            return pos.immutable();
+        }
+    }
 }

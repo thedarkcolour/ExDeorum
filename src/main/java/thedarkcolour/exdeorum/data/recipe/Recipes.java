@@ -35,9 +35,15 @@ import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.common.crafting.conditions.ICondition;
+import net.minecraftforge.common.crafting.conditions.ModLoadedCondition;
+import net.minecraftforge.common.crafting.conditions.NotCondition;
+import net.minecraftforge.common.crafting.conditions.TagEmptyCondition;
 import net.minecraftforge.registries.RegistryObject;
 import org.apache.commons.lang3.mutable.MutableObject;
 import thedarkcolour.exdeorum.ExDeorum;
+import thedarkcolour.exdeorum.compat.ModIds;
+import thedarkcolour.exdeorum.data.ModCompatData;
 import thedarkcolour.exdeorum.recipe.TagResultRecipe;
 import thedarkcolour.exdeorum.recipe.barrel.FinishedBarrelCompostRecipe;
 import thedarkcolour.exdeorum.recipe.barrel.FinishedBarrelMixingRecipe;
@@ -50,6 +56,7 @@ import thedarkcolour.exdeorum.registry.ERecipeSerializers;
 import thedarkcolour.exdeorum.tag.EItemTags;
 import thedarkcolour.modkit.data.MKRecipeProvider;
 
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -95,6 +102,17 @@ public class Recipes {
         uShaped(recipes, EItems.CRIMSON_CRUCIBLE, ingredient(Items.CRIMSON_STEM), ingredient(Items.CRIMSON_SLAB));
         uShaped(recipes, EItems.WARPED_CRUCIBLE, ingredient(Items.WARPED_STEM), ingredient(Items.WARPED_SLAB));
         uShaped(recipes, EItems.UNFIRED_PORCELAIN_CRUCIBLE, ingredient(EItems.PORCELAIN_CLAY_BALL.get()), ingredient(EItems.PORCELAIN_CLAY_BALL.get()));
+        // Modded crucibles
+        bopUShaped(recipes, EItems.FIR_CRUCIBLE, ModCompatData.FIR_LOG_ITEM, ModCompatData.FIR_SLAB);
+        bopUShaped(recipes, EItems.REDWOOD_CRUCIBLE, ModCompatData.REDWOOD_LOG_ITEM, ModCompatData.REDWOOD_SLAB);
+        bopUShaped(recipes, EItems.MAHOGANY_CRUCIBLE, ModCompatData.MAHOGANY_LOG_ITEM, ModCompatData.MAHOGANY_SLAB);
+        bopUShaped(recipes, EItems.JACARANDA_CRUCIBLE, ModCompatData.JACARANDA_LOG_ITEM, ModCompatData.JACARANDA_SLAB);
+        bopUShaped(recipes, EItems.PALM_CRUCIBLE, ModCompatData.PALM_LOG_ITEM, ModCompatData.PALM_SLAB);
+        bopUShaped(recipes, EItems.WILLOW_CRUCIBLE, ModCompatData.WILLOW_LOG_ITEM, ModCompatData.WILLOW_SLAB);
+        bopUShaped(recipes, EItems.DEAD_CRUCIBLE, ModCompatData.DEAD_LOG_ITEM, ModCompatData.DEAD_SLAB);
+        bopUShaped(recipes, EItems.MAGIC_CRUCIBLE, ModCompatData.MAGIC_LOG_ITEM, ModCompatData.MAGIC_SLAB);
+        bopUShaped(recipes, EItems.UMBRAN_CRUCIBLE, ModCompatData.UMBRAN_LOG_ITEM, ModCompatData.UMBRAN_SLAB);
+        bopUShaped(recipes, EItems.HELLBARK_CRUCIBLE, ModCompatData.HELLBARK_LOG_ITEM, ModCompatData.HELLBARK_SLAB);
 
         // Barrels
         uShaped(recipes, EItems.OAK_BARREL, ingredient(Items.OAK_PLANKS), ingredient(Items.OAK_SLAB));
@@ -109,6 +127,17 @@ public class Recipes {
         uShaped(recipes, EItems.CRIMSON_BARREL, ingredient(Items.CRIMSON_PLANKS), ingredient(Items.CRIMSON_SLAB));
         uShaped(recipes, EItems.WARPED_BARREL, ingredient(Items.WARPED_PLANKS), ingredient(Items.WARPED_SLAB));
         uShaped(recipes, EItems.STONE_BARREL, ingredient(Items.STONE), ingredient(Items.STONE_SLAB));
+        // Modded barrels
+        bopUShaped(recipes, EItems.FIR_BARREL, ModCompatData.FIR_PLANKS_ITEM, ModCompatData.FIR_SLAB);
+        bopUShaped(recipes, EItems.REDWOOD_BARREL, ModCompatData.REDWOOD_PLANKS_ITEM, ModCompatData.REDWOOD_SLAB);
+        bopUShaped(recipes, EItems.MAHOGANY_BARREL, ModCompatData.MAHOGANY_PLANKS_ITEM, ModCompatData.MAHOGANY_SLAB);
+        bopUShaped(recipes, EItems.JACARANDA_BARREL, ModCompatData.JACARANDA_PLANKS_ITEM, ModCompatData.JACARANDA_SLAB);
+        bopUShaped(recipes, EItems.PALM_BARREL, ModCompatData.PALM_PLANKS_ITEM, ModCompatData.PALM_SLAB);
+        bopUShaped(recipes, EItems.WILLOW_BARREL, ModCompatData.WILLOW_PLANKS_ITEM, ModCompatData.WILLOW_SLAB);
+        bopUShaped(recipes, EItems.DEAD_BARREL, ModCompatData.DEAD_PLANKS_ITEM, ModCompatData.DEAD_SLAB);
+        bopUShaped(recipes, EItems.MAGIC_BARREL, ModCompatData.MAGIC_PLANKS_ITEM, ModCompatData.MAGIC_SLAB);
+        bopUShaped(recipes, EItems.UMBRAN_BARREL, ModCompatData.UMBRAN_PLANKS_ITEM, ModCompatData.UMBRAN_SLAB);
+        bopUShaped(recipes, EItems.HELLBARK_BARREL, ModCompatData.HELLBARK_PLANKS_ITEM, ModCompatData.HELLBARK_SLAB);
 
         // Pebbles and ore chunks
         recipes.grid2x2(Items.COBBLESTONE, ingredient(EItems.STONE_PEBBLE));
@@ -150,6 +179,17 @@ public class Recipes {
         sieve(recipes, EItems.BAMBOO_SIEVE, Items.BAMBOO_PLANKS, Items.BAMBOO_SLAB);
         sieve(recipes, EItems.CRIMSON_SIEVE, Items.CRIMSON_PLANKS, Items.CRIMSON_SLAB);
         sieve(recipes, EItems.WARPED_SIEVE, Items.WARPED_PLANKS, Items.WARPED_SLAB);
+        // Modded sieves
+        bopSieve(recipes, EItems.FIR_SIEVE, ModCompatData.FIR_PLANKS_ITEM, ModCompatData.FIR_SLAB);
+        bopSieve(recipes, EItems.REDWOOD_SIEVE, ModCompatData.REDWOOD_PLANKS_ITEM, ModCompatData.REDWOOD_SLAB);
+        bopSieve(recipes, EItems.MAHOGANY_SIEVE, ModCompatData.MAHOGANY_PLANKS_ITEM, ModCompatData.MAHOGANY_SLAB);
+        bopSieve(recipes, EItems.JACARANDA_SIEVE, ModCompatData.JACARANDA_PLANKS_ITEM, ModCompatData.JACARANDA_SLAB);
+        bopSieve(recipes, EItems.PALM_SIEVE, ModCompatData.PALM_PLANKS_ITEM, ModCompatData.PALM_SLAB);
+        bopSieve(recipes, EItems.WILLOW_SIEVE, ModCompatData.WILLOW_PLANKS_ITEM, ModCompatData.WILLOW_SLAB);
+        bopSieve(recipes, EItems.DEAD_SIEVE, ModCompatData.DEAD_PLANKS_ITEM, ModCompatData.DEAD_SLAB);
+        bopSieve(recipes, EItems.MAGIC_SIEVE, ModCompatData.MAGIC_PLANKS_ITEM, ModCompatData.MAGIC_SLAB);
+        bopSieve(recipes, EItems.UMBRAN_SIEVE, ModCompatData.UMBRAN_PLANKS_ITEM, ModCompatData.UMBRAN_SLAB);
+        bopSieve(recipes, EItems.HELLBARK_SIEVE, ModCompatData.HELLBARK_PLANKS_ITEM, ModCompatData.HELLBARK_SLAB);
 
         // Meshes
         recipes.grid3x3(EItems.STRING_MESH.get(), ingredient(Tags.Items.STRING));
@@ -189,6 +229,18 @@ public class Recipes {
             recipe.pattern("PPP");
             recipe.pattern("SES");
             recipe.pattern("CCC");
+        });
+    }
+
+    private static void bopUShaped(MKRecipeProvider recipes, RegistryObject<? extends Item> result, RegistryObject<? extends Item> sides, RegistryObject<? extends Item> middle) {
+        recipes.conditional(result.getId().getPath(), List.of(modInstalled(ModIds.BIOMES_O_PLENTY)), writer1 -> {
+            uShaped(recipes, result, ingredient(sides), ingredient(middle));
+        });
+    }
+
+    private static void bopSieve(MKRecipeProvider recipes, RegistryObject<? extends Item> result, RegistryObject<? extends Item> planks, RegistryObject<? extends Item> slab) {
+        recipes.conditional(result.getId().getPath(), List.of(modInstalled(ModIds.BIOMES_O_PLENTY)), writer1 -> {
+            sieve(recipes, result, planks.get(), slab.get());
         });
     }
 
@@ -453,5 +505,13 @@ public class Recipes {
 
     private static void barrelMixing(Consumer<FinishedRecipe> writer, String suffix, Ingredient ingredient, Fluid fluidType, Item result) {
         writer.accept(new FinishedBarrelMixingRecipe(new ResourceLocation(ExDeorum.ID, "barrel_mixing/" + path(result) + suffix), ingredient, fluidType, 1000, result));
+    }
+
+    static ICondition tagNotEmpty(TagKey<Item> tag) {
+        return new NotCondition(new TagEmptyCondition(tag.location()));
+    }
+
+    static ICondition modInstalled(String modid) {
+        return new ModLoadedCondition(modid);
     }
 }

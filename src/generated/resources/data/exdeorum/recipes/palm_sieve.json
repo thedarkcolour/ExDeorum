@@ -1,0 +1,37 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "biomesoplenty"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "I": {
+            "tag": "forge:rods/wooden"
+          },
+          "O": {
+            "item": "biomesoplenty:palm_planks"
+          },
+          "_": {
+            "item": "biomesoplenty:palm_slab"
+          }
+        },
+        "pattern": [
+          "O O",
+          "O_O",
+          "I I"
+        ],
+        "result": {
+          "item": "exdeorum:palm_sieve"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}

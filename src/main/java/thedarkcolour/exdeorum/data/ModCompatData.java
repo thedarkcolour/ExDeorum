@@ -47,6 +47,36 @@ public class ModCompatData {
     public static RegistryObject<Block> MAGIC_PLANKS;
     public static RegistryObject<Block> UMBRAN_PLANKS;
     public static RegistryObject<Block> HELLBARK_PLANKS;
+    public static RegistryObject<Item> FIR_PLANKS_ITEM;
+    public static RegistryObject<Item> REDWOOD_PLANKS_ITEM;
+    public static RegistryObject<Item> MAHOGANY_PLANKS_ITEM;
+    public static RegistryObject<Item> JACARANDA_PLANKS_ITEM;
+    public static RegistryObject<Item> PALM_PLANKS_ITEM;
+    public static RegistryObject<Item> WILLOW_PLANKS_ITEM;
+    public static RegistryObject<Item> DEAD_PLANKS_ITEM;
+    public static RegistryObject<Item> MAGIC_PLANKS_ITEM;
+    public static RegistryObject<Item> UMBRAN_PLANKS_ITEM;
+    public static RegistryObject<Item> HELLBARK_PLANKS_ITEM;
+    public static RegistryObject<Item> FIR_SLAB;
+    public static RegistryObject<Item> REDWOOD_SLAB;
+    public static RegistryObject<Item> MAHOGANY_SLAB;
+    public static RegistryObject<Item> JACARANDA_SLAB;
+    public static RegistryObject<Item> PALM_SLAB;
+    public static RegistryObject<Item> WILLOW_SLAB;
+    public static RegistryObject<Item> DEAD_SLAB;
+    public static RegistryObject<Item> MAGIC_SLAB;
+    public static RegistryObject<Item> UMBRAN_SLAB;
+    public static RegistryObject<Item> HELLBARK_SLAB;
+    public static RegistryObject<Item> FIR_LOG_ITEM;
+    public static RegistryObject<Item> REDWOOD_LOG_ITEM;
+    public static RegistryObject<Item> MAHOGANY_LOG_ITEM;
+    public static RegistryObject<Item> JACARANDA_LOG_ITEM;
+    public static RegistryObject<Item> PALM_LOG_ITEM;
+    public static RegistryObject<Item> WILLOW_LOG_ITEM;
+    public static RegistryObject<Item> DEAD_LOG_ITEM;
+    public static RegistryObject<Item> MAGIC_LOG_ITEM;
+    public static RegistryObject<Item> UMBRAN_LOG_ITEM;
+    public static RegistryObject<Item> HELLBARK_LOG_ITEM;
     public static RegistryObject<Block> FIR_LOG;
     public static RegistryObject<Block> REDWOOD_LOG;
     public static RegistryObject<Block> MAHOGANY_LOG;
@@ -78,6 +108,7 @@ public class ModCompatData {
     public static RegistryObject<Item> CERTUS_QUARTZ_CRYSTAL;
     public static RegistryObject<Item> CHARGED_CERTUS_QUARTZ_CRYSTAL;
     public static RegistryObject<Item> CERTUS_QUARTZ_DUST;
+    public static RegistryObject<Item> SKY_STONE_DUST;
 
     public static void registerModData() {
         registerModItems(ModIds.ENDERIO, addItem -> GRAINS_OF_INFINITY = addItem.apply("grains_of_infinity"));
@@ -105,6 +136,26 @@ public class ModCompatData {
             HELLBARK_LOG = addBlock.apply("hellbark_log");
         });
         registerModItems(ModIds.BIOMES_O_PLENTY, addItem -> {
+            FIR_PLANKS_ITEM = addItem.apply("fir_planks");
+            REDWOOD_PLANKS_ITEM = addItem.apply("redwood_planks");
+            MAHOGANY_PLANKS_ITEM = addItem.apply("mahogany_planks");
+            JACARANDA_PLANKS_ITEM = addItem.apply("jacaranda_planks");
+            PALM_PLANKS_ITEM = addItem.apply("palm_planks");
+            WILLOW_PLANKS_ITEM = addItem.apply("willow_planks");
+            DEAD_PLANKS_ITEM = addItem.apply("dead_planks");
+            MAGIC_PLANKS_ITEM = addItem.apply("magic_planks");
+            UMBRAN_PLANKS_ITEM = addItem.apply("umbran_planks");
+            HELLBARK_PLANKS_ITEM = addItem.apply("hellbark_planks");
+            FIR_SLAB = addItem.apply("fir_slab");
+            REDWOOD_SLAB = addItem.apply("redwood_slab");
+            MAHOGANY_SLAB = addItem.apply("mahogany_slab");
+            JACARANDA_SLAB = addItem.apply("jacaranda_slab");
+            PALM_SLAB = addItem.apply("palm_slab");
+            WILLOW_SLAB = addItem.apply("willow_slab");
+            DEAD_SLAB = addItem.apply("dead_slab");
+            MAGIC_SLAB = addItem.apply("magic_slab");
+            UMBRAN_SLAB = addItem.apply("umbran_slab");
+            HELLBARK_SLAB = addItem.apply("hellbark_slab");
             ORIGIN_SAPLING = addItem.apply("origin_sapling");
             FLOWERING_OAK_SAPLING = addItem.apply("flowering_oak_sapling");
             SNOWBLOSSOM_SAPLING = addItem.apply("snowblossom_sapling");
@@ -122,11 +173,22 @@ public class ModCompatData {
             MAGIC_SAPLING = addItem.apply("magic_sapling");
             UMBRAN_SAPLING = addItem.apply("umbran_sapling");
             HELLBARK_SAPLING = addItem.apply("hellbark_sapling");
+            FIR_LOG_ITEM = addItem.apply("fir_log");
+            REDWOOD_LOG_ITEM = addItem.apply("redwood_log");
+            MAHOGANY_LOG_ITEM = addItem.apply("mahogany_log");
+            JACARANDA_LOG_ITEM = addItem.apply("jacaranda_log");
+            PALM_LOG_ITEM = addItem.apply("palm_log");
+            WILLOW_LOG_ITEM = addItem.apply("willow_log");
+            DEAD_LOG_ITEM = addItem.apply("dead_log");
+            MAGIC_LOG_ITEM = addItem.apply("magic_log");
+            UMBRAN_LOG_ITEM = addItem.apply("umbran_log");
+            HELLBARK_LOG_ITEM = addItem.apply("hellbark_log");
         });
         registerModItems(ModIds.APPLIED_ENERGISTICS_2, addItem -> {
             CERTUS_QUARTZ_CRYSTAL = addItem.apply("certus_quartz_crystal");
             CHARGED_CERTUS_QUARTZ_CRYSTAL = addItem.apply("charged_certus_quartz_crystal");
             CERTUS_QUARTZ_DUST = addItem.apply("certus_quartz_dust");
+            SKY_STONE_DUST = addItem.apply("sky_stone_dust");
         });
     }
 

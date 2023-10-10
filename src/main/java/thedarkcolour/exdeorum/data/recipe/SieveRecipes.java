@@ -29,9 +29,6 @@ import net.minecraft.world.level.storage.loot.providers.number.BinomialDistribut
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraftforge.common.crafting.ConditionalRecipe;
 import net.minecraftforge.common.crafting.conditions.ICondition;
-import net.minecraftforge.common.crafting.conditions.ModLoadedCondition;
-import net.minecraftforge.common.crafting.conditions.NotCondition;
-import net.minecraftforge.common.crafting.conditions.TagEmptyCondition;
 import net.minecraftforge.registries.RegistryObject;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.compat.ModIds;
@@ -50,6 +47,7 @@ import static net.minecraft.world.level.storage.loot.providers.number.BinomialDi
 import static thedarkcolour.modkit.data.MKRecipeProvider.ingredient;
 import static thedarkcolour.modkit.data.MKRecipeProvider.path;
 
+// todo sky stone dust from Dust block
 class SieveRecipes {
     static void sieveRecipes(Consumer<FinishedRecipe> writer) {
         var allMeshes = List.of(EItems.STRING_MESH, EItems.FLINT_MESH, EItems.IRON_MESH, EItems.GOLDEN_MESH, EItems.DIAMOND_MESH, EItems.NETHERITE_MESH);
@@ -166,14 +164,14 @@ class SieveRecipes {
             addDrop.accept(Items.EMERALD, chance(0.01f));
             addDrop.accept(Items.AMETHYST_SHARD, chance(0.01f));
 
-            addConditionalDrop.accept(EItems.ALUMINUM_ORE_CHUNK.get(), chance(0.04f), tagNotEmpty(EItemTags.ORES_ALUMINUM));
-            addConditionalDrop.accept(EItems.SILVER_ORE_CHUNK.get(), chance(0.04f), tagNotEmpty(EItemTags.ORES_SILVER));
-            addConditionalDrop.accept(EItems.LEAD_ORE_CHUNK.get(), chance(0.04f), tagNotEmpty(EItemTags.ORES_LEAD));
-            addConditionalDrop.accept(EItems.OSMIUM_ORE_CHUNK.get(), chance(0.03f), tagNotEmpty(EItemTags.ORES_OSMIUM));
-            addConditionalDrop.accept(EItems.NICKEL_ORE_CHUNK.get(), chance(0.04f), tagNotEmpty(EItemTags.ORES_NICKEL));
-            addConditionalDrop.accept(EItems.TIN_ORE_CHUNK.get(), chance(0.06f), tagNotEmpty(EItemTags.ORES_TIN));
-            addConditionalDrop.accept(EItems.ZINC_ORE_CHUNK.get(), chance(0.035f), tagNotEmpty(EItemTags.ORES_ZINC));
-            addConditionalDrop.accept(EItems.IRIDIUM_ORE_CHUNK.get(), chance(0.03f), tagNotEmpty(EItemTags.ORES_IRIDIUM));
+            addConditionalDrop.accept(EItems.ALUMINUM_ORE_CHUNK.get(), chance(0.04f), Recipes.tagNotEmpty(EItemTags.ORES_ALUMINUM));
+            addConditionalDrop.accept(EItems.SILVER_ORE_CHUNK.get(), chance(0.04f), Recipes.tagNotEmpty(EItemTags.ORES_SILVER));
+            addConditionalDrop.accept(EItems.LEAD_ORE_CHUNK.get(), chance(0.04f), Recipes.tagNotEmpty(EItemTags.ORES_LEAD));
+            addConditionalDrop.accept(EItems.OSMIUM_ORE_CHUNK.get(), chance(0.03f), Recipes.tagNotEmpty(EItemTags.ORES_OSMIUM));
+            addConditionalDrop.accept(EItems.NICKEL_ORE_CHUNK.get(), chance(0.04f), Recipes.tagNotEmpty(EItemTags.ORES_NICKEL));
+            addConditionalDrop.accept(EItems.TIN_ORE_CHUNK.get(), chance(0.06f), Recipes.tagNotEmpty(EItemTags.ORES_TIN));
+            addConditionalDrop.accept(EItems.ZINC_ORE_CHUNK.get(), chance(0.035f), Recipes.tagNotEmpty(EItemTags.ORES_ZINC));
+            addConditionalDrop.accept(EItems.IRIDIUM_ORE_CHUNK.get(), chance(0.03f), Recipes.tagNotEmpty(EItemTags.ORES_IRIDIUM));
         });
         // Gravel -> Flint mesh
         forMesh(writer, ingredient(Items.GRAVEL), EItems.FLINT_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
@@ -192,14 +190,14 @@ class SieveRecipes {
             addDrop.accept(Items.EMERALD, chance(0.015f));
             addDrop.accept(Items.AMETHYST_SHARD, chance(0.015f));
 
-            addConditionalDrop.accept(EItems.ALUMINUM_ORE_CHUNK.get(), chance(0.05f), tagNotEmpty(EItemTags.ORES_ALUMINUM));
-            addConditionalDrop.accept(EItems.SILVER_ORE_CHUNK.get(), chance(0.05f), tagNotEmpty(EItemTags.ORES_SILVER));
-            addConditionalDrop.accept(EItems.LEAD_ORE_CHUNK.get(), chance(0.05f), tagNotEmpty(EItemTags.ORES_LEAD));
-            addConditionalDrop.accept(EItems.OSMIUM_ORE_CHUNK.get(), chance(0.04f), tagNotEmpty(EItemTags.ORES_OSMIUM));
-            addConditionalDrop.accept(EItems.NICKEL_ORE_CHUNK.get(), chance(0.055f), tagNotEmpty(EItemTags.ORES_NICKEL));
-            addConditionalDrop.accept(EItems.TIN_ORE_CHUNK.get(), chance(0.07f), tagNotEmpty(EItemTags.ORES_TIN));
-            addConditionalDrop.accept(EItems.ZINC_ORE_CHUNK.get(), chance(0.04f), tagNotEmpty(EItemTags.ORES_ZINC));
-            addConditionalDrop.accept(EItems.IRIDIUM_ORE_CHUNK.get(), chance(0.03f), tagNotEmpty(EItemTags.ORES_IRIDIUM));
+            addConditionalDrop.accept(EItems.ALUMINUM_ORE_CHUNK.get(), chance(0.05f), Recipes.tagNotEmpty(EItemTags.ORES_ALUMINUM));
+            addConditionalDrop.accept(EItems.SILVER_ORE_CHUNK.get(), chance(0.05f), Recipes.tagNotEmpty(EItemTags.ORES_SILVER));
+            addConditionalDrop.accept(EItems.LEAD_ORE_CHUNK.get(), chance(0.05f), Recipes.tagNotEmpty(EItemTags.ORES_LEAD));
+            addConditionalDrop.accept(EItems.OSMIUM_ORE_CHUNK.get(), chance(0.04f), Recipes.tagNotEmpty(EItemTags.ORES_OSMIUM));
+            addConditionalDrop.accept(EItems.NICKEL_ORE_CHUNK.get(), chance(0.055f), Recipes.tagNotEmpty(EItemTags.ORES_NICKEL));
+            addConditionalDrop.accept(EItems.TIN_ORE_CHUNK.get(), chance(0.07f), Recipes.tagNotEmpty(EItemTags.ORES_TIN));
+            addConditionalDrop.accept(EItems.ZINC_ORE_CHUNK.get(), chance(0.04f), Recipes.tagNotEmpty(EItemTags.ORES_ZINC));
+            addConditionalDrop.accept(EItems.IRIDIUM_ORE_CHUNK.get(), chance(0.03f), Recipes.tagNotEmpty(EItemTags.ORES_IRIDIUM));
         });
         // Gravel -> Iron mesh
         forMesh(writer, ingredient(Items.GRAVEL), EItems.IRON_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
@@ -215,14 +213,14 @@ class SieveRecipes {
             addDrop.accept(Items.EMERALD, chance(0.04f));
             addDrop.accept(Items.AMETHYST_SHARD, chance(0.04f));
 
-            addConditionalDrop.accept(EItems.ALUMINUM_ORE_CHUNK.get(), chance(0.06f), tagNotEmpty(EItemTags.ORES_ALUMINUM));
-            addConditionalDrop.accept(EItems.SILVER_ORE_CHUNK.get(), chance(0.055f), tagNotEmpty(EItemTags.ORES_SILVER));
-            addConditionalDrop.accept(EItems.LEAD_ORE_CHUNK.get(), chance(0.06f), tagNotEmpty(EItemTags.ORES_LEAD));
-            addConditionalDrop.accept(EItems.OSMIUM_ORE_CHUNK.get(), chance(0.045f), tagNotEmpty(EItemTags.ORES_OSMIUM));
-            addConditionalDrop.accept(EItems.NICKEL_ORE_CHUNK.get(), chance(0.07f), tagNotEmpty(EItemTags.ORES_NICKEL));
-            addConditionalDrop.accept(EItems.TIN_ORE_CHUNK.get(), chance(0.09f), tagNotEmpty(EItemTags.ORES_TIN));
-            addConditionalDrop.accept(EItems.ZINC_ORE_CHUNK.get(), chance(0.06f), tagNotEmpty(EItemTags.ORES_ZINC));
-            addConditionalDrop.accept(EItems.IRIDIUM_ORE_CHUNK.get(), chance(0.04f), tagNotEmpty(EItemTags.ORES_IRIDIUM));
+            addConditionalDrop.accept(EItems.ALUMINUM_ORE_CHUNK.get(), chance(0.06f), Recipes.tagNotEmpty(EItemTags.ORES_ALUMINUM));
+            addConditionalDrop.accept(EItems.SILVER_ORE_CHUNK.get(), chance(0.055f), Recipes.tagNotEmpty(EItemTags.ORES_SILVER));
+            addConditionalDrop.accept(EItems.LEAD_ORE_CHUNK.get(), chance(0.06f), Recipes.tagNotEmpty(EItemTags.ORES_LEAD));
+            addConditionalDrop.accept(EItems.OSMIUM_ORE_CHUNK.get(), chance(0.045f), Recipes.tagNotEmpty(EItemTags.ORES_OSMIUM));
+            addConditionalDrop.accept(EItems.NICKEL_ORE_CHUNK.get(), chance(0.07f), Recipes.tagNotEmpty(EItemTags.ORES_NICKEL));
+            addConditionalDrop.accept(EItems.TIN_ORE_CHUNK.get(), chance(0.09f), Recipes.tagNotEmpty(EItemTags.ORES_TIN));
+            addConditionalDrop.accept(EItems.ZINC_ORE_CHUNK.get(), chance(0.06f), Recipes.tagNotEmpty(EItemTags.ORES_ZINC));
+            addConditionalDrop.accept(EItems.IRIDIUM_ORE_CHUNK.get(), chance(0.04f), Recipes.tagNotEmpty(EItemTags.ORES_IRIDIUM));
         });
         // Golden mesh has much higher drops for gold and gems, but at the cost of much lower drops for metals
         // Gravel -> Golden mesh
@@ -241,14 +239,14 @@ class SieveRecipes {
             addDrop.accept(Items.GOLD_NUGGET, chance(0.08f));
             addDrop.accept(Items.RAW_GOLD, chance(0.02f));
 
-            addConditionalDrop.accept(EItems.ALUMINUM_ORE_CHUNK.get(), chance(0.07f), tagNotEmpty(EItemTags.ORES_ALUMINUM));
-            addConditionalDrop.accept(EItems.SILVER_ORE_CHUNK.get(), chance(0.12f), tagNotEmpty(EItemTags.ORES_SILVER));
-            addConditionalDrop.accept(EItems.LEAD_ORE_CHUNK.get(), chance(0.07f), tagNotEmpty(EItemTags.ORES_LEAD));
-            addConditionalDrop.accept(EItems.OSMIUM_ORE_CHUNK.get(), chance(0.05f), tagNotEmpty(EItemTags.ORES_OSMIUM));
-            addConditionalDrop.accept(EItems.NICKEL_ORE_CHUNK.get(), chance(0.07f), tagNotEmpty(EItemTags.ORES_NICKEL));
-            addConditionalDrop.accept(EItems.TIN_ORE_CHUNK.get(), chance(0.07f), tagNotEmpty(EItemTags.ORES_TIN));
-            addConditionalDrop.accept(EItems.ZINC_ORE_CHUNK.get(), chance(0.05f), tagNotEmpty(EItemTags.ORES_ZINC));
-            addConditionalDrop.accept(EItems.IRIDIUM_ORE_CHUNK.get(), chance(0.05f), tagNotEmpty(EItemTags.ORES_IRIDIUM));
+            addConditionalDrop.accept(EItems.ALUMINUM_ORE_CHUNK.get(), chance(0.07f), Recipes.tagNotEmpty(EItemTags.ORES_ALUMINUM));
+            addConditionalDrop.accept(EItems.SILVER_ORE_CHUNK.get(), chance(0.12f), Recipes.tagNotEmpty(EItemTags.ORES_SILVER));
+            addConditionalDrop.accept(EItems.LEAD_ORE_CHUNK.get(), chance(0.07f), Recipes.tagNotEmpty(EItemTags.ORES_LEAD));
+            addConditionalDrop.accept(EItems.OSMIUM_ORE_CHUNK.get(), chance(0.05f), Recipes.tagNotEmpty(EItemTags.ORES_OSMIUM));
+            addConditionalDrop.accept(EItems.NICKEL_ORE_CHUNK.get(), chance(0.07f), Recipes.tagNotEmpty(EItemTags.ORES_NICKEL));
+            addConditionalDrop.accept(EItems.TIN_ORE_CHUNK.get(), chance(0.07f), Recipes.tagNotEmpty(EItemTags.ORES_TIN));
+            addConditionalDrop.accept(EItems.ZINC_ORE_CHUNK.get(), chance(0.05f), Recipes.tagNotEmpty(EItemTags.ORES_ZINC));
+            addConditionalDrop.accept(EItems.IRIDIUM_ORE_CHUNK.get(), chance(0.05f), Recipes.tagNotEmpty(EItemTags.ORES_IRIDIUM));
         });
         // Gravel -> Diamond mesh
         forMesh(writer, ingredient(Items.GRAVEL), EItems.DIAMOND_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
@@ -263,14 +261,14 @@ class SieveRecipes {
             addDrop.accept(Items.EMERALD, chance(0.07f));
             addDrop.accept(Items.AMETHYST_SHARD, chance(0.06f));
 
-            addConditionalDrop.accept(EItems.ALUMINUM_ORE_CHUNK.get(), chance(0.08f), tagNotEmpty(EItemTags.ORES_ALUMINUM));
-            addConditionalDrop.accept(EItems.SILVER_ORE_CHUNK.get(), chance(0.08f), tagNotEmpty(EItemTags.ORES_SILVER));
-            addConditionalDrop.accept(EItems.LEAD_ORE_CHUNK.get(), chance(0.09f), tagNotEmpty(EItemTags.ORES_LEAD));
-            addConditionalDrop.accept(EItems.OSMIUM_ORE_CHUNK.get(), chance(0.07f), tagNotEmpty(EItemTags.ORES_OSMIUM));
-            addConditionalDrop.accept(EItems.NICKEL_ORE_CHUNK.get(), chance(0.09f), tagNotEmpty(EItemTags.ORES_NICKEL));
-            addConditionalDrop.accept(EItems.TIN_ORE_CHUNK.get(), chance(0.11f), tagNotEmpty(EItemTags.ORES_TIN));
-            addConditionalDrop.accept(EItems.ZINC_ORE_CHUNK.get(), chance(0.08f), tagNotEmpty(EItemTags.ORES_ZINC));
-            addConditionalDrop.accept(EItems.IRIDIUM_ORE_CHUNK.get(), chance(0.05f), tagNotEmpty(EItemTags.ORES_IRIDIUM));
+            addConditionalDrop.accept(EItems.ALUMINUM_ORE_CHUNK.get(), chance(0.08f), Recipes.tagNotEmpty(EItemTags.ORES_ALUMINUM));
+            addConditionalDrop.accept(EItems.SILVER_ORE_CHUNK.get(), chance(0.08f), Recipes.tagNotEmpty(EItemTags.ORES_SILVER));
+            addConditionalDrop.accept(EItems.LEAD_ORE_CHUNK.get(), chance(0.09f), Recipes.tagNotEmpty(EItemTags.ORES_LEAD));
+            addConditionalDrop.accept(EItems.OSMIUM_ORE_CHUNK.get(), chance(0.07f), Recipes.tagNotEmpty(EItemTags.ORES_OSMIUM));
+            addConditionalDrop.accept(EItems.NICKEL_ORE_CHUNK.get(), chance(0.09f), Recipes.tagNotEmpty(EItemTags.ORES_NICKEL));
+            addConditionalDrop.accept(EItems.TIN_ORE_CHUNK.get(), chance(0.11f), Recipes.tagNotEmpty(EItemTags.ORES_TIN));
+            addConditionalDrop.accept(EItems.ZINC_ORE_CHUNK.get(), chance(0.08f), Recipes.tagNotEmpty(EItemTags.ORES_ZINC));
+            addConditionalDrop.accept(EItems.IRIDIUM_ORE_CHUNK.get(), chance(0.05f), Recipes.tagNotEmpty(EItemTags.ORES_IRIDIUM));
         });
         // Gravel -> Netherite mesh
         forMesh(writer, ingredient(Items.GRAVEL), EItems.NETHERITE_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
@@ -286,14 +284,14 @@ class SieveRecipes {
             addDrop.accept(Items.GOLD_NUGGET, chance(0.04f));
             addDrop.accept(Items.RAW_GOLD, chance(0.01f));
 
-            addConditionalDrop.accept(EItems.ALUMINUM_ORE_CHUNK.get(), chance(0.09f), tagNotEmpty(EItemTags.ORES_ALUMINUM));
-            addConditionalDrop.accept(EItems.SILVER_ORE_CHUNK.get(), chance(0.11f), tagNotEmpty(EItemTags.ORES_SILVER));
-            addConditionalDrop.accept(EItems.LEAD_ORE_CHUNK.get(), chance(0.11f), tagNotEmpty(EItemTags.ORES_LEAD));
-            addConditionalDrop.accept(EItems.OSMIUM_ORE_CHUNK.get(), chance(0.09f), tagNotEmpty(EItemTags.ORES_OSMIUM));
-            addConditionalDrop.accept(EItems.NICKEL_ORE_CHUNK.get(), chance(0.10f), tagNotEmpty(EItemTags.ORES_NICKEL));
-            addConditionalDrop.accept(EItems.TIN_ORE_CHUNK.get(), chance(0.12f), tagNotEmpty(EItemTags.ORES_TIN));
-            addConditionalDrop.accept(EItems.ZINC_ORE_CHUNK.get(), chance(0.08f), tagNotEmpty(EItemTags.ORES_ZINC));
-            addConditionalDrop.accept(EItems.IRIDIUM_ORE_CHUNK.get(), chance(0.055f), tagNotEmpty(EItemTags.ORES_IRIDIUM));
+            addConditionalDrop.accept(EItems.ALUMINUM_ORE_CHUNK.get(), chance(0.09f), Recipes.tagNotEmpty(EItemTags.ORES_ALUMINUM));
+            addConditionalDrop.accept(EItems.SILVER_ORE_CHUNK.get(), chance(0.11f), Recipes.tagNotEmpty(EItemTags.ORES_SILVER));
+            addConditionalDrop.accept(EItems.LEAD_ORE_CHUNK.get(), chance(0.11f), Recipes.tagNotEmpty(EItemTags.ORES_LEAD));
+            addConditionalDrop.accept(EItems.OSMIUM_ORE_CHUNK.get(), chance(0.09f), Recipes.tagNotEmpty(EItemTags.ORES_OSMIUM));
+            addConditionalDrop.accept(EItems.NICKEL_ORE_CHUNK.get(), chance(0.10f), Recipes.tagNotEmpty(EItemTags.ORES_NICKEL));
+            addConditionalDrop.accept(EItems.TIN_ORE_CHUNK.get(), chance(0.12f), Recipes.tagNotEmpty(EItemTags.ORES_TIN));
+            addConditionalDrop.accept(EItems.ZINC_ORE_CHUNK.get(), chance(0.08f), Recipes.tagNotEmpty(EItemTags.ORES_ZINC));
+            addConditionalDrop.accept(EItems.IRIDIUM_ORE_CHUNK.get(), chance(0.055f), Recipes.tagNotEmpty(EItemTags.ORES_IRIDIUM));
         });
 
         // Sand -> String mesh
@@ -306,8 +304,8 @@ class SieveRecipes {
             addDrop.accept(Items.KELP, chance(0.1f));
             addDrop.accept(Items.SEA_PICKLE, chance(0.05f));
 
-            addConditionalDrop.accept(ModCompatData.CERTUS_QUARTZ_CRYSTAL.get(), chance(0.03f), modInstalled(ModIds.APPLIED_ENERGISTICS_2));
-            addConditionalDrop.accept(ModCompatData.CHARGED_CERTUS_QUARTZ_CRYSTAL.get(), chance(0.005f), modInstalled(ModIds.APPLIED_ENERGISTICS_2));
+            addConditionalDrop.accept(ModCompatData.CERTUS_QUARTZ_CRYSTAL.get(), chance(0.03f), Recipes.modInstalled(ModIds.APPLIED_ENERGISTICS_2));
+            addConditionalDrop.accept(ModCompatData.CHARGED_CERTUS_QUARTZ_CRYSTAL.get(), chance(0.005f), Recipes.modInstalled(ModIds.APPLIED_ENERGISTICS_2));
         });
         forMesh(writer, ingredient(Items.SAND), EItems.FLINT_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
             addDrop.accept(Items.FLINT, binomial(2, 0.2f));
@@ -316,8 +314,8 @@ class SieveRecipes {
             addDrop.accept(Items.IRON_NUGGET, chance(0.16f));
             addDrop.accept(EItems.RANDOM_POTTERY_SHERD.get(), chance(0.04f));
 
-            addConditionalDrop.accept(ModCompatData.CERTUS_QUARTZ_CRYSTAL.get(), chance(0.04f), modInstalled(ModIds.APPLIED_ENERGISTICS_2));
-            addConditionalDrop.accept(ModCompatData.CHARGED_CERTUS_QUARTZ_CRYSTAL.get(), chance(0.005f), modInstalled(ModIds.APPLIED_ENERGISTICS_2));
+            addConditionalDrop.accept(ModCompatData.CERTUS_QUARTZ_CRYSTAL.get(), chance(0.04f), Recipes.modInstalled(ModIds.APPLIED_ENERGISTICS_2));
+            addConditionalDrop.accept(ModCompatData.CHARGED_CERTUS_QUARTZ_CRYSTAL.get(), chance(0.005f), Recipes.modInstalled(ModIds.APPLIED_ENERGISTICS_2));
         });
         forMesh(writer, ingredient(Items.SAND), EItems.IRON_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
             addDrop.accept(Items.CACTUS, chance(0.13f));
@@ -330,8 +328,8 @@ class SieveRecipes {
             addDrop.accept(Items.PRISMARINE_SHARD, chance(0.06f));
             addDrop.accept(Items.PRISMARINE_CRYSTALS, chance(0.06f));
 
-            addConditionalDrop.accept(ModCompatData.CERTUS_QUARTZ_CRYSTAL.get(), chance(0.06f), modInstalled(ModIds.APPLIED_ENERGISTICS_2));
-            addConditionalDrop.accept(ModCompatData.CHARGED_CERTUS_QUARTZ_CRYSTAL.get(), chance(0.0125f), modInstalled(ModIds.APPLIED_ENERGISTICS_2));
+            addConditionalDrop.accept(ModCompatData.CERTUS_QUARTZ_CRYSTAL.get(), chance(0.06f), Recipes.modInstalled(ModIds.APPLIED_ENERGISTICS_2));
+            addConditionalDrop.accept(ModCompatData.CHARGED_CERTUS_QUARTZ_CRYSTAL.get(), chance(0.0125f), Recipes.modInstalled(ModIds.APPLIED_ENERGISTICS_2));
         });
         forMesh(writer, ingredient(Items.SAND), EItems.GOLDEN_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
             addDrop.accept(Items.CACTUS, chance(0.10f));
@@ -346,8 +344,8 @@ class SieveRecipes {
             addDrop.accept(Items.RAW_GOLD, chance(0.04f));
             addDrop.accept(EItems.RANDOM_ARMOR_TRIM.get(), chance(0.02f));
 
-            addConditionalDrop.accept(ModCompatData.CERTUS_QUARTZ_CRYSTAL.get(), chance(0.07f), modInstalled(ModIds.APPLIED_ENERGISTICS_2));
-            addConditionalDrop.accept(ModCompatData.CHARGED_CERTUS_QUARTZ_CRYSTAL.get(), chance(0.015f), modInstalled(ModIds.APPLIED_ENERGISTICS_2));
+            addConditionalDrop.accept(ModCompatData.CERTUS_QUARTZ_CRYSTAL.get(), chance(0.07f), Recipes.modInstalled(ModIds.APPLIED_ENERGISTICS_2));
+            addConditionalDrop.accept(ModCompatData.CHARGED_CERTUS_QUARTZ_CRYSTAL.get(), chance(0.015f), Recipes.modInstalled(ModIds.APPLIED_ENERGISTICS_2));
         });
         forMesh(writer, ingredient(Items.SAND), EItems.DIAMOND_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
             addDrop.accept(Items.FLINT, chance(0.23f));
@@ -356,8 +354,8 @@ class SieveRecipes {
             addDrop.accept(Items.PRISMARINE_SHARD, chance(0.09f));
             addDrop.accept(Items.PRISMARINE_CRYSTALS, chance(0.09f));
 
-            addConditionalDrop.accept(ModCompatData.CERTUS_QUARTZ_CRYSTAL.get(), chance(0.09f), modInstalled(ModIds.APPLIED_ENERGISTICS_2));
-            addConditionalDrop.accept(ModCompatData.CHARGED_CERTUS_QUARTZ_CRYSTAL.get(), chance(0.02f), modInstalled(ModIds.APPLIED_ENERGISTICS_2));
+            addConditionalDrop.accept(ModCompatData.CERTUS_QUARTZ_CRYSTAL.get(), chance(0.09f), Recipes.modInstalled(ModIds.APPLIED_ENERGISTICS_2));
+            addConditionalDrop.accept(ModCompatData.CHARGED_CERTUS_QUARTZ_CRYSTAL.get(), chance(0.02f), Recipes.modInstalled(ModIds.APPLIED_ENERGISTICS_2));
         });
         forMesh(writer, ingredient(Items.SAND), EItems.NETHERITE_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
             addDrop.accept(Items.CACTUS, chance(0.15f));
@@ -369,8 +367,8 @@ class SieveRecipes {
             addDrop.accept(Items.PRISMARINE_SHARD, chance(0.12f));
             addDrop.accept(Items.PRISMARINE_CRYSTALS, chance(0.12f));
 
-            addConditionalDrop.accept(ModCompatData.CERTUS_QUARTZ_CRYSTAL.get(), chance(0.095f), modInstalled(ModIds.APPLIED_ENERGISTICS_2));
-            addConditionalDrop.accept(ModCompatData.CHARGED_CERTUS_QUARTZ_CRYSTAL.get(), chance(0.035f), modInstalled(ModIds.APPLIED_ENERGISTICS_2));
+            addConditionalDrop.accept(ModCompatData.CERTUS_QUARTZ_CRYSTAL.get(), chance(0.095f), Recipes.modInstalled(ModIds.APPLIED_ENERGISTICS_2));
+            addConditionalDrop.accept(ModCompatData.CHARGED_CERTUS_QUARTZ_CRYSTAL.get(), chance(0.035f), Recipes.modInstalled(ModIds.APPLIED_ENERGISTICS_2));
         });
 
         // Red Sand -> String mesh
@@ -423,8 +421,9 @@ class SieveRecipes {
             addDrop.accept(Items.GLOWSTONE_DUST, chance(0.04f));
             addDrop.accept(Items.BLAZE_POWDER, chance(0.03f));
 
-            addConditionalDrop.accept(ModCompatData.GRAINS_OF_INFINITY.get(), chance(0.06f), modInstalled(ModIds.ENDERIO));
-            addConditionalDrop.accept(ModCompatData.YELLORIUM_DUST.get(), chance(0.05f), modInstalled(ModIds.EXTREME_REACTORS));
+            addConditionalDrop.accept(ModCompatData.GRAINS_OF_INFINITY.get(), chance(0.06f), Recipes.modInstalled(ModIds.ENDERIO));
+            addConditionalDrop.accept(ModCompatData.YELLORIUM_DUST.get(), chance(0.05f), Recipes.modInstalled(ModIds.EXTREME_REACTORS));
+
         });
         forMesh(writer, ingredient(EItems.DUST.get()), EItems.FLINT_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
             addDrop.accept(Items.GUNPOWDER, chance(0.11f));
@@ -433,8 +432,8 @@ class SieveRecipes {
             addDrop.accept(Items.GLOWSTONE_DUST, chance(0.07f));
             addDrop.accept(Items.BLAZE_POWDER, chance(0.04f));
 
-            addConditionalDrop.accept(ModCompatData.GRAINS_OF_INFINITY.get(), chance(0.07f), modInstalled(ModIds.ENDERIO));
-            addConditionalDrop.accept(ModCompatData.YELLORIUM_DUST.get(), chance(0.055f), modInstalled(ModIds.EXTREME_REACTORS));
+            addConditionalDrop.accept(ModCompatData.GRAINS_OF_INFINITY.get(), chance(0.07f), Recipes.modInstalled(ModIds.ENDERIO));
+            addConditionalDrop.accept(ModCompatData.YELLORIUM_DUST.get(), chance(0.055f), Recipes.modInstalled(ModIds.EXTREME_REACTORS));
         });
         forMesh(writer, ingredient(EItems.DUST.get()), EItems.IRON_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
             addDrop.accept(Items.GUNPOWDER, chance(0.13f));
@@ -444,8 +443,8 @@ class SieveRecipes {
             addDrop.accept(Items.BLAZE_POWDER, chance(0.05f));
             addDrop.accept(Items.IRON_NUGGET, chance(0.06f));
 
-            addConditionalDrop.accept(ModCompatData.GRAINS_OF_INFINITY.get(), chance(0.09f), modInstalled(ModIds.ENDERIO));
-            addConditionalDrop.accept(ModCompatData.YELLORIUM_DUST.get(), chance(0.08f), modInstalled(ModIds.EXTREME_REACTORS));
+            addConditionalDrop.accept(ModCompatData.GRAINS_OF_INFINITY.get(), chance(0.09f), Recipes.modInstalled(ModIds.ENDERIO));
+            addConditionalDrop.accept(ModCompatData.YELLORIUM_DUST.get(), chance(0.08f), Recipes.modInstalled(ModIds.EXTREME_REACTORS));
         });
         forMesh(writer, ingredient(EItems.DUST.get()), EItems.GOLDEN_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
             addDrop.accept(Items.GUNPOWDER, chance(0.13f));
@@ -456,8 +455,8 @@ class SieveRecipes {
             addDrop.accept(Items.GOLD_NUGGET, binomial(2, 0.18f));
             addDrop.accept(Items.RAW_GOLD, chance(0.02f));
 
-            addConditionalDrop.accept(ModCompatData.GRAINS_OF_INFINITY.get(), chance(0.11f), modInstalled(ModIds.ENDERIO));
-            addConditionalDrop.accept(ModCompatData.YELLORIUM_DUST.get(), chance(0.10f), modInstalled(ModIds.EXTREME_REACTORS));
+            addConditionalDrop.accept(ModCompatData.GRAINS_OF_INFINITY.get(), chance(0.11f), Recipes.modInstalled(ModIds.ENDERIO));
+            addConditionalDrop.accept(ModCompatData.YELLORIUM_DUST.get(), chance(0.10f), Recipes.modInstalled(ModIds.EXTREME_REACTORS));
         });
         forMesh(writer, ingredient(EItems.DUST.get()), EItems.DIAMOND_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
             addDrop.accept(Items.GUNPOWDER, chance(0.14f));
@@ -467,8 +466,8 @@ class SieveRecipes {
             addDrop.accept(Items.BLAZE_POWDER, chance(0.06f));
             addDrop.accept(Items.GOLD_NUGGET, chance(0.08f));
 
-            addConditionalDrop.accept(ModCompatData.GRAINS_OF_INFINITY.get(), chance(0.12f), modInstalled(ModIds.ENDERIO));
-            addConditionalDrop.accept(ModCompatData.YELLORIUM_DUST.get(), chance(0.12f), modInstalled(ModIds.EXTREME_REACTORS));
+            addConditionalDrop.accept(ModCompatData.GRAINS_OF_INFINITY.get(), chance(0.12f), Recipes.modInstalled(ModIds.ENDERIO));
+            addConditionalDrop.accept(ModCompatData.YELLORIUM_DUST.get(), chance(0.12f), Recipes.modInstalled(ModIds.EXTREME_REACTORS));
         });
         forMesh(writer, ingredient(EItems.DUST.get()), EItems.NETHERITE_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
             addDrop.accept(Items.GUNPOWDER, chance(0.14f));
@@ -479,8 +478,8 @@ class SieveRecipes {
             addDrop.accept(Items.GOLD_NUGGET, chance(0.08f));
             addDrop.accept(Items.IRON_NUGGET, chance(0.08f));
 
-            addConditionalDrop.accept(ModCompatData.GRAINS_OF_INFINITY.get(), chance(0.135f), modInstalled(ModIds.ENDERIO));
-            addConditionalDrop.accept(ModCompatData.YELLORIUM_DUST.get(), chance(0.14f), modInstalled(ModIds.EXTREME_REACTORS));
+            addConditionalDrop.accept(ModCompatData.GRAINS_OF_INFINITY.get(), chance(0.135f), Recipes.modInstalled(ModIds.ENDERIO));
+            addConditionalDrop.accept(ModCompatData.YELLORIUM_DUST.get(), chance(0.14f), Recipes.modInstalled(ModIds.EXTREME_REACTORS));
         });
 
         // Crushed Deepslate -> String mesh
@@ -494,14 +493,14 @@ class SieveRecipes {
             addDrop.accept(Items.LAPIS_LAZULI, chance(0.04f));
             addDrop.accept(Items.EMERALD, chance(0.03f));
 
-            addConditionalDrop.accept(EItems.SILVER_ORE_CHUNK.get(), chance(0.05f), tagNotEmpty(EItemTags.ORES_SILVER));
-            addConditionalDrop.accept(EItems.LEAD_ORE_CHUNK.get(), chance(0.05f), tagNotEmpty(EItemTags.ORES_LEAD));
-            addConditionalDrop.accept(EItems.OSMIUM_ORE_CHUNK.get(), chance(0.06f), tagNotEmpty(EItemTags.ORES_OSMIUM));
-            addConditionalDrop.accept(EItems.NICKEL_ORE_CHUNK.get(), chance(0.04f), tagNotEmpty(EItemTags.ORES_NICKEL));
-            addConditionalDrop.accept(EItems.TIN_ORE_CHUNK.get(), chance(0.05f), tagNotEmpty(EItemTags.ORES_TIN));
-            addConditionalDrop.accept(EItems.IRIDIUM_ORE_CHUNK.get(), chance(0.04f), tagNotEmpty(EItemTags.ORES_IRIDIUM));
-            addConditionalDrop.accept(EItems.PLATINUM_ORE_CHUNK.get(), chance(0.03f), tagNotEmpty(EItemTags.ORES_PLATINUM));
-            addConditionalDrop.accept(EItems.URANIUM_ORE_CHUNK.get(), chance(0.04f), tagNotEmpty(EItemTags.ORES_URANIUM));
+            addConditionalDrop.accept(EItems.SILVER_ORE_CHUNK.get(), chance(0.05f), Recipes.tagNotEmpty(EItemTags.ORES_SILVER));
+            addConditionalDrop.accept(EItems.LEAD_ORE_CHUNK.get(), chance(0.05f), Recipes.tagNotEmpty(EItemTags.ORES_LEAD));
+            addConditionalDrop.accept(EItems.OSMIUM_ORE_CHUNK.get(), chance(0.06f), Recipes.tagNotEmpty(EItemTags.ORES_OSMIUM));
+            addConditionalDrop.accept(EItems.NICKEL_ORE_CHUNK.get(), chance(0.04f), Recipes.tagNotEmpty(EItemTags.ORES_NICKEL));
+            addConditionalDrop.accept(EItems.TIN_ORE_CHUNK.get(), chance(0.05f), Recipes.tagNotEmpty(EItemTags.ORES_TIN));
+            addConditionalDrop.accept(EItems.IRIDIUM_ORE_CHUNK.get(), chance(0.04f), Recipes.tagNotEmpty(EItemTags.ORES_IRIDIUM));
+            addConditionalDrop.accept(EItems.PLATINUM_ORE_CHUNK.get(), chance(0.03f), Recipes.tagNotEmpty(EItemTags.ORES_PLATINUM));
+            addConditionalDrop.accept(EItems.URANIUM_ORE_CHUNK.get(), chance(0.04f), Recipes.tagNotEmpty(EItemTags.ORES_URANIUM));
         });
         forMesh(writer, ingredient(EItems.CRUSHED_DEEPSLATE.get()), EItems.FLINT_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
             addDrop.accept(EItems.DEEPSLATE_PEBBLE.get(), binomial(4, 0.5f));
@@ -516,14 +515,14 @@ class SieveRecipes {
             addDrop.accept(Items.LAPIS_LAZULI, chance(0.05f));
             addDrop.accept(Items.EMERALD, chance(0.04f));
 
-            addConditionalDrop.accept(EItems.SILVER_ORE_CHUNK.get(), chance(0.08f), tagNotEmpty(EItemTags.ORES_SILVER));
-            addConditionalDrop.accept(EItems.LEAD_ORE_CHUNK.get(), chance(0.08f), tagNotEmpty(EItemTags.ORES_LEAD));
-            addConditionalDrop.accept(EItems.OSMIUM_ORE_CHUNK.get(), chance(0.08f), tagNotEmpty(EItemTags.ORES_OSMIUM));
-            addConditionalDrop.accept(EItems.NICKEL_ORE_CHUNK.get(), chance(0.06f), tagNotEmpty(EItemTags.ORES_NICKEL));
-            addConditionalDrop.accept(EItems.TIN_ORE_CHUNK.get(), chance(0.07f), tagNotEmpty(EItemTags.ORES_TIN));
-            addConditionalDrop.accept(EItems.IRIDIUM_ORE_CHUNK.get(), chance(0.05f), tagNotEmpty(EItemTags.ORES_IRIDIUM));
-            addConditionalDrop.accept(EItems.PLATINUM_ORE_CHUNK.get(), chance(0.05f), tagNotEmpty(EItemTags.ORES_PLATINUM));
-            addConditionalDrop.accept(EItems.URANIUM_ORE_CHUNK.get(), chance(0.06f), tagNotEmpty(EItemTags.ORES_URANIUM));
+            addConditionalDrop.accept(EItems.SILVER_ORE_CHUNK.get(), chance(0.08f), Recipes.tagNotEmpty(EItemTags.ORES_SILVER));
+            addConditionalDrop.accept(EItems.LEAD_ORE_CHUNK.get(), chance(0.08f), Recipes.tagNotEmpty(EItemTags.ORES_LEAD));
+            addConditionalDrop.accept(EItems.OSMIUM_ORE_CHUNK.get(), chance(0.08f), Recipes.tagNotEmpty(EItemTags.ORES_OSMIUM));
+            addConditionalDrop.accept(EItems.NICKEL_ORE_CHUNK.get(), chance(0.06f), Recipes.tagNotEmpty(EItemTags.ORES_NICKEL));
+            addConditionalDrop.accept(EItems.TIN_ORE_CHUNK.get(), chance(0.07f), Recipes.tagNotEmpty(EItemTags.ORES_TIN));
+            addConditionalDrop.accept(EItems.IRIDIUM_ORE_CHUNK.get(), chance(0.05f), Recipes.tagNotEmpty(EItemTags.ORES_IRIDIUM));
+            addConditionalDrop.accept(EItems.PLATINUM_ORE_CHUNK.get(), chance(0.05f), Recipes.tagNotEmpty(EItemTags.ORES_PLATINUM));
+            addConditionalDrop.accept(EItems.URANIUM_ORE_CHUNK.get(), chance(0.06f), Recipes.tagNotEmpty(EItemTags.ORES_URANIUM));
         });
         forMesh(writer, ingredient(EItems.CRUSHED_DEEPSLATE.get()), EItems.IRON_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
             addDrop.accept(EItems.DEEPSLATE_PEBBLE.get(), binomial(4, 0.6f));
@@ -535,14 +534,14 @@ class SieveRecipes {
             addDrop.accept(Items.LAPIS_LAZULI, chance(0.08f));
             addDrop.accept(Items.EMERALD, chance(0.05f));
 
-            addConditionalDrop.accept(EItems.SILVER_ORE_CHUNK.get(), chance(0.1f), tagNotEmpty(EItemTags.ORES_SILVER));
-            addConditionalDrop.accept(EItems.LEAD_ORE_CHUNK.get(), chance(0.1f), tagNotEmpty(EItemTags.ORES_LEAD));
-            addConditionalDrop.accept(EItems.OSMIUM_ORE_CHUNK.get(), chance(0.10f), tagNotEmpty(EItemTags.ORES_OSMIUM));
-            addConditionalDrop.accept(EItems.NICKEL_ORE_CHUNK.get(), chance(0.09f), tagNotEmpty(EItemTags.ORES_NICKEL));
-            addConditionalDrop.accept(EItems.TIN_ORE_CHUNK.get(), chance(0.11f), tagNotEmpty(EItemTags.ORES_TIN));
-            addConditionalDrop.accept(EItems.IRIDIUM_ORE_CHUNK.get(), chance(0.06f), tagNotEmpty(EItemTags.ORES_IRIDIUM));
-            addConditionalDrop.accept(EItems.PLATINUM_ORE_CHUNK.get(), chance(0.065f), tagNotEmpty(EItemTags.ORES_PLATINUM));
-            addConditionalDrop.accept(EItems.URANIUM_ORE_CHUNK.get(), chance(0.08f), tagNotEmpty(EItemTags.ORES_URANIUM));
+            addConditionalDrop.accept(EItems.SILVER_ORE_CHUNK.get(), chance(0.1f), Recipes.tagNotEmpty(EItemTags.ORES_SILVER));
+            addConditionalDrop.accept(EItems.LEAD_ORE_CHUNK.get(), chance(0.1f), Recipes.tagNotEmpty(EItemTags.ORES_LEAD));
+            addConditionalDrop.accept(EItems.OSMIUM_ORE_CHUNK.get(), chance(0.10f), Recipes.tagNotEmpty(EItemTags.ORES_OSMIUM));
+            addConditionalDrop.accept(EItems.NICKEL_ORE_CHUNK.get(), chance(0.09f), Recipes.tagNotEmpty(EItemTags.ORES_NICKEL));
+            addConditionalDrop.accept(EItems.TIN_ORE_CHUNK.get(), chance(0.11f), Recipes.tagNotEmpty(EItemTags.ORES_TIN));
+            addConditionalDrop.accept(EItems.IRIDIUM_ORE_CHUNK.get(), chance(0.06f), Recipes.tagNotEmpty(EItemTags.ORES_IRIDIUM));
+            addConditionalDrop.accept(EItems.PLATINUM_ORE_CHUNK.get(), chance(0.065f), Recipes.tagNotEmpty(EItemTags.ORES_PLATINUM));
+            addConditionalDrop.accept(EItems.URANIUM_ORE_CHUNK.get(), chance(0.08f), Recipes.tagNotEmpty(EItemTags.ORES_URANIUM));
         });
         forMesh(writer, ingredient(EItems.CRUSHED_DEEPSLATE.get()), EItems.GOLDEN_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
             addDrop.accept(EItems.DEEPSLATE_PEBBLE.get(), binomial(4, 0.65f));
@@ -556,14 +555,14 @@ class SieveRecipes {
             addDrop.accept(Items.RAW_GOLD, chance(0.05f));
             addDrop.accept(Items.GOLD_NUGGET, binomial(3, 0.1f));
 
-            addConditionalDrop.accept(EItems.SILVER_ORE_CHUNK.get(), chance(0.15f), tagNotEmpty(EItemTags.ORES_SILVER));
-            addConditionalDrop.accept(EItems.LEAD_ORE_CHUNK.get(), chance(0.09f), tagNotEmpty(EItemTags.ORES_LEAD));
-            addConditionalDrop.accept(EItems.OSMIUM_ORE_CHUNK.get(), chance(0.09f), tagNotEmpty(EItemTags.ORES_OSMIUM));
-            addConditionalDrop.accept(EItems.NICKEL_ORE_CHUNK.get(), chance(0.11f), tagNotEmpty(EItemTags.ORES_NICKEL));
-            addConditionalDrop.accept(EItems.TIN_ORE_CHUNK.get(), chance(0.12f), tagNotEmpty(EItemTags.ORES_TIN));
-            addConditionalDrop.accept(EItems.IRIDIUM_ORE_CHUNK.get(), chance(0.04f), tagNotEmpty(EItemTags.ORES_IRIDIUM));
-            addConditionalDrop.accept(EItems.PLATINUM_ORE_CHUNK.get(), chance(0.09f), tagNotEmpty(EItemTags.ORES_PLATINUM));
-            addConditionalDrop.accept(EItems.URANIUM_ORE_CHUNK.get(), chance(0.07f), tagNotEmpty(EItemTags.ORES_URANIUM));
+            addConditionalDrop.accept(EItems.SILVER_ORE_CHUNK.get(), chance(0.15f), Recipes.tagNotEmpty(EItemTags.ORES_SILVER));
+            addConditionalDrop.accept(EItems.LEAD_ORE_CHUNK.get(), chance(0.09f), Recipes.tagNotEmpty(EItemTags.ORES_LEAD));
+            addConditionalDrop.accept(EItems.OSMIUM_ORE_CHUNK.get(), chance(0.09f), Recipes.tagNotEmpty(EItemTags.ORES_OSMIUM));
+            addConditionalDrop.accept(EItems.NICKEL_ORE_CHUNK.get(), chance(0.11f), Recipes.tagNotEmpty(EItemTags.ORES_NICKEL));
+            addConditionalDrop.accept(EItems.TIN_ORE_CHUNK.get(), chance(0.12f), Recipes.tagNotEmpty(EItemTags.ORES_TIN));
+            addConditionalDrop.accept(EItems.IRIDIUM_ORE_CHUNK.get(), chance(0.04f), Recipes.tagNotEmpty(EItemTags.ORES_IRIDIUM));
+            addConditionalDrop.accept(EItems.PLATINUM_ORE_CHUNK.get(), chance(0.09f), Recipes.tagNotEmpty(EItemTags.ORES_PLATINUM));
+            addConditionalDrop.accept(EItems.URANIUM_ORE_CHUNK.get(), chance(0.07f), Recipes.tagNotEmpty(EItemTags.ORES_URANIUM));
         });
         forMesh(writer, ingredient(EItems.CRUSHED_DEEPSLATE.get()), EItems.DIAMOND_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
             addDrop.accept(EItems.DEEPSLATE_PEBBLE.get(), binomial(4, 0.65f));
@@ -575,14 +574,14 @@ class SieveRecipes {
             addDrop.accept(Items.LAPIS_LAZULI, chance(0.12f));
             addDrop.accept(Items.EMERALD, chance(0.08f));
 
-            addConditionalDrop.accept(EItems.SILVER_ORE_CHUNK.get(), chance(0.11f), tagNotEmpty(EItemTags.ORES_SILVER));
-            addConditionalDrop.accept(EItems.LEAD_ORE_CHUNK.get(), chance(0.11f), tagNotEmpty(EItemTags.ORES_LEAD));
-            addConditionalDrop.accept(EItems.OSMIUM_ORE_CHUNK.get(), chance(0.12f), tagNotEmpty(EItemTags.ORES_OSMIUM));
-            addConditionalDrop.accept(EItems.NICKEL_ORE_CHUNK.get(), chance(0.11f), tagNotEmpty(EItemTags.ORES_NICKEL));
-            addConditionalDrop.accept(EItems.TIN_ORE_CHUNK.get(), chance(0.13f), tagNotEmpty(EItemTags.ORES_TIN));
-            addConditionalDrop.accept(EItems.IRIDIUM_ORE_CHUNK.get(), chance(0.065f), tagNotEmpty(EItemTags.ORES_IRIDIUM));
-            addConditionalDrop.accept(EItems.PLATINUM_ORE_CHUNK.get(), chance(0.075f), tagNotEmpty(EItemTags.ORES_PLATINUM));
-            addConditionalDrop.accept(EItems.URANIUM_ORE_CHUNK.get(), chance(0.1f), tagNotEmpty(EItemTags.ORES_URANIUM));
+            addConditionalDrop.accept(EItems.SILVER_ORE_CHUNK.get(), chance(0.11f), Recipes.tagNotEmpty(EItemTags.ORES_SILVER));
+            addConditionalDrop.accept(EItems.LEAD_ORE_CHUNK.get(), chance(0.11f), Recipes.tagNotEmpty(EItemTags.ORES_LEAD));
+            addConditionalDrop.accept(EItems.OSMIUM_ORE_CHUNK.get(), chance(0.12f), Recipes.tagNotEmpty(EItemTags.ORES_OSMIUM));
+            addConditionalDrop.accept(EItems.NICKEL_ORE_CHUNK.get(), chance(0.11f), Recipes.tagNotEmpty(EItemTags.ORES_NICKEL));
+            addConditionalDrop.accept(EItems.TIN_ORE_CHUNK.get(), chance(0.13f), Recipes.tagNotEmpty(EItemTags.ORES_TIN));
+            addConditionalDrop.accept(EItems.IRIDIUM_ORE_CHUNK.get(), chance(0.065f), Recipes.tagNotEmpty(EItemTags.ORES_IRIDIUM));
+            addConditionalDrop.accept(EItems.PLATINUM_ORE_CHUNK.get(), chance(0.075f), Recipes.tagNotEmpty(EItemTags.ORES_PLATINUM));
+            addConditionalDrop.accept(EItems.URANIUM_ORE_CHUNK.get(), chance(0.1f), Recipes.tagNotEmpty(EItemTags.ORES_URANIUM));
         });
         forMesh(writer, ingredient(EItems.CRUSHED_DEEPSLATE.get()), EItems.NETHERITE_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
             addDrop.accept(EItems.DEEPSLATE_PEBBLE.get(), binomial(4, 0.7f));
@@ -594,14 +593,14 @@ class SieveRecipes {
             addDrop.accept(Items.LAPIS_LAZULI, chance(0.14f));
             addDrop.accept(Items.EMERALD, chance(0.1f));
 
-            addConditionalDrop.accept(EItems.SILVER_ORE_CHUNK.get(), chance(0.12f), tagNotEmpty(EItemTags.ORES_SILVER));
-            addConditionalDrop.accept(EItems.LEAD_ORE_CHUNK.get(), chance(0.12f), tagNotEmpty(EItemTags.ORES_LEAD));
-            addConditionalDrop.accept(EItems.OSMIUM_ORE_CHUNK.get(), chance(0.14f), tagNotEmpty(EItemTags.ORES_OSMIUM));
-            addConditionalDrop.accept(EItems.NICKEL_ORE_CHUNK.get(), chance(0.15f), tagNotEmpty(EItemTags.ORES_NICKEL));
-            addConditionalDrop.accept(EItems.TIN_ORE_CHUNK.get(), chance(0.16f), tagNotEmpty(EItemTags.ORES_TIN));
-            addConditionalDrop.accept(EItems.IRIDIUM_ORE_CHUNK.get(), chance(0.065f), tagNotEmpty(EItemTags.ORES_IRIDIUM));
-            addConditionalDrop.accept(EItems.PLATINUM_ORE_CHUNK.get(), chance(0.09f), tagNotEmpty(EItemTags.ORES_PLATINUM));
-            addConditionalDrop.accept(EItems.URANIUM_ORE_CHUNK.get(), chance(0.12f), tagNotEmpty(EItemTags.ORES_URANIUM));
+            addConditionalDrop.accept(EItems.SILVER_ORE_CHUNK.get(), chance(0.12f), Recipes.tagNotEmpty(EItemTags.ORES_SILVER));
+            addConditionalDrop.accept(EItems.LEAD_ORE_CHUNK.get(), chance(0.12f), Recipes.tagNotEmpty(EItemTags.ORES_LEAD));
+            addConditionalDrop.accept(EItems.OSMIUM_ORE_CHUNK.get(), chance(0.14f), Recipes.tagNotEmpty(EItemTags.ORES_OSMIUM));
+            addConditionalDrop.accept(EItems.NICKEL_ORE_CHUNK.get(), chance(0.15f), Recipes.tagNotEmpty(EItemTags.ORES_NICKEL));
+            addConditionalDrop.accept(EItems.TIN_ORE_CHUNK.get(), chance(0.16f), Recipes.tagNotEmpty(EItemTags.ORES_TIN));
+            addConditionalDrop.accept(EItems.IRIDIUM_ORE_CHUNK.get(), chance(0.065f), Recipes.tagNotEmpty(EItemTags.ORES_IRIDIUM));
+            addConditionalDrop.accept(EItems.PLATINUM_ORE_CHUNK.get(), chance(0.09f), Recipes.tagNotEmpty(EItemTags.ORES_PLATINUM));
+            addConditionalDrop.accept(EItems.URANIUM_ORE_CHUNK.get(), chance(0.12f), Recipes.tagNotEmpty(EItemTags.ORES_URANIUM));
         });
 
         forMesh(writer, ingredient(EItems.CRUSHED_BLACKSTONE.get()), EItems.STRING_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
@@ -666,7 +665,7 @@ class SieveRecipes {
             addDrop.accept(EItems.CRIMSON_NYLIUM_SPORES.get(), chance(0.05f));
             addDrop.accept(Items.GOLD_NUGGET, chance(0.07f));
 
-            addConditionalDrop.accept(EItems.COBALT_ORE_CHUNK.get(), chance(0.04f), tagNotEmpty(EItemTags.ORES_COBALT));
+            addConditionalDrop.accept(EItems.COBALT_ORE_CHUNK.get(), chance(0.04f), Recipes.tagNotEmpty(EItemTags.ORES_COBALT));
         });
         forMesh(writer, ingredient(EItems.CRUSHED_NETHERRACK.get()), EItems.FLINT_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
             addDrop.accept(EItems.BLACKSTONE_PEBBLE.get(), binomial(4, 0.5f));
@@ -679,7 +678,7 @@ class SieveRecipes {
             addDrop.accept(EItems.CRIMSON_NYLIUM_SPORES.get(), chance(0.07f));
             addDrop.accept(Items.GOLD_NUGGET, chance(0.08f));
 
-            addConditionalDrop.accept(EItems.COBALT_ORE_CHUNK.get(), chance(0.05f), tagNotEmpty(EItemTags.ORES_COBALT));
+            addConditionalDrop.accept(EItems.COBALT_ORE_CHUNK.get(), chance(0.05f), Recipes.tagNotEmpty(EItemTags.ORES_COBALT));
         });
         forMesh(writer, ingredient(EItems.CRUSHED_NETHERRACK.get()), EItems.IRON_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
             addDrop.accept(EItems.BLACKSTONE_PEBBLE.get(), binomial(4, 0.6f));
@@ -692,7 +691,7 @@ class SieveRecipes {
             addDrop.accept(EItems.CRIMSON_NYLIUM_SPORES.get(), chance(0.08f));
             addDrop.accept(Items.GOLD_NUGGET, chance(0.1f));
 
-            addConditionalDrop.accept(EItems.COBALT_ORE_CHUNK.get(), chance(0.065f), tagNotEmpty(EItemTags.ORES_COBALT));
+            addConditionalDrop.accept(EItems.COBALT_ORE_CHUNK.get(), chance(0.065f), Recipes.tagNotEmpty(EItemTags.ORES_COBALT));
         });
         forMesh(writer, ingredient(EItems.CRUSHED_NETHERRACK.get()), EItems.GOLDEN_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
             addDrop.accept(EItems.BLACKSTONE_PEBBLE.get(), binomial(4, 0.6f));
@@ -706,7 +705,7 @@ class SieveRecipes {
             addDrop.accept(Items.GOLD_NUGGET, chance(0.14f));
             addDrop.accept(Items.RAW_GOLD, chance(0.03f));
 
-            addConditionalDrop.accept(EItems.COBALT_ORE_CHUNK.get(), chance(0.07f), tagNotEmpty(EItemTags.ORES_COBALT));
+            addConditionalDrop.accept(EItems.COBALT_ORE_CHUNK.get(), chance(0.07f), Recipes.tagNotEmpty(EItemTags.ORES_COBALT));
         });
         forMesh(writer, ingredient(EItems.CRUSHED_NETHERRACK.get()), EItems.DIAMOND_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
             addDrop.accept(EItems.BLACKSTONE_PEBBLE.get(), binomial(4, 0.6f));
@@ -716,7 +715,7 @@ class SieveRecipes {
             addDrop.accept(Items.GUNPOWDER, chance(0.13f));
             addDrop.accept(Items.GOLD_NUGGET, chance(0.12f));
 
-            addConditionalDrop.accept(EItems.COBALT_ORE_CHUNK.get(), chance(0.09f), tagNotEmpty(EItemTags.ORES_COBALT));
+            addConditionalDrop.accept(EItems.COBALT_ORE_CHUNK.get(), chance(0.09f), Recipes.tagNotEmpty(EItemTags.ORES_COBALT));
         });
         forMesh(writer, ingredient(EItems.CRUSHED_NETHERRACK.get()), EItems.NETHERITE_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
             addDrop.accept(EItems.BLACKSTONE_PEBBLE.get(), binomial(5, 0.65f));
@@ -726,7 +725,7 @@ class SieveRecipes {
             addDrop.accept(Items.GUNPOWDER, chance(0.13f));
             addDrop.accept(Items.GOLD_NUGGET, chance(0.12f));
 
-            addConditionalDrop.accept(EItems.COBALT_ORE_CHUNK.get(), chance(0.11f), tagNotEmpty(EItemTags.ORES_COBALT));
+            addConditionalDrop.accept(EItems.COBALT_ORE_CHUNK.get(), chance(0.11f), Recipes.tagNotEmpty(EItemTags.ORES_COBALT));
         });
 
         forMesh(writer, ingredient(Items.SOUL_SAND), EItems.STRING_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
@@ -830,7 +829,7 @@ class SieveRecipes {
                 addDrop.accept(Items.BIG_DRIPLEAF, chance(0.05f + j * 0.02f));
                 addDrop.accept(Items.SPORE_BLOSSOM, chance(0.03f + j * 0.015f));
 
-                var bop = modInstalled(ModIds.BIOMES_O_PLENTY);
+                var bop = Recipes.modInstalled(ModIds.BIOMES_O_PLENTY);
                 addConditionalDrop.accept(ModCompatData.ORIGIN_SAPLING.get(), chance(0.04f), bop);
                 addConditionalDrop.accept(ModCompatData.FLOWERING_OAK_SAPLING.get(), chance(0.04f), bop);
                 addConditionalDrop.accept(ModCompatData.SNOWBLOSSOM_SAPLING.get(), chance(0.04f), bop);
@@ -861,14 +860,6 @@ class SieveRecipes {
 
     private static BinomialDistributionGenerator chance(float p) {
         return binomial(1, p);
-    }
-
-    private static ICondition tagNotEmpty(TagKey<Item> tag) {
-        return new NotCondition(new TagEmptyCondition(tag.location()));
-    }
-
-    private static ICondition modInstalled(String modid) {
-        return new ModLoadedCondition(modid);
     }
 
     private static void forMesh(Consumer<FinishedRecipe> writer, Ingredient block, RegistryObject<? extends Item> mesh, ForMeshContext addDrops) {

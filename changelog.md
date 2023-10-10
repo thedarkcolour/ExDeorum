@@ -1,3 +1,8 @@
+## Ex Deorum 1.6
+- Added way to obtain sky stone dust from AE2.
+- Fixed End Portal not generating properly.
+- Fixed missing Biomes O' Plenty recipes for the sieves, barrels, and crucibles.
+
 ## Ex Deorum 1.5
 - Added Random Pottery Sherd and Random Armor Trim items to replace the bloated sand loot tables for obtaining pottery sherds and armor trims.
 - Added compatibility with Biomes O' Plenty (sieves, barrels, crucibles, saplings obtainable from sifting moss like other saplings) 

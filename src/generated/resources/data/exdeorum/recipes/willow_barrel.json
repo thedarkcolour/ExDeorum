@@ -1,0 +1,34 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "biomesoplenty"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "m": {
+            "item": "biomesoplenty:willow_slab"
+          },
+          "s": {
+            "item": "biomesoplenty:willow_planks"
+          }
+        },
+        "pattern": [
+          "s s",
+          "s s",
+          "sms"
+        ],
+        "result": {
+          "item": "exdeorum:willow_barrel"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}
