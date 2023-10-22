@@ -271,7 +271,7 @@ public class BarrelBlockEntity extends EBlockEntity {
         if (simulate) {
             return RecipeUtil.isCompostable(stack);
         } else {
-            var recipe = RecipeUtil.getBarrelCompostRecipe(stack);
+            var recipe = RecipeUtil.getBarrelCompostRecipe(stack.getItem());
             if (recipe != null) {
                 addCompost(stack, recipe.getVolume());
                 return true;

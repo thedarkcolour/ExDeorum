@@ -28,7 +28,7 @@ function initializeCoreMod() {
                     var insn = insnList.get(i);
 
                     // patch before ASTORE 3
-                    if (insn.getOpcode() == Opcodes.ASTORE && insn.var == 3) {
+                    if (insn.getOpcode() === Opcodes.ASTORE && insn.var === 3) {
                         insnList.insertBefore(insn, ASMAPI.listOf(
                             new VarInsnNode(Opcodes.ALOAD, 1),
                             new MethodInsnNode(Opcodes.INVOKESTATIC, 'thedarkcolour/exdeorum/asm/ASMHooks', 'adjustPos', '(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/levelgen/structure/Structure$GenerationContext;)Lnet/minecraft/core/BlockPos;', false)
@@ -70,6 +70,7 @@ function initializeCoreMod() {
             }
         },
         // Fixes heightmap issues when placing the end portal podium that would only spawn half of the portal
+        // What this patch looks like in code: EndIslandPodium.place(..., this.portalLocation = ASMHooks.prePlaceEndPodium(this.portalLocation))
         'EndPortalPatch': {
             'target': {
                 'type': 'METHOD',

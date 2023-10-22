@@ -244,6 +244,7 @@ public class Recipes {
         });
     }
 
+    // todo wtf does this do? why is it using a MutableObject
     private static void grid2x2TagResult(Consumer<FinishedRecipe> writer, MKRecipeProvider recipes, TagKey<Item> resultTag, Ingredient ingredient) {
         var ref = new MutableObject<FinishedRecipe>();
         recipes.pushWriter(ref::setValue, newWriter -> {
@@ -514,4 +515,8 @@ public class Recipes {
     static ICondition modInstalled(String modid) {
         return new ModLoadedCondition(modid);
     }
+
+    static final ICondition AE2 = modInstalled(ModIds.APPLIED_ENERGISTICS_2);
+    static final ICondition ENDERIO = modInstalled(ModIds.ENDERIO);
+    static final ICondition EXTREME_REACTORS = modInstalled(ModIds.EXTREME_REACTORS);
 }

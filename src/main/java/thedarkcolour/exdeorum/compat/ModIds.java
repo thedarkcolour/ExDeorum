@@ -35,4 +35,6 @@ public class ModIds {
     public static final String ENDERIO = "enderio";
     public static final String BIOMES_O_PLENTY = "biomesoplenty";
     public static final String APPLIED_ENERGISTICS_2 = "ae2";
+    public static final String MODEST_FLINT_OVERHAUL = "modestflintoverhaul";
+    public static final String FACTORIUM = "factorium";
 }

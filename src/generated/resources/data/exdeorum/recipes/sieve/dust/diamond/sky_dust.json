@@ -1,0 +1,26 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "ae2"
+        }
+      ],
+      "recipe": {
+        "type": "exdeorum:sieve",
+        "ingredient": {
+          "item": "exdeorum:dust"
+        },
+        "mesh": "exdeorum:diamond_mesh",
+        "result": "ae2:sky_dust",
+        "result_amount": {
+          "type": "minecraft:binomial",
+          "n": 1.0,
+          "p": 0.1
+        }
+      }
+    }
+  ]
+}

@@ -38,7 +38,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Map;
 
-public class ModdedTags {
+public class PreferredOres {
     private static final Map<TagKey<Item>, Item> PREFERRED_ORE_ITEMS = new Object2ObjectOpenHashMap<>(11, Hash.DEFAULT_LOAD_FACTOR);
 
     static {
@@ -100,19 +100,19 @@ public class ModdedTags {
     }
 
     public static Item getDefaultSilverOre() {
-        return defaultItem("silver_ore", ModIds.ALL_THE_ORES, ModIds.OCCULTISM, ModIds.RAILCRAFT);
+        return defaultItem("silver_ore", ModIds.ALL_THE_ORES, ModIds.OCCULTISM, ModIds.RAILCRAFT, ModIds.FACTORIUM);
     }
 
     public static Item getDefaultLeadOre() {
-        return defaultItem("lead_ore", ModIds.ALL_THE_ORES, ModIds.GREG, ModIds.MEKANISM, ModIds.RAILCRAFT);
+        return defaultItem("lead_ore", ModIds.ALL_THE_ORES, ModIds.GREG, ModIds.MEKANISM, ModIds.RAILCRAFT, ModIds.FACTORIUM);
     }
 
     public static Item getDefaultPlatinumOre() {
-        return defaultItem("platinum_ore", ModIds.ALL_THE_ORES, ModIds.GREG);
+        return defaultItem("platinum_ore", ModIds.ALL_THE_ORES, ModIds.GREG, ModIds.FACTORIUM);
     }
 
     public static Item getDefaultNickelOre() {
-        return defaultItem("nickel_ore", ModIds.ALL_THE_ORES, ModIds.GREG, ModIds.THERMAL, ModIds.RAILCRAFT);
+        return defaultItem("nickel_ore", ModIds.ALL_THE_ORES, ModIds.GREG, ModIds.THERMAL, ModIds.RAILCRAFT, ModIds.FACTORIUM);
     }
 
     public static Item getDefaultUraniumOre() {
@@ -130,11 +130,11 @@ public class ModdedTags {
     }
 
     public static Item getDefaultTinOre() {
-        return defaultItem("tin_ore", ModIds.ALL_THE_ORES, ModIds.GREG, ModIds.THERMAL, ModIds.RAILCRAFT, "orestestmod");
+        return defaultItem("tin_ore", ModIds.ALL_THE_ORES, ModIds.GREG, ModIds.THERMAL, ModIds.RAILCRAFT, ModIds.FACTORIUM);
     }
 
     public static Item getDefaultZincOre() {
-        return defaultItem("zinc_ore", ModIds.ALL_THE_ORES, ModIds.GREG, ModIds.CREATE, ModIds.RAILCRAFT);
+        return defaultItem("zinc_ore", ModIds.ALL_THE_ORES, ModIds.GREG, ModIds.CREATE, ModIds.RAILCRAFT, ModIds.FACTORIUM);
     }
 
     public static Item getDefaultIridiumOre() {
@@ -145,7 +145,11 @@ public class ModdedTags {
         var modId = getFirstAvailableModId(modIds);
 
         if (modId != null) {
-            return ForgeRegistries.ITEMS.getValue(new ResourceLocation(modId, path));
+            if (modId.equals(ModIds.FACTORIUM)) {
+                return ForgeRegistries.ITEMS.getValue(new ResourceLocation(modId, "mat_" + path));
+            } else {
+                return ForgeRegistries.ITEMS.getValue(new ResourceLocation(modId, path));
+            }
         } else {
             return Items.AIR;
         }

@@ -47,7 +47,6 @@ import static net.minecraft.world.level.storage.loot.providers.number.BinomialDi
 import static thedarkcolour.modkit.data.MKRecipeProvider.ingredient;
 import static thedarkcolour.modkit.data.MKRecipeProvider.path;
 
-// todo sky stone dust from Dust block
 class SieveRecipes {
     static void sieveRecipes(Consumer<FinishedRecipe> writer) {
         var allMeshes = List.of(EItems.STRING_MESH, EItems.FLINT_MESH, EItems.IRON_MESH, EItems.GOLDEN_MESH, EItems.DIAMOND_MESH, EItems.NETHERITE_MESH);
@@ -421,9 +420,9 @@ class SieveRecipes {
             addDrop.accept(Items.GLOWSTONE_DUST, chance(0.04f));
             addDrop.accept(Items.BLAZE_POWDER, chance(0.03f));
 
-            addConditionalDrop.accept(ModCompatData.GRAINS_OF_INFINITY.get(), chance(0.06f), Recipes.modInstalled(ModIds.ENDERIO));
-            addConditionalDrop.accept(ModCompatData.YELLORIUM_DUST.get(), chance(0.05f), Recipes.modInstalled(ModIds.EXTREME_REACTORS));
-
+            addConditionalDrop.accept(ModCompatData.GRAINS_OF_INFINITY.get(), chance(0.06f), Recipes.ENDERIO);
+            addConditionalDrop.accept(ModCompatData.YELLORIUM_DUST.get(), chance(0.05f), Recipes.EXTREME_REACTORS);
+            addConditionalDrop.accept(ModCompatData.SKY_STONE_DUST.get(), chance(0.06f), Recipes.AE2);
         });
         forMesh(writer, ingredient(EItems.DUST.get()), EItems.FLINT_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
             addDrop.accept(Items.GUNPOWDER, chance(0.11f));
@@ -432,8 +431,9 @@ class SieveRecipes {
             addDrop.accept(Items.GLOWSTONE_DUST, chance(0.07f));
             addDrop.accept(Items.BLAZE_POWDER, chance(0.04f));
 
-            addConditionalDrop.accept(ModCompatData.GRAINS_OF_INFINITY.get(), chance(0.07f), Recipes.modInstalled(ModIds.ENDERIO));
-            addConditionalDrop.accept(ModCompatData.YELLORIUM_DUST.get(), chance(0.055f), Recipes.modInstalled(ModIds.EXTREME_REACTORS));
+            addConditionalDrop.accept(ModCompatData.GRAINS_OF_INFINITY.get(), chance(0.07f), Recipes.ENDERIO);
+            addConditionalDrop.accept(ModCompatData.YELLORIUM_DUST.get(), chance(0.055f), Recipes.EXTREME_REACTORS);
+            addConditionalDrop.accept(ModCompatData.SKY_STONE_DUST.get(), chance(0.07f), Recipes.AE2);
         });
         forMesh(writer, ingredient(EItems.DUST.get()), EItems.IRON_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
             addDrop.accept(Items.GUNPOWDER, chance(0.13f));
@@ -443,8 +443,9 @@ class SieveRecipes {
             addDrop.accept(Items.BLAZE_POWDER, chance(0.05f));
             addDrop.accept(Items.IRON_NUGGET, chance(0.06f));
 
-            addConditionalDrop.accept(ModCompatData.GRAINS_OF_INFINITY.get(), chance(0.09f), Recipes.modInstalled(ModIds.ENDERIO));
-            addConditionalDrop.accept(ModCompatData.YELLORIUM_DUST.get(), chance(0.08f), Recipes.modInstalled(ModIds.EXTREME_REACTORS));
+            addConditionalDrop.accept(ModCompatData.GRAINS_OF_INFINITY.get(), chance(0.09f), Recipes.ENDERIO);
+            addConditionalDrop.accept(ModCompatData.YELLORIUM_DUST.get(), chance(0.08f), Recipes.EXTREME_REACTORS);
+            addConditionalDrop.accept(ModCompatData.SKY_STONE_DUST.get(), chance(0.075f), Recipes.AE2);
         });
         forMesh(writer, ingredient(EItems.DUST.get()), EItems.GOLDEN_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
             addDrop.accept(Items.GUNPOWDER, chance(0.13f));
@@ -455,8 +456,9 @@ class SieveRecipes {
             addDrop.accept(Items.GOLD_NUGGET, binomial(2, 0.18f));
             addDrop.accept(Items.RAW_GOLD, chance(0.02f));
 
-            addConditionalDrop.accept(ModCompatData.GRAINS_OF_INFINITY.get(), chance(0.11f), Recipes.modInstalled(ModIds.ENDERIO));
-            addConditionalDrop.accept(ModCompatData.YELLORIUM_DUST.get(), chance(0.10f), Recipes.modInstalled(ModIds.EXTREME_REACTORS));
+            addConditionalDrop.accept(ModCompatData.GRAINS_OF_INFINITY.get(), chance(0.11f), Recipes.ENDERIO);
+            addConditionalDrop.accept(ModCompatData.YELLORIUM_DUST.get(), chance(0.10f), Recipes.EXTREME_REACTORS);
+            addConditionalDrop.accept(ModCompatData.SKY_STONE_DUST.get(), chance(0.08f), Recipes.AE2);
         });
         forMesh(writer, ingredient(EItems.DUST.get()), EItems.DIAMOND_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
             addDrop.accept(Items.GUNPOWDER, chance(0.14f));
@@ -466,8 +468,9 @@ class SieveRecipes {
             addDrop.accept(Items.BLAZE_POWDER, chance(0.06f));
             addDrop.accept(Items.GOLD_NUGGET, chance(0.08f));
 
-            addConditionalDrop.accept(ModCompatData.GRAINS_OF_INFINITY.get(), chance(0.12f), Recipes.modInstalled(ModIds.ENDERIO));
-            addConditionalDrop.accept(ModCompatData.YELLORIUM_DUST.get(), chance(0.12f), Recipes.modInstalled(ModIds.EXTREME_REACTORS));
+            addConditionalDrop.accept(ModCompatData.GRAINS_OF_INFINITY.get(), chance(0.12f), Recipes.ENDERIO);
+            addConditionalDrop.accept(ModCompatData.YELLORIUM_DUST.get(), chance(0.12f), Recipes.EXTREME_REACTORS);
+            addConditionalDrop.accept(ModCompatData.SKY_STONE_DUST.get(), chance(0.10f), Recipes.AE2);
         });
         forMesh(writer, ingredient(EItems.DUST.get()), EItems.NETHERITE_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
             addDrop.accept(Items.GUNPOWDER, chance(0.14f));
@@ -478,8 +481,9 @@ class SieveRecipes {
             addDrop.accept(Items.GOLD_NUGGET, chance(0.08f));
             addDrop.accept(Items.IRON_NUGGET, chance(0.08f));
 
-            addConditionalDrop.accept(ModCompatData.GRAINS_OF_INFINITY.get(), chance(0.135f), Recipes.modInstalled(ModIds.ENDERIO));
-            addConditionalDrop.accept(ModCompatData.YELLORIUM_DUST.get(), chance(0.14f), Recipes.modInstalled(ModIds.EXTREME_REACTORS));
+            addConditionalDrop.accept(ModCompatData.GRAINS_OF_INFINITY.get(), chance(0.135f), Recipes.ENDERIO);
+            addConditionalDrop.accept(ModCompatData.YELLORIUM_DUST.get(), chance(0.14f), Recipes.EXTREME_REACTORS);
+            addConditionalDrop.accept(ModCompatData.SKY_STONE_DUST.get(), chance(0.11f), Recipes.AE2);
         });
 
         // Crushed Deepslate -> String mesh

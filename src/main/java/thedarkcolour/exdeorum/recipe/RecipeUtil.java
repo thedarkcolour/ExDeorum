@@ -26,7 +26,6 @@ import com.google.gson.JsonObject;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.Container;
@@ -43,14 +42,15 @@ import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
+import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
-import thedarkcolour.exdeorum.compat.ModdedTags;
+import thedarkcolour.exdeorum.compat.PreferredOres;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelCompostRecipe;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelMixingRecipe;
 import thedarkcolour.exdeorum.recipe.crucible.CrucibleRecipe;
+import thedarkcolour.exdeorum.recipe.hammer.HammerRecipe;
 import thedarkcolour.exdeorum.recipe.sieve.SieveRecipe;
 import thedarkcolour.exdeorum.registry.ERecipeTypes;
 
@@ -68,24 +68,28 @@ public final class RecipeUtil {
     private static Lazy<Map<Item, BarrelCompostRecipe>> barrelCompostRecipeCache;
     private static Lazy<Map<Item, CrucibleRecipe>> lavaCrucibleRecipeCache;
     private static Lazy<Map<Item, CrucibleRecipe>> waterCrucibleRecipeCache;
+    private static Lazy<Map<Item, HammerRecipe>> hammerRecipeCache;
 
     public static void reload(RecipeManager recipes) {
         SIEVE_RECIPE_CACHE.invalidateAll();
 
-        barrelCompostRecipeCache = Lazy.of(() -> loadSimpleRecipeCache(recipes, ERecipeTypes.BARREL_COMPOST));
-        lavaCrucibleRecipeCache = Lazy.of(() -> loadSimpleRecipeCache(recipes, ERecipeTypes.LAVA_CRUCIBLE));
-        waterCrucibleRecipeCache = Lazy.of(() -> loadSimpleRecipeCache(recipes, ERecipeTypes.WATER_CRUCIBLE));
+        barrelCompostRecipeCache = loadSimpleRecipeCache(recipes, ERecipeTypes.BARREL_COMPOST);
+        lavaCrucibleRecipeCache = loadSimpleRecipeCache(recipes, ERecipeTypes.LAVA_CRUCIBLE);
+        waterCrucibleRecipeCache = loadSimpleRecipeCache(recipes, ERecipeTypes.WATER_CRUCIBLE);
+        hammerRecipeCache = loadSimpleRecipeCache(recipes, ERecipeTypes.HAMMER);
     }
 
-    private static <T extends SingleIngredientRecipe> ImmutableMap<Item, T> loadSimpleRecipeCache(RecipeManager recipes, Supplier<RecipeType<T>> recipeType) {
-        var builder = new ImmutableMap.Builder<Item, T>();
-        for (var recipe : recipes.byType(recipeType.get()).values()) {
-            for (var item : recipe.getIngredient().getItems()) {
-                builder.put(item.getItem(), recipe);
+    private static <T extends SingleIngredientRecipe> Lazy<Map<Item, T>> loadSimpleRecipeCache(RecipeManager recipes, Supplier<RecipeType<T>> recipeType) {
+        return Lazy.of(() -> {
+            var builder = new ImmutableMap.Builder<Item, T>();
+            for (var recipe : recipes.byType(recipeType.get()).values()) {
+                for (var item : recipe.getIngredient().getItems()) {
+                    builder.put(item.getItem(), recipe);
+                }
             }
-        }
 
-        return builder.buildKeepingLast();
+            return builder.buildKeepingLast();
+        });
     }
 
     public static List<SieveRecipe> getSieveRecipes(RecipeManager manager, Item mesh, ItemStack item) {
@@ -114,16 +118,24 @@ public final class RecipeUtil {
         return recipes;
     }
 
+    @Nullable
     public static CrucibleRecipe getLavaCrucibleRecipe(ItemStack item) {
         return lavaCrucibleRecipeCache.get().get(item.getItem());
     }
 
+    @Nullable
     public static CrucibleRecipe getWaterCrucibleRecipe(ItemStack item) {
         return waterCrucibleRecipeCache.get().get(item.getItem());
     }
 
-    public static BarrelCompostRecipe getBarrelCompostRecipe(ItemStack playerItem) {
-        return barrelCompostRecipeCache.get().get(playerItem.getItem());
+    @Nullable
+    public static BarrelCompostRecipe getBarrelCompostRecipe(Item playerItem) {
+        return barrelCompostRecipeCache.get().get(playerItem);
+    }
+
+    @Nullable
+    public static HammerRecipe getHammerRecipe(Item playerItem) {
+        return hammerRecipeCache.get().get(playerItem);
     }
 
     public static <C extends Container, T extends Recipe<C>> Collection<T> byType(RecipeManager manager, RecipeType<T> type) {
@@ -139,7 +151,7 @@ public final class RecipeUtil {
     }
 
     public static Item readItem(JsonObject json, String key) {
-        return ForgeRegistries.ITEMS.getValue(new ResourceLocation(GsonHelper.getAsString(json, key)));
+        return CraftingHelper.getItem(GsonHelper.getAsString(json, key), true);
     }
 
     public static NumberProvider readNumberProvider(JsonObject json, String key) {
@@ -293,7 +305,7 @@ public final class RecipeUtil {
     }
 
     public static boolean isTagEmpty(TagKey<Item> tag) {
-        return BuiltInRegistries.ITEM.getTag(tag).map(set -> !set.iterator().hasNext()).orElse(ModdedTags.getPreferredOre(tag) == Items.AIR);
+        return BuiltInRegistries.ITEM.getTag(tag).map(set -> !set.iterator().hasNext()).orElse(PreferredOres.getPreferredOre(tag) == Items.AIR);
     }
 
     private record SieveCacheKey(Item mesh, Item ingredient) {

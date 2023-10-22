@@ -33,7 +33,7 @@ import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.ExDeorum;
-import thedarkcolour.exdeorum.compat.ModdedTags;
+import thedarkcolour.exdeorum.compat.PreferredOres;
 import thedarkcolour.exdeorum.registry.ERecipeSerializers;
 
 public class TagResultRecipe {
@@ -44,7 +44,7 @@ public class TagResultRecipe {
             var resultTag = GsonHelper.getAsString(json, "result_tag");
             if (ResourceLocation.isValidResourceLocation(resultTag)) {
                 var tag = TagKey.create(Registries.ITEM, new ResourceLocation(resultTag));
-                var preferredItem = ModdedTags.getPreferredOre(tag);
+                var preferredItem = PreferredOres.getPreferredOre(tag);
                 if (preferredItem != Items.AIR) {
                     var recipeJson = GsonHelper.getAsJsonObject(json, "recipe");
 

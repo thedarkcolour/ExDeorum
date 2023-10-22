@@ -21,15 +21,15 @@ package thedarkcolour.exdeorum.loot;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.common.loot.IGlobalLootModifier;
 import net.minecraftforge.common.loot.LootModifier;
-import thedarkcolour.exdeorum.registry.ERecipeTypes;
+import thedarkcolour.exdeorum.recipe.RecipeUtil;
 
 import javax.annotation.Nonnull;
 
@@ -43,22 +43,42 @@ public class HammerLootModifier extends LootModifier {
     @Nonnull
     @Override
     protected ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
-        var level = context.getLevel();
         var state = context.getParamOrNull(LootContextParams.BLOCK_STATE);
 
-        // todo incorporate Fortune
-        if (state != null && state.getBlock().asItem() != Items.AIR) {
-            var temporaryItem = new SimpleContainer(new ItemStack(state.getBlock().asItem()));
-            var recipe = level.getRecipeManager().getRecipeFor(ERecipeTypes.HAMMER.get(), temporaryItem, level);
+        if (state != null) {
+            var itemForm = state.getBlock().asItem();
+            if (itemForm != Items.AIR) {
+                var recipe = RecipeUtil.getHammerRecipe(itemForm);
 
-            if (recipe.isPresent()) {
-                ObjectArrayList<ItemStack> newLoot = new ObjectArrayList<>();
-                var resultAmount = recipe.get().resultAmount.getInt(context);
+                if (recipe != null) {
+                    ObjectArrayList<ItemStack> newLoot = new ObjectArrayList<>();
+                    var resultAmount = recipe.resultAmount.getInt(context);
 
-                if (resultAmount > 0) {
-                    newLoot.add(new ItemStack(recipe.get().result, resultAmount));
+                    // fortune handling; more likely to boost drops if there are none to begin with
+                    if (context.hasParam(LootContextParams.TOOL)) {
+                        var stack = context.getParam(LootContextParams.TOOL);
+                        var fortune = stack.getEnchantmentLevel(Enchantments.BLOCK_FORTUNE);
+
+                        if (fortune != 0) {
+                            var chance = context.getRandom().nextFloat();
+
+                            if (resultAmount == 0) {
+                                if (chance < 0.06 * fortune) {
+                                    resultAmount++;
+                                }
+                            } else {
+                                if (chance < 0.03 * fortune) {
+                                    resultAmount++;
+                                }
+                            }
+                        }
+                    }
+
+                    if (resultAmount > 0) {
+                        newLoot.add(new ItemStack(recipe.result, resultAmount));
+                    }
+                    return newLoot;
                 }
-                return newLoot;
             }
         }
 

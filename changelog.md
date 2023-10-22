@@ -1,3 +1,8 @@
+## Ex Deorum 1.7
+- Actually added way to obtain Sky Stone Dust from AE2.
+- Added compatibility with Factorium's ores, which can now be crafted with Ex Deorum's ore chunks.
+- Hammer now has slight benefits for using Fortune. For blocks with multiple drops, slightly increases the number of drops, and for blocks which have a chance to not drop anything, decreases the chance that nothing is dropped.
+
 ## Ex Deorum 1.6
 - Added way to obtain sky stone dust from AE2.
 - Fixed End Portal not generating properly.

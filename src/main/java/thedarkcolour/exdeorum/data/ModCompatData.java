@@ -188,7 +188,7 @@ public class ModCompatData {
             CERTUS_QUARTZ_CRYSTAL = addItem.apply("certus_quartz_crystal");
             CHARGED_CERTUS_QUARTZ_CRYSTAL = addItem.apply("charged_certus_quartz_crystal");
             CERTUS_QUARTZ_DUST = addItem.apply("certus_quartz_dust");
-            SKY_STONE_DUST = addItem.apply("sky_stone_dust");
+            SKY_STONE_DUST = addItem.apply("sky_dust");
         });
     }
 
