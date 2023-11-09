@@ -19,6 +19,7 @@
 package thedarkcolour.exdeorum.data;
 
 import thedarkcolour.exdeorum.ExDeorum;
+import thedarkcolour.exdeorum.registry.EBlocks;
 import thedarkcolour.modkit.data.MKEnglishProvider;
 
 class English {
@@ -60,5 +61,10 @@ class English {
         english.add(TranslationKeys.SIEVE_RECIPE_AVERAGE_OUTPUT, "Avg. Output: %s");
         english.add(TranslationKeys.SIEVE_RECIPE_MIN_OUTPUT, "Min: %s");
         english.add(TranslationKeys.SIEVE_RECIPE_MAX_OUTPUT, "Max: %s");
+
+        english.addBlock(EBlocks.VEXING_ARCHWOOD_CRUCIBLE, "Vexing Archwood Crucible");
+        english.addBlock(EBlocks.CASCADING_ARCHWOOD_CRUCIBLE, "Cascading Archwood Crucible");
+        english.addBlock(EBlocks.BLAZING_ARCHWOOD_CRUCIBLE, "Blazing Archwood Crucible");
+        english.addBlock(EBlocks.FLOURISHING_ARCHWOOD_CRUCIBLE, "Flourishing Archwood Crucible");
     }
 }

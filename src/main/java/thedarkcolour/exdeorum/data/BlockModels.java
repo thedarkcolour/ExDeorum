@@ -20,7 +20,6 @@ package thedarkcolour.exdeorum.data;
 
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.client.model.generators.BlockModelBuilder;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 import thedarkcolour.exdeorum.registry.EBlocks;
@@ -79,6 +78,18 @@ class BlockModels {
 
         // Mod compat
         bopModels(models);
+        arsNouveauModels(models);
+    }
+
+    private static void arsNouveauModels(MKBlockModelProvider models) {
+        barrel(models, EBlocks.ARCHWOOD_BARREL.get(), ModCompatData.ARCHWOOD_PLANKS.get());
+
+        sieve(models, EBlocks.ARCHWOOD_SIEVE.get(), ModCompatData.ARCHWOOD_PLANKS.get());
+
+        crucible(models, EBlocks.CASCADING_ARCHWOOD_CRUCIBLE.get(), ModCompatData.CASCADING_ARCHWOOD_LOG.get());
+        crucible(models, EBlocks.BLAZING_ARCHWOOD_CRUCIBLE.get(), ModCompatData.BLAZING_ARCHWOOD_LOG.get());
+        crucible(models, EBlocks.VEXING_ARCHWOOD_CRUCIBLE.get(), ModCompatData.VEXING_ARCHWOOD_LOG.get());
+        crucible(models, EBlocks.FLOURISHING_ARCHWOOD_CRUCIBLE.get(), ModCompatData.FLOURISHING_ARCHWOOD_LOG.get());
     }
 
     private static void bopModels(MKBlockModelProvider models) {
@@ -114,6 +125,8 @@ class BlockModels {
         crucible(models, EBlocks.MAGIC_CRUCIBLE.get(), ModCompatData.MAGIC_LOG.get());
         crucible(models, EBlocks.UMBRAN_CRUCIBLE.get(), ModCompatData.UMBRAN_LOG.get());
         crucible(models, EBlocks.HELLBARK_CRUCIBLE.get(), ModCompatData.HELLBARK_LOG.get());
+
+
     }
 
     public static void crucible(MKBlockModelProvider models, Block block) {

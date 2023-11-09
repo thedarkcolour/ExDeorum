@@ -26,6 +26,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -36,6 +37,7 @@ import thedarkcolour.exdeorum.config.EConfig;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.recipe.sieve.SieveRecipe;
 import thedarkcolour.exdeorum.registry.EBlockEntities;
+import thedarkcolour.exdeorum.registry.EItems;
 import thedarkcolour.exdeorum.tag.EItemTags;
 
 import java.util.Map;
@@ -243,8 +245,10 @@ public class SieveBlockEntity extends EBlockEntity {
 
     private void giveItems(Player player) {
         var pos = this.worldPosition;
-        var context = new LootContext.Builder(new LootParams((ServerLevel) this.level, Map.of(), Map.of(), player.getLuck())).create(null);
+        var level = this.level;
+        var context = new LootContext.Builder(new LootParams((ServerLevel) level, Map.of(), Map.of(), player.getLuck())).create(null);
         var rand = this.level.random;
+        var limitDrops = this.contents.getItem() == Items.MOSS_BLOCK && EConfig.SERVER.limitMossSieveDrops.get();
 
         for (SieveRecipe recipe : RecipeUtil.getSieveRecipes(level.getRecipeManager(), this.mesh.getItem(), this.contents)) {
             var amount = recipe.resultAmount.getInt(context);
@@ -256,9 +260,14 @@ public class SieveBlockEntity extends EBlockEntity {
             }
 
             if (amount >= 1) {
-                var itemEntity = new ItemEntity(this.level, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, new ItemStack(recipe.result, amount));
+                var itemEntity = new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, new ItemStack(recipe.result, amount));
                 itemEntity.setDeltaMovement(rand.nextGaussian() * 0.05, 0.2, rand.nextGaussian() * 0.05);
-                this.level.addFreshEntity(itemEntity);
+                level.addFreshEntity(itemEntity);
+
+                // limit drops to 1 or two items (could be more than 2 but unlikely)
+                if (limitDrops && rand.nextInt(5) != 0) {
+                    break;
+                }
             }
         }
 

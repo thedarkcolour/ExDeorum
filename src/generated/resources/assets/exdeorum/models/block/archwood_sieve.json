@@ -1,0 +1,6 @@
+{
+  "parent": "exdeorum:block/template_sieve",
+  "textures": {
+    "texture": "ars_nouveau:block/archwood_planks"
+  }
+}

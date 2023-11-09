@@ -103,6 +103,9 @@ public class EConfig {
         public final BooleanValue setVoidWorldAsDefault;
         public final ConfigValue<String> defaultSpawnTreeFeature;
         public final BooleanValue useBiomeAppropriateTree;
+        public final BooleanValue limitMossSieveDrops;
+        public final BooleanValue allowWaterBottleTransfer;
+        public final BooleanValue allowWitchWaterEntityConversion;
 
         public Server(ForgeConfigSpec.Builder builder) {
             builder.comment("Server configuration for Ex Deorum").push("server");
@@ -134,6 +137,15 @@ public class EConfig {
             this.useBiomeAppropriateTree = builder
                     .comment("Whether the Spawn Tree in the void world changes based on the biome it's in. If false, Oak Tree is always used.")
                         .define("use_biome_appropriate_tree", false);
+            this.limitMossSieveDrops = builder
+                    .comment("Whether to restrict Moss Block sieve drops to 1-2 items when sieving. May be useful when lots of mods add saplings and the sieve drops become spammy.")
+                    .define("limit_moss_sieve_drops", true);
+            this.allowWaterBottleTransfer = builder
+                    .comment("Whether glass bottles can be used to transfer water between water crucibles and barrels.")
+                    .define("allow_water_bottle_transfer", true);
+            this.allowWitchWaterEntityConversion = builder
+                    .comment("Whether the entity conversion mechanic of Witch Water is enabled. If enabled, when an entity steps into Witch Water, the following conversions may happen: Villager -> Zombie Villager, Cleric Villager -> Witch, Skeleton -> Wither Skeleton, Creeper -> Charged Creeper, Spider -> Cave Spider, Pig & Piglin -> Zombified Piglin, Squid -> Ghast, Mooshroom -> Brown Mooshroom, Axolotl -> Blue Axolotl, Rabbit -> Killer Rabbit, Pufferfish -> Guardian, Horse -> Skeleton/Zombie Horse")
+                    .define("allow_witch_water_entity_conversion", true);
 
             builder.pop();
         }

@@ -22,6 +22,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
@@ -31,7 +32,10 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BowlFoodItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -44,6 +48,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.IItemHandler;
@@ -163,6 +168,10 @@ public class BarrelBlockEntity extends EBlockEntity {
         this.item.setStackInSlot(0, item);
     }
 
+    public IFluidTank getTank() {
+        return this.tank;
+    }
+
     public InteractionResult use(Level level, BlockPos pos, Player player, InteractionHand hand) {
         // Collect an item
         if (!getItem().isEmpty()) {
@@ -184,11 +193,45 @@ public class BarrelBlockEntity extends EBlockEntity {
 
         var playerItem = player.getItemInHand(hand);
         if (!level.isClientSide) {
-            var handItem = item.insertItem(0, player.getAbilities().instabuild ? playerItem.copy() : playerItem, false);
+            var bottled = false;
 
-            if (!player.getAbilities().instabuild) {
-                player.setItemInHand(hand, handItem);
-                giveResultItem(level, pos);
+            if (EConfig.SERVER.allowWaterBottleTransfer.get()) {
+                var fluid = new FluidStack(Fluids.WATER, 250);
+
+                if (playerItem.getItem() == Items.POTION && PotionUtils.getPotion(playerItem) == Potions.WATER) {
+                    if (tank.fill(fluid, IFluidHandler.FluidAction.SIMULATE) > 0) {
+                        if (!player.getAbilities().instabuild) {
+                            player.setItemInHand(hand, new ItemStack(Items.GLASS_BOTTLE));
+                        }
+                        tank.fill(fluid, IFluidHandler.FluidAction.EXECUTE);
+                        bottled = true;
+                        level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.BOTTLE_FILL, SoundSource.NEUTRAL, 1.0F, 1.0F);
+                    }
+                } else if (playerItem.getItem() == Items.GLASS_BOTTLE) {
+                    if (tank.drain(fluid, IFluidHandler.FluidAction.SIMULATE).getAmount() == 250) {
+                        if (!player.getAbilities().instabuild) {
+                            playerItem.shrink(1);
+                        }
+                        var bottle = PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER);
+                        if (!player.addItem(bottle)) {
+                            player.drop(bottle, false);
+                        }
+                        tank.drain(fluid, IFluidHandler.FluidAction.EXECUTE);
+                        bottled = true;
+                        level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.BOTTLE_EMPTY, SoundSource.NEUTRAL, 1.0F, 1.0F);
+                    }
+                }
+            }
+
+            if (!bottled) {
+                var handItem = item.insertItem(0, player.getAbilities().instabuild ? playerItem.copy() : playerItem, false);
+
+                if (!player.getAbilities().instabuild) {
+                    player.setItemInHand(hand, handItem);
+                    giveResultItem(level, pos);
+                }
+            } else {
+                markUpdated();
             }
         }
 

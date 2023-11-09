@@ -71,8 +71,14 @@ public class ExDeorumInfoProvider implements IProbeInfoProvider {
 
                 info.text(CompoundText.create().style(TextStyleClass.ERROR).text("Burning! ").style(TextStyleClass.WARNING).text(progress / 20 + "s"));
             }
+            if (playerEntity.isShiftKeyDown()) {
+                info.tank(barrel.getTank());
+            }
         } else if (te instanceof AbstractCrucibleBlockEntity crucible) {
             info.text(CompoundText.create().style(TextStyleClass.LABEL).text("Rate: ").style(TextStyleClass.WARNING).text(crucible.getMeltingRate() + "x"));
+            if (playerEntity.isShiftKeyDown()) {
+                info.tank(crucible.getTank());
+            }
         } else if (te instanceof SieveBlockEntity sieve) {
             if (!sieve.getContents().isEmpty()) {
                 info.text(CompoundText.create().style(TextStyleClass.LABEL).text("Progress: ").style(TextStyleClass.WARNING).text((100 - sieve.getProgress()) + "%"));

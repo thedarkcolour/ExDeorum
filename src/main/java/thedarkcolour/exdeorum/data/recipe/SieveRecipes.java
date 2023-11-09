@@ -88,6 +88,7 @@ class SieveRecipes {
             addDrop.accept(Items.BAMBOO, chance(0.04f));
             addDrop.accept(Items.PINK_PETALS, chance(0.03f));
             addDrop.accept(Items.SWEET_BERRIES, chance(0.05f));
+            addConditionalDrop.accept(ModCompatData.SOURCEBERRY.get(), chance(0.03f), Recipes.modInstalled(ModIds.ARS_NOUVEAU));
         });
         // Dirt -> Iron mesh
         forMesh(writer, ingredient(Items.DIRT), EItems.IRON_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
@@ -852,6 +853,14 @@ class SieveRecipes {
                 addConditionalDrop.accept(ModCompatData.MAGIC_SAPLING.get(), chance(0.04f), bop);
                 addConditionalDrop.accept(ModCompatData.UMBRAN_SAPLING.get(), chance(0.04f), bop);
                 addConditionalDrop.accept(ModCompatData.HELLBARK_SAPLING.get(), chance(0.04f), bop);
+
+                var ars = Recipes.modInstalled(ModIds.ARS_NOUVEAU);
+                addConditionalDrop.accept(ModCompatData.BLUE_ARCHWOOD_SAPLING.get(), chance(0.005f), ars);
+                addConditionalDrop.accept(ModCompatData.RED_ARCHWOOD_SAPLING.get(), chance(0.005f), ars);
+                addConditionalDrop.accept(ModCompatData.PURPLE_ARCHWOOD_SAPLING.get(), chance(0.005f), ars);
+                addConditionalDrop.accept(ModCompatData.GREEN_ARCHWOOD_SAPLING.get(), chance(0.005f), ars);
+
+                addConditionalDrop.accept(ModCompatData.SOURCEBERRY.get(), chance(0.01f), ars);
             });
         }
         forMesh(writer, ingredient(Items.MOSS_BLOCK), EItems.FLINT_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {

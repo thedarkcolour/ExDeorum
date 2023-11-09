@@ -162,6 +162,10 @@ public class ExDeorumJeiPlugin implements IModPlugin {
             waterCrucibles.add(EItems.DEAD_CRUCIBLE.get());
             waterCrucibles.add(EItems.MAGIC_CRUCIBLE.get());
             waterCrucibles.add(EItems.UMBRAN_CRUCIBLE.get());
+            waterCrucibles.add(EItems.CASCADING_ARCHWOOD_CRUCIBLE.get());
+            waterCrucibles.add(EItems.BLAZING_ARCHWOOD_CRUCIBLE.get());
+            waterCrucibles.add(EItems.VEXING_ARCHWOOD_CRUCIBLE.get());
+            waterCrucibles.add(EItems.FLOURISHING_ARCHWOOD_CRUCIBLE.get());
         }
         for (var barrel : barrels) {
             var stack = new ItemStack(barrel);

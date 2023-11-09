@@ -59,7 +59,12 @@ public class EBlockEntities {
             EBlocks.WILLOW_CRUCIBLE.get(),
             EBlocks.DEAD_CRUCIBLE.get(),
             EBlocks.MAGIC_CRUCIBLE.get(),
-            EBlocks.UMBRAN_CRUCIBLE.get()
+            EBlocks.UMBRAN_CRUCIBLE.get(),
+            // Ars Nouveau
+            EBlocks.CASCADING_ARCHWOOD_CRUCIBLE.get(),
+            EBlocks.BLAZING_ARCHWOOD_CRUCIBLE.get(),
+            EBlocks.VEXING_ARCHWOOD_CRUCIBLE.get(),
+            EBlocks.FLOURISHING_ARCHWOOD_CRUCIBLE.get()
     ).build(null));
     public static final RegistryObject<BlockEntityType<BarrelBlockEntity>> BARREL = BLOCK_ENTITIES.register("barrel", () -> BlockEntityType.Builder.of(BarrelBlockEntity::new,
             EBlocks.OAK_BARREL.get(),
@@ -84,7 +89,9 @@ public class EBlockEntities {
             EBlocks.DEAD_BARREL.get(),
             EBlocks.MAGIC_BARREL.get(),
             EBlocks.UMBRAN_BARREL.get(),
-            EBlocks.HELLBARK_BARREL.get()
+            EBlocks.HELLBARK_BARREL.get(),
+            // Ars Nouveau
+            EBlocks.ARCHWOOD_BARREL.get()
     ).build(null));
     public static final RegistryObject<BlockEntityType<SieveBlockEntity>> SIEVE = BLOCK_ENTITIES.register("sieve", () -> BlockEntityType.Builder.of(SieveBlockEntity::new,
             EBlocks.OAK_SIEVE.get(),
@@ -108,6 +115,8 @@ public class EBlockEntities {
             EBlocks.DEAD_SIEVE.get(),
             EBlocks.MAGIC_SIEVE.get(),
             EBlocks.UMBRAN_SIEVE.get(),
-            EBlocks.HELLBARK_SIEVE.get()
+            EBlocks.HELLBARK_SIEVE.get(),
+            // Ars Nouveau
+            EBlocks.ARCHWOOD_SIEVE.get()
     ).build(null));
 }

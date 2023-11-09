@@ -1,0 +1,9 @@
+{
+  "parent": "exdeorum:block/template_crucible",
+  "textures": {
+    "bottom": "ars_nouveau:block/purple_archwood_log",
+    "inside": "ars_nouveau:block/purple_archwood_log",
+    "side": "ars_nouveau:block/purple_archwood_log",
+    "top": "ars_nouveau:block/purple_archwood_log"
+  }
+}

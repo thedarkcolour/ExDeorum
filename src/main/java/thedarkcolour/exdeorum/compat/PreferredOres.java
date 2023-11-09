@@ -130,7 +130,7 @@ public class PreferredOres {
     }
 
     public static Item getDefaultTinOre() {
-        return defaultItem("tin_ore", ModIds.ALL_THE_ORES, ModIds.GREG, ModIds.THERMAL, ModIds.RAILCRAFT, ModIds.FACTORIUM);
+        return defaultItem("tin_ore", ModIds.ALL_THE_ORES, ModIds.GREG, ModIds.THERMAL, ModIds.MEKANISM, ModIds.RAILCRAFT, ModIds.FACTORIUM);
     }
 
     public static Item getDefaultZincOre() {

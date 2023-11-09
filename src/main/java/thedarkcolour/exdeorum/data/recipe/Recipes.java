@@ -102,17 +102,22 @@ public class Recipes {
         uShaped(recipes, EItems.CRIMSON_CRUCIBLE, ingredient(Items.CRIMSON_STEM), ingredient(Items.CRIMSON_SLAB));
         uShaped(recipes, EItems.WARPED_CRUCIBLE, ingredient(Items.WARPED_STEM), ingredient(Items.WARPED_SLAB));
         uShaped(recipes, EItems.UNFIRED_PORCELAIN_CRUCIBLE, ingredient(EItems.PORCELAIN_CLAY_BALL.get()), ingredient(EItems.PORCELAIN_CLAY_BALL.get()));
-        // Modded crucibles
-        bopUShaped(recipes, EItems.FIR_CRUCIBLE, ModCompatData.FIR_LOG_ITEM, ModCompatData.FIR_SLAB);
-        bopUShaped(recipes, EItems.REDWOOD_CRUCIBLE, ModCompatData.REDWOOD_LOG_ITEM, ModCompatData.REDWOOD_SLAB);
-        bopUShaped(recipes, EItems.MAHOGANY_CRUCIBLE, ModCompatData.MAHOGANY_LOG_ITEM, ModCompatData.MAHOGANY_SLAB);
-        bopUShaped(recipes, EItems.JACARANDA_CRUCIBLE, ModCompatData.JACARANDA_LOG_ITEM, ModCompatData.JACARANDA_SLAB);
-        bopUShaped(recipes, EItems.PALM_CRUCIBLE, ModCompatData.PALM_LOG_ITEM, ModCompatData.PALM_SLAB);
-        bopUShaped(recipes, EItems.WILLOW_CRUCIBLE, ModCompatData.WILLOW_LOG_ITEM, ModCompatData.WILLOW_SLAB);
-        bopUShaped(recipes, EItems.DEAD_CRUCIBLE, ModCompatData.DEAD_LOG_ITEM, ModCompatData.DEAD_SLAB);
-        bopUShaped(recipes, EItems.MAGIC_CRUCIBLE, ModCompatData.MAGIC_LOG_ITEM, ModCompatData.MAGIC_SLAB);
-        bopUShaped(recipes, EItems.UMBRAN_CRUCIBLE, ModCompatData.UMBRAN_LOG_ITEM, ModCompatData.UMBRAN_SLAB);
-        bopUShaped(recipes, EItems.HELLBARK_CRUCIBLE, ModCompatData.HELLBARK_LOG_ITEM, ModCompatData.HELLBARK_SLAB);
+        // BOP crucibles
+        modUShaped(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.FIR_LOG_ITEM, ModCompatData.FIR_SLAB, EItems.FIR_CRUCIBLE);
+        modUShaped(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.REDWOOD_LOG_ITEM, ModCompatData.REDWOOD_SLAB, EItems.REDWOOD_CRUCIBLE);
+        modUShaped(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.MAHOGANY_LOG_ITEM, ModCompatData.MAHOGANY_SLAB, EItems.MAHOGANY_CRUCIBLE);
+        modUShaped(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.JACARANDA_LOG_ITEM, ModCompatData.JACARANDA_SLAB, EItems.JACARANDA_CRUCIBLE);
+        modUShaped(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.PALM_LOG_ITEM, ModCompatData.PALM_SLAB, EItems.PALM_CRUCIBLE);
+        modUShaped(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.WILLOW_LOG_ITEM, ModCompatData.WILLOW_SLAB, EItems.WILLOW_CRUCIBLE);
+        modUShaped(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.DEAD_LOG_ITEM, ModCompatData.DEAD_SLAB, EItems.DEAD_CRUCIBLE);
+        modUShaped(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.MAGIC_LOG_ITEM, ModCompatData.MAGIC_SLAB, EItems.MAGIC_CRUCIBLE);
+        modUShaped(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.UMBRAN_LOG_ITEM, ModCompatData.UMBRAN_SLAB, EItems.UMBRAN_CRUCIBLE);
+        modUShaped(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.HELLBARK_LOG_ITEM, ModCompatData.HELLBARK_SLAB, EItems.HELLBARK_CRUCIBLE);
+        // Ars crucibles
+        modUShaped(recipes, ModIds.ARS_NOUVEAU, ModCompatData.CASCADING_ARCHWOOD_LOG_ITEM, ModCompatData.ARCHWOOD_SLAB, EItems.CASCADING_ARCHWOOD_CRUCIBLE);
+        modUShaped(recipes, ModIds.ARS_NOUVEAU, ModCompatData.BLAZING_ARCHWOOD_LOG_ITEM, ModCompatData.ARCHWOOD_SLAB, EItems.BLAZING_ARCHWOOD_CRUCIBLE);
+        modUShaped(recipes, ModIds.ARS_NOUVEAU, ModCompatData.VEXING_ARCHWOOD_LOG_ITEM, ModCompatData.ARCHWOOD_SLAB, EItems.VEXING_ARCHWOOD_CRUCIBLE);
+        modUShaped(recipes, ModIds.ARS_NOUVEAU, ModCompatData.FLOURISHING_ARCHWOOD_LOG_ITEM, ModCompatData.ARCHWOOD_SLAB, EItems.FLOURISHING_ARCHWOOD_CRUCIBLE);
 
         // Barrels
         uShaped(recipes, EItems.OAK_BARREL, ingredient(Items.OAK_PLANKS), ingredient(Items.OAK_SLAB));
@@ -128,16 +133,17 @@ public class Recipes {
         uShaped(recipes, EItems.WARPED_BARREL, ingredient(Items.WARPED_PLANKS), ingredient(Items.WARPED_SLAB));
         uShaped(recipes, EItems.STONE_BARREL, ingredient(Items.STONE), ingredient(Items.STONE_SLAB));
         // Modded barrels
-        bopUShaped(recipes, EItems.FIR_BARREL, ModCompatData.FIR_PLANKS_ITEM, ModCompatData.FIR_SLAB);
-        bopUShaped(recipes, EItems.REDWOOD_BARREL, ModCompatData.REDWOOD_PLANKS_ITEM, ModCompatData.REDWOOD_SLAB);
-        bopUShaped(recipes, EItems.MAHOGANY_BARREL, ModCompatData.MAHOGANY_PLANKS_ITEM, ModCompatData.MAHOGANY_SLAB);
-        bopUShaped(recipes, EItems.JACARANDA_BARREL, ModCompatData.JACARANDA_PLANKS_ITEM, ModCompatData.JACARANDA_SLAB);
-        bopUShaped(recipes, EItems.PALM_BARREL, ModCompatData.PALM_PLANKS_ITEM, ModCompatData.PALM_SLAB);
-        bopUShaped(recipes, EItems.WILLOW_BARREL, ModCompatData.WILLOW_PLANKS_ITEM, ModCompatData.WILLOW_SLAB);
-        bopUShaped(recipes, EItems.DEAD_BARREL, ModCompatData.DEAD_PLANKS_ITEM, ModCompatData.DEAD_SLAB);
-        bopUShaped(recipes, EItems.MAGIC_BARREL, ModCompatData.MAGIC_PLANKS_ITEM, ModCompatData.MAGIC_SLAB);
-        bopUShaped(recipes, EItems.UMBRAN_BARREL, ModCompatData.UMBRAN_PLANKS_ITEM, ModCompatData.UMBRAN_SLAB);
-        bopUShaped(recipes, EItems.HELLBARK_BARREL, ModCompatData.HELLBARK_PLANKS_ITEM, ModCompatData.HELLBARK_SLAB);
+        modUShaped(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.FIR_PLANKS_ITEM, ModCompatData.FIR_SLAB, EItems.FIR_BARREL);
+        modUShaped(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.REDWOOD_PLANKS_ITEM, ModCompatData.REDWOOD_SLAB, EItems.REDWOOD_BARREL);
+        modUShaped(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.MAHOGANY_PLANKS_ITEM, ModCompatData.MAHOGANY_SLAB, EItems.MAHOGANY_BARREL);
+        modUShaped(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.JACARANDA_PLANKS_ITEM, ModCompatData.JACARANDA_SLAB, EItems.JACARANDA_BARREL);
+        modUShaped(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.PALM_PLANKS_ITEM, ModCompatData.PALM_SLAB, EItems.PALM_BARREL);
+        modUShaped(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.WILLOW_PLANKS_ITEM, ModCompatData.WILLOW_SLAB, EItems.WILLOW_BARREL);
+        modUShaped(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.DEAD_PLANKS_ITEM, ModCompatData.DEAD_SLAB, EItems.DEAD_BARREL);
+        modUShaped(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.MAGIC_PLANKS_ITEM, ModCompatData.MAGIC_SLAB, EItems.MAGIC_BARREL);
+        modUShaped(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.UMBRAN_PLANKS_ITEM, ModCompatData.UMBRAN_SLAB, EItems.UMBRAN_BARREL);
+        modUShaped(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.HELLBARK_PLANKS_ITEM, ModCompatData.HELLBARK_SLAB, EItems.HELLBARK_BARREL);
+        modUShaped(recipes, ModIds.ARS_NOUVEAU, ModCompatData.ARCHWOOD_PLANKS_ITEM, ModCompatData.ARCHWOOD_SLAB, EItems.ARCHWOOD_BARREL);
 
         // Pebbles and ore chunks
         recipes.grid2x2(Items.COBBLESTONE, ingredient(EItems.STONE_PEBBLE));
@@ -180,16 +186,17 @@ public class Recipes {
         sieve(recipes, EItems.CRIMSON_SIEVE, Items.CRIMSON_PLANKS, Items.CRIMSON_SLAB);
         sieve(recipes, EItems.WARPED_SIEVE, Items.WARPED_PLANKS, Items.WARPED_SLAB);
         // Modded sieves
-        bopSieve(recipes, EItems.FIR_SIEVE, ModCompatData.FIR_PLANKS_ITEM, ModCompatData.FIR_SLAB);
-        bopSieve(recipes, EItems.REDWOOD_SIEVE, ModCompatData.REDWOOD_PLANKS_ITEM, ModCompatData.REDWOOD_SLAB);
-        bopSieve(recipes, EItems.MAHOGANY_SIEVE, ModCompatData.MAHOGANY_PLANKS_ITEM, ModCompatData.MAHOGANY_SLAB);
-        bopSieve(recipes, EItems.JACARANDA_SIEVE, ModCompatData.JACARANDA_PLANKS_ITEM, ModCompatData.JACARANDA_SLAB);
-        bopSieve(recipes, EItems.PALM_SIEVE, ModCompatData.PALM_PLANKS_ITEM, ModCompatData.PALM_SLAB);
-        bopSieve(recipes, EItems.WILLOW_SIEVE, ModCompatData.WILLOW_PLANKS_ITEM, ModCompatData.WILLOW_SLAB);
-        bopSieve(recipes, EItems.DEAD_SIEVE, ModCompatData.DEAD_PLANKS_ITEM, ModCompatData.DEAD_SLAB);
-        bopSieve(recipes, EItems.MAGIC_SIEVE, ModCompatData.MAGIC_PLANKS_ITEM, ModCompatData.MAGIC_SLAB);
-        bopSieve(recipes, EItems.UMBRAN_SIEVE, ModCompatData.UMBRAN_PLANKS_ITEM, ModCompatData.UMBRAN_SLAB);
-        bopSieve(recipes, EItems.HELLBARK_SIEVE, ModCompatData.HELLBARK_PLANKS_ITEM, ModCompatData.HELLBARK_SLAB);
+        modSieve(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.FIR_PLANKS_ITEM, ModCompatData.FIR_SLAB, EItems.FIR_SIEVE);
+        modSieve(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.REDWOOD_PLANKS_ITEM, ModCompatData.REDWOOD_SLAB, EItems.REDWOOD_SIEVE);
+        modSieve(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.MAHOGANY_PLANKS_ITEM, ModCompatData.MAHOGANY_SLAB, EItems.MAHOGANY_SIEVE);
+        modSieve(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.JACARANDA_PLANKS_ITEM, ModCompatData.JACARANDA_SLAB, EItems.JACARANDA_SIEVE);
+        modSieve(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.PALM_PLANKS_ITEM, ModCompatData.PALM_SLAB, EItems.PALM_SIEVE);
+        modSieve(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.WILLOW_PLANKS_ITEM, ModCompatData.WILLOW_SLAB, EItems.WILLOW_SIEVE);
+        modSieve(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.DEAD_PLANKS_ITEM, ModCompatData.DEAD_SLAB, EItems.DEAD_SIEVE);
+        modSieve(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.MAGIC_PLANKS_ITEM, ModCompatData.MAGIC_SLAB, EItems.MAGIC_SIEVE);
+        modSieve(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.UMBRAN_PLANKS_ITEM, ModCompatData.UMBRAN_SLAB, EItems.UMBRAN_SIEVE);
+        modSieve(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.HELLBARK_PLANKS_ITEM, ModCompatData.HELLBARK_SLAB, EItems.HELLBARK_SIEVE);
+        modSieve(recipes, ModIds.ARS_NOUVEAU, ModCompatData.ARCHWOOD_PLANKS_ITEM, ModCompatData.ARCHWOOD_SLAB,  EItems.ARCHWOOD_SIEVE);
 
         // Meshes
         recipes.grid3x3(EItems.STRING_MESH.get(), ingredient(Tags.Items.STRING));
@@ -232,14 +239,14 @@ public class Recipes {
         });
     }
 
-    private static void bopUShaped(MKRecipeProvider recipes, RegistryObject<? extends Item> result, RegistryObject<? extends Item> sides, RegistryObject<? extends Item> middle) {
-        recipes.conditional(result.getId().getPath(), List.of(modInstalled(ModIds.BIOMES_O_PLENTY)), writer1 -> {
+    private static void modUShaped(MKRecipeProvider recipes, String modid, RegistryObject<? extends Item> sides, RegistryObject<? extends Item> middle, RegistryObject<? extends Item> result) {
+        recipes.conditional(result.getId().getPath(), List.of(modInstalled(modid)), writer1 -> {
             uShaped(recipes, result, ingredient(sides), ingredient(middle));
         });
     }
 
-    private static void bopSieve(MKRecipeProvider recipes, RegistryObject<? extends Item> result, RegistryObject<? extends Item> planks, RegistryObject<? extends Item> slab) {
-        recipes.conditional(result.getId().getPath(), List.of(modInstalled(ModIds.BIOMES_O_PLENTY)), writer1 -> {
+    private static void modSieve(MKRecipeProvider recipes, String modid, RegistryObject<? extends Item> planks, RegistryObject<? extends Item> slab, RegistryObject<? extends Item> result) {
+        recipes.conditional(result.getId().getPath(), List.of(modInstalled(modid)), writer1 -> {
             sieve(recipes, result, planks.get(), slab.get());
         });
     }
@@ -501,7 +508,7 @@ public class Recipes {
     }
 
     private static void barrelMixing(Consumer<FinishedRecipe> writer, Ingredient ingredient, Fluid fluidType, Item result) {
-        writer.accept(new FinishedBarrelMixingRecipe(new ResourceLocation(ExDeorum.ID, "barrel_mixing/" + path(result)), ingredient, fluidType, 1000, result));
+        barrelMixing(writer, "", ingredient, fluidType, result);
     }
 
     private static void barrelMixing(Consumer<FinishedRecipe> writer, String suffix, Ingredient ingredient, Fluid fluidType, Item result) {

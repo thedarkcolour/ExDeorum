@@ -30,13 +30,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import thedarkcolour.exdeorum.ExDeorum;
-import thedarkcolour.exdeorum.block.BarrelBlock;
-import thedarkcolour.exdeorum.block.EndCakeBlock;
-import thedarkcolour.exdeorum.block.InfestedLeavesBlock;
-import thedarkcolour.exdeorum.block.LavaCrucibleBlock;
-import thedarkcolour.exdeorum.block.SieveBlock;
-import thedarkcolour.exdeorum.block.UnfiredCrucibleBlock;
-import thedarkcolour.exdeorum.block.WaterCrucibleBlock;
+import thedarkcolour.exdeorum.block.*;
 
 import static net.minecraft.world.level.block.state.BlockBehaviour.Properties.copy;
 import static net.minecraft.world.level.block.state.BlockBehaviour.Properties.of;
@@ -75,6 +69,8 @@ public class EBlocks {
     public static final RegistryObject<BarrelBlock> MAGIC_BARREL = registerBarrel("magic_barrel", false, false, MapColor.COLOR_BLUE);
     public static final RegistryObject<BarrelBlock> UMBRAN_BARREL = registerBarrel("umbran_barrel", false, false, MapColor.TERRACOTTA_BLUE);
     public static final RegistryObject<BarrelBlock> HELLBARK_BARREL = registerBarrel("hellbark_barrel", false, false, MapColor.TERRACOTTA_GRAY);
+    // Ars Nouveau Barrels
+    public static final RegistryObject<BarrelBlock> ARCHWOOD_BARREL = registerBarrel("archwood_barrel", false, false, MapColor.COLOR_GRAY);
 
     // Sieves
     public static final RegistryObject<SieveBlock> OAK_SIEVE = registerSieve("oak_sieve");
@@ -99,6 +95,8 @@ public class EBlocks {
     public static final RegistryObject<SieveBlock> MAGIC_SIEVE = registerSieve("magic_sieve");
     public static final RegistryObject<SieveBlock> UMBRAN_SIEVE = registerSieve("umbran_sieve");
     public static final RegistryObject<SieveBlock> HELLBARK_SIEVE = registerSieve("hellbark_sieve");
+    // Ars Nouveau Sieves
+    public static final RegistryObject<SieveBlock> ARCHWOOD_SIEVE = registerSieve("archwood_sieve");
 
     // Lava Crucibles
     public static final RegistryObject<LavaCrucibleBlock> PORCELAIN_CRUCIBLE = registerLavaCrucible("porcelain_crucible", true, SoundType.STONE);
@@ -128,10 +126,15 @@ public class EBlocks {
     public static final RegistryObject<WaterCrucibleBlock> DEAD_CRUCIBLE = registerWaterCrucible("dead_crucible");
     public static final RegistryObject<WaterCrucibleBlock> MAGIC_CRUCIBLE = registerWaterCrucible("magic_crucible");
     public static final RegistryObject<WaterCrucibleBlock> UMBRAN_CRUCIBLE = registerWaterCrucible("umbran_crucible");
+    // Ars Nouveau Water Crucibles
+    public static final RegistryObject<WaterCrucibleBlock> CASCADING_ARCHWOOD_CRUCIBLE = registerWaterCrucible("blue_archwood_crucible");
+    public static final RegistryObject<WaterCrucibleBlock> BLAZING_ARCHWOOD_CRUCIBLE = registerWaterCrucible("red_archwood_crucible");
+    public static final RegistryObject<WaterCrucibleBlock> VEXING_ARCHWOOD_CRUCIBLE = registerWaterCrucible("purple_archwood_crucible");
+    public static final RegistryObject<WaterCrucibleBlock> FLOURISHING_ARCHWOOD_CRUCIBLE = registerWaterCrucible("green_archwood_crucible");
 
     // Misc
     public static final RegistryObject<InfestedLeavesBlock> INFESTED_LEAVES = BLOCKS.register("infested_leaves", () -> new InfestedLeavesBlock(copy(Blocks.OAK_LEAVES)));
-    public static final RegistryObject<LiquidBlock> WITCH_WATER = BLOCKS.register("witch_water", () -> new LiquidBlock(EFluids.WITCH_WATER, copy(Blocks.WATER).mapColor(MapColor.COLOR_PURPLE)));
+    public static final RegistryObject<LiquidBlock> WITCH_WATER = BLOCKS.register("witch_water", () -> new WitchWaterBlock(EFluids.WITCH_WATER, copy(Blocks.WATER).mapColor(MapColor.COLOR_PURPLE)));
     public static final RegistryObject<EndCakeBlock> END_CAKE = BLOCKS.register("end_cake", () -> new EndCakeBlock(of().noLootTable().mapColor(MapColor.COLOR_BLACK).forceSolidOn().strength(0.5F).sound(SoundType.WOOL).pushReaction(PushReaction.BLOCK)));
 
     public static RegistryObject<SieveBlock> registerSieve(String name) {

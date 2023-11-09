@@ -1,3 +1,12 @@
+## Ex Deorum 1.8
+- Added a config option to limit the number of sieve drops from sieving moss. May be useful when playing with mods that add a lot of different saplings.
+- Added compatibility with Ars Nouveau's saplings and Sourceberries to the sieve.
+- Added compatibility with Ars Nouveau's wood types for Crucibles, Barrels, and Sieve.
+- Added missing TOP compatibility for seeing fluids inside Barrels and Crucibles. The exact fluid and amount are now visible when crouching.
+- Added Witch Water entity conversion functionality from the original Ex Nihilo, can be disabled in config. Here are the following conversions: Villager -> Zombie Villager, Cleric Villager -> Witch, Skeleton -> Wither Skeleton, Creeper -> Charged Creeper, Spider -> Cave Spider, Pig & Piglin -> Zombified Piglin, Squid -> Ghast, Mooshroom -> Brown Mooshroom, Axolotl -> Blue Axolotl, Rabbit -> Killer Rabbit, Pufferfish -> Guardian, Horse -> Skeleton/Zombie Horse
+- Allow using glass bottles to carry water from wooden crucibles to barrels. Can be disabled in config.
+- Fix Mekanism's Tin ore not being detected by Ex Deorum as a valid tin ore.
+
 ## Ex Deorum 1.7
 - Actually added way to obtain Sky Stone Dust from AE2.
 - Added compatibility with Factorium's ores, which can now be crafted with Ex Deorum's ore chunks.

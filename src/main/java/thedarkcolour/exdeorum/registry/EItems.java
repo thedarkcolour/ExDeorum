@@ -168,6 +168,8 @@ public class EItems {
     public static final RegistryObject<BlockItem> MAGIC_BARREL = registerItemBlock(EBlocks.MAGIC_BARREL);
     public static final RegistryObject<BlockItem> UMBRAN_BARREL = registerItemBlock(EBlocks.UMBRAN_BARREL);
     public static final RegistryObject<BlockItem> HELLBARK_BARREL = registerItemBlock(EBlocks.HELLBARK_BARREL);
+    // Ars Nouveau Barrels
+    public static final RegistryObject<BlockItem> ARCHWOOD_BARREL = registerItemBlock(EBlocks.ARCHWOOD_BARREL);
 
     // Sieves
     public static final RegistryObject<BlockItem> OAK_SIEVE = registerItemBlock(EBlocks.OAK_SIEVE);
@@ -192,6 +194,8 @@ public class EItems {
     public static final RegistryObject<BlockItem> MAGIC_SIEVE = registerItemBlock(EBlocks.MAGIC_SIEVE);
     public static final RegistryObject<BlockItem> UMBRAN_SIEVE = registerItemBlock(EBlocks.UMBRAN_SIEVE);
     public static final RegistryObject<BlockItem> HELLBARK_SIEVE = registerItemBlock(EBlocks.HELLBARK_SIEVE);
+    // Ars Nouveau Sieves
+    public static final RegistryObject<BlockItem> ARCHWOOD_SIEVE = registerItemBlock(EBlocks.ARCHWOOD_SIEVE);
 
     // Lava Crucibles
     public static final RegistryObject<BlockItem> PORCELAIN_CRUCIBLE = registerItemBlock(EBlocks.PORCELAIN_CRUCIBLE);
@@ -211,7 +215,7 @@ public class EItems {
     public static final RegistryObject<BlockItem> MANGROVE_CRUCIBLE = registerItemBlock(EBlocks.MANGROVE_CRUCIBLE);
     public static final RegistryObject<BlockItem> CHERRY_CRUCIBLE = registerItemBlock(EBlocks.CHERRY_CRUCIBLE);
     public static final RegistryObject<BlockItem> BAMBOO_CRUCIBLE = registerItemBlock(EBlocks.BAMBOO_CRUCIBLE);
-    // BOP Water Crucible
+    // BOP Water Crucibles
     public static final RegistryObject<BlockItem> FIR_CRUCIBLE = registerItemBlock(EBlocks.FIR_CRUCIBLE);
     public static final RegistryObject<BlockItem> REDWOOD_CRUCIBLE = registerItemBlock(EBlocks.REDWOOD_CRUCIBLE);
     public static final RegistryObject<BlockItem> MAHOGANY_CRUCIBLE = registerItemBlock(EBlocks.MAHOGANY_CRUCIBLE);
@@ -221,6 +225,11 @@ public class EItems {
     public static final RegistryObject<BlockItem> DEAD_CRUCIBLE = registerItemBlock(EBlocks.DEAD_CRUCIBLE);
     public static final RegistryObject<BlockItem> MAGIC_CRUCIBLE = registerItemBlock(EBlocks.MAGIC_CRUCIBLE);
     public static final RegistryObject<BlockItem> UMBRAN_CRUCIBLE = registerItemBlock(EBlocks.UMBRAN_CRUCIBLE);
+    // Ars Nouveau Water Crucibles
+    public static final RegistryObject<BlockItem> CASCADING_ARCHWOOD_CRUCIBLE = registerItemBlock(EBlocks.CASCADING_ARCHWOOD_CRUCIBLE);
+    public static final RegistryObject<BlockItem> BLAZING_ARCHWOOD_CRUCIBLE = registerItemBlock(EBlocks.BLAZING_ARCHWOOD_CRUCIBLE);
+    public static final RegistryObject<BlockItem> VEXING_ARCHWOOD_CRUCIBLE = registerItemBlock(EBlocks.VEXING_ARCHWOOD_CRUCIBLE);
+    public static final RegistryObject<BlockItem> FLOURISHING_ARCHWOOD_CRUCIBLE = registerItemBlock(EBlocks.FLOURISHING_ARCHWOOD_CRUCIBLE);
 
     public static final RegistryObject<BlockItem> END_CAKE = registerItemBlock(EBlocks.END_CAKE);
 
@@ -260,6 +269,9 @@ public class EItems {
             output.accept(UMBRAN_SIEVE.get());
             output.accept(HELLBARK_SIEVE.get());
         }
+        if (ModList.get().isLoaded(ModIds.ARS_NOUVEAU)) {
+            output.accept(ARCHWOOD_SIEVE.get());
+        }
         output.accept(PORCELAIN_CRUCIBLE.get());
         output.accept(WARPED_CRUCIBLE.get());
         output.accept(CRIMSON_CRUCIBLE.get());
@@ -287,6 +299,12 @@ public class EItems {
             output.accept(DEAD_CRUCIBLE.get());
             output.accept(MAGIC_CRUCIBLE.get());
             output.accept(UMBRAN_CRUCIBLE.get());
+        }
+        if (ModList.get().isLoaded(ModIds.ARS_NOUVEAU)) {
+            output.accept(CASCADING_ARCHWOOD_CRUCIBLE.get());
+            output.accept(BLAZING_ARCHWOOD_CRUCIBLE.get());
+            output.accept(VEXING_ARCHWOOD_CRUCIBLE.get());
+            output.accept(FLOURISHING_ARCHWOOD_CRUCIBLE.get());
         }
 
         output.accept(DUST.get());
@@ -370,6 +388,9 @@ public class EItems {
             output.accept(MAGIC_BARREL.get());
             output.accept(UMBRAN_BARREL.get());
             output.accept(HELLBARK_BARREL.get());
+        }
+        if (ModList.get().isLoaded(ModIds.ARS_NOUVEAU)) {
+            output.accept(ARCHWOOD_BARREL.get());
         }
     }
 }

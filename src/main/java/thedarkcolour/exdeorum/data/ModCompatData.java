@@ -30,7 +30,7 @@ import thedarkcolour.exdeorum.compat.ModIds;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-// registers dummy items so that data generation can reference modded items without needing those mods installed.
+// Mocks modded items so that data generation can reference modded items without needing those mods installed.
 public class ModCompatData {
     // Ender IO
     public static RegistryObject<Item> GRAINS_OF_INFINITY;
@@ -109,6 +109,23 @@ public class ModCompatData {
     public static RegistryObject<Item> CHARGED_CERTUS_QUARTZ_CRYSTAL;
     public static RegistryObject<Item> CERTUS_QUARTZ_DUST;
     public static RegistryObject<Item> SKY_STONE_DUST;
+    // Ars Nouveau
+    public static RegistryObject<Item> BLUE_ARCHWOOD_SAPLING;
+    public static RegistryObject<Item> RED_ARCHWOOD_SAPLING;
+    public static RegistryObject<Item> PURPLE_ARCHWOOD_SAPLING;
+    public static RegistryObject<Item> GREEN_ARCHWOOD_SAPLING;
+    public static RegistryObject<Item> SOURCEBERRY;
+    public static RegistryObject<Block> CASCADING_ARCHWOOD_LOG;
+    public static RegistryObject<Block> BLAZING_ARCHWOOD_LOG;
+    public static RegistryObject<Block> VEXING_ARCHWOOD_LOG;
+    public static RegistryObject<Block> FLOURISHING_ARCHWOOD_LOG;
+    public static RegistryObject<Block> ARCHWOOD_PLANKS;
+    public static RegistryObject<Item> CASCADING_ARCHWOOD_LOG_ITEM;
+    public static RegistryObject<Item> BLAZING_ARCHWOOD_LOG_ITEM;
+    public static RegistryObject<Item> VEXING_ARCHWOOD_LOG_ITEM;
+    public static RegistryObject<Item> FLOURISHING_ARCHWOOD_LOG_ITEM;
+    public static RegistryObject<Item> ARCHWOOD_SLAB;
+    public static RegistryObject<Item> ARCHWOOD_PLANKS_ITEM;
 
     public static void registerModData() {
         registerModItems(ModIds.ENDERIO, addItem -> GRAINS_OF_INFINITY = addItem.apply("grains_of_infinity"));
@@ -189,6 +206,26 @@ public class ModCompatData {
             CHARGED_CERTUS_QUARTZ_CRYSTAL = addItem.apply("charged_certus_quartz_crystal");
             CERTUS_QUARTZ_DUST = addItem.apply("certus_quartz_dust");
             SKY_STONE_DUST = addItem.apply("sky_dust");
+        });
+        registerModBlocks(ModIds.ARS_NOUVEAU, addBlock -> {
+            CASCADING_ARCHWOOD_LOG = addBlock.apply("blue_archwood_log");
+            BLAZING_ARCHWOOD_LOG = addBlock.apply("red_archwood_log");
+            VEXING_ARCHWOOD_LOG = addBlock.apply("purple_archwood_log");
+            FLOURISHING_ARCHWOOD_LOG = addBlock.apply("green_archwood_log");
+            ARCHWOOD_PLANKS = addBlock.apply("archwood_planks");
+        });
+        registerModItems(ModIds.ARS_NOUVEAU, addItem -> {
+            BLUE_ARCHWOOD_SAPLING = addItem.apply("blue_archwood_sapling");
+            RED_ARCHWOOD_SAPLING = addItem.apply("red_archwood_sapling");
+            PURPLE_ARCHWOOD_SAPLING = addItem.apply("purple_archwood_sapling");
+            GREEN_ARCHWOOD_SAPLING = addItem.apply("green_archwood_sapling");
+            SOURCEBERRY = addItem.apply("sourceberry_bush");
+            CASCADING_ARCHWOOD_LOG_ITEM = addItem.apply("blue_archwood_log");
+            BLAZING_ARCHWOOD_LOG_ITEM = addItem.apply("red_archwood_log");
+            VEXING_ARCHWOOD_LOG_ITEM = addItem.apply("purple_archwood_log");
+            FLOURISHING_ARCHWOOD_LOG_ITEM = addItem.apply("green_archwood_log");
+            ARCHWOOD_SLAB = addItem.apply("archwood_slab");
+            ARCHWOOD_PLANKS_ITEM = addItem.apply("archwood_planks");
         });
     }
 

@@ -1,0 +1,34 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "ars_nouveau"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "m": {
+            "item": "ars_nouveau:archwood_slab"
+          },
+          "s": {
+            "item": "ars_nouveau:red_archwood_log"
+          }
+        },
+        "pattern": [
+          "s s",
+          "s s",
+          "sms"
+        ],
+        "result": {
+          "item": "exdeorum:red_archwood_crucible"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}
