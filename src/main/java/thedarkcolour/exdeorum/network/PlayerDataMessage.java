@@ -18,25 +18,19 @@
 
 package thedarkcolour.exdeorum.network;
 
-import net.minecraft.client.Minecraft;
-import thedarkcolour.exdeorum.client.ClientHandler;
-import thedarkcolour.exdeorum.recipe.RecipeUtil;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.network.NetworkEvent;
 
-public class ClientMessageHandler {
-    public static boolean isInVoidWorld;
+import java.util.function.Supplier;
 
-    // Removes the black sky/fog that appears when the player is below y=62
-    public static void disableVoidFogRendering() {
-        isInVoidWorld = true;
-
-        var level = Minecraft.getInstance().level;
-        if (level != null) {
-            level.clientLevelData.isFlat = true;
-        }
-    }
-
-    public static void reloadClientRecipeCache() {
-        //RecipeUtil.reload(Minecraft.getInstance().level.getRecipeManager());
-        ClientHandler.needsRecipeCacheRefresh = true;
+// Server -> Client
+// Fired whenever a player joins an LAN world or dedicated server to load the recipe caches
+// Also fired whenever those servers reload data
+public class PlayerDataMessage {
+    public void handle(Supplier<NetworkEvent.Context> ctxSupplier) {
+        NetworkHandler.handle(ctxSupplier, ctx -> {
+            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ClientMessageHandler::reloadClientRecipeCache);
+        });
     }
 }

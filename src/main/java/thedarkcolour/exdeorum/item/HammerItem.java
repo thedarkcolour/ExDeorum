@@ -28,32 +28,41 @@ import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.util.Lazy;
 import org.jetbrains.annotations.Nullable;
+import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.registry.EItems;
-import thedarkcolour.exdeorum.registry.ERecipeTypes;
 
 import java.util.Set;
 
 public class HammerItem extends DiggerItem {
-    public static final Set<Block> VALID_BLOCKS = new ObjectOpenHashSet<>();
+    public static Lazy<Set<Block>> validBlocks = Lazy.of(HammerItem::computeValidBlocks);
 
     public HammerItem(Tier tier, Properties properties) {
         super(1.0f, -2.8f, tier, null, properties);
     }
 
-    public static void refreshValidBlocks(RecipeManager recipes) {
-        VALID_BLOCKS.clear();
-        for (var recipe : recipes.byType(ERecipeTypes.HAMMER.get()).values()) {
+    public static Set<Block> computeValidBlocks() {
+        var hammerRecipes = RecipeUtil.getCachedHammerRecipes();
+        var validBlocks = new ObjectOpenHashSet<Block>(hammerRecipes.size());
+
+        for (var recipe : hammerRecipes) {
             for (var item : recipe.getIngredient().getItems()) {
                 if (item.getItem() instanceof BlockItem blockItem) {
-                    VALID_BLOCKS.add(blockItem.getBlock());
+                    validBlocks.add(blockItem.getBlock());
                 }
             }
         }
+
+        return validBlocks;
+    }
+
+    public static void refreshValidBlocks(RecipeManager recipes) {
+        validBlocks = Lazy.of(HammerItem::computeValidBlocks);
     }
 
     protected Set<Block> getValidBlocks() {
-        return VALID_BLOCKS;
+        return validBlocks.get();
     }
 
     @Override

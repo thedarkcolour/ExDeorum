@@ -16,27 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package thedarkcolour.exdeorum.network;
+package thedarkcolour.exdeorum.event;
 
 import net.minecraft.client.Minecraft;
-import thedarkcolour.exdeorum.client.ClientHandler;
-import thedarkcolour.exdeorum.recipe.RecipeUtil;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 
-public class ClientMessageHandler {
-    public static boolean isInVoidWorld;
-
-    // Removes the black sky/fog that appears when the player is below y=62
-    public static void disableVoidFogRendering() {
-        isInVoidWorld = true;
-
-        var level = Minecraft.getInstance().level;
-        if (level != null) {
-            level.clientLevelData.isFlat = true;
-        }
-    }
-
-    public static void reloadClientRecipeCache() {
-        //RecipeUtil.reload(Minecraft.getInstance().level.getRecipeManager());
-        ClientHandler.needsRecipeCacheRefresh = true;
+// necessary to avoid EventBus loading LocalPlayer through its ASM transformations
+class ClientsideCode {
+    static Player getLocalPlayer() {
+        return Minecraft.getInstance().player;
     }
 }

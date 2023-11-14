@@ -1,3 +1,9 @@
+## Ex Deorum 1.9
+- Fixed incompatibility with SkyblockBuilder where player would not receive torch/watering can and Ex Deorum advancements
+- Fixed error message printing while patching the End Portal method
+- Fixed several issues with hammers in LAN and server worlds
+- Fixed hammer recipes with tag ingredients not functioning
+
 ## Ex Deorum 1.8
 - Added a config option to limit the number of sieve drops from sieving moss. May be useful when playing with mods that add a lot of different saplings.
 - Added compatibility with Ars Nouveau's saplings and Sourceberries to the sieve.

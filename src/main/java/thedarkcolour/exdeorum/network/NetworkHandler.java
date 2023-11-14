@@ -35,10 +35,15 @@ public final class NetworkHandler {
 
     public static void register() {
         CHANNEL.registerMessage(0, VoidWorldMessage.class, VoidWorldMessage::encode, VoidWorldMessage::decode, VoidWorldMessage::handle);
+        CHANNEL.registerMessage(1, PlayerDataMessage.class, (msg, buffer) -> {}, buffer -> new PlayerDataMessage(), PlayerDataMessage::handle);
     }
 
     public static void sendVoidWorld(ServerPlayer pPlayer) {
         CHANNEL.sendTo(new VoidWorldMessage(), pPlayer.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
+    }
+
+    public static void sendRecipeCacheReset(ServerPlayer player) {
+        CHANNEL.sendTo(new PlayerDataMessage(), player.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
     }
 
     static void handle(Supplier<NetworkEvent.Context> ctxSupplier, Consumer<NetworkEvent.Context> handler) {

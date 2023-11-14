@@ -29,6 +29,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Unit;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameRules;
@@ -36,18 +37,23 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.XoroshiroRandomSource;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ClientChatEvent;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AddReloadListenerEvent;
+import net.minecraftforge.event.OnDatapackSyncEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.fluids.FluidInteractionRegistry;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLEnvironment;
+import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.blockentity.LavaCrucibleBlockEntity;
 import thedarkcolour.exdeorum.client.CompostColors;
@@ -56,6 +62,7 @@ import thedarkcolour.exdeorum.compat.top.ExDeorumTopCompat;
 import thedarkcolour.exdeorum.config.EConfig;
 import thedarkcolour.exdeorum.item.HammerItem;
 import thedarkcolour.exdeorum.item.WateringCanItem;
+import thedarkcolour.exdeorum.network.ClientMessageHandler;
 import thedarkcolour.exdeorum.network.NetworkHandler;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.registry.EFluids;
@@ -63,15 +70,21 @@ import thedarkcolour.exdeorum.registry.EItems;
 import thedarkcolour.exdeorum.tag.EBiomeTags;
 import thedarkcolour.exdeorum.voidworld.VoidChunkGenerator;
 
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Set;
+import java.util.UUID;
+
 public final class EventHandler {
     public static void register() {
         var fmlBus = MinecraftForge.EVENT_BUS;
         var modBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         fmlBus.addListener(EventHandler::onPlayerLogin);
+        fmlBus.addListener(EventHandler::onDataSynced);
         fmlBus.addListener(EventHandler::addReloadListeners);
-        modBus.addListener(EventHandler::interModEnqueue);
         fmlBus.addListener(EventHandler::createSpawnTree);
+        modBus.addListener(EventHandler::interModEnqueue);
         modBus.addListener(EventHandler::onCommonSetup);
 
         if (ExDeorum.DEBUG) {
@@ -154,9 +167,38 @@ public final class EventHandler {
         });
     }
 
+    private static void onDataSynced(OnDatapackSyncEvent event) {
+        UUID excludedUUID = null;
+
+        if (FMLEnvironment.dist == Dist.CLIENT) {
+            // since event code is turned into ASM, we need this to prevent ASM trying to load the LocalPlayer class
+            Player player = DistExecutor.unsafeCallWhenOn(Dist.CLIENT, () -> ClientsideCode::getLocalPlayer);;
+            if (player == null) {
+                return;
+            } else {
+                excludedUUID = player.getUUID();
+            }
+        }
+
+        // A player who is first connecting isn't yet included in the server's player list, so include them.
+        Set<ServerPlayer> players = new HashSet<>(event.getPlayerList().getPlayers());
+        if (event.getPlayer() != null) {
+            players.add(event.getPlayer());
+        }
+
+        for (var player : players) {
+            if (!player.getUUID().equals(excludedUUID)) {
+                NetworkHandler.sendRecipeCacheReset(player);
+            }
+        }
+    }
+
     private static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
-            if (player.serverLevel().getChunkSource().getGenerator() instanceof VoidChunkGenerator) {
+            var generator = player.serverLevel().getChunkSource().getGenerator();
+
+            // tries to account for other SkyBlock generator mods like SkyBlockBuilder
+            if (generator instanceof VoidChunkGenerator || generator.getClass().getName().toLowerCase(Locale.ROOT).contains("skyblock")) {
                 NetworkHandler.sendVoidWorld(player);
                 var advancement = player.server.getAdvancements().getAdvancement(new ResourceLocation(ExDeorum.ID, "core/root"));
 
@@ -188,7 +230,6 @@ public final class EventHandler {
         var recipes = event.getServerResources().getRecipeManager();
         event.addListener((prepBarrier, resourceManager, prepProfiler, reloadProfiler, backgroundExecutor, gameExecutor) -> {
             return prepBarrier.wait(Unit.INSTANCE).thenRunAsync(() -> {
-                HammerItem.refreshValidBlocks(recipes);
                 RecipeUtil.reload(recipes);
                 LavaCrucibleBlockEntity.putDefaultHeatValues();
             }, gameExecutor);

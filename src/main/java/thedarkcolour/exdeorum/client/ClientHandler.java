@@ -35,6 +35,8 @@ import net.minecraftforge.client.event.RegisterClientReloadListenersEvent;
 import net.minecraftforge.client.event.RegisterShadersEvent;
 import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.TagsUpdatedEvent;
+import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -45,6 +47,7 @@ import thedarkcolour.exdeorum.client.ter.InfestedLeavesRenderer;
 import thedarkcolour.exdeorum.client.ter.SieveRenderer;
 import thedarkcolour.exdeorum.config.EConfig;
 import thedarkcolour.exdeorum.network.ClientMessageHandler;
+import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.registry.EBlockEntities;
 import thedarkcolour.exdeorum.registry.EFluids;
 import thedarkcolour.exdeorum.registry.EWorldPresets;
@@ -52,6 +55,8 @@ import thedarkcolour.exdeorum.registry.EWorldPresets;
 import java.io.IOException;
 
 public class ClientHandler {
+    public static boolean needsRecipeCacheRefresh;
+
     public static void register() {
         var modBus = FMLJavaModLoadingContext.get().getModEventBus();
         var fmlBus = MinecraftForge.EVENT_BUS;
@@ -60,10 +65,18 @@ public class ClientHandler {
         modBus.addListener(ClientHandler::registerRenderers);
         modBus.addListener(ClientHandler::registerShaders);
         modBus.addListener(ClientHandler::addClientReloadListeners);
+        modBus.addListener(ClientHandler::onConfigChanged);
         fmlBus.addListener(ClientHandler::onPlayerRespawn);
         fmlBus.addListener(ClientHandler::onPlayerLogout);
-        modBus.addListener(ClientHandler::onConfigChanged);
         fmlBus.addListener(ClientHandler::onScreenOpen);
+        fmlBus.addListener(ClientHandler::onTagsUpdated);
+    }
+
+    private static void onTagsUpdated(TagsUpdatedEvent event) {
+        if (needsRecipeCacheRefresh && Minecraft.getInstance().getConnection() != null) {
+            RecipeUtil.reload(Minecraft.getInstance().getConnection().getRecipeManager());
+            needsRecipeCacheRefresh = false;
+        }
     }
 
     private static void addClientReloadListeners(RegisterClientReloadListenersEvent event) {
@@ -84,6 +97,12 @@ public class ClientHandler {
 
     private static void onPlayerLogout(ClientPlayerNetworkEvent.LoggingOut event) {
         ClientMessageHandler.isInVoidWorld = false;
+        needsRecipeCacheRefresh = false;
+
+        // Only null when logging in
+        if (Minecraft.getInstance().level != null) {
+            RecipeUtil.unload();
+        }
     }
 
     private static void onConfigChanged(ModConfigEvent.Reloading event) {

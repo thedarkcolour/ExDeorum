@@ -47,6 +47,7 @@ import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.compat.PreferredOres;
+import thedarkcolour.exdeorum.item.HammerItem;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelCompostRecipe;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelMixingRecipe;
 import thedarkcolour.exdeorum.recipe.crucible.CrucibleRecipe;
@@ -77,6 +78,15 @@ public final class RecipeUtil {
         lavaCrucibleRecipeCache = loadSimpleRecipeCache(recipes, ERecipeTypes.LAVA_CRUCIBLE);
         waterCrucibleRecipeCache = loadSimpleRecipeCache(recipes, ERecipeTypes.WATER_CRUCIBLE);
         hammerRecipeCache = loadSimpleRecipeCache(recipes, ERecipeTypes.HAMMER);
+        HammerItem.refreshValidBlocks(recipes);
+    }
+
+    public static void unload() {
+        SIEVE_RECIPE_CACHE.invalidateAll();
+        barrelCompostRecipeCache = null;
+        lavaCrucibleRecipeCache = null;
+        waterCrucibleRecipeCache = null;
+        hammerRecipeCache = null;
     }
 
     private static <T extends SingleIngredientRecipe> Lazy<Map<Item, T>> loadSimpleRecipeCache(RecipeManager recipes, Supplier<RecipeType<T>> recipeType) {
@@ -136,6 +146,10 @@ public final class RecipeUtil {
     @Nullable
     public static HammerRecipe getHammerRecipe(Item playerItem) {
         return hammerRecipeCache.get().get(playerItem);
+    }
+
+    public static Collection<HammerRecipe> getCachedHammerRecipes() {
+        return hammerRecipeCache.get().values();
     }
 
     public static <C extends Container, T extends Recipe<C>> Collection<T> byType(RecipeManager manager, RecipeType<T> type) {
