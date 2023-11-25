@@ -38,4 +38,6 @@ public class ModIds {
     public static final String ARS_NOUVEAU = "ars_nouveau";
     public static final String MODEST_FLINT_OVERHAUL = "modestflintoverhaul";
     public static final String FACTORIUM = "factorium";
+    public static final String AETHER = "aether";
+    public static final String BLUE_SKIES = "blue_skies";
 }

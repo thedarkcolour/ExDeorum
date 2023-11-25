@@ -32,7 +32,6 @@ import net.minecraft.world.level.levelgen.structure.BuiltinStructureSets;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.material.Fluid;
 import thedarkcolour.exdeorum.ExDeorum;
-import thedarkcolour.exdeorum.block.EBlock;
 import thedarkcolour.exdeorum.registry.EBlocks;
 import thedarkcolour.exdeorum.registry.EFluids;
 import thedarkcolour.exdeorum.registry.EItems;
@@ -52,21 +51,30 @@ class ModTags {
                 EBlocks.FIR_BARREL.get(), EBlocks.REDWOOD_BARREL.get(), EBlocks.MAHOGANY_BARREL.get(), EBlocks.JACARANDA_BARREL.get(), EBlocks.PALM_BARREL.get(), EBlocks.WILLOW_BARREL.get(), EBlocks.DEAD_BARREL.get(), EBlocks.MAGIC_BARREL.get(), EBlocks.UMBRAN_BARREL.get(), EBlocks.HELLBARK_BARREL.get(),
                 // Ars Nouveau barrels
                 EBlocks.ARCHWOOD_BARREL.get(),
+                // Aether barrels
+                EBlocks.SKYROOT_BARREL.get(),
+                // Blue Skies barrels
+                EBlocks.BLUEBRIGHT_BARREL.get(), EBlocks.STARLIT_BARREL.get(), EBlocks.FROSTBRIGHT_BARREL.get(), EBlocks.COMET_BARREL.get(), EBlocks.LUNAR_BARREL.get(), EBlocks.DUSK_BARREL.get(), EBlocks.MAPLE_BARREL.get(), EBlocks.CRYSTALLIZED_BARREL.get(),
                 // Vanilla sieves
                 EBlocks.OAK_SIEVE.get(), EBlocks.SPRUCE_SIEVE.get(), EBlocks.BIRCH_SIEVE.get(), EBlocks.JUNGLE_SIEVE.get(), EBlocks.ACACIA_SIEVE.get(), EBlocks.DARK_OAK_SIEVE.get(), EBlocks.MANGROVE_SIEVE.get(), EBlocks.CHERRY_SIEVE.get(), EBlocks.BAMBOO_SIEVE.get(), EBlocks.CRIMSON_SIEVE.get(), EBlocks.WARPED_SIEVE.get(),
                 // BOP sieves
                 EBlocks.FIR_SIEVE.get(), EBlocks.REDWOOD_SIEVE.get(), EBlocks.MAHOGANY_SIEVE.get(), EBlocks.JACARANDA_SIEVE.get(), EBlocks.PALM_SIEVE.get(), EBlocks.WILLOW_SIEVE.get(), EBlocks.DEAD_SIEVE.get(), EBlocks.MAGIC_SIEVE.get(), EBlocks.UMBRAN_SIEVE.get(), EBlocks.HELLBARK_SIEVE.get(),
                 // Ars Nouveau sieves
                 EBlocks.ARCHWOOD_SIEVE.get(),
+                // Aether sieves
+                EBlocks.SKYROOT_SIEVE.get(),
+                // Blue Skies sieves
+                EBlocks.BLUEBRIGHT_SIEVE.get(), EBlocks.STARLIT_SIEVE.get(), EBlocks.FROSTBRIGHT_SIEVE.get(), EBlocks.COMET_SIEVE.get(), EBlocks.LUNAR_SIEVE.get(), EBlocks.DUSK_SIEVE.get(), EBlocks.MAPLE_SIEVE.get(), EBlocks.CRYSTALLIZED_SIEVE.get(),
                 // Vanilla crucibles
                 EBlocks.WARPED_CRUCIBLE.get(), EBlocks.CRIMSON_CRUCIBLE.get(), EBlocks.OAK_CRUCIBLE.get(), EBlocks.SPRUCE_CRUCIBLE.get(), EBlocks.BIRCH_CRUCIBLE.get(), EBlocks.JUNGLE_CRUCIBLE.get(), EBlocks.ACACIA_CRUCIBLE.get(), EBlocks.DARK_OAK_CRUCIBLE.get(), EBlocks.MANGROVE_CRUCIBLE.get(), EBlocks.CHERRY_CRUCIBLE.get(), EBlocks.BAMBOO_CRUCIBLE.get(),
                 // BOP crucibles
                 EBlocks.FIR_CRUCIBLE.get(), EBlocks.REDWOOD_CRUCIBLE.get(), EBlocks.MAHOGANY_CRUCIBLE.get(), EBlocks.JACARANDA_CRUCIBLE.get(), EBlocks.PALM_CRUCIBLE.get(), EBlocks.WILLOW_CRUCIBLE.get(), EBlocks.DEAD_CRUCIBLE.get(), EBlocks.MAGIC_CRUCIBLE.get(), EBlocks.UMBRAN_CRUCIBLE.get(), EBlocks.HELLBARK_CRUCIBLE.get(),
                 // Ars Nouveau crucibles
-                EBlocks.CASCADING_ARCHWOOD_CRUCIBLE.get(),
-                EBlocks.BLAZING_ARCHWOOD_CRUCIBLE.get(),
-                EBlocks.VEXING_ARCHWOOD_CRUCIBLE.get(),
-                EBlocks.FLOURISHING_ARCHWOOD_CRUCIBLE.get()
+                EBlocks.CASCADING_ARCHWOOD_CRUCIBLE.get(), EBlocks.BLAZING_ARCHWOOD_CRUCIBLE.get(), EBlocks.VEXING_ARCHWOOD_CRUCIBLE.get(), EBlocks.FLOURISHING_ARCHWOOD_CRUCIBLE.get(),
+                // Aether crucibles
+                EBlocks.SKYROOT_CRUCIBLE.get(), EBlocks.GOLDEN_OAK_CRUCIBLE.get(),
+                // Blue Skies crucibles
+                EBlocks.BLUEBRIGHT_CRUCIBLE.get(), EBlocks.STARLIT_CRUCIBLE.get(), EBlocks.FROSTBRIGHT_CRUCIBLE.get(), EBlocks.COMET_CRUCIBLE.get(), EBlocks.LUNAR_CRUCIBLE.get(), EBlocks.DUSK_CRUCIBLE.get(), EBlocks.MAPLE_CRUCIBLE.get()
         );
         tags.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(EBlocks.STONE_BARREL, EBlocks.PORCELAIN_CRUCIBLE, EBlocks.UNFIRED_PORCELAIN_CRUCIBLE);
         tags.tag(BlockTags.MINEABLE_WITH_SHOVEL).add(EBlocks.DUST, EBlocks.CRUSHED_NETHERRACK, EBlocks.CRUSHED_END_STONE, EBlocks.CRUSHED_DEEPSLATE, EBlocks.CRUSHED_BLACKSTONE);

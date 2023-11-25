@@ -162,10 +162,46 @@ public class ExDeorumJeiPlugin implements IModPlugin {
             waterCrucibles.add(EItems.DEAD_CRUCIBLE.get());
             waterCrucibles.add(EItems.MAGIC_CRUCIBLE.get());
             waterCrucibles.add(EItems.UMBRAN_CRUCIBLE.get());
+        }
+        if (ModList.get().isLoaded(ModIds.ARS_NOUVEAU)) {
+            barrels.add(EItems.ARCHWOOD_BARREL.get());
+            sieves.add(EItems.ARCHWOOD_SIEVE.get());
             waterCrucibles.add(EItems.CASCADING_ARCHWOOD_CRUCIBLE.get());
             waterCrucibles.add(EItems.BLAZING_ARCHWOOD_CRUCIBLE.get());
             waterCrucibles.add(EItems.VEXING_ARCHWOOD_CRUCIBLE.get());
             waterCrucibles.add(EItems.FLOURISHING_ARCHWOOD_CRUCIBLE.get());
+        }
+        if (ModList.get().isLoaded(ModIds.AETHER)) {
+            barrels.add(EItems.SKYROOT_BARREL.get());
+            sieves.add(EItems.SKYROOT_SIEVE.get());
+            waterCrucibles.add(EItems.SKYROOT_CRUCIBLE.get());
+            waterCrucibles.add(EItems.GOLDEN_OAK_CRUCIBLE.get());
+        }
+        if (ModList.get().isLoaded(ModIds.BLUE_SKIES)) {
+            barrels.add(EItems.BLUEBRIGHT_BARREL.get());
+            barrels.add(EItems.STARLIT_BARREL.get());
+            barrels.add(EItems.FROSTBRIGHT_BARREL.get());
+            barrels.add(EItems.COMET_BARREL.get());
+            barrels.add(EItems.LUNAR_BARREL.get());
+            barrels.add(EItems.DUSK_BARREL.get());
+            barrels.add(EItems.MAPLE_BARREL.get());
+            barrels.add(EItems.CRYSTALLIZED_BARREL.get());
+            sieves.add(EItems.BLUEBRIGHT_SIEVE.get());
+            sieves.add(EItems.STARLIT_SIEVE.get());
+            sieves.add(EItems.FROSTBRIGHT_SIEVE.get());
+            sieves.add(EItems.COMET_SIEVE.get());
+            sieves.add(EItems.LUNAR_SIEVE.get());
+            sieves.add(EItems.DUSK_SIEVE.get());
+            sieves.add(EItems.MAPLE_SIEVE.get());
+            sieves.add(EItems.CRYSTALLIZED_SIEVE.get());
+            lavaCrucibles.add(EItems.CRYSTALLIZED_CRUCIBLE.get());
+            waterCrucibles.add(EItems.BLUEBRIGHT_CRUCIBLE.get());
+            waterCrucibles.add(EItems.STARLIT_CRUCIBLE.get());
+            waterCrucibles.add(EItems.FROSTBRIGHT_CRUCIBLE.get());
+            waterCrucibles.add(EItems.COMET_CRUCIBLE.get());
+            waterCrucibles.add(EItems.LUNAR_CRUCIBLE.get());
+            waterCrucibles.add(EItems.DUSK_CRUCIBLE.get());
+            waterCrucibles.add(EItems.MAPLE_CRUCIBLE.get());
         }
         for (var barrel : barrels) {
             var stack = new ItemStack(barrel);

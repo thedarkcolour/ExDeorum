@@ -32,6 +32,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import thedarkcolour.exdeorum.ExDeorum;
+import thedarkcolour.exdeorum.block.EBlock;
 import thedarkcolour.exdeorum.compat.ModIds;
 import thedarkcolour.exdeorum.item.*;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
@@ -170,6 +171,17 @@ public class EItems {
     public static final RegistryObject<BlockItem> HELLBARK_BARREL = registerItemBlock(EBlocks.HELLBARK_BARREL);
     // Ars Nouveau Barrels
     public static final RegistryObject<BlockItem> ARCHWOOD_BARREL = registerItemBlock(EBlocks.ARCHWOOD_BARREL);
+    // Aether Barrels
+    public static final RegistryObject<BlockItem> SKYROOT_BARREL = registerItemBlock(EBlocks.SKYROOT_BARREL);
+    // Blue Skies Barrels
+    public static final RegistryObject<BlockItem> BLUEBRIGHT_BARREL = registerItemBlock(EBlocks.BLUEBRIGHT_BARREL);
+    public static final RegistryObject<BlockItem> STARLIT_BARREL = registerItemBlock(EBlocks.STARLIT_BARREL);
+    public static final RegistryObject<BlockItem> FROSTBRIGHT_BARREL = registerItemBlock(EBlocks.FROSTBRIGHT_BARREL);
+    public static final RegistryObject<BlockItem> COMET_BARREL = registerItemBlock(EBlocks.COMET_BARREL);
+    public static final RegistryObject<BlockItem> LUNAR_BARREL = registerItemBlock(EBlocks.LUNAR_BARREL);
+    public static final RegistryObject<BlockItem> DUSK_BARREL = registerItemBlock(EBlocks.DUSK_BARREL);
+    public static final RegistryObject<BlockItem> MAPLE_BARREL = registerItemBlock(EBlocks.MAPLE_BARREL);
+    public static final RegistryObject<BlockItem> CRYSTALLIZED_BARREL = registerItemBlock(EBlocks.CRYSTALLIZED_BARREL);
 
     // Sieves
     public static final RegistryObject<BlockItem> OAK_SIEVE = registerItemBlock(EBlocks.OAK_SIEVE);
@@ -306,6 +318,10 @@ public class EItems {
             output.accept(VEXING_ARCHWOOD_CRUCIBLE.get());
             output.accept(FLOURISHING_ARCHWOOD_CRUCIBLE.get());
         }
+        if (ModList.get().isLoaded(ModIds.AETHER)) {
+            output.accept(SKYROOT_CRUCIBLE.get());
+            output.accept(GOLDEN_OAK_CRUCIBLE.get());
+        }
 
         output.accept(DUST.get());
         output.accept(CRUSHED_NETHERRACK.get());
@@ -391,6 +407,19 @@ public class EItems {
         }
         if (ModList.get().isLoaded(ModIds.ARS_NOUVEAU)) {
             output.accept(ARCHWOOD_BARREL.get());
+        }
+        if (ModList.get().isLoaded(ModIds.AETHER)) {
+            output.accept(SKYROOT_BARREL.get());
+        }
+        if (ModList.get().isLoaded(ModIds.BLUE_SKIES)) {
+            output.accept(BLUEBRIGHT_BARREL.get());
+                    output.accept(STARLIT_BARREL.get());
+            output.accept(FROSTBRIGHT_BARREL.get());
+                    output.accept(COMET_BARREL.get());
+            output.accept(LUNAR_BARREL.get());
+                    output.accept(DUSK_BARREL.get());
+            output.accept(MAPLE_BARREL.get());
+                    output.accept(CRYSTALLIZED_BARREL.get());
         }
     }
 }

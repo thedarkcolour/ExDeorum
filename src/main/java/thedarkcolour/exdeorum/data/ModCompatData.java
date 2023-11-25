@@ -126,6 +126,10 @@ public class ModCompatData {
     public static RegistryObject<Item> FLOURISHING_ARCHWOOD_LOG_ITEM;
     public static RegistryObject<Item> ARCHWOOD_SLAB;
     public static RegistryObject<Item> ARCHWOOD_PLANKS_ITEM;
+    // Aether
+    public static RegistryObject<Block> SKYROOT_PLANKS;
+    public static RegistryObject<Item> SKYROOT_SLAB;
+    public static RegistryObject<Item> SKYROOT_PLANKS_ITEM;
 
     public static void registerModData() {
         registerModItems(ModIds.ENDERIO, addItem -> GRAINS_OF_INFINITY = addItem.apply("grains_of_infinity"));
@@ -226,6 +230,13 @@ public class ModCompatData {
             FLOURISHING_ARCHWOOD_LOG_ITEM = addItem.apply("green_archwood_log");
             ARCHWOOD_SLAB = addItem.apply("archwood_slab");
             ARCHWOOD_PLANKS_ITEM = addItem.apply("archwood_planks");
+        });
+        registerModBlocks(ModIds.AETHER, addBlock -> {
+            SKYROOT_PLANKS = addBlock.apply("skyroot_planks");
+        });
+        registerModItems(ModIds.AETHER, addItem -> {
+            SKYROOT_SLAB = addItem.apply("skyroot_slab");
+            SKYROOT_PLANKS_ITEM = addItem.apply("skyroot_planks");
         });
     }
 

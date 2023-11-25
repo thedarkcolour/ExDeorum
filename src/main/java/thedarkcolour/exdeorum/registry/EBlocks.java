@@ -71,6 +71,17 @@ public class EBlocks {
     public static final RegistryObject<BarrelBlock> HELLBARK_BARREL = registerBarrel("hellbark_barrel", false, false, MapColor.TERRACOTTA_GRAY);
     // Ars Nouveau Barrels
     public static final RegistryObject<BarrelBlock> ARCHWOOD_BARREL = registerBarrel("archwood_barrel", false, false, MapColor.COLOR_GRAY);
+    // Aether Barrels
+    public static final RegistryObject<BarrelBlock> SKYROOT_BARREL = registerBarrel("skyroot_barrel", false, false, MapColor.WOOD);
+    // Blue Skies Barrels
+    public static final RegistryObject<BarrelBlock> BLUEBRIGHT_BARREL = registerBarrel("bluebright_barrel", false, false, MapColor.WOOD);
+    public static final RegistryObject<BarrelBlock> STARLIT_BARREL = registerBarrel("starlit_barrel", false, false, MapColor.WOOD);
+    public static final RegistryObject<BarrelBlock> FROSTBRIGHT_BARREL = registerBarrel("frostbright_barrel", false, false, MapColor.WOOD);
+    public static final RegistryObject<BarrelBlock> COMET_BARREL = registerBarrel("comet_barrel", false, false, MapColor.WOOD);
+    public static final RegistryObject<BarrelBlock> LUNAR_BARREL = registerBarrel("lunar_barrel", false, false, MapColor.WOOD);
+    public static final RegistryObject<BarrelBlock> DUSK_BARREL = registerBarrel("dusk_barrel", false, false, MapColor.WOOD);
+    public static final RegistryObject<BarrelBlock> MAPLE_BARREL = registerBarrel("maple_barrel", false, false, MapColor.WOOD);
+    public static final RegistryObject<BarrelBlock> CRYSTALLIZED_BARREL = registerBarrel("crystallized_barrel", true, true, MapColor.TERRACOTTA_WHITE);
 
     // Sieves
     public static final RegistryObject<SieveBlock> OAK_SIEVE = registerSieve("oak_sieve");
@@ -97,6 +108,17 @@ public class EBlocks {
     public static final RegistryObject<SieveBlock> HELLBARK_SIEVE = registerSieve("hellbark_sieve");
     // Ars Nouveau Sieves
     public static final RegistryObject<SieveBlock> ARCHWOOD_SIEVE = registerSieve("archwood_sieve");
+    // Aether Sieves
+    public static final RegistryObject<SieveBlock> SKYROOT_SIEVE = registerSieve("skyroot_sieve");
+    // Blue Skies Sieves
+    public static final RegistryObject<SieveBlock> BLUEBRIGHT_SIEVE = registerSieve("bluebright_sieve");
+    public static final RegistryObject<SieveBlock> STARLIT_SIEVE = registerSieve("starlit_sieve");
+    public static final RegistryObject<SieveBlock> FROSTBRIGHT_SIEVE = registerSieve("frostbright_sieve");
+    public static final RegistryObject<SieveBlock> COMET_SIEVE = registerSieve("comet_sieve");
+    public static final RegistryObject<SieveBlock> LUNAR_SIEVE = registerSieve("lunar_sieve");
+    public static final RegistryObject<SieveBlock> DUSK_SIEVE = registerSieve("dusk_sieve");
+    public static final RegistryObject<SieveBlock> MAPLE_SIEVE = registerSieve("maple_sieve");
+    public static final RegistryObject<SieveBlock> CRYSTALLIZED_SIEVE = registerSieve("crystallized_sieve");
 
     // Lava Crucibles
     public static final RegistryObject<LavaCrucibleBlock> PORCELAIN_CRUCIBLE = registerLavaCrucible("porcelain_crucible", true, SoundType.STONE);
@@ -105,6 +127,8 @@ public class EBlocks {
     public static final RegistryObject<UnfiredCrucibleBlock> UNFIRED_PORCELAIN_CRUCIBLE = BLOCKS.register("unfired_porcelain_crucible", () -> new UnfiredCrucibleBlock(of().strength(2.0f)));
     // BOP Lava Crucibles
     public static final RegistryObject<LavaCrucibleBlock> HELLBARK_CRUCIBLE = registerLavaCrucible("hellbark_crucible", false, SoundType.WOOD);
+    // Blue Skies Lava Crucibles
+    public static final RegistryObject<LavaCrucibleBlock> CRYSTALLIZED_CRUCIBLE = registerLavaCrucible("crystallized_crucible", true, SoundType.GLASS);
 
     // Water Crucibles
     public static final RegistryObject<WaterCrucibleBlock> OAK_CRUCIBLE = registerWaterCrucible("oak_crucible");
@@ -131,6 +155,17 @@ public class EBlocks {
     public static final RegistryObject<WaterCrucibleBlock> BLAZING_ARCHWOOD_CRUCIBLE = registerWaterCrucible("red_archwood_crucible");
     public static final RegistryObject<WaterCrucibleBlock> VEXING_ARCHWOOD_CRUCIBLE = registerWaterCrucible("purple_archwood_crucible");
     public static final RegistryObject<WaterCrucibleBlock> FLOURISHING_ARCHWOOD_CRUCIBLE = registerWaterCrucible("green_archwood_crucible");
+    // Aether Crucibles
+    public static final RegistryObject<WaterCrucibleBlock> SKYROOT_CRUCIBLE = registerWaterCrucible("skyroot_crucible");
+    public static final RegistryObject<WaterCrucibleBlock> GOLDEN_OAK_CRUCIBLE = registerWaterCrucible("golden_oak_crucible");
+    // Blue Skies Crucibles
+    public static final RegistryObject<WaterCrucibleBlock> BLUEBRIGHT_CRUCIBLE = registerWaterCrucible("bluebright_crucible");
+    public static final RegistryObject<WaterCrucibleBlock> STARLIT_CRUCIBLE = registerWaterCrucible("starlit_crucible");
+    public static final RegistryObject<WaterCrucibleBlock> FROSTBRIGHT_CRUCIBLE = registerWaterCrucible("frostbright_crucible");
+    public static final RegistryObject<WaterCrucibleBlock> COMET_CRUCIBLE = registerWaterCrucible("comet_crucible");
+    public static final RegistryObject<WaterCrucibleBlock> LUNAR_CRUCIBLE = registerWaterCrucible("lunar_crucible");
+    public static final RegistryObject<WaterCrucibleBlock> DUSK_CRUCIBLE = registerWaterCrucible("dusk_crucible");
+    public static final RegistryObject<WaterCrucibleBlock> MAPLE_CRUCIBLE = registerWaterCrucible("maple_crucible");
 
     // Misc
     public static final RegistryObject<InfestedLeavesBlock> INFESTED_LEAVES = BLOCKS.register("infested_leaves", () -> new InfestedLeavesBlock(copy(Blocks.OAK_LEAVES)));

@@ -23,6 +23,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import thedarkcolour.exdeorum.ExDeorum;
+import thedarkcolour.exdeorum.block.EBlock;
 import thedarkcolour.exdeorum.blockentity.BarrelBlockEntity;
 import thedarkcolour.exdeorum.blockentity.InfestedLeavesBlockEntity;
 import thedarkcolour.exdeorum.blockentity.LavaCrucibleBlockEntity;
@@ -38,7 +39,9 @@ public class EBlockEntities {
             EBlocks.CRIMSON_CRUCIBLE.get(),
             EBlocks.PORCELAIN_CRUCIBLE.get(),
             // BOP
-            EBlocks.HELLBARK_CRUCIBLE.get()
+            EBlocks.HELLBARK_CRUCIBLE.get(),
+            // Blue Skies
+            EBlocks.CRYSTALLIZED_CRUCIBLE.get()
     ).build(null));
     public static final RegistryObject<BlockEntityType<WaterCrucibleBlockEntity>> WATER_CRUCIBLE = BLOCK_ENTITIES.register("water_crucible", () -> BlockEntityType.Builder.of(WaterCrucibleBlockEntity::new,
             EBlocks.OAK_CRUCIBLE.get(),
@@ -64,7 +67,18 @@ public class EBlockEntities {
             EBlocks.CASCADING_ARCHWOOD_CRUCIBLE.get(),
             EBlocks.BLAZING_ARCHWOOD_CRUCIBLE.get(),
             EBlocks.VEXING_ARCHWOOD_CRUCIBLE.get(),
-            EBlocks.FLOURISHING_ARCHWOOD_CRUCIBLE.get()
+            EBlocks.FLOURISHING_ARCHWOOD_CRUCIBLE.get(),
+            // Aether
+            EBlocks.SKYROOT_CRUCIBLE.get(),
+            EBlocks.GOLDEN_OAK_CRUCIBLE.get(),
+            // Blue Skies
+            EBlocks.BLUEBRIGHT_CRUCIBLE.get(),
+            EBlocks.STARLIT_CRUCIBLE.get(),
+            EBlocks.FROSTBRIGHT_CRUCIBLE.get(),
+            EBlocks.COMET_CRUCIBLE.get(),
+            EBlocks.LUNAR_CRUCIBLE.get(),
+            EBlocks.DUSK_CRUCIBLE.get(),
+            EBlocks.MAPLE_CRUCIBLE.get()
     ).build(null));
     public static final RegistryObject<BlockEntityType<BarrelBlockEntity>> BARREL = BLOCK_ENTITIES.register("barrel", () -> BlockEntityType.Builder.of(BarrelBlockEntity::new,
             EBlocks.OAK_BARREL.get(),
@@ -91,7 +105,18 @@ public class EBlockEntities {
             EBlocks.UMBRAN_BARREL.get(),
             EBlocks.HELLBARK_BARREL.get(),
             // Ars Nouveau
-            EBlocks.ARCHWOOD_BARREL.get()
+            EBlocks.ARCHWOOD_BARREL.get(),
+            // Aether
+            EBlocks.SKYROOT_BARREL.get(),
+            // Blue Skies
+            EBlocks.BLUEBRIGHT_BARREL.get(),
+            EBlocks.STARLIT_BARREL.get(),
+            EBlocks.FROSTBRIGHT_BARREL.get(),
+            EBlocks.COMET_BARREL.get(),
+            EBlocks.LUNAR_BARREL.get(),
+            EBlocks.DUSK_BARREL.get(),
+            EBlocks.MAPLE_BARREL.get(),
+            EBlocks.CRYSTALLIZED_BARREL.get()
     ).build(null));
     public static final RegistryObject<BlockEntityType<SieveBlockEntity>> SIEVE = BLOCK_ENTITIES.register("sieve", () -> BlockEntityType.Builder.of(SieveBlockEntity::new,
             EBlocks.OAK_SIEVE.get(),
@@ -117,6 +142,17 @@ public class EBlockEntities {
             EBlocks.UMBRAN_SIEVE.get(),
             EBlocks.HELLBARK_SIEVE.get(),
             // Ars Nouveau
-            EBlocks.ARCHWOOD_SIEVE.get()
+            EBlocks.ARCHWOOD_SIEVE.get(),
+            // Aether
+            EBlocks.SKYROOT_SIEVE.get(),
+            // Blue Skies
+            EBlocks.BLUEBRIGHT_SIEVE.get(),
+            EBlocks.STARLIT_SIEVE.get(),
+            EBlocks.FROSTBRIGHT_SIEVE.get(),
+            EBlocks.COMET_SIEVE.get(),
+            EBlocks.LUNAR_SIEVE.get(),
+            EBlocks.DUSK_SIEVE.get(),
+            EBlocks.MAPLE_SIEVE.get(),
+            EBlocks.CRYSTALLIZED_SIEVE.get()
     ).build(null));
 }
