@@ -33,6 +33,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.block.EBlock;
+import thedarkcolour.exdeorum.block.SieveBlock;
 import thedarkcolour.exdeorum.compat.ModIds;
 import thedarkcolour.exdeorum.item.*;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
@@ -208,6 +209,17 @@ public class EItems {
     public static final RegistryObject<BlockItem> HELLBARK_SIEVE = registerItemBlock(EBlocks.HELLBARK_SIEVE);
     // Ars Nouveau Sieves
     public static final RegistryObject<BlockItem> ARCHWOOD_SIEVE = registerItemBlock(EBlocks.ARCHWOOD_SIEVE);
+    // Aether Sieves
+    public static final RegistryObject<BlockItem> SKYROOT_SIEVE = registerItemBlock(EBlocks.SKYROOT_SIEVE);
+    // Blue Skies Sieves
+    public static final RegistryObject<BlockItem> BLUEBRIGHT_SIEVE = registerItemBlock(EBlocks.BLUEBRIGHT_SIEVE);
+    public static final RegistryObject<BlockItem> STARLIT_SIEVE = registerItemBlock(EBlocks.STARLIT_SIEVE);
+    public static final RegistryObject<BlockItem> FROSTBRIGHT_SIEVE = registerItemBlock(EBlocks.FROSTBRIGHT_SIEVE);
+    public static final RegistryObject<BlockItem> COMET_SIEVE = registerItemBlock(EBlocks.COMET_SIEVE);
+    public static final RegistryObject<BlockItem> LUNAR_SIEVE = registerItemBlock(EBlocks.LUNAR_SIEVE);
+    public static final RegistryObject<BlockItem> DUSK_SIEVE = registerItemBlock(EBlocks.DUSK_SIEVE);
+    public static final RegistryObject<BlockItem> MAPLE_SIEVE = registerItemBlock(EBlocks.MAPLE_SIEVE);
+    public static final RegistryObject<BlockItem> CRYSTALLIZED_SIEVE = registerItemBlock(EBlocks.CRYSTALLIZED_SIEVE);
 
     // Lava Crucibles
     public static final RegistryObject<BlockItem> PORCELAIN_CRUCIBLE = registerItemBlock(EBlocks.PORCELAIN_CRUCIBLE);
@@ -216,6 +228,8 @@ public class EItems {
     public static final RegistryObject<BlockItem> UNFIRED_PORCELAIN_CRUCIBLE = registerItemBlock(EBlocks.UNFIRED_PORCELAIN_CRUCIBLE);
     // BOP Lava Crucibles
     public static final RegistryObject<BlockItem> HELLBARK_CRUCIBLE = registerItemBlock(EBlocks.HELLBARK_CRUCIBLE);
+    // Blue Skies Lava Crucibles
+    public static final RegistryObject<BlockItem> CRYSTALLIZED_CRUCIBLE = registerItemBlock(EBlocks.CRYSTALLIZED_CRUCIBLE);
 
     // Water Crucibles
     public static final RegistryObject<BlockItem> OAK_CRUCIBLE = registerItemBlock(EBlocks.OAK_CRUCIBLE);
@@ -242,10 +256,26 @@ public class EItems {
     public static final RegistryObject<BlockItem> BLAZING_ARCHWOOD_CRUCIBLE = registerItemBlock(EBlocks.BLAZING_ARCHWOOD_CRUCIBLE);
     public static final RegistryObject<BlockItem> VEXING_ARCHWOOD_CRUCIBLE = registerItemBlock(EBlocks.VEXING_ARCHWOOD_CRUCIBLE);
     public static final RegistryObject<BlockItem> FLOURISHING_ARCHWOOD_CRUCIBLE = registerItemBlock(EBlocks.FLOURISHING_ARCHWOOD_CRUCIBLE);
+    // Aether Water Crucibles
+    public static final RegistryObject<BlockItem> SKYROOT_CRUCIBLE = registerItemBlock(EBlocks.SKYROOT_CRUCIBLE);
+    public static final RegistryObject<BlockItem> GOLDEN_OAK_CRUCIBLE = registerItemBlock(EBlocks.GOLDEN_OAK_CRUCIBLE);
+    // Blue Skies Water Crucibles
+    public static final RegistryObject<BlockItem> BLUEBRIGHT_CRUCIBLE = registerItemBlock(EBlocks.BLUEBRIGHT_CRUCIBLE);
+    public static final RegistryObject<BlockItem> STARLIT_CRUCIBLE = registerItemBlock(EBlocks.STARLIT_CRUCIBLE);
+    public static final RegistryObject<BlockItem> FROSTBRIGHT_CRUCIBLE = registerItemBlock(EBlocks.FROSTBRIGHT_CRUCIBLE);
+    public static final RegistryObject<BlockItem> COMET_CRUCIBLE = registerItemBlock(EBlocks.COMET_CRUCIBLE);
+    public static final RegistryObject<BlockItem> LUNAR_CRUCIBLE = registerItemBlock(EBlocks.LUNAR_CRUCIBLE);
+    public static final RegistryObject<BlockItem> DUSK_CRUCIBLE = registerItemBlock(EBlocks.DUSK_CRUCIBLE);
+    public static final RegistryObject<BlockItem> MAPLE_CRUCIBLE = registerItemBlock(EBlocks.MAPLE_CRUCIBLE);
 
     public static final RegistryObject<BlockItem> END_CAKE = registerItemBlock(EBlocks.END_CAKE);
 
     public static void addItemsToMainTab(CreativeModeTab.Output output) {
+        boolean biomesOPlenty = ModList.get().isLoaded(ModIds.BIOMES_O_PLENTY);
+        boolean arsNouveau = ModList.get().isLoaded(ModIds.ARS_NOUVEAU);
+        boolean aether = ModList.get().isLoaded(ModIds.AETHER);
+        boolean blueSkies = ModList.get().isLoaded(ModIds.BLUE_SKIES);
+
         output.accept(OAK_BARREL.get());
         output.accept(SPRUCE_BARREL.get());
         output.accept(BIRCH_BARREL.get());
@@ -258,7 +288,38 @@ public class EItems {
         output.accept(CRIMSON_BARREL.get());
         output.accept(WARPED_BARREL.get());
         output.accept(STONE_BARREL.get());
+
+        if (biomesOPlenty) {
+            output.accept(FIR_BARREL.get());
+            output.accept(REDWOOD_BARREL.get());
+            output.accept(MAHOGANY_BARREL.get());
+            output.accept(JACARANDA_BARREL.get());
+            output.accept(PALM_BARREL.get());
+            output.accept(WILLOW_BARREL.get());
+            output.accept(DEAD_BARREL.get());
+            output.accept(MAGIC_BARREL.get());
+            output.accept(UMBRAN_BARREL.get());
+            output.accept(HELLBARK_BARREL.get());
+        }
+        if (arsNouveau) {
+            output.accept(ARCHWOOD_BARREL.get());
+        }
+        if (aether) {
+            output.accept(SKYROOT_BARREL.get());
+        }
+        if (blueSkies) {
+            output.accept(BLUEBRIGHT_BARREL.get());
+            output.accept(STARLIT_BARREL.get());
+            output.accept(FROSTBRIGHT_BARREL.get());
+            output.accept(COMET_BARREL.get());
+            output.accept(LUNAR_BARREL.get());
+            output.accept(DUSK_BARREL.get());
+            output.accept(MAPLE_BARREL.get());
+            output.accept(CRYSTALLIZED_BARREL.get());
+        }
+
         output.accept(OAK_SIEVE.get());
+
         output.accept(SPRUCE_SIEVE.get());
         output.accept(BIRCH_SIEVE.get());
         output.accept(JUNGLE_SIEVE.get());
@@ -269,7 +330,8 @@ public class EItems {
         output.accept(BAMBOO_SIEVE.get());
         output.accept(CRIMSON_SIEVE.get());
         output.accept(WARPED_SIEVE.get());
-        if (ModList.get().isLoaded(ModIds.BIOMES_O_PLENTY)) {
+
+        if (biomesOPlenty) {
             output.accept(FIR_SIEVE.get());
             output.accept(REDWOOD_SIEVE.get());
             output.accept(MAHOGANY_SIEVE.get());
@@ -281,15 +343,32 @@ public class EItems {
             output.accept(UMBRAN_SIEVE.get());
             output.accept(HELLBARK_SIEVE.get());
         }
-        if (ModList.get().isLoaded(ModIds.ARS_NOUVEAU)) {
+        if (arsNouveau) {
             output.accept(ARCHWOOD_SIEVE.get());
         }
+        if (aether) {
+            output.accept(SKYROOT_SIEVE.get());
+        }
+        if (blueSkies) {
+            output.accept(BLUEBRIGHT_SIEVE.get());
+            output.accept(STARLIT_SIEVE.get());
+            output.accept(FROSTBRIGHT_SIEVE.get());
+            output.accept(COMET_SIEVE.get());
+            output.accept(LUNAR_SIEVE.get());
+            output.accept(DUSK_SIEVE.get());
+            output.accept(MAPLE_SIEVE.get());
+            output.accept(CRYSTALLIZED_SIEVE.get());
+        }
+
         output.accept(PORCELAIN_CRUCIBLE.get());
         output.accept(WARPED_CRUCIBLE.get());
         output.accept(CRIMSON_CRUCIBLE.get());
         output.accept(UNFIRED_PORCELAIN_CRUCIBLE.get());
-        if (ModList.get().isLoaded(ModIds.BIOMES_O_PLENTY)) {
+        if (biomesOPlenty) {
             output.accept(HELLBARK_CRUCIBLE.get());
+        }
+        if (blueSkies) {
+            output.accept(CRYSTALLIZED_CRUCIBLE.get());
         }
         output.accept(OAK_CRUCIBLE.get());
         output.accept(SPRUCE_CRUCIBLE.get());
@@ -301,7 +380,7 @@ public class EItems {
         output.accept(CHERRY_CRUCIBLE.get());
         output.accept(BAMBOO_CRUCIBLE.get());
 
-        if (ModList.get().isLoaded(ModIds.BIOMES_O_PLENTY)) {
+        if (biomesOPlenty) {
             output.accept(FIR_CRUCIBLE.get());
             output.accept(REDWOOD_CRUCIBLE.get());
             output.accept(MAHOGANY_CRUCIBLE.get());
@@ -312,15 +391,24 @@ public class EItems {
             output.accept(MAGIC_CRUCIBLE.get());
             output.accept(UMBRAN_CRUCIBLE.get());
         }
-        if (ModList.get().isLoaded(ModIds.ARS_NOUVEAU)) {
+        if (arsNouveau) {
             output.accept(CASCADING_ARCHWOOD_CRUCIBLE.get());
             output.accept(BLAZING_ARCHWOOD_CRUCIBLE.get());
             output.accept(VEXING_ARCHWOOD_CRUCIBLE.get());
             output.accept(FLOURISHING_ARCHWOOD_CRUCIBLE.get());
         }
-        if (ModList.get().isLoaded(ModIds.AETHER)) {
+        if (aether) {
             output.accept(SKYROOT_CRUCIBLE.get());
             output.accept(GOLDEN_OAK_CRUCIBLE.get());
+        }
+        if (blueSkies) {
+            output.accept(BLUEBRIGHT_CRUCIBLE.get());
+            output.accept(STARLIT_CRUCIBLE.get());
+            output.accept(FROSTBRIGHT_CRUCIBLE.get());
+            output.accept(COMET_CRUCIBLE.get());
+            output.accept(LUNAR_CRUCIBLE.get());
+            output.accept(DUSK_CRUCIBLE.get());
+            output.accept(MAPLE_CRUCIBLE.get());
         }
 
         output.accept(DUST.get());
@@ -392,34 +480,5 @@ public class EItems {
         output.accept(PORCELAIN_LAVA_BUCKET.get());
         output.accept(PORCELAIN_MILK_BUCKET.get());
         output.accept(PORCELAIN_WITCH_WATER_BUCKET.get());
-
-        if (ModList.get().isLoaded(ModIds.BIOMES_O_PLENTY)) {
-            output.accept(FIR_BARREL.get());
-            output.accept(REDWOOD_BARREL.get());
-            output.accept(MAHOGANY_BARREL.get());
-            output.accept(JACARANDA_BARREL.get());
-            output.accept(PALM_BARREL.get());
-            output.accept(WILLOW_BARREL.get());
-            output.accept(DEAD_BARREL.get());
-            output.accept(MAGIC_BARREL.get());
-            output.accept(UMBRAN_BARREL.get());
-            output.accept(HELLBARK_BARREL.get());
-        }
-        if (ModList.get().isLoaded(ModIds.ARS_NOUVEAU)) {
-            output.accept(ARCHWOOD_BARREL.get());
-        }
-        if (ModList.get().isLoaded(ModIds.AETHER)) {
-            output.accept(SKYROOT_BARREL.get());
-        }
-        if (ModList.get().isLoaded(ModIds.BLUE_SKIES)) {
-            output.accept(BLUEBRIGHT_BARREL.get());
-                    output.accept(STARLIT_BARREL.get());
-            output.accept(FROSTBRIGHT_BARREL.get());
-                    output.accept(COMET_BARREL.get());
-            output.accept(LUNAR_BARREL.get());
-                    output.accept(DUSK_BARREL.get());
-            output.accept(MAPLE_BARREL.get());
-                    output.accept(CRYSTALLIZED_BARREL.get());
-        }
     }
 }

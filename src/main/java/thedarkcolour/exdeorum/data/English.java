@@ -55,6 +55,8 @@ class English {
         english.add(TranslationKeys.BARREL_MIXING_CATEGORY_TITLE, "Barrel Mixing");
         english.add(TranslationKeys.WATER_CRUCIBLE_CATEGORY_TITLE, "Water Crucible");
         english.add(TranslationKeys.LAVA_CRUCIBLE_CATEGORY_TITLE, "Lava Crucible");
+        english.add(TranslationKeys.CRUCIBLE_HEAT_SOURCE_CATEGORY_TITLE, "Crucible Heat Sources");
+        english.add(TranslationKeys.CRUCIBLE_HEAT_SOURCE_CATEGORY_MULTIPLIER, "Melt Rate: %sx");
         english.add(TranslationKeys.HAMMER_CATEGORY_TITLE, "Hammer");
         english.add(TranslationKeys.SIEVE_CATEGORY_TITLE, "Sieve");
         english.add(TranslationKeys.SIEVE_RECIPE_CHANCE, "Chance: %s%%");

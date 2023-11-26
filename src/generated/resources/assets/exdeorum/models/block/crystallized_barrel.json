@@ -1,0 +1,7 @@
+{
+  "parent": "exdeorum:block/template_barrel",
+  "render_type": "minecraft:translucent",
+  "textures": {
+    "barrel": "blue_skies:block/wood/crystallized_planks"
+  }
+}

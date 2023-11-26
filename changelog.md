@@ -1,3 +1,10 @@
+## Ex Deorum 1.10
+- Added crucibles, sieves, and barrels for wood types from Blue Skies and Aether mods.
+- Added Certus Quartz Dust as a sieve drop from Dust.
+- Allow extracting water from wooden crucibles using water bottles.
+- Watering cans now accelerate crops from Pam's Harvestcraft 2 Crops
+- Fixed a crash that happened with Ex Deorum barrels and crucibles when logging out of a world.
+
 ## Ex Deorum 1.9
 - Fixed incompatibility with SkyblockBuilder where player would not receive torch/watering can and Ex Deorum advancements
 - Fixed error message printing while patching the End Portal method

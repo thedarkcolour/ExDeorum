@@ -19,6 +19,8 @@
 package thedarkcolour.exdeorum.compat.jei;
 
 import com.google.common.collect.Lists;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.VanillaTypes;
@@ -27,16 +29,21 @@ import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
+import mezz.jei.api.registration.IVanillaCategoryExtensionRegistration;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.WallBlock;
+import net.minecraft.world.level.block.WallTorchBlock;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.ModList;
 import thedarkcolour.exdeorum.ExDeorum;
+import thedarkcolour.exdeorum.blockentity.LavaCrucibleBlockEntity;
 import thedarkcolour.exdeorum.compat.ModIds;
 import thedarkcolour.exdeorum.data.TranslationKeys;
 import thedarkcolour.exdeorum.item.WateringCanItem;
@@ -64,6 +71,9 @@ public class ExDeorumJeiPlugin implements IModPlugin {
     static final RecipeType<BarrelMixingRecipe> BARREL_MIXING = RecipeType.create(ExDeorum.ID, "barrel_mixing", BarrelMixingRecipe.class);
     static final RecipeType<CrucibleRecipe> LAVA_CRUCIBLE = RecipeType.create(ExDeorum.ID, "lava_crucible", CrucibleRecipe.class);
     static final RecipeType<CrucibleRecipe> WATER_CRUCIBLE = RecipeType.create(ExDeorum.ID, "water_crucible", CrucibleRecipe.class);
+    // I love Java generics (todo finish implementing)
+    @SuppressWarnings("unchecked")
+    static final RecipeType<Object2IntMap.Entry<Block>> CRUCIBLE_HEAT_SOURCES = RecipeType.create(ExDeorum.ID, "crucible_heat_sources", (Class<Object2IntMap.Entry<Block>>) ((Object) Object2IntMap.Entry.class));
     static final RecipeType<JeiSieveRecipeGroup> SIEVE = RecipeType.create(ExDeorum.ID, "sieve", JeiSieveRecipeGroup.class);
     static final RecipeType<HammerRecipe> HAMMER = RecipeType.create(ExDeorum.ID, "hammer", HammerRecipe.class);
 
@@ -82,6 +92,7 @@ public class ExDeorumJeiPlugin implements IModPlugin {
         registration.addRecipeCategories(new BarrelMixingCategory(helper, plus, arrow));
         registration.addRecipeCategories(new CrucibleCategory.LavaCrucible(helper, arrow));
         registration.addRecipeCategories(new CrucibleCategory.WaterCrucible(helper, arrow));
+        registration.addRecipeCategories(new CrucibleHeatSourcesCategory(helper, registration.getJeiHelpers().getFocusFactory()));
         registration.addRecipeCategories(new SieveCategory(helper));
         registration.addRecipeCategories(new HammerCategory(helper, arrow));
     }
@@ -209,7 +220,9 @@ public class ExDeorumJeiPlugin implements IModPlugin {
             registration.addRecipeCatalyst(stack, BARREL_MIXING);
         }
         for (var lavaCrucible : lavaCrucibles) {
-            registration.addRecipeCatalyst(new ItemStack(lavaCrucible), LAVA_CRUCIBLE);
+            var stack = new ItemStack(lavaCrucible);
+            registration.addRecipeCatalyst(stack, LAVA_CRUCIBLE);
+            registration.addRecipeCatalyst(stack, CRUCIBLE_HEAT_SOURCES);
         }
         for (var waterCrucible : waterCrucibles) {
             registration.addRecipeCatalyst(new ItemStack(waterCrucible), WATER_CRUCIBLE);
@@ -264,6 +277,36 @@ public class ExDeorumJeiPlugin implements IModPlugin {
         addRecipes(registration, WATER_CRUCIBLE, ERecipeTypes.WATER_CRUCIBLE);
         addRecipes(registration, HAMMER, ERecipeTypes.HAMMER);
         JeiSieveRecipeGroup.addGroupedRecipes(registration, SIEVE);
+
+        addCrucibleHeatSources(registration);
+    }
+
+    private static void addCrucibleHeatSources(IRecipeRegistration registration) {
+        var values = new Object2IntOpenHashMap<Block>();
+        for (var entry : LavaCrucibleBlockEntity.HEAT_REGISTRY.object2IntEntrySet()) {
+            var state = entry.getKey();
+            var block = state.getBlock();
+
+            if (block instanceof WallTorchBlock) continue;
+
+            if (block != Blocks.AIR) {
+                final int newValue = entry.getIntValue();
+
+                values.computeInt(block, (key, value) -> {
+                    if (value != null) {
+                        return Math.max(value, newValue);
+                    } else {
+                        return newValue == 0 ? null : newValue;
+                    }
+                });
+            }
+        }
+        registration.addRecipes(CRUCIBLE_HEAT_SOURCES, List.copyOf(values.object2IntEntrySet()));
+    }
+
+    @Override
+    public void registerVanillaCategoryExtensions(IVanillaCategoryExtensionRegistration registration) {
+        IModPlugin.super.registerVanillaCategoryExtensions(registration);
     }
 
     private static <C extends Container, T extends Recipe<C>> void addRecipes(IRecipeRegistration registration, RecipeType<T> category, Supplier<net.minecraft.world.item.crafting.RecipeType<T>> type) {

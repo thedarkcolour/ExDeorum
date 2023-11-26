@@ -424,6 +424,7 @@ class SieveRecipes {
             addConditionalDrop.accept(ModCompatData.GRAINS_OF_INFINITY.get(), chance(0.06f), Recipes.ENDERIO);
             addConditionalDrop.accept(ModCompatData.YELLORIUM_DUST.get(), chance(0.05f), Recipes.EXTREME_REACTORS);
             addConditionalDrop.accept(ModCompatData.SKY_STONE_DUST.get(), chance(0.06f), Recipes.AE2);
+            addConditionalDrop.accept(ModCompatData.CERTUS_QUARTZ_DUST.get(), chance(0.06f), Recipes.AE2);
         });
         forMesh(writer, ingredient(EItems.DUST.get()), EItems.FLINT_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
             addDrop.accept(Items.GUNPOWDER, chance(0.11f));
@@ -435,6 +436,7 @@ class SieveRecipes {
             addConditionalDrop.accept(ModCompatData.GRAINS_OF_INFINITY.get(), chance(0.07f), Recipes.ENDERIO);
             addConditionalDrop.accept(ModCompatData.YELLORIUM_DUST.get(), chance(0.055f), Recipes.EXTREME_REACTORS);
             addConditionalDrop.accept(ModCompatData.SKY_STONE_DUST.get(), chance(0.07f), Recipes.AE2);
+            addConditionalDrop.accept(ModCompatData.CERTUS_QUARTZ_DUST.get(), chance(0.07f), Recipes.AE2);
         });
         forMesh(writer, ingredient(EItems.DUST.get()), EItems.IRON_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
             addDrop.accept(Items.GUNPOWDER, chance(0.13f));
@@ -447,6 +449,7 @@ class SieveRecipes {
             addConditionalDrop.accept(ModCompatData.GRAINS_OF_INFINITY.get(), chance(0.09f), Recipes.ENDERIO);
             addConditionalDrop.accept(ModCompatData.YELLORIUM_DUST.get(), chance(0.08f), Recipes.EXTREME_REACTORS);
             addConditionalDrop.accept(ModCompatData.SKY_STONE_DUST.get(), chance(0.075f), Recipes.AE2);
+            addConditionalDrop.accept(ModCompatData.CERTUS_QUARTZ_DUST.get(), chance(0.075f), Recipes.AE2);
         });
         forMesh(writer, ingredient(EItems.DUST.get()), EItems.GOLDEN_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
             addDrop.accept(Items.GUNPOWDER, chance(0.13f));
@@ -460,6 +463,7 @@ class SieveRecipes {
             addConditionalDrop.accept(ModCompatData.GRAINS_OF_INFINITY.get(), chance(0.11f), Recipes.ENDERIO);
             addConditionalDrop.accept(ModCompatData.YELLORIUM_DUST.get(), chance(0.10f), Recipes.EXTREME_REACTORS);
             addConditionalDrop.accept(ModCompatData.SKY_STONE_DUST.get(), chance(0.08f), Recipes.AE2);
+            addConditionalDrop.accept(ModCompatData.CERTUS_QUARTZ_DUST.get(), chance(0.08f), Recipes.AE2);
         });
         forMesh(writer, ingredient(EItems.DUST.get()), EItems.DIAMOND_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
             addDrop.accept(Items.GUNPOWDER, chance(0.14f));
@@ -472,6 +476,7 @@ class SieveRecipes {
             addConditionalDrop.accept(ModCompatData.GRAINS_OF_INFINITY.get(), chance(0.12f), Recipes.ENDERIO);
             addConditionalDrop.accept(ModCompatData.YELLORIUM_DUST.get(), chance(0.12f), Recipes.EXTREME_REACTORS);
             addConditionalDrop.accept(ModCompatData.SKY_STONE_DUST.get(), chance(0.10f), Recipes.AE2);
+            addConditionalDrop.accept(ModCompatData.CERTUS_QUARTZ_DUST.get(), chance(0.10f), Recipes.AE2);
         });
         forMesh(writer, ingredient(EItems.DUST.get()), EItems.NETHERITE_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
             addDrop.accept(Items.GUNPOWDER, chance(0.14f));
@@ -485,6 +490,7 @@ class SieveRecipes {
             addConditionalDrop.accept(ModCompatData.GRAINS_OF_INFINITY.get(), chance(0.135f), Recipes.ENDERIO);
             addConditionalDrop.accept(ModCompatData.YELLORIUM_DUST.get(), chance(0.14f), Recipes.EXTREME_REACTORS);
             addConditionalDrop.accept(ModCompatData.SKY_STONE_DUST.get(), chance(0.11f), Recipes.AE2);
+            addConditionalDrop.accept(ModCompatData.CERTUS_QUARTZ_DUST.get(), chance(0.11f), Recipes.AE2);
         });
 
         // Crushed Deepslate -> String mesh

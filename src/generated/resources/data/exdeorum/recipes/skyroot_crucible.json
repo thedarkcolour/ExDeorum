@@ -1,0 +1,34 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "aether"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "m": {
+            "item": "aether:skyroot_slab"
+          },
+          "s": {
+            "item": "aether:skyroot_log"
+          }
+        },
+        "pattern": [
+          "s s",
+          "s s",
+          "sms"
+        ],
+        "result": {
+          "item": "exdeorum:skyroot_crucible"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}

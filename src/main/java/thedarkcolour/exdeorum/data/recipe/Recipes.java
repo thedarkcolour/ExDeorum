@@ -118,6 +118,18 @@ public class Recipes {
         modUShaped(recipes, ModIds.ARS_NOUVEAU, ModCompatData.BLAZING_ARCHWOOD_LOG_ITEM, ModCompatData.ARCHWOOD_SLAB, EItems.BLAZING_ARCHWOOD_CRUCIBLE);
         modUShaped(recipes, ModIds.ARS_NOUVEAU, ModCompatData.VEXING_ARCHWOOD_LOG_ITEM, ModCompatData.ARCHWOOD_SLAB, EItems.VEXING_ARCHWOOD_CRUCIBLE);
         modUShaped(recipes, ModIds.ARS_NOUVEAU, ModCompatData.FLOURISHING_ARCHWOOD_LOG_ITEM, ModCompatData.ARCHWOOD_SLAB, EItems.FLOURISHING_ARCHWOOD_CRUCIBLE);
+        // Aether crucibles
+        modUShaped(recipes, ModIds.AETHER, ModCompatData.GOLDEN_OAK_LOG_ITEM, ModCompatData.SKYROOT_SLAB, EItems.GOLDEN_OAK_CRUCIBLE);
+        modUShaped(recipes, ModIds.AETHER, ModCompatData.SKYROOT_LOG_ITEM, ModCompatData.SKYROOT_SLAB, EItems.SKYROOT_CRUCIBLE);
+        // Blue Skies crucibles
+        modUShaped(recipes, ModIds.BLUE_SKIES, ModCompatData.BLUEBRIGHT_LOG_ITEM, ModCompatData.BLUEBRIGHT_SLAB, EItems.BLUEBRIGHT_CRUCIBLE);
+        modUShaped(recipes, ModIds.BLUE_SKIES, ModCompatData.STARLIT_LOG_ITEM, ModCompatData.STARLIT_SLAB, EItems.STARLIT_CRUCIBLE);
+        modUShaped(recipes, ModIds.BLUE_SKIES, ModCompatData.FROSTBRIGHT_LOG_ITEM, ModCompatData.FROSTBRIGHT_SLAB, EItems.FROSTBRIGHT_CRUCIBLE);
+        modUShaped(recipes, ModIds.BLUE_SKIES, ModCompatData.COMET_LOG_ITEM, ModCompatData.COMET_SLAB, EItems.COMET_CRUCIBLE);
+        modUShaped(recipes, ModIds.BLUE_SKIES, ModCompatData.LUNAR_LOG_ITEM, ModCompatData.LUNAR_SLAB, EItems.LUNAR_CRUCIBLE);
+        modUShaped(recipes, ModIds.BLUE_SKIES, ModCompatData.DUSK_LOG_ITEM, ModCompatData.DUSK_SLAB, EItems.DUSK_CRUCIBLE);
+        modUShaped(recipes, ModIds.BLUE_SKIES, ModCompatData.MAPLE_LOG_ITEM, ModCompatData.MAPLE_SLAB, EItems.MAPLE_CRUCIBLE);
+        modUShaped(recipes, ModIds.BLUE_SKIES, ModCompatData.CRYSTALLIZED_LOG_ITEM, ModCompatData.CRYSTALLIZED_SLAB, EItems.CRYSTALLIZED_CRUCIBLE);
 
         // Barrels
         uShaped(recipes, EItems.OAK_BARREL, ingredient(Items.OAK_PLANKS), ingredient(Items.OAK_SLAB));

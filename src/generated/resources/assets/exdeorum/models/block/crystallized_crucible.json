@@ -1,0 +1,10 @@
+{
+  "parent": "exdeorum:block/template_crucible",
+  "render_type": "minecraft:translucent",
+  "textures": {
+    "bottom": "blue_skies:block/wood/crystallized_log_side",
+    "inside": "blue_skies:block/wood/crystallized_log_side",
+    "side": "blue_skies:block/wood/crystallized_log_side",
+    "top": "blue_skies:block/wood/crystallized_log_side"
+  }
+}

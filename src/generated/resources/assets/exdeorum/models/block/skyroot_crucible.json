@@ -1,0 +1,9 @@
+{
+  "parent": "exdeorum:block/template_crucible",
+  "textures": {
+    "bottom": "aether:block/natural/skyroot_log",
+    "inside": "aether:block/natural/skyroot_log",
+    "side": "aether:block/natural/skyroot_log",
+    "top": "aether:block/natural/skyroot_log"
+  }
+}

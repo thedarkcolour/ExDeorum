@@ -14,7 +14,7 @@
           "item": "exdeorum:dust"
         },
         "mesh": "exdeorum:string_mesh",
-        "result": "bigreactors:yellorium_dust",
+        "result": "biggerreactors:yellorium_dust",
         "result_amount": {
           "type": "minecraft:binomial",
           "n": 1.0,

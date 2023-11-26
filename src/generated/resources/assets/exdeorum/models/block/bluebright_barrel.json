@@ -1,0 +1,6 @@
+{
+  "parent": "exdeorum:block/template_barrel",
+  "textures": {
+    "barrel": "blue_skies:block/wood/bluebright_planks"
+  }
+}

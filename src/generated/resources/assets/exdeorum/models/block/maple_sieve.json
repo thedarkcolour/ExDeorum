@@ -1,0 +1,6 @@
+{
+  "parent": "exdeorum:block/template_sieve",
+  "textures": {
+    "texture": "blue_skies:block/wood/maple_planks"
+  }
+}

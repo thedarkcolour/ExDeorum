@@ -18,6 +18,7 @@
 
 package thedarkcolour.exdeorum.registry;
 
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -31,6 +32,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.block.*;
+
+import java.util.function.Supplier;
 
 import static net.minecraft.world.level.block.state.BlockBehaviour.Properties.copy;
 import static net.minecraft.world.level.block.state.BlockBehaviour.Properties.of;
@@ -92,7 +95,7 @@ public class EBlocks {
     public static final RegistryObject<SieveBlock> DARK_OAK_SIEVE = registerSieve("dark_oak_sieve");
     public static final RegistryObject<SieveBlock> MANGROVE_SIEVE = registerSieve("mangrove_sieve");
     public static final RegistryObject<SieveBlock> CHERRY_SIEVE = registerSieve("cherry_sieve");
-    public static final RegistryObject<SieveBlock> BAMBOO_SIEVE = registerSieve("bamboo_sieve");
+    public static final RegistryObject<SieveBlock> BAMBOO_SIEVE = registerSieve("bamboo_sieve", SoundType.BAMBOO_WOOD);
     public static final RegistryObject<SieveBlock> CRIMSON_SIEVE = registerSieve("crimson_sieve");
     public static final RegistryObject<SieveBlock> WARPED_SIEVE = registerSieve("warped_sieve");
     // BOP Sieves
@@ -118,7 +121,7 @@ public class EBlocks {
     public static final RegistryObject<SieveBlock> LUNAR_SIEVE = registerSieve("lunar_sieve");
     public static final RegistryObject<SieveBlock> DUSK_SIEVE = registerSieve("dusk_sieve");
     public static final RegistryObject<SieveBlock> MAPLE_SIEVE = registerSieve("maple_sieve");
-    public static final RegistryObject<SieveBlock> CRYSTALLIZED_SIEVE = registerSieve("crystallized_sieve");
+    public static final RegistryObject<SieveBlock> CRYSTALLIZED_SIEVE = registerSieve("crystallized_sieve", SoundType.GLASS);
 
     // Lava Crucibles
     public static final RegistryObject<LavaCrucibleBlock> PORCELAIN_CRUCIBLE = registerLavaCrucible("porcelain_crucible", true, SoundType.STONE);
@@ -173,14 +176,19 @@ public class EBlocks {
     public static final RegistryObject<EndCakeBlock> END_CAKE = BLOCKS.register("end_cake", () -> new EndCakeBlock(of().noLootTable().mapColor(MapColor.COLOR_BLACK).forceSolidOn().strength(0.5F).sound(SoundType.WOOL).pushReaction(PushReaction.BLOCK)));
 
     public static RegistryObject<SieveBlock> registerSieve(String name) {
-        var bamboo = name.equals("bamboo_sieve");
-        return BLOCKS.register(name, () -> new SieveBlock(of().strength(2.0f).noOcclusion().sound(bamboo ? SoundType.BAMBOO_WOOD : SoundType.WOOD)));
+        return registerSieve(name, SoundType.WOOD);
+    }
+
+    public static RegistryObject<SieveBlock> registerSieve(String name, SoundType sound) {
+        return BLOCKS.register(name, () -> new SieveBlock(of().strength(2.0f).noOcclusion().sound(sound)));
     }
 
     public static RegistryObject<BarrelBlock> registerBarrel(String name, boolean stone, boolean fireproof, MapColor color) {
         var bamboo = name.equals("bamboo_barrel");
+        var crystallized = name.equals("crystallized_barrel");
+
         return BLOCKS.register(name, () -> {
-            var props = of().noOcclusion().strength(stone ? 4.0f : 2.0f).sound(stone ? SoundType.STONE : (bamboo ? SoundType.BAMBOO_WOOD : SoundType.WOOD));
+            var props = of().noOcclusion().strength(stone ? 4.0f : 2.0f).sound(stone ? (crystallized ? SoundType.GLASS : SoundType.STONE) : (bamboo ? SoundType.BAMBOO_WOOD : SoundType.WOOD));
             if (!stone) {
                 if (!fireproof) {
                     props.ignitedByLava();

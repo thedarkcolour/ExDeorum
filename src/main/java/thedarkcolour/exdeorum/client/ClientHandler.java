@@ -21,6 +21,7 @@ package thedarkcolour.exdeorum.client;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.Timer;
 import net.minecraft.client.gui.screens.worldselection.CreateWorldScreen;
 import net.minecraft.client.gui.screens.worldselection.WorldCreationUiState;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
@@ -98,11 +99,6 @@ public class ClientHandler {
     private static void onPlayerLogout(ClientPlayerNetworkEvent.LoggingOut event) {
         ClientMessageHandler.isInVoidWorld = false;
         needsRecipeCacheRefresh = false;
-
-        // Only null when logging in
-        if (Minecraft.getInstance().level != null) {
-            RecipeUtil.unload();
-        }
     }
 
     private static void onConfigChanged(ModConfigEvent.Reloading event) {

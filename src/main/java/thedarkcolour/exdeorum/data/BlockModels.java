@@ -18,13 +18,16 @@
 
 package thedarkcolour.exdeorum.data;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.client.model.generators.BlockModelBuilder;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
+import net.minecraftforge.registries.ForgeRegistries;
 import thedarkcolour.exdeorum.registry.EBlocks;
 import thedarkcolour.modkit.data.MKBlockModelProvider;
 
+import java.util.Objects;
 import java.util.function.Supplier;
 
 class BlockModels {
@@ -97,41 +100,44 @@ class BlockModels {
     }
 
     private static void aetherModels(MKBlockModelProvider models) {
-        barrel(models, EBlocks.SKYROOT_BARREL, ModCompatData.SKYROOT_PLANKS.get());
+        barrel(models, EBlocks.SKYROOT_BARREL, ModCompatData.SKYROOT_PLANKS.get(), "construction/");
 
-        sieve(models, EBlocks.SKYROOT_SIEVE.get(), ModCompatData.SKYROOT_PLANKS.get());
+        sieve(models, EBlocks.SKYROOT_SIEVE.get(), ModCompatData.SKYROOT_PLANKS.get(), "construction/");
 
-        crucible(models, EBlocks.SKYROOT_CRUCIBLE.get(), ModCompatData.SKYROOT_LOG.get());
-        crucible(models, EBlocks.GOLDEN_OAK_CRUCIBLE.get(), ModCompatData.GOLDEN_OAK_LOG.get());
+        crucible(models, EBlocks.SKYROOT_CRUCIBLE.get(), ModCompatData.SKYROOT_LOG.get(), "natural/", "");
+        crucible(models, EBlocks.GOLDEN_OAK_CRUCIBLE.get(), ModCompatData.GOLDEN_OAK_LOG.get(), "natural/", "");
     }
 
     private static void blueSkiesModels(MKBlockModelProvider models) {
-        barrel(models, EBlocks.BLUEBRIGHT_BARREL, ModCompatData.BLUEBRIGHT_PLANKS.get());
-        barrel(models, EBlocks.STARLIT_BARREL, ModCompatData.STARLIT_PLANKS.get());
-        barrel(models, EBlocks.FROSTBRIGHT_BARREL, ModCompatData.FROSTBRIGHT_PLANKS.get());
-        barrel(models, EBlocks.COMET_BARREL, ModCompatData.COMET_PLANKS.get());
-        barrel(models, EBlocks.LUNAR_BARREL, ModCompatData.LUNAR_PLANKS.get());
-        barrel(models, EBlocks.DUSK_BARREL, ModCompatData.DUSK_PLANKS.get());
-        barrel(models, EBlocks.MAPLE_BARREL, ModCompatData.MAPLE_PLANKS.get());
-        barrel(models, EBlocks.CRYSTALLIZED_BARREL, ModCompatData.CRYSTALLIZED_PLANKS.get());
+        final String woodPrefix = "wood/";
+        final String logSuffix = "_side";
 
-        barrel(models, EBlocks.BLUEBRIGHT_SIEVE.get(), ModCompatData.BLUEBRIGHT_PLANKS.get());
-        barrel(models, EBlocks.STARLIT_SIEVE.get(), ModCompatData.STARLIT_PLANKS.get());
-        barrel(models, EBlocks.FROSTBRIGHT_SIEVE.get(), ModCompatData.FROSTBRIGHT_PLANKS.get());
-        barrel(models, EBlocks.COMET_SIEVE.get(), ModCompatData.COMET_PLANKS.get());
-        barrel(models, EBlocks.LUNAR_SIEVE.get(), ModCompatData.LUNAR_PLANKS.get());
-        barrel(models, EBlocks.DUSK_SIEVE.get(), ModCompatData.DUSK_PLANKS.get());
-        barrel(models, EBlocks.MAPLE_SIEVE.get(), ModCompatData.MAPLE_PLANKS.get());
-        barrel(models, EBlocks.CRYSTALLIZED_SIEVE.get(), ModCompatData.CRYSTALLIZED_PLANKS.get());
+        barrel(models, EBlocks.BLUEBRIGHT_BARREL, ModCompatData.BLUEBRIGHT_PLANKS.get(), woodPrefix);
+        barrel(models, EBlocks.STARLIT_BARREL, ModCompatData.STARLIT_PLANKS.get(), woodPrefix);
+        barrel(models, EBlocks.FROSTBRIGHT_BARREL, ModCompatData.FROSTBRIGHT_PLANKS.get(), woodPrefix);
+        barrel(models, EBlocks.COMET_BARREL, ModCompatData.COMET_PLANKS.get(), woodPrefix);
+        barrel(models, EBlocks.LUNAR_BARREL, ModCompatData.LUNAR_PLANKS.get(), woodPrefix);
+        barrel(models, EBlocks.DUSK_BARREL, ModCompatData.DUSK_PLANKS.get(), woodPrefix);
+        barrel(models, EBlocks.MAPLE_BARREL, ModCompatData.MAPLE_PLANKS.get(), woodPrefix);
+        barrel(models, EBlocks.CRYSTALLIZED_BARREL, ModCompatData.CRYSTALLIZED_PLANKS.get(), woodPrefix).renderType("translucent");
 
-        crucible(models, EBlocks.BLUEBRIGHT_CRUCIBLE.get(), ModCompatData.BLUEBRIGHT_LOG.get());
-        crucible(models, EBlocks.STARLIT_CRUCIBLE.get(), ModCompatData.STARLIT_LOG.get());
-        crucible(models, EBlocks.FROSTBRIGHT_CRUCIBLE.get(), ModCompatData.FROSTBRIGHT_LOG.get());
-        crucible(models, EBlocks.COMET_CRUCIBLE.get(), ModCompatData.COMET_LOG.get());
-        crucible(models, EBlocks.LUNAR_CRUCIBLE.get(), ModCompatData.LUNAR_LOG.get());
-        crucible(models, EBlocks.DUSK_CRUCIBLE.get(), ModCompatData.DUSK_LOG.get());
-        crucible(models, EBlocks.MAPLE_CRUCIBLE.get(), ModCompatData.MAPLE_LOG.get());
-        crucible(models, EBlocks.CRYSTALLIZED_CRUCIBLE.get(), ModCompatData.CRYSTALLIZED_LOG.get());
+        sieve(models, EBlocks.BLUEBRIGHT_SIEVE.get(), ModCompatData.BLUEBRIGHT_PLANKS.get(), woodPrefix);
+        sieve(models, EBlocks.STARLIT_SIEVE.get(), ModCompatData.STARLIT_PLANKS.get(), woodPrefix);
+        sieve(models, EBlocks.FROSTBRIGHT_SIEVE.get(), ModCompatData.FROSTBRIGHT_PLANKS.get(), woodPrefix);
+        sieve(models, EBlocks.COMET_SIEVE.get(), ModCompatData.COMET_PLANKS.get(), woodPrefix);
+        sieve(models, EBlocks.LUNAR_SIEVE.get(), ModCompatData.LUNAR_PLANKS.get(), woodPrefix);
+        sieve(models, EBlocks.DUSK_SIEVE.get(), ModCompatData.DUSK_PLANKS.get(), woodPrefix);
+        sieve(models, EBlocks.MAPLE_SIEVE.get(), ModCompatData.MAPLE_PLANKS.get(), woodPrefix);
+        sieve(models, EBlocks.CRYSTALLIZED_SIEVE.get(), ModCompatData.CRYSTALLIZED_PLANKS.get(), woodPrefix).renderType("translucent");
+
+        crucible(models, EBlocks.BLUEBRIGHT_CRUCIBLE.get(), ModCompatData.BLUEBRIGHT_LOG.get(), woodPrefix, logSuffix);
+        crucible(models, EBlocks.STARLIT_CRUCIBLE.get(), ModCompatData.STARLIT_LOG.get(), woodPrefix, logSuffix);
+        crucible(models, EBlocks.FROSTBRIGHT_CRUCIBLE.get(), ModCompatData.FROSTBRIGHT_LOG.get(), woodPrefix, logSuffix);
+        crucible(models, EBlocks.COMET_CRUCIBLE.get(), ModCompatData.COMET_LOG.get(), woodPrefix, logSuffix);
+        crucible(models, EBlocks.LUNAR_CRUCIBLE.get(), ModCompatData.LUNAR_LOG.get(), woodPrefix, logSuffix);
+        crucible(models, EBlocks.DUSK_CRUCIBLE.get(), ModCompatData.DUSK_LOG.get(), woodPrefix, logSuffix);
+        crucible(models, EBlocks.MAPLE_CRUCIBLE.get(), ModCompatData.MAPLE_LOG.get(), woodPrefix, logSuffix);
+        crucible(models, EBlocks.CRYSTALLIZED_CRUCIBLE.get(), ModCompatData.CRYSTALLIZED_LOG.get(), woodPrefix, logSuffix).renderType("translucent");
     }
 
     private static void bopModels(MKBlockModelProvider models) {
@@ -169,14 +175,19 @@ class BlockModels {
         crucible(models, EBlocks.HELLBARK_CRUCIBLE.get(), ModCompatData.HELLBARK_LOG.get());
     }
 
+    // Only used in Ex Deorum
     public static void crucible(MKBlockModelProvider models, Block block) {
         crucible(models, block, block);
     }
 
     public static void crucible(MKBlockModelProvider models, Block block, Block appearance) {
-        var texture = models.blockTexture(appearance);
+        crucible(models, block, appearance, "", "");
+    }
 
-        singleModel(models, block)
+    public static BlockModelBuilder crucible(MKBlockModelProvider models, Block block, Block appearance, String pathPrefix, String pathSuffix) {
+        var texture = texture(appearance, pathPrefix, pathSuffix);
+
+        return singleModel(models, block)
                 .parent(models.modFile("template_crucible"))
                 .texture("inside", texture)
                 .texture("top", texture)
@@ -184,16 +195,29 @@ class BlockModels {
                 .texture("side", texture);
     }
 
+    private static ResourceLocation texture(Block block, String prefix, String suffix) {
+        var key = Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(block));
+        return new ResourceLocation(key.getNamespace(), "block/" + prefix + key.getPath() + suffix);
+    }
+
     public static void barrel(MKBlockModelProvider models, Supplier<? extends Block> block, Block appearance) {
-        singleModel(models, block.get())
+        barrel(models, block, appearance, "");
+    }
+
+    public static BlockModelBuilder barrel(MKBlockModelProvider models, Supplier<? extends Block> block, Block appearance, String pathPrefix) {
+        return singleModel(models, block.get())
                 .parent(models.modFile("template_barrel"))
-                .texture("barrel", models.blockTexture(appearance));
+                .texture("barrel", texture(appearance, pathPrefix, ""));
     }
 
     public static void sieve(MKBlockModelProvider models, Block block, Block appearance) {
-        singleModel(models, block)
+        sieve(models, block, appearance, "");
+    }
+
+    public static BlockModelBuilder sieve(MKBlockModelProvider models, Block block, Block appearance, String pathPrefix) {
+        return singleModel(models, block)
                 .parent(models.modFile("template_sieve"))
-                .texture("texture", models.blockTexture(appearance));
+                .texture("texture", texture(appearance, pathPrefix, ""));
     }
 
     public static BlockModelBuilder singleModel(MKBlockModelProvider models, Block block) {
@@ -203,7 +227,6 @@ class BlockModels {
 
         return builder;
     }
-
 
     public static BlockModelBuilder blockModel(MKBlockModelProvider models, Block block) {
         return models.models().getBuilder(models.name(block));

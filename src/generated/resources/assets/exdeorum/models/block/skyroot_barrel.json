@@ -1,0 +1,6 @@
+{
+  "parent": "exdeorum:block/template_barrel",
+  "textures": {
+    "barrel": "aether:block/construction/skyroot_planks"
+  }
+}

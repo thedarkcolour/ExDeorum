@@ -50,7 +50,9 @@ import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import thedarkcolour.exdeorum.config.EConfig;
 import thedarkcolour.exdeorum.recipe.crucible.CrucibleRecipe;
+import thedarkcolour.exdeorum.registry.EBlockEntities;
 import thedarkcolour.exdeorum.registry.EItems;
 
 import java.util.HashMap;
@@ -125,8 +127,17 @@ public abstract class AbstractCrucibleBlockEntity extends EBlockEntity {
             return FluidUtil.interactWithFluidHandler(player, hand, tank) ? InteractionResult.sidedSuccess(level.isClientSide) : InteractionResult.PASS;
         }
 
-        if (!level.isClientSide && canInsertItem(playerItem)) {
-            tryMelt(playerItem, player.getAbilities().instabuild ? stack -> {} : stack -> stack.shrink(1));
+        if (!level.isClientSide) {
+            if (playerItem.getItem() == Items.GLASS_BOTTLE && this.getType() == EBlockEntities.WATER_CRUCIBLE.get() && EConfig.SERVER.allowWaterBottleTransfer.get()) {
+                var fluid = new FluidStack(Fluids.WATER, 250);
+
+                if (tank.drain(fluid, IFluidHandler.FluidAction.SIMULATE).getAmount() == 250) {
+                    BarrelBlockEntity.extractWaterBottle(this.tank, level, player, playerItem, fluid);
+                    markUpdated();
+                }
+            } else if (canInsertItem(playerItem)) {
+                tryMelt(playerItem, player.getAbilities().instabuild ? stack -> {} : stack -> stack.shrink(1));
+            }
         }
 
         return InteractionResult.sidedSuccess(level.isClientSide);

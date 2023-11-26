@@ -45,6 +45,8 @@ import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.OnDatapackSyncEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.level.LevelEvent;
+import net.minecraftforge.event.server.ServerStoppingEvent;
+import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.fluids.FluidInteractionRegistry;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
@@ -86,10 +88,15 @@ public final class EventHandler {
         fmlBus.addListener(EventHandler::createSpawnTree);
         modBus.addListener(EventHandler::interModEnqueue);
         modBus.addListener(EventHandler::onCommonSetup);
+        fmlBus.addListener(EventHandler::serverShutdown);
 
         if (ExDeorum.DEBUG) {
             fmlBus.addListener(EventHandler::handleDebugCommands);
         }
+    }
+
+    private static void serverShutdown(ServerStoppingEvent event) {
+        RecipeUtil.unload();
     }
 
     private static void handleDebugCommands(ClientChatEvent event) {

@@ -1,0 +1,37 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "blue_skies"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "I": {
+            "tag": "forge:rods/wooden"
+          },
+          "O": {
+            "item": "blue_skies:maple_planks"
+          },
+          "_": {
+            "item": "blue_skies:maple_slab"
+          }
+        },
+        "pattern": [
+          "O O",
+          "O_O",
+          "I I"
+        ],
+        "result": {
+          "item": "exdeorum:maple_sieve"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}

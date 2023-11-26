@@ -22,7 +22,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
@@ -32,7 +31,6 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BowlFoodItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
@@ -209,16 +207,8 @@ public class BarrelBlockEntity extends EBlockEntity {
                     }
                 } else if (playerItem.getItem() == Items.GLASS_BOTTLE) {
                     if (tank.drain(fluid, IFluidHandler.FluidAction.SIMULATE).getAmount() == 250) {
-                        if (!player.getAbilities().instabuild) {
-                            playerItem.shrink(1);
-                        }
-                        var bottle = PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER);
-                        if (!player.addItem(bottle)) {
-                            player.drop(bottle, false);
-                        }
-                        tank.drain(fluid, IFluidHandler.FluidAction.EXECUTE);
+                        extractWaterBottle(tank, level, player, playerItem, fluid);
                         bottled = true;
-                        level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.BOTTLE_EMPTY, SoundSource.NEUTRAL, 1.0F, 1.0F);
                     }
                 }
             }
@@ -236,6 +226,19 @@ public class BarrelBlockEntity extends EBlockEntity {
         }
 
         return InteractionResult.sidedSuccess(level.isClientSide);
+    }
+
+    // Also used by Water Crucibles
+    protected static void extractWaterBottle(IFluidHandler tank, Level level, Player player, ItemStack playerItem, FluidStack fluid) {
+        if (!player.getAbilities().instabuild) {
+            playerItem.shrink(1);
+        }
+        var bottle = PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER);
+        if (!player.addItem(bottle)) {
+            player.drop(bottle, false);
+        }
+        tank.drain(fluid, IFluidHandler.FluidAction.EXECUTE);
+        level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.BOTTLE_EMPTY, SoundSource.NEUTRAL, 1.0F, 1.0F);
     }
 
     // Pops the item out of the barrel (ex. dirt that has finished composting)

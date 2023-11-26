@@ -1,0 +1,37 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "aether"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "I": {
+            "tag": "forge:rods/wooden"
+          },
+          "O": {
+            "item": "aether:skyroot_planks"
+          },
+          "_": {
+            "item": "aether:skyroot_slab"
+          }
+        },
+        "pattern": [
+          "O O",
+          "O_O",
+          "I I"
+        ],
+        "result": {
+          "item": "exdeorum:skyroot_sieve"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}

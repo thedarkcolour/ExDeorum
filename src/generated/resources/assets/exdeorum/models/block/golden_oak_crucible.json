@@ -1,0 +1,9 @@
+{
+  "parent": "exdeorum:block/template_crucible",
+  "textures": {
+    "bottom": "aether:block/natural/golden_oak_log",
+    "inside": "aether:block/natural/golden_oak_log",
+    "side": "aether:block/natural/golden_oak_log",
+    "top": "aether:block/natural/golden_oak_log"
+  }
+}

@@ -54,6 +54,8 @@ public class TranslationKeys {
     public static final String BARREL_MIXING_CATEGORY_TITLE = "gui." + ExDeorum.ID + ".category.barrel_mixing";
     public static final String WATER_CRUCIBLE_CATEGORY_TITLE = "gui." + ExDeorum.ID + ".category.water_crucible";
     public static final String LAVA_CRUCIBLE_CATEGORY_TITLE = "gui." + ExDeorum.ID + ".category.lava_crucible";
+    public static final String CRUCIBLE_HEAT_SOURCE_CATEGORY_TITLE = "gui." + ExDeorum.ID + ".category.crucible_heat_source";
+    public static final String CRUCIBLE_HEAT_SOURCE_CATEGORY_MULTIPLIER = "gui." + ExDeorum.ID + ".category.crucible_heat_source.multiplier";
     public static final String HAMMER_CATEGORY_TITLE = "gui." + ExDeorum.ID + ".category.hammer";
     public static final String SIEVE_CATEGORY_TITLE = "gui." + ExDeorum.ID + ".category.sieve";
     public static final String SIEVE_RECIPE_CHANCE = "gui." + ExDeorum.ID + ".category.sieve.chance";

@@ -18,240 +18,221 @@
 
 package thedarkcolour.exdeorum.data;
 
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraftforge.data.loading.DatagenModLoader;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import thedarkcolour.exdeorum.compat.ModIds;
 
-import java.util.function.Consumer;
-import java.util.function.Function;
+import java.util.IdentityHashMap;
+import java.util.Map;
 
 // Mocks modded items so that data generation can reference modded items without needing those mods installed.
 public class ModCompatData {
+    // Identity maps because keys are just constants from ModIds
+    private static final Map<String, DeferredRegister<Item>> itemRegistries = new IdentityHashMap<>();
+    private static final Map<String, DeferredRegister<Block>> blockRegistries = new IdentityHashMap<>();
+
+    @SuppressWarnings("DataFlowIssue")
+    private static RegistryObject<Item> item(String modid, String name) {
+        if (DatagenModLoader.isRunningDataGen()) {
+            DeferredRegister<Item> registry = itemRegistries.computeIfAbsent(modid, key -> DeferredRegister.create(Registries.ITEM, key));
+            return registry.register(name, () -> new Item(new Item.Properties()));
+        } else {
+            return null;
+        }
+    }
+
+    @SuppressWarnings("DataFlowIssue")
+    private static RegistryObject<Block> block(String modid, String name) {
+        if (DatagenModLoader.isRunningDataGen()) {
+            DeferredRegister<Block> registry = blockRegistries.computeIfAbsent(modid, key -> DeferredRegister.create(Registries.BLOCK, key));
+            return registry.register(name, () -> new Block(BlockBehaviour.Properties.of()));
+        } else {
+            return null;
+        }
+    }
+
     // Ender IO
-    public static RegistryObject<Item> GRAINS_OF_INFINITY;
+    public static final RegistryObject<Item>
+            GRAINS_OF_INFINITY = item(ModIds.ENDERIO, "grains_of_infinity");
     // Bigger reactors
-    public static RegistryObject<Item> YELLORIUM_DUST;
+    public static final RegistryObject<Item>
+            YELLORIUM_DUST = item(ModIds.BIGGER_REACTORS, "yellorium_dust");
     // Biomes O' Plenty
-    public static RegistryObject<Block> FIR_PLANKS;
-    public static RegistryObject<Block> REDWOOD_PLANKS;
-    public static RegistryObject<Block> MAHOGANY_PLANKS;
-    public static RegistryObject<Block> JACARANDA_PLANKS;
-    public static RegistryObject<Block> PALM_PLANKS;
-    public static RegistryObject<Block> WILLOW_PLANKS;
-    public static RegistryObject<Block> DEAD_PLANKS;
-    public static RegistryObject<Block> MAGIC_PLANKS;
-    public static RegistryObject<Block> UMBRAN_PLANKS;
-    public static RegistryObject<Block> HELLBARK_PLANKS;
-    public static RegistryObject<Item> FIR_PLANKS_ITEM;
-    public static RegistryObject<Item> REDWOOD_PLANKS_ITEM;
-    public static RegistryObject<Item> MAHOGANY_PLANKS_ITEM;
-    public static RegistryObject<Item> JACARANDA_PLANKS_ITEM;
-    public static RegistryObject<Item> PALM_PLANKS_ITEM;
-    public static RegistryObject<Item> WILLOW_PLANKS_ITEM;
-    public static RegistryObject<Item> DEAD_PLANKS_ITEM;
-    public static RegistryObject<Item> MAGIC_PLANKS_ITEM;
-    public static RegistryObject<Item> UMBRAN_PLANKS_ITEM;
-    public static RegistryObject<Item> HELLBARK_PLANKS_ITEM;
-    public static RegistryObject<Item> FIR_SLAB;
-    public static RegistryObject<Item> REDWOOD_SLAB;
-    public static RegistryObject<Item> MAHOGANY_SLAB;
-    public static RegistryObject<Item> JACARANDA_SLAB;
-    public static RegistryObject<Item> PALM_SLAB;
-    public static RegistryObject<Item> WILLOW_SLAB;
-    public static RegistryObject<Item> DEAD_SLAB;
-    public static RegistryObject<Item> MAGIC_SLAB;
-    public static RegistryObject<Item> UMBRAN_SLAB;
-    public static RegistryObject<Item> HELLBARK_SLAB;
-    public static RegistryObject<Item> FIR_LOG_ITEM;
-    public static RegistryObject<Item> REDWOOD_LOG_ITEM;
-    public static RegistryObject<Item> MAHOGANY_LOG_ITEM;
-    public static RegistryObject<Item> JACARANDA_LOG_ITEM;
-    public static RegistryObject<Item> PALM_LOG_ITEM;
-    public static RegistryObject<Item> WILLOW_LOG_ITEM;
-    public static RegistryObject<Item> DEAD_LOG_ITEM;
-    public static RegistryObject<Item> MAGIC_LOG_ITEM;
-    public static RegistryObject<Item> UMBRAN_LOG_ITEM;
-    public static RegistryObject<Item> HELLBARK_LOG_ITEM;
-    public static RegistryObject<Block> FIR_LOG;
-    public static RegistryObject<Block> REDWOOD_LOG;
-    public static RegistryObject<Block> MAHOGANY_LOG;
-    public static RegistryObject<Block> JACARANDA_LOG;
-    public static RegistryObject<Block> PALM_LOG;
-    public static RegistryObject<Block> WILLOW_LOG;
-    public static RegistryObject<Block> DEAD_LOG;
-    public static RegistryObject<Block> MAGIC_LOG;
-    public static RegistryObject<Block> UMBRAN_LOG;
-    public static RegistryObject<Block> HELLBARK_LOG;
-    public static RegistryObject<Item> ORIGIN_SAPLING;
-    public static RegistryObject<Item> FLOWERING_OAK_SAPLING;
-    public static RegistryObject<Item> SNOWBLOSSOM_SAPLING;
-    public static RegistryObject<Item> RAINBOW_BIRCH_SAPLING;
-    public static RegistryObject<Item> YELLOW_AUTUMN_SAPLING;
-    public static RegistryObject<Item> ORANGE_AUTUMN_SAPLING;
-    public static RegistryObject<Item> MAPLE_SAPLING;
-    public static RegistryObject<Item> FIR_SAPLING;
-    public static RegistryObject<Item> REDWOOD_SAPLING;
-    public static RegistryObject<Item> MAHOGANY_SAPLING;
-    public static RegistryObject<Item> JACARANDA_SAPLING;
-    public static RegistryObject<Item> PALM_SAPLING;
-    public static RegistryObject<Item> WILLOW_SAPLING;
-    public static RegistryObject<Item> DEAD_SAPLING;
-    public static RegistryObject<Item> MAGIC_SAPLING;
-    public static RegistryObject<Item> UMBRAN_SAPLING;
-    public static RegistryObject<Item> HELLBARK_SAPLING;
+    public static final RegistryObject<Block>
+            FIR_PLANKS = block(ModIds.BIOMES_O_PLENTY, "fir_planks"),
+            REDWOOD_PLANKS = block(ModIds.BIOMES_O_PLENTY, "redwood_planks"),
+            MAHOGANY_PLANKS = block(ModIds.BIOMES_O_PLENTY, "mahogany_planks"),
+            JACARANDA_PLANKS = block(ModIds.BIOMES_O_PLENTY, "jacaranda_planks"),
+            PALM_PLANKS = block(ModIds.BIOMES_O_PLENTY, "palm_planks"),
+            WILLOW_PLANKS = block(ModIds.BIOMES_O_PLENTY, "willow_planks"),
+            DEAD_PLANKS = block(ModIds.BIOMES_O_PLENTY, "dead_planks"),
+            MAGIC_PLANKS = block(ModIds.BIOMES_O_PLENTY, "magic_planks"),
+            UMBRAN_PLANKS = block(ModIds.BIOMES_O_PLENTY, "umbran_planks"),
+            HELLBARK_PLANKS = block(ModIds.BIOMES_O_PLENTY, "hellbark_planks"),
+            FIR_LOG = block(ModIds.BIOMES_O_PLENTY, "fir_log"),
+            REDWOOD_LOG = block(ModIds.BIOMES_O_PLENTY, "redwood_log"),
+            MAHOGANY_LOG = block(ModIds.BIOMES_O_PLENTY, "mahogany_log"),
+            JACARANDA_LOG = block(ModIds.BIOMES_O_PLENTY, "jacaranda_log"),
+            PALM_LOG = block(ModIds.BIOMES_O_PLENTY, "palm_log"),
+            WILLOW_LOG = block(ModIds.BIOMES_O_PLENTY, "willow_log"),
+            DEAD_LOG = block(ModIds.BIOMES_O_PLENTY, "dead_log"),
+            MAGIC_LOG = block(ModIds.BIOMES_O_PLENTY, "magic_log"),
+            UMBRAN_LOG = block(ModIds.BIOMES_O_PLENTY, "umbran_log"),
+            HELLBARK_LOG = block(ModIds.BIOMES_O_PLENTY, "hellbark_log");
+    public static final RegistryObject<Item>
+            FIR_PLANKS_ITEM = item(ModIds.BIOMES_O_PLENTY, "fir_planks"),
+            REDWOOD_PLANKS_ITEM = item(ModIds.BIOMES_O_PLENTY, "redwood_planks"),
+            MAHOGANY_PLANKS_ITEM = item(ModIds.BIOMES_O_PLENTY, "mahogany_planks"),
+            JACARANDA_PLANKS_ITEM = item(ModIds.BIOMES_O_PLENTY, "jacaranda_planks"),
+            PALM_PLANKS_ITEM = item(ModIds.BIOMES_O_PLENTY, "palm_planks"),
+            WILLOW_PLANKS_ITEM = item(ModIds.BIOMES_O_PLENTY, "willow_planks"),
+            DEAD_PLANKS_ITEM = item(ModIds.BIOMES_O_PLENTY, "dead_planks"),
+            MAGIC_PLANKS_ITEM = item(ModIds.BIOMES_O_PLENTY, "magic_planks"),
+            UMBRAN_PLANKS_ITEM = item(ModIds.BIOMES_O_PLENTY, "umbran_planks"),
+            HELLBARK_PLANKS_ITEM = item(ModIds.BIOMES_O_PLENTY, "hellbark_planks"),
+            FIR_SLAB = item(ModIds.BIOMES_O_PLENTY, "fir_slab"),
+            REDWOOD_SLAB = item(ModIds.BIOMES_O_PLENTY, "redwood_slab"),
+            MAHOGANY_SLAB = item(ModIds.BIOMES_O_PLENTY, "mahogany_slab"),
+            JACARANDA_SLAB = item(ModIds.BIOMES_O_PLENTY, "jacaranda_slab"),
+            PALM_SLAB = item(ModIds.BIOMES_O_PLENTY, "palm_slab"),
+            WILLOW_SLAB = item(ModIds.BIOMES_O_PLENTY, "willow_slab"),
+            DEAD_SLAB = item(ModIds.BIOMES_O_PLENTY, "dead_slab"),
+            MAGIC_SLAB = item(ModIds.BIOMES_O_PLENTY, "magic_slab"),
+            UMBRAN_SLAB = item(ModIds.BIOMES_O_PLENTY, "umbran_slab"),
+            HELLBARK_SLAB = item(ModIds.BIOMES_O_PLENTY, "hellbark_slab"),
+            FIR_LOG_ITEM = item(ModIds.BIOMES_O_PLENTY, "fir_log"),
+            REDWOOD_LOG_ITEM = item(ModIds.BIOMES_O_PLENTY, "redwood_log"),
+            MAHOGANY_LOG_ITEM = item(ModIds.BIOMES_O_PLENTY, "mahogany_log"),
+            JACARANDA_LOG_ITEM = item(ModIds.BIOMES_O_PLENTY, "jacaranda_log"),
+            PALM_LOG_ITEM = item(ModIds.BIOMES_O_PLENTY, "palm_log"),
+            WILLOW_LOG_ITEM = item(ModIds.BIOMES_O_PLENTY, "willow_log"),
+            DEAD_LOG_ITEM = item(ModIds.BIOMES_O_PLENTY, "dead_log"),
+            MAGIC_LOG_ITEM = item(ModIds.BIOMES_O_PLENTY, "magic_log"),
+            UMBRAN_LOG_ITEM = item(ModIds.BIOMES_O_PLENTY, "umbran_log"),
+            HELLBARK_LOG_ITEM = item(ModIds.BIOMES_O_PLENTY, "hellbark_log"),
+            ORIGIN_SAPLING = item(ModIds.BIOMES_O_PLENTY, "origin_sapling"),
+            FLOWERING_OAK_SAPLING = item(ModIds.BIOMES_O_PLENTY, "flowering_oak_sapling"),
+            SNOWBLOSSOM_SAPLING = item(ModIds.BIOMES_O_PLENTY, "snowblossom_sapling"),
+            RAINBOW_BIRCH_SAPLING = item(ModIds.BIOMES_O_PLENTY, "rainbow_birch_sapling"),
+            YELLOW_AUTUMN_SAPLING = item(ModIds.BIOMES_O_PLENTY, "yellow_autumn_sapling"),
+            ORANGE_AUTUMN_SAPLING = item(ModIds.BIOMES_O_PLENTY, "orange_autumn_sapling"),
+            MAPLE_SAPLING = item(ModIds.BIOMES_O_PLENTY, "maple_sapling"),
+            FIR_SAPLING = item(ModIds.BIOMES_O_PLENTY, "fir_sapling"),
+            REDWOOD_SAPLING = item(ModIds.BIOMES_O_PLENTY, "redwood_sapling"),
+            MAHOGANY_SAPLING = item(ModIds.BIOMES_O_PLENTY, "mahogany_sapling"),
+            JACARANDA_SAPLING = item(ModIds.BIOMES_O_PLENTY, "jacaranda_sapling"),
+            PALM_SAPLING = item(ModIds.BIOMES_O_PLENTY, "palm_sapling"),
+            WILLOW_SAPLING = item(ModIds.BIOMES_O_PLENTY, "willow_sapling"),
+            DEAD_SAPLING = item(ModIds.BIOMES_O_PLENTY, "dead_sapling"),
+            MAGIC_SAPLING = item(ModIds.BIOMES_O_PLENTY, "magic_sapling"),
+            UMBRAN_SAPLING = item(ModIds.BIOMES_O_PLENTY, "umbran_sapling"),
+            HELLBARK_SAPLING = item(ModIds.BIOMES_O_PLENTY, "hellbark_sapling");
     // Applied Energistics 2
-    public static RegistryObject<Item> CERTUS_QUARTZ_CRYSTAL;
-    public static RegistryObject<Item> CHARGED_CERTUS_QUARTZ_CRYSTAL;
-    public static RegistryObject<Item> CERTUS_QUARTZ_DUST;
-    public static RegistryObject<Item> SKY_STONE_DUST;
+    public static final RegistryObject<Item>
+            CERTUS_QUARTZ_CRYSTAL = item(ModIds.APPLIED_ENERGISTICS_2, "certus_quartz_crystal"),
+            CHARGED_CERTUS_QUARTZ_CRYSTAL = item(ModIds.APPLIED_ENERGISTICS_2, "charged_certus_quartz_crystal"),
+            CERTUS_QUARTZ_DUST = item(ModIds.APPLIED_ENERGISTICS_2, "certus_quartz_dust"),
+            SKY_STONE_DUST = item(ModIds.APPLIED_ENERGISTICS_2, "sky_dust");
     // Ars Nouveau
-    public static RegistryObject<Item> BLUE_ARCHWOOD_SAPLING;
-    public static RegistryObject<Item> RED_ARCHWOOD_SAPLING;
-    public static RegistryObject<Item> PURPLE_ARCHWOOD_SAPLING;
-    public static RegistryObject<Item> GREEN_ARCHWOOD_SAPLING;
-    public static RegistryObject<Item> SOURCEBERRY;
-    public static RegistryObject<Block> CASCADING_ARCHWOOD_LOG;
-    public static RegistryObject<Block> BLAZING_ARCHWOOD_LOG;
-    public static RegistryObject<Block> VEXING_ARCHWOOD_LOG;
-    public static RegistryObject<Block> FLOURISHING_ARCHWOOD_LOG;
-    public static RegistryObject<Block> ARCHWOOD_PLANKS;
-    public static RegistryObject<Item> CASCADING_ARCHWOOD_LOG_ITEM;
-    public static RegistryObject<Item> BLAZING_ARCHWOOD_LOG_ITEM;
-    public static RegistryObject<Item> VEXING_ARCHWOOD_LOG_ITEM;
-    public static RegistryObject<Item> FLOURISHING_ARCHWOOD_LOG_ITEM;
-    public static RegistryObject<Item> ARCHWOOD_SLAB;
-    public static RegistryObject<Item> ARCHWOOD_PLANKS_ITEM;
+    public static final RegistryObject<Block>
+            CASCADING_ARCHWOOD_LOG = block(ModIds.ARS_NOUVEAU, "blue_archwood_log"),
+            BLAZING_ARCHWOOD_LOG = block(ModIds.ARS_NOUVEAU, "red_archwood_log"),
+            VEXING_ARCHWOOD_LOG = block(ModIds.ARS_NOUVEAU, "purple_archwood_log"),
+            FLOURISHING_ARCHWOOD_LOG = block(ModIds.ARS_NOUVEAU, "green_archwood_log"),
+            ARCHWOOD_PLANKS = block(ModIds.ARS_NOUVEAU, "archwood_planks");
+    public static final RegistryObject<Item>
+            BLUE_ARCHWOOD_SAPLING = item(ModIds.ARS_NOUVEAU, "blue_archwood_sapling"),
+            RED_ARCHWOOD_SAPLING = item(ModIds.ARS_NOUVEAU, "red_archwood_sapling"),
+            PURPLE_ARCHWOOD_SAPLING = item(ModIds.ARS_NOUVEAU, "purple_archwood_sapling"),
+            GREEN_ARCHWOOD_SAPLING = item(ModIds.ARS_NOUVEAU, "green_archwood_sapling"),
+            SOURCEBERRY = item(ModIds.ARS_NOUVEAU, "sourceberry_bush"),
+            CASCADING_ARCHWOOD_LOG_ITEM = item(ModIds.ARS_NOUVEAU, "blue_archwood_log"),
+            BLAZING_ARCHWOOD_LOG_ITEM = item(ModIds.ARS_NOUVEAU, "red_archwood_log"),
+            VEXING_ARCHWOOD_LOG_ITEM = item(ModIds.ARS_NOUVEAU, "purple_archwood_log"),
+            FLOURISHING_ARCHWOOD_LOG_ITEM = item(ModIds.ARS_NOUVEAU, "green_archwood_log"),
+            ARCHWOOD_SLAB = item(ModIds.ARS_NOUVEAU, "archwood_slab"),
+            ARCHWOOD_PLANKS_ITEM = item(ModIds.ARS_NOUVEAU, "archwood_planks");
     // Aether
-    public static RegistryObject<Block> SKYROOT_PLANKS;
-    public static RegistryObject<Item> SKYROOT_SLAB;
-    public static RegistryObject<Item> SKYROOT_PLANKS_ITEM;
+    public static final RegistryObject<Block>
+            SKYROOT_PLANKS = block(ModIds.AETHER, "skyroot_planks"),
+            SKYROOT_LOG = block(ModIds.AETHER, "skyroot_log"),
+            GOLDEN_OAK_LOG = block(ModIds.AETHER, "golden_oak_log");
+    public static final RegistryObject<Item>
+            SKYROOT_SLAB = item(ModIds.AETHER, "skyroot_slab"),
+            SKYROOT_PLANKS_ITEM = item(ModIds.AETHER, "skyroot_planks"),
+            GOLDEN_OAK_LOG_ITEM = item(ModIds.AETHER, "golden_oak_log"),
+            SKYROOT_LOG_ITEM = item(ModIds.AETHER, "skyroot_log");
+    // Blue Skies
+    public static final RegistryObject<Block>
+            BLUEBRIGHT_PLANKS = block(ModIds.BLUE_SKIES, "bluebright_planks"),
+            STARLIT_PLANKS = block(ModIds.BLUE_SKIES, "starlit_planks"),
+            FROSTBRIGHT_PLANKS = block(ModIds.BLUE_SKIES, "frostbright_planks"),
+            COMET_PLANKS = block(ModIds.BLUE_SKIES, "comet_planks"),
+            LUNAR_PLANKS = block(ModIds.BLUE_SKIES, "lunar_planks"),
+            DUSK_PLANKS = block(ModIds.BLUE_SKIES, "dusk_planks"),
+            MAPLE_PLANKS = block(ModIds.BLUE_SKIES, "maple_planks"),
+            CRYSTALLIZED_PLANKS = block(ModIds.BLUE_SKIES, "crystallized_planks"),
+            BLUEBRIGHT_LOG = block(ModIds.BLUE_SKIES, "bluebright_log"),
+            STARLIT_LOG = block(ModIds.BLUE_SKIES, "starlit_log"),
+            FROSTBRIGHT_LOG = block(ModIds.BLUE_SKIES, "frostbright_log"),
+            COMET_LOG = block(ModIds.BLUE_SKIES, "comet_log"),
+            LUNAR_LOG = block(ModIds.BLUE_SKIES, "lunar_log"),
+            DUSK_LOG = block(ModIds.BLUE_SKIES, "dusk_log"),
+            MAPLE_LOG = block(ModIds.BLUE_SKIES, "maple_log"),
+            CRYSTALLIZED_LOG = block(ModIds.BLUE_SKIES, "crystallized_log");
+    public static final RegistryObject<Item>
+            BLUEBRIGHT_PLANKS_ITEM = item(ModIds.BLUE_SKIES, "bluebright_planks"),
+            STARLIT_PLANKS_ITEM = item(ModIds.BLUE_SKIES, "starlit_planks"),
+            FROSTBRIGHT_PLANKS_ITEM = item(ModIds.BLUE_SKIES, "frostbright_planks"),
+            COMET_PLANKS_ITEM = item(ModIds.BLUE_SKIES, "comet_planks"),
+            LUNAR_PLANKS_ITEM = item(ModIds.BLUE_SKIES, "lunar_planks"),
+            DUSK_PLANKS_ITEM = item(ModIds.BLUE_SKIES, "dusk_planks"),
+            MAPLE_PLANKS_ITEM = item(ModIds.BLUE_SKIES, "maple_planks"),
+            CRYSTALLIZED_PLANKS_ITEM = item(ModIds.BLUE_SKIES, "crystallized_planks"),
+            BLUEBRIGHT_SLAB = item(ModIds.BLUE_SKIES, "bluebright_slab"),
+            STARLIT_SLAB = item(ModIds.BLUE_SKIES, "starlit_slab"),
+            FROSTBRIGHT_SLAB = item(ModIds.BLUE_SKIES, "frostbright_slab"),
+            COMET_SLAB = item(ModIds.BLUE_SKIES, "comet_slab"),
+            LUNAR_SLAB = item(ModIds.BLUE_SKIES, "lunar_slab"),
+            DUSK_SLAB = item(ModIds.BLUE_SKIES, "dusk_slab"),
+            MAPLE_SLAB = item(ModIds.BLUE_SKIES, "maple_slab"),
+            CRYSTALLIZED_SLAB = item(ModIds.BLUE_SKIES, "crystallized_slab"),
+            BLUEBRIGHT_LOG_ITEM = item(ModIds.BLUE_SKIES, "bluebright_log"),
+            STARLIT_LOG_ITEM = item(ModIds.BLUE_SKIES, "starlit_log"),
+            FROSTBRIGHT_LOG_ITEM = item(ModIds.BLUE_SKIES, "frostbright_log"),
+            COMET_LOG_ITEM = item(ModIds.BLUE_SKIES, "comet_log"),
+            LUNAR_LOG_ITEM = item(ModIds.BLUE_SKIES, "lunar_log"),
+            DUSK_LOG_ITEM = item(ModIds.BLUE_SKIES, "dusk_log"),
+            MAPLE_LOG_ITEM = item(ModIds.BLUE_SKIES, "maple_log"),
+            CRYSTALLIZED_LOG_ITEM = item(ModIds.BLUE_SKIES, "crystallized_log");
+
+    public static final ResourceLocation[] PAMS_CROPS;
+
+    static {
+        // copy and pasted from the GitHub
+        String[] names = { "pamagavecrop", "pamamaranthcrop", "pamarrowrootcrop", "pamartichokecrop", "pamasparaguscrop", "pambarleycrop", "pambeancrop", "pambellpeppercrop", "pamblackberrycrop", "pamblueberrycrop", "pambroccolicrop", "pambrusselsproutcrop", "pamcabbagecrop", "pamcactusfruitcrop", "pamcandleberrycrop", "pamcantaloupecrop", "pamcassavacrop", "pamcauliflowercrop", "pamcelerycrop", "pamchickpeacrop", "pamchilipeppercrop", "pamcoffeebeancrop", "pamcorncrop", "pamcottoncrop", "pamcranberrycrop", "pamcucumbercrop", "pameggplantcrop", "pamelderberrycrop", "pamflaxcrop", "pamgarliccrop", "pamgingercrop", "pamgrapecrop", "pamgreengrapecrop", "pamhuckleberrycrop", "pamjicamacrop", "pamjuniperberrycrop", "pamjutecrop", "pamkalecrop", "pamkenafcrop", "pamkiwicrop", "pamkohlrabicrop", "pamleekcrop", "pamlentilcrop", "pamlettucecrop", "pammilletcrop", "pammulberrycrop", "pammustardseedscrop", "pamoatscrop", "pamokracrop", "pamonioncrop", "pamparsnipcrop", "pampeanutcrop", "pampeascrop", "pampineapplecrop", "pamquinoacrop", "pamradishcrop", "pamraspberrycrop", "pamrhubarbcrop", "pamricecrop", "pamrutabagacrop", "pamryecrop", "pamscallioncrop", "pamsesameseedscrop", "pamsisalcrop", "pamsoybeancrop", "pamspiceleafcrop", "pamspinachcrop", "pamstrawberrycrop", "pamsweetpotatocrop", "pamtarocrop", "pamtealeafcrop", "pamtomatillocrop", "pamtomatocrop", "pamturnipcrop", "pamwaterchestnutcrop", "pamwhitemushroomcrop", "pamwintersquashcrop", "pamzucchinicrop"};
+        PAMS_CROPS = new ResourceLocation[names.length];
+
+        for (int i = 0, namesLength = names.length; i < namesLength; i++) {
+            PAMS_CROPS[i] = new ResourceLocation(ModIds.PAMS_HARVESTCRAFT_CROPS, names[i]);
+        }
+    }
 
     public static void registerModData() {
-        registerModItems(ModIds.ENDERIO, addItem -> GRAINS_OF_INFINITY = addItem.apply("grains_of_infinity"));
-        registerModItems(ModIds.EXTREME_REACTORS, addItem -> YELLORIUM_DUST = addItem.apply("yellorium_dust"));
-        registerModBlocks(ModIds.BIOMES_O_PLENTY, addBlock -> {
-            FIR_PLANKS = addBlock.apply("fir_planks");
-            REDWOOD_PLANKS = addBlock.apply("redwood_planks");
-            MAHOGANY_PLANKS = addBlock.apply("mahogany_planks");
-            JACARANDA_PLANKS = addBlock.apply("jacaranda_planks");
-            PALM_PLANKS = addBlock.apply("palm_planks");
-            WILLOW_PLANKS = addBlock.apply("willow_planks");
-            DEAD_PLANKS = addBlock.apply("dead_planks");
-            MAGIC_PLANKS = addBlock.apply("magic_planks");
-            UMBRAN_PLANKS = addBlock.apply("umbran_planks");
-            HELLBARK_PLANKS = addBlock.apply("hellbark_planks");
-            FIR_LOG = addBlock.apply("fir_log");
-            REDWOOD_LOG = addBlock.apply("redwood_log");
-            MAHOGANY_LOG = addBlock.apply("mahogany_log");
-            JACARANDA_LOG = addBlock.apply("jacaranda_log");
-            PALM_LOG = addBlock.apply("palm_log");
-            WILLOW_LOG = addBlock.apply("willow_log");
-            DEAD_LOG = addBlock.apply("dead_log");
-            MAGIC_LOG = addBlock.apply("magic_log");
-            UMBRAN_LOG = addBlock.apply("umbran_log");
-            HELLBARK_LOG = addBlock.apply("hellbark_log");
-        });
-        registerModItems(ModIds.BIOMES_O_PLENTY, addItem -> {
-            FIR_PLANKS_ITEM = addItem.apply("fir_planks");
-            REDWOOD_PLANKS_ITEM = addItem.apply("redwood_planks");
-            MAHOGANY_PLANKS_ITEM = addItem.apply("mahogany_planks");
-            JACARANDA_PLANKS_ITEM = addItem.apply("jacaranda_planks");
-            PALM_PLANKS_ITEM = addItem.apply("palm_planks");
-            WILLOW_PLANKS_ITEM = addItem.apply("willow_planks");
-            DEAD_PLANKS_ITEM = addItem.apply("dead_planks");
-            MAGIC_PLANKS_ITEM = addItem.apply("magic_planks");
-            UMBRAN_PLANKS_ITEM = addItem.apply("umbran_planks");
-            HELLBARK_PLANKS_ITEM = addItem.apply("hellbark_planks");
-            FIR_SLAB = addItem.apply("fir_slab");
-            REDWOOD_SLAB = addItem.apply("redwood_slab");
-            MAHOGANY_SLAB = addItem.apply("mahogany_slab");
-            JACARANDA_SLAB = addItem.apply("jacaranda_slab");
-            PALM_SLAB = addItem.apply("palm_slab");
-            WILLOW_SLAB = addItem.apply("willow_slab");
-            DEAD_SLAB = addItem.apply("dead_slab");
-            MAGIC_SLAB = addItem.apply("magic_slab");
-            UMBRAN_SLAB = addItem.apply("umbran_slab");
-            HELLBARK_SLAB = addItem.apply("hellbark_slab");
-            ORIGIN_SAPLING = addItem.apply("origin_sapling");
-            FLOWERING_OAK_SAPLING = addItem.apply("flowering_oak_sapling");
-            SNOWBLOSSOM_SAPLING = addItem.apply("snowblossom_sapling");
-            RAINBOW_BIRCH_SAPLING = addItem.apply("rainbow_birch_sapling");
-            YELLOW_AUTUMN_SAPLING = addItem.apply("yellow_autumn_sapling");
-            ORANGE_AUTUMN_SAPLING = addItem.apply("orange_autumn_sapling");
-            MAPLE_SAPLING = addItem.apply("maple_sapling");
-            FIR_SAPLING = addItem.apply("fir_sapling");
-            REDWOOD_SAPLING = addItem.apply("redwood_sapling");
-            MAHOGANY_SAPLING = addItem.apply("mahogany_sapling");
-            JACARANDA_SAPLING = addItem.apply("jacaranda_sapling");
-            PALM_SAPLING = addItem.apply("palm_sapling");
-            WILLOW_SAPLING = addItem.apply("willow_sapling");
-            DEAD_SAPLING = addItem.apply("dead_sapling");
-            MAGIC_SAPLING = addItem.apply("magic_sapling");
-            UMBRAN_SAPLING = addItem.apply("umbran_sapling");
-            HELLBARK_SAPLING = addItem.apply("hellbark_sapling");
-            FIR_LOG_ITEM = addItem.apply("fir_log");
-            REDWOOD_LOG_ITEM = addItem.apply("redwood_log");
-            MAHOGANY_LOG_ITEM = addItem.apply("mahogany_log");
-            JACARANDA_LOG_ITEM = addItem.apply("jacaranda_log");
-            PALM_LOG_ITEM = addItem.apply("palm_log");
-            WILLOW_LOG_ITEM = addItem.apply("willow_log");
-            DEAD_LOG_ITEM = addItem.apply("dead_log");
-            MAGIC_LOG_ITEM = addItem.apply("magic_log");
-            UMBRAN_LOG_ITEM = addItem.apply("umbran_log");
-            HELLBARK_LOG_ITEM = addItem.apply("hellbark_log");
-        });
-        registerModItems(ModIds.APPLIED_ENERGISTICS_2, addItem -> {
-            CERTUS_QUARTZ_CRYSTAL = addItem.apply("certus_quartz_crystal");
-            CHARGED_CERTUS_QUARTZ_CRYSTAL = addItem.apply("charged_certus_quartz_crystal");
-            CERTUS_QUARTZ_DUST = addItem.apply("certus_quartz_dust");
-            SKY_STONE_DUST = addItem.apply("sky_dust");
-        });
-        registerModBlocks(ModIds.ARS_NOUVEAU, addBlock -> {
-            CASCADING_ARCHWOOD_LOG = addBlock.apply("blue_archwood_log");
-            BLAZING_ARCHWOOD_LOG = addBlock.apply("red_archwood_log");
-            VEXING_ARCHWOOD_LOG = addBlock.apply("purple_archwood_log");
-            FLOURISHING_ARCHWOOD_LOG = addBlock.apply("green_archwood_log");
-            ARCHWOOD_PLANKS = addBlock.apply("archwood_planks");
-        });
-        registerModItems(ModIds.ARS_NOUVEAU, addItem -> {
-            BLUE_ARCHWOOD_SAPLING = addItem.apply("blue_archwood_sapling");
-            RED_ARCHWOOD_SAPLING = addItem.apply("red_archwood_sapling");
-            PURPLE_ARCHWOOD_SAPLING = addItem.apply("purple_archwood_sapling");
-            GREEN_ARCHWOOD_SAPLING = addItem.apply("green_archwood_sapling");
-            SOURCEBERRY = addItem.apply("sourceberry_bush");
-            CASCADING_ARCHWOOD_LOG_ITEM = addItem.apply("blue_archwood_log");
-            BLAZING_ARCHWOOD_LOG_ITEM = addItem.apply("red_archwood_log");
-            VEXING_ARCHWOOD_LOG_ITEM = addItem.apply("purple_archwood_log");
-            FLOURISHING_ARCHWOOD_LOG_ITEM = addItem.apply("green_archwood_log");
-            ARCHWOOD_SLAB = addItem.apply("archwood_slab");
-            ARCHWOOD_PLANKS_ITEM = addItem.apply("archwood_planks");
-        });
-        registerModBlocks(ModIds.AETHER, addBlock -> {
-            SKYROOT_PLANKS = addBlock.apply("skyroot_planks");
-        });
-        registerModItems(ModIds.AETHER, addItem -> {
-            SKYROOT_SLAB = addItem.apply("skyroot_slab");
-            SKYROOT_PLANKS_ITEM = addItem.apply("skyroot_planks");
-        });
-    }
+        var modBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-    private static void registerModItems(String modid, Consumer<Function<String, RegistryObject<Item>>> addItems) {
-        var deferredRegister = DeferredRegister.create(ForgeRegistries.ITEMS, modid);
-        deferredRegister.register(FMLJavaModLoadingContext.get().getModEventBus());
-
-        addItems.accept(name -> deferredRegister.register(name, () -> new Item(new Item.Properties())));
-    }
-
-    @SuppressWarnings("SameParameterValue")
-    private static void registerModBlocks(String modid, Consumer<Function<String, RegistryObject<Block>>> addBlocks) {
-        var deferredRegister = DeferredRegister.create(ForgeRegistries.BLOCKS, modid);
-        deferredRegister.register(FMLJavaModLoadingContext.get().getModEventBus());
-
-        addBlocks.accept(name -> deferredRegister.register(name, () -> new Block(BlockBehaviour.Properties.of())));
+        for (var registry : itemRegistries.values()) {
+            registry.register(modBus);
+        }
+        for (var registry : blockRegistries.values()) {
+            registry.register(modBus);
+        }
     }
 }

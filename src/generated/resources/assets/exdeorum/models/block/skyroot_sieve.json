@@ -1,0 +1,6 @@
+{
+  "parent": "exdeorum:block/template_sieve",
+  "textures": {
+    "texture": "aether:block/construction/skyroot_planks"
+  }
+}

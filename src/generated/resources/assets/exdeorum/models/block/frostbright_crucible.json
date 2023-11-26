@@ -1,0 +1,9 @@
+{
+  "parent": "exdeorum:block/template_crucible",
+  "textures": {
+    "bottom": "blue_skies:block/wood/frostbright_log_side",
+    "inside": "blue_skies:block/wood/frostbright_log_side",
+    "side": "blue_skies:block/wood/frostbright_log_side",
+    "top": "blue_skies:block/wood/frostbright_log_side"
+  }
+}

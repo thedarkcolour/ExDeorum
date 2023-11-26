@@ -1,9 +1,9 @@
-// 1.20.1	2023-08-08T15:59:08.3354345	Tags for minecraft:item mod id exdeorum
+// 1.20.1	2023-11-25T19:04:39.9873323	Tags for minecraft:item mod id exdeorum
 6c72957356b1d59a27be736fa1da54a5a9795ef7 data/exdeorum/tags/items/barrels.json
 5feb54ce68fa657af5ce696f75b8c7a6d04cc7a7 data/exdeorum/tags/items/crooks.json
 74eefeb986d633d26ad42202c4a6b5e71463c425 data/exdeorum/tags/items/end_cake_materials.json
 be46bf2abe731d5ee5bd15ce72f222b2b9a49385 data/exdeorum/tags/items/hammers.json
 b90bd3c642e69b9e800c58a9f8f53e369652e6ba data/exdeorum/tags/items/pebbles.json
 8e1b5ab26037123d3948e9ac9f50da1b7cd0a129 data/exdeorum/tags/items/sieve_meshes.json
-c97c766a33dab7ad0c0c9dfab62ae0f0c19dcb99 data/exdeorum/tags/items/stone_barrels.json
-ffdb0354323b0eb3c4170e26bfffa2670bb16781 data/exdeorum/tags/items/wooden_barrels.json
+0152da758e7665bf282f17f466599c7a009d9a15 data/exdeorum/tags/items/stone_barrels.json
+da9e65a9ddbd1b6fa3ee55da4c0f8a041bb05dcd data/exdeorum/tags/items/wooden_barrels.json

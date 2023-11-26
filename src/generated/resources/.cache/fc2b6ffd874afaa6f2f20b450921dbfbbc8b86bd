@@ -1,4 +1,4 @@
-// 1.20.1	2023-11-02T20:23:36.9068339	ModKit Item Models for mod 'exdeorum'
+// 1.20.1	2023-11-25T19:04:39.9733295	ModKit Item Models for mod 'exdeorum'
 4ba3bb2c6174ac3728a4b85e34681f118ec8eb34 assets/exdeorum/models/item/acacia_barrel.json
 c03ce41f7c071498fcbd5f5225e91dcb2f365fbb assets/exdeorum/models/item/acacia_crucible.json
 3b4f1d45c0d9c4cd1d9a5cdf6ddc8d2c9791bca5 assets/exdeorum/models/item/acacia_sieve.json
@@ -14,6 +14,9 @@ cb54f7f749cf12c5980051180b59993c33513231 assets/exdeorum/models/item/birch_barre
 c6a2834820a8ee03ad01a50df13fdaa50de55507 assets/exdeorum/models/item/birch_crucible.json
 cea0d8d765050cad7aed1d23c8ff89cb7112a64d assets/exdeorum/models/item/birch_sieve.json
 83c2bbf6ddc7053565b8450f57d8d19ca69d5a66 assets/exdeorum/models/item/blackstone_pebble.json
+aca318964a4af0b54d935faa6c83c8653bdb4296 assets/exdeorum/models/item/bluebright_barrel.json
+6c91566e21ce1d6e97513f49edd6ba986c317b07 assets/exdeorum/models/item/bluebright_crucible.json
+43e534189ef41de5ffe650e27f9e2039a9a8c0b2 assets/exdeorum/models/item/bluebright_sieve.json
 ce29c4adab1efa20645351b8bb2aa5a87f36729d assets/exdeorum/models/item/blue_archwood_crucible.json
 19995d73ae76d8ebcb64cab9219373f6192f5e8d assets/exdeorum/models/item/bone_crook.json
 d3f7de31d0fba8578c3e36a16ab39ac0a4d54af9 assets/exdeorum/models/item/calcite_pebble.json
@@ -21,6 +24,9 @@ d3f7de31d0fba8578c3e36a16ab39ac0a4d54af9 assets/exdeorum/models/item/calcite_peb
 9480047be2df6b628b18f1102699ed8f24de4deb assets/exdeorum/models/item/cherry_crucible.json
 8e6c3863c2c6f6fc4039d8157cb9850b193a56be assets/exdeorum/models/item/cherry_sieve.json
 4f5fa166847ceacc60abaa11bc70bb947be20c27 assets/exdeorum/models/item/cobalt_ore_chunk.json
+dbd3c1898984f6aab278ffb78760a5a8850da789 assets/exdeorum/models/item/comet_barrel.json
+42ef0c6e4a6f3fd8efcfba24f3ad6fdfb071bdca assets/exdeorum/models/item/comet_crucible.json
+ab256ed56e23571c5f80e930c6dbc90c04b2eb01 assets/exdeorum/models/item/comet_sieve.json
 e0a5c7f6e6ec0cd9aa99175d3bca27b88ac299d4 assets/exdeorum/models/item/cooked_silk_worm.json
 a24ee1ee422f8460afec77474608b988d52ea42d assets/exdeorum/models/item/copper_ore_chunk.json
 d6109df4904776aca591e7dfc8ee8da50664e1df assets/exdeorum/models/item/crimson_barrel.json
@@ -32,6 +38,9 @@ d4e37ab48e6a73807f2f811dbb0243d1e47e43b4 assets/exdeorum/models/item/crook.json
 265eca52aabed2fe1a5ec5a1b3e8e7371942d187 assets/exdeorum/models/item/crushed_deepslate.json
 670588edd96ed3914a8ebd82788682d20194f10c assets/exdeorum/models/item/crushed_end_stone.json
 a81914d35e6d1027d348e54608245ff90cee2793 assets/exdeorum/models/item/crushed_netherrack.json
+b148ebf96adcc2a03fe8a653279b2a7ec70b5272 assets/exdeorum/models/item/crystallized_barrel.json
+0d0cef3fc706933dcd067cb164ebf16847cdfb0b assets/exdeorum/models/item/crystallized_crucible.json
+2bd6f8b0d49d17d253554ea2a338c61e89857a73 assets/exdeorum/models/item/crystallized_sieve.json
 fd9b0ecdfacc39df90a9f80e1ed813cf07f7294b assets/exdeorum/models/item/dark_oak_barrel.json
 927f88a29eeb6eed779ddbe38ba6d21b1c38939e assets/exdeorum/models/item/dark_oak_crucible.json
 8ce9c480e9daa9a7644fea4bcacd51d77fa237df assets/exdeorum/models/item/dark_oak_sieve.json
@@ -43,14 +52,21 @@ b4104cc571bb62de4ec205f1ef1750a1b0217a0f assets/exdeorum/models/item/dead_sieve.
 db9d0dbe1ad45be2a238c6e5f6f9d102b436340c assets/exdeorum/models/item/diamond_mesh.json
 21810f413414ae5c2430ff0b9da6e01515d608ea assets/exdeorum/models/item/diamond_watering_can.json
 ab6a64efa0d9ddcce071a5a1996e46877ebbfff2 assets/exdeorum/models/item/diorite_pebble.json
+304f1ad9612a16f551cec505947a6d6b141fa6a7 assets/exdeorum/models/item/dusk_barrel.json
+4cea858b2c5f72a5e41a73bd24b4fcc81109a758 assets/exdeorum/models/item/dusk_crucible.json
+6248654a9e89e547ff3ff8b81f4ad8a92e9f8e12 assets/exdeorum/models/item/dusk_sieve.json
 8edca3e9c453345a5c6c5752096926d943b73ff3 assets/exdeorum/models/item/dust.json
 2ba0fb3dcca0337d100198f00996eed6b4f0efa5 assets/exdeorum/models/item/end_cake.json
 ddcd1d34048c1aa0462fd7481d664acaf94b6b0e assets/exdeorum/models/item/fir_barrel.json
 dc27dff26c3f0853fbbbd763dcda36f43a333361 assets/exdeorum/models/item/fir_crucible.json
 073c2854a0fa5840c52c6769f9483e7af17b4022 assets/exdeorum/models/item/fir_sieve.json
 d445d763388c9fb9ae4f8e8e8c200d92b3db7628 assets/exdeorum/models/item/flint_mesh.json
+70591469880369ec9586d7e05e19ef9c99c4a484 assets/exdeorum/models/item/frostbright_barrel.json
+d4ad4bfb4a15b1c8639c623fc2a706fc71051e85 assets/exdeorum/models/item/frostbright_crucible.json
+69669ecb115f750607543bc7d6790c1cf5091c1c assets/exdeorum/models/item/frostbright_sieve.json
 ff1e2e653bf0dcba9d25bdf6b44cc6118b2f0cc8 assets/exdeorum/models/item/golden_hammer.json
 f2138f982e5ee62ca1ed52c3a64a7813fd91ead9 assets/exdeorum/models/item/golden_mesh.json
+dea2cc3a5538e648b67f779b62b650ecea694274 assets/exdeorum/models/item/golden_oak_crucible.json
 5b2c04bdc90b653c764c86fd367c29359d82558b assets/exdeorum/models/item/golden_watering_can.json
 ee9de2285230b32b42585283793b265c4bb14773 assets/exdeorum/models/item/gold_ore_chunk.json
 5c80508cc8b27f55f91efc58efb7955e70dd2592 assets/exdeorum/models/item/granite_pebble.json
@@ -71,6 +87,9 @@ e4719451e58406787ac0d5fb40416b76b2a03002 assets/exdeorum/models/item/jungle_barr
 746006f07a42bc786ccab5c6f5849f175e117183 assets/exdeorum/models/item/jungle_crucible.json
 eebf19c29a53f46c26a33bb9e2052190c88ecc50 assets/exdeorum/models/item/jungle_sieve.json
 5b40d64710f86ff702001cf658e4928f8195f2fa assets/exdeorum/models/item/lead_ore_chunk.json
+c4e7ccf8e6915926936b165ff5980fd533327769 assets/exdeorum/models/item/lunar_barrel.json
+dec903b9466d6cf1ac05effcef8b8439fe524509 assets/exdeorum/models/item/lunar_crucible.json
+59a7338eb3c8c6e4cfe49070cdadca01dec3007a assets/exdeorum/models/item/lunar_sieve.json
 3331c8b6920e1ca297578e6b50ea657c7b4a1ae8 assets/exdeorum/models/item/magic_barrel.json
 d731d1ae590d603ebcd2b619fa0d60b7426beb70 assets/exdeorum/models/item/magic_crucible.json
 a47f968f3ad7d417b636e0d66fc19a9b0411ec41 assets/exdeorum/models/item/magic_sieve.json
@@ -80,6 +99,9 @@ ff89dc05408074da0e9d41bfef91dfe975302403 assets/exdeorum/models/item/mahogany_cr
 40db3277bce3f5291d16740d6dd0d96661e04197 assets/exdeorum/models/item/mangrove_barrel.json
 9d8b0cd120a6965dcba6cc3753d76b7171bbddbc assets/exdeorum/models/item/mangrove_crucible.json
 319ea63595a7f9ceff1818414c8250f777f087f4 assets/exdeorum/models/item/mangrove_sieve.json
+c3f2af2a88cd97148b05efbd6e24fc2558fcc0b8 assets/exdeorum/models/item/maple_barrel.json
+cc045825c562e9133858ce5cfe6e6f1dcb747d8e assets/exdeorum/models/item/maple_crucible.json
+a64e9b9ce91ac6b2f36690a770afc52b8900a614 assets/exdeorum/models/item/maple_sieve.json
 d543d3e18bdcf2bf79a762b52cc61a4161124db1 assets/exdeorum/models/item/mycelium_spores.json
 1f48b2ce3452ce5d02142c9f663ae7bdb7d1d934 assets/exdeorum/models/item/netherite_hammer.json
 248ebed818e2e4a5eb7ce78363f56433a3066646 assets/exdeorum/models/item/netherite_mesh.json
@@ -110,9 +132,15 @@ fd049e432cadca3fc329cc94d2671731c07846d2 assets/exdeorum/models/item/red_archwoo
 3818c896e463945cc5081644bc1ed52edbde6ebb assets/exdeorum/models/item/sculk_core.json
 52d8514e585524122e32cae1c18a838da5eb6f09 assets/exdeorum/models/item/silk_worm.json
 f7ca92f0d009a188c037bf129356b6f493564853 assets/exdeorum/models/item/silver_ore_chunk.json
+356d6b050ec773e581baf325d40be4c1e8e7664c assets/exdeorum/models/item/skyroot_barrel.json
+7dac1307076484ed68673eb9d2b362f3f803b22b assets/exdeorum/models/item/skyroot_crucible.json
+0e5391d4a08ace7cc45ab1ef35d1f21c9215fceb assets/exdeorum/models/item/skyroot_sieve.json
 a017f369bb5bf2dde7ebc1134fc89f96a725ea8d assets/exdeorum/models/item/spruce_barrel.json
 03dac3d7dec527c4a9efbb6c28d23815252b9c39 assets/exdeorum/models/item/spruce_crucible.json
 a1acf7f34360d0710f0f0bceb83f5028c4c93710 assets/exdeorum/models/item/spruce_sieve.json
+198585a47db306514cd00258b8151cdfc947302d assets/exdeorum/models/item/starlit_barrel.json
+22da19d8a60d1d2daf8fdaab43fb546607e27216 assets/exdeorum/models/item/starlit_crucible.json
+7e1cc1a117ccdcd1421dbe259e31f07d365d8bd1 assets/exdeorum/models/item/starlit_sieve.json
 bf3f5eb4caf2e2d4d4e7f33d1323b2ca5eb29329 assets/exdeorum/models/item/stone_barrel.json
 b71e04a912b620bfebfd309bf5d61cee8fba35b9 assets/exdeorum/models/item/stone_hammer.json
 9cf157cd0b41f89c9291be6b6383e0494369c6ef assets/exdeorum/models/item/stone_pebble.json

@@ -1,0 +1,6 @@
+{
+  "parent": "exdeorum:block/template_barrel",
+  "textures": {
+    "barrel": "blue_skies:block/wood/comet_planks"
+  }
+}

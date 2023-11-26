@@ -2,6 +2,9 @@
   "values": [
     "exdeorum:stone_barrel",
     "exdeorum:porcelain_crucible",
-    "exdeorum:unfired_porcelain_crucible"
+    "exdeorum:unfired_porcelain_crucible",
+    "exdeorum:crystallized_barrel",
+    "exdeorum:crystallized_crucible",
+    "exdeorum:crystallized_sieve"
   ]
 }
