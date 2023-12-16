@@ -52,6 +52,7 @@ public class TranslationKeys {
     public static final String BARREL_COMPOST_CATEGORY_TITLE = "gui." + ExDeorum.ID + ".category.barrel_compost";
     public static final String BARREL_COMPOST_RECIPE_VOLUME = "gui." + ExDeorum.ID + ".category.barrel_compost.volume";
     public static final String BARREL_MIXING_CATEGORY_TITLE = "gui." + ExDeorum.ID + ".category.barrel_mixing";
+    public static final String BARREL_FLUID_MIXING_CATEGORY_TITLE = "gui." + ExDeorum.ID + ".category.barrel_fluid_mixing";
     public static final String WATER_CRUCIBLE_CATEGORY_TITLE = "gui." + ExDeorum.ID + ".category.water_crucible";
     public static final String LAVA_CRUCIBLE_CATEGORY_TITLE = "gui." + ExDeorum.ID + ".category.lava_crucible";
     public static final String CRUCIBLE_HEAT_SOURCE_CATEGORY_TITLE = "gui." + ExDeorum.ID + ".category.crucible_heat_source";

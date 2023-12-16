@@ -24,6 +24,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.client.model.data.ModelData;
+import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.blockentity.InfestedLeavesBlockEntity;
 import thedarkcolour.exdeorum.client.RenderUtil;
 import thedarkcolour.exdeorum.config.EConfig;
@@ -31,7 +32,7 @@ import thedarkcolour.exdeorum.config.EConfig;
 public class InfestedLeavesRenderer implements BlockEntityRenderer<InfestedLeavesBlockEntity> {
     @Override
     public void render(InfestedLeavesBlockEntity te, float partialTicks, PoseStack stack, MultiBufferSource buffer, int light, int unused) {
-        if (EConfig.CLIENT.useFastInfestedLeaves.get()) return;
+        if (EConfig.CLIENT.useFastInfestedLeaves.get() || RenderUtil.IRIS_ACCESS.areShadersEnabled()) return;
 
         var mc = Minecraft.getInstance();
         var state = te.getMimic();

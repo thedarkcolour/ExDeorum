@@ -19,7 +19,6 @@
 package thedarkcolour.exdeorum.compat.jei;
 
 import com.google.common.collect.Lists;
-import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
@@ -35,10 +34,11 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.WallBlock;
+import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.WallTorchBlock;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.ModList;
@@ -49,6 +49,7 @@ import thedarkcolour.exdeorum.data.TranslationKeys;
 import thedarkcolour.exdeorum.item.WateringCanItem;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelCompostRecipe;
+import thedarkcolour.exdeorum.recipe.barrel.BarrelFluidMixingRecipe;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelMixingRecipe;
 import thedarkcolour.exdeorum.recipe.crucible.CrucibleRecipe;
 import thedarkcolour.exdeorum.recipe.hammer.HammerRecipe;
@@ -69,11 +70,10 @@ public class ExDeorumJeiPlugin implements IModPlugin {
 
     static final RecipeType<BarrelCompostRecipe> BARREL_COMPOST = RecipeType.create(ExDeorum.ID, "barrel_compost", BarrelCompostRecipe.class);
     static final RecipeType<BarrelMixingRecipe> BARREL_MIXING = RecipeType.create(ExDeorum.ID, "barrel_mixing", BarrelMixingRecipe.class);
+    static final RecipeType<BarrelFluidMixingRecipe> BARREL_FLUID_MIXING = RecipeType.create(ExDeorum.ID, "barrel_fluid_mixing", BarrelFluidMixingRecipe.class);
     static final RecipeType<CrucibleRecipe> LAVA_CRUCIBLE = RecipeType.create(ExDeorum.ID, "lava_crucible", CrucibleRecipe.class);
     static final RecipeType<CrucibleRecipe> WATER_CRUCIBLE = RecipeType.create(ExDeorum.ID, "water_crucible", CrucibleRecipe.class);
-    // I love Java generics (todo finish implementing)
-    @SuppressWarnings("unchecked")
-    static final RecipeType<Object2IntMap.Entry<Block>> CRUCIBLE_HEAT_SOURCES = RecipeType.create(ExDeorum.ID, "crucible_heat_sources", (Class<Object2IntMap.Entry<Block>>) ((Object) Object2IntMap.Entry.class));
+    static final RecipeType<CrucibleHeatSourceRecipe> CRUCIBLE_HEAT_SOURCES = RecipeType.create(ExDeorum.ID, "crucible_heat_sources", CrucibleHeatSourceRecipe.class);
     static final RecipeType<JeiSieveRecipeGroup> SIEVE = RecipeType.create(ExDeorum.ID, "sieve", JeiSieveRecipeGroup.class);
     static final RecipeType<HammerRecipe> HAMMER = RecipeType.create(ExDeorum.ID, "hammer", HammerRecipe.class);
 
@@ -89,10 +89,11 @@ public class ExDeorumJeiPlugin implements IModPlugin {
         var plus = helper.createDrawable(ExDeorumJeiPlugin.EX_DEORUM_JEI_TEXTURE, 22, 18, 8, 8);
 
         registration.addRecipeCategories(new BarrelCompostCategory(helper));
-        registration.addRecipeCategories(new BarrelMixingCategory(helper, plus, arrow));
+        registration.addRecipeCategories(new BarrelMixingCategory.Items(helper, plus, arrow));
+        registration.addRecipeCategories(new BarrelMixingCategory.Fluids(helper, plus, arrow));
         registration.addRecipeCategories(new CrucibleCategory.LavaCrucible(helper, arrow));
         registration.addRecipeCategories(new CrucibleCategory.WaterCrucible(helper, arrow));
-        registration.addRecipeCategories(new CrucibleHeatSourcesCategory(helper, registration.getJeiHelpers().getFocusFactory()));
+        registration.addRecipeCategories(new CrucibleHeatSourcesCategory(registration.getJeiHelpers()));
         registration.addRecipeCategories(new SieveCategory(helper));
         registration.addRecipeCategories(new HammerCategory(helper, arrow));
     }
@@ -218,6 +219,7 @@ public class ExDeorumJeiPlugin implements IModPlugin {
             var stack = new ItemStack(barrel);
             registration.addRecipeCatalyst(stack, BARREL_COMPOST);
             registration.addRecipeCatalyst(stack, BARREL_MIXING);
+            registration.addRecipeCatalyst(stack, BARREL_FLUID_MIXING);
         }
         for (var lavaCrucible : lavaCrucibles) {
             var stack = new ItemStack(lavaCrucible);
@@ -273,6 +275,7 @@ public class ExDeorumJeiPlugin implements IModPlugin {
 
         addRecipes(registration, BARREL_COMPOST, ERecipeTypes.BARREL_COMPOST);
         addRecipes(registration, BARREL_MIXING, ERecipeTypes.BARREL_MIXING);
+        addRecipes(registration, BARREL_FLUID_MIXING, ERecipeTypes.BARREL_FLUID_MIXING);
         addRecipes(registration, LAVA_CRUCIBLE, ERecipeTypes.LAVA_CRUCIBLE);
         addRecipes(registration, WATER_CRUCIBLE, ERecipeTypes.WATER_CRUCIBLE);
         addRecipes(registration, HAMMER, ERecipeTypes.HAMMER);
@@ -301,7 +304,24 @@ public class ExDeorumJeiPlugin implements IModPlugin {
                 });
             }
         }
-        registration.addRecipes(CRUCIBLE_HEAT_SOURCES, List.copyOf(values.object2IntEntrySet()));
+        var fluidHelper = registration.getJeiHelpers().getPlatformFluidHelper();
+        var fluidIngredientType = fluidHelper.getFluidIngredientType();
+        var recipes = new ArrayList<CrucibleHeatSourceRecipe>();
+
+        for (var entry : values.object2IntEntrySet()) {
+            if (entry.getKey() instanceof LiquidBlock liquid) {
+                recipes.add(new CrucibleHeatSourceRecipe(entry.getIntValue(), entry.getKey().defaultBlockState(), fluidIngredientType, fluidHelper.create(liquid.getFluid(), 1000)));
+            } else {
+                var itemForm = entry.getKey().asItem();
+
+                if (itemForm != Items.AIR) {
+                    recipes.add(new CrucibleHeatSourceRecipe(entry.getIntValue(), entry.getKey().defaultBlockState(), VanillaTypes.ITEM_STACK, new ItemStack(itemForm)));
+                } else {
+                    recipes.add(new CrucibleHeatSourceRecipe(entry.getIntValue(), entry.getKey().defaultBlockState(), null, null));
+                }
+            }
+        }
+        registration.addRecipes(CRUCIBLE_HEAT_SOURCES, recipes);
     }
 
     @Override

@@ -250,7 +250,7 @@ public class SieveBlockEntity extends EBlockEntity {
         var rand = this.level.random;
         var limitDrops = this.contents.getItem() == Items.MOSS_BLOCK && EConfig.SERVER.limitMossSieveDrops.get();
 
-        for (SieveRecipe recipe : RecipeUtil.getSieveRecipes(level.getRecipeManager(), this.mesh.getItem(), this.contents)) {
+        for (SieveRecipe recipe : RecipeUtil.getSieveRecipes(this.mesh.getItem(), this.contents)) {
             var amount = recipe.resultAmount.getInt(context);
 
             for (int i = 0; i < this.fortune; i++) {

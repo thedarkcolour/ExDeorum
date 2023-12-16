@@ -40,6 +40,7 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.blockentity.InfestedLeavesBlockEntity;
+import thedarkcolour.exdeorum.client.RenderUtil;
 import thedarkcolour.exdeorum.config.EConfig;
 import thedarkcolour.exdeorum.registry.EBlockEntities;
 
@@ -89,6 +90,6 @@ public class InfestedLeavesBlock extends LeavesBlock implements EntityBlock {
 
     @Override
     public RenderShape getRenderShape(BlockState pState) {
-        return EConfig.CLIENT_SPEC.isLoaded() && EConfig.CLIENT.useFastInfestedLeaves.get() ? RenderShape.MODEL : RenderShape.INVISIBLE;
+        return (EConfig.CLIENT_SPEC.isLoaded() && EConfig.CLIENT.useFastInfestedLeaves.get()) || RenderUtil.IRIS_ACCESS.areShadersEnabled() ? RenderShape.MODEL : RenderShape.INVISIBLE;
     }
 }

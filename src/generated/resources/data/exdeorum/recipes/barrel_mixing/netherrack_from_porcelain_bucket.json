@@ -1,9 +1,0 @@
-{
-  "type": "exdeorum:barrel_mixing",
-  "fluid": "minecraft:lava",
-  "fluid_amount": 1000,
-  "ingredient": {
-    "item": "exdeorum:porcelain_witch_water_bucket"
-  },
-  "result": "minecraft:netherrack"
-}

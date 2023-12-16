@@ -24,7 +24,6 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.DiggerItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
-import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -57,7 +56,7 @@ public class HammerItem extends DiggerItem {
         return validBlocks;
     }
 
-    public static void refreshValidBlocks(RecipeManager recipes) {
+    public static void refreshValidBlocks() {
         validBlocks = Lazy.of(HammerItem::computeValidBlocks);
     }
 

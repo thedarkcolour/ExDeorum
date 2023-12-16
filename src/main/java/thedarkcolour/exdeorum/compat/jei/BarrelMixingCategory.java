@@ -27,13 +27,17 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
+import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.data.TranslationKeys;
+import thedarkcolour.exdeorum.recipe.barrel.BarrelFluidMixingRecipe;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelMixingRecipe;
 import thedarkcolour.exdeorum.registry.EBlocks;
 
-public class BarrelMixingCategory implements IRecipeCategory<BarrelMixingRecipe> {
+public abstract class BarrelMixingCategory<T> implements IRecipeCategory<T> {
     public static final int WIDTH = 120;
     public static final int HEIGHT = 18;
 
@@ -44,18 +48,13 @@ public class BarrelMixingCategory implements IRecipeCategory<BarrelMixingRecipe>
     private final IDrawable icon;
     private final Component title;
 
-    public BarrelMixingCategory(IGuiHelper helper, IDrawable plus, IDrawable arrow) {
+    public BarrelMixingCategory(IGuiHelper helper, IDrawable plus, IDrawable arrow, String titleKey) {
         this.background = helper.createBlankDrawable(WIDTH, HEIGHT);
         this.slot = helper.getSlotDrawable();
         this.plus = plus;
         this.arrow = arrow;
         this.icon = helper.createDrawableItemStack(new ItemStack(EBlocks.STONE_BARREL.get()));
-        this.title = Component.translatable(TranslationKeys.BARREL_MIXING_CATEGORY_TITLE);
-    }
-
-    @Override
-    public RecipeType<BarrelMixingRecipe> getRecipeType() {
-        return ExDeorumJeiPlugin.BARREL_MIXING;
+        this.title = Component.translatable(titleKey);
     }
 
     @Override
@@ -74,18 +73,47 @@ public class BarrelMixingCategory implements IRecipeCategory<BarrelMixingRecipe>
     }
 
     @Override
-    public void setRecipe(IRecipeLayoutBuilder builder, BarrelMixingRecipe recipe, IFocusGroup focuses) {
-        builder.addSlot(RecipeIngredientRole.INPUT, 1, 1).addIngredients(recipe.getIngredient());
-        builder.addSlot(RecipeIngredientRole.INPUT, 33, 1).addFluidStack(recipe.fluid, recipe.fluidAmount).setFluidRenderer(Math.max(1000, recipe.fluidAmount), false, 16, 16);
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 79, 1).addItemStack(new ItemStack(recipe.result));
-    }
-
-    @Override
-    public void draw(BarrelMixingRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
+    public void draw(T recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
         slot.draw(graphics);
         plus.draw(graphics, 21, 5);
         slot.draw(graphics, 18 + 3 + 3 + 8, 0);
         arrow.draw(graphics, 53, 1);
         slot.draw(graphics, 78, 0);
+    }
+
+    public static class Items extends BarrelMixingCategory<BarrelMixingRecipe> {
+        public Items(IGuiHelper helper, IDrawable plus, IDrawable arrow) {
+            super(helper, plus, arrow, TranslationKeys.BARREL_MIXING_CATEGORY_TITLE);
+        }
+
+        @Override
+        public void setRecipe(IRecipeLayoutBuilder builder, BarrelMixingRecipe recipe, IFocusGroup focuses) {
+            builder.addSlot(RecipeIngredientRole.INPUT, 1, 1).addFluidStack(recipe.fluid, recipe.fluidAmount).setFluidRenderer(1000, false, 16, 16);
+            builder.addSlot(RecipeIngredientRole.INPUT, 33, 1).addIngredients(recipe.getIngredient());
+            builder.addSlot(RecipeIngredientRole.OUTPUT, 79, 1).addItemStack(new ItemStack(recipe.result));
+        }
+
+        @Override
+        public RecipeType<BarrelMixingRecipe> getRecipeType() {
+            return ExDeorumJeiPlugin.BARREL_MIXING;
+        }
+    }
+
+    public static class Fluids extends BarrelMixingCategory<BarrelFluidMixingRecipe> {
+        public Fluids(IGuiHelper helper, IDrawable plus, IDrawable arrow) {
+            super(helper, plus, arrow, TranslationKeys.BARREL_FLUID_MIXING_CATEGORY_TITLE);
+        }
+
+        @Override
+        public void setRecipe(IRecipeLayoutBuilder builder, BarrelFluidMixingRecipe recipe, IFocusGroup focuses) {
+            builder.addSlot(RecipeIngredientRole.INPUT, 1, 1).addFluidStack(recipe.baseFluid, recipe.baseFluidAmount).setFluidRenderer(1000, false, 16, 16);
+            builder.addSlot(RecipeIngredientRole.INPUT, 33, 1).addFluidStack(recipe.additiveFluid, 1000).setFluidRenderer(1000, false, 16, 16);
+            builder.addSlot(RecipeIngredientRole.OUTPUT, 79, 1).addItemStack(new ItemStack(recipe.result));
+        }
+
+        @Override
+        public RecipeType<BarrelFluidMixingRecipe> getRecipeType() {
+            return ExDeorumJeiPlugin.BARREL_FLUID_MIXING;
+        }
     }
 }

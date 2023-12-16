@@ -26,6 +26,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import net.irisshaders.iris.api.v0.IrisApi;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderStateShard;
@@ -64,8 +65,10 @@ public class RenderUtil {
     public static TextureAtlas blockAtlas;
     public static ShaderInstance renderTypeTintedCutoutMippedShader;
     private static final Map<BlockState, BakedModel> LEAF_BAKED_MODELS = new Object2ObjectOpenHashMap<>();
+    public static final IrisAccess IRIS_ACCESS;
 
     static {
+        // todo remove these caches, google cache is slow
         TOP_RENDER_TYPES = CacheBuilder.newBuilder().maximumSize(10).build(new CacheLoader<>() {
             @Override
             public RenderType load(Block key) {
@@ -88,21 +91,15 @@ public class RenderUtil {
                 return sprite;
             }
         });
-    }
 
-    public static BakedModel getMimicModel(BlockState state) {
-        var model = LEAF_BAKED_MODELS.get(state);
-
-        if (model == null) {
-            model = Minecraft.getInstance().getBlockRenderer().getBlockModel(state);
-
-            if (model == Minecraft.getInstance().getModelManager().getMissingModel()) {
-                model = Minecraft.getInstance().getBlockRenderer().getBlockModel(Blocks.OAK_LEAVES.defaultBlockState());
-            }
-
-            LEAF_BAKED_MODELS.put(state, model);
+        IrisAccess irisAccess;
+        try {
+            Class.forName("net.irisshaders.iris.api.v0.IrisApi");
+            irisAccess = () -> IrisApi.getInstance().isShaderPackInUse();
+        } catch (ClassNotFoundException e) {
+            irisAccess = () -> false;
         }
-        return model;
+        IRIS_ACCESS = irisAccess;
     }
 
     public static boolean isMissingTexture(TextureAtlasSprite sprite) {
@@ -178,5 +175,9 @@ public class RenderUtil {
 
     public static int getFluidColor(Fluid fluid, Level level, BlockPos pos) {
         return IClientFluidTypeExtensions.of(fluid).getTintColor(fluid.defaultFluidState(), level, pos);
+    }
+
+    public interface IrisAccess {
+        boolean areShadersEnabled();
     }
 }

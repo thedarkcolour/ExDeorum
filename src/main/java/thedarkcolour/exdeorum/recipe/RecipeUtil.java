@@ -18,14 +18,12 @@
 
 package thedarkcolour.exdeorum.recipe;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.Container;
@@ -36,28 +34,28 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.storage.loot.LootDataType;
-import net.minecraft.world.level.storage.loot.providers.number.BinomialDistributionGenerator;
-import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
-import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
-import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
-import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
+import net.minecraft.world.level.storage.loot.providers.number.*;
 import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.compat.PreferredOres;
 import thedarkcolour.exdeorum.item.HammerItem;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelCompostRecipe;
+import thedarkcolour.exdeorum.recipe.barrel.BarrelFluidMixingRecipe;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelMixingRecipe;
 import thedarkcolour.exdeorum.recipe.crucible.CrucibleRecipe;
 import thedarkcolour.exdeorum.recipe.hammer.HammerRecipe;
 import thedarkcolour.exdeorum.recipe.sieve.SieveRecipe;
 import thedarkcolour.exdeorum.registry.ERecipeTypes;
 
-import java.time.Duration;
-import java.util.*;
-import java.util.function.Supplier;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Objects;
 
 public final class RecipeUtil {
     private static final int CONSTANT_TYPE = 1;
@@ -65,91 +63,58 @@ public final class RecipeUtil {
     private static final int BINOMIAL_TYPE = 3;
     private static final int UNKNOWN_TYPE = 99;
 
-    private static final Cache<SieveCacheKey, ImmutableList<SieveRecipe>> SIEVE_RECIPE_CACHE = CacheBuilder.newBuilder().expireAfterAccess(Duration.ofMinutes(3)).build();
-    private static Lazy<Map<Item, BarrelCompostRecipe>> barrelCompostRecipeCache;
-    private static Lazy<Map<Item, CrucibleRecipe>> lavaCrucibleRecipeCache;
-    private static Lazy<Map<Item, CrucibleRecipe>> waterCrucibleRecipeCache;
-    private static Lazy<Map<Item, HammerRecipe>> hammerRecipeCache;
+    private static SingleIngredientRecipeCache<BarrelCompostRecipe> barrelCompostRecipeCache;
+    private static SingleIngredientRecipeCache<CrucibleRecipe> lavaCrucibleRecipeCache;
+    private static SingleIngredientRecipeCache<CrucibleRecipe> waterCrucibleRecipeCache;
+    private static SingleIngredientRecipeCache<HammerRecipe> hammerRecipeCache;
+    private static SieveRecipeCache sieveRecipeCache;
+    private static BarrelFluidMixingRecipeCache barrelFluidMixingRecipeCache;
 
     public static void reload(RecipeManager recipes) {
-        SIEVE_RECIPE_CACHE.invalidateAll();
-
-        barrelCompostRecipeCache = loadSimpleRecipeCache(recipes, ERecipeTypes.BARREL_COMPOST);
-        lavaCrucibleRecipeCache = loadSimpleRecipeCache(recipes, ERecipeTypes.LAVA_CRUCIBLE);
-        waterCrucibleRecipeCache = loadSimpleRecipeCache(recipes, ERecipeTypes.WATER_CRUCIBLE);
-        hammerRecipeCache = loadSimpleRecipeCache(recipes, ERecipeTypes.HAMMER);
-        HammerItem.refreshValidBlocks(recipes);
+        barrelCompostRecipeCache = new SingleIngredientRecipeCache<>(recipes, ERecipeTypes.BARREL_COMPOST);
+        lavaCrucibleRecipeCache = new SingleIngredientRecipeCache<>(recipes, ERecipeTypes.LAVA_CRUCIBLE);
+        waterCrucibleRecipeCache = new SingleIngredientRecipeCache<>(recipes, ERecipeTypes.WATER_CRUCIBLE);
+        hammerRecipeCache = new SingleIngredientRecipeCache<>(recipes, ERecipeTypes.HAMMER).trackAllRecipes();
+        sieveRecipeCache = new SieveRecipeCache(recipes);
+        barrelFluidMixingRecipeCache = new BarrelFluidMixingRecipeCache(recipes);
+        HammerItem.refreshValidBlocks();
     }
 
     public static void unload() {
-        SIEVE_RECIPE_CACHE.invalidateAll();
         barrelCompostRecipeCache = null;
         lavaCrucibleRecipeCache = null;
         waterCrucibleRecipeCache = null;
         hammerRecipeCache = null;
+        sieveRecipeCache = null;
+        barrelFluidMixingRecipeCache = null;
     }
 
-    private static <T extends SingleIngredientRecipe> Lazy<Map<Item, T>> loadSimpleRecipeCache(RecipeManager recipes, Supplier<RecipeType<T>> recipeType) {
-        return Lazy.of(() -> {
-            var builder = new ImmutableMap.Builder<Item, T>();
-            for (var recipe : recipes.byType(recipeType.get()).values()) {
-                for (var item : recipe.getIngredient().getItems()) {
-                    builder.put(item.getItem(), recipe);
-                }
-            }
-
-            return builder.buildKeepingLast();
-        });
-    }
-
-    public static List<SieveRecipe> getSieveRecipes(RecipeManager manager, Item mesh, ItemStack item) {
-        var cacheKey = new SieveCacheKey(mesh, item.getItem());
-        var cacheVal = SIEVE_RECIPE_CACHE.getIfPresent(cacheKey);
-        if (cacheVal != null) return cacheVal;
-
-        var builder = new ImmutableList.Builder<SieveRecipe>();
-        var cache = true;
-
-        for (var recipe : byType(manager, ERecipeTypes.SIEVE.get())) {
-            if (recipe.test(mesh, item)) {
-                builder.add(recipe);
-
-                if (recipe.dependsOnNbt) {
-                    cache = false;
-                }
-            }
-        }
-
-        var recipes = builder.build();
-        if (cache) {
-            SIEVE_RECIPE_CACHE.put(cacheKey, recipes);
-        }
-
-        return recipes;
+    public static List<SieveRecipe> getSieveRecipes(Item mesh, ItemStack item) {
+        return sieveRecipeCache.getRecipe(mesh, item);
     }
 
     @Nullable
     public static CrucibleRecipe getLavaCrucibleRecipe(ItemStack item) {
-        return lavaCrucibleRecipeCache.get().get(item.getItem());
+        return lavaCrucibleRecipeCache.getRecipe(item);
     }
 
     @Nullable
     public static CrucibleRecipe getWaterCrucibleRecipe(ItemStack item) {
-        return waterCrucibleRecipeCache.get().get(item.getItem());
+        return waterCrucibleRecipeCache.getRecipe(item);
     }
 
     @Nullable
-    public static BarrelCompostRecipe getBarrelCompostRecipe(Item playerItem) {
-        return barrelCompostRecipeCache.get().get(playerItem);
+    public static BarrelCompostRecipe getBarrelCompostRecipe(ItemStack item) {
+        return barrelCompostRecipeCache.getRecipe(item);
     }
 
     @Nullable
-    public static HammerRecipe getHammerRecipe(Item playerItem) {
-        return hammerRecipeCache.get().get(playerItem);
+    public static HammerRecipe getHammerRecipe(Item item) {
+        return hammerRecipeCache.getRecipe(item);
     }
 
     public static Collection<HammerRecipe> getCachedHammerRecipes() {
-        return hammerRecipeCache.get().values();
+        return hammerRecipeCache.getAllRecipes();
     }
 
     public static <C extends Container, T extends Recipe<C>> Collection<T> byType(RecipeManager manager, RecipeType<T> type) {
@@ -166,6 +131,19 @@ public final class RecipeUtil {
 
     public static Item readItem(JsonObject json, String key) {
         return CraftingHelper.getItem(GsonHelper.getAsString(json, key), true);
+    }
+
+    public static Fluid readFluid(JsonObject json, String key) {
+        String fluidName = GsonHelper.getAsString(json, key);
+        ResourceLocation fluidKey = new ResourceLocation(fluidName);
+        if (!ForgeRegistries.FLUIDS.containsKey(fluidKey)) {
+            throw new JsonSyntaxException("Unknown fluid '" + fluidName + "'");
+        }
+        Fluid fluid = ForgeRegistries.FLUIDS.getValue(fluidKey);
+        if (fluid == Fluids.EMPTY) {
+            throw new JsonSyntaxException("Invalid Fluid: " + fluidName);
+        }
+        return Objects.requireNonNull(fluid);
     }
 
     public static NumberProvider readNumberProvider(JsonObject json, String key) {
@@ -292,7 +270,7 @@ public final class RecipeUtil {
     }
 
     public static boolean isCompostable(ItemStack stack) {
-        return barrelCompostRecipeCache != null && barrelCompostRecipeCache.get().containsKey(stack.getItem());
+        return barrelCompostRecipeCache != null && barrelCompostRecipeCache.getRecipe(stack) != null;
     }
 
     public static @Nullable BarrelMixingRecipe getBarrelMixingRecipe(RecipeManager recipes, ItemStack stack, FluidStack fluid) {
@@ -322,6 +300,13 @@ public final class RecipeUtil {
         return BuiltInRegistries.ITEM.getTag(tag).map(set -> !set.iterator().hasNext()).orElse(PreferredOres.getPreferredOre(tag) == Items.AIR);
     }
 
-    private record SieveCacheKey(Item mesh, Item ingredient) {
+    @Nullable
+    public static BarrelFluidMixingRecipe getFluidMixingRecipe(FluidStack base, Fluid additive) {
+        var recipe = barrelFluidMixingRecipeCache.getRecipe(base.getFluid(), additive);
+        if (recipe != null && base.getAmount() >= recipe.baseFluidAmount) {
+            return recipe;
+        } else {
+            return null;
+        }
     }
 }

@@ -107,8 +107,6 @@ function initializeCoreMod() {
                             new FieldInsnNode(Opcodes.PUTFIELD, insn.owner, insn.name, insn.desc)
                         ));
 
-                        ASMAPI.log('INFO', 'The node we are patching at: { opcode: ' + insn.getOpcode() + ', name: ' + insn.name);
-
                         ASMAPI.log('INFO', 'Successfully patched end portal.');
                         return method;
                     }

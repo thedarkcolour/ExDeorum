@@ -38,6 +38,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.capabilities.Capability;
@@ -56,11 +57,13 @@ import org.jetbrains.annotations.NotNull;
 import thedarkcolour.exdeorum.client.CompostColors;
 import thedarkcolour.exdeorum.config.EConfig;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
+import thedarkcolour.exdeorum.recipe.barrel.BarrelFluidMixingRecipe;
 import thedarkcolour.exdeorum.registry.EBlockEntities;
 import thedarkcolour.exdeorum.registry.EFluids;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.swing.text.html.Option;
 
 public class BarrelBlockEntity extends EBlockEntity {
     private static final int MOSS_SPREAD_RANGE = 2;
@@ -131,7 +134,7 @@ public class BarrelBlockEntity extends EBlockEntity {
     }
 
     // Returns true if there are no solid ingredients (can a fluid be inserted?)
-    public boolean isEmptySolids() {
+    public boolean canInsertFluid() {
         return compost <= 0 && item.getStackInSlot(0).isEmpty();
     }
 
@@ -177,7 +180,7 @@ public class BarrelBlockEntity extends EBlockEntity {
         }
 
         // Handle item fluid interaction
-        if (isEmptySolids()) {
+        if (canInsertFluid()) {
             var wasBurning = isBurning();
 
             if (FluidUtil.interactWithFluidHandler(player, hand, tank)) {
@@ -186,6 +189,22 @@ public class BarrelBlockEntity extends EBlockEntity {
                 }
 
                 return InteractionResult.sidedSuccess(level.isClientSide);
+            } else {
+                var heldItem = player.getItemInHand(hand);
+                var optionalBool = heldItem.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).map(item -> {
+                    var fluidInTank = item.getFluidInTank(0);
+                    if (fluidInTank.getAmount() >= 1000) {
+                        if (!level.isClientSide) {
+                            return tryFluidMixing(fluidInTank.getFluid());
+                        }
+                        return true;
+                    }
+
+                    return false;
+                });
+                if (optionalBool.isPresent() && optionalBool.get()) {
+                    return InteractionResult.sidedSuccess(level.isClientSide);
+                }
             }
         }
 
@@ -313,11 +332,33 @@ public class BarrelBlockEntity extends EBlockEntity {
         }
     }
 
+    public boolean tryInWorldFluidMixing() {
+        if (!tank.isEmpty() && item.getStackInSlot(0).isEmpty()) {
+            var aboveFluid = level.getBlockState(worldPosition.above()).getFluidState().getType();
+
+            return aboveFluid != Fluids.EMPTY && tryFluidMixing(aboveFluid);
+        } else {
+            return false;
+        }
+    }
+
+    private boolean tryFluidMixing(Fluid additive) {
+        BarrelFluidMixingRecipe recipe = RecipeUtil.getFluidMixingRecipe(tank.getFluid(), additive);
+
+        if (recipe != null) {
+            tank.drain(recipe.baseFluidAmount, IFluidHandler.FluidAction.EXECUTE);
+            setItem(new ItemStack(recipe.result));
+            return true;
+        }
+
+        return false;
+    }
+
     private boolean tryComposting(ItemStack stack, boolean simulate) {
         if (simulate) {
             return RecipeUtil.isCompostable(stack);
         } else {
-            var recipe = RecipeUtil.getBarrelCompostRecipe(stack.getItem());
+            var recipe = RecipeUtil.getBarrelCompostRecipe(stack);
             if (recipe != null) {
                 addCompost(stack, recipe.getVolume());
                 return true;
@@ -447,6 +488,11 @@ public class BarrelBlockEntity extends EBlockEntity {
         return (stack.getItem() instanceof BowlFoodItem || stack.getItem() == Items.SUSPICIOUS_STEW) ? new ItemStack(Items.BOWL) : stack.getCraftingRemainingItem();
     }
 
+    @Override
+    public void onLoad() {
+        tryInWorldFluidMixing();
+    }
+
     // Inner class
     private class ItemHandler extends ItemStackHandler {
         @Override
@@ -475,6 +521,7 @@ public class BarrelBlockEntity extends EBlockEntity {
                     return ItemHandlerHelper.copyStackWithSize(stack, stack.getCount() - 1);
                 }
             } else {
+                tryInWorldFluidMixing();
                 return stack;
             }
         }
@@ -504,7 +551,12 @@ public class BarrelBlockEntity extends EBlockEntity {
 
         @Override
         public boolean isFluidValid(FluidStack stack) {
-            return !isBrewing() && BarrelBlockEntity.this.isEmptySolids();
+            return !isBrewing() && BarrelBlockEntity.this.canInsertFluid();
+        }
+
+        @Override
+        protected void onContentsChanged() {
+            BarrelBlockEntity.this.tryInWorldFluidMixing();
         }
     }
 }

@@ -91,4 +91,11 @@ public class BarrelBlock extends Block implements EntityBlock {
 
         super.onRemove(state, level, pos, newState, isMoving);
     }
+
+    @Override
+    public void neighborChanged(BlockState pState, Level level, BlockPos pos, Block pBlock, BlockPos pFromPos, boolean pIsMoving) {
+        if (level.getBlockEntity(pos) instanceof BarrelBlockEntity barrel) {
+            barrel.tryInWorldFluidMixing();
+        }
+    }
 }

@@ -60,7 +60,7 @@ public abstract class SingleIngredientRecipe implements Recipe<Container> {
 
     @Override
     public boolean canCraftInDimensions(int width, int height) {
-        return true;
+        return false;
     }
 
     @Override

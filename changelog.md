@@ -4,6 +4,10 @@
 - Allow extracting water from wooden crucibles using water bottles.
 - Watering cans now accelerate crops from Pam's Harvestcraft 2 Crops
 - Fixed a crash that happened with Ex Deorum barrels and crucibles when logging out of a world.
+- Fixed infested leaves showing as invisible when using Oculus Shaders.
+- It is now possible to see the melting rates for crucible heat sources in JEI.
+- Barrels can now mix fluids with liquids placed on top of the (ex. water on top of a lava barrel creates obsidian)
+- Optimized recipe lookups for the sieve.
 
 ## Ex Deorum 1.9
 - Fixed incompatibility with SkyblockBuilder where player would not receive torch/watering can and Ex Deorum advancements

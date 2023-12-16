@@ -75,9 +75,9 @@ public class BarrelMixingRecipe extends SingleIngredientRecipe {
         @Override
         public BarrelMixingRecipe fromJson(ResourceLocation id, JsonObject json) {
             Ingredient ingredient = RecipeUtil.readIngredient(json, "ingredient");
-            Fluid fluid = ForgeRegistries.FLUIDS.getValue(new ResourceLocation(GsonHelper.getAsString(json, "fluid")));
+            Fluid fluid = RecipeUtil.readFluid(json, "fluid");;
             int fluidAmount = GsonHelper.getAsInt(json, "fluid_amount");
-            Item result = ForgeRegistries.ITEMS.getValue(new ResourceLocation(GsonHelper.getAsString(json, "result")));
+            Item result = RecipeUtil.readItem(json, "result");
 
             return new BarrelMixingRecipe(id, ingredient, fluid, fluidAmount, result);
         }

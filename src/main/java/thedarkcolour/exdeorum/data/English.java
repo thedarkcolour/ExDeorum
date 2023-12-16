@@ -53,6 +53,7 @@ class English {
         english.add(TranslationKeys.BARREL_COMPOST_CATEGORY_TITLE, "Barrel Compost");
         english.add(TranslationKeys.BARREL_COMPOST_RECIPE_VOLUME, "Compost: %s");
         english.add(TranslationKeys.BARREL_MIXING_CATEGORY_TITLE, "Barrel Mixing");
+        english.add(TranslationKeys.BARREL_FLUID_MIXING_CATEGORY_TITLE, "Barrel Fluid Mixing");
         english.add(TranslationKeys.WATER_CRUCIBLE_CATEGORY_TITLE, "Water Crucible");
         english.add(TranslationKeys.LAVA_CRUCIBLE_CATEGORY_TITLE, "Lava Crucible");
         english.add(TranslationKeys.CRUCIBLE_HEAT_SOURCE_CATEGORY_TITLE, "Crucible Heat Sources");

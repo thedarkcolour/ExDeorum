@@ -46,6 +46,7 @@ import thedarkcolour.exdeorum.compat.ModIds;
 import thedarkcolour.exdeorum.data.ModCompatData;
 import thedarkcolour.exdeorum.recipe.TagResultRecipe;
 import thedarkcolour.exdeorum.recipe.barrel.FinishedBarrelCompostRecipe;
+import thedarkcolour.exdeorum.recipe.barrel.FinishedBarrelFluidMixingRecipe;
 import thedarkcolour.exdeorum.recipe.barrel.FinishedBarrelMixingRecipe;
 import thedarkcolour.exdeorum.recipe.crucible.FinishedCrucibleRecipe;
 import thedarkcolour.exdeorum.recipe.hammer.FinishedHammerRecipe;
@@ -523,14 +524,12 @@ public class Recipes {
         barrelMixing(writer, ingredient(Items.MILK_BUCKET), Fluids.WATER, Items.SLIME_BLOCK);
         barrelMixing(writer, "_from_porcelain_bucket", ingredient(EItems.PORCELAIN_MILK_BUCKET.get()), Fluids.WATER, Items.SLIME_BLOCK);
         barrelMixing(writer, ingredient(Items.SNOWBALL), Fluids.WATER, Items.ICE);
-        barrelMixing(writer, ingredient(Items.LAVA_BUCKET), Fluids.WATER, Items.STONE);
-        barrelMixing(writer, "_from_porcelain_bucket", ingredient(EItems.PORCELAIN_LAVA_BUCKET), Fluids.WATER, Items.STONE);
+        barrelFluidMixing(writer, Fluids.WATER, Fluids.LAVA, Items.STONE);
         // lava
-        barrelMixing(writer, ingredient(EItems.WITCH_WATER_BUCKET), Fluids.LAVA, Items.NETHERRACK);
-        barrelMixing(writer, "_from_porcelain_bucket", ingredient(EItems.PORCELAIN_WITCH_WATER_BUCKET), Fluids.LAVA, Items.NETHERRACK);
+        barrelFluidMixing(writer, EFluids.WITCH_WATER.get(), Fluids.LAVA, Items.NETHERRACK);
+        barrelFluidMixing(writer, Fluids.LAVA, EFluids.WITCH_WATER.get(), Items.BLACKSTONE);
         barrelMixing(writer, ingredient(Items.GLOWSTONE_DUST), Fluids.LAVA, Items.END_STONE);
-        barrelMixing(writer, ingredient(Items.WATER_BUCKET), Fluids.LAVA, Items.OBSIDIAN);
-        barrelMixing(writer, "_from_porcelain_bucket", ingredient(EItems.PORCELAIN_WATER_BUCKET), Fluids.LAVA, Items.OBSIDIAN);
+        barrelFluidMixing(writer, Fluids.LAVA, Fluids.WATER, Items.OBSIDIAN);
         barrelMixing(writer, ingredient(Items.SLIME_BALL), Fluids.LAVA, Items.MAGMA_CREAM);
         barrelMixing(writer, ingredient(Items.SOUL_SAND), Fluids.LAVA, Items.SOUL_SOIL);
         // witch water
@@ -543,6 +542,10 @@ public class Recipes {
 
     private static void barrelMixing(Consumer<FinishedRecipe> writer, String suffix, Ingredient ingredient, Fluid fluidType, Item result) {
         writer.accept(new FinishedBarrelMixingRecipe(new ResourceLocation(ExDeorum.ID, "barrel_mixing/" + path(result) + suffix), ingredient, fluidType, 1000, result));
+    }
+
+    private static void barrelFluidMixing(Consumer<FinishedRecipe> writer, Fluid base, Fluid additive, Item result) {
+        writer.accept(new FinishedBarrelFluidMixingRecipe(new ResourceLocation(ExDeorum.ID, "barrel_fluid_mixing/" + path(result)), base, 1000, additive, result));
     }
 
     static ICondition tagNotEmpty(TagKey<Item> tag) {
