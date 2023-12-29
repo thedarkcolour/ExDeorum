@@ -172,6 +172,9 @@ class SieveRecipes {
             addConditionalDrop.accept(EItems.TIN_ORE_CHUNK.get(), chance(0.06f), Recipes.tagNotEmpty(EItemTags.ORES_TIN));
             addConditionalDrop.accept(EItems.ZINC_ORE_CHUNK.get(), chance(0.035f), Recipes.tagNotEmpty(EItemTags.ORES_ZINC));
             addConditionalDrop.accept(EItems.IRIDIUM_ORE_CHUNK.get(), chance(0.03f), Recipes.tagNotEmpty(EItemTags.ORES_IRIDIUM));
+            addConditionalDrop.accept(EItems.MAGNESIUM_ORE_CHUNK.get(), chance(0.07f), Recipes.tagNotEmpty(EItemTags.ORES_MAGNESIUM));
+            addConditionalDrop.accept(EItems.THORIUM_ORE_CHUNK.get(), chance(0.05f), Recipes.tagNotEmpty(EItemTags.ORES_THORIUM));
+            addConditionalDrop.accept(EItems.BORON_ORE_CHUNK.get(), chance(0.03f), Recipes.tagNotEmpty(EItemTags.ORES_BORON));
         });
         // Gravel -> Flint mesh
         forMesh(writer, ingredient(Items.GRAVEL), EItems.FLINT_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
@@ -198,6 +201,9 @@ class SieveRecipes {
             addConditionalDrop.accept(EItems.TIN_ORE_CHUNK.get(), chance(0.07f), Recipes.tagNotEmpty(EItemTags.ORES_TIN));
             addConditionalDrop.accept(EItems.ZINC_ORE_CHUNK.get(), chance(0.04f), Recipes.tagNotEmpty(EItemTags.ORES_ZINC));
             addConditionalDrop.accept(EItems.IRIDIUM_ORE_CHUNK.get(), chance(0.03f), Recipes.tagNotEmpty(EItemTags.ORES_IRIDIUM));
+            addConditionalDrop.accept(EItems.MAGNESIUM_ORE_CHUNK.get(), chance(0.075f), Recipes.tagNotEmpty(EItemTags.ORES_MAGNESIUM));
+            addConditionalDrop.accept(EItems.THORIUM_ORE_CHUNK.get(), chance(0.055f), Recipes.tagNotEmpty(EItemTags.ORES_THORIUM));
+            addConditionalDrop.accept(EItems.BORON_ORE_CHUNK.get(), chance(0.0325f), Recipes.tagNotEmpty(EItemTags.ORES_BORON));
         });
         // Gravel -> Iron mesh
         forMesh(writer, ingredient(Items.GRAVEL), EItems.IRON_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
@@ -221,8 +227,11 @@ class SieveRecipes {
             addConditionalDrop.accept(EItems.TIN_ORE_CHUNK.get(), chance(0.09f), Recipes.tagNotEmpty(EItemTags.ORES_TIN));
             addConditionalDrop.accept(EItems.ZINC_ORE_CHUNK.get(), chance(0.06f), Recipes.tagNotEmpty(EItemTags.ORES_ZINC));
             addConditionalDrop.accept(EItems.IRIDIUM_ORE_CHUNK.get(), chance(0.04f), Recipes.tagNotEmpty(EItemTags.ORES_IRIDIUM));
+            addConditionalDrop.accept(EItems.MAGNESIUM_ORE_CHUNK.get(), chance(0.09f), Recipes.tagNotEmpty(EItemTags.ORES_MAGNESIUM));
+            addConditionalDrop.accept(EItems.THORIUM_ORE_CHUNK.get(), chance(0.065f), Recipes.tagNotEmpty(EItemTags.ORES_THORIUM));
+            addConditionalDrop.accept(EItems.BORON_ORE_CHUNK.get(), chance(0.045f), Recipes.tagNotEmpty(EItemTags.ORES_BORON));
         });
-        // Golden mesh has much higher drops for gold and gems, but at the cost of much lower drops for metals
+        // Golden mesh has much higher drops for gold and gems
         // Gravel -> Golden mesh
         forMesh(writer, ingredient(Items.GRAVEL), EItems.GOLDEN_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
             addDrop.accept(EItems.STONE_PEBBLE.get(), binomial(4, 0.5f));
@@ -231,9 +240,9 @@ class SieveRecipes {
             addDrop.accept(Items.COAL, chance(0.2f));
             addDrop.accept(Items.LAPIS_LAZULI, chance(0.1f));
             addDrop.accept(EItems.COPPER_ORE_CHUNK.get(), chance(0.07f));
-            addDrop.accept(EItems.IRON_ORE_CHUNK.get(), chance(0.04f));
+            addDrop.accept(EItems.IRON_ORE_CHUNK.get(), chance(0.07f));
             addDrop.accept(EItems.GOLD_ORE_CHUNK.get(), chance(0.1f));
-            addDrop.accept(Items.DIAMOND, chance(0.1f));
+            addDrop.accept(Items.DIAMOND, chance(0.09f));
             addDrop.accept(Items.EMERALD, chance(0.09f));
             addDrop.accept(Items.AMETHYST_SHARD, chance(0.08f));
             addDrop.accept(Items.GOLD_NUGGET, chance(0.08f));
@@ -247,6 +256,9 @@ class SieveRecipes {
             addConditionalDrop.accept(EItems.TIN_ORE_CHUNK.get(), chance(0.07f), Recipes.tagNotEmpty(EItemTags.ORES_TIN));
             addConditionalDrop.accept(EItems.ZINC_ORE_CHUNK.get(), chance(0.05f), Recipes.tagNotEmpty(EItemTags.ORES_ZINC));
             addConditionalDrop.accept(EItems.IRIDIUM_ORE_CHUNK.get(), chance(0.05f), Recipes.tagNotEmpty(EItemTags.ORES_IRIDIUM));
+            addConditionalDrop.accept(EItems.MAGNESIUM_ORE_CHUNK.get(), chance(0.04f), Recipes.tagNotEmpty(EItemTags.ORES_MAGNESIUM));
+            addConditionalDrop.accept(EItems.THORIUM_ORE_CHUNK.get(), chance(0.04f), Recipes.tagNotEmpty(EItemTags.ORES_THORIUM));
+            addConditionalDrop.accept(EItems.BORON_ORE_CHUNK.get(), chance(0.04f), Recipes.tagNotEmpty(EItemTags.ORES_BORON));
         });
         // Gravel -> Diamond mesh
         forMesh(writer, ingredient(Items.GRAVEL), EItems.DIAMOND_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
@@ -269,6 +281,9 @@ class SieveRecipes {
             addConditionalDrop.accept(EItems.TIN_ORE_CHUNK.get(), chance(0.11f), Recipes.tagNotEmpty(EItemTags.ORES_TIN));
             addConditionalDrop.accept(EItems.ZINC_ORE_CHUNK.get(), chance(0.08f), Recipes.tagNotEmpty(EItemTags.ORES_ZINC));
             addConditionalDrop.accept(EItems.IRIDIUM_ORE_CHUNK.get(), chance(0.05f), Recipes.tagNotEmpty(EItemTags.ORES_IRIDIUM));
+            addConditionalDrop.accept(EItems.MAGNESIUM_ORE_CHUNK.get(), chance(0.105f), Recipes.tagNotEmpty(EItemTags.ORES_MAGNESIUM));
+            addConditionalDrop.accept(EItems.THORIUM_ORE_CHUNK.get(), chance(0.07f), Recipes.tagNotEmpty(EItemTags.ORES_THORIUM));
+            addConditionalDrop.accept(EItems.BORON_ORE_CHUNK.get(), chance(0.06f), Recipes.tagNotEmpty(EItemTags.ORES_BORON));
         });
         // Gravel -> Netherite mesh
         forMesh(writer, ingredient(Items.GRAVEL), EItems.NETHERITE_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
@@ -292,6 +307,9 @@ class SieveRecipes {
             addConditionalDrop.accept(EItems.TIN_ORE_CHUNK.get(), chance(0.12f), Recipes.tagNotEmpty(EItemTags.ORES_TIN));
             addConditionalDrop.accept(EItems.ZINC_ORE_CHUNK.get(), chance(0.08f), Recipes.tagNotEmpty(EItemTags.ORES_ZINC));
             addConditionalDrop.accept(EItems.IRIDIUM_ORE_CHUNK.get(), chance(0.055f), Recipes.tagNotEmpty(EItemTags.ORES_IRIDIUM));
+            addConditionalDrop.accept(EItems.MAGNESIUM_ORE_CHUNK.get(), chance(0.12f), Recipes.tagNotEmpty(EItemTags.ORES_MAGNESIUM));
+            addConditionalDrop.accept(EItems.THORIUM_ORE_CHUNK.get(), chance(0.075f), Recipes.tagNotEmpty(EItemTags.ORES_THORIUM));
+            addConditionalDrop.accept(EItems.BORON_ORE_CHUNK.get(), chance(0.065f), Recipes.tagNotEmpty(EItemTags.ORES_BORON));
         });
 
         // Sand -> String mesh
@@ -512,6 +530,10 @@ class SieveRecipes {
             addConditionalDrop.accept(EItems.IRIDIUM_ORE_CHUNK.get(), chance(0.04f), Recipes.tagNotEmpty(EItemTags.ORES_IRIDIUM));
             addConditionalDrop.accept(EItems.PLATINUM_ORE_CHUNK.get(), chance(0.03f), Recipes.tagNotEmpty(EItemTags.ORES_PLATINUM));
             addConditionalDrop.accept(EItems.URANIUM_ORE_CHUNK.get(), chance(0.04f), Recipes.tagNotEmpty(EItemTags.ORES_URANIUM));
+            addConditionalDrop.accept(EItems.MAGNESIUM_ORE_CHUNK.get(), chance(0.09f), Recipes.tagNotEmpty(EItemTags.ORES_MAGNESIUM));
+            addConditionalDrop.accept(EItems.THORIUM_ORE_CHUNK.get(), chance(0.06f), Recipes.tagNotEmpty(EItemTags.ORES_THORIUM));
+            addConditionalDrop.accept(EItems.BORON_ORE_CHUNK.get(), chance(0.05f), Recipes.tagNotEmpty(EItemTags.ORES_BORON));
+            addConditionalDrop.accept(EItems.LITHIUM_ORE_CHUNK.get(), chance(0.045f), Recipes.tagNotEmpty(EItemTags.ORES_LITHIUM));
         });
         forMesh(writer, ingredient(EItems.CRUSHED_DEEPSLATE.get()), EItems.FLINT_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
             addDrop.accept(EItems.DEEPSLATE_PEBBLE.get(), binomial(4, 0.5f));
@@ -534,6 +556,10 @@ class SieveRecipes {
             addConditionalDrop.accept(EItems.IRIDIUM_ORE_CHUNK.get(), chance(0.05f), Recipes.tagNotEmpty(EItemTags.ORES_IRIDIUM));
             addConditionalDrop.accept(EItems.PLATINUM_ORE_CHUNK.get(), chance(0.05f), Recipes.tagNotEmpty(EItemTags.ORES_PLATINUM));
             addConditionalDrop.accept(EItems.URANIUM_ORE_CHUNK.get(), chance(0.06f), Recipes.tagNotEmpty(EItemTags.ORES_URANIUM));
+            addConditionalDrop.accept(EItems.MAGNESIUM_ORE_CHUNK.get(), chance(0.10f), Recipes.tagNotEmpty(EItemTags.ORES_MAGNESIUM));
+            addConditionalDrop.accept(EItems.THORIUM_ORE_CHUNK.get(), chance(0.065f), Recipes.tagNotEmpty(EItemTags.ORES_THORIUM));
+            addConditionalDrop.accept(EItems.BORON_ORE_CHUNK.get(), chance(0.06f), Recipes.tagNotEmpty(EItemTags.ORES_BORON));
+            addConditionalDrop.accept(EItems.LITHIUM_ORE_CHUNK.get(), chance(0.05f), Recipes.tagNotEmpty(EItemTags.ORES_LITHIUM));
         });
         forMesh(writer, ingredient(EItems.CRUSHED_DEEPSLATE.get()), EItems.IRON_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
             addDrop.accept(EItems.DEEPSLATE_PEBBLE.get(), binomial(4, 0.6f));
@@ -553,6 +579,10 @@ class SieveRecipes {
             addConditionalDrop.accept(EItems.IRIDIUM_ORE_CHUNK.get(), chance(0.06f), Recipes.tagNotEmpty(EItemTags.ORES_IRIDIUM));
             addConditionalDrop.accept(EItems.PLATINUM_ORE_CHUNK.get(), chance(0.065f), Recipes.tagNotEmpty(EItemTags.ORES_PLATINUM));
             addConditionalDrop.accept(EItems.URANIUM_ORE_CHUNK.get(), chance(0.08f), Recipes.tagNotEmpty(EItemTags.ORES_URANIUM));
+            addConditionalDrop.accept(EItems.MAGNESIUM_ORE_CHUNK.get(), chance(0.11f), Recipes.tagNotEmpty(EItemTags.ORES_MAGNESIUM));
+            addConditionalDrop.accept(EItems.THORIUM_ORE_CHUNK.get(), chance(0.075f), Recipes.tagNotEmpty(EItemTags.ORES_THORIUM));
+            addConditionalDrop.accept(EItems.BORON_ORE_CHUNK.get(), chance(0.06f), Recipes.tagNotEmpty(EItemTags.ORES_BORON));
+            addConditionalDrop.accept(EItems.LITHIUM_ORE_CHUNK.get(), chance(0.06f), Recipes.tagNotEmpty(EItemTags.ORES_LITHIUM));
         });
         forMesh(writer, ingredient(EItems.CRUSHED_DEEPSLATE.get()), EItems.GOLDEN_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
             addDrop.accept(EItems.DEEPSLATE_PEBBLE.get(), binomial(4, 0.65f));
@@ -574,6 +604,10 @@ class SieveRecipes {
             addConditionalDrop.accept(EItems.IRIDIUM_ORE_CHUNK.get(), chance(0.04f), Recipes.tagNotEmpty(EItemTags.ORES_IRIDIUM));
             addConditionalDrop.accept(EItems.PLATINUM_ORE_CHUNK.get(), chance(0.09f), Recipes.tagNotEmpty(EItemTags.ORES_PLATINUM));
             addConditionalDrop.accept(EItems.URANIUM_ORE_CHUNK.get(), chance(0.07f), Recipes.tagNotEmpty(EItemTags.ORES_URANIUM));
+            addConditionalDrop.accept(EItems.MAGNESIUM_ORE_CHUNK.get(), chance(0.12f), Recipes.tagNotEmpty(EItemTags.ORES_MAGNESIUM));
+            addConditionalDrop.accept(EItems.THORIUM_ORE_CHUNK.get(), chance(0.075f), Recipes.tagNotEmpty(EItemTags.ORES_THORIUM));
+            addConditionalDrop.accept(EItems.BORON_ORE_CHUNK.get(), chance(0.065f), Recipes.tagNotEmpty(EItemTags.ORES_BORON));
+            addConditionalDrop.accept(EItems.LITHIUM_ORE_CHUNK.get(), chance(0.065f), Recipes.tagNotEmpty(EItemTags.ORES_LITHIUM));
         });
         forMesh(writer, ingredient(EItems.CRUSHED_DEEPSLATE.get()), EItems.DIAMOND_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
             addDrop.accept(EItems.DEEPSLATE_PEBBLE.get(), binomial(4, 0.65f));
@@ -593,6 +627,10 @@ class SieveRecipes {
             addConditionalDrop.accept(EItems.IRIDIUM_ORE_CHUNK.get(), chance(0.065f), Recipes.tagNotEmpty(EItemTags.ORES_IRIDIUM));
             addConditionalDrop.accept(EItems.PLATINUM_ORE_CHUNK.get(), chance(0.075f), Recipes.tagNotEmpty(EItemTags.ORES_PLATINUM));
             addConditionalDrop.accept(EItems.URANIUM_ORE_CHUNK.get(), chance(0.1f), Recipes.tagNotEmpty(EItemTags.ORES_URANIUM));
+            addConditionalDrop.accept(EItems.MAGNESIUM_ORE_CHUNK.get(), chance(0.12f), Recipes.tagNotEmpty(EItemTags.ORES_MAGNESIUM));
+            addConditionalDrop.accept(EItems.THORIUM_ORE_CHUNK.get(), chance(0.095f), Recipes.tagNotEmpty(EItemTags.ORES_THORIUM));
+            addConditionalDrop.accept(EItems.BORON_ORE_CHUNK.get(), chance(0.08f), Recipes.tagNotEmpty(EItemTags.ORES_BORON));
+            addConditionalDrop.accept(EItems.LITHIUM_ORE_CHUNK.get(), chance(0.08f), Recipes.tagNotEmpty(EItemTags.ORES_LITHIUM));
         });
         forMesh(writer, ingredient(EItems.CRUSHED_DEEPSLATE.get()), EItems.NETHERITE_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
             addDrop.accept(EItems.DEEPSLATE_PEBBLE.get(), binomial(4, 0.7f));
@@ -612,6 +650,10 @@ class SieveRecipes {
             addConditionalDrop.accept(EItems.IRIDIUM_ORE_CHUNK.get(), chance(0.065f), Recipes.tagNotEmpty(EItemTags.ORES_IRIDIUM));
             addConditionalDrop.accept(EItems.PLATINUM_ORE_CHUNK.get(), chance(0.09f), Recipes.tagNotEmpty(EItemTags.ORES_PLATINUM));
             addConditionalDrop.accept(EItems.URANIUM_ORE_CHUNK.get(), chance(0.12f), Recipes.tagNotEmpty(EItemTags.ORES_URANIUM));
+            addConditionalDrop.accept(EItems.MAGNESIUM_ORE_CHUNK.get(), chance(0.14f), Recipes.tagNotEmpty(EItemTags.ORES_MAGNESIUM));
+            addConditionalDrop.accept(EItems.THORIUM_ORE_CHUNK.get(), chance(0.11f), Recipes.tagNotEmpty(EItemTags.ORES_THORIUM));
+            addConditionalDrop.accept(EItems.BORON_ORE_CHUNK.get(), chance(0.09f), Recipes.tagNotEmpty(EItemTags.ORES_BORON));
+            addConditionalDrop.accept(EItems.LITHIUM_ORE_CHUNK.get(), chance(0.085f), Recipes.tagNotEmpty(EItemTags.ORES_LITHIUM));
         });
 
         forMesh(writer, ingredient(EItems.CRUSHED_BLACKSTONE.get()), EItems.STRING_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {

@@ -92,6 +92,10 @@ public class EItems {
     public static final RegistryObject<Item> TIN_ORE_CHUNK = registerSimpleItem("tin_ore_chunk");
     public static final RegistryObject<Item> ZINC_ORE_CHUNK = registerSimpleItem("zinc_ore_chunk");
     public static final RegistryObject<Item> IRIDIUM_ORE_CHUNK = registerSimpleItem("iridium_ore_chunk");
+    public static final RegistryObject<Item> THORIUM_ORE_CHUNK = registerSimpleItem("thorium_ore_chunk");
+    public static final RegistryObject<Item> MAGNESIUM_ORE_CHUNK = registerSimpleItem("magnesium_ore_chunk");
+    public static final RegistryObject<Item> LITHIUM_ORE_CHUNK = registerSimpleItem("lithium_ore_chunk");
+    public static final RegistryObject<Item> BORON_ORE_CHUNK = registerSimpleItem("boron_ore_chunk");
 
     // Pebbles
     public static final RegistryObject<Item> STONE_PEBBLE = registerSimpleItem("stone_pebble");
@@ -457,6 +461,10 @@ public class EItems {
         if (!RecipeUtil.isTagEmpty(EItemTags.ORES_TIN)) output.accept(TIN_ORE_CHUNK.get());
         if (!RecipeUtil.isTagEmpty(EItemTags.ORES_ZINC)) output.accept(ZINC_ORE_CHUNK.get());
         if (!RecipeUtil.isTagEmpty(EItemTags.ORES_IRIDIUM)) output.accept(IRIDIUM_ORE_CHUNK.get());
+        if (!RecipeUtil.isTagEmpty(EItemTags.ORES_THORIUM)) output.accept(THORIUM_ORE_CHUNK.get());
+        if (!RecipeUtil.isTagEmpty(EItemTags.ORES_MAGNESIUM)) output.accept(MAGNESIUM_ORE_CHUNK.get());
+        if (!RecipeUtil.isTagEmpty(EItemTags.ORES_LITHIUM)) output.accept(LITHIUM_ORE_CHUNK.get());
+        if (!RecipeUtil.isTagEmpty(EItemTags.ORES_BORON)) output.accept(BORON_ORE_CHUNK.get());
 
         output.accept(STONE_PEBBLE.get());
         output.accept(DIORITE_PEBBLE.get());

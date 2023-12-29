@@ -1,3 +1,8 @@
+## Ex Deorum 1.11
+- Added support for NuclearCraft: Neoteric - Boron, Thorium, Lithium, and Magnesium ores
+- Fixed bug where hoppers and other automation could not craft fluid mixing recipes in the barrel (ex. Water and Lava to make Obsidian)
+- Fixed bug where JEI compatibility would fail to load if every mod compatible with Ex Deorum was also loaded (like in ATM9 mod pack)
+
 ## Ex Deorum 1.10
 - Added crucibles, sieves, and barrels for wood types from Blue Skies and Aether mods.
 - Added Certus Quartz Dust as a sieve drop from Dust.

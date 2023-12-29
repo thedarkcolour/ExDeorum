@@ -29,6 +29,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
@@ -68,7 +69,7 @@ public class BarrelRenderer implements BlockEntityRenderer<BarrelBlockEntity> {
             var fluidStack = tank.getFluidInTank(0);
 
             if (!fluidStack.isEmpty()) { // Get texture
-                var fluid = fluidStack.getFluid();
+                var fluid = Fluids.LAVA;//fluidStack.getFluid();
                 var level = barrel.getLevel();
                 var pos = barrel.getBlockPos();
                 var percentage = fluidStack.getAmount() / 1000.0f;

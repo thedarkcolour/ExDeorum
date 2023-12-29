@@ -1,0 +1,21 @@
+{
+  "type": "exdeorum:tag_result",
+  "recipe": {
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "key": {
+      "#": {
+        "item": "exdeorum:thorium_ore_chunk"
+      }
+    },
+    "pattern": [
+      "##",
+      "##"
+    ],
+    "result": {
+      "item": "minecraft:air"
+    },
+    "show_notification": true
+  },
+  "result_tag": "forge:ores/thorium"
+}

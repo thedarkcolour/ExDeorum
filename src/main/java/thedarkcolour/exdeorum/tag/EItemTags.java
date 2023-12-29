@@ -46,6 +46,10 @@ public class EItemTags {
     public static final TagKey<Item> ORES_TIN = forgeTag("ores/tin");
     public static final TagKey<Item> ORES_ZINC = forgeTag("ores/zinc");
     public static final TagKey<Item> ORES_IRIDIUM = forgeTag("ores/iridium");
+    public static final TagKey<Item> ORES_THORIUM = forgeTag("ores/thorium");
+    public static final TagKey<Item> ORES_MAGNESIUM = forgeTag("ores/magnesium");
+    public static final TagKey<Item> ORES_LITHIUM = forgeTag("ores/lithium");
+    public static final TagKey<Item> ORES_BORON = forgeTag("ores/boron");
 
     public static TagKey<Item> tag(String name) {
         return ItemTags.create(new ResourceLocation(ExDeorum.ID, name));

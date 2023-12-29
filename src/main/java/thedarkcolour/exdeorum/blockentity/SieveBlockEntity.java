@@ -37,7 +37,6 @@ import thedarkcolour.exdeorum.config.EConfig;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.recipe.sieve.SieveRecipe;
 import thedarkcolour.exdeorum.registry.EBlockEntities;
-import thedarkcolour.exdeorum.registry.EItems;
 import thedarkcolour.exdeorum.tag.EItemTags;
 
 import java.util.Map;
@@ -221,7 +220,7 @@ public class SieveBlockEntity extends EBlockEntity {
         }
     }
 
-    private InteractionResult removeMesh() {
+    private void removeMesh() {
         if (!level.isClientSide) {
             // Pop out item
             var itemEntity = new ItemEntity(level, worldPosition.getX() + 0.5, worldPosition.getY() + 1.5, worldPosition.getZ() + 0.5, mesh);
@@ -233,8 +232,6 @@ public class SieveBlockEntity extends EBlockEntity {
             setMesh(ItemStack.EMPTY);
             markUpdated();
         }
-
-        return InteractionResult.sidedSuccess(level.isClientSide);
     }
 
     private void setMesh(ItemStack mesh) {

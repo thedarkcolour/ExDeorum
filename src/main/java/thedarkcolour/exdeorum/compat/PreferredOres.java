@@ -53,8 +53,19 @@ public class PreferredOres {
         putPreferredOre(EItemTags.ORES_TIN, EConfig.COMMON.preferredTinOre, getDefaultTinOre());
         putPreferredOre(EItemTags.ORES_ZINC, EConfig.COMMON.preferredZincOre, getDefaultZincOre());
         putPreferredOre(EItemTags.ORES_IRIDIUM, EConfig.COMMON.preferredIridiumOre, getDefaultIridiumOre());
+        putPreferredOre(EItemTags.ORES_THORIUM, EConfig.COMMON.preferredThoriumOre, getDefaultThoriumOre());
+        putPreferredOre(EItemTags.ORES_MAGNESIUM, EConfig.COMMON.preferredMagnesiumOre, getDefaultMagnesiumOre());
+        putPreferredOre(EItemTags.ORES_LITHIUM, EConfig.COMMON.preferredLithiumOre, getDefaultLithiumOre());
+        putPreferredOre(EItemTags.ORES_BORON, EConfig.COMMON.preferredBoronOre, getDefaultBoronOre());
     }
 
+    /**
+     * Determines which mod's ore should be crafted by Ex Deorum ore chunks.
+     *
+     * @param tag        The tag which contains a list of choices for the desired ore. Might be empty.
+     * @param config     A config which holds an override value chosen by the user. Could even be something that isn't an ore.
+     * @param defaultOre The default ore choice, picked by Ex Deorum based on which mod is the "best" choice according to thedarkcolour.
+     */
     @SuppressWarnings("deprecation")
     private static void putPreferredOre(TagKey<Item> tag, ForgeConfigSpec.ConfigValue<String> config, Item defaultOre) {
         var item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(config.get()));
@@ -86,6 +97,7 @@ public class PreferredOres {
             } else {
                 collection.sort(Comparator.comparing(holder -> BuiltInRegistries.ITEM.getKey(holder.get())));
 
+                // todo should the PREFERRED_ORE map be updated with this value?
                 return collection.get(0).get();
             }
         }
@@ -96,19 +108,19 @@ public class PreferredOres {
     }
 
     public static Item getDefaultCobaltOre() {
-        return defaultItem("cobalt_ore", ModIds.TINKERS_CONSTRUCT);
+        return defaultItem("cobalt_ore", ModIds.TINKERS_CONSTRUCT, ModIds.NUCLEARCRAFT_NEOTERIC);
     }
 
     public static Item getDefaultSilverOre() {
-        return defaultItem("silver_ore", ModIds.ALL_THE_ORES, ModIds.OCCULTISM, ModIds.RAILCRAFT, ModIds.FACTORIUM);
+        return defaultItem("silver_ore", ModIds.ALL_THE_ORES, ModIds.OCCULTISM, ModIds.RAILCRAFT, ModIds.FACTORIUM, ModIds.NUCLEARCRAFT_NEOTERIC);
     }
 
     public static Item getDefaultLeadOre() {
-        return defaultItem("lead_ore", ModIds.ALL_THE_ORES, ModIds.GREG, ModIds.MEKANISM, ModIds.RAILCRAFT, ModIds.FACTORIUM);
+        return defaultItem("lead_ore", ModIds.ALL_THE_ORES, ModIds.GREG, ModIds.MEKANISM, ModIds.RAILCRAFT, ModIds.FACTORIUM, ModIds.NUCLEARCRAFT_NEOTERIC);
     }
 
     public static Item getDefaultPlatinumOre() {
-        return defaultItem("platinum_ore", ModIds.ALL_THE_ORES, ModIds.GREG, ModIds.FACTORIUM);
+        return defaultItem("platinum_ore", ModIds.ALL_THE_ORES, ModIds.GREG, ModIds.FACTORIUM, ModIds.NUCLEARCRAFT_NEOTERIC);
     }
 
     public static Item getDefaultNickelOre() {
@@ -116,7 +128,7 @@ public class PreferredOres {
     }
 
     public static Item getDefaultUraniumOre() {
-        var item = defaultItem("uranium_ore", ModIds.ALL_THE_ORES, ModIds.MEKANISM, ModIds.BIGGER_REACTORS);
+        var item = defaultItem("uranium_ore", ModIds.ALL_THE_ORES, ModIds.MEKANISM, ModIds.BIGGER_REACTORS, ModIds.NUCLEARCRAFT_NEOTERIC);
 
         if (item == Items.AIR && ModList.get().isLoaded(ModIds.EXTREME_REACTORS)) {
             item = defaultItem("yellorite_ore", ModIds.EXTREME_REACTORS);
@@ -130,15 +142,31 @@ public class PreferredOres {
     }
 
     public static Item getDefaultTinOre() {
-        return defaultItem("tin_ore", ModIds.ALL_THE_ORES, ModIds.GREG, ModIds.THERMAL, ModIds.MEKANISM, ModIds.RAILCRAFT, ModIds.FACTORIUM);
+        return defaultItem("tin_ore", ModIds.ALL_THE_ORES, ModIds.GREG, ModIds.THERMAL, ModIds.MEKANISM, ModIds.RAILCRAFT, ModIds.FACTORIUM, ModIds.NUCLEARCRAFT_NEOTERIC);
     }
 
     public static Item getDefaultZincOre() {
-        return defaultItem("zinc_ore", ModIds.ALL_THE_ORES, ModIds.GREG, ModIds.CREATE, ModIds.RAILCRAFT, ModIds.FACTORIUM);
+        return defaultItem("zinc_ore", ModIds.ALL_THE_ORES, ModIds.GREG, ModIds.CREATE, ModIds.RAILCRAFT, ModIds.FACTORIUM, ModIds.NUCLEARCRAFT_NEOTERIC);
     }
 
     public static Item getDefaultIridiumOre() {
         return defaultItem("iridium_ore", ModIds.ALL_THE_ORES);
+    }
+
+    public static Item getDefaultThoriumOre() {
+        return defaultItem("thorium_ore", ModIds.NUCLEARCRAFT_NEOTERIC);
+    }
+
+    public static Item getDefaultMagnesiumOre() {
+        return defaultItem("magnesium_ore", ModIds.NUCLEARCRAFT_NEOTERIC);
+    }
+
+    public static Item getDefaultLithiumOre() {
+        return defaultItem("lithium_ore", ModIds.NUCLEARCRAFT_NEOTERIC);
+    }
+
+    public static Item getDefaultBoronOre() {
+        return defaultItem("boron_ore", ModIds.NUCLEARCRAFT_NEOTERIC);
     }
 
     private static Item defaultItem(String path, String... modIds) {

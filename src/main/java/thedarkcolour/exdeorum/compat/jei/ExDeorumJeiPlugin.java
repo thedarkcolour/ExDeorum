@@ -33,6 +33,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Recipe;
@@ -43,6 +44,7 @@ import net.minecraft.world.level.block.WallTorchBlock;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.ModList;
 import thedarkcolour.exdeorum.ExDeorum;
+import thedarkcolour.exdeorum.block.SieveBlock;
 import thedarkcolour.exdeorum.blockentity.LavaCrucibleBlockEntity;
 import thedarkcolour.exdeorum.compat.ModIds;
 import thedarkcolour.exdeorum.data.TranslationKeys;
@@ -100,20 +102,7 @@ public class ExDeorumJeiPlugin implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        var barrels = Lists.newArrayList(
-                EItems.OAK_BARREL.get(),
-                EItems.SPRUCE_BARREL.get(),
-                EItems.BIRCH_BARREL.get(),
-                EItems.JUNGLE_BARREL.get(),
-                EItems.ACACIA_BARREL.get(),
-                EItems.DARK_OAK_BARREL.get(),
-                EItems.MANGROVE_BARREL.get(),
-                EItems.CHERRY_BARREL.get(),
-                EItems.BAMBOO_BARREL.get(),
-                EItems.CRIMSON_BARREL.get(),
-                EItems.WARPED_BARREL.get(),
-                EItems.STONE_BARREL.get()
-        );
+        var barrels = getAvailableBarrels();
         var sieves = Lists.newArrayList(
                 EItems.OAK_SIEVE.get(),
                 EItems.SPRUCE_SIEVE.get(),
@@ -144,16 +133,6 @@ public class ExDeorumJeiPlugin implements IModPlugin {
                 EItems.BAMBOO_CRUCIBLE.get()
         );
         if (ModList.get().isLoaded(ModIds.BIOMES_O_PLENTY)) {
-            barrels.add(EItems.FIR_BARREL.get());
-            barrels.add(EItems.REDWOOD_BARREL.get());
-            barrels.add(EItems.MAHOGANY_BARREL.get());
-            barrels.add(EItems.JACARANDA_BARREL.get());
-            barrels.add(EItems.PALM_BARREL.get());
-            barrels.add(EItems.WILLOW_BARREL.get());
-            barrels.add(EItems.DEAD_BARREL.get());
-            barrels.add(EItems.MAGIC_BARREL.get());
-            barrels.add(EItems.UMBRAN_BARREL.get());
-            barrels.add(EItems.HELLBARK_BARREL.get());
             sieves.add(EItems.FIR_SIEVE.get());
             sieves.add(EItems.REDWOOD_SIEVE.get());
             sieves.add(EItems.MAHOGANY_SIEVE.get());
@@ -176,7 +155,6 @@ public class ExDeorumJeiPlugin implements IModPlugin {
             waterCrucibles.add(EItems.UMBRAN_CRUCIBLE.get());
         }
         if (ModList.get().isLoaded(ModIds.ARS_NOUVEAU)) {
-            barrels.add(EItems.ARCHWOOD_BARREL.get());
             sieves.add(EItems.ARCHWOOD_SIEVE.get());
             waterCrucibles.add(EItems.CASCADING_ARCHWOOD_CRUCIBLE.get());
             waterCrucibles.add(EItems.BLAZING_ARCHWOOD_CRUCIBLE.get());
@@ -184,20 +162,11 @@ public class ExDeorumJeiPlugin implements IModPlugin {
             waterCrucibles.add(EItems.FLOURISHING_ARCHWOOD_CRUCIBLE.get());
         }
         if (ModList.get().isLoaded(ModIds.AETHER)) {
-            barrels.add(EItems.SKYROOT_BARREL.get());
             sieves.add(EItems.SKYROOT_SIEVE.get());
             waterCrucibles.add(EItems.SKYROOT_CRUCIBLE.get());
             waterCrucibles.add(EItems.GOLDEN_OAK_CRUCIBLE.get());
         }
         if (ModList.get().isLoaded(ModIds.BLUE_SKIES)) {
-            barrels.add(EItems.BLUEBRIGHT_BARREL.get());
-            barrels.add(EItems.STARLIT_BARREL.get());
-            barrels.add(EItems.FROSTBRIGHT_BARREL.get());
-            barrels.add(EItems.COMET_BARREL.get());
-            barrels.add(EItems.LUNAR_BARREL.get());
-            barrels.add(EItems.DUSK_BARREL.get());
-            barrels.add(EItems.MAPLE_BARREL.get());
-            barrels.add(EItems.CRYSTALLIZED_BARREL.get());
             sieves.add(EItems.BLUEBRIGHT_SIEVE.get());
             sieves.add(EItems.STARLIT_SIEVE.get());
             sieves.add(EItems.FROSTBRIGHT_SIEVE.get());
@@ -271,7 +240,9 @@ public class ExDeorumJeiPlugin implements IModPlugin {
         if (RecipeUtil.isTagEmpty(EItemTags.ORES_ZINC)) toRemove.add(new ItemStack(EItems.ZINC_ORE_CHUNK.get()));
         if (RecipeUtil.isTagEmpty(EItemTags.ORES_IRIDIUM)) toRemove.add(new ItemStack(EItems.IRIDIUM_ORE_CHUNK.get()));
 
-        registration.getIngredientManager().removeIngredientsAtRuntime(VanillaTypes.ITEM_STACK, toRemove);
+        if (!toRemove.isEmpty()) {
+            registration.getIngredientManager().removeIngredientsAtRuntime(VanillaTypes.ITEM_STACK, toRemove);
+        }
 
         addRecipes(registration, BARREL_COMPOST, ERecipeTypes.BARREL_COMPOST);
         addRecipes(registration, BARREL_MIXING, ERecipeTypes.BARREL_MIXING);
@@ -331,5 +302,60 @@ public class ExDeorumJeiPlugin implements IModPlugin {
 
     private static <C extends Container, T extends Recipe<C>> void addRecipes(IRecipeRegistration registration, RecipeType<T> category, Supplier<net.minecraft.world.item.crafting.RecipeType<T>> type) {
         registration.addRecipes(category, Objects.requireNonNull(Minecraft.getInstance().level).getRecipeManager().getAllRecipesFor(type.get()));
+    }
+
+    public static List<Item> getAvailableBarrels() {
+        // Vanilla barrels
+        List<Item> barrels = Lists.newArrayList(EItems.OAK_BARREL.get(), EItems.SPRUCE_BARREL.get(), EItems.BIRCH_BARREL.get(), EItems.JUNGLE_BARREL.get(), EItems.ACACIA_BARREL.get(), EItems.DARK_OAK_BARREL.get(), EItems.MANGROVE_BARREL.get(), EItems.CHERRY_BARREL.get(), EItems.BAMBOO_BARREL.get(), EItems.CRIMSON_BARREL.get(), EItems.WARPED_BARREL.get(), EItems.STONE_BARREL.get());
+        ModList mods = ModList.get();
+
+        if (mods.isLoaded(ModIds.BIOMES_O_PLENTY)) {
+            barrels.add(EItems.FIR_BARREL.get());
+            barrels.add(EItems.REDWOOD_BARREL.get());
+            barrels.add(EItems.MAHOGANY_BARREL.get());
+            barrels.add(EItems.JACARANDA_BARREL.get());
+            barrels.add(EItems.PALM_BARREL.get());
+            barrels.add(EItems.WILLOW_BARREL.get());
+            barrels.add(EItems.DEAD_BARREL.get());
+            barrels.add(EItems.MAGIC_BARREL.get());
+            barrels.add(EItems.UMBRAN_BARREL.get());
+            barrels.add(EItems.HELLBARK_BARREL.get());
+        }
+        if (mods.isLoaded(ModIds.ARS_NOUVEAU)) {
+            barrels.add(EItems.ARCHWOOD_BARREL.get());
+        }
+        if (mods.isLoaded(ModIds.AETHER)) {
+            barrels.add(EItems.SKYROOT_BARREL.get());
+        }
+        if (mods.isLoaded(ModIds.BLUE_SKIES)) {
+            barrels.add(EItems.BLUEBRIGHT_BARREL.get());
+            barrels.add(EItems.STARLIT_BARREL.get());
+            barrels.add(EItems.FROSTBRIGHT_BARREL.get());
+            barrels.add(EItems.COMET_BARREL.get());
+            barrels.add(EItems.LUNAR_BARREL.get());
+            barrels.add(EItems.DUSK_BARREL.get());
+            barrels.add(EItems.MAPLE_BARREL.get());
+            barrels.add(EItems.CRYSTALLIZED_BARREL.get());
+        }
+
+        return barrels;
+    }
+
+    public static List<Item> getAvailableSieves() {
+        List<Item> sieves = Lists.newArrayList(
+                EItems.OAK_SIEVE.get(),
+                EItems.SPRUCE_SIEVE.get(),
+                EItems.BIRCH_SIEVE.get(),
+                EItems.JUNGLE_SIEVE.get(),
+                EItems.ACACIA_SIEVE.get(),
+                EItems.DARK_OAK_SIEVE.get(),
+                EItems.MANGROVE_SIEVE.get(),
+                EItems.CHERRY_SIEVE.get(),
+                EItems.BAMBOO_SIEVE.get(),
+                EItems.CRIMSON_SIEVE.get(),
+                EItems.WARPED_SIEVE.get()
+        );
+
+        return sieves;
     }
 }

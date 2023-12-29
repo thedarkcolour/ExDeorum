@@ -93,9 +93,12 @@ public class BarrelBlock extends Block implements EntityBlock {
     }
 
     @Override
-    public void neighborChanged(BlockState pState, Level level, BlockPos pos, Block pBlock, BlockPos pFromPos, boolean pIsMoving) {
-        if (level.getBlockEntity(pos) instanceof BarrelBlockEntity barrel) {
-            barrel.tryInWorldFluidMixing();
+    public void neighborChanged(BlockState pState, Level level, BlockPos pos, Block pBlock, BlockPos fromPos, boolean pIsMoving) {
+        // Only check when the above block is updated
+        if (fromPos.getY() - pos.getY() == 1) {
+            if (level.getBlockEntity(pos) instanceof BarrelBlockEntity barrel) {
+                barrel.tryInWorldFluidMixing();
+            }
         }
     }
 }

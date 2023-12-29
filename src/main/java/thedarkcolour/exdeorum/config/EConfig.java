@@ -68,6 +68,10 @@ public class EConfig {
         public final ConfigValue<String> preferredTinOre;
         public final ConfigValue<String> preferredZincOre;
         public final ConfigValue<String> preferredIridiumOre;
+        public final ConfigValue<String> preferredThoriumOre;
+        public final ConfigValue<String> preferredMagnesiumOre;
+        public final ConfigValue<String> preferredLithiumOre;
+        public final ConfigValue<String> preferredBoronOre;
 
         public Common(ForgeConfigSpec.Builder builder) {
             // Preferred items
@@ -88,6 +92,10 @@ public class EConfig {
             this.preferredTinOre = preferredOreConfig(builder, "tin_ore", airId);
             this.preferredZincOre = preferredOreConfig(builder, "zinc_ore", airId);
             this.preferredIridiumOre = preferredOreConfig(builder, "iridium_ore", airId);
+            this.preferredThoriumOre = preferredOreConfig(builder, "thorium_ore", airId);
+            this.preferredMagnesiumOre = preferredOreConfig(builder, "magnesium_ore", airId);
+            this.preferredLithiumOre = preferredOreConfig(builder, "lithium_ore", airId);
+            this.preferredBoronOre = preferredOreConfig(builder, "boron_ore", airId);
 
             builder.pop(2);
         }
@@ -123,7 +131,7 @@ public class EConfig {
                     .comment("Whether machines/fake players can interact with the Sieve.")
                     .define("automated_sieves", false);
             this.barrelProgressStep = builder
-                    .comment("The progress to increment by each tick for barrel composting and witch water transformation.")
+                    .comment("The progress to increment by each tick for barrel composting.")
                     .defineInRange("barrel_progress_step", 0.004, 0.0f, 1.0f);
             this.witchWaterNetherrackGenerator = builder
                     .comment("Whether Witch Water forms netherrack when lava flows into it, allowing for a netherrack version of a cobblestone generator.")

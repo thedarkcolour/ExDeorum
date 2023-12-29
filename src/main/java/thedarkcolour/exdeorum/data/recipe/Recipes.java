@@ -194,6 +194,10 @@ public class Recipes {
         grid2x2TagResult(writer, recipes, EItemTags.ORES_TIN, ingredient(EItems.TIN_ORE_CHUNK));
         grid2x2TagResult(writer, recipes, EItemTags.ORES_ZINC, ingredient(EItems.ZINC_ORE_CHUNK));
         grid2x2TagResult(writer, recipes, EItemTags.ORES_IRIDIUM, ingredient(EItems.IRIDIUM_ORE_CHUNK));
+        grid2x2TagResult(writer, recipes, EItemTags.ORES_THORIUM, ingredient(EItems.THORIUM_ORE_CHUNK));
+        grid2x2TagResult(writer, recipes, EItemTags.ORES_MAGNESIUM, ingredient(EItems.MAGNESIUM_ORE_CHUNK));
+        grid2x2TagResult(writer, recipes, EItemTags.ORES_LITHIUM, ingredient(EItems.LITHIUM_ORE_CHUNK));
+        grid2x2TagResult(writer, recipes, EItemTags.ORES_BORON, ingredient(EItems.BORON_ORE_CHUNK));
 
         // Sieves
         sieve(recipes, EItems.OAK_SIEVE, Items.OAK_PLANKS, Items.OAK_SLAB);

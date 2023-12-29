@@ -54,6 +54,7 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
+import thedarkcolour.exdeorum.block.BarrelBlock;
 import thedarkcolour.exdeorum.client.CompostColors;
 import thedarkcolour.exdeorum.config.EConfig;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
@@ -63,7 +64,6 @@ import thedarkcolour.exdeorum.registry.EFluids;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.swing.text.html.Option;
 
 public class BarrelBlockEntity extends EBlockEntity {
     private static final int MOSS_SPREAD_RANGE = 2;
@@ -134,7 +134,7 @@ public class BarrelBlockEntity extends EBlockEntity {
     }
 
     // Returns true if there are no solid ingredients (can a fluid be inserted?)
-    public boolean canInsertFluid() {
+    public boolean hasNoSolids() {
         return compost <= 0 && item.getStackInSlot(0).isEmpty();
     }
 
@@ -179,68 +179,69 @@ public class BarrelBlockEntity extends EBlockEntity {
             return giveResultItem(level, pos);
         }
 
-        // Handle item fluid interaction
-        if (canInsertFluid()) {
+        // Handle item fluid interaction first
+        if (hasNoSolids()) {
             var wasBurning = isBurning();
 
             if (FluidUtil.interactWithFluidHandler(player, hand, tank)) {
+                // If the item is a fluid handler, try to transfer fluids
                 if (wasBurning && !isHotFluid(tank.getFluid().getFluid().getFluidType())) {
                     progress = 0.0f;
                 }
 
                 return InteractionResult.sidedSuccess(level.isClientSide);
             } else {
-                var heldItem = player.getItemInHand(hand);
-                var optionalBool = heldItem.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).map(item -> {
-                    var fluidInTank = item.getFluidInTank(0);
+                // try one more time to transfer fluids between item and barrel
+                var playerItem = player.getItemInHand(hand);
+                if (EConfig.SERVER.allowWaterBottleTransfer.get()) {
+                    var fluid = new FluidStack(Fluids.WATER, 250);
+
+                    if (playerItem.getItem() == Items.POTION && PotionUtils.getPotion(playerItem) == Potions.WATER) {
+                        if (tank.fill(fluid, IFluidHandler.FluidAction.SIMULATE) > 0) {
+                            if (!player.getAbilities().instabuild) {
+                                player.setItemInHand(hand, new ItemStack(Items.GLASS_BOTTLE));
+                            }
+                            tank.fill(fluid, IFluidHandler.FluidAction.EXECUTE);
+                            level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.BOTTLE_FILL, SoundSource.NEUTRAL, 1.0F, 1.0F);
+
+                            markUpdated();
+                            return InteractionResult.sidedSuccess(level.isClientSide);
+                        }
+                    } else if (playerItem.getItem() == Items.GLASS_BOTTLE) {
+                        if (tank.drain(fluid, IFluidHandler.FluidAction.SIMULATE).getAmount() == 250) {
+                            extractWaterBottle(tank, level, player, playerItem, fluid);
+
+                            markUpdated();
+                            return InteractionResult.sidedSuccess(level.isClientSide);
+                        }
+                    }
+                }
+
+                // Otherwise, mix the item's fluid into the barrel's fluid
+                var itemFluidCap = playerItem.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).resolve();
+                if (itemFluidCap.isPresent()) {
+                    var fluidInTank = itemFluidCap.get().getFluidInTank(0);
+
                     if (fluidInTank.getAmount() >= 1000) {
                         if (!level.isClientSide) {
-                            return tryFluidMixing(fluidInTank.getFluid());
+                            tryFluidMixing(fluidInTank.getFluid());
                         }
-                        return true;
+                        // If a mix was successful, skip rest of logic
+                        return InteractionResult.sidedSuccess(level.isClientSide);
                     }
-
-                    return false;
-                });
-                if (optionalBool.isPresent() && optionalBool.get()) {
-                    return InteractionResult.sidedSuccess(level.isClientSide);
                 }
             }
         }
 
+        // If the barrel has no solids and no fluid mixing/transfer happened
         var playerItem = player.getItemInHand(hand);
         if (!level.isClientSide) {
-            var bottled = false;
+            // mix item ingredient into fluid OR turn into compost (delegated to item handler)
+            var handItem = item.insertItem(0, player.getAbilities().instabuild ? playerItem.copy() : playerItem, false);
 
-            if (EConfig.SERVER.allowWaterBottleTransfer.get()) {
-                var fluid = new FluidStack(Fluids.WATER, 250);
-
-                if (playerItem.getItem() == Items.POTION && PotionUtils.getPotion(playerItem) == Potions.WATER) {
-                    if (tank.fill(fluid, IFluidHandler.FluidAction.SIMULATE) > 0) {
-                        if (!player.getAbilities().instabuild) {
-                            player.setItemInHand(hand, new ItemStack(Items.GLASS_BOTTLE));
-                        }
-                        tank.fill(fluid, IFluidHandler.FluidAction.EXECUTE);
-                        bottled = true;
-                        level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.BOTTLE_FILL, SoundSource.NEUTRAL, 1.0F, 1.0F);
-                    }
-                } else if (playerItem.getItem() == Items.GLASS_BOTTLE) {
-                    if (tank.drain(fluid, IFluidHandler.FluidAction.SIMULATE).getAmount() == 250) {
-                        extractWaterBottle(tank, level, player, playerItem, fluid);
-                        bottled = true;
-                    }
-                }
-            }
-
-            if (!bottled) {
-                var handItem = item.insertItem(0, player.getAbilities().instabuild ? playerItem.copy() : playerItem, false);
-
-                if (!player.getAbilities().instabuild) {
-                    player.setItemInHand(hand, handItem);
-                    giveResultItem(level, pos);
-                }
-            } else {
-                markUpdated();
+            if (!player.getAbilities().instabuild) {
+                player.setItemInHand(hand, handItem);
+                giveResultItem(level, pos);
             }
         }
 
@@ -283,7 +284,7 @@ public class BarrelBlockEntity extends EBlockEntity {
     }
 
     /**
-     * @param input The input item to craft with
+     * @param input    The input item to craft with
      * @param simulate Whether the craft should actually take place
      * @return Whether a craft was made or is possible
      */
@@ -307,7 +308,7 @@ public class BarrelBlockEntity extends EBlockEntity {
 
     /**
      * @param playerItem The item to try to mix with this barrel's fluid
-     * @param simulate Whether this is a test or the player is actually mixing with the barrel
+     * @param simulate   Whether this is a test or the player is actually mixing with the barrel
      * @return Whether something was mixed (if simulated, whether the mix is possible)
      */
     private boolean tryMixing(ItemStack playerItem, boolean simulate) {
@@ -330,28 +331,6 @@ public class BarrelBlockEntity extends EBlockEntity {
         } else {
             return false;
         }
-    }
-
-    public boolean tryInWorldFluidMixing() {
-        if (!tank.isEmpty() && item.getStackInSlot(0).isEmpty()) {
-            var aboveFluid = level.getBlockState(worldPosition.above()).getFluidState().getType();
-
-            return aboveFluid != Fluids.EMPTY && tryFluidMixing(aboveFluid);
-        } else {
-            return false;
-        }
-    }
-
-    private boolean tryFluidMixing(Fluid additive) {
-        BarrelFluidMixingRecipe recipe = RecipeUtil.getFluidMixingRecipe(tank.getFluid(), additive);
-
-        if (recipe != null) {
-            tank.drain(recipe.baseFluidAmount, IFluidHandler.FluidAction.EXECUTE);
-            setItem(new ItemStack(recipe.result));
-            return true;
-        }
-
-        return false;
     }
 
     private boolean tryComposting(ItemStack stack, boolean simulate) {
@@ -387,6 +366,31 @@ public class BarrelBlockEntity extends EBlockEntity {
         }
 
         level.playSound(null, worldPosition, SoundEvents.COMPOSTER_FILL, SoundSource.BLOCKS);
+    }
+
+    /**
+     * Called in three cases, which should cover all the possible edge cases:
+     * <li> When the barrel is updated by a neighboring block (see {@link BarrelBlock#neighborChanged}) </li>
+     * <li> When the barrel is first loaded from NBT (see {@link #onLoad}) </li>
+     * <li> When the fluid in the barrel changes (see {@link FluidHandler#onContentsChanged()}) </li>
+     */
+    public void tryInWorldFluidMixing() {
+        if (!tank.isEmpty() && item.getStackInSlot(0).isEmpty()) {
+            var aboveFluid = level.getBlockState(worldPosition.above()).getFluidState().getType();
+
+            if (aboveFluid != Fluids.EMPTY) {
+                tryFluidMixing(aboveFluid);
+            }
+        }
+    }
+
+    private void tryFluidMixing(Fluid additive) {
+        BarrelFluidMixingRecipe recipe = RecipeUtil.getFluidMixingRecipe(tank.getFluid(), additive);
+
+        if (recipe != null) {
+            tank.drain(recipe.baseFluidAmount, IFluidHandler.FluidAction.EXECUTE);
+            setItem(new ItemStack(recipe.result));
+        }
     }
 
     public static class Ticker implements BlockEntityTicker<BarrelBlockEntity> {
@@ -521,7 +525,7 @@ public class BarrelBlockEntity extends EBlockEntity {
                     return ItemHandlerHelper.copyStackWithSize(stack, stack.getCount() - 1);
                 }
             } else {
-                tryInWorldFluidMixing();
+                stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).ifPresent(itemFluid -> tryFluidMixing(itemFluid.getFluidInTank(0).getFluid()));
                 return stack;
             }
         }
@@ -551,7 +555,7 @@ public class BarrelBlockEntity extends EBlockEntity {
 
         @Override
         public boolean isFluidValid(FluidStack stack) {
-            return !isBrewing() && BarrelBlockEntity.this.canInsertFluid();
+            return !isBrewing() && BarrelBlockEntity.this.hasNoSolids();
         }
 
         @Override

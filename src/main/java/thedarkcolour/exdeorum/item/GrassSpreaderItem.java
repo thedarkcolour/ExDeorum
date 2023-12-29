@@ -68,7 +68,6 @@ public class GrassSpreaderItem extends Item {
                 level.addDestroyBlockEffect(pos, grass);
             }
 
-
             return InteractionResult.SUCCESS;
         }
 
