@@ -117,6 +117,7 @@ public class EItems {
     public static final RegistryObject<Item> SCULK_CORE = ITEMS.register("sculk_core", () -> new SculkCoreItem(props().stacksTo(1)));
     public static final RegistryObject<Item> RANDOM_POTTERY_SHERD = ITEMS.register("random_pottery_sherd", () -> new RandomResultItem.RandomSherd(props()));
     public static final RegistryObject<Item> RANDOM_ARMOR_TRIM = ITEMS.register("random_armor_trim", () -> new RandomResultItem.RandomSandyArmorTrim(props()));
+    public static final RegistryObject<Item> WOOD_CHIPPINGS = registerSimpleItem("wood_chippings");
 
     // Buckets
     public static final RegistryObject<Item> UNFIRED_PORCELAIN_BUCKET = registerSimpleItem("unfired_porcelain_bucket");

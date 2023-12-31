@@ -69,7 +69,7 @@ public class BarrelRenderer implements BlockEntityRenderer<BarrelBlockEntity> {
             var fluidStack = tank.getFluidInTank(0);
 
             if (!fluidStack.isEmpty()) { // Get texture
-                var fluid = Fluids.LAVA;//fluidStack.getFluid();
+                var fluid = fluidStack.getFluid();
                 var level = barrel.getLevel();
                 var pos = barrel.getBlockPos();
                 var percentage = fluidStack.getAmount() / 1000.0f;

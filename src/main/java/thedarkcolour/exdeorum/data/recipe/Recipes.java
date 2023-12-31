@@ -21,6 +21,7 @@ package thedarkcolour.exdeorum.data.recipe;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -272,6 +273,15 @@ public class Recipes {
             recipe.pattern("SES");
             recipe.pattern("CCC");
         });
+        recipes.shapedCrafting(RecipeCategory.BUILDING_BLOCKS, Items.SPONGE, recipe -> {
+            recipe.define('S', Blocks.SLIME_BLOCK);
+            recipe.define('W', ItemTags.WOOL);
+            recipe.define('C', EItems.WOOD_CHIPPINGS);
+            recipe.pattern("WCW");
+            recipe.pattern("CSC");
+            recipe.pattern("WCW");
+            MKRecipeProvider.unlockedByHaving(recipe, EItems.WOOD_CHIPPINGS.get());
+        });
     }
 
     private static void modUShaped(MKRecipeProvider recipes, String modid, RegistryObject<? extends Item> sides, RegistryObject<? extends Item> middle, RegistryObject<? extends Item> result) {
@@ -286,17 +296,17 @@ public class Recipes {
         });
     }
 
-    // todo wtf does this do? why is it using a MutableObject
     private static void grid2x2TagResult(Consumer<FinishedRecipe> writer, MKRecipeProvider recipes, TagKey<Item> resultTag, Ingredient ingredient) {
-        var ref = new MutableObject<FinishedRecipe>();
-        recipes.pushWriter(ref::setValue, newWriter -> {
+        // capture the generated recipe and wrap it in a TagResultRecipe
+        var wrappedRecipe = new MutableObject<FinishedRecipe>();
+        recipes.pushWriter(wrappedRecipe::setValue, newWriter -> {
             recipes.shapedCrafting(resultTag.location().getPath() + "_tag", RecipeCategory.MISC, Items.AIR, recipe -> {
                 recipe.define('#', ingredient);
                 recipe.pattern("##");
                 recipe.pattern("##");
             });
         });
-        writer.accept(new TagResultRecipe.Finished(resultTag, ref.getValue()));
+        writer.accept(new TagResultRecipe.Finished(resultTag, wrappedRecipe.getValue()));
     }
 
     private static void shapedCrook(MKRecipeProvider recipes, RegistryObject<? extends Item> crook, Ingredient stick) {
@@ -425,6 +435,7 @@ public class Recipes {
 
         hammerRecipe(writer, "stone_pebbles", ingredient(Items.STONE, Items.STONE_BRICKS, Items.CHISELED_STONE_BRICKS, Items.CRACKED_STONE_BRICKS), EItems.STONE_PEBBLE.get(), new UniformGenerator(ConstantValue.exactly(1), ConstantValue.exactly(6)));
         hammerRecipe(writer, "basalt", ingredient(Items.POLISHED_BASALT, Items.SMOOTH_BASALT), Items.BASALT);
+        hammerRecipe(writer, "wood_chippings", ingredient(BlockTags.LOGS), EItems.WOOD_CHIPPINGS.get(), new UniformGenerator(ConstantValue.exactly(3), ConstantValue.exactly(8)));
 
         hammerRecipe(writer, "tube_coral", ingredient(Items.TUBE_CORAL_BLOCK), Items.TUBE_CORAL);
         hammerRecipe(writer, "brain_coral", ingredient(Items.BRAIN_CORAL_BLOCK), Items.BRAIN_CORAL);
@@ -485,6 +496,7 @@ public class Recipes {
         barrelCompost(writer, "spore_blossom", ingredient(Items.SPORE_BLOSSOM), 125);
         barrelCompost(writer, "weeping_vines", ingredient(Items.WEEPING_VINES), 100);
         barrelCompost(writer, "twisting_vines", ingredient(Items.TWISTING_VINES), 100);
+        barrelCompost(writer, "wood_chippings", ingredient(EItems.WOOD_CHIPPINGS), 125);
         // flesh
         barrelCompost(writer, "rotten_flesh", ingredient(Items.ROTTEN_FLESH), 100);
         barrelCompost(writer, "spider_eye", ingredient(Items.SPIDER_EYE), 80);

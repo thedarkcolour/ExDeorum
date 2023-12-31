@@ -74,6 +74,8 @@ public class BarrelBlockEntity extends EBlockEntity {
     public short compost;
     // compost colors
     public short r, g, b;
+    // used to avoid obsidian dupe
+    private boolean isBeingFilledByPlayer;
 
     public BarrelBlockEntity(BlockPos pos, BlockState state) {
         super(EBlockEntities.BARREL.get(), pos, state);
@@ -183,7 +185,12 @@ public class BarrelBlockEntity extends EBlockEntity {
         if (hasNoSolids()) {
             var wasBurning = isBurning();
 
-            if (FluidUtil.interactWithFluidHandler(player, hand, tank)) {
+            this.isBeingFilledByPlayer = true;
+
+            if (FluidUtil.interactWithFluidHandler(player, hand, this.tank)) {
+                this.isBeingFilledByPlayer = false;
+                tryInWorldFluidMixing();
+
                 // If the item is a fluid handler, try to transfer fluids
                 if (wasBurning && !isHotFluid(tank.getFluid().getFluid().getFluidType())) {
                     progress = 0.0f;
@@ -191,6 +198,7 @@ public class BarrelBlockEntity extends EBlockEntity {
 
                 return InteractionResult.sidedSuccess(level.isClientSide);
             } else {
+                this.isBeingFilledByPlayer = false;
                 // try one more time to transfer fluids between item and barrel
                 var playerItem = player.getItemInHand(hand);
                 if (EConfig.SERVER.allowWaterBottleTransfer.get()) {
@@ -222,7 +230,7 @@ public class BarrelBlockEntity extends EBlockEntity {
                 if (itemFluidCap.isPresent()) {
                     var fluidInTank = itemFluidCap.get().getFluidInTank(0);
 
-                    if (fluidInTank.getAmount() >= 1000) {
+                    if (tank.getFluidAmount() >= 1000) {
                         if (!level.isClientSide) {
                             tryFluidMixing(fluidInTank.getFluid());
                         }
@@ -560,7 +568,9 @@ public class BarrelBlockEntity extends EBlockEntity {
 
         @Override
         protected void onContentsChanged() {
-            BarrelBlockEntity.this.tryInWorldFluidMixing();
+            if (!BarrelBlockEntity.this.isBeingFilledByPlayer) {
+                BarrelBlockEntity.this.tryInWorldFluidMixing();
+            }
         }
     }
 }

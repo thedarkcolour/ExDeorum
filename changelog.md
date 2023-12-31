@@ -1,3 +1,7 @@
+## Ex Deorum 1.12
+- Fixed dupe bug with fluid mixing recipes
+- Fixed bug where every fluid would appear as lava in a barrel
+
 ## Ex Deorum 1.11
 - Added support for NuclearCraft: Neoteric - Boron, Thorium, Lithium, and Magnesium ores
 - Fixed bug where hoppers and other automation could not craft fluid mixing recipes in the barrel (ex. Water and Lava to make Obsidian)
