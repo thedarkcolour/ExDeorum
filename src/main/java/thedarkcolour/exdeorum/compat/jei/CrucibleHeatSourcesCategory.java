@@ -135,7 +135,12 @@ class CrucibleHeatSourcesCategory implements IRecipeCategory<CrucibleHeatSourceR
                 if (recipe.ingredientType() != null) {
                     ingredientManager.createTypedIngredient(recipe.ingredientType(), recipe.ingredient()).ifPresent(ingredient -> {
                         if (Minecraft.getInstance().screen instanceof IRecipesGui recipesGui) {
-                            recipesGui.show(focusFactory.createFocus(input.getValue() == InputConstants.MOUSE_BUTTON_LEFT ? RecipeIngredientRole.OUTPUT : RecipeIngredientRole.INPUT, ingredient));
+                            if (input.getValue() == InputConstants.MOUSE_BUTTON_LEFT) {
+                                recipesGui.show(focusFactory.createFocus(RecipeIngredientRole.OUTPUT, ingredient));
+                            } else {
+                                // INPUT + CATALYST
+                                recipesGui.show(List.of(focusFactory.createFocus(RecipeIngredientRole.CATALYST, ingredient), focusFactory.createFocus(RecipeIngredientRole.INPUT, ingredient)));
+                            }
                         }
                     });
                 }

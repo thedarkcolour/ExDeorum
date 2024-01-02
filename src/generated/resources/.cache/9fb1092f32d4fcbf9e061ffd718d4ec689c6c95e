@@ -1,4 +1,5 @@
-// 1.20.1	2023-12-29T14:57:29.393698	Recipes
+// 1.20.1	2024-01-01T15:35:52.3392677	Recipes
+e37b64428f17e304e91539ac0513456d7ce40cd1 data/exdeorum/advancements/recipes/building_blocks/sponge.json
 5ad481a0c376c1a1785a5d3b992064d0ec0bf3b0 data/exdeorum/advancements/recipes/food/end_cake.json
 25dd027e844a72b03c95dbe5e3c3dd8c738ceb00 data/exdeorum/advancements/recipes/misc/acacia_barrel.json
 376be94a64c9ca97a9ea2346547b6e617f13a815 data/exdeorum/advancements/recipes/misc/acacia_crucible.json
@@ -161,6 +162,7 @@ f17f12ac67e700f7838cb3bab740ec254bbfe13c data/exdeorum/recipes/barrel_compost/tw
 653a42a46a6bd977a2eddea7336df4beabbbeecf data/exdeorum/recipes/barrel_compost/vine.json
 c4ecb4272c220282de403852031b3ca92651d91c data/exdeorum/recipes/barrel_compost/weeping_vines.json
 5677e23fdc74130523d602ebf9e557f659af57c5 data/exdeorum/recipes/barrel_compost/wheat.json
+b9a34df74ce0ee9c4247a9a64784c851eb1de58c data/exdeorum/recipes/barrel_compost/wood_chippings.json
 d08b7a270dff3f7bb45338798227a69d775e7c32 data/exdeorum/recipes/barrel_fluid_mixing/blackstone.json
 1a87de0d21b9677fda38f7a520cbffbdc41d8532 data/exdeorum/recipes/barrel_fluid_mixing/netherrack.json
 8b42ca284eaea721e8e7589e5fb0b16ccbe66ee5 data/exdeorum/recipes/barrel_fluid_mixing/obsidian.json
@@ -249,12 +251,14 @@ df7f23b00f23a5ac255345801ac88850877a2e88 data/exdeorum/recipes/hammer/fire_coral
 113507c073fc77439cb7d3c56a96d61ca70b6c9d data/exdeorum/recipes/hammer/gravel.json
 808203624a792fcd4a0289975d82b3bff34af90e data/exdeorum/recipes/hammer/horn_coral.json
 5ebb5a4dfa54230abcd4cdb5af34b2b296c7eb23 data/exdeorum/recipes/hammer/horn_coral_fan.json
+58d46cc4ad8fc320659e118d2796151ff2d5597f data/exdeorum/recipes/hammer/pointed_dripstone.json
 19c00defa531bfbaa11f19403ff9d1694a9cd04a data/exdeorum/recipes/hammer/prismarine.json
 fdc243a5cfb1e84220cf6c41f46f454b3aff8b87 data/exdeorum/recipes/hammer/red_sand.json
 b592554bc00ab20d8affdfd1627406858ac10797 data/exdeorum/recipes/hammer/sand.json
 0e879c5bcf28023efdcd257d3e12e7153bd0bef7 data/exdeorum/recipes/hammer/stone_pebbles.json
 3bf60837b935bd09248a84fd8f22968fc244ea46 data/exdeorum/recipes/hammer/tube_coral.json
 f9654d25e05276b2bce6445e2cf7c1f2d9170124 data/exdeorum/recipes/hammer/tube_coral_fan.json
+f6b16e8168c798bc433e19edf5ede3a7703865f5 data/exdeorum/recipes/hammer/wood_chippings.json
 89bc76bd0dd2350b25ac8981f3597e0119dff939 data/exdeorum/recipes/hellbark_barrel.json
 4c3b4daf2bed2d4ee662e2e80f4547b3f0b2a271 data/exdeorum/recipes/hellbark_crucible.json
 2995ec75979bfb8b0415b8a1da7db7001b9ae433 data/exdeorum/recipes/hellbark_sieve.json
@@ -1170,6 +1174,7 @@ fe809175ad8570b7338b3aff029c040ca0fe5095 data/exdeorum/recipes/sieve/soul_sand/s
 9ab74f344d31bf2bde6ce9c2aad2d739e7b5f234 data/exdeorum/recipes/skyroot_barrel.json
 8e724e34a3107b459a0f6be31c2acd7e9782be97 data/exdeorum/recipes/skyroot_crucible.json
 80b9df7f6ed4c5fb23f5d79cdd7dfbd1a79253e7 data/exdeorum/recipes/skyroot_sieve.json
+afdb75127a9ece3ba346b78155877b35135cc9f8 data/exdeorum/recipes/sponge.json
 5fada017bfccd7c672986d436e390ed5799b185a data/exdeorum/recipes/spruce_barrel.json
 3a2654f08af2014451533d7168c29ed866c0788f data/exdeorum/recipes/spruce_crucible.json
 b4531ee1e1478da1145f099271cff9a9c2069c46 data/exdeorum/recipes/spruce_sieve.json

@@ -1,0 +1,7 @@
+{
+  "type": "exdeorum:barrel_compost",
+  "ingredient": {
+    "item": "exdeorum:wood_chippings"
+  },
+  "volume": 125
+}

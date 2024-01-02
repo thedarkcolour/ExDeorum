@@ -55,7 +55,7 @@ public class EConfig {
         }
     }
 
-    // Needed because common configs load before Tags
+    // Needed because these configs are needed before Tags are loaded
     public static class Common {
         public final ConfigValue<String> preferredAluminumOre;
         public final ConfigValue<String> preferredCobaltOre;
@@ -72,6 +72,9 @@ public class EConfig {
         public final ConfigValue<String> preferredMagnesiumOre;
         public final ConfigValue<String> preferredLithiumOre;
         public final ConfigValue<String> preferredBoronOre;
+
+        public final BooleanValue voidNetherGeneration;
+        public final BooleanValue voidEndGeneration;
 
         public Common(ForgeConfigSpec.Builder builder) {
             // Preferred items
@@ -97,7 +100,16 @@ public class EConfig {
             this.preferredLithiumOre = preferredOreConfig(builder, "lithium_ore", airId);
             this.preferredBoronOre = preferredOreConfig(builder, "boron_ore", airId);
 
-            builder.pop(2);
+            builder.pop();
+
+            this.voidNetherGeneration = builder
+                    .comment("If the Void World type is selected, whether the Nether world generation is overridden to a void world. Changes take effect after reopening the world.")
+                    .define("void_nether_generation", true);
+            this.voidEndGeneration = builder
+                    .comment("If the Void World type is selected, whether the End world generation is overridden to a void world. Changes take effect after reopening the world.")
+                    .define("void_end_generation", true);
+
+            builder.pop();
         }
     }
 

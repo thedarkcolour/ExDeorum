@@ -1,4 +1,4 @@
-// 1.20.1	2023-12-27T21:44:18.578794	ModKit Item Models for mod 'exdeorum'
+// 1.20.1	2023-12-31T14:34:20.2490508	ModKit Item Models for mod 'exdeorum'
 4ba3bb2c6174ac3728a4b85e34681f118ec8eb34 assets/exdeorum/models/item/acacia_barrel.json
 c03ce41f7c071498fcbd5f5225e91dcb2f365fbb assets/exdeorum/models/item/acacia_crucible.json
 3b4f1d45c0d9c4cd1d9a5cdf6ddc8d2c9791bca5 assets/exdeorum/models/item/acacia_sieve.json
@@ -168,4 +168,5 @@ e4df47baeb322b38fe7b58ef1b9ea675424be7c3 assets/exdeorum/models/item/willow_siev
 c72e7359dd4934c756c49350682ac667fffe009b assets/exdeorum/models/item/witch_water_bucket.json
 7089629f8033bd4e52780fe88437aa684f4ee0a9 assets/exdeorum/models/item/wooden_hammer.json
 d6c652c6828ed14e33c4e948afc1c9a29f977853 assets/exdeorum/models/item/wooden_watering_can.json
+595baa9d8d249479f3d3847a6c5ba1485d0edbbe assets/exdeorum/models/item/wood_chippings.json
 b2118d142d87e5956865096bd2dc16b3f533e783 assets/exdeorum/models/item/zinc_ore_chunk.json

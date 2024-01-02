@@ -435,7 +435,7 @@ public class Recipes {
 
         hammerRecipe(writer, "stone_pebbles", ingredient(Items.STONE, Items.STONE_BRICKS, Items.CHISELED_STONE_BRICKS, Items.CRACKED_STONE_BRICKS), EItems.STONE_PEBBLE.get(), new UniformGenerator(ConstantValue.exactly(1), ConstantValue.exactly(6)));
         hammerRecipe(writer, "basalt", ingredient(Items.POLISHED_BASALT, Items.SMOOTH_BASALT), Items.BASALT);
-        hammerRecipe(writer, "wood_chippings", ingredient(BlockTags.LOGS), EItems.WOOD_CHIPPINGS.get(), new UniformGenerator(ConstantValue.exactly(3), ConstantValue.exactly(8)));
+        hammerRecipe(writer, "wood_chippings", ingredient(ItemTags.LOGS), EItems.WOOD_CHIPPINGS.get(), new UniformGenerator(ConstantValue.exactly(3), ConstantValue.exactly(8)));
 
         hammerRecipe(writer, "tube_coral", ingredient(Items.TUBE_CORAL_BLOCK), Items.TUBE_CORAL);
         hammerRecipe(writer, "brain_coral", ingredient(Items.BRAIN_CORAL_BLOCK), Items.BRAIN_CORAL);
@@ -449,6 +449,7 @@ public class Recipes {
         hammerRecipe(writer, "horn_coral_fan", ingredient(Items.HORN_CORAL), Items.HORN_CORAL_FAN);
 
         hammerRecipe(writer, "prismarine", ingredient(Items.PRISMARINE, Items.PRISMARINE_BRICKS, Items.DARK_PRISMARINE), Items.PRISMARINE_SHARD, between(1, 4));
+        hammerRecipe(writer, "pointed_dripstone", ingredient(Items.DRIPSTONE_BLOCK), Items.POINTED_DRIPSTONE, between(2, 4));
     }
 
     private static void hammerRecipe(Consumer<FinishedRecipe> writer, String name, Ingredient block, ItemLike result) {

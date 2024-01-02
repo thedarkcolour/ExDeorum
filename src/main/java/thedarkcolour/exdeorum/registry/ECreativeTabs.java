@@ -18,7 +18,6 @@
 
 package thedarkcolour.exdeorum.registry;
 
-import net.minecraft.Util;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
@@ -29,16 +28,14 @@ import net.minecraftforge.registries.RegistryObject;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.data.TranslationKeys;
 
-import java.util.function.Consumer;
-
 public class ECreativeTabs {
     public static final DeferredRegister<CreativeModeTab> CREATIVE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, ExDeorum.ID);
 
-    public static final RegistryObject<CreativeModeTab> MAIN = register("main", ECreativeTabs::mainTab);
-
-    private static RegistryObject<CreativeModeTab> register(String id, Consumer<CreativeModeTab.Builder> create) {
-        return CREATIVE_TABS.register(id, () -> Util.make(new CreativeModeTab.Builder(CreativeModeTab.Row.TOP, 0), create).build());
-    }
+    public static final RegistryObject<CreativeModeTab> MAIN = CREATIVE_TABS.register("main", () -> {
+        var builder = new CreativeModeTab.Builder(CreativeModeTab.Row.TOP, 0);
+        ECreativeTabs.mainTab(builder);
+        return builder.build();
+    });
 
     private static void mainTab(CreativeModeTab.Builder builder) {
         builder.icon(() -> new ItemStack(EItems.CROOK.get()));

@@ -23,7 +23,6 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import thedarkcolour.exdeorum.ExDeorum;
-import thedarkcolour.exdeorum.block.EBlock;
 import thedarkcolour.exdeorum.blockentity.BarrelBlockEntity;
 import thedarkcolour.exdeorum.blockentity.InfestedLeavesBlockEntity;
 import thedarkcolour.exdeorum.blockentity.LavaCrucibleBlockEntity;

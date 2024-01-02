@@ -481,7 +481,7 @@ public class EItems {
         output.accept(WARPED_NYLIUM_SPORES.get());
         output.accept(CRIMSON_NYLIUM_SPORES.get());
         output.accept(SCULK_CORE.get());
-        output.accept(WITCH_WATER_BUCKET.get());
+        output.accept(WOOD_CHIPPINGS.get());
         output.accept(PORCELAIN_CLAY_BALL.get());
         output.accept(UNFIRED_PORCELAIN_BUCKET.get());
         output.accept(PORCELAIN_BUCKET.get());
@@ -489,5 +489,6 @@ public class EItems {
         output.accept(PORCELAIN_LAVA_BUCKET.get());
         output.accept(PORCELAIN_MILK_BUCKET.get());
         output.accept(PORCELAIN_WITCH_WATER_BUCKET.get());
+        output.accept(WITCH_WATER_BUCKET.get());
     }
 }

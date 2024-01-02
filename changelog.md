@@ -1,6 +1,11 @@
 ## Ex Deorum 1.12
+- Added Wood Chippings, obtained by hammering logs. Usable as compost or as a crafting material for Sponges.
+- Added some more KubeJS functions. Check out the [new documentation](https://exdeorum.readthedocs.io/en/latest) for Ex Deorum.
+- Added options to the config to disable void generation in the Nether and End dimensions when using the Void World preset.
+- Added recipe for Pointed Dripstone from hammering Dripstone.
 - Fixed dupe bug with fluid mixing recipes
 - Fixed bug where every fluid would appear as lava in a barrel
+- Fixed minor bug with JEI heat sources not showing all usages of a block
 
 ## Ex Deorum 1.11
 - Added support for NuclearCraft: Neoteric - Boron, Thorium, Lithium, and Magnesium ores

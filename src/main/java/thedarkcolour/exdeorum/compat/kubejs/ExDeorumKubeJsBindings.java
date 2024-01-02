@@ -18,18 +18,51 @@
 
 package thedarkcolour.exdeorum.compat.kubejs;
 
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import dev.latvian.mods.kubejs.recipe.RecipesEventJS;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import net.minecraft.commands.arguments.blocks.BlockStateParser;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.blockentity.LavaCrucibleBlockEntity;
+import thedarkcolour.exdeorum.registry.ERecipeTypes;
 
+@SuppressWarnings("unused")
 class ExDeorumKubeJsBindings {
-    public void setCrucibleHeatValue(BlockState state, int value) {
-        LavaCrucibleBlockEntity.KUBEJS_HEAT_VALUES.put(state, value);
+    public void setCrucibleHeatValue(Block block, int value) {
+        setCrucibleHeatValueForBlock(block, value);
+    }
+
+    // This method previously accepted a BlockState, which made it impossible to call through KubeJS.
+    public void setCrucibleHeatValueForState(String stateString, int value) {
+        try {
+            LavaCrucibleBlockEntity.KUBEJS_HEAT_VALUES.put(BlockStateParser.parseForBlock(BuiltInRegistries.BLOCK.asLookup(), stateString, false).blockState(), value);
+        } catch (CommandSyntaxException exception) {
+            // Throw a more appropriate exception.
+            throw new IllegalArgumentException("Failed to parse BlockState string \"" + stateString + "\"");
+        }
     }
 
     public void setCrucibleHeatValueForBlock(Block block, int value) {
         for (var state : block.getStateDefinition().getPossibleStates()) {
             LavaCrucibleBlockEntity.KUBEJS_HEAT_VALUES.put(state, value);
+        }
+    }
+
+    public void removeDefaultSieveRecipes(RecipesEventJS recipesEvent) {
+        recipesEvent.remove(r -> {
+            return r.kjs$getType().equals(ERecipeTypes.SIEVE.getId()) && r.kjs$getOrCreateId().getNamespace().equals(ExDeorum.ID);
+        });
+    }
+
+    // not the most elegant solution, but if it works, it works
+    public void removeDefaultHeatSources() {
+        var map = new Object2IntOpenHashMap<BlockState>();
+        LavaCrucibleBlockEntity.putDefaults(map);
+        for (var key : map.keySet()) {
+            LavaCrucibleBlockEntity.KUBEJS_HEAT_VALUES.put(key, 0);
         }
     }
 }

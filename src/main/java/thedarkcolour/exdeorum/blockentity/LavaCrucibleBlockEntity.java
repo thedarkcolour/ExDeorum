@@ -21,7 +21,6 @@ package thedarkcolour.exdeorum.blockentity;
 import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import it.unimi.dsi.fastutil.objects.ObjectSet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
@@ -46,33 +45,44 @@ public class LavaCrucibleBlockEntity extends AbstractCrucibleBlockEntity {
     public static void putDefaultHeatValues() {
         HEAT_REGISTRY.clear();
 
-        putAllStates(Blocks.TORCH, 1);
-        putAllStates(Blocks.WALL_TORCH, 1);
-        putAllStates(Blocks.LANTERN, 1);
-        putAllStates(Blocks.SOUL_TORCH, 2);
-        putAllStates(Blocks.SOUL_WALL_TORCH, 2);
-        putAllStates(Blocks.SOUL_LANTERN, 2);
-        putAllStates(Blocks.LAVA, 3);
-        putAllStates(Blocks.FIRE, 5);
-        putAllStates(Blocks.SOUL_FIRE, 5);
+        putDefaults(HEAT_REGISTRY);
 
-        putStates(Blocks.CAMPFIRE, 2, state -> state.getValue(CampfireBlock.LIT));
-        putStates(Blocks.SOUL_CAMPFIRE, 2, state -> state.getValue(CampfireBlock.LIT));
+        for (var entry : KUBEJS_HEAT_VALUES.object2IntEntrySet()) {
+            if (entry.getIntValue() <= 0) {
+                HEAT_REGISTRY.removeInt(entry.getKey());
+            } else {
+                HEAT_REGISTRY.put(entry.getKey(), entry.getIntValue());
+            }
+        }
 
-        HEAT_REGISTRY.putAll(KUBEJS_HEAT_VALUES);
         KUBEJS_HEAT_VALUES.clear();
     }
 
-    public static void putAllStates(Block block, int heat) {
+    public static void putDefaults(Object2IntMap<BlockState> heatMap) {
+        putAllStates(Blocks.TORCH, 1, heatMap);
+        putAllStates(Blocks.WALL_TORCH, 1, heatMap);
+        putAllStates(Blocks.LANTERN, 1, heatMap);
+        putAllStates(Blocks.SOUL_TORCH, 2, heatMap);
+        putAllStates(Blocks.SOUL_WALL_TORCH, 2, heatMap);
+        putAllStates(Blocks.SOUL_LANTERN, 2, heatMap);
+        putAllStates(Blocks.LAVA, 3, heatMap);
+        putAllStates(Blocks.FIRE, 5, heatMap);
+        putAllStates(Blocks.SOUL_FIRE, 5, heatMap);
+
+        putStates(Blocks.CAMPFIRE, 2, state -> state.getValue(CampfireBlock.LIT), heatMap);
+        putStates(Blocks.SOUL_CAMPFIRE, 2, state -> state.getValue(CampfireBlock.LIT), heatMap);
+    }
+
+    public static void putAllStates(Block block, int heat, Object2IntMap<BlockState> heatMap) {
         for (var state : block.getStateDefinition().getPossibleStates()) {
-            HEAT_REGISTRY.put(state, heat);
+            heatMap.put(state, heat);
         }
     }
 
-    public static void putStates(Block block, int heat, Predicate<BlockState> predicate) {
+    public static void putStates(Block block, int heat, Predicate<BlockState> predicate, Object2IntMap<BlockState> heatMap) {
         for (var state : block.getStateDefinition().getPossibleStates()) {
             if (predicate.test(state)) {
-                HEAT_REGISTRY.put(state, heat);
+                heatMap.put(state, heat);
             }
         }
     }

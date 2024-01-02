@@ -26,6 +26,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.WorldGenRegion;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.LevelHeightAccessor;
@@ -46,6 +47,7 @@ import net.minecraft.world.level.levelgen.RandomState;
 import net.minecraft.world.level.levelgen.blending.Blender;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
+import thedarkcolour.exdeorum.config.EConfig;
 
 import java.util.List;
 import java.util.Optional;
@@ -63,11 +65,13 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
     });
     private final Holder<NoiseGeneratorSettings> settings;
     private final TagKey<StructureSet> allowedStructureSets;
+    private final boolean generateNormal;
 
     public VoidChunkGenerator(BiomeSource biomeSource, Holder<NoiseGeneratorSettings> settings, TagKey<StructureSet> allowedStructureSets) {
         super(biomeSource, settings);
         this.settings = settings;
         this.allowedStructureSets = allowedStructureSets;
+        this.generateNormal = (settings.is(new ResourceLocation("minecraft:end")) && !EConfig.COMMON.voidEndGeneration.get()) || (settings.is(new ResourceLocation("minecraft:nether")) && !EConfig.COMMON.voidNetherGeneration.get());
     }
 
     @Override
@@ -77,51 +81,75 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 
     @Override
     public void applyCarvers(WorldGenRegion pLevel, long pSeed, RandomState pRandom, BiomeManager pBiomeManager, StructureManager pStructureManager, ChunkAccess pChunk, GenerationStep.Carving pStep) {
+        if (generateNormal) {
+            super.applyCarvers(pLevel, pSeed, pRandom, pBiomeManager, pStructureManager, pChunk, pStep);
+        }
     }
 
     // Filter structures
     @Override
     public ChunkGeneratorStructureState createState(HolderLookup<StructureSet> lookup, RandomState pRandomState, long pSeed) {
-        return super.createState(new FilteredLookup(lookup, allowedStructureSets), pRandomState, pSeed);
+        return generateNormal ? super.createState(lookup, pRandomState, pSeed) : super.createState(new FilteredLookup(lookup, allowedStructureSets), pRandomState, pSeed);
     }
 
     @Override
     public void buildSurface(WorldGenRegion pLevel, StructureManager pStructureManager, RandomState pRandom, ChunkAccess pChunk) {
+        if (generateNormal) {
+            super.buildSurface(pLevel, pStructureManager, pRandom, pChunk);
+        }
     }
 
     @Override
     public void spawnOriginalMobs(WorldGenRegion pLevel) {
+        if (generateNormal) {
+            super.spawnOriginalMobs(pLevel);
+        }
     }
 
     @Override
     public CompletableFuture<ChunkAccess> fillFromNoise(Executor pExecutor, Blender pBlender, RandomState pRandom, StructureManager pStructureManager, ChunkAccess chunk) {
-        return CompletableFuture.completedFuture(chunk);
+        if (generateNormal) {
+            return super.fillFromNoise(pExecutor, pBlender, pRandom, pStructureManager, chunk);
+        } else {
+            return CompletableFuture.completedFuture(chunk);
+        }
     }
 
     @Override
     public int getBaseHeight(int pX, int pZ, Heightmap.Types pType, LevelHeightAccessor pLevel, RandomState pRandom) {
-        return getMinY();
+        if (generateNormal) {
+            return super.getBaseHeight(pX, pZ, pType, pLevel, pRandom);
+        } else {
+            return getMinY();
+        }
     }
 
     @Override
     public NoiseColumn getBaseColumn(int pX, int pZ, LevelHeightAccessor pHeight, RandomState pRandom) {
-        return new NoiseColumn(0, new BlockState[0]);
+        if (generateNormal) {
+            return super.getBaseColumn(pX, pZ, pHeight, pRandom);
+        } else {
+            return new NoiseColumn(0, new BlockState[0]);
+        }
     }
 
     @Override
     public void addDebugScreenInfo(List<String> pInfo, RandomState pRandom, BlockPos pPos) {
+        if (generateNormal) {
+            super.addDebugScreenInfo(pInfo, pRandom, pPos);
+        }
     }
 
     @Override
     public void createReferences(WorldGenLevel level, StructureManager pStructureManager, ChunkAccess pChunk) {
-        if (hasStructures(level.registryAccess())) {
+        if (generateNormal || hasStructures(level.registryAccess())) {
             super.createReferences(level, pStructureManager, pChunk);
         }
     }
 
     @Override
     public void createStructures(RegistryAccess registries, ChunkGeneratorStructureState pStructureState, StructureManager pStructureManager, ChunkAccess pChunk, StructureTemplateManager pStructureTemplateManager) {
-        if (hasStructures(registries)) {
+        if (generateNormal || hasStructures(registries)) {
             super.createStructures(registries, pStructureState, pStructureManager, pChunk, pStructureTemplateManager);
         }
     }

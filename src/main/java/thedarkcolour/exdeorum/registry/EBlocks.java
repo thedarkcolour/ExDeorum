@@ -18,7 +18,6 @@
 
 package thedarkcolour.exdeorum.registry;
 
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -32,8 +31,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.block.*;
-
-import java.util.function.Supplier;
 
 import static net.minecraft.world.level.block.state.BlockBehaviour.Properties.copy;
 import static net.minecraft.world.level.block.state.BlockBehaviour.Properties.of;

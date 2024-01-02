@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "C": {
+      "item": "exdeorum:wood_chippings"
+    },
+    "S": {
+      "item": "minecraft:slime_block"
+    },
+    "W": {
+      "tag": "minecraft:wool"
+    }
+  },
+  "pattern": [
+    "WCW",
+    "CSC",
+    "WCW"
+  ],
+  "result": {
+    "item": "minecraft:sponge"
+  },
+  "show_notification": true
+}

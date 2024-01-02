@@ -18,9 +18,7 @@
 
 package thedarkcolour.exdeorum.event;
 
-import com.google.common.collect.ImmutableList;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
@@ -31,11 +29,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Unit;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -67,11 +63,8 @@ import thedarkcolour.exdeorum.config.EConfig;
 import thedarkcolour.exdeorum.item.WateringCanItem;
 import thedarkcolour.exdeorum.network.NetworkHandler;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
-import thedarkcolour.exdeorum.recipe.barrel.BarrelCompostRecipe;
-import thedarkcolour.exdeorum.recipe.sieve.SieveRecipe;
 import thedarkcolour.exdeorum.registry.EFluids;
 import thedarkcolour.exdeorum.registry.EItems;
-import thedarkcolour.exdeorum.registry.ERecipeTypes;
 import thedarkcolour.exdeorum.tag.EBiomeTags;
 import thedarkcolour.exdeorum.voidworld.VoidChunkGenerator;
 

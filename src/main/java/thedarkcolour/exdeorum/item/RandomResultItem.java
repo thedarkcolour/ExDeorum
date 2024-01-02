@@ -43,12 +43,10 @@ public abstract class RandomResultItem extends Item {
         var stack = player.getItemInHand(hand);
 
         if (!level.isClientSide) {
-            var consumed = false;
             var possibilities = getPossibilities();
 
             if (!player.getAbilities().instabuild) {
                 stack.shrink(1);
-                consumed = true;
             }
             var newItem = new ItemStack(Util.getRandom(possibilities, level.random));
             player.getInventory().placeItemBackInInventory(newItem);
