@@ -18,8 +18,10 @@
 
 package thedarkcolour.exdeorum.recipe;
 
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 
@@ -31,5 +33,10 @@ public abstract class ProbabilityRecipe extends SingleIngredientRecipe {
         super(id, ingredient);
         this.result = result;
         this.resultAmount = resultAmount;
+    }
+
+    @Override
+    public ItemStack getResultItem(RegistryAccess access) {
+        return new ItemStack(this.result);
     }
 }

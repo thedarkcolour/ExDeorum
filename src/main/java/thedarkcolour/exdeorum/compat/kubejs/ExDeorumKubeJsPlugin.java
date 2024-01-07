@@ -19,6 +19,7 @@
 package thedarkcolour.exdeorum.compat.kubejs;
 
 import dev.latvian.mods.kubejs.KubeJSPlugin;
+import dev.latvian.mods.kubejs.recipe.schema.RegisterRecipeSchemasEvent;
 import dev.latvian.mods.kubejs.script.BindingsEvent;
 import dev.latvian.mods.kubejs.script.ScriptType;
 import dev.latvian.mods.kubejs.util.ClassFilter;
@@ -28,6 +29,12 @@ public class ExDeorumKubeJsPlugin extends KubeJSPlugin {
     @Override
     public void registerBindings(BindingsEvent event) {
         event.add(ExDeorum.ID, new ExDeorumKubeJsBindings());
+    }
+
+    @Override
+    public void registerRecipeSchemas(RegisterRecipeSchemasEvent event) {
+        event.namespace("exdeorum")
+                .register("sieve", SieveRecipeSchema.SCHEMA);
     }
 
     @Override

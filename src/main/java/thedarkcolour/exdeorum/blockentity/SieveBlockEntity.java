@@ -115,7 +115,8 @@ public class SieveBlockEntity extends EBlockEntity {
         if (contents.isEmpty()) {
             // Insert an item
             if (!isClientSide) {
-                if (RecipeUtil.hasSieveResult(level.getRecipeManager(), mesh.getItem(), playerItem)) {
+                // If the input has any sieve drops, insert it into the mesh
+                if (!RecipeUtil.getSieveRecipes(mesh.getItem(), playerItem).isEmpty()) {
                     playerItem = this.insertContents(player, hand);
                     markUpdated();
 

@@ -1,0 +1,68 @@
+{
+	"parent": "block/block",
+	"textures": {
+		"barrel": "minecraft:block/oak_planks",
+		"dirt": "minecraft:block/dirt"
+	},
+	"elements": [
+		{
+			"from": [1, 0, 1],
+			"to": [2, 16, 15],
+			"faces": {
+				"north": {"uv": [14, 0, 15, 16], "texture": "#barrel"},
+				"east": {"uv": [1, 0, 15, 16], "texture": "#barrel"},
+				"south": {"uv": [1, 0, 2, 16], "texture": "#barrel"},
+				"west": {"uv": [1, 0, 15, 16], "texture": "#barrel"},
+				"up": {"uv": [14, 1, 15, 15], "texture": "#barrel", "cullface": "up"},
+				"down": {"uv": [1, 1, 2, 15], "texture": "#barrel", "cullface": "down"}
+			}
+		},
+		{
+			"from": [2, 0, 2],
+			"to": [14, 1, 14],
+			"faces": {
+				"up": {"uv": [2, 2, 14, 14], "texture": "#barrel"},
+				"down": {"uv": [14, 2, 2, 14], "texture": "#barrel", "cullface": "down"}
+			}
+		},
+		{
+			"from": [2, 0, 14],
+			"to": [14, 16, 15],
+			"faces": {
+				"north": {"uv": [2, 0, 14, 16], "texture": "#barrel"},
+				"south": {"uv": [2, 0, 14, 16], "texture": "#barrel"},
+				"up": {"uv": [2, 1, 14, 2], "texture": "#barrel", "cullface": "up"},
+				"down": {"uv": [2, 1, 14, 2], "texture": "#barrel", "cullface": "down"}
+			}
+		},
+		{
+			"from": [2, 0, 1],
+			"to": [14, 16, 2],
+			"faces": {
+				"north": {"uv": [2, 0, 14, 16], "texture": "#barrel"},
+				"south": {"uv": [2, 0, 14, 16], "texture": "#barrel"},
+				"up": {"uv": [2, 14, 14, 15], "texture": "#barrel", "cullface": "up"},
+				"down": {"uv": [2, 14, 14, 15], "texture": "#barrel", "cullface": "down"}
+			}
+		},
+		{
+			"from": [14, 0, 1],
+			"to": [15, 16, 15],
+			"faces": {
+				"north": {"uv": [1, 0, 2, 16], "texture": "#barrel"},
+				"east": {"uv": [1, 0, 15, 16], "texture": "#barrel"},
+				"south": {"uv": [14, 0, 15, 16], "texture": "#barrel"},
+				"west": {"uv": [1, 0, 15, 16], "texture": "#barrel"},
+				"up": {"uv": [1, 1, 2, 15], "texture": "#barrel", "cullface": "up"},
+				"down": {"uv": [14, 1, 15, 15], "texture": "#barrel", "cullface": "down"}
+			}
+		},
+		{
+			"from": [2, 1, 2],
+			"to": [14, 14, 14],
+			"faces": {
+				"up": {"uv": [2, 2, 14, 14], "texture": "#dirt"}
+			}
+		}
+	]
+}

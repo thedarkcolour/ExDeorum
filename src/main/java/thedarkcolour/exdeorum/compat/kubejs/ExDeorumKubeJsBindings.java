@@ -20,6 +20,8 @@ package thedarkcolour.exdeorum.compat.kubejs;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.latvian.mods.kubejs.recipe.RecipesEventJS;
+import dev.latvian.mods.kubejs.recipe.ReplacementMatch;
+import dev.latvian.mods.kubejs.recipe.filter.RecipeFilter;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.commands.arguments.blocks.BlockStateParser;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -31,6 +33,15 @@ import thedarkcolour.exdeorum.registry.ERecipeTypes;
 
 @SuppressWarnings("unused")
 class ExDeorumKubeJsBindings {
+    static {
+        RecipeFilter.PARSE.register((ctx, filters, map) -> {
+            var sieveMesh = map.get("sieve_mesh");
+            if (sieveMesh != null) {
+                filters.add(new SieveMeshFilter(ReplacementMatch.of(sieveMesh)));
+            }
+        });
+    }
+
     public void setCrucibleHeatValue(Block block, int value) {
         setCrucibleHeatValueForBlock(block, value);
     }

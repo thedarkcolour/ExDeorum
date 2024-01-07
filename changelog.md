@@ -1,3 +1,12 @@
+## Ex Deorum 1.13
+- Added new icon for JEI compost recipes to help differentiate from the other categories.
+- Added `sieve_mesh` property to KubeJS's RecipeFilter, for usage in `RecipesEventJS.remove` to remove sieve recipes using a specific mesh. View the [updated documentation](https://exdeorum.readthedocs.io/en/latest).
+- Fixed bug with Ex Deorum recipes not being removable by KubeJS with the OutputFilter and InputFilter.
+- Fixed water crucible not displaying leaves properly.
+- Fixed crimson nylium spores displaying as warped nylium in the water crucible.
+- Fixed sieves not rendering AllTheCompressed blocks properly.
+- Optimized crucible/sieve rendering of solid contents. No more Guava cache!
+
 ## Ex Deorum 1.12
 - Added Wood Chippings, obtained by hammering logs. Usable as compost or as a crafting material for Sponges.
 - Added some more KubeJS functions. Check out the [new documentation](https://exdeorum.readthedocs.io/en/latest) for Ex Deorum.

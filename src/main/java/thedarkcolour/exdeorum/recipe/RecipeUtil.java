@@ -259,21 +259,13 @@ public final class RecipeUtil {
         }
     }
 
-    public static boolean hasSieveResult(RecipeManager recipes, Item mesh, ItemStack stack) {
-        for (var recipe : byType(recipes, ERecipeTypes.SIEVE.get())) {
-            if (recipe.test(mesh, stack)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     public static boolean isCompostable(ItemStack stack) {
         return barrelCompostRecipeCache != null && barrelCompostRecipeCache.getRecipe(stack) != null;
     }
 
-    public static @Nullable BarrelMixingRecipe getBarrelMixingRecipe(RecipeManager recipes, ItemStack stack, FluidStack fluid) {
+    // todo stop using the RecipeManager
+    @Nullable
+    public static BarrelMixingRecipe getBarrelMixingRecipe(RecipeManager recipes, ItemStack stack, FluidStack fluid) {
         for (var recipe : byType(recipes, ERecipeTypes.BARREL_MIXING.get())) {
             if (recipe.matches(stack, fluid)) {
                 return recipe;
@@ -281,6 +273,16 @@ public final class RecipeUtil {
         }
 
         return null;
+    }
+
+    @Nullable
+    public static BarrelFluidMixingRecipe getFluidMixingRecipe(FluidStack base, Fluid additive) {
+        var recipe = barrelFluidMixingRecipeCache.getRecipe(base.getFluid(), additive);
+        if (recipe != null && base.getAmount() >= recipe.baseFluidAmount) {
+            return recipe;
+        } else {
+            return null;
+        }
     }
 
     public static double getExpectedValue(NumberProvider provider) {
@@ -298,15 +300,5 @@ public final class RecipeUtil {
 
     public static boolean isTagEmpty(TagKey<Item> tag) {
         return BuiltInRegistries.ITEM.getTag(tag).map(set -> !set.iterator().hasNext()).orElse(PreferredOres.getPreferredOre(tag) == Items.AIR);
-    }
-
-    @Nullable
-    public static BarrelFluidMixingRecipe getFluidMixingRecipe(FluidStack base, Fluid additive) {
-        var recipe = barrelFluidMixingRecipeCache.getRecipe(base.getFluid(), additive);
-        if (recipe != null && base.getAmount() >= recipe.baseFluidAmount) {
-            return recipe;
-        } else {
-            return null;
-        }
     }
 }

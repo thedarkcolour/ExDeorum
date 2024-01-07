@@ -50,10 +50,6 @@ public class SieveRecipe extends ProbabilityRecipe {
         this.mesh = mesh;
     }
 
-    public boolean test(Item mesh, ItemStack item) {
-        return this.mesh == mesh && getIngredient().test(item);
-    }
-
     @Override
     public RecipeSerializer<?> getSerializer() {
         return ERecipeSerializers.SIEVE.get();

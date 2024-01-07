@@ -242,17 +242,18 @@ public abstract class AbstractCrucibleBlockEntity extends EBlockEntity {
         overrides.put(EItems.GRASS_SEEDS.get(), Blocks.GRASS_BLOCK);
         overrides.put(EItems.MYCELIUM_SPORES.get(), Blocks.MYCELIUM);
         overrides.put(EItems.WARPED_NYLIUM_SPORES.get(), Blocks.WARPED_NYLIUM);
-        overrides.put(EItems.CRIMSON_NYLIUM_SPORES.get(), Blocks.WARPED_NYLIUM);
+        overrides.put(EItems.CRIMSON_NYLIUM_SPORES.get(), Blocks.CRIMSON_NYLIUM);
 
         for (var sapling : ForgeRegistries.BLOCKS.getEntries()) {
-            var key = sapling.getKey().location();
+            var item = sapling.getValue().asItem();
+            if (!overrides.containsKey(item)) {
+                var key = sapling.getKey().location();
 
-            if (key.getPath().endsWith("sapling")) {
-                try {
-                    var item = sapling.getValue().asItem();
-                    ForgeRegistries.BLOCKS.getValue(new ResourceLocation(key.getNamespace(), key.getPath().replace("sapling", "leaves")));
-                    overrides.put(item, Blocks.OAK_LEAVES);
-                } catch (Exception ignored) {
+                if (key.getPath().endsWith("sapling")) {
+                    try {
+                        overrides.put(item, ForgeRegistries.BLOCKS.getValue(new ResourceLocation(key.getNamespace(), key.getPath().replace("sapling", "leaves"))));
+                    } catch (Exception ignored) {
+                    }
                 }
             }
         }

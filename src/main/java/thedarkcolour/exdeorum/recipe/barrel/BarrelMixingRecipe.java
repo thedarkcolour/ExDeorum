@@ -19,6 +19,7 @@
 package thedarkcolour.exdeorum.recipe.barrel;
 
 import com.google.gson.JsonObject;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
@@ -59,6 +60,11 @@ public class BarrelMixingRecipe extends SingleIngredientRecipe {
 
     public boolean matches(ItemStack item, FluidStack fluid) {
         return ingredient.test(item) && fluid.getFluid() == this.fluid && fluid.getAmount() >= fluidAmount;
+    }
+
+    @Override
+    public ItemStack getResultItem(RegistryAccess access) {
+        return new ItemStack(this.result);
     }
 
     @Override

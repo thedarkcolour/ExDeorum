@@ -150,7 +150,7 @@ public class BarrelBlockEntity extends EBlockEntity {
         return fluidType.getTemperature() > 575;
     }
 
-    private void spawnBurningParticles() {
+    private void spawnParticlesIfBurning() {
         if (isBurning()) {
             BlockPos pos = getBlockPos();
             int burnTicks = (int) (progress * 300);
@@ -430,6 +430,7 @@ public class BarrelBlockEntity extends EBlockEntity {
                         }
                     }
 
+                    // Try to perform a fluid transformation recipe
                     if (barrel.tank.getFluid().getFluid().getFluidType() == ForgeMod.WATER_TYPE.get()) {
                         if (mycelium == 0 && state.ignitedByLava() && rand.nextInt(500) == 0) {
                             var randomPos = pos.offset(rand.nextIntBetweenInclusive(-MOSS_SPREAD_RANGE, MOSS_SPREAD_RANGE), -1, rand.nextIntBetweenInclusive(-MOSS_SPREAD_RANGE, MOSS_SPREAD_RANGE));
@@ -475,7 +476,7 @@ public class BarrelBlockEntity extends EBlockEntity {
                     }
                 }
             } else {
-                barrel.spawnBurningParticles();
+                barrel.spawnParticlesIfBurning();
             }
         }
     }

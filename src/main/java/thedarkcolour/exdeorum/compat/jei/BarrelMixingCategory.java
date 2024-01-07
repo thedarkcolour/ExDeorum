@@ -27,15 +27,13 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.Container;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.data.TranslationKeys;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelFluidMixingRecipe;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelMixingRecipe;
-import thedarkcolour.exdeorum.registry.EBlocks;
+import thedarkcolour.exdeorum.registry.EItems;
 
 public abstract class BarrelMixingCategory<T> implements IRecipeCategory<T> {
     public static final int WIDTH = 120;
@@ -48,12 +46,12 @@ public abstract class BarrelMixingCategory<T> implements IRecipeCategory<T> {
     private final IDrawable icon;
     private final Component title;
 
-    public BarrelMixingCategory(IGuiHelper helper, IDrawable plus, IDrawable arrow, String titleKey) {
+    public BarrelMixingCategory(IGuiHelper helper, IDrawable plus, IDrawable arrow, String titleKey, Item iconItem) {
         this.background = helper.createBlankDrawable(WIDTH, HEIGHT);
         this.slot = helper.getSlotDrawable();
         this.plus = plus;
         this.arrow = arrow;
-        this.icon = helper.createDrawableItemStack(new ItemStack(EBlocks.STONE_BARREL.get()));
+        this.icon = helper.createDrawableItemStack(new ItemStack(iconItem));
         this.title = Component.translatable(titleKey);
     }
 
@@ -83,7 +81,7 @@ public abstract class BarrelMixingCategory<T> implements IRecipeCategory<T> {
 
     public static class Items extends BarrelMixingCategory<BarrelMixingRecipe> {
         public Items(IGuiHelper helper, IDrawable plus, IDrawable arrow) {
-            super(helper, plus, arrow, TranslationKeys.BARREL_MIXING_CATEGORY_TITLE);
+            super(helper, plus, arrow, TranslationKeys.BARREL_MIXING_CATEGORY_TITLE, EItems.OAK_BARREL.get());
         }
 
         @Override
@@ -101,7 +99,7 @@ public abstract class BarrelMixingCategory<T> implements IRecipeCategory<T> {
 
     public static class Fluids extends BarrelMixingCategory<BarrelFluidMixingRecipe> {
         public Fluids(IGuiHelper helper, IDrawable plus, IDrawable arrow) {
-            super(helper, plus, arrow, TranslationKeys.BARREL_FLUID_MIXING_CATEGORY_TITLE);
+            super(helper, plus, arrow, TranslationKeys.BARREL_FLUID_MIXING_CATEGORY_TITLE, EItems.STONE_BARREL.get());
         }
 
         @Override

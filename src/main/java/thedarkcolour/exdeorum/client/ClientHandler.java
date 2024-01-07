@@ -21,7 +21,6 @@ package thedarkcolour.exdeorum.client;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.Timer;
 import net.minecraft.client.gui.screens.worldselection.CreateWorldScreen;
 import net.minecraft.client.gui.screens.worldselection.WorldCreationUiState;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
@@ -32,12 +31,13 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Unit;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.RegisterClientReloadListenersEvent;
 import net.minecraftforge.client.event.RegisterShadersEvent;
 import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TagsUpdatedEvent;
-import net.minecraftforge.eventbus.api.Event;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -46,6 +46,7 @@ import thedarkcolour.exdeorum.client.ter.BarrelRenderer;
 import thedarkcolour.exdeorum.client.ter.CrucibleRenderer;
 import thedarkcolour.exdeorum.client.ter.InfestedLeavesRenderer;
 import thedarkcolour.exdeorum.client.ter.SieveRenderer;
+import thedarkcolour.exdeorum.compat.ModIds;
 import thedarkcolour.exdeorum.config.EConfig;
 import thedarkcolour.exdeorum.network.ClientMessageHandler;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
@@ -56,6 +57,9 @@ import thedarkcolour.exdeorum.registry.EWorldPresets;
 import java.io.IOException;
 
 public class ClientHandler {
+    // Used for the composting recipe category in JEI
+    public static final ResourceLocation OAK_BARREL_COMPOSTING = new ResourceLocation(ExDeorum.ID, "item/oak_barrel_composting");
+    // This is set to true whenever the server tells a client to do so, then set back to false after cache is refreshed.
     public static boolean needsRecipeCacheRefresh;
 
     public static void register() {
@@ -71,6 +75,10 @@ public class ClientHandler {
         fmlBus.addListener(ClientHandler::onPlayerLogout);
         fmlBus.addListener(ClientHandler::onScreenOpen);
         fmlBus.addListener(ClientHandler::onTagsUpdated);
+
+        if (ModList.get().isLoaded(ModIds.JEI)) {
+            modBus.addListener(ClientHandler::registerAdditionalModels);
+        }
     }
 
     private static void onTagsUpdated(TagsUpdatedEvent event) {
@@ -88,6 +96,12 @@ public class ClientHandler {
 
     private static void clientSetup(FMLClientSetupEvent event) {
         event.enqueueWork(ClientHandler::setRenderLayers);
+    }
+
+    private static void setRenderLayers() {
+        // Fluids
+        ItemBlockRenderTypes.setRenderLayer(EFluids.WITCH_WATER.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(EFluids.WITCH_WATER_FLOWING.get(), RenderType.translucent());
     }
 
     private static void onPlayerRespawn(ClientPlayerNetworkEvent.Clone event) {
@@ -138,9 +152,9 @@ public class ClientHandler {
         }
     }
 
-    private static void setRenderLayers() {
-        // Fluids
-        ItemBlockRenderTypes.setRenderLayer(EFluids.WITCH_WATER.get(), RenderType.translucent());
-        ItemBlockRenderTypes.setRenderLayer(EFluids.WITCH_WATER_FLOWING.get(), RenderType.translucent());
+    // Only called when JEI is loaded, because this registers the recipe category icon models.
+    private static void registerAdditionalModels(ModelEvent.RegisterAdditional event) {
+        event.register(new ResourceLocation(ExDeorum.ID, "block/oak_barrel_composting"));
+        event.register(OAK_BARREL_COMPOSTING);
     }
 }

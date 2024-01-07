@@ -42,4 +42,5 @@ public class ModIds {
     public static final String BLUE_SKIES = "blue_skies";
     public static final String PAMS_HARVESTCRAFT_CROPS = "pamhc2crops";
     public static final String NUCLEARCRAFT_NEOTERIC = "nuclearcraft";
+    public static final String JEI = "jei";
 }

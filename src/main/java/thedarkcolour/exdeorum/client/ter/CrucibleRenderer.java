@@ -23,7 +23,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.util.Mth;
-import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import thedarkcolour.exdeorum.blockentity.AbstractCrucibleBlockEntity;
 import thedarkcolour.exdeorum.client.RenderUtil;
@@ -52,14 +51,15 @@ public class CrucibleRenderer implements BlockEntityRenderer<AbstractCrucibleBlo
                     RenderUtil.renderFlatFluidSprite(buffers, stack, level, pos, y, 2.0f, light, (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff, fluid);
                 }
                 if (solids != 0) {
-                    var builder = buffers.getBuffer(RenderUtil.TOP_RENDER_TYPES.getUnchecked(crucible.getLastMelted()));
-                    var sprite = RenderUtil.getTopTexture(crucible.getLastMelted(), crucible.getDefaultMeltBlock());
+                    // LastMelted is not null if solids is nonzero
+                    @SuppressWarnings("DataFlowIssue")
+                    var face = RenderUtil.getTopFaceOrDefault(crucible.getLastMelted(), crucible.getDefaultMeltBlock());
 
                     var color = Minecraft.getInstance().getBlockColors().getColor(crucible.getLastMelted().defaultBlockState(), level, pos, 0);
 
                     if (color == -1) color = 0xffffff;
 
-                    RenderUtil.renderFlatSpriteLerp(builder, stack, solids, (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff, sprite, light, 2.0f, 4.0f, 14.0f);
+                    face.renderFlatSpriteLerp(buffers, stack, solids, (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff, light, 2.0f, 4.0f, 14.0f);
                 }
             }
         });

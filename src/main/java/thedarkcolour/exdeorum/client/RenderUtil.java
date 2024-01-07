@@ -18,14 +18,13 @@
 
 package thedarkcolour.exdeorum.client;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexFormat;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.Pair;
 import net.irisshaders.iris.api.v0.IrisApi;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -40,14 +39,14 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.LegacyRandomSource;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.minecraftforge.client.model.CompositeModel;
 import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.joml.Vector3f;
@@ -55,64 +54,34 @@ import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.client.ter.SieveRenderer;
 
 import java.awt.Color;
-import java.util.Map;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.VarHandle;
+import java.util.IdentityHashMap;
 
 public class RenderUtil {
-    public static final LoadingCache<Block, RenderType> TOP_RENDER_TYPES;
-    public static final LoadingCache<Block, TextureAtlasSprite> TOP_TEXTURES;
+    private static final VarHandle COMPOSITE_MODEL_CHILDREN;
+    private static final IdentityHashMap<Block, RenderFace> TOP_FACES = new IdentityHashMap<>();
     public static final RenderStateShard.ShaderStateShard RENDER_TYPE_TINTED_CUTOUT_MIPPED_SHADER = new RenderStateShard.ShaderStateShard(RenderUtil::getRenderTypeTintedCutoutMippedShader);
     public static final RenderType TINTED_CUTOUT_MIPPED = RenderType.create(ExDeorum.ID + ":tinted_cutout_mipped", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, RenderType.SMALL_BUFFER_SIZE, false, false, RenderType.CompositeState.builder().setLightmapState(RenderStateShard.LIGHTMAP).setShaderState(RENDER_TYPE_TINTED_CUTOUT_MIPPED_SHADER).setTextureState(RenderStateShard.BLOCK_SHEET_MIPPED).createCompositeState(true));
     public static TextureAtlas blockAtlas;
     public static ShaderInstance renderTypeTintedCutoutMippedShader;
-    private static final Map<BlockState, BakedModel> LEAF_BAKED_MODELS = new Object2ObjectOpenHashMap<>();
     public static final IrisAccess IRIS_ACCESS;
 
     static {
-        // todo remove these caches, google cache is slow
-        TOP_RENDER_TYPES = CacheBuilder.newBuilder().maximumSize(10).build(new CacheLoader<>() {
-            @Override
-            public RenderType load(Block key) {
-                var rand = new LegacyRandomSource(key.hashCode());
-                var blockTypes = Minecraft.getInstance().getBlockRenderer().getBlockModel(key.defaultBlockState()).getRenderTypes(key.defaultBlockState(), rand, ModelData.EMPTY);
-                return RenderType.chunkBufferLayers().stream().filter(blockTypes::contains).findFirst().get();
-            }
-        });
-        TOP_TEXTURES = CacheBuilder.newBuilder().weakValues().build(new CacheLoader<>() {
-            @Override
-            public TextureAtlasSprite load(Block key) {
-                var registryName = ForgeRegistries.BLOCKS.getKey(key);
-                var blockLoc = registryName.withPrefix("block/");
-                var sprite = blockAtlas.getSprite(blockLoc);
-                // for stuff like azalea bush, retry to get the top texture
-                if (isMissingTexture(sprite)) {
-                    blockLoc = new ResourceLocation(registryName.getNamespace(), "block/" + registryName.getPath() + "_top");
-                    sprite = blockAtlas.getSprite(blockLoc);
-                }
-                return sprite;
-            }
-        });
-
         IrisAccess irisAccess;
         try {
             Class.forName("net.irisshaders.iris.api.v0.IrisApi");
-            irisAccess = () -> IrisApi.getInstance().isShaderPackInUse();
+            irisAccess = IrisApi.getInstance()::isShaderPackInUse;
         } catch (ClassNotFoundException e) {
             irisAccess = () -> false;
         }
         IRIS_ACCESS = irisAccess;
-    }
 
-    public static boolean isMissingTexture(TextureAtlasSprite sprite) {
-        return sprite.contents().name() == MissingTextureAtlasSprite.getLocation();
-    }
-
-    public static TextureAtlasSprite getTopTexture(Block block, Block defaultBlock) {
-        var sprite = TOP_TEXTURES.getUnchecked(block);
-
-        if (isMissingTexture(sprite)) {
-            return TOP_TEXTURES.getUnchecked(defaultBlock);
-        } else {
-            return sprite;
+        var lookup = MethodHandles.lookup();
+        try {
+            COMPOSITE_MODEL_CHILDREN = MethodHandles.privateLookupIn(CompositeModel.Baked.class, lookup).findVarHandle(CompositeModel.Baked.class, "children", ImmutableMap.class);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -122,9 +91,75 @@ public class RenderUtil {
     }
 
     public static void invalidateCaches() {
-        SieveRenderer.MESH_TEXTURES.invalidateAll();
+        SieveRenderer.MESH_TEXTURES.clear();
+        TOP_FACES.clear();
         blockAtlas = null;
-        LEAF_BAKED_MODELS.clear();
+    }
+
+    public static RenderFace getTopFaceOrDefault(Block block, Block defaultBlock) {
+        var face = getTopFace(block);
+        if (face.isMissingTexture()) {
+            return getTopFace(defaultBlock);
+        } else {
+            return face;
+        }
+    }
+
+    public static RenderFace getTopFace(Block block) {
+        if (TOP_FACES.containsKey(block)) {
+            return TOP_FACES.get(block);
+        } else {
+            var rand = new LegacyRandomSource(block.hashCode());
+            BakedModel model = Minecraft.getInstance().getBlockRenderer().getBlockModel(block.defaultBlockState());
+            RenderFace face;
+
+            if (model instanceof CompositeModel.Baked composite) {
+                @SuppressWarnings("unchecked")
+                ImmutableMap<String, BakedModel> children = (ImmutableMap<String, BakedModel>) COMPOSITE_MODEL_CHILDREN.get(composite);
+                var builder = new ImmutableList.Builder<Pair<RenderType, TextureAtlasSprite>>();
+
+                for (var childModel : children.values()) {
+                    var singleFace = getFaceFromModel(block, rand, childModel);
+                    builder.add(Pair.of(singleFace.renderType(), singleFace.sprite()));
+                }
+
+                face = new RenderFace.Composite(builder.build());
+            } else {
+                face = getFaceFromModel(block, rand, model);
+            }
+
+            TOP_FACES.put(block, face);
+
+            return face;
+        }
+    }
+
+    private static RenderFace.Single getFaceFromModel(Block block, RandomSource rand, BakedModel model) {
+        var texture = getTopTexture(block, model);
+        var blockTypes = model.getRenderTypes(block.defaultBlockState(), rand, ModelData.EMPTY);
+        for (var bufferLayer : RenderType.chunkBufferLayers()) {
+            if (blockTypes.contains(bufferLayer)) {
+                return new RenderFace.Single(bufferLayer, texture);
+            }
+        }
+        throw new IllegalStateException("No render type found for block " + block);
+    }
+
+    private static TextureAtlasSprite getTopTexture(Block block, BakedModel model) {
+        var registryName = ForgeRegistries.BLOCKS.getKey(block);
+        var sprite = blockAtlas.getSprite(registryName.withPrefix("block/"));
+        // for stuff like azalea bush, retry to get the top texture
+        if (isMissingTexture(sprite)) {
+            sprite = blockAtlas.getSprite(new ResourceLocation(registryName.getNamespace(), "block/" + registryName.getPath() + "_top"));
+        }
+        if (isMissingTexture(sprite)) {
+            sprite = model.getParticleIcon(ModelData.EMPTY);
+        }
+        return sprite;
+    }
+
+    public static boolean isMissingTexture(TextureAtlasSprite sprite) {
+        return sprite.contents().name() == MissingTextureAtlasSprite.getLocation();
     }
 
     public static void renderFlatFluidSprite(MultiBufferSource buffers, PoseStack stack, Level level, BlockPos pos, float y, float edge, int light, int r, int g, int b, Fluid fluid) {
