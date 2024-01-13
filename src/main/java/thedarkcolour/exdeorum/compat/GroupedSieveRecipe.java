@@ -1,6 +1,6 @@
 /*
  * Ex Deorum
- * Copyright (c) 2023 thedarkcolour
+ * Copyright (c) 2024 thedarkcolour
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,13 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package thedarkcolour.exdeorum.compat.jei;
+package thedarkcolour.exdeorum.compat;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multimap;
-import mezz.jei.api.recipe.RecipeType;
-import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.util.Mth;
@@ -41,10 +39,11 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
-record JeiSieveRecipeGroup(Ingredient ingredient, ItemStack mesh, List<Result> results) {
+// Since no JEI code is used here, this can be reused for REI
+public record GroupedSieveRecipe(Ingredient ingredient, ItemStack mesh, List<Result> results) {
     public static int maxSieveRows;
 
-    public static void addGroupedRecipes(IRecipeRegistration registration, RecipeType<JeiSieveRecipeGroup> recipeType) {
+    public static ImmutableList<GroupedSieveRecipe> getAllRecipesGrouped() {
         maxSieveRows = 1;
 
         // copy the list so we can do removals
@@ -67,11 +66,11 @@ record JeiSieveRecipeGroup(Ingredient ingredient, ItemStack mesh, List<Result> r
             }
         }
 
-        ImmutableList.Builder<JeiSieveRecipeGroup> jeiRecipes = new ImmutableList.Builder<>();
+        ImmutableList.Builder<GroupedSieveRecipe> jeiRecipes = new ImmutableList.Builder<>();
         // Sort based on expected count of result
         var resultSorter = Comparator.comparingDouble(Result::expectedCount).reversed();
         // Sort based on order of sieve tier
-        var meshSorter = Comparator.comparingInt(JeiSieveRecipeGroup::meshOrder);
+        var meshSorter = Comparator.comparingInt(GroupedSieveRecipe::meshOrder);
 
         // ingredients with common ingredients are grouped into lists (ex. dirt)
         for (var ingredient : ingredientGrouper.keySet()) {
@@ -93,12 +92,12 @@ record JeiSieveRecipeGroup(Ingredient ingredient, ItemStack mesh, List<Result> r
 
                 for (var recipe : meshRecipes) {
                     int resultCount = recipe.resultAmount instanceof ConstantValue constant ? Math.round(constant.value) : 1;
-                    results.add(new Result(new ItemStack(recipe.result, resultCount), recipe.resultAmount));
+                    results.add(new Result(new ItemStack(recipe.result, resultCount), recipe.resultAmount, recipe.byHandOnly));
                 }
 
                 results.sort(resultSorter);
 
-                var jeiRecipe = new JeiSieveRecipeGroup(ingredient, new ItemStack(mesh), results);
+                var jeiRecipe = new GroupedSieveRecipe(ingredient, new ItemStack(mesh), results);
                 jeiRecipes.add(jeiRecipe);
 
                 var rows = Mth.ceil((float) meshRecipes.size() / 9f);
@@ -107,10 +106,10 @@ record JeiSieveRecipeGroup(Ingredient ingredient, ItemStack mesh, List<Result> r
                 }
             }
         }
-
-        registration.addRecipes(recipeType, jeiRecipes.build());
+        return jeiRecipes.build();
     }
 
+    @SuppressWarnings("deprecation")
     private static int meshOrder(Item mesh) {
         if (mesh == EItems.STRING_MESH.get()) {
             return -5;
@@ -129,14 +128,16 @@ record JeiSieveRecipeGroup(Ingredient ingredient, ItemStack mesh, List<Result> r
         }
     }
 
-    static final class Result {
-        final ItemStack item;
-        final NumberProvider provider;
-        final double expectedCount;
+    public static final class Result {
+        public final ItemStack item;
+        public final NumberProvider provider;
+        public final boolean byHandOnly;
+        private final double expectedCount;
 
-        Result(ItemStack item, NumberProvider provider) {
+        Result(ItemStack item, NumberProvider provider, boolean byHandOnly) {
             this.item = item;
             this.provider = provider;
+            this.byHandOnly = byHandOnly;
             this.expectedCount = RecipeUtil.getExpectedValue(this.provider);
         }
 

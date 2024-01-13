@@ -939,6 +939,7 @@ class SieveRecipes {
         void accept(BiConsumer<Item, NumberProvider> addDrop, BiConsumer<TagKey<Item>, NumberProvider> addTagDrop, AddConditionalTag addConditionalTag);
     }
 
+    @FunctionalInterface
     private interface AddConditionalTag {
         void accept(Either<Item, TagKey<Item>> result, NumberProvider resultAmount, ICondition condition);
 

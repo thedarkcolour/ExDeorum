@@ -21,6 +21,7 @@ package thedarkcolour.exdeorum.client;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.gui.screens.worldselection.CreateWorldScreen;
 import net.minecraft.client.gui.screens.worldselection.WorldCreationUiState;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
@@ -42,6 +43,7 @@ import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import thedarkcolour.exdeorum.ExDeorum;
+import thedarkcolour.exdeorum.client.screen.MechanicalSieveScreen;
 import thedarkcolour.exdeorum.client.ter.BarrelRenderer;
 import thedarkcolour.exdeorum.client.ter.CrucibleRenderer;
 import thedarkcolour.exdeorum.client.ter.InfestedLeavesRenderer;
@@ -52,9 +54,11 @@ import thedarkcolour.exdeorum.network.ClientMessageHandler;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.registry.EBlockEntities;
 import thedarkcolour.exdeorum.registry.EFluids;
+import thedarkcolour.exdeorum.registry.EMenus;
 import thedarkcolour.exdeorum.registry.EWorldPresets;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 
 public class ClientHandler {
     // Used for the composting recipe category in JEI
@@ -95,7 +99,10 @@ public class ClientHandler {
     }
 
     private static void clientSetup(FMLClientSetupEvent event) {
-        event.enqueueWork(ClientHandler::setRenderLayers);
+        event.enqueueWork(() -> {
+            setRenderLayers();
+            MenuScreens.register(EMenus.MECHANICAL_SIEVE.get(), MechanicalSieveScreen::new);
+        });
     }
 
     private static void setRenderLayers() {
@@ -128,7 +135,8 @@ public class ClientHandler {
         event.registerBlockEntityRenderer(EBlockEntities.BARREL.get(), BarrelRenderer::new);
         event.registerBlockEntityRenderer(EBlockEntities.LAVA_CRUCIBLE.get(), ctx -> new CrucibleRenderer());
         event.registerBlockEntityRenderer(EBlockEntities.WATER_CRUCIBLE.get(), ctx -> new CrucibleRenderer());
-        event.registerBlockEntityRenderer(EBlockEntities.SIEVE.get(), SieveRenderer::new);
+        event.registerBlockEntityRenderer(EBlockEntities.SIEVE.get(), ctx -> new SieveRenderer<>());
+        event.registerBlockEntityRenderer(EBlockEntities.MECHANICAL_SIEVE.get(), ctx -> new SieveRenderer<>());
     }
 
     private static void registerShaders(RegisterShadersEvent event) {

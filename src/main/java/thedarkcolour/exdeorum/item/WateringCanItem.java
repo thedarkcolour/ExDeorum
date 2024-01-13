@@ -46,7 +46,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BucketPickup;
 import net.minecraft.world.level.block.FarmBlock;
 import net.minecraft.world.level.block.LevelEvent;
-import net.minecraft.world.level.block.SpreadingSnowyDirtBlock;
 import net.minecraft.world.level.block.SugarCaneBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
@@ -132,9 +131,8 @@ public class WateringCanItem extends Item {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level pLevel, List<Component> tooltip, TooltipFlag pIsAdvanced) {
         stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).ifPresent(fluidHandler -> {
-            var water = Component.translatable(ForgeMod.WATER_TYPE.get().getDescriptionId());
-
-            tooltip.add(water.append(Component.translatable(TranslationKeys.WATERING_CAN_FLUID_DISPLAY, fluidHandler.getFluidInTank(0).getAmount(), capacity)).withStyle(ChatFormatting.GRAY));
+            // use the block name which is guaranteed to have a vanilla translation
+            tooltip.add(Component.translatable("block.minecraft.water").append(Component.translatable(TranslationKeys.FRACTION_DISPLAY, fluidHandler.getFluidInTank(0).getAmount(), capacity)).withStyle(ChatFormatting.GRAY));
         });
     }
 

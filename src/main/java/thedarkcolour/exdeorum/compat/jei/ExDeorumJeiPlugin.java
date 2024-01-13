@@ -24,12 +24,15 @@ import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.forge.ForgeTypes;
+import mezz.jei.api.gui.handlers.IGuiClickableArea;
+import mezz.jei.api.gui.handlers.IGuiContainerHandler;
 import mezz.jei.api.recipe.RecipeType;
+import mezz.jei.api.registration.IGuiHandlerRegistration;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
-import mezz.jei.api.registration.IVanillaCategoryExtensionRegistration;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
@@ -44,8 +47,9 @@ import net.minecraft.world.level.block.WallTorchBlock;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.ModList;
 import thedarkcolour.exdeorum.ExDeorum;
-import thedarkcolour.exdeorum.block.SieveBlock;
 import thedarkcolour.exdeorum.blockentity.LavaCrucibleBlockEntity;
+import thedarkcolour.exdeorum.client.screen.MechanicalSieveScreen;
+import thedarkcolour.exdeorum.compat.GroupedSieveRecipe;
 import thedarkcolour.exdeorum.compat.ModIds;
 import thedarkcolour.exdeorum.data.TranslationKeys;
 import thedarkcolour.exdeorum.item.WateringCanItem;
@@ -62,6 +66,7 @@ import thedarkcolour.exdeorum.registry.ERecipeTypes;
 import thedarkcolour.exdeorum.tag.EItemTags;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Supplier;
@@ -76,7 +81,7 @@ public class ExDeorumJeiPlugin implements IModPlugin {
     static final RecipeType<CrucibleRecipe> LAVA_CRUCIBLE = RecipeType.create(ExDeorum.ID, "lava_crucible", CrucibleRecipe.class);
     static final RecipeType<CrucibleRecipe> WATER_CRUCIBLE = RecipeType.create(ExDeorum.ID, "water_crucible", CrucibleRecipe.class);
     static final RecipeType<CrucibleHeatSourceRecipe> CRUCIBLE_HEAT_SOURCES = RecipeType.create(ExDeorum.ID, "crucible_heat_sources", CrucibleHeatSourceRecipe.class);
-    static final RecipeType<JeiSieveRecipeGroup> SIEVE = RecipeType.create(ExDeorum.ID, "sieve", JeiSieveRecipeGroup.class);
+    static final RecipeType<GroupedSieveRecipe> SIEVE = RecipeType.create(ExDeorum.ID, "sieve", GroupedSieveRecipe.class);
     static final RecipeType<HammerRecipe> HAMMER = RecipeType.create(ExDeorum.ID, "hammer", HammerRecipe.class);
 
     @Override
@@ -114,7 +119,8 @@ public class ExDeorumJeiPlugin implements IModPlugin {
                 EItems.CHERRY_SIEVE.get(),
                 EItems.BAMBOO_SIEVE.get(),
                 EItems.CRIMSON_SIEVE.get(),
-                EItems.WARPED_SIEVE.get()
+                EItems.WARPED_SIEVE.get(),
+                EItems.MECHANICAL_SIEVE.get()
         );
         var lavaCrucibles = Lists.newArrayList(
                 EItems.PORCELAIN_CRUCIBLE.get(),
@@ -214,6 +220,7 @@ public class ExDeorumJeiPlugin implements IModPlugin {
     public void registerRecipes(IRecipeRegistration registration) {
         registration.addItemStackInfo(new ItemStack(EItems.SILK_WORM.get()), Component.translatable(TranslationKeys.SILK_WORM_JEI_INFO));
         registration.addItemStackInfo(List.of(new ItemStack(EBlocks.OAK_SIEVE.get()), new ItemStack(EBlocks.SPRUCE_SIEVE.get()), new ItemStack(EBlocks.BIRCH_SIEVE.get()), new ItemStack(EBlocks.JUNGLE_SIEVE.get()), new ItemStack(EBlocks.ACACIA_SIEVE.get()), new ItemStack(EBlocks.DARK_OAK_SIEVE.get()), new ItemStack(EBlocks.MANGROVE_SIEVE.get()), new ItemStack(EBlocks.CHERRY_SIEVE.get()), new ItemStack(EBlocks.BAMBOO_SIEVE.get()), new ItemStack(EBlocks.CRIMSON_SIEVE.get()), new ItemStack(EBlocks.WARPED_SIEVE.get())), Component.translatable(TranslationKeys.SIEVE_JEI_INFO));
+        registration.addItemStackInfo(List.of(new ItemStack(EItems.STRING_MESH.get()), new ItemStack(EItems.STRING_MESH.get()), new ItemStack(EItems.FLINT_MESH.get()), new ItemStack(EItems.IRON_MESH.get()), new ItemStack(EItems.GOLDEN_MESH.get()), new ItemStack(EItems.DIAMOND_MESH.get()), new ItemStack(EItems.NETHERITE_MESH.get())), Component.translatable(TranslationKeys.SIEVE_MESH_JEI_INFO));
         registration.addItemStackInfo(List.of(WateringCanItem.getFull(EItems.WOODEN_WATERING_CAN), WateringCanItem.getFull(EItems.STONE_WATERING_CAN), WateringCanItem.getFull(EItems.IRON_WATERING_CAN), WateringCanItem.getFull(EItems.GOLDEN_WATERING_CAN), WateringCanItem.getFull(EItems.DIAMOND_WATERING_CAN), WateringCanItem.getFull(EItems.NETHERITE_WATERING_CAN)), Component.translatable(TranslationKeys.WATERING_CAN_JEI_INFO));
         var witchWaterInfo = Component.translatable(TranslationKeys.WITCH_WATER_JEI_INFO);
         registration.addItemStackInfo(List.of(new ItemStack(EItems.WITCH_WATER_BUCKET.get()), new ItemStack(EItems.PORCELAIN_WITCH_WATER_BUCKET.get())), witchWaterInfo);
@@ -223,6 +230,7 @@ public class ExDeorumJeiPlugin implements IModPlugin {
         registration.addItemStackInfo(new ItemStack(EItems.WARPED_NYLIUM_SPORES.get()), Component.translatable(TranslationKeys.WARPED_NYLIUM_SPORES_JEI_INFO));
         registration.addItemStackInfo(new ItemStack(EItems.CRIMSON_NYLIUM_SPORES.get()), Component.translatable(TranslationKeys.CRIMSON_NYLIUM_SPORES_JEI_INFO));
         registration.addItemStackInfo(new ItemStack(EItems.SCULK_CORE.get()), Component.translatable(TranslationKeys.SCULK_CORE_JEI_INFO));
+        registration.addItemStackInfo(new ItemStack(EItems.MECHANICAL_SIEVE.get()), Component.translatable(TranslationKeys.MECHANICAL_SIEVE_JEI_INFO));
 
         var toRemove = new ArrayList<ItemStack>();
 
@@ -250,7 +258,7 @@ public class ExDeorumJeiPlugin implements IModPlugin {
         addRecipes(registration, LAVA_CRUCIBLE, ERecipeTypes.LAVA_CRUCIBLE);
         addRecipes(registration, WATER_CRUCIBLE, ERecipeTypes.WATER_CRUCIBLE);
         addRecipes(registration, HAMMER, ERecipeTypes.HAMMER);
-        JeiSieveRecipeGroup.addGroupedRecipes(registration, SIEVE);
+        registration.addRecipes(SIEVE, GroupedSieveRecipe.getAllRecipesGrouped());
 
         addCrucibleHeatSources(registration);
     }
@@ -296,8 +304,24 @@ public class ExDeorumJeiPlugin implements IModPlugin {
     }
 
     @Override
-    public void registerVanillaCategoryExtensions(IVanillaCategoryExtensionRegistration registration) {
-        IModPlugin.super.registerVanillaCategoryExtensions(registration);
+    public void registerGuiHandlers(IGuiHandlerRegistration registration) {
+        // see addRecipeClickArea for reference
+        registration.addGuiContainerHandler(MechanicalSieveScreen.class, new IGuiContainerHandler<>() {
+            @Override
+            public Collection<IGuiClickableArea> getGuiClickableAreas(MechanicalSieveScreen containerScreen, double mouseX, double mouseY) {
+                IGuiClickableArea clickableArea = IGuiClickableArea.createBasic(MechanicalSieveScreen.RECIPE_CLICK_AREA_POS_X, MechanicalSieveScreen.RECIPE_CLICK_AREA_POS_Y, MechanicalSieveScreen.RECIPE_CLICK_AREA_WIDTH, MechanicalSieveScreen.RECIPE_CLICK_AREA_HEIGHT, SIEVE);
+                return List.of(clickableArea);
+            }
+
+            @Override
+            public List<Rect2i> getGuiExtraAreas(MechanicalSieveScreen containerScreen) {
+                var widget = containerScreen.getRedstoneControlWidget();
+                if (widget != null) {
+                    return widget.getJeiBounds();
+                }
+                return List.of();
+            }
+        });
     }
 
     private static <C extends Container, T extends Recipe<C>> void addRecipes(IRecipeRegistration registration, RecipeType<T> category, Supplier<net.minecraft.world.item.crafting.RecipeType<T>> type) {
@@ -353,7 +377,8 @@ public class ExDeorumJeiPlugin implements IModPlugin {
                 EItems.CHERRY_SIEVE.get(),
                 EItems.BAMBOO_SIEVE.get(),
                 EItems.CRIMSON_SIEVE.get(),
-                EItems.WARPED_SIEVE.get()
+                EItems.WARPED_SIEVE.get(),
+                EItems.MECHANICAL_SIEVE.get()
         );
 
         return sieves;

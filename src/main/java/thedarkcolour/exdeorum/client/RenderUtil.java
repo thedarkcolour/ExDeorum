@@ -56,11 +56,12 @@ import thedarkcolour.exdeorum.client.ter.SieveRenderer;
 import java.awt.Color;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
-import java.util.IdentityHashMap;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RenderUtil {
     private static final VarHandle COMPOSITE_MODEL_CHILDREN;
-    private static final IdentityHashMap<Block, RenderFace> TOP_FACES = new IdentityHashMap<>();
+    private static final Map<Block, RenderFace> TOP_FACES = new HashMap<>();
     public static final RenderStateShard.ShaderStateShard RENDER_TYPE_TINTED_CUTOUT_MIPPED_SHADER = new RenderStateShard.ShaderStateShard(RenderUtil::getRenderTypeTintedCutoutMippedShader);
     public static final RenderType TINTED_CUTOUT_MIPPED = RenderType.create(ExDeorum.ID + ":tinted_cutout_mipped", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, RenderType.SMALL_BUFFER_SIZE, false, false, RenderType.CompositeState.builder().setLightmapState(RenderStateShard.LIGHTMAP).setShaderState(RENDER_TYPE_TINTED_CUTOUT_MIPPED_SHADER).setTextureState(RenderStateShard.BLOCK_SHEET_MIPPED).createCompositeState(true));
     public static TextureAtlas blockAtlas;

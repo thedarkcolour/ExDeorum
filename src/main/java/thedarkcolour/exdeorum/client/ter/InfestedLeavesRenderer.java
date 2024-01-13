@@ -50,6 +50,7 @@ public class InfestedLeavesRenderer implements BlockEntityRenderer<InfestedLeave
         int progress = Math.min((int) (te.getProgress() * 16000), 16000);
         // Render
         var model = mc.getBlockRenderer().getBlockModel(state);
-        mc.getBlockRenderer().getModelRenderer().tesselateBlock(level, model, state, te.getBlockPos(), stack, buffer.getBuffer(RenderUtil.TINTED_CUTOUT_MIPPED), false, level.random, 42L, progress, ModelData.EMPTY, null);
+        var pos = te.getBlockPos();
+        mc.getBlockRenderer().getModelRenderer().tesselateBlock(level, model, state, pos, stack, buffer.getBuffer(RenderUtil.TINTED_CUTOUT_MIPPED), false, level.random, state.getSeed(pos), progress, ModelData.EMPTY, null);
     }
 }

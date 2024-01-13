@@ -25,6 +25,7 @@ import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
 import thedarkcolour.exdeorum.ExDeorum;
+import thedarkcolour.exdeorum.blockentity.EBlockEntity;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -36,6 +37,8 @@ public final class NetworkHandler {
     public static void register() {
         CHANNEL.registerMessage(0, VoidWorldMessage.class, VoidWorldMessage::encode, VoidWorldMessage::decode, VoidWorldMessage::handle);
         CHANNEL.registerMessage(1, PlayerDataMessage.class, (msg, buffer) -> {}, buffer -> new PlayerDataMessage(), PlayerDataMessage::handle);
+        CHANNEL.registerMessage(2, VisualUpdateMessage.class, VisualUpdateMessage::encode, VisualUpdateMessage::decode, VisualUpdateMessage::handle);
+        CHANNEL.registerMessage(3, MenuPropertyMessage.class, MenuPropertyMessage::encode, MenuPropertyMessage::decode, MenuPropertyMessage::handle);
     }
 
     public static void sendVoidWorld(ServerPlayer pPlayer) {
@@ -50,5 +53,9 @@ public final class NetworkHandler {
         var ctx = ctxSupplier.get();
         ctx.enqueueWork(() -> handler.accept(ctx));
         ctx.setPacketHandled(true);
+    }
+
+    public static void sendMenuProperty(ServerPlayer player, int containerId, int index, int prevSieveEnergy) {
+        CHANNEL.sendTo(new MenuPropertyMessage(containerId, index, prevSieveEnergy), player.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
     }
 }

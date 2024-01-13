@@ -19,8 +19,11 @@
 package thedarkcolour.exdeorum.network;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.world.entity.player.Player;
+import thedarkcolour.exdeorum.blockentity.EBlockEntity;
 import thedarkcolour.exdeorum.client.ClientHandler;
-import thedarkcolour.exdeorum.recipe.RecipeUtil;
+import thedarkcolour.exdeorum.menu.EContainerMenu;
 
 public class ClientMessageHandler {
     public static boolean isInVoidWorld;
@@ -36,7 +39,23 @@ public class ClientMessageHandler {
     }
 
     public static void reloadClientRecipeCache() {
-        //RecipeUtil.reload(Minecraft.getInstance().level.getRecipeManager());
         ClientHandler.needsRecipeCacheRefresh = true;
+    }
+
+    @SuppressWarnings("DataFlowIssue")
+    public static void handleVisualUpdate(VisualUpdateMessage msg) {
+        ClientLevel level = Minecraft.getInstance().level;
+        if (level != null && level.getBlockEntity(msg.pos) instanceof EBlockEntity blockEntity) {
+            // payload should be nonnull on the client side
+            blockEntity.readVisualData(msg.payload);
+        }
+    }
+
+    public static void handleMenuProperty(MenuPropertyMessage msg) {
+        Player player = Minecraft.getInstance().player;
+
+        if (player != null && player.containerMenu instanceof EContainerMenu menu && menu.containerId == msg.containerId()) {
+            menu.setClientProperty(msg.index(), msg.value());
+        }
     }
 }

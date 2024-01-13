@@ -1,3 +1,10 @@
+## Ex Deorum 1.14
+- Added Mechanical Sieve, a machine that uses FE to sift blocks automatically. Uses 40 FE a tick by default and takes 100 ticks to sift an item with no efficiency enchantment.
+- Added `by_hand_only` boolean field to Sieve recipes, which allows modpack makers to add sieve drops that don't drop from the Mechanical Sieve.
+- Added JEI information telling the player that meshes can be enchanted with Fortune and Efficiency.
+- Fixed minor rendering bug with infested leaves and Ars Nouveau leaves not rotating properly.
+- Optimized syncing block entity visual updates from the server to the client.
+
 ## Ex Deorum 1.13
 - Added new icon for JEI compost recipes to help differentiate from the other categories.
 - Added `sieve_mesh` property to KubeJS's RecipeFilter, for usage in `RecipesEventJS.remove` to remove sieve recipes using a specific mesh. View the [updated documentation](https://exdeorum.readthedocs.io/en/latest).

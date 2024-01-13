@@ -29,14 +29,14 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 import thedarkcolour.exdeorum.compat.ModIds;
 
-import java.util.IdentityHashMap;
+import java.util.HashMap;
 import java.util.Map;
 
 // Mocks modded items so that data generation can reference modded items without needing those mods installed.
 public class ModCompatData {
     // Identity maps because keys are just constants from ModIds
-    private static final Map<String, DeferredRegister<Item>> itemRegistries = new IdentityHashMap<>();
-    private static final Map<String, DeferredRegister<Block>> blockRegistries = new IdentityHashMap<>();
+    private static final Map<String, DeferredRegister<Item>> itemRegistries = new HashMap<>();
+    private static final Map<String, DeferredRegister<Block>> blockRegistries = new HashMap<>();
 
     @SuppressWarnings("DataFlowIssue")
     private static RegistryObject<Item> item(String modid, String name) {

@@ -20,7 +20,9 @@ package thedarkcolour.exdeorum.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -58,6 +60,7 @@ import thedarkcolour.exdeorum.registry.EItems;
 import java.util.HashMap;
 import java.util.function.Consumer;
 
+@SuppressWarnings("deprecation")
 public abstract class AbstractCrucibleBlockEntity extends EBlockEntity {
     public static final Lazy<HashMap<Item, Block>> MELT_OVERRIDES = Lazy.concurrentOf(() -> {
         var map = new HashMap<Item, Block>();
@@ -70,8 +73,8 @@ public abstract class AbstractCrucibleBlockEntity extends EBlockEntity {
     private final AbstractCrucibleBlockEntity.ItemHandler item = new AbstractCrucibleBlockEntity.ItemHandler();
     private final AbstractCrucibleBlockEntity.FluidHandler tank = new AbstractCrucibleBlockEntity.FluidHandler();
     // Capabilities
-    private final LazyOptional<IItemHandler> itemHandler = LazyOptional.of(() -> item);
-    private final LazyOptional<IFluidHandler> fluidHandler = LazyOptional.of(() -> tank);
+    private final LazyOptional<IItemHandler> itemHandler = LazyOptional.of(() -> this.item);
+    private final LazyOptional<IFluidHandler> fluidHandler = LazyOptional.of(() -> this.tank);
 
     @Nullable
     private Block lastMelted;
@@ -87,15 +90,22 @@ public abstract class AbstractCrucibleBlockEntity extends EBlockEntity {
     @NotNull
     @Override
     public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if (!remove) {
+        if (!this.remove) {
             if (cap == ForgeCapabilities.FLUID_HANDLER) {
-                return fluidHandler.cast();
+                return this.fluidHandler.cast();
             } else if (cap == ForgeCapabilities.ITEM_HANDLER) {
-                return itemHandler.cast();
+                return this.itemHandler.cast();
             }
         }
 
         return super.getCapability(cap, side);
+    }
+
+    @Override
+    public void invalidateCaps() {
+        super.invalidateCaps();
+        this.fluidHandler.invalidate();
+        this.itemHandler.invalidate();
     }
 
     // NBT
@@ -103,35 +113,57 @@ public abstract class AbstractCrucibleBlockEntity extends EBlockEntity {
     public void saveAdditional(CompoundTag nbt) {
         super.saveAdditional(nbt);
 
-        nbt.put("Tank", tank.writeToNBT(new CompoundTag()));
-        nbt.putString("LastMelted", ForgeRegistries.BLOCKS.getKey(lastMelted).toString());
-        nbt.putString("Fluid", ForgeRegistries.FLUIDS.getKey(fluid).toString());
-        nbt.putShort("Solids", solids);
+        nbt.put("Tank", this.tank.writeToNBT(new CompoundTag()));
+        nbt.putString("LastMelted", ForgeRegistries.BLOCKS.getKey(this.lastMelted).toString());
+        nbt.putString("Fluid", ForgeRegistries.FLUIDS.getKey(this.fluid).toString());
+        nbt.putShort("Solids", this.solids);
     }
 
     @Override
     public void load(CompoundTag nbt) {
         super.load(nbt);
 
-        tank.readFromNBT(nbt.getCompound("Tank"));
-        lastMelted = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(nbt.getString("LastMelted")));
-        fluid = ForgeRegistries.FLUIDS.getValue(new ResourceLocation(nbt.getString("Fluid")));
-        solids = nbt.getShort("Solids");
-        needsLightUpdate = true;
+        this.tank.readFromNBT(nbt.getCompound("Tank"));
+        this.lastMelted = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(nbt.getString("LastMelted")));
+        this.fluid = ForgeRegistries.FLUIDS.getValue(new ResourceLocation(nbt.getString("Fluid")));
+        this.solids = nbt.getShort("Solids");
+        this.needsLightUpdate = true;
+    }
+
+    @Override
+    public void writeVisualData(FriendlyByteBuf buffer) {
+        buffer.writeId(BuiltInRegistries.FLUID, this.tank.getFluid().getFluid());
+        buffer.writeVarInt(this.tank.getFluidAmount());
+        buffer.writeId(BuiltInRegistries.BLOCK, this.lastMelted != null ? this.lastMelted : Blocks.AIR);
+        buffer.writeShort(this.solids);
+    }
+
+    @Override
+    public void readVisualData(FriendlyByteBuf buffer) {
+        Fluid fluid = buffer.readById(BuiltInRegistries.FLUID);
+        if (fluid == null) {
+            this.tank.setFluid(FluidStack.EMPTY);
+            buffer.readVarInt();
+        } else {
+            this.tank.setFluid(new FluidStack(fluid, buffer.readVarInt()));
+        }
+        var lastMelted = buffer.readById(BuiltInRegistries.BLOCK);
+        this.lastMelted = lastMelted == Blocks.AIR ? null : lastMelted;
+        this.solids = buffer.readShort();
     }
 
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         var playerItem = player.getItemInHand(hand);
 
         if (playerItem.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent()) {
-            return FluidUtil.interactWithFluidHandler(player, hand, tank) ? InteractionResult.sidedSuccess(level.isClientSide) : InteractionResult.PASS;
+            return FluidUtil.interactWithFluidHandler(player, hand, this.tank) ? InteractionResult.sidedSuccess(level.isClientSide) : InteractionResult.PASS;
         }
 
         if (!level.isClientSide) {
             if (playerItem.getItem() == Items.GLASS_BOTTLE && this.getType() == EBlockEntities.WATER_CRUCIBLE.get() && EConfig.SERVER.allowWaterBottleTransfer.get()) {
                 var fluid = new FluidStack(Fluids.WATER, 250);
 
-                if (tank.drain(fluid, IFluidHandler.FluidAction.SIMULATE).getAmount() == 250) {
+                if (this.tank.drain(fluid, IFluidHandler.FluidAction.SIMULATE).getAmount() == 250) {
                     BarrelBlockEntity.extractWaterBottle(this.tank, level, player, playerItem, fluid);
                     markUpdated();
                 }
@@ -165,22 +197,22 @@ public abstract class AbstractCrucibleBlockEntity extends EBlockEntity {
         var result = recipe.getResult();
         var contained = this.tank.getFluid();
         shrinkAction.accept(item);
-        this.solids = (short) Math.min(solids + result.getAmount(), MAX_SOLIDS);
+        this.solids = (short) Math.min(this.solids + result.getAmount(), MAX_SOLIDS);
 
         if (contained.isEmpty()) {
-            fluid = result.getFluid();
-            needsLightUpdate = true;
+            this.fluid = result.getFluid();
+            this.needsLightUpdate = true;
         }
 
         var melts = MELT_OVERRIDES.get();
         if (melts.containsKey(meltItem)) {
-            lastMelted = melts.get(meltItem);
+            this.lastMelted = melts.get(meltItem);
         } else if (meltItem.getClass() == BlockItem.class) {
-            lastMelted = ((BlockItem) meltItem).getBlock();
+            this.lastMelted = ((BlockItem) meltItem).getBlock();
         } else {
             // If we already have something else inside just use that instead of switching to default
-            if (lastMelted == null) {
-                lastMelted = getDefaultMeltBlock();
+            if (this.lastMelted == null) {
+                this.lastMelted = getDefaultMeltBlock();
             }
         }
 
@@ -194,9 +226,9 @@ public abstract class AbstractCrucibleBlockEntity extends EBlockEntity {
 
         if (recipe != null) {
             var result = recipe.getResult();
-            var contained = tank.getFluid();
+            var contained = this.tank.getFluid();
 
-            return (result.isFluidEqual(contained) || contained.isEmpty()) && result.getAmount() + solids <= MAX_SOLIDS;
+            return (result.isFluidEqual(contained) || contained.isEmpty()) && result.getAmount() + this.solids <= MAX_SOLIDS;
         }
 
         return false;
@@ -207,24 +239,24 @@ public abstract class AbstractCrucibleBlockEntity extends EBlockEntity {
     }
 
     public int getSolids() {
-        return solids;
+        return this.solids;
     }
 
     public FluidTank getTank() {
-        return tank;
+        return this.tank;
     }
 
     public abstract Block getDefaultMeltBlock();
 
     @Nullable
     public Block getLastMelted() {
-        return lastMelted;
+        return this.lastMelted;
     }
 
     @Override
     public void setRemoved() {
-        itemHandler.invalidate();
-        fluidHandler.invalidate();
+        this.itemHandler.invalidate();
+        this.fluidHandler.invalidate();
         super.setRemoved();
     }
 
@@ -288,7 +320,7 @@ public abstract class AbstractCrucibleBlockEntity extends EBlockEntity {
         }
 
         public ItemStack getItem() {
-            return stacks.get(0);
+            return this.stacks.get(0);
         }
     }
 

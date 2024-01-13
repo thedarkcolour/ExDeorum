@@ -38,6 +38,7 @@ import thedarkcolour.exdeorum.registry.EFluids;
 import thedarkcolour.exdeorum.registry.EGlobalLootModifiers;
 import thedarkcolour.exdeorum.registry.EItems;
 import thedarkcolour.exdeorum.registry.ELootFunctions;
+import thedarkcolour.exdeorum.registry.EMenus;
 import thedarkcolour.exdeorum.registry.ERecipeSerializers;
 import thedarkcolour.exdeorum.registry.ERecipeTypes;
 import thedarkcolour.exdeorum.registry.EChunkGenerators;
@@ -77,6 +78,7 @@ public class ExDeorum {
         EGlobalLootModifiers.GLOBAL_LOOT_MODIFIERS.register(modBus);
         EItems.ITEMS.register(modBus);
         ELootFunctions.LOOT_FUNCTIONS.register(modBus);
+        EMenus.MENUS.register(modBus);
         ERecipeSerializers.RECIPE_SERIALIZERS.register(modBus);
         ERecipeTypes.RECIPE_TYPES.register(modBus);
     }

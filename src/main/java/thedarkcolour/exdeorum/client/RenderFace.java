@@ -27,9 +27,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import java.util.List;
 
 public interface RenderFace {
-    void renderFlatSprite(MultiBufferSource buffers, PoseStack stack, float y, int r, int g, int b, int light, float edge);
-
-    void renderFlatSpriteLerp(MultiBufferSource buffers, PoseStack stack, float percentage, int r, int g, int b, int light, float edge, float minY, float maxY);
+    void renderFlatSpriteLerp(MultiBufferSource buffers, PoseStack stack, float percentage, int r, int g, int b, int light, float edge, float yStart, float yEnd);
 
     boolean isMissingTexture();
 
@@ -37,14 +35,10 @@ public interface RenderFace {
         public Single(RenderType renderType, TextureAtlasSprite sprite) {
             this(renderType, sprite, RenderUtil.isMissingTexture(sprite));
         }
-        @Override
-        public void renderFlatSprite(MultiBufferSource buffers, PoseStack stack, float y, int r, int g, int b, int light, float edge) {
-            RenderUtil.renderFlatSprite(buffers.getBuffer(this.renderType), stack, y, r, g, b, this.sprite, light, edge);
-        }
 
         @Override
-        public void renderFlatSpriteLerp(MultiBufferSource buffers, PoseStack stack, float percentage, int r, int g, int b, int light, float edge, float minY, float maxY) {
-            RenderUtil.renderFlatSpriteLerp(buffers.getBuffer(this.renderType), stack, percentage, r, g, b, this.sprite, light, edge, minY, maxY);
+        public void renderFlatSpriteLerp(MultiBufferSource buffers, PoseStack stack, float percentage, int r, int g, int b, int light, float edge, float yStart, float yEnd) {
+            RenderUtil.renderFlatSpriteLerp(buffers.getBuffer(this.renderType), stack, percentage, r, g, b, this.sprite, light, edge, yStart, yEnd);
         }
     }
 
@@ -54,16 +48,9 @@ public interface RenderFace {
         }
 
         @Override
-        public void renderFlatSprite(MultiBufferSource buffers, PoseStack stack, float y, int r, int g, int b, int light, float edge) {
+        public void renderFlatSpriteLerp(MultiBufferSource buffers, PoseStack stack, float percentage, int r, int g, int b, int light, float edge, float yStart, float yEnd) {
             for (var layer : this.layers) {
-                RenderUtil.renderFlatSprite(buffers.getBuffer(layer.first()), stack, y, r, g, b, layer.second(), light, edge);
-            }
-        }
-
-        @Override
-        public void renderFlatSpriteLerp(MultiBufferSource buffers, PoseStack stack, float percentage, int r, int g, int b, int light, float edge, float minY, float maxY) {
-            for (var layer : this.layers) {
-                RenderUtil.renderFlatSpriteLerp(buffers.getBuffer(layer.first()), stack, percentage, r, g, b, layer.second(), light, edge, minY, maxY);
+                RenderUtil.renderFlatSpriteLerp(buffers.getBuffer(layer.first()), stack, percentage, r, g, b, layer.second(), light, edge, yStart, yEnd);
             }
         }
 

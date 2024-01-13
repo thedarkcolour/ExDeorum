@@ -1,4 +1,4 @@
-// 1.20.1	2023-12-31T14:34:20.2490508	ModKit Item Models for mod 'exdeorum'
+// 1.20.1	2024-01-10T20:18:25.7240245	ModKit Item Models for mod 'exdeorum'
 4ba3bb2c6174ac3728a4b85e34681f118ec8eb34 assets/exdeorum/models/item/acacia_barrel.json
 c03ce41f7c071498fcbd5f5225e91dcb2f365fbb assets/exdeorum/models/item/acacia_crucible.json
 3b4f1d45c0d9c4cd1d9a5cdf6ddc8d2c9791bca5 assets/exdeorum/models/item/acacia_sieve.json
@@ -105,6 +105,7 @@ ff89dc05408074da0e9d41bfef91dfe975302403 assets/exdeorum/models/item/mahogany_cr
 c3f2af2a88cd97148b05efbd6e24fc2558fcc0b8 assets/exdeorum/models/item/maple_barrel.json
 cc045825c562e9133858ce5cfe6e6f1dcb747d8e assets/exdeorum/models/item/maple_crucible.json
 a64e9b9ce91ac6b2f36690a770afc52b8900a614 assets/exdeorum/models/item/maple_sieve.json
+1e2b482f5fc4d283f5ca12919b575f86dc4a9541 assets/exdeorum/models/item/mechanical_sieve.json
 d543d3e18bdcf2bf79a762b52cc61a4161124db1 assets/exdeorum/models/item/mycelium_spores.json
 1f48b2ce3452ce5d02142c9f663ae7bdb7d1d934 assets/exdeorum/models/item/netherite_hammer.json
 248ebed818e2e4a5eb7ce78363f56433a3066646 assets/exdeorum/models/item/netherite_mesh.json

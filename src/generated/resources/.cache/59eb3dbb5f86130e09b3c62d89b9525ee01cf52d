@@ -1,4 +1,4 @@
-// 1.20.1	2023-11-25T19:04:39.9783304	Loot Tables
+// 1.20.1	2024-01-10T20:18:25.7260241	Loot Tables
 105d8a61ea7145d7798146d385d4aad24fd1588d data/exdeorum/loot_tables/blocks/acacia_barrel.json
 1e77127a82cbba0937bb02694f65cf1893aeffcb data/exdeorum/loot_tables/blocks/acacia_crucible.json
 fcc00910a8cc94bed6339d6833fcec53c501a0d7 data/exdeorum/loot_tables/blocks/acacia_sieve.json
@@ -73,6 +73,7 @@ b38104ee25127d9c65ad9e323ed879f76df7a048 data/exdeorum/loot_tables/blocks/mangro
 475b89fd8f09834652f80c93d8a6d0964d708ead data/exdeorum/loot_tables/blocks/maple_barrel.json
 54f36187d7fb97dedc4680d14e2ad7d70b5c64af data/exdeorum/loot_tables/blocks/maple_crucible.json
 7ffe80360af055f3977d05b5684a299886bcb756 data/exdeorum/loot_tables/blocks/maple_sieve.json
+a84508222cb36b07cb20ee31915d802bcc411149 data/exdeorum/loot_tables/blocks/mechanical_sieve.json
 cad973c873a2e50ccfac91e88eadb3c2462d39d1 data/exdeorum/loot_tables/blocks/oak_barrel.json
 f94bc97efbfd26ccf7dba32d414fb5e33decd5f6 data/exdeorum/loot_tables/blocks/oak_crucible.json
 8d69a87e09fc8a179d5a1bc8eba5faab66e77a6c data/exdeorum/loot_tables/blocks/oak_sieve.json

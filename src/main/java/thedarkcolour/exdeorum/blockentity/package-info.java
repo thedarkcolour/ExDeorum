@@ -16,12 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * This package contains all data generation for Ex Deorum. It is not to be used outside of data generation.
- * <p>
- * Ex Deorum uses the ModKit library, which adds several utilities primarily for data generation
- * without needing to be shaded or depended upon outside a development environment.
- */
 @net.minecraft.MethodsReturnNonnullByDefault
 @javax.annotation.ParametersAreNonnullByDefault
 package thedarkcolour.exdeorum.blockentity;

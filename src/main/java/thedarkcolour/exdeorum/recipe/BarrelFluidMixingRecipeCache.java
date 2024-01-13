@@ -24,13 +24,14 @@ import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelFluidMixingRecipe;
 import thedarkcolour.exdeorum.registry.ERecipeTypes;
 
-import java.util.IdentityHashMap;
+import java.util.HashMap;
+import java.util.Map;
 
 // for now, only simple recipes
 public class BarrelFluidMixingRecipeCache {
     private RecipeManager recipeManager;
     @Nullable
-    private IdentityHashMap<Fluid, IdentityHashMap<Fluid, BarrelFluidMixingRecipe>> recipes;
+    private Map<Fluid, Map<Fluid, BarrelFluidMixingRecipe>> recipes;
 
     public BarrelFluidMixingRecipeCache(RecipeManager recipeManager) {
         this.recipeManager = recipeManager;
@@ -49,10 +50,10 @@ public class BarrelFluidMixingRecipeCache {
     }
 
     private void buildRecipes() {
-        this.recipes = new IdentityHashMap<>();
+        var recipes = new HashMap<Fluid, Map<Fluid, BarrelFluidMixingRecipe>>();
 
         for (var recipe : this.recipeManager.byType(ERecipeTypes.BARREL_FLUID_MIXING.get()).values()) {
-            recipes.computeIfAbsent(recipe.baseFluid, key -> new IdentityHashMap<>()).put(recipe.additiveFluid, recipe);
+            recipes.computeIfAbsent(recipe.baseFluid, key -> new HashMap<>()).put(recipe.additiveFluid, recipe);
         }
 
         this.recipeManager = null;

@@ -21,6 +21,7 @@ package thedarkcolour.exdeorum.blockentity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -29,6 +30,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import thedarkcolour.exdeorum.network.VisualUpdateTracker;
 
 import javax.annotation.Nullable;
 
@@ -50,6 +52,7 @@ public abstract class EBlockEntity extends BlockEntity {
 
     @Override
     public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
+        // todo consider removing the load with an empty tag
         if (pkt.getTag() == null) {
             load(new CompoundTag());
         } else {
@@ -57,12 +60,20 @@ public abstract class EBlockEntity extends BlockEntity {
         }
     }
 
-    protected void markUpdated() {
+    public void markUpdated() {
         setChanged();
-        level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 2);
+        VisualUpdateTracker.sendVisualUpdate(this);
     }
 
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         return InteractionResult.PASS;
+    }
+
+    public void writeVisualData(FriendlyByteBuf buffer) {
+
+    }
+
+    public void readVisualData(FriendlyByteBuf buffer) {
+
     }
 }

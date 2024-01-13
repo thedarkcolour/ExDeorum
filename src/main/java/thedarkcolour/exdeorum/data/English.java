@@ -19,6 +19,7 @@
 package thedarkcolour.exdeorum.data;
 
 import thedarkcolour.exdeorum.ExDeorum;
+import thedarkcolour.exdeorum.client.screen.RedstoneControlWidget;
 import thedarkcolour.exdeorum.registry.EBlocks;
 import thedarkcolour.modkit.data.MKEnglishProvider;
 
@@ -28,7 +29,9 @@ class English {
 
         english.add(TranslationKeys.MAIN_CREATIVE_TAB, "Ex Deorum");
         english.add(TranslationKeys.VOID_WORLD_TYPE, "Void World");
-        english.add(TranslationKeys.WATERING_CAN_FLUID_DISPLAY, ": %s / %s");
+        english.add(TranslationKeys.FRACTION_DISPLAY, ": %s / %s");
+        english.add(TranslationKeys.MECHANICAL_SIEVE_MESH_LABEL, "Mesh: ");
+        english.add(TranslationKeys.ENERGY, "Energy");
 
         english.add(TranslationKeys.ROOT_ADVANCEMENT_TITLE, "Don't Look Down...");
         english.add(TranslationKeys.ROOT_ADVANCEMENT_DESCRIPTION, "Spawn into a SkyBlock void world");
@@ -43,6 +46,7 @@ class English {
 
         english.add(TranslationKeys.SILK_WORM_JEI_INFO, "Silk worms have a 1 in 100 chance to drop from leaves harvested with a Crook. Using a silk worm on a tree's leaves will infest them, gradually spreading through the entire tree. 100% infested leaves can be harvested for string, but do not drop saplings.");
         english.add(TranslationKeys.SIEVE_JEI_INFO, "Sieves are used to sift for items from soft blocks like gravel and dirt. A mesh is required to use the sieve. Meshes can be enchanted with Fortune and Efficiency. Sieves in a 3x3 area can be used simultaneously.");
+        english.add(TranslationKeys.SIEVE_MESH_JEI_INFO, "Meshes are used in sieves. Different meshes yield different drops. Meshes can be enchanted with Fortune and Efficiency to increase likelihood of drops and sifting speed, respectively.");
         english.add(TranslationKeys.WATERING_CAN_JEI_INFO, "Watering cans speed up crop growth, tree growth, and grass spreading, among other things. They can be filled with water from barrels and wooden crucibles. Golden and above watering cans do not need to be refilled once full. Diamond watering cans water in a 3x3 area, and Netherite watering cans are usable by machinery.");
         english.add(TranslationKeys.WITCH_WATER_JEI_INFO, "Witch water is obtained by putting water in a barrel on top of mycelium. More mycelium speeds up the process. A barrel with witch water will grow mushrooms on nearby mycelium. Witch water and lava can make a netherrack generator, similar to a cobblestone generator.");
         english.add(TranslationKeys.MYCELIUM_SPORES_JEI_INFO, "Use on dirt to turn it into mycelium.");
@@ -50,6 +54,8 @@ class English {
         english.add(TranslationKeys.WARPED_NYLIUM_SPORES_JEI_INFO, "Use on netherrack to turn it into a warped nylium block.");
         english.add(TranslationKeys.CRIMSON_NYLIUM_SPORES_JEI_INFO, "Use on netherrack to turn it into a crimson nylium block.");
         english.add(TranslationKeys.SCULK_CORE_JEI_INFO, "Use a sculk core on a Sculk Shrieker to enable it to spawn Wardens. Normally, Sculk Shriekers placed by players cannot spawn Wardens, so this item is useful for obtaining Sculk items in a SkyBlock world.");
+        english.add(TranslationKeys.MECHANICAL_SIEVE_JEI_INFO, "The Mechanical Sieve is a machine that, when supplied with a mesh and Forge Energy (FE), will sift blocks without a player having to do it themselves. It also supports three different modes of redstone control. Since Ex Deorum does not provide a way to generate FE, you will need another mod to provide power.");
+
         english.add(TranslationKeys.BARREL_COMPOST_CATEGORY_TITLE, "Barrel Compost");
         english.add(TranslationKeys.BARREL_COMPOST_RECIPE_VOLUME, "Compost: %s");
         english.add(TranslationKeys.BARREL_MIXING_CATEGORY_TITLE, "Barrel Mixing");
@@ -64,6 +70,14 @@ class English {
         english.add(TranslationKeys.SIEVE_RECIPE_AVERAGE_OUTPUT, "Avg. Output: %s");
         english.add(TranslationKeys.SIEVE_RECIPE_MIN_OUTPUT, "Min: %s");
         english.add(TranslationKeys.SIEVE_RECIPE_MAX_OUTPUT, "Max: %s");
+        english.add(TranslationKeys.SIEVE_RECIPE_BY_HAND_ONLY, "Does not drop from Mechanical Sieve");
+
+        english.add(TranslationKeys.MECHANICAL_SIEVE_SCREEN_TITLE, "Mechanical Sieve");
+        english.add(TranslationKeys.REDSTONE_CONTROL_MODES[RedstoneControlWidget.REDSTONE_MODE_IGNORED], "Always");
+        english.add(TranslationKeys.REDSTONE_CONTROL_MODES[RedstoneControlWidget.REDSTONE_MODE_UNPOWERED], "Unpowered");
+        english.add(TranslationKeys.REDSTONE_CONTROL_MODES[RedstoneControlWidget.REDSTONE_MODE_POWERED], "Powered");
+        english.add(TranslationKeys.REDSTONE_CONTROL_LABEL, "Redstone Mode");
+        english.add(TranslationKeys.REDSTONE_CONTROL_MODE, "Mode: ");
 
         english.addBlock(EBlocks.VEXING_ARCHWOOD_CRUCIBLE, "Vexing Archwood Crucible");
         english.addBlock(EBlocks.CASCADING_ARCHWOOD_CRUCIBLE, "Cascading Archwood Crucible");

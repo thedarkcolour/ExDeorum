@@ -28,13 +28,13 @@ import thedarkcolour.exdeorum.registry.ERecipeTypes;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SieveRecipeCache {
     private RecipeManager recipeManager;
     @Nullable
-    private IdentityHashMap<Item, MeshRecipeCache> meshCaches;
+    private Map<Item, MeshRecipeCache> meshCaches;
 
     public SieveRecipeCache(RecipeManager recipeManager) {
         this.recipeManager = recipeManager;
@@ -54,7 +54,7 @@ public class SieveRecipeCache {
         for (var recipe : recipeManager.byType(ERecipeTypes.SIEVE.get()).values()) {
             tempMap.computeIfAbsent(recipe.mesh, k -> new ArrayList<>()).add(recipe);
         }
-        this.meshCaches = new IdentityHashMap<>();
+        this.meshCaches = new HashMap<>();
         for (var mesh : tempMap.entrySet()) {
             this.meshCaches.put(mesh.getKey(), new MeshRecipeCache(mesh.getValue()));
         }
@@ -64,14 +64,14 @@ public class SieveRecipeCache {
     // For now, there will be no complex recipes. What that means is, recipes may not use NBT information of the
     // block being sifted to decide what its drops are. Firstly, this would be complicated for me to code. Secondly,
     // conveying this information in JEI would be difficult (ex. Bottle drops from Sand, but only if the Sand has a
-    // certain NBT tag). Thirdly, I do not see anybody needing this use case, and if they do, they should contact
+    // certain enchantment). Thirdly, I do not see anybody needing this use case, and if they do, they should contact
     // me on GitHub or Discord so that I can get around to actually implementing it.
     private static class MeshRecipeCache {
-        private final IdentityHashMap<Item, List<SieveRecipe>> simpleRecipes;
+        private final Map<Item, List<SieveRecipe>> simpleRecipes;
 
         private MeshRecipeCache(List<SieveRecipe> recipes) {
-            this.simpleRecipes = new IdentityHashMap<>();
-            var temp = new IdentityHashMap<Item, ImmutableList.Builder<SieveRecipe>>();
+            this.simpleRecipes = new HashMap<>();
+            var temp = new HashMap<Item, ImmutableList.Builder<SieveRecipe>>();
 
             for (var recipe : recipes) {
                 for (var item : recipe.ingredient.getItems()) {

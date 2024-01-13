@@ -21,9 +21,13 @@ package thedarkcolour.exdeorum.data;
 import thedarkcolour.exdeorum.ExDeorum;
 
 public class TranslationKeys {
+    // Misc
     public static final String MAIN_CREATIVE_TAB = "itemGroup." + ExDeorum.ID + ".main";
     public static final String VOID_WORLD_TYPE = "generator." + ExDeorum.ID + ".void_world";
-    public static final String WATERING_CAN_FLUID_DISPLAY = "item." + ExDeorum.ID + ".watering_can_fluid_display";
+    // ": %s / %s"
+    public static final String FRACTION_DISPLAY = "item." + ExDeorum.ID + ".watering_can_fluid_display";
+    public static final String MECHANICAL_SIEVE_MESH_LABEL = "item." + ExDeorum.ID + ".mechanical_sieve.mesh_label";
+    public static final String ENERGY = "gui." + ExDeorum.ID + ".energy_label";
 
     // Advancements
     public static final String ROOT_ADVANCEMENT_TITLE = "advancements." + ExDeorum.ID + ".core.root.title";
@@ -40,6 +44,7 @@ public class TranslationKeys {
     // JEI descriptions
     public static final String SILK_WORM_JEI_INFO = "info." + ExDeorum.ID + ".silk_worm";
     public static final String SIEVE_JEI_INFO = "info." + ExDeorum.ID + ".sieve";
+    public static final String SIEVE_MESH_JEI_INFO = "info." + ExDeorum.ID + ".sieve_mesh";
     public static final String WATERING_CAN_JEI_INFO = "info." + ExDeorum.ID + ".watering_can";
     public static final String WITCH_WATER_JEI_INFO = "info." + ExDeorum.ID + ".witch_water";
     public static final String MYCELIUM_SPORES_JEI_INFO = "info." + ExDeorum.ID + ".mycelium_spores";
@@ -47,6 +52,7 @@ public class TranslationKeys {
     public static final String WARPED_NYLIUM_SPORES_JEI_INFO = "info." + ExDeorum.ID + ".warped_nylium_spores";
     public static final String CRIMSON_NYLIUM_SPORES_JEI_INFO = "info." + ExDeorum.ID + ".crimson_nylium_spores";
     public static final String SCULK_CORE_JEI_INFO = "info." + ExDeorum.ID + ".sculk_core";
+    public static final String MECHANICAL_SIEVE_JEI_INFO = "info." + ExDeorum.ID + ".mechanical_sieve";
 
     // JEI recipe categories
     public static final String BARREL_COMPOST_CATEGORY_TITLE = "gui." + ExDeorum.ID + ".category.barrel_compost";
@@ -63,4 +69,15 @@ public class TranslationKeys {
     public static final String SIEVE_RECIPE_AVERAGE_OUTPUT = "gui." + ExDeorum.ID + ".category.sieve.average_output";
     public static final String SIEVE_RECIPE_MIN_OUTPUT = "gui." + ExDeorum.ID + ".category.sieve.min_output";
     public static final String SIEVE_RECIPE_MAX_OUTPUT = "gui." + ExDeorum.ID + ".category.sieve.max_output";
+    public static final String SIEVE_RECIPE_BY_HAND_ONLY = "gui." + ExDeorum.ID + ".category.sieve.by_hand_only";
+
+    // Screens
+    public static final String MECHANICAL_SIEVE_SCREEN_TITLE = ExDeorum.ID + ".container.mechanical_sieve";
+    public static final String[] REDSTONE_CONTROL_MODES = new String[] {
+            "gui." + ExDeorum.ID + ".redstone_control.always",
+            "gui." + ExDeorum.ID + ".redstone_control.unpowered",
+            "gui." + ExDeorum.ID + ".redstone_control.powered"
+    };
+    public static final String REDSTONE_CONTROL_LABEL = "gui." + ExDeorum.ID + ".redstone_control.label";
+    public static final String REDSTONE_CONTROL_MODE = "gui." + ExDeorum.ID + ".redstone_control.mode";
 }

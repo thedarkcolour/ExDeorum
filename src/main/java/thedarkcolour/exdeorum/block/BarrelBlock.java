@@ -38,8 +38,9 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.blockentity.BarrelBlockEntity;
 import thedarkcolour.exdeorum.registry.EBlockEntities;
+import thedarkcolour.exdeorum.registry.EBlocks;
 
-public class BarrelBlock extends Block implements EntityBlock {
+public class BarrelBlock extends EBlock {
     public static final VoxelShape SHAPE = Shapes.join(
         box(1, 0, 1, 15, 16, 15),
         box(2, 1, 2, 14, 16, 14),
@@ -47,12 +48,7 @@ public class BarrelBlock extends Block implements EntityBlock {
     );
 
     public BarrelBlock(Properties properties) {
-        super(properties);
-    }
-
-    @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new BarrelBlockEntity(pos, state);
+        super(properties, EBlockEntities.BARREL);
     }
 
     @Nullable
@@ -64,15 +60,6 @@ public class BarrelBlock extends Block implements EntityBlock {
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return SHAPE;
-    }
-
-    @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
-        if (level.getBlockEntity(pos) instanceof BarrelBlockEntity barrel) {
-            return barrel.use(level, pos, player, hand);
-        }
-
-        return InteractionResult.PASS;
     }
 
     @Override

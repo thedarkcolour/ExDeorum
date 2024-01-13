@@ -23,6 +23,7 @@ import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
 import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
 import net.minecraftforge.common.ForgeConfigSpec.DoubleValue;
+import net.minecraftforge.common.ForgeConfigSpec.IntValue;
 import org.apache.commons.lang3.text.WordUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import thedarkcolour.exdeorum.compat.ModIds;
@@ -117,6 +118,7 @@ public class EConfig {
         public final BooleanValue startingTorch;
         public final BooleanValue startingWateringCan;
         public final BooleanValue simultaneousSieveUsage;
+        public final IntValue simultaneousSieveUsageRange;
         public final BooleanValue automatedSieves;
         public final DoubleValue barrelProgressStep;
         public final BooleanValue witchWaterNetherrackGenerator;
@@ -126,6 +128,10 @@ public class EConfig {
         public final BooleanValue limitMossSieveDrops;
         public final BooleanValue allowWaterBottleTransfer;
         public final BooleanValue allowWitchWaterEntityConversion;
+        public final IntValue mechanicalSieveEnergyStorage;
+        public final IntValue mechanicalSieveEnergyConsumption;
+        //public final IntValue mechanicalHammerEnergyStorage;
+        //public final IntValue mechanicalHammerEnergyConsumption;
 
         public Server(ForgeConfigSpec.Builder builder) {
             builder.comment("Server configuration for Ex Deorum").push("server");
@@ -137,8 +143,11 @@ public class EConfig {
                     .comment("Whether players in a void world start out with a full wooden watering can.")
                     .define("starting_watering_can", true);
             this.simultaneousSieveUsage = builder
-                    .comment("Whether players can use multiple sieves in a 3x3 area at once.")
+                    .comment("Whether players can use multiple sieves in a 3x3 or larger area at once.")
                     .define("simultaneous_sieve_usage", true);
+            this.simultaneousSieveUsageRange = builder
+                    .comment("The range from which simultaneous sieve usage can reach. 1 means a maximum of 3x3 sieves at once, 2 means a maximum of 5x5, 3 means maximum of 7x7 simultaneous sieves, and so on.")
+                    .defineInRange("simultaneous_sieve_range", 2, 0, 6);
             this.automatedSieves = builder
                     .comment("Whether machines/fake players can interact with the Sieve.")
                     .define("automated_sieves", false);
@@ -166,6 +175,18 @@ public class EConfig {
             this.allowWitchWaterEntityConversion = builder
                     .comment("Whether the entity conversion mechanic of Witch Water is enabled. If enabled, when an entity steps into Witch Water, the following conversions may happen: Villager -> Zombie Villager, Cleric Villager -> Witch, Skeleton -> Wither Skeleton, Creeper -> Charged Creeper, Spider -> Cave Spider, Pig & Piglin -> Zombified Piglin, Squid -> Ghast, Mooshroom -> Brown Mooshroom, Axolotl -> Blue Axolotl, Rabbit -> Killer Rabbit, Pufferfish -> Guardian, Horse -> Skeleton/Zombie Horse")
                     .define("allow_witch_water_entity_conversion", true);
+            this.mechanicalSieveEnergyStorage = builder
+                    .comment("The maximum amount of FE the mechanical sieve can have in its energy storage.")
+                    .defineInRange("mechanical_sieve_energy_storage", 40_000, 0, Integer.MAX_VALUE);
+            this.mechanicalSieveEnergyConsumption = builder
+                    .comment("The amount of FE/t a tick consumed by the mechanical sieve when sifting a block.")
+                    .defineInRange("mechanical_sieve_energy_consumption", 40, 0, Integer.MAX_VALUE);
+            //this.mechanicalHammerEnergyStorage = builder
+            //        .comment("The maximum amount of FE the mechanical hammer can have in its energy storage.")
+            //        .defineInRange("mechanical_hammer_energy_storage", 40_000, 0, Integer.MAX_VALUE);
+            //this.mechanicalHammerEnergyConsumption = builder
+            //        .comment("The amount of FE/t a tick consumed by the mechanical hammer when sifting a block.")
+            //        .defineInRange("mechanical_hammer_energy_consumption", 40, 0, Integer.MAX_VALUE);
 
             builder.pop();
         }

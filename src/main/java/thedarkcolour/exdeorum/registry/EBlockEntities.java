@@ -24,8 +24,10 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.blockentity.BarrelBlockEntity;
+import thedarkcolour.exdeorum.blockentity.CompressedSieveBlockEntity;
 import thedarkcolour.exdeorum.blockentity.InfestedLeavesBlockEntity;
 import thedarkcolour.exdeorum.blockentity.LavaCrucibleBlockEntity;
+import thedarkcolour.exdeorum.blockentity.MechanicalSieveBlockEntity;
 import thedarkcolour.exdeorum.blockentity.SieveBlockEntity;
 import thedarkcolour.exdeorum.blockentity.WaterCrucibleBlockEntity;
 
@@ -154,4 +156,5 @@ public class EBlockEntities {
             EBlocks.MAPLE_SIEVE.get(),
             EBlocks.CRYSTALLIZED_SIEVE.get()
     ).build(null));
+    public static final RegistryObject<BlockEntityType<MechanicalSieveBlockEntity>> MECHANICAL_SIEVE = BLOCK_ENTITIES.register("mechanical_sieve", () -> BlockEntityType.Builder.of(MechanicalSieveBlockEntity::new, EBlocks.MECHANICAL_SIEVE.get()).build(null));
 }

@@ -46,6 +46,6 @@ class HammerCategory extends OneToOneCategory<HammerRecipe> {
     @Override
     protected void addOutput(IRecipeSlotBuilder slot, HammerRecipe recipe) {
         slot.addItemStack(new ItemStack(recipe.result));
-        SieveCategory.addTooltips(slot, recipe.resultAmount);
+        SieveCategory.addTooltips(slot, false, recipe.resultAmount);
     }
 }

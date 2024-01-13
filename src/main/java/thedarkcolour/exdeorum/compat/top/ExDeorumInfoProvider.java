@@ -81,7 +81,7 @@ public class ExDeorumInfoProvider implements IProbeInfoProvider {
             }
         } else if (te instanceof SieveBlockEntity sieve) {
             if (!sieve.getContents().isEmpty()) {
-                info.text(CompoundText.create().style(TextStyleClass.LABEL).text("Progress: ").style(TextStyleClass.WARNING).text((100 - sieve.getProgress()) + "%"));
+                info.text(CompoundText.create().style(TextStyleClass.LABEL).text("Progress: ").style(TextStyleClass.WARNING).text((Math.round(1000 * sieve.getProgress()) / 10) + "%"));
             }
             if (playerEntity.isShiftKeyDown()) {
                 var mesh = sieve.getMesh();

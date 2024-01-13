@@ -35,7 +35,7 @@ public class VoidWorldMessage {
         return new VoidWorldMessage();
     }
 
-    public void handle(Supplier<NetworkEvent.Context> ctxSupplier) {
+    public static void handle(VoidWorldMessage msg, Supplier<NetworkEvent.Context> ctxSupplier) {
         NetworkHandler.handle(ctxSupplier, ctx -> {
             DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ClientMessageHandler::disableVoidFogRendering);
         });

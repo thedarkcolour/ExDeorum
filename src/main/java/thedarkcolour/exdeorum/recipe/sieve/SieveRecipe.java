@@ -43,11 +43,13 @@ import thedarkcolour.exdeorum.registry.ERecipeTypes;
 
 public class SieveRecipe extends ProbabilityRecipe {
     public final Item mesh;
+    public final boolean byHandOnly;
 
-    public SieveRecipe(ResourceLocation id, Ingredient ingredient, Item mesh, Item result, NumberProvider resultAmount) {
+    public SieveRecipe(ResourceLocation id, Ingredient ingredient, Item mesh, Item result, NumberProvider resultAmount, boolean byHandOnly) {
         super(id, ingredient, result, resultAmount);
 
         this.mesh = mesh;
+        this.byHandOnly = byHandOnly;
     }
 
     @Override
@@ -83,7 +85,8 @@ public class SieveRecipe extends ProbabilityRecipe {
             }
 
             NumberProvider resultAmount = RecipeUtil.readNumberProvider(json, "result_amount");
-            return new SieveRecipe(id, ingredient, mesh, result, resultAmount);
+            boolean byHandOnly = json.has("by_hand_only") && json.get("by_hand_only").getAsBoolean();
+            return new SieveRecipe(id, ingredient, mesh, result, resultAmount, byHandOnly);
         }
 
         @Override
@@ -92,7 +95,7 @@ public class SieveRecipe extends ProbabilityRecipe {
             Item mesh = buffer.readById(BuiltInRegistries.ITEM);
             Item result = buffer.readById(BuiltInRegistries.ITEM);
             NumberProvider resultAmount = RecipeUtil.fromNetworkNumberProvider(buffer);
-            return new SieveRecipe(id, ingredient, mesh, result, resultAmount);
+            return new SieveRecipe(id, ingredient, mesh, result, resultAmount, buffer.readBoolean());
         }
 
         @Override
@@ -101,6 +104,7 @@ public class SieveRecipe extends ProbabilityRecipe {
             buffer.writeId(BuiltInRegistries.ITEM, recipe.mesh);
             buffer.writeId(BuiltInRegistries.ITEM, recipe.result);
             RecipeUtil.toNetworkNumberProvider(buffer, recipe.resultAmount);
+            buffer.writeBoolean(recipe.byHandOnly);
         }
     }
 }

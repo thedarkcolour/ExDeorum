@@ -26,15 +26,16 @@ import net.minecraft.world.item.crafting.RecipeType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
-import java.util.IdentityHashMap;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 
 public class SingleIngredientRecipeCache<T extends SingleIngredientRecipe> {
     private final Supplier<RecipeType<T>> recipeType;
     private RecipeManager recipeManager;
     @Nullable
-    private IdentityHashMap<Item, T> simpleRecipes;
+    private Map<Item, T> simpleRecipes;
     @Nullable
     private List<T> complexRecipes;
     @Nullable
@@ -98,7 +99,7 @@ public class SingleIngredientRecipeCache<T extends SingleIngredientRecipe> {
      * have been scanned, the {@link #recipeManager} is set to null, since it is no longer needed.
      */
     private void buildRecipes() {
-        this.simpleRecipes = new IdentityHashMap<>();
+        this.simpleRecipes = new HashMap<>();
         var complexRecipes = ImmutableList.<T>builder();
 
         var allRecipes = this.recipeManager.byType(recipeType.get()).values();

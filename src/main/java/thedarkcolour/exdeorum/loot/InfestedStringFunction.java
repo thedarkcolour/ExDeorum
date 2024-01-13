@@ -31,11 +31,11 @@ import thedarkcolour.exdeorum.blockentity.InfestedLeavesBlockEntity;
 import thedarkcolour.exdeorum.registry.ELootFunctions;
 
 // Sets the correct amount based on the progress of the infested leaves
-public class InfestedStringCount extends LootItemConditionalFunction {
+public class InfestedStringFunction extends LootItemConditionalFunction {
     // todo move to config
     public static final float STRING_CHANCE = 0.4f;
 
-    protected InfestedStringCount(LootItemCondition[] conditions) {
+    protected InfestedStringFunction(LootItemCondition[] conditions) {
         super(conditions);
     }
 
@@ -73,13 +73,13 @@ public class InfestedStringCount extends LootItemConditionalFunction {
     }
 
     public static LootItemConditionalFunction.Builder<?> infestedString() {
-        return LootItemConditionalFunction.simpleBuilder(InfestedStringCount::new);
+        return LootItemConditionalFunction.simpleBuilder(InfestedStringFunction::new);
     }
 
-    public static class LootSerializer extends LootItemConditionalFunction.Serializer<InfestedStringCount> {
+    public static class LootSerializer extends LootItemConditionalFunction.Serializer<InfestedStringFunction> {
         @Override
-        public InfestedStringCount deserialize(JsonObject json, JsonDeserializationContext ctx, LootItemCondition[] conditions) {
-            return new InfestedStringCount(conditions);
+        public InfestedStringFunction deserialize(JsonObject json, JsonDeserializationContext ctx, LootItemCondition[] conditions) {
+            return new InfestedStringFunction(conditions);
         }
     }
 }

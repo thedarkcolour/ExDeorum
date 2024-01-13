@@ -97,6 +97,13 @@ public class BarrelBlockEntity extends EBlockEntity {
     }
 
     @Override
+    public void invalidateCaps() {
+        super.invalidateCaps();
+        this.fluidHandler.invalidate();
+        this.itemHandler.invalidate();
+    }
+
+    @Override
     public void saveAdditional(CompoundTag nbt) {
         super.saveAdditional(nbt);
 
@@ -175,10 +182,11 @@ public class BarrelBlockEntity extends EBlockEntity {
         return this.tank;
     }
 
-    public InteractionResult use(Level level, BlockPos pos, Player player, InteractionHand hand) {
+    @Override
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
         // Collect an item
         if (!getItem().isEmpty()) {
-            return giveResultItem(level, pos);
+            return giveResultItem(level);
         }
 
         // Handle item fluid interaction first
@@ -249,7 +257,7 @@ public class BarrelBlockEntity extends EBlockEntity {
 
             if (!player.getAbilities().instabuild) {
                 player.setItemInHand(hand, handItem);
-                giveResultItem(level, pos);
+                giveResultItem(level);
             }
         }
 
@@ -270,9 +278,9 @@ public class BarrelBlockEntity extends EBlockEntity {
     }
 
     // Pops the item out of the barrel (ex. dirt that has finished composting)
-    private InteractionResult giveResultItem(Level level, BlockPos pos) {
+    private InteractionResult giveResultItem(Level level) {
         if (!level.isClientSide) {
-            popOutItem(level, pos, item.extract(false));
+            popOutItem(level, this.worldPosition, item.extract(false));
 
             // Empty contents
             setItem(ItemStack.EMPTY);

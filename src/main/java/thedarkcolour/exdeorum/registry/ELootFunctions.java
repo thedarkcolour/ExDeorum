@@ -23,9 +23,12 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 import thedarkcolour.exdeorum.ExDeorum;
-import thedarkcolour.exdeorum.loot.InfestedStringCount;
+import thedarkcolour.exdeorum.loot.InfestedStringFunction;
+import thedarkcolour.exdeorum.loot.MachineLootFunction;
 
 public class ELootFunctions {
     public static final DeferredRegister<LootItemFunctionType> LOOT_FUNCTIONS = DeferredRegister.create(Registries.LOOT_FUNCTION_TYPE, ExDeorum.ID);
-    public static final RegistryObject<LootItemFunctionType> INFESTED_STRING = LOOT_FUNCTIONS.register("infested_string", () -> new LootItemFunctionType(new InfestedStringCount.LootSerializer()));
+
+    public static final RegistryObject<LootItemFunctionType> INFESTED_STRING = LOOT_FUNCTIONS.register("infested_string", () -> new LootItemFunctionType(new InfestedStringFunction.LootSerializer()));
+    public static final RegistryObject<LootItemFunctionType> MACHINE = LOOT_FUNCTIONS.register("machine", () -> new LootItemFunctionType(new MachineLootFunction.LootSerializer()));
 }

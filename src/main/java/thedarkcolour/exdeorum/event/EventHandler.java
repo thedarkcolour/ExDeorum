@@ -43,6 +43,7 @@ import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.OnDatapackSyncEvent;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.event.server.ServerStoppingEvent;
@@ -62,6 +63,7 @@ import thedarkcolour.exdeorum.compat.top.ExDeorumTopCompat;
 import thedarkcolour.exdeorum.config.EConfig;
 import thedarkcolour.exdeorum.item.WateringCanItem;
 import thedarkcolour.exdeorum.network.NetworkHandler;
+import thedarkcolour.exdeorum.network.VisualUpdateTracker;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.registry.EFluids;
 import thedarkcolour.exdeorum.registry.EItems;
@@ -85,6 +87,7 @@ public final class EventHandler {
         modBus.addListener(EventHandler::interModEnqueue);
         modBus.addListener(EventHandler::onCommonSetup);
         fmlBus.addListener(EventHandler::serverShutdown);
+        fmlBus.addListener(EventHandler::serverTick);
 
         if (ExDeorum.DEBUG) {
             fmlBus.addListener(EventHandler::handleDebugCommands);
@@ -223,7 +226,7 @@ public final class EventHandler {
     }
 
     // Send messages to other mods
-    public static void interModEnqueue(InterModEnqueueEvent event) {
+    private static void interModEnqueue(InterModEnqueueEvent event) {
         if (ModList.get().isLoaded(ModIds.THE_ONE_PROBE)) {
             InterModComms.sendTo(ModIds.THE_ONE_PROBE, "getTheOneProbe", ExDeorumTopCompat::new);
         }
@@ -237,5 +240,11 @@ public final class EventHandler {
                 LavaCrucibleBlockEntity.putDefaultHeatValues();
             }, gameExecutor);
         });
+    }
+
+    private static void serverTick(TickEvent.ServerTickEvent event) {
+        if (event.phase == TickEvent.Phase.END) {
+            VisualUpdateTracker.syncVisualUpdates();
+        }
     }
 }

@@ -22,32 +22,29 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
-import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.ForgeRegistries;
-import thedarkcolour.exdeorum.blockentity.SieveBlockEntity;
+import thedarkcolour.exdeorum.blockentity.AbstractSieveBlockEntity;
 import thedarkcolour.exdeorum.client.RenderUtil;
 
-import java.util.IdentityHashMap;
+import java.util.HashMap;
 import java.util.Map;
 
-public class SieveRenderer implements BlockEntityRenderer<SieveBlockEntity> {
-    public static final Map<Item, TextureAtlasSprite> MESH_TEXTURES = new IdentityHashMap<>();
-
-    public SieveRenderer(BlockEntityRendererProvider.Context ctx) {}
+public class SieveRenderer<T extends AbstractSieveBlockEntity> implements BlockEntityRenderer<T> {
+    public static final Map<Item, TextureAtlasSprite> MESH_TEXTURES = new HashMap<>();
 
     @Override
-    public void render(SieveBlockEntity sieve, float partialTicks, PoseStack stack, MultiBufferSource buffers, int light, int overlay) {
+    public void render(T sieve, float partialTicks, PoseStack stack, MultiBufferSource buffers, int light, int overlay) {
         var contents = sieve.getContents();
 
         if (!contents.isEmpty() && contents.getItem() instanceof BlockItem blockItem) {
             var block = blockItem.getBlock();
-            var percentage = (float) sieve.getProgress() / 100.0f;
+            var percentage = sieve.getProgress();
             var face = RenderUtil.getTopFace(block);
-            face.renderFlatSpriteLerp(buffers, stack, percentage, 0xff, 0xff, 0xff, light, 1.0f, 13f, 15f);
+            face.renderFlatSpriteLerp(buffers, stack, percentage, 0xff, 0xff, 0xff, light, 1.0f, 15f, 13f);
         }
 
         var mesh = sieve.getMesh();
@@ -56,20 +53,20 @@ public class SieveRenderer implements BlockEntityRenderer<SieveBlockEntity> {
             var builder = buffers.getBuffer(RenderType.cutoutMipped());
             var meshItem = mesh.getItem();
 
-            TextureAtlasSprite sprite;
+            TextureAtlasSprite meshSprite;
             if (MESH_TEXTURES.containsKey(meshItem)) {
-                sprite = MESH_TEXTURES.get(meshItem);
+                meshSprite = MESH_TEXTURES.get(meshItem);
             } else {
                 ResourceLocation registryName = ForgeRegistries.ITEMS.getKey(meshItem);
                 ResourceLocation textureLoc = registryName.withPrefix("item/mesh/");
-                sprite = RenderUtil.blockAtlas.getSprite(textureLoc);
-                MESH_TEXTURES.put(meshItem, sprite);
+                meshSprite = RenderUtil.blockAtlas.getSprite(textureLoc);
+                MESH_TEXTURES.put(meshItem, meshSprite);
             }
 
-            RenderUtil.renderFlatSprite(builder, stack, 0.75f, 0xff, 0xff, 0xff, sprite, light, 1f);
+            RenderUtil.renderFlatSprite(builder, stack, 0.75f, 0xff, 0xff, 0xff, meshSprite, light, 1f);
 
             if (mesh.hasFoil()) {
-                RenderUtil.renderFlatSprite(buffers.getBuffer(RenderType.glint()), stack, 0.75f, 0xff, 0xff, 0xff, sprite, light, 1f);
+                RenderUtil.renderFlatSprite(buffers.getBuffer(RenderType.glint()), stack, 0.75f, 0xff, 0xff, 0xff, meshSprite, light, 1f);
             }
         }
     }

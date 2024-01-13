@@ -49,19 +49,19 @@ public class FinishedSieveRecipe implements EFinishedRecipe {
 
     @Override
     public void serializeRecipeData(JsonObject object) {
-        object.add("ingredient", ingredient.toJson());
+        object.add("ingredient", this.ingredient.toJson());
         object.addProperty("mesh", ForgeRegistries.ITEMS.getKey(this.mesh).toString());
         this.result.ifLeft(item -> {
             object.addProperty("result", ForgeRegistries.ITEMS.getKey(item).toString());
         }).ifRight(tag -> {
             object.addProperty("result_tag", tag.location().toString());
         });
-        object.add("result_amount", LootDataType.PREDICATE.parser().toJsonTree(resultAmount));
+        object.add("result_amount", LootDataType.PREDICATE.parser().toJsonTree(this.resultAmount));
     }
 
     @Override
     public ResourceLocation getId() {
-        return id;
+        return this.id;
     }
 
     @Override

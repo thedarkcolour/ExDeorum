@@ -18,10 +18,10 @@
 
 package thedarkcolour.exdeorum.data.recipe;
 
+import mcjty.theoneprobe.apiimpl.elements.ElementItemStack;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -281,6 +281,16 @@ public class Recipes {
             recipe.pattern("CSC");
             recipe.pattern("WCW");
             MKRecipeProvider.unlockedByHaving(recipe, EItems.WOOD_CHIPPINGS.get());
+        });
+        recipes.shapedCrafting(RecipeCategory.MISC, EItems.MECHANICAL_SIEVE.get(), recipe -> {
+            recipe.define('#', Items.IRON_BLOCK);
+            recipe.define('G', Items.GLASS);
+            recipe.define('H', Items.HOPPER);
+            recipe.define('I', Items.IRON_BARS);
+            recipe.pattern("#G#");
+            recipe.pattern("IHI");
+            recipe.pattern("I I");
+            MKRecipeProvider.unlockedByHaving(recipe, Items.HOPPER);
         });
     }
 

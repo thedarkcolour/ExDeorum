@@ -23,6 +23,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
@@ -54,25 +55,35 @@ public class InfestedLeavesBlockEntity extends EBlockEntity {
         super(EBlockEntities.INFESTED_LEAVES.get(), pos, state);
     }
 
+    @Override
+    public void writeVisualData(FriendlyByteBuf buffer) {
+        buffer.writeFloat(this.progress);
+    }
+
+    @Override
+    public void readVisualData(FriendlyByteBuf buffer) {
+        buffer.readFloat();
+    }
+
     // Attempt to convert a leaf block within 1 block radius around this block
     private void trySpread() {
         // Get random offset
-        int x = level.random.nextInt(3) - 1;
-        int y = level.random.nextInt(3) - 1;
-        int z = level.random.nextInt(3) - 1;
+        int x = this.level.random.nextInt(3) - 1;
+        int y = this.level.random.nextInt(3) - 1;
+        int z = this.level.random.nextInt(3) - 1;
 
         // Get the block in the world
         BlockPos targetPos = getBlockPos().offset(x, y, z);
-        BlockState state = level.getBlockState(targetPos);
+        BlockState state = this.level.getBlockState(targetPos);
 
         // DO NOT SPREAD TO ALREADY INFESTED LEAVES
         if (state.is(BlockTags.LEAVES) && state.getBlock() != EBlocks.INFESTED_LEAVES.get()) {
             // Spread and keep distance/persistent properties
-            level.setBlock(targetPos, EBlocks.INFESTED_LEAVES.get().defaultBlockState()
+            this.level.setBlock(targetPos, EBlocks.INFESTED_LEAVES.get().defaultBlockState()
                     .setValue(LeavesBlock.DISTANCE, state.getValue(LeavesBlock.DISTANCE))
                     .setValue(LeavesBlock.PERSISTENT, state.getValue(LeavesBlock.PERSISTENT)),
                     2);
-            var te = level.getBlockEntity(targetPos);
+            var te = this.level.getBlockEntity(targetPos);
 
             // Set mimic state of other block
             if (te instanceof InfestedLeavesBlockEntity leaves) {
@@ -89,27 +100,27 @@ public class InfestedLeavesBlockEntity extends EBlockEntity {
         // From PistonMovingBlockEntity
         @SuppressWarnings("deprecation")
         var holderLookup = this.level != null ? this.level.holderLookup(Registries.BLOCK) : BuiltInRegistries.BLOCK.asLookup();
-        mimic = NbtUtils.readBlockState(holderLookup, nbt.getCompound("mimic"));
-        progress = nbt.getFloat("progress");
+        this.mimic = NbtUtils.readBlockState(holderLookup, nbt.getCompound("mimic"));
+        this.progress = nbt.getFloat("progress");
     }
 
     @Override
     public void saveAdditional(CompoundTag nbt) {
         super.saveAdditional(nbt);
 
-        if (mimic == null || mimic.getBlock() == EBlocks.INFESTED_LEAVES.get()) {
-            mimic = Blocks.OAK_LEAVES.defaultBlockState();
+        if (this.mimic == null || this.mimic.getBlock() == EBlocks.INFESTED_LEAVES.get()) {
+            this.mimic = Blocks.OAK_LEAVES.defaultBlockState();
         }
-        nbt.put("mimic", NbtUtils.writeBlockState(mimic));
-        nbt.putFloat("progress", progress);
+        nbt.put("mimic", NbtUtils.writeBlockState(this.mimic));
+        nbt.putFloat("progress", this.progress);
     }
 
     public float getProgress() {
-        return progress;
+        return this.progress;
     }
 
     public BlockState getMimic() {
-        return mimic;
+        return this.mimic;
     }
 
     public void setMimic(BlockState mimic) {
@@ -118,7 +129,7 @@ public class InfestedLeavesBlockEntity extends EBlockEntity {
 
     @Override
     public @NotNull ModelData getModelData() {
-        return ModelData.builder().with(MIMIC_PROPERTY, mimic).build();
+        return ModelData.builder().with(MIMIC_PROPERTY, this.mimic).build();
     }
 
     public static class Ticker implements BlockEntityTicker<InfestedLeavesBlockEntity> {

@@ -18,7 +18,6 @@
 
 package thedarkcolour.exdeorum.compat.jei;
 
-import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -28,16 +27,10 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-import net.minecraft.CrashReport;
-import net.minecraft.CrashReportCategory;
-import net.minecraft.ReportedException;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-import org.joml.Matrix4f;
 import thedarkcolour.exdeorum.client.ClientHandler;
 import thedarkcolour.exdeorum.data.TranslationKeys;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelCompostRecipe;
@@ -86,7 +79,7 @@ class BarrelCompostCategory implements IRecipeCategory<BarrelCompostRecipe> {
 
     @Override
     public void draw(BarrelCompostRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
-        slot.draw(graphics);
+        this.slot.draw(graphics);
 
         var volume = recipe.getVolume();
         var volumeLabel = Component.translatable(TranslationKeys.BARREL_COMPOST_RECIPE_VOLUME, volume);
@@ -112,40 +105,10 @@ class BarrelCompostCategory implements IRecipeCategory<BarrelCompostRecipe> {
             // From mezz.jei.library.render.ItemStackRenderer
             RenderSystem.enableDepthTest();
 
-            // From GuiGraphics.renderFakeItem
             Minecraft mc = Minecraft.getInstance();
             var model = mc.getModelManager().getModel(ClientHandler.OAK_BARREL_COMPOSTING);
-            var pose = guiGraphics.pose();
-            pose.pushPose();
-            pose.translate(8 + xOffset, 8 + yOffset, 150);
-
-            try {
-                pose.mulPoseMatrix((new Matrix4f()).scaling(1.0F, -1.0F, 1.0F));
-                pose.scale(16f, 16f, 16f);
-                boolean flag = !model.usesBlockLight();
-                if (flag) {
-                    Lighting.setupForFlatItems();
-                }
-
-                mc.getItemRenderer().render(oakBarrel, ItemDisplayContext.GUI, false, pose, guiGraphics.bufferSource(), 0xf000f0, OverlayTexture.NO_OVERLAY, model);
-                guiGraphics.flush();
-                if (flag) {
-                    Lighting.setupFor3DItems();
-                }
-            } catch (Throwable throwable) {
-                CrashReport crashreport = CrashReport.forThrowable(throwable, "Rendering item");
-                CrashReportCategory crashreportcategory = crashreport.addCategory("Item being rendered");
-                crashreportcategory.setDetail("Item Type", () -> {
-                    return String.valueOf(oakBarrel.getItem());
-                });
-                crashreportcategory.setDetail("Registry Name", () -> "exdeorum:oak_barrel");
-                throw new ReportedException(crashreport);
-            }
-
-            pose.popPose();
-
-            // From end of ItemStackRenderer
-            RenderSystem.disableBlend();
+            // From GuiGraphics.renderFakeItem
+            ClientJeiUtil.renderItemAlternativeModel(guiGraphics, model, this.oakBarrel, xOffset, yOffset);
             // From end of DrawableIngredient
             RenderSystem.disableDepthTest();
         }
