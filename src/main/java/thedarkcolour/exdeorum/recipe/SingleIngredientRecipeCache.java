@@ -1,6 +1,6 @@
 /*
  * Ex Deorum
- * Copyright (c) 2023 thedarkcolour
+ * Copyright (c) 2024 thedarkcolour
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -59,15 +59,15 @@ public class SingleIngredientRecipeCache<T extends SingleIngredientRecipe> {
 
     @Nullable
     public T getRecipe(ItemStack item) {
-        if (simpleRecipes == null) {
+        if (this.simpleRecipes == null) {
             buildRecipes();
         }
         // simpleRecipes is guaranteed not null
-        var recipe = simpleRecipes.get(item.getItem());
+        var recipe = this.simpleRecipes.get(item.getItem());
 
         // if there are complex recipes, test each one
-        if (recipe == null && complexRecipes != null) {
-            for (var complexRecipe : complexRecipes) {
+        if (recipe == null && this.complexRecipes != null) {
+            for (var complexRecipe : this.complexRecipes) {
                 if (complexRecipe.getIngredient().test(item)) {
                     return complexRecipe;
                 }
@@ -102,14 +102,14 @@ public class SingleIngredientRecipeCache<T extends SingleIngredientRecipe> {
         this.simpleRecipes = new HashMap<>();
         var complexRecipes = ImmutableList.<T>builder();
 
-        var allRecipes = this.recipeManager.byType(recipeType.get()).values();
+        var allRecipes = this.recipeManager.byType(this.recipeType.get()).values();
 
         for (var recipe : allRecipes) {
             var ingredient = recipe.getIngredient();
 
             if (ingredient.isSimple()) {
                 for (var item : ingredient.getItems()) {
-                    simpleRecipes.put(item.getItem(), recipe);
+                    this.simpleRecipes.put(item.getItem(), recipe);
                 }
             } else {
                 complexRecipes.add(recipe);

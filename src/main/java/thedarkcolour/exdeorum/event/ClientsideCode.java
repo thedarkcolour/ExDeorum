@@ -1,6 +1,6 @@
 /*
  * Ex Deorum
- * Copyright (c) 2023 thedarkcolour
+ * Copyright (c) 2024 thedarkcolour
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,9 +20,11 @@ package thedarkcolour.exdeorum.event;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
+import org.jetbrains.annotations.Nullable;
 
 // necessary to avoid EventBus loading LocalPlayer through its ASM transformations
 class ClientsideCode {
+    @Nullable
     static Player getLocalPlayer() {
         return Minecraft.getInstance().player;
     }

@@ -1,6 +1,6 @@
 /*
  * Ex Deorum
- * Copyright (c) 2023 thedarkcolour
+ * Copyright (c) 2024 thedarkcolour
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,6 +36,7 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FlowingFluid;
+import net.minecraftforge.event.ForgeEventFactory;
 import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.config.EConfig;
 
@@ -114,7 +115,6 @@ public class WitchWaterBlock extends LiquidBlock {
         }
     }
 
-    @SuppressWarnings("deprecation")
     @Nullable
     private static <T extends Mob> T attemptToConvertEntity(Level level, Entity entity, EntityType<T> newType) {
         if (level.getDifficulty() != Difficulty.PEACEFUL && entity instanceof LivingEntity) {
@@ -123,7 +123,7 @@ public class WitchWaterBlock extends LiquidBlock {
             if (newEntity != null) {
                 var serverLevel = (ServerLevelAccessor) level;
                 newEntity.copyPosition(entity);
-                newEntity.finalizeSpawn(serverLevel, level.getCurrentDifficultyAt(entity.blockPosition()), MobSpawnType.CONVERSION, null, null);
+                ForgeEventFactory.onFinalizeSpawn(newEntity, serverLevel, level.getCurrentDifficultyAt(entity.blockPosition()), MobSpawnType.CONVERSION, null, null);
                 newEntity.setNoAi(newEntity.isNoAi());
 
                 if (entity.hasCustomName()) {

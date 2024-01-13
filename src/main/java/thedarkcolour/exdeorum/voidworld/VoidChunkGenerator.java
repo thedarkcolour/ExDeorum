@@ -1,6 +1,6 @@
 /*
  * Ex Deorum
- * Copyright (c) 2023 thedarkcolour
+ * Copyright (c) 2024 thedarkcolour
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -81,7 +81,7 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 
     @Override
     public void applyCarvers(WorldGenRegion pLevel, long pSeed, RandomState pRandom, BiomeManager pBiomeManager, StructureManager pStructureManager, ChunkAccess pChunk, GenerationStep.Carving pStep) {
-        if (generateNormal) {
+        if (this.generateNormal) {
             super.applyCarvers(pLevel, pSeed, pRandom, pBiomeManager, pStructureManager, pChunk, pStep);
         }
     }
@@ -89,26 +89,26 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
     // Filter structures
     @Override
     public ChunkGeneratorStructureState createState(HolderLookup<StructureSet> lookup, RandomState pRandomState, long pSeed) {
-        return generateNormal ? super.createState(lookup, pRandomState, pSeed) : super.createState(new FilteredLookup(lookup, allowedStructureSets), pRandomState, pSeed);
+        return this.generateNormal ? super.createState(lookup, pRandomState, pSeed) : super.createState(new FilteredLookup(lookup, this.allowedStructureSets), pRandomState, pSeed);
     }
 
     @Override
     public void buildSurface(WorldGenRegion pLevel, StructureManager pStructureManager, RandomState pRandom, ChunkAccess pChunk) {
-        if (generateNormal) {
+        if (this.generateNormal) {
             super.buildSurface(pLevel, pStructureManager, pRandom, pChunk);
         }
     }
 
     @Override
     public void spawnOriginalMobs(WorldGenRegion pLevel) {
-        if (generateNormal) {
+        if (this.generateNormal) {
             super.spawnOriginalMobs(pLevel);
         }
     }
 
     @Override
     public CompletableFuture<ChunkAccess> fillFromNoise(Executor pExecutor, Blender pBlender, RandomState pRandom, StructureManager pStructureManager, ChunkAccess chunk) {
-        if (generateNormal) {
+        if (this.generateNormal) {
             return super.fillFromNoise(pExecutor, pBlender, pRandom, pStructureManager, chunk);
         } else {
             return CompletableFuture.completedFuture(chunk);
@@ -117,7 +117,7 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 
     @Override
     public int getBaseHeight(int pX, int pZ, Heightmap.Types pType, LevelHeightAccessor pLevel, RandomState pRandom) {
-        if (generateNormal) {
+        if (this.generateNormal) {
             return super.getBaseHeight(pX, pZ, pType, pLevel, pRandom);
         } else {
             return getMinY();
@@ -126,7 +126,7 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 
     @Override
     public NoiseColumn getBaseColumn(int pX, int pZ, LevelHeightAccessor pHeight, RandomState pRandom) {
-        if (generateNormal) {
+        if (this.generateNormal) {
             return super.getBaseColumn(pX, pZ, pHeight, pRandom);
         } else {
             return new NoiseColumn(0, new BlockState[0]);
@@ -135,27 +135,27 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 
     @Override
     public void addDebugScreenInfo(List<String> pInfo, RandomState pRandom, BlockPos pPos) {
-        if (generateNormal) {
+        if (this.generateNormal) {
             super.addDebugScreenInfo(pInfo, pRandom, pPos);
         }
     }
 
     @Override
     public void createReferences(WorldGenLevel level, StructureManager pStructureManager, ChunkAccess pChunk) {
-        if (generateNormal || hasStructures(level.registryAccess())) {
+        if (this.generateNormal || hasStructures(level.registryAccess())) {
             super.createReferences(level, pStructureManager, pChunk);
         }
     }
 
     @Override
     public void createStructures(RegistryAccess registries, ChunkGeneratorStructureState pStructureState, StructureManager pStructureManager, ChunkAccess pChunk, StructureTemplateManager pStructureTemplateManager) {
-        if (generateNormal || hasStructures(registries)) {
+        if (this.generateNormal || hasStructures(registries)) {
             super.createStructures(registries, pStructureState, pStructureManager, pChunk, pStructureTemplateManager);
         }
     }
 
     private boolean hasStructures(RegistryAccess registries) {
-        return registries.registryOrThrow(Registries.STRUCTURE_SET).getTagOrEmpty(allowedStructureSets).iterator().hasNext();
+        return registries.registryOrThrow(Registries.STRUCTURE_SET).getTagOrEmpty(this.allowedStructureSets).iterator().hasNext();
     }
 
     private static class FilteredLookup extends HolderLookup.Delegate<StructureSet> {
@@ -168,12 +168,12 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 
         @Override
         public Optional<Holder.Reference<StructureSet>> get(ResourceKey<StructureSet> key) {
-            return this.parent.get(key).filter(obj -> obj.is(allowedValues));
+            return this.parent.get(key).filter(obj -> obj.is(this.allowedValues));
         }
 
         @Override
         public Stream<Holder.Reference<StructureSet>> listElements() {
-            return this.parent.listElements().filter(obj -> obj.is(allowedValues));
+            return this.parent.listElements().filter(obj -> obj.is(this.allowedValues));
         }
     }
 }

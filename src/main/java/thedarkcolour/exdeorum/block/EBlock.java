@@ -1,6 +1,6 @@
 /*
  * Ex Deorum
- * Copyright (c) 2023 thedarkcolour
+ * Copyright (c) 2024 thedarkcolour
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ public abstract class EBlock extends Block implements EntityBlock {
 
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return blockEntityType.get().create(pos, state);
+        return this.blockEntityType.get().create(pos, state);
     }
 
     @Override

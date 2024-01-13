@@ -1,6 +1,6 @@
 /*
  * Ex Deorum
- * Copyright (c) 2023 thedarkcolour
+ * Copyright (c) 2024 thedarkcolour
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,7 +47,7 @@ public class CrucibleRecipe extends SingleIngredientRecipe {
     }
 
     public FluidStack getResult() {
-        return result;
+        return this.result;
     }
 
     @Override
@@ -57,7 +57,7 @@ public class CrucibleRecipe extends SingleIngredientRecipe {
 
     @Override
     public RecipeType<?> getType() {
-        return type;
+        return this.type;
     }
 
     public static class Serializer implements RecipeSerializer<CrucibleRecipe> {
@@ -72,13 +72,13 @@ public class CrucibleRecipe extends SingleIngredientRecipe {
             Ingredient ingredient = RecipeUtil.readIngredient(json, "ingredient");
             FluidStack stack = CodecUtil.decode(FluidStack.CODEC, json.get("fluid"));
 
-            return new CrucibleRecipe(id, type, ingredient, stack);
+            return new CrucibleRecipe(id, this.type, ingredient, stack);
         }
 
         @Nullable
         @Override
         public CrucibleRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buffer) {
-            return new CrucibleRecipe(id, type, Ingredient.fromNetwork(buffer), FluidStack.readFromPacket(buffer));
+            return new CrucibleRecipe(id, this.type, Ingredient.fromNetwork(buffer), FluidStack.readFromPacket(buffer));
         }
 
         @Override

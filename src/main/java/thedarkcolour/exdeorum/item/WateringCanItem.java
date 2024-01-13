@@ -1,6 +1,6 @@
 /*
  * Ex Deorum
- * Copyright (c) 2023 thedarkcolour
+ * Copyright (c) 2024 thedarkcolour
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -103,7 +103,7 @@ public class WateringCanItem extends Item {
 
     @Override
     public boolean isBarVisible(ItemStack stack) {
-        return renewing ? stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).map(handler -> handler.getFluidInTank(0).getAmount() < capacity).orElse(true) : true;
+        return this.renewing ? stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).map(handler -> handler.getFluidInTank(0).getAmount() < this.capacity).orElse(true) : true;
     }
 
     @Override
@@ -114,7 +114,7 @@ public class WateringCanItem extends Item {
     @Override
     public int getBarWidth(ItemStack stack) {
         return stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).map(fluidHandler -> {
-            return Math.round((float) fluidHandler.getFluidInTank(0).getAmount() * 13.0F / (float) capacity);
+            return Math.round((float) fluidHandler.getFluidInTank(0).getAmount() * 13.0F / (float) this.capacity);
         }).orElse(0);
     }
 
@@ -132,7 +132,7 @@ public class WateringCanItem extends Item {
     public void appendHoverText(ItemStack stack, @Nullable Level pLevel, List<Component> tooltip, TooltipFlag pIsAdvanced) {
         stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).ifPresent(fluidHandler -> {
             // use the block name which is guaranteed to have a vanilla translation
-            tooltip.add(Component.translatable("block.minecraft.water").append(Component.translatable(TranslationKeys.FRACTION_DISPLAY, fluidHandler.getFluidInTank(0).getAmount(), capacity)).withStyle(ChatFormatting.GRAY));
+            tooltip.add(Component.translatable("block.minecraft.water").append(Component.translatable(TranslationKeys.FRACTION_DISPLAY, fluidHandler.getFluidInTank(0).getAmount(), this.capacity)).withStyle(ChatFormatting.GRAY));
         });
     }
 
@@ -193,7 +193,7 @@ public class WateringCanItem extends Item {
                             if (useTicks % WATERING_INTERVAL == 0) {
                                 tryWatering((ServerLevel) level, pos, state);
 
-                                if (!this.renewing || fluidHandler.getFluidInTank(0).getAmount() != capacity) {
+                                if (!this.renewing || fluidHandler.getFluidInTank(0).getAmount() != this.capacity) {
                                     if (!(living instanceof Player player && player.getAbilities().instabuild)) {
                                         ((CapabilityProvider) fluidHandler).drain();
                                     }

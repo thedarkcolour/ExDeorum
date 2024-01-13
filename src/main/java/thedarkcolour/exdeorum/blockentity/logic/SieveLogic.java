@@ -199,21 +199,6 @@ public class SieveLogic {
         this.progress = progress;
     }
 
-    public CompoundTag writeUpdateTag() {
-        var tag = new CompoundTag();
-        tag.putBoolean("logic", true);
-        tag.putFloat("progress", this.progress);
-        tag.put("mesh", this.mesh.serializeNBT());
-        tag.put("contents", this.contents.serializeNBT());
-        return tag;
-    }
-
-    public void readUpdateTag(CompoundTag nbt) {
-        this.progress = nbt.getFloat("progress");
-        this.mesh = nbt.contains("mesh") ? ItemStack.of(nbt.getCompound("mesh")) : ItemStack.EMPTY;
-        this.contents = nbt.contains("contents") ? ItemStack.of(nbt.getCompound("contents")) : ItemStack.EMPTY;
-    }
-
     // implement on the owner of this sieve logic
     public interface Owner {
         ServerLevel getServerLevel();

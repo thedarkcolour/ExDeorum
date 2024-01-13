@@ -3,6 +3,7 @@
 - Added `by_hand_only` boolean field to Sieve recipes, which allows modpack makers to add sieve drops that don't drop from the Mechanical Sieve.
 - Added JEI information telling the player that meshes can be enchanted with Fortune and Efficiency.
 - Fixed minor rendering bug with infested leaves and Ars Nouveau leaves not rotating properly.
+- Fixed bugged config option to disable Void World by default. Now, instead of being two options in the client and server configs, there is one option in the common config file that controls default world type both on the create world screen and in server.properties.
 - Optimized syncing block entity visual updates from the server to the client.
 
 ## Ex Deorum 1.13

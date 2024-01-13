@@ -1,6 +1,6 @@
 /*
  * Ex Deorum
- * Copyright (c) 2023 thedarkcolour
+ * Copyright (c) 2024 thedarkcolour
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,7 +49,7 @@ public class EConfig {
                     .comment("Whether to use a simplified renderer for infested leaves (reduces FPS lag with lots of infested trees)")
                     .define("use_fast_infested_leaves", false);
             this.setVoidWorldAsDefault = builder
-                    .comment("Whether the Void World type is set as the default world preset in the world creation screen.")
+                    .comment("Whether the Void World type is set as the default world preset. (DEPRECATED - USE THE OPTION IN THE COMMON CONFIG INSTEAD)")
                     .define("set_void_world_as_default", true);
 
             builder.pop();
@@ -74,6 +74,7 @@ public class EConfig {
         public final ConfigValue<String> preferredLithiumOre;
         public final ConfigValue<String> preferredBoronOre;
 
+        public final BooleanValue setVoidWorldAsDefault;
         public final BooleanValue voidNetherGeneration;
         public final BooleanValue voidEndGeneration;
 
@@ -103,6 +104,9 @@ public class EConfig {
 
             builder.pop();
 
+            this.setVoidWorldAsDefault = builder
+                    .comment("Whether the Void World type is set as the default world preset in world creation screen and server.properties.")
+                    .define("set_void_world_as_default", true);
             this.voidNetherGeneration = builder
                     .comment("If the Void World type is selected, whether the Nether world generation is overridden to a void world. Changes take effect after reopening the world.")
                     .define("void_nether_generation", true);
@@ -122,7 +126,6 @@ public class EConfig {
         public final BooleanValue automatedSieves;
         public final DoubleValue barrelProgressStep;
         public final BooleanValue witchWaterNetherrackGenerator;
-        public final BooleanValue setVoidWorldAsDefault;
         public final ConfigValue<String> defaultSpawnTreeFeature;
         public final BooleanValue useBiomeAppropriateTree;
         public final BooleanValue limitMossSieveDrops;
@@ -130,8 +133,6 @@ public class EConfig {
         public final BooleanValue allowWitchWaterEntityConversion;
         public final IntValue mechanicalSieveEnergyStorage;
         public final IntValue mechanicalSieveEnergyConsumption;
-        //public final IntValue mechanicalHammerEnergyStorage;
-        //public final IntValue mechanicalHammerEnergyConsumption;
 
         public Server(ForgeConfigSpec.Builder builder) {
             builder.comment("Server configuration for Ex Deorum").push("server");
@@ -157,9 +158,6 @@ public class EConfig {
             this.witchWaterNetherrackGenerator = builder
                     .comment("Whether Witch Water forms netherrack when lava flows into it, allowing for a netherrack version of a cobblestone generator.")
                     .define("witch_water_netherrack_generator", true);
-            this.setVoidWorldAsDefault = builder
-                    .comment("Whether the Void World type is used by default in the \"server.properties\" file when creating a server.")
-                    .define("set_void_world_as_default", true);
             this.defaultSpawnTreeFeature = builder
                     .comment("The ID of the default tree feature to use when generating a spawn island (or when useBiomeAppropriateTree is true and the biome has no tree set). By default, minecraft:oak_tree_bees_005 is used.")
                     .define("default_spawn_tree_feature", ModIds.MINECRAFT + ":oak_tree_bees_005");
@@ -181,12 +179,6 @@ public class EConfig {
             this.mechanicalSieveEnergyConsumption = builder
                     .comment("The amount of FE/t a tick consumed by the mechanical sieve when sifting a block.")
                     .defineInRange("mechanical_sieve_energy_consumption", 40, 0, Integer.MAX_VALUE);
-            //this.mechanicalHammerEnergyStorage = builder
-            //        .comment("The maximum amount of FE the mechanical hammer can have in its energy storage.")
-            //        .defineInRange("mechanical_hammer_energy_storage", 40_000, 0, Integer.MAX_VALUE);
-            //this.mechanicalHammerEnergyConsumption = builder
-            //        .comment("The amount of FE/t a tick consumed by the mechanical hammer when sifting a block.")
-            //        .defineInRange("mechanical_hammer_energy_consumption", 40, 0, Integer.MAX_VALUE);
 
             builder.pop();
         }

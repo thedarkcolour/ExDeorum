@@ -1,6 +1,6 @@
 /*
  * Ex Deorum
- * Copyright (c) 2023 thedarkcolour
+ * Copyright (c) 2024 thedarkcolour
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,8 +29,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.level.material.Fluids;
-import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import thedarkcolour.exdeorum.ExDeorum;
@@ -58,7 +56,7 @@ public class BarrelRenderer implements BlockEntityRenderer<BarrelBlockEntity> {
             stack.translate(2 / 16f, 2 / 16f, 2 / 16f);
             stack.scale(12 / 16f, 12 / 16f, 12 / 16f);
 
-            blockRenderer.renderSingleBlock(state, stack, buffers, light, overlay, ModelData.EMPTY, null);
+            this.blockRenderer.renderSingleBlock(state, stack, buffers, light, overlay, ModelData.EMPTY, null);
 
             stack.popPose();
         } else {

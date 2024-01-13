@@ -1,6 +1,6 @@
 /*
  * Ex Deorum
- * Copyright (c) 2023 thedarkcolour
+ * Copyright (c) 2024 thedarkcolour
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,12 +45,12 @@ public abstract class SingleIngredientRecipe implements Recipe<Container> {
     }
 
     public Ingredient getIngredient() {
-        return ingredient;
+        return this.ingredient;
     }
 
     @Override
     public boolean matches(Container inventory, Level level) {
-        return ingredient.test(inventory.getItem(0));
+        return this.ingredient.test(inventory.getItem(0));
     }
 
     @Override
@@ -65,7 +65,7 @@ public abstract class SingleIngredientRecipe implements Recipe<Container> {
 
     @Override
     public ResourceLocation getId() {
-        return id;
+        return this.id;
     }
 
     @Override

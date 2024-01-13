@@ -1,6 +1,6 @@
 /*
  * Ex Deorum
- * Copyright (c) 2023 thedarkcolour
+ * Copyright (c) 2024 thedarkcolour
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -72,11 +72,11 @@ public abstract class BarrelMixingCategory<T> implements IRecipeCategory<T> {
 
     @Override
     public void draw(T recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
-        slot.draw(graphics);
-        plus.draw(graphics, 21, 5);
-        slot.draw(graphics, 18 + 3 + 3 + 8, 0);
-        arrow.draw(graphics, 53, 1);
-        slot.draw(graphics, 78, 0);
+        this.slot.draw(graphics);
+        this.plus.draw(graphics, 21, 5);
+        this.slot.draw(graphics, 18 + 3 + 3 + 8, 0);
+        this.arrow.draw(graphics, 53, 1);
+        this.slot.draw(graphics, 78, 0);
     }
 
     public static class Items extends BarrelMixingCategory<BarrelMixingRecipe> {

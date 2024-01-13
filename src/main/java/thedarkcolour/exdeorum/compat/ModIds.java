@@ -1,6 +1,6 @@
 /*
  * Ex Deorum
- * Copyright (c) 2023 thedarkcolour
+ * Copyright (c) 2024 thedarkcolour
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,7 +24,6 @@ public class ModIds {
     public static final String TINKERS_CONSTRUCT = "tconstruct";
     public static final String ALL_THE_ORES = "alltheores";
     public static final String THERMAL = "thermal";
-    public static final String CHEM_LIB = "chemlib";
     public static final String OCCULTISM = "occultism";
     public static final String RAILCRAFT = "railcraft";
     public static final String GREG = "gtceu";
@@ -36,7 +35,6 @@ public class ModIds {
     public static final String BIOMES_O_PLENTY = "biomesoplenty";
     public static final String APPLIED_ENERGISTICS_2 = "ae2";
     public static final String ARS_NOUVEAU = "ars_nouveau";
-    public static final String MODEST_FLINT_OVERHAUL = "modestflintoverhaul";
     public static final String FACTORIUM = "factorium";
     public static final String AETHER = "aether";
     public static final String BLUE_SKIES = "blue_skies";

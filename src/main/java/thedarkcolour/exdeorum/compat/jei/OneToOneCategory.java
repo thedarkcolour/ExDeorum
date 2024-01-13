@@ -1,6 +1,6 @@
 /*
  * Ex Deorum
- * Copyright (c) 2023 thedarkcolour
+ * Copyright (c) 2024 thedarkcolour
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -73,8 +73,8 @@ abstract class OneToOneCategory<T> implements IRecipeCategory<T> {
 
     @Override
     public void draw(T recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
-        slot.draw(graphics);
-        arrow.draw(graphics, 25, 1);
-        slot.draw(graphics, 54, 0);
+        this.slot.draw(graphics);
+        this.arrow.draw(graphics, 25, 1);
+        this.slot.draw(graphics, 54, 0);
     }
 }

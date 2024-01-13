@@ -1,6 +1,6 @@
 /*
  * Ex Deorum
- * Copyright (c) 2023 thedarkcolour
+ * Copyright (c) 2024 thedarkcolour
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -178,7 +178,7 @@ public final class EventHandler {
 
         if (FMLEnvironment.dist == Dist.CLIENT) {
             // since event code is turned into ASM, we need this to prevent ASM trying to load the LocalPlayer class
-            Player player = DistExecutor.unsafeCallWhenOn(Dist.CLIENT, () -> ClientsideCode::getLocalPlayer);;
+            Player player = DistExecutor.unsafeCallWhenOn(Dist.CLIENT, () -> ClientsideCode::getLocalPlayer);
             if (player == null) {
                 return;
             } else {

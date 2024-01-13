@@ -65,6 +65,7 @@ public class MechanicalSieveBlock extends EBlock {
         return SHAPE;
     }
 
+    @SuppressWarnings("unchecked")
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState pState, BlockEntityType<T> type) {

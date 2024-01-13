@@ -1,6 +1,6 @@
 /*
  * Ex Deorum
- * Copyright (c) 2023 thedarkcolour
+ * Copyright (c) 2024 thedarkcolour
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -59,7 +59,7 @@ public class BarrelMixingRecipe extends SingleIngredientRecipe {
     }
 
     public boolean matches(ItemStack item, FluidStack fluid) {
-        return ingredient.test(item) && fluid.getFluid() == this.fluid && fluid.getAmount() >= fluidAmount;
+        return this.ingredient.test(item) && fluid.getFluid() == this.fluid && fluid.getAmount() >= this.fluidAmount;
     }
 
     @Override
@@ -81,7 +81,7 @@ public class BarrelMixingRecipe extends SingleIngredientRecipe {
         @Override
         public BarrelMixingRecipe fromJson(ResourceLocation id, JsonObject json) {
             Ingredient ingredient = RecipeUtil.readIngredient(json, "ingredient");
-            Fluid fluid = RecipeUtil.readFluid(json, "fluid");;
+            Fluid fluid = RecipeUtil.readFluid(json, "fluid");
             int fluidAmount = GsonHelper.getAsInt(json, "fluid_amount");
             Item result = RecipeUtil.readItem(json, "result");
 

@@ -1,6 +1,6 @@
 /*
  * Ex Deorum
- * Copyright (c) 2023 thedarkcolour
+ * Copyright (c) 2024 thedarkcolour
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,17 +41,17 @@ public class SieveRecipeCache {
     }
 
     public List<SieveRecipe> getRecipe(Item mesh, ItemStack input) {
-        if (meshCaches == null) {
+        if (this.meshCaches == null) {
             buildRecipes();
         }
-        var meshCache = meshCaches.get(mesh);
+        var meshCache = this.meshCaches.get(mesh);
         return meshCache == null ? List.of() : meshCache.getRecipes(input);
     }
 
     private void buildRecipes() {
         // Group recipes based on their mesh
         var tempMap = new HashMap<Item, List<SieveRecipe>>();
-        for (var recipe : recipeManager.byType(ERecipeTypes.SIEVE.get()).values()) {
+        for (var recipe : this.recipeManager.byType(ERecipeTypes.SIEVE.get()).values()) {
             tempMap.computeIfAbsent(recipe.mesh, k -> new ArrayList<>()).add(recipe);
         }
         this.meshCaches = new HashMap<>();
@@ -85,7 +85,7 @@ public class SieveRecipeCache {
         }
 
         public List<SieveRecipe> getRecipes(ItemStack input) {
-            var result = simpleRecipes.get(input.getItem());
+            var result = this.simpleRecipes.get(input.getItem());
             return result == null ? List.of() : result;
         }
     }

@@ -1,6 +1,6 @@
 /*
  * Ex Deorum
- * Copyright (c) 2023 thedarkcolour
+ * Copyright (c) 2024 thedarkcolour
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -159,7 +159,7 @@ public class PorcelainBucket extends Item {
 
     private ItemStack getEmptySuccessItem(ItemStack stack, Player player) {
         if (!player.getAbilities().instabuild) {
-            if (fluid.get() == Fluids.LAVA) {
+            if (this.fluid.get() == Fluids.LAVA) {
                 return ItemStack.EMPTY;
             } else {
                 return new ItemStack(EItems.PORCELAIN_BUCKET.get());
@@ -224,7 +224,7 @@ public class PorcelainBucket extends Item {
     }
 
     protected boolean canBlockContainFluid(Level level, BlockPos pos, BlockState state) {
-        return state.getBlock() instanceof LiquidBlockContainer block && block.canPlaceLiquid(level, pos, state, fluid.get());
+        return state.getBlock() instanceof LiquidBlockContainer block && block.canPlaceLiquid(level, pos, state, this.fluid.get());
     }
 
     @Override

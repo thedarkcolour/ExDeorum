@@ -1,6 +1,6 @@
 /*
  * Ex Deorum
- * Copyright (c) 2023 thedarkcolour
+ * Copyright (c) 2024 thedarkcolour
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,14 +44,14 @@ public class FinishedHammerRecipe implements EFinishedRecipe {
 
     @Override
     public void serializeRecipeData(JsonObject object) {
-        object.add("ingredient", ingredient.toJson());
+        object.add("ingredient", this.ingredient.toJson());
         object.addProperty("result", ForgeRegistries.ITEMS.getKey(this.result).toString());
-        object.add("result_amount", LootDataType.PREDICATE.parser().toJsonTree(resultAmount));
+        object.add("result_amount", LootDataType.PREDICATE.parser().toJsonTree(this.resultAmount));
     }
 
     @Override
     public ResourceLocation getId() {
-        return id;
+        return this.id;
     }
 
     @Override

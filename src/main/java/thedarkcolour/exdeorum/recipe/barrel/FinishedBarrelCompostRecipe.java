@@ -1,6 +1,6 @@
 /*
  * Ex Deorum
- * Copyright (c) 2023 thedarkcolour
+ * Copyright (c) 2024 thedarkcolour
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,13 +38,13 @@ public class FinishedBarrelCompostRecipe implements EFinishedRecipe {
 
     @Override
     public void serializeRecipeData(JsonObject json) {
-        json.add("ingredient", ingredient.toJson());
-        json.addProperty("volume", volume);
+        json.add("ingredient", this.ingredient.toJson());
+        json.addProperty("volume", this.volume);
     }
 
     @Override
     public ResourceLocation getId() {
-        return id;
+        return this.id;
     }
 
     @Override

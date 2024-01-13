@@ -1,6 +1,6 @@
 /*
  * Ex Deorum
- * Copyright (c) 2023 thedarkcolour
+ * Copyright (c) 2024 thedarkcolour
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,20 +38,20 @@ final class CrucibleHeatSourceRecipe {
     }
 
     public int meltRate() {
-        return meltRate;
+        return this.meltRate;
     }
 
     public BlockState blockState() {
-        return blockState;
+        return this.blockState;
     }
 
     @Nullable
     public IIngredientType<Object> ingredientType() {
-        return ingredientType;
+        return this.ingredientType;
     }
 
     @Nullable
     public Object ingredient() {
-        return ingredient;
+        return this.ingredient;
     }
 }

@@ -1,6 +1,6 @@
 /*
  * Ex Deorum
- * Copyright (c) 2023 thedarkcolour
+ * Copyright (c) 2024 thedarkcolour
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,17 +47,17 @@ public class FinishedCrucibleRecipe implements EFinishedRecipe {
 
     @Override
     public void serializeRecipeData(JsonObject json) {
-        json.add("ingredient", ingredient.toJson());
-        json.add("fluid", CodecUtil.encode(FluidStack.CODEC, fluidStack));
+        json.add("ingredient", this.ingredient.toJson());
+        json.add("fluid", CodecUtil.encode(FluidStack.CODEC, this.fluidStack));
     }
 
     @Override
     public ResourceLocation getId() {
-        return id;
+        return this.id;
     }
 
     @Override
     public RecipeSerializer<?> getType() {
-        return serializer;
+        return this.serializer;
     }
 }

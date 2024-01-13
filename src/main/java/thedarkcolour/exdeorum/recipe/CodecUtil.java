@@ -1,6 +1,6 @@
 /*
  * Ex Deorum
- * Copyright (c) 2023 thedarkcolour
+ * Copyright (c) 2024 thedarkcolour
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,13 +32,5 @@ public class CodecUtil {
 
     public static <T> T decode(Codec<T> codec, JsonElement json) {
         return codec.parse(JsonOps.INSTANCE, json).result().get();
-    }
-
-    public static <T> Tag encodeNbt(Codec<T> codec, T object) {
-        return codec.encodeStart(NbtOps.INSTANCE, object).result().get();
-    }
-
-    public static <T> T decodeNbt(Codec<T> codec, Tag json) {
-        return codec.parse(NbtOps.INSTANCE, json).result().get();
     }
 }

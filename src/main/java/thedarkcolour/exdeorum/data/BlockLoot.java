@@ -1,6 +1,6 @@
 /*
  * Ex Deorum
- * Copyright (c) 2023 thedarkcolour
+ * Copyright (c) 2024 thedarkcolour
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -69,12 +69,12 @@ class BlockLoot extends BlockLootSubProvider {
 
     @Override
     protected Iterable<Block> getKnownBlocks() {
-        return added;
+        return this.added;
     }
 
     @Override
     protected void add(Block block, LootTable.Builder builder) {
         super.add(block, builder);
-        added.add(block);
+        this.added.add(block);
     }
 }

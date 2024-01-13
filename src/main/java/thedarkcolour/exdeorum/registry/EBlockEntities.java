@@ -1,6 +1,6 @@
 /*
  * Ex Deorum
- * Copyright (c) 2023 thedarkcolour
+ * Copyright (c) 2024 thedarkcolour
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,7 +24,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.blockentity.BarrelBlockEntity;
-import thedarkcolour.exdeorum.blockentity.CompressedSieveBlockEntity;
 import thedarkcolour.exdeorum.blockentity.InfestedLeavesBlockEntity;
 import thedarkcolour.exdeorum.blockentity.LavaCrucibleBlockEntity;
 import thedarkcolour.exdeorum.blockentity.MechanicalSieveBlockEntity;
@@ -34,7 +33,7 @@ import thedarkcolour.exdeorum.blockentity.WaterCrucibleBlockEntity;
 public class EBlockEntities {
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, ExDeorum.ID);
 
-    public static final RegistryObject<BlockEntityType<InfestedLeavesBlockEntity>> INFESTED_LEAVES = BLOCK_ENTITIES.register("infested_leaves", () -> BlockEntityType.Builder.<InfestedLeavesBlockEntity>of(InfestedLeavesBlockEntity::new, EBlocks.INFESTED_LEAVES.get()).build(null));
+    public static final RegistryObject<BlockEntityType<InfestedLeavesBlockEntity>> INFESTED_LEAVES = BLOCK_ENTITIES.register("infested_leaves", () -> BlockEntityType.Builder.of(InfestedLeavesBlockEntity::new, EBlocks.INFESTED_LEAVES.get()).build(null));
     public static final RegistryObject<BlockEntityType<LavaCrucibleBlockEntity>> LAVA_CRUCIBLE = BLOCK_ENTITIES.register("lava_crucible", () -> BlockEntityType.Builder.of(LavaCrucibleBlockEntity::new,
             EBlocks.WARPED_CRUCIBLE.get(),
             EBlocks.CRIMSON_CRUCIBLE.get(),

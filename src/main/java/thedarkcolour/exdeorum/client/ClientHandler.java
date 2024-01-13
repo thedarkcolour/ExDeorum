@@ -1,6 +1,6 @@
 /*
  * Ex Deorum
- * Copyright (c) 2023 thedarkcolour
+ * Copyright (c) 2024 thedarkcolour
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,7 +58,6 @@ import thedarkcolour.exdeorum.registry.EMenus;
 import thedarkcolour.exdeorum.registry.EWorldPresets;
 
 import java.io.IOException;
-import java.text.DecimalFormat;
 
 public class ClientHandler {
     // Used for the composting recipe category in JEI
@@ -152,7 +151,7 @@ public class ClientHandler {
 
     // Sets Ex Deorum world type as default
     private static void onScreenOpen(ScreenEvent.Opening event) {
-        if (EConfig.CLIENT.setVoidWorldAsDefault.get()) {
+        if (EConfig.CLIENT.setVoidWorldAsDefault.get() && EConfig.COMMON.setVoidWorldAsDefault.get()) {
             if (event.getNewScreen() instanceof CreateWorldScreen screen) {
                 var ctx = screen.getUiState().getSettings();
                 screen.getUiState().setWorldType(new WorldCreationUiState.WorldTypeEntry(ctx.worldgenLoadContext().registryOrThrow(Registries.WORLD_PRESET).getHolder(EWorldPresets.VOID_WORLD).orElse(null)));

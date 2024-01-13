@@ -1,6 +1,6 @@
 /*
  * Ex Deorum
- * Copyright (c) 2023 thedarkcolour
+ * Copyright (c) 2024 thedarkcolour
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,8 +19,15 @@
 package thedarkcolour.exdeorum.asm;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.levelgen.presets.WorldPreset;
+import net.minecraft.world.level.levelgen.presets.WorldPresets;
 import net.minecraft.world.level.levelgen.structure.Structure;
+import thedarkcolour.exdeorum.config.EConfig;
+import thedarkcolour.exdeorum.registry.EWorldPresets;
 import thedarkcolour.exdeorum.voidworld.VoidChunkGenerator;
+
+import java.util.Properties;
 
 @SuppressWarnings("unused")
 public final class ASMHooks {
@@ -38,7 +45,7 @@ public final class ASMHooks {
 
     /**
      * Called in {@link net.minecraft.world.level.dimension.end.EndDragonFight#spawnExitPortal(boolean)}
-     * right before EndPodiumFeature.place is called to fix End Portal not spawning fully,
+     * right before {@code EndPodiumFeature.place} is called to fix End Portal not spawning fully,
      * with part of it being generated outside the world in the void.
      */
     public static BlockPos prePlaceEndPodium(BlockPos pos) {
@@ -47,5 +54,13 @@ public final class ASMHooks {
         } else {
             return pos.immutable();
         }
+    }
+
+    /**
+     * Called in {@link net.minecraft.server.dedicated.DedicatedServerProperties#DedicatedServerProperties(Properties)}
+     * where {@code WorldPresets.NORMAL} is used in the line that looks like {@code WorldPresets.NORMAL.location().toString()}
+     */
+    public static ResourceKey<WorldPreset> overrideDefaultWorldPreset() {
+        return EConfig.COMMON.setVoidWorldAsDefault.get() ? EWorldPresets.VOID_WORLD : WorldPresets.NORMAL;
     }
 }

@@ -1,6 +1,6 @@
 /*
  * Ex Deorum
- * Copyright (c) 2023 thedarkcolour
+ * Copyright (c) 2024 thedarkcolour
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -81,16 +81,16 @@ public class BarrelBlockEntity extends EBlockEntity {
         super(EBlockEntities.BARREL.get(), pos, state);
     }
 
-    private final LazyOptional<IItemHandler> itemHandler = LazyOptional.of(() -> item);
-    private final LazyOptional<IFluidHandler> fluidHandler = LazyOptional.of(() -> tank);
+    private final LazyOptional<IItemHandler> itemHandler = LazyOptional.of(() -> this.item);
+    private final LazyOptional<IFluidHandler> fluidHandler = LazyOptional.of(() -> this.tank);
 
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
         if (cap == ForgeCapabilities.FLUID_HANDLER) {
-            return fluidHandler.cast();
+            return this.fluidHandler.cast();
         } else if (cap == ForgeCapabilities.ITEM_HANDLER) {
-            return itemHandler.cast();
+            return this.itemHandler.cast();
         }
 
         return super.getCapability(cap, side);
@@ -107,13 +107,13 @@ public class BarrelBlockEntity extends EBlockEntity {
     public void saveAdditional(CompoundTag nbt) {
         super.saveAdditional(nbt);
 
-        nbt.put("item", item.serializeNBT());
-        nbt.put("tank", tank.writeToNBT(new CompoundTag()));
-        nbt.putShort("compost", compost);
-        nbt.putFloat("progress", progress);
-        nbt.putShort("r", r);
-        nbt.putShort("g", g);
-        nbt.putShort("b", b);
+        nbt.put("item", this.item.serializeNBT());
+        nbt.put("tank", this.tank.writeToNBT(new CompoundTag()));
+        nbt.putShort("compost", this.compost);
+        nbt.putFloat("progress", this.progress);
+        nbt.putShort("r", this.r);
+        nbt.putShort("g", this.g);
+        nbt.putShort("b", this.b);
     }
 
     @Override
@@ -130,25 +130,25 @@ public class BarrelBlockEntity extends EBlockEntity {
     }
 
     public boolean isBrewing() {
-        return tank.getFluidAmount() == 1000 && progress != 0.0f && !isBurning();
+        return this.tank.getFluidAmount() == 1000 && this.progress != 0.0f && !isBurning();
     }
 
     public boolean isBurning() {
-        return isHotFluid(tank.getFluid().getFluid().getFluidType()) && progress != 0.0f;
+        return isHotFluid(this.tank.getFluid().getFluid().getFluidType()) && this.progress != 0.0f;
     }
 
     // Composting is in progress if at 1000. When finished, compost is set back to 0
     public boolean isComposting() {
-        return compost == 1000;
+        return this.compost == 1000;
     }
 
     // Returns true if there are no solid ingredients (can a fluid be inserted?)
     public boolean hasNoSolids() {
-        return compost <= 0 && item.getStackInSlot(0).isEmpty();
+        return this.compost <= 0 && this.item.getStackInSlot(0).isEmpty();
     }
 
     public boolean hasFullWater() {
-        return tank.getFluidAmount() == 1000 && tank.getFluid().getFluid().is(FluidTags.WATER);
+        return this.tank.getFluidAmount() == 1000 && this.tank.getFluid().getFluid().is(FluidTags.WATER);
     }
 
     // Burning temp of wood according to google is 300 C or ~575 kelvin
@@ -160,18 +160,18 @@ public class BarrelBlockEntity extends EBlockEntity {
     private void spawnParticlesIfBurning() {
         if (isBurning()) {
             BlockPos pos = getBlockPos();
-            int burnTicks = (int) (progress * 300);
+            int burnTicks = (int) (this.progress * 300);
 
             if (burnTicks % 30 == 0) {
-                level.addParticle(ParticleTypes.LARGE_SMOKE, pos.getX() + Math.random(), pos.getY() + 1.2, pos.getZ() + Math.random(), 0.0, 0.0, 0.0);
+                this.level.addParticle(ParticleTypes.LARGE_SMOKE, pos.getX() + Math.random(), pos.getY() + 1.2, pos.getZ() + Math.random(), 0.0, 0.0, 0.0);
             } else if (burnTicks % 5 == 0) {
-                level.addParticle(ParticleTypes.SMOKE, pos.getX() + Math.random(), pos.getY() + 1.2, pos.getZ() + Math.random(), 0.0, 0.0, 0.0);
+                this.level.addParticle(ParticleTypes.SMOKE, pos.getX() + Math.random(), pos.getY() + 1.2, pos.getZ() + Math.random(), 0.0, 0.0, 0.0);
             }
         }
     }
 
     public ItemStack getItem() {
-        return item.getStackInSlot(0);
+        return this.item.getStackInSlot(0);
     }
 
     private void setItem(ItemStack item) {
@@ -200,8 +200,8 @@ public class BarrelBlockEntity extends EBlockEntity {
                 tryInWorldFluidMixing();
 
                 // If the item is a fluid handler, try to transfer fluids
-                if (wasBurning && !isHotFluid(tank.getFluid().getFluid().getFluidType())) {
-                    progress = 0.0f;
+                if (wasBurning && !isHotFluid(this.tank.getFluid().getFluid().getFluidType())) {
+                    this.progress = 0.0f;
                 }
 
                 return InteractionResult.sidedSuccess(level.isClientSide);
@@ -213,19 +213,19 @@ public class BarrelBlockEntity extends EBlockEntity {
                     var fluid = new FluidStack(Fluids.WATER, 250);
 
                     if (playerItem.getItem() == Items.POTION && PotionUtils.getPotion(playerItem) == Potions.WATER) {
-                        if (tank.fill(fluid, IFluidHandler.FluidAction.SIMULATE) > 0) {
+                        if (this.tank.fill(fluid, IFluidHandler.FluidAction.SIMULATE) > 0) {
                             if (!player.getAbilities().instabuild) {
                                 player.setItemInHand(hand, new ItemStack(Items.GLASS_BOTTLE));
                             }
-                            tank.fill(fluid, IFluidHandler.FluidAction.EXECUTE);
+                            this.tank.fill(fluid, IFluidHandler.FluidAction.EXECUTE);
                             level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.BOTTLE_FILL, SoundSource.NEUTRAL, 1.0F, 1.0F);
 
                             markUpdated();
                             return InteractionResult.sidedSuccess(level.isClientSide);
                         }
                     } else if (playerItem.getItem() == Items.GLASS_BOTTLE) {
-                        if (tank.drain(fluid, IFluidHandler.FluidAction.SIMULATE).getAmount() == 250) {
-                            extractWaterBottle(tank, level, player, playerItem, fluid);
+                        if (this.tank.drain(fluid, IFluidHandler.FluidAction.SIMULATE).getAmount() == 250) {
+                            extractWaterBottle(this.tank, level, player, playerItem, fluid);
 
                             markUpdated();
                             return InteractionResult.sidedSuccess(level.isClientSide);
@@ -238,7 +238,7 @@ public class BarrelBlockEntity extends EBlockEntity {
                 if (itemFluidCap.isPresent()) {
                     var fluidInTank = itemFluidCap.get().getFluidInTank(0);
 
-                    if (tank.getFluidAmount() >= 1000) {
+                    if (this.tank.getFluidAmount() >= 1000) {
                         if (!level.isClientSide) {
                             tryFluidMixing(fluidInTank.getFluid());
                         }
@@ -253,7 +253,7 @@ public class BarrelBlockEntity extends EBlockEntity {
         var playerItem = player.getItemInHand(hand);
         if (!level.isClientSide) {
             // mix item ingredient into fluid OR turn into compost (delegated to item handler)
-            var handItem = item.insertItem(0, player.getAbilities().instabuild ? playerItem.copy() : playerItem, false);
+            var handItem = this.item.insertItem(0, player.getAbilities().instabuild ? playerItem.copy() : playerItem, false);
 
             if (!player.getAbilities().instabuild) {
                 player.setItemInHand(hand, handItem);
@@ -280,7 +280,7 @@ public class BarrelBlockEntity extends EBlockEntity {
     // Pops the item out of the barrel (ex. dirt that has finished composting)
     private InteractionResult giveResultItem(Level level) {
         if (!level.isClientSide) {
-            popOutItem(level, this.worldPosition, item.extract(false));
+            popOutItem(level, this.worldPosition, this.item.extract(false));
 
             // Empty contents
             setItem(ItemStack.EMPTY);
@@ -306,7 +306,7 @@ public class BarrelBlockEntity extends EBlockEntity {
      */
     private boolean tryCrafting(ItemStack input, boolean simulate) {
         boolean crafted = false;
-        if (!tank.isEmpty()) {
+        if (!this.tank.isEmpty()) {
             crafted = tryMixing(input, simulate);
         } else if (!isComposting()) {
             crafted = tryComposting(input, simulate);
@@ -332,15 +332,15 @@ public class BarrelBlockEntity extends EBlockEntity {
             return false;
         }
 
-        var recipe = RecipeUtil.getBarrelMixingRecipe(level.getRecipeManager(), playerItem, this.tank.getFluid());
+        var recipe = RecipeUtil.getBarrelMixingRecipe(this.level.getRecipeManager(), playerItem, this.tank.getFluid());
 
         if (recipe != null) {
             if (!simulate) {
                 // Empty barrel
-                tank.drain(recipe.fluidAmount, IFluidHandler.FluidAction.EXECUTE);
+                this.tank.drain(recipe.fluidAmount, IFluidHandler.FluidAction.EXECUTE);
                 // Replace fluid with result
                 setItem(new ItemStack(recipe.result));
-                level.playSound(null, worldPosition, SoundEvents.AMBIENT_UNDERWATER_EXIT, SoundSource.BLOCKS, 0.8f, 0.8f);
+                this.level.playSound(null, this.worldPosition, SoundEvents.AMBIENT_UNDERWATER_EXIT, SoundSource.BLOCKS, 0.8f, 0.8f);
             }
             // Mixing was successful, so return true
             return true;
@@ -364,24 +364,24 @@ public class BarrelBlockEntity extends EBlockEntity {
     }
 
     private void addCompost(ItemStack playerItem, int volume) {
-        int oldCompost = compost;
-        compost = (short) Math.min(1000, compost + volume);
+        int oldCompost = this.compost;
+        this.compost = (short) Math.min(1000, this.compost + volume);
 
-        if (compost != 0) {
+        if (this.compost != 0) {
             if (!CompostColors.isLoaded()) {
                 CompostColors.loadColors();
             }
 
-            float weightNew = (float) (compost - oldCompost) / compost;
+            float weightNew = (float) (this.compost - oldCompost) / this.compost;
             float weightOld = 1 - weightNew;
             var color = CompostColors.COLORS.getOrDefault(playerItem.getItem(), CompostColors.DEFAULT_COLOR);
 
-            r = (short) (weightNew * color.x + weightOld * r);
-            g = (short) (weightNew * color.y + weightOld * g);
-            b = (short) (weightNew * color.z + weightOld * b);
+            this.r = (short) (weightNew * color.x + weightOld * this.r);
+            this.g = (short) (weightNew * color.y + weightOld * this.g);
+            this.b = (short) (weightNew * color.z + weightOld * this.b);
         }
 
-        level.playSound(null, worldPosition, SoundEvents.COMPOSTER_FILL, SoundSource.BLOCKS);
+        this.level.playSound(null, this.worldPosition, SoundEvents.COMPOSTER_FILL, SoundSource.BLOCKS);
     }
 
     /**
@@ -391,8 +391,8 @@ public class BarrelBlockEntity extends EBlockEntity {
      * <li> When the fluid in the barrel changes (see {@link FluidHandler#onContentsChanged()}) </li>
      */
     public void tryInWorldFluidMixing() {
-        if (!tank.isEmpty() && item.getStackInSlot(0).isEmpty()) {
-            var aboveFluid = level.getBlockState(worldPosition.above()).getFluidState().getType();
+        if (!this.tank.isEmpty() && this.item.getStackInSlot(0).isEmpty()) {
+            var aboveFluid = this.level.getBlockState(this.worldPosition.above()).getFluidState().getType();
 
             if (aboveFluid != Fluids.EMPTY) {
                 tryFluidMixing(aboveFluid);
@@ -401,10 +401,10 @@ public class BarrelBlockEntity extends EBlockEntity {
     }
 
     private void tryFluidMixing(Fluid additive) {
-        BarrelFluidMixingRecipe recipe = RecipeUtil.getFluidMixingRecipe(tank.getFluid(), additive);
+        BarrelFluidMixingRecipe recipe = RecipeUtil.getFluidMixingRecipe(this.tank.getFluid(), additive);
 
         if (recipe != null) {
-            tank.drain(recipe.baseFluidAmount, IFluidHandler.FluidAction.EXECUTE);
+            this.tank.drain(recipe.baseFluidAmount, IFluidHandler.FluidAction.EXECUTE);
             setItem(new ItemStack(recipe.result));
         }
     }
@@ -494,14 +494,14 @@ public class BarrelBlockEntity extends EBlockEntity {
     }
 
     private void doCompost() {
-        progress += getProgressStep();
+        this.progress += getProgressStep();
         markUpdated();
 
-        if (progress >= 1.0f) {
-            progress = 0.0f;
-            compost = 0;
+        if (this.progress >= 1.0f) {
+            this.progress = 0.0f;
+            this.compost = 0;
             setItem(new ItemStack(Items.DIRT));
-            level.playSound(null, worldPosition, SoundEvents.COMPOSTER_READY, SoundSource.BLOCKS);
+            this.level.playSound(null, this.worldPosition, SoundEvents.COMPOSTER_READY, SoundSource.BLOCKS);
         }
     }
 
@@ -531,14 +531,14 @@ public class BarrelBlockEntity extends EBlockEntity {
             if (stack.isEmpty())
                 return ItemStack.EMPTY;
             validateSlotIndex(slot);
-            if (!stacks.get(slot).isEmpty())
+            if (!this.stacks.get(slot).isEmpty())
                 return stack;
 
             if (tryCrafting(stack, simulate)) {
                 if (stack.getCount() == 1) {
                     return getRemainderItem(stack);
                 } else {
-                    popOutItem(level, worldPosition, getRemainderItem(stack));
+                    popOutItem(BarrelBlockEntity.this.level, BarrelBlockEntity.this.worldPosition, getRemainderItem(stack));
                     return ItemHandlerHelper.copyStackWithSize(stack, stack.getCount() - 1);
                 }
             } else {
@@ -558,7 +558,7 @@ public class BarrelBlockEntity extends EBlockEntity {
 
         @Override
         protected void onContentsChanged(int slot) {
-            if (!level.isClientSide) {
+            if (!BarrelBlockEntity.this.level.isClientSide) {
                 markUpdated();
             }
         }

@@ -1,6 +1,6 @@
 /*
  * Ex Deorum
- * Copyright (c) 2023 thedarkcolour
+ * Copyright (c) 2024 thedarkcolour
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,10 +23,8 @@ import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
-import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.helpers.IJeiHelpers;
 import mezz.jei.api.helpers.IModIdHelper;
-import mezz.jei.api.ingredients.IIngredientType;
 import mezz.jei.api.recipe.IFocusFactory;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
@@ -34,14 +32,11 @@ import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.runtime.IIngredientManager;
 import mezz.jei.api.runtime.IRecipesGui;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraftforge.fml.ModContainer;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.registries.ForgeRegistries;
 import thedarkcolour.exdeorum.data.TranslationKeys;
 import thedarkcolour.exdeorum.registry.EItems;
@@ -115,13 +110,13 @@ class CrucibleHeatSourcesCategory implements IRecipeCategory<CrucibleHeatSourceR
     public List<Component> getTooltipStrings(CrucibleHeatSourceRecipe recipe, IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
         if (44.0 < mouseX && mouseX < 76.0 && 16 < mouseY && mouseY < 48) {
             if (recipe.ingredientType() != null) {
-                var tooltip = ingredientManager.getIngredientRenderer(recipe.ingredientType()).getTooltip(recipe.ingredient(), Minecraft.getInstance().options.advancedItemTooltips ? TooltipFlag.ADVANCED : TooltipFlag.NORMAL);
-                return modIdHelper.addModNameToIngredientTooltip(tooltip, recipe.ingredient(), ingredientManager.getIngredientHelper(recipe.ingredientType()));
+                var tooltip = this.ingredientManager.getIngredientRenderer(recipe.ingredientType()).getTooltip(recipe.ingredient(), Minecraft.getInstance().options.advancedItemTooltips ? TooltipFlag.ADVANCED : TooltipFlag.NORMAL);
+                return this.modIdHelper.addModNameToIngredientTooltip(tooltip, recipe.ingredient(), this.ingredientManager.getIngredientHelper(recipe.ingredientType()));
             } else {
 
                 var block = recipe.blockState().getBlock();
                 var modId = ForgeRegistries.BLOCKS.getKey(block).getNamespace();
-                return List.of(Component.translatable(block.getDescriptionId()), Component.literal(modIdHelper.getFormattedModNameForModId(modId)));
+                return List.of(Component.translatable(block.getDescriptionId()), Component.literal(this.modIdHelper.getFormattedModNameForModId(modId)));
             }
         }
 
@@ -133,13 +128,13 @@ class CrucibleHeatSourcesCategory implements IRecipeCategory<CrucibleHeatSourceR
         if (input.getType() == InputConstants.Type.MOUSE && (input.getValue() == InputConstants.MOUSE_BUTTON_LEFT || input.getValue() == InputConstants.MOUSE_BUTTON_RIGHT)) {
             if (44.0 < mouseX && mouseX < 76.0 && 16 < mouseY && mouseY < 48) {
                 if (recipe.ingredientType() != null) {
-                    ingredientManager.createTypedIngredient(recipe.ingredientType(), recipe.ingredient()).ifPresent(ingredient -> {
+                    this.ingredientManager.createTypedIngredient(recipe.ingredientType(), recipe.ingredient()).ifPresent(ingredient -> {
                         if (Minecraft.getInstance().screen instanceof IRecipesGui recipesGui) {
                             if (input.getValue() == InputConstants.MOUSE_BUTTON_LEFT) {
-                                recipesGui.show(focusFactory.createFocus(RecipeIngredientRole.OUTPUT, ingredient));
+                                recipesGui.show(this.focusFactory.createFocus(RecipeIngredientRole.OUTPUT, ingredient));
                             } else {
                                 // INPUT + CATALYST
-                                recipesGui.show(List.of(focusFactory.createFocus(RecipeIngredientRole.CATALYST, ingredient), focusFactory.createFocus(RecipeIngredientRole.INPUT, ingredient)));
+                                recipesGui.show(List.of(this.focusFactory.createFocus(RecipeIngredientRole.CATALYST, ingredient), this.focusFactory.createFocus(RecipeIngredientRole.INPUT, ingredient)));
                             }
                         }
                     });

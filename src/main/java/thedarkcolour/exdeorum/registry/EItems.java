@@ -1,6 +1,6 @@
 /*
  * Ex Deorum
- * Copyright (c) 2023 thedarkcolour
+ * Copyright (c) 2024 thedarkcolour
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,8 +32,6 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import thedarkcolour.exdeorum.ExDeorum;
-import thedarkcolour.exdeorum.block.EBlock;
-import thedarkcolour.exdeorum.block.SieveBlock;
 import thedarkcolour.exdeorum.compat.ModIds;
 import thedarkcolour.exdeorum.item.*;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;

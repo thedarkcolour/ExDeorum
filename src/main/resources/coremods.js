@@ -42,7 +42,7 @@ function initializeCoreMod() {
                 return method;
             }
         },
-        // Redirects a field access in the constructor of DedicatedServerProperties from WorldPresets.NORMAL to EWorldPresets.VOID_WORLD
+        // Redirects a field access in the constructor of DedicatedServerProperties from WorldPresets.NORMAL to ASMHooks.overrideDefaultWorldPreset()
         'DedicatedServerPropertiesPatch': {
             'target': {
                 'type': 'METHOD',
@@ -57,8 +57,8 @@ function initializeCoreMod() {
                     var insn = insnList.get(i);
 
                     if (insn.getOpcode() === Opcodes.GETSTATIC && (insn.name.equals('f_226437_') || insn.name.equals('NORMAL'))) {
-                        insn.owner = 'thedarkcolour/exdeorum/registry/EWorldPresets';
-                        insn.name = 'VOID_WORLD';
+                        var newInsn = new MethodInsnNode(Opcodes.INVOKESTATIC, 'thedarkcolour/exdeorum/asm/ASMHooks', 'overrideDefaultWorldPreset', '()Lnet/minecraft/resources/ResourceKey;', false)
+                        insnList.set(insn, newInsn);
 
                         ASMAPI.log('INFO', 'Successfully patched server.properties to use void world type by default');
                         return method;

@@ -1,6 +1,6 @@
 /*
  * Ex Deorum
- * Copyright (c) 2023 thedarkcolour
+ * Copyright (c) 2024 thedarkcolour
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,8 +24,6 @@ import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.math.Axis;
-import mezz.jei.api.gui.ingredient.IRecipeSlotTooltipCallback;
-import mezz.jei.api.gui.ingredient.IRecipeSlotView;
 import mezz.jei.api.ingredients.IIngredientRenderer;
 import net.minecraft.ChatFormatting;
 import net.minecraft.CrashReport;
@@ -65,8 +63,6 @@ import java.util.List;
 class ClientJeiUtil {
     private static final FluidState EMPTY = Fluids.EMPTY.defaultFluidState();
     private static final BlockState AIR = Blocks.AIR.defaultBlockState();
-
-    private static final IIngredientRenderer<ItemStack> ASTERISK_RENDERER = AsteriskRenderer.INSTANCE;
 
     // https://github.com/way2muchnoise/JustEnoughResources/blob/89ee40ff068c8d6eb6ab103f76381445691cffc9/Common/src/main/java/jeresources/util/RenderHelper.java#L100
     static void renderBlock(GuiGraphics guiGraphics, BlockState block, float x, float y, float z, float scale) {

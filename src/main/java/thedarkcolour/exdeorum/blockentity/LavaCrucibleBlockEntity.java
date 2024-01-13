@@ -1,6 +1,6 @@
 /*
  * Ex Deorum
- * Copyright (c) 2023 thedarkcolour
+ * Copyright (c) 2024 thedarkcolour
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -93,7 +93,7 @@ public class LavaCrucibleBlockEntity extends AbstractCrucibleBlockEntity {
 
     @Override
     public int getMeltingRate() {
-        BlockState state = level.getBlockState(getBlockPos().below());
+        BlockState state = this.level.getBlockState(getBlockPos().below());
 
         return HEAT_REGISTRY.getInt(state);
     }

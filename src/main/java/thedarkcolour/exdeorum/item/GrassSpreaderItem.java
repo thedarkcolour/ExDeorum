@@ -1,6 +1,6 @@
 /*
  * Ex Deorum
- * Copyright (c) 2023 thedarkcolour
+ * Copyright (c) 2024 thedarkcolour
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,7 +28,6 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Cow;
-import net.minecraft.world.entity.animal.MushroomCow;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -52,7 +51,7 @@ public class GrassSpreaderItem extends Item {
         var pos = ctx.getClickedPos();
         var player = ctx.getPlayer();
         var state = level.getBlockState(pos);
-        var grass = grassState.get();
+        var grass = this.grassState.get();
 
         if (canSpread(state) && grass != state) {
             if (!level.isClientSide) {

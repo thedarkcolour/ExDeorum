@@ -28,6 +28,6 @@ import thedarkcolour.exdeorum.recipe.sieve.SieveRecipe;
 public record SieveMeshFilter(ReplacementMatch match) implements RecipeFilter {
     @Override
     public boolean test(RecipeKJS recipe) {
-        return match instanceof ItemMatch match && recipe instanceof RecipeJS recipeJs && recipeJs.getOriginalRecipe() instanceof SieveRecipe sieveRecipe && match.contains(sieveRecipe.mesh);
+        return this.match instanceof ItemMatch itemMatch && recipe instanceof RecipeJS recipeJs && recipeJs.getOriginalRecipe() instanceof SieveRecipe sieveRecipe && itemMatch.contains(sieveRecipe.mesh);
     }
 }

@@ -1,6 +1,6 @@
 /*
  * Ex Deorum
- * Copyright (c) 2023 thedarkcolour
+ * Copyright (c) 2024 thedarkcolour
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,10 +39,10 @@ public class BarrelFluidMixingRecipeCache {
 
     @Nullable
     public BarrelFluidMixingRecipe getRecipe(Fluid baseFluid, Fluid additive) {
-        if (recipes == null) {
+        if (this.recipes == null) {
             buildRecipes();
         }
-        var recipesForBase = recipes.get(baseFluid);
+        var recipesForBase = this.recipes.get(baseFluid);
         if (recipesForBase != null) {
             return recipesForBase.get(additive);
         }
@@ -50,10 +50,10 @@ public class BarrelFluidMixingRecipeCache {
     }
 
     private void buildRecipes() {
-        var recipes = new HashMap<Fluid, Map<Fluid, BarrelFluidMixingRecipe>>();
+        this.recipes = new HashMap<>();
 
         for (var recipe : this.recipeManager.byType(ERecipeTypes.BARREL_FLUID_MIXING.get()).values()) {
-            recipes.computeIfAbsent(recipe.baseFluid, key -> new HashMap<>()).put(recipe.additiveFluid, recipe);
+            this.recipes.computeIfAbsent(recipe.baseFluid, key -> new HashMap<>()).put(recipe.additiveFluid, recipe);
         }
 
         this.recipeManager = null;
