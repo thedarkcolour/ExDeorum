@@ -75,7 +75,7 @@ public class MechanicalSieveBlockEntity extends AbstractSieveBlockEntity impleme
         super(EBlockEntities.MECHANICAL_SIEVE.get(), pos, state, owner -> new SieveLogic(owner, false, true));
 
         this.inventory = new ItemHandler(22);
-        this.energy = new EnergyHelper(40000);
+        this.energy = new EnergyHelper(EConfig.SERVER.mechanicalSieveEnergyStorage.get());
 
         this.capabilityInventory = LazyOptional.of(() -> this.inventory);
         this.capabilityEnergy = LazyOptional.of(() -> this.energy);
