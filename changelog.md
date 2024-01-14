@@ -1,6 +1,9 @@
-## Ex Deorum 1.15
+## Ex Deorum 1.16
 - Added Mechanical Hammer, a machine that uses FE to hammer blocks automatically. Uses 20 FE a tick by default and takes 200 ticks (10 seconds) to hammer an item with a hammer that has no efficiency.
+
+## Ex Deorum 1.15
 - Fixed not being able to enchant sieve meshes in the Enchanting Table.
+- Improved appearance of witch water to better match water so that the transformation animation looks smoother.
 
 ## Ex Deorum 1.14
 - Added Mechanical Sieve, a machine that uses FE to sift blocks automatically. Uses 40 FE a tick by default and takes 100 ticks to sift an item with no efficiency enchantment.

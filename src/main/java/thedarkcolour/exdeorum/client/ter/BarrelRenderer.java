@@ -81,10 +81,10 @@ public class BarrelRenderer implements BlockEntityRenderer<BarrelBlockEntity> {
                 if (barrel.isBrewing()) {
                     float progress = barrel.progress;
 
-                    // Transition between water color and witch water color (1F0C4C)
-                    r = (int) Mth.lerp(progress, r, 31);
-                    g = (int) Mth.lerp(progress, g, 12);
-                    b = (int) Mth.lerp(progress, b, 76);
+                    // Transition between water color and witch water color (200B41)
+                    r = (int) Mth.lerp(progress, r, 32);
+                    g = (int) Mth.lerp(progress, g, 11);
+                    b = (int) Mth.lerp(progress, b, 65);
                 }
 
                 RenderUtil.renderFlatFluidSprite(buffers, stack, level, pos, y, 2.0f, light, r, g, b, fluid);
