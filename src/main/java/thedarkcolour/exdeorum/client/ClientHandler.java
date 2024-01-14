@@ -43,6 +43,7 @@ import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import thedarkcolour.exdeorum.ExDeorum;
+import thedarkcolour.exdeorum.client.screen.MechanicalHammerScreen;
 import thedarkcolour.exdeorum.client.screen.MechanicalSieveScreen;
 import thedarkcolour.exdeorum.client.ter.BarrelRenderer;
 import thedarkcolour.exdeorum.client.ter.CrucibleRenderer;
@@ -101,6 +102,7 @@ public class ClientHandler {
         event.enqueueWork(() -> {
             setRenderLayers();
             MenuScreens.register(EMenus.MECHANICAL_SIEVE.get(), MechanicalSieveScreen::new);
+            MenuScreens.register(EMenus.MECHANICAL_HAMMER.get(), MechanicalHammerScreen::new);
         });
     }
 

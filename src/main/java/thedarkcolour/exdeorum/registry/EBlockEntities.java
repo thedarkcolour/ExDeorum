@@ -26,6 +26,7 @@ import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.blockentity.BarrelBlockEntity;
 import thedarkcolour.exdeorum.blockentity.InfestedLeavesBlockEntity;
 import thedarkcolour.exdeorum.blockentity.LavaCrucibleBlockEntity;
+import thedarkcolour.exdeorum.blockentity.MechanicalHammerBlockEntity;
 import thedarkcolour.exdeorum.blockentity.MechanicalSieveBlockEntity;
 import thedarkcolour.exdeorum.blockentity.SieveBlockEntity;
 import thedarkcolour.exdeorum.blockentity.WaterCrucibleBlockEntity;
@@ -156,4 +157,5 @@ public class EBlockEntities {
             EBlocks.CRYSTALLIZED_SIEVE.get()
     ).build(null));
     public static final RegistryObject<BlockEntityType<MechanicalSieveBlockEntity>> MECHANICAL_SIEVE = BLOCK_ENTITIES.register("mechanical_sieve", () -> BlockEntityType.Builder.of(MechanicalSieveBlockEntity::new, EBlocks.MECHANICAL_SIEVE.get()).build(null));
+    public static final RegistryObject<BlockEntityType<MechanicalHammerBlockEntity>> MECHANICAL_HAMMER = BLOCK_ENTITIES.register("mechanical_hammer", () -> BlockEntityType.Builder.of(MechanicalHammerBlockEntity::new, EBlocks.MECHANICAL_HAMMER.get()).build(null));
 }

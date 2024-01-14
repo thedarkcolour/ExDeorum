@@ -80,14 +80,15 @@ public class ExDeorumInfoProvider implements IProbeInfoProvider {
                 info.tank(crucible.getTank());
             }
         } else if (te instanceof SieveBlockEntity sieve) {
-            if (!sieve.getContents().isEmpty()) {
-                info.text(CompoundText.create().style(TextStyleClass.LABEL).text("Progress: ").style(TextStyleClass.WARNING).text((Math.round(1000 * sieve.getProgress()) / 10) + "%"));
+            var logic = sieve.getLogic();
+            if (!logic.getContents().isEmpty()) {
+                info.text(CompoundText.create().style(TextStyleClass.LABEL).text("Progress: ").style(TextStyleClass.WARNING).text((Math.round(1000 * logic.getProgress()) / 10) + "%"));
             }
             if (playerEntity.isShiftKeyDown()) {
-                var mesh = sieve.getMesh();
+                var mesh = logic.getMesh();
                 info.horizontal(info.defaultLayoutStyle().spacing(10).alignment(ElementAlignment.ALIGN_CENTER))
-                        .item(sieve.getMesh(), info.defaultItemStyle().width(16).height(16))
-                        .text(CompoundText.create().info(sieve.getMesh().getDescriptionId()));
+                        .item(mesh, info.defaultItemStyle().width(16).height(16))
+                        .text(CompoundText.create().info(mesh.getDescriptionId()));
                 if (mesh.isEnchanted()) {
                     var list = new ObjectArrayList<Component>();
                     var style = info.defaultTextStyle().height(10);

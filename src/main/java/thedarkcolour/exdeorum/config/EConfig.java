@@ -133,6 +133,8 @@ public class EConfig {
         public final BooleanValue allowWitchWaterEntityConversion;
         public final IntValue mechanicalSieveEnergyStorage;
         public final IntValue mechanicalSieveEnergyConsumption;
+        public final IntValue mechanicalHammerEnergyStorage;
+        public final IntValue mechanicalHammerEnergyConsumption;
 
         public Server(ForgeConfigSpec.Builder builder) {
             builder.comment("Server configuration for Ex Deorum").push("server");
@@ -179,6 +181,12 @@ public class EConfig {
             this.mechanicalSieveEnergyConsumption = builder
                     .comment("The amount of FE/t a tick consumed by the mechanical sieve when sifting a block.")
                     .defineInRange("mechanical_sieve_energy_consumption", 40, 0, Integer.MAX_VALUE);
+            this.mechanicalHammerEnergyStorage = builder
+                    .comment("The maximum amount of FE the mechanical hammer can have in its energy storage.")
+                    .defineInRange("mechanical_hammer_energy_storage", 40_000, 0, Integer.MAX_VALUE);
+            this.mechanicalHammerEnergyConsumption = builder
+                    .comment("The amount of FE/t a tick consumed by the mechanical hammer when crushing a block.")
+                    .defineInRange("mechanical_hammer_energy_consumption", 20, 0, Integer.MAX_VALUE);
 
             builder.pop();
         }

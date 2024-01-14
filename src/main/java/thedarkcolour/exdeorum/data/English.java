@@ -78,6 +78,8 @@ class English {
         english.add(TranslationKeys.REDSTONE_CONTROL_MODES[RedstoneControlWidget.REDSTONE_MODE_POWERED], "Powered");
         english.add(TranslationKeys.REDSTONE_CONTROL_LABEL, "Redstone Mode");
         english.add(TranslationKeys.REDSTONE_CONTROL_MODE, "Mode: ");
+        english.add(TranslationKeys.MECHANICAL_HAMMER_SCREEN_TITLE, "Mechanical Hammer");
+        english.add(TranslationKeys.MECHANICAL_HAMMER_SCREEN_TITLE, "Consuming %s FE/t");
 
         english.addBlock(EBlocks.VEXING_ARCHWOOD_CRUCIBLE, "Vexing Archwood Crucible");
         english.addBlock(EBlocks.CASCADING_ARCHWOOD_CRUCIBLE, "Cascading Archwood Crucible");

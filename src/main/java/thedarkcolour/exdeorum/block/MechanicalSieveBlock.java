@@ -69,7 +69,7 @@ public class MechanicalSieveBlock extends EBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState pState, BlockEntityType<T> type) {
-        return type == EBlockEntities.MECHANICAL_SIEVE.get() && !level.isClientSide ? (BlockEntityTicker<T>) new MechanicalSieveBlockEntity.ServerTicker() : null;
+        return type == EBlockEntities.MECHANICAL_SIEVE.get() && !level.isClientSide ? (BlockEntityTicker<T>) new MechanicalSieveBlockEntity.ServerTicker<>() : null;
     }
 
     @Override
@@ -93,7 +93,7 @@ public class MechanicalSieveBlock extends EBlock {
     public void playerWillDestroy(Level level, BlockPos pos, BlockState pState, Player player) {
         if (!level.isClientSide && player.isCreative() && level.getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS)) {
             if (level.getBlockEntity(pos) instanceof MechanicalSieveBlockEntity sieve) {
-                if (!sieve.getMesh().isEmpty()) {
+                if (!sieve.getLogic().getMesh().isEmpty()) {
                     var stack = new ItemStack(this);
                     BlockItem.setBlockEntityData(stack, EBlockEntities.MECHANICAL_SIEVE.get(), sieve.saveWithoutMetadata());
                     var itemEntity = new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, stack);

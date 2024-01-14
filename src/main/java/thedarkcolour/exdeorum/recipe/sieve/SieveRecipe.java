@@ -87,6 +87,7 @@ public class SieveRecipe extends ProbabilityRecipe {
             return new SieveRecipe(id, ingredient, mesh, result, resultAmount, byHandOnly);
         }
 
+        @SuppressWarnings("deprecation")
         @Override
         public @Nullable SieveRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buffer) {
             Ingredient ingredient = Ingredient.fromNetwork(buffer);
@@ -96,6 +97,7 @@ public class SieveRecipe extends ProbabilityRecipe {
             return new SieveRecipe(id, ingredient, mesh, result, resultAmount, buffer.readBoolean());
         }
 
+        @SuppressWarnings("deprecation")
         @Override
         public void toNetwork(FriendlyByteBuf buffer, SieveRecipe recipe) {
             recipe.getIngredient().toNetwork(buffer);

@@ -23,7 +23,7 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.world.entity.player.Player;
 import thedarkcolour.exdeorum.blockentity.EBlockEntity;
 import thedarkcolour.exdeorum.client.ClientHandler;
-import thedarkcolour.exdeorum.menu.EContainerMenu;
+import thedarkcolour.exdeorum.menu.AbstractMachineMenu;
 
 public class ClientMessageHandler {
     public static boolean isInVoidWorld;
@@ -54,7 +54,7 @@ public class ClientMessageHandler {
     public static void handleMenuProperty(MenuPropertyMessage msg) {
         Player player = Minecraft.getInstance().player;
 
-        if (player != null && player.containerMenu instanceof EContainerMenu menu && menu.containerId == msg.containerId()) {
+        if (player != null && player.containerMenu instanceof AbstractMachineMenu menu && menu.containerId == msg.containerId()) {
             menu.setClientProperty(msg.index(), msg.value());
         }
     }
