@@ -57,6 +57,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.blockentity.LavaCrucibleBlockEntity;
+import thedarkcolour.exdeorum.blockentity.helper.ItemHelper;
 import thedarkcolour.exdeorum.client.CompostColors;
 import thedarkcolour.exdeorum.compat.ModIds;
 import thedarkcolour.exdeorum.compat.top.ExDeorumTopCompat;
@@ -229,6 +230,10 @@ public final class EventHandler {
     private static void interModEnqueue(InterModEnqueueEvent event) {
         if (ModList.get().isLoaded(ModIds.THE_ONE_PROBE)) {
             InterModComms.sendTo(ModIds.THE_ONE_PROBE, "getTheOneProbe", ExDeorumTopCompat::new);
+        }
+        // todo instead of doing this, figure out the real reason sorting voids items
+        if (ModList.get().isLoaded(ModIds.INVENTORY_SORTER)) {
+            InterModComms.sendTo(ModIds.INVENTORY_SORTER, "slotblacklist", ItemHelper.Slot.class::getName);
         }
     }
 

@@ -139,6 +139,12 @@ repositories {
             includeModule("maven.modrinth", "embeddium")
         }
     }
+    maven {
+        url "https://cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
 }
 
 dependencies {
@@ -169,6 +175,7 @@ dependencies {
 
     // testing
     //implementation fg.deobf("curse.maven:allthecompressed-514045:4938351")
+    //implementation fg.deobf("curse.maven:inventorysorter-240633:4655091")
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
