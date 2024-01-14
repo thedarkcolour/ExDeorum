@@ -4,6 +4,7 @@
 ## Ex Deorum 1.15
 - Fixed not being able to enchant sieve meshes in the Enchanting Table.
 - Fixed Barrels not rendering their contents properly
+- Fixed Inventory Sorter by voxcpw voiding items when middle clicking slots in the Mechanical Sieve GUI.
 - Improved appearance of witch water to better match water so that the transformation animation looks smoother.
 
 ## Ex Deorum 1.14
