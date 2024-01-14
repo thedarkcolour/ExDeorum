@@ -25,19 +25,28 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.blockentity.MechanicalHammerBlockEntity;
 import thedarkcolour.exdeorum.registry.EBlockEntities;
 
 public class MechanicalHammerBlock extends EBlock {
+    public static final BooleanProperty RUNNING = BooleanProperty.create("running");
+
     public MechanicalHammerBlock(Properties properties) {
         super(properties, EBlockEntities.MECHANICAL_HAMMER);
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        builder.add(RUNNING);
     }
 
     @SuppressWarnings("unchecked")
     @Nullable
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState pState, BlockEntityType<T> type) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
         return type == EBlockEntities.MECHANICAL_HAMMER.get() && !level.isClientSide ? (BlockEntityTicker<T>) new MechanicalHammerBlockEntity.ServerTicker<>() : null;
     }
 

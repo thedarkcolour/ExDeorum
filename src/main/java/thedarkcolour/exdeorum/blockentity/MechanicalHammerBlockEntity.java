@@ -33,6 +33,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import thedarkcolour.exdeorum.block.MechanicalHammerBlock;
 import thedarkcolour.exdeorum.blockentity.helper.ItemHelper;
 import thedarkcolour.exdeorum.config.EConfig;
 import thedarkcolour.exdeorum.data.TranslationKeys;
@@ -101,6 +102,7 @@ public class MechanicalHammerBlockEntity extends AbstractMachineBlockEntity<Mech
         if (!input.isEmpty() && !this.inventory.getStackInSlot(HAMMER_SLOT).isEmpty()) {
             if (canFitResultIntoOutput(input) != null) {
                 this.progress = 0;
+                this.level.setBlock(this.worldPosition, this.getBlockState().setValue(MechanicalHammerBlock.RUNNING, true), 3);
             }
         }
     }
@@ -153,6 +155,8 @@ public class MechanicalHammerBlockEntity extends AbstractMachineBlockEntity<Mech
 
                 this.progress = NOT_RUNNING;
             }
+        } else {
+            this.level.setBlock(this.worldPosition, this.getBlockState().setValue(MechanicalHammerBlock.RUNNING, false), 3);
         }
     }
 

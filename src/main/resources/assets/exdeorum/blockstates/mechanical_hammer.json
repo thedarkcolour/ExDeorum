@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "running=false": {
+      "model": "exdeorum:block/mechanical_hammer_off"
+    },
+    "running=true": {
+      "model": "exdeorum:block/mechanical_hammer_on"
+    }
+  }
+}
