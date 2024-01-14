@@ -22,6 +22,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
@@ -127,6 +128,28 @@ public class BarrelBlockEntity extends EBlockEntity {
         this.r = nbt.getShort("r");
         this.g = nbt.getShort("g");
         this.b = nbt.getShort("b");
+    }
+
+    @Override
+    public void writeVisualData(FriendlyByteBuf buffer) {
+        buffer.writeItem(this.item.getStackInSlot(0));
+        buffer.writeFluidStack(this.tank.getFluid());
+        buffer.writeShort(this.compost);
+        buffer.writeFloat(this.progress);
+        buffer.writeShort(this.r);
+        buffer.writeShort(this.g);
+        buffer.writeShort(this.b);
+    }
+
+    @Override
+    public void readVisualData(FriendlyByteBuf buffer) {
+        this.item.setStackInSlot(0, buffer.readItem());
+        this.tank.setFluid(buffer.readFluidStack());
+        this.compost = buffer.readShort();
+        this.progress = buffer.readFloat();
+        this.r = buffer.readShort();
+        this.g = buffer.readShort();
+        this.b = buffer.readShort();
     }
 
     public boolean isBrewing() {

@@ -3,6 +3,7 @@
 
 ## Ex Deorum 1.15
 - Fixed not being able to enchant sieve meshes in the Enchanting Table.
+- Fixed Barrels not rendering their contents properly
 - Improved appearance of witch water to better match water so that the transformation animation looks smoother.
 
 ## Ex Deorum 1.14
