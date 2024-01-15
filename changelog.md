@@ -1,3 +1,12 @@
+## Ex Deorum 1.16
+- Added Mechanical Hammer, a machine that uses FE to hammer blocks automatically. Uses 20 FE a tick by default and takes 200 ticks (10 seconds) to hammer an item with a hammer that has no efficiency.
+
+## Ex Deorum 1.15
+- Fixed not being able to enchant sieve meshes in the Enchanting Table.
+- Fixed Barrels not rendering their contents properly
+- Fixed Inventory Sorter by voxcpw voiding items when middle clicking slots in the Mechanical Sieve GUI.
+- Improved appearance of witch water to better match water so that the transformation animation looks smoother.
+
 ## Ex Deorum 1.14
 - Added Mechanical Sieve, a machine that uses FE to sift blocks automatically. Uses 40 FE a tick by default and takes 100 ticks to sift an item with no efficiency enchantment.
 - Added `by_hand_only` boolean field to Sieve recipes, which allows modpack makers to add sieve drops that don't drop from the Mechanical Sieve.
