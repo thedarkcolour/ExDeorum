@@ -602,6 +602,7 @@ public class BarrelBlockEntity extends EBlockEntity {
         protected void onContentsChanged() {
             if (!BarrelBlockEntity.this.isBeingFilledByPlayer) {
                 BarrelBlockEntity.this.tryInWorldFluidMixing();
+                BarrelBlockEntity.this.markUpdated();
             }
         }
     }

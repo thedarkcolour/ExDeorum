@@ -1,10 +1,14 @@
-## Ex Deorum 1.16
+## Ex Deorum 1.17
 - Added Mechanical Hammer, a machine that uses FE to hammer blocks automatically. Uses 20 FE a tick by default and takes 200 ticks (10 seconds) to hammer an item with a hammer that has no efficiency.
+
+## Ex Deorum 1.16
+- Fixed barrels not correctly rendering their fluid contents when modified by pipes.
+- Fixed Mechanical Sieve being instantly breakable with no tool. Now requires a pickaxe to destroy, like machines added by other mods.
 
 ## Ex Deorum 1.15
 - Fixed not being able to enchant sieve meshes in the Enchanting Table.
 - Fixed Barrels not rendering their contents properly
-- Fixed Inventory Sorter by voxcpw voiding items when middle clicking slots in the Mechanical Sieve GUI.
+- Fixed Inventory Sorter by voxcpw voiding items when middle-clicking slots in the Mechanical Sieve GUI.
 - Improved appearance of witch water to better match water so that the transformation animation looks smoother.
 
 ## Ex Deorum 1.14
