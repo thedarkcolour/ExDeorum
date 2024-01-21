@@ -19,6 +19,8 @@
 package thedarkcolour.exdeorum;
 
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.common.ForgeMod;
+import net.minecraftforge.data.loading.DatagenModLoader;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -55,6 +57,11 @@ public class ExDeorum {
     public ExDeorum() {
         createRegistries();
         NetworkHandler.register();
+
+        // Still enabled in Dev environment because KubeJS enables milk fluid
+        if (DatagenModLoader.isRunningDataGen()) {
+            ForgeMod.enableMilkFluid();
+        }
 
         // Game Events
         EventHandler.register();

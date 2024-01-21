@@ -1,4 +1,4 @@
-// 1.20.1	2024-01-11T17:10:41.051025	Recipes
+// 1.20.1	2024-01-20T15:20:37.3902252	Recipes
 e37b64428f17e304e91539ac0513456d7ce40cd1 data/exdeorum/advancements/recipes/building_blocks/sponge.json
 5ad481a0c376c1a1785a5d3b992064d0ec0bf3b0 data/exdeorum/advancements/recipes/food/end_cake.json
 25dd027e844a72b03c95dbe5e3c3dd8c738ceb00 data/exdeorum/advancements/recipes/misc/acacia_barrel.json
@@ -167,6 +167,7 @@ b9a34df74ce0ee9c4247a9a64784c851eb1de58c data/exdeorum/recipes/barrel_compost/wo
 d08b7a270dff3f7bb45338798227a69d775e7c32 data/exdeorum/recipes/barrel_fluid_mixing/blackstone.json
 1a87de0d21b9677fda38f7a520cbffbdc41d8532 data/exdeorum/recipes/barrel_fluid_mixing/netherrack.json
 8b42ca284eaea721e8e7589e5fb0b16ccbe66ee5 data/exdeorum/recipes/barrel_fluid_mixing/obsidian.json
+fe744cd05e5e9f62aa8d51f5c89376374288c90f data/exdeorum/recipes/barrel_fluid_mixing/slime_block.json
 7cfc5db0d6fbb804a7bd1d3bbbbace986d90f3c4 data/exdeorum/recipes/barrel_fluid_mixing/stone.json
 bdcdeae9d06028ce943d06c367b58677efe03fa8 data/exdeorum/recipes/barrel_mixing/clay.json
 72f969f4db1f82a627df573c866a1b291e540a0a data/exdeorum/recipes/barrel_mixing/end_stone.json

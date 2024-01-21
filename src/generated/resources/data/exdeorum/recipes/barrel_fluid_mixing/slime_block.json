@@ -1,0 +1,7 @@
+{
+  "type": "exdeorum:barrel_fluid_mixing",
+  "additive_fluid": "minecraft:milk",
+  "base_fluid": "minecraft:water",
+  "base_fluid_amount": 1000,
+  "result": "minecraft:slime_block"
+}

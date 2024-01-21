@@ -34,6 +34,7 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
+import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.crafting.conditions.ICondition;
 import net.minecraftforge.common.crafting.conditions.ModLoadedCondition;
@@ -549,6 +550,7 @@ public class Recipes {
         barrelMixing(writer, ingredient(EItems.DUST.get()), Fluids.WATER, Items.CLAY);
         barrelMixing(writer, ingredient(Items.MILK_BUCKET), Fluids.WATER, Items.SLIME_BLOCK);
         barrelMixing(writer, "_from_porcelain_bucket", ingredient(EItems.PORCELAIN_MILK_BUCKET.get()), Fluids.WATER, Items.SLIME_BLOCK);
+        barrelFluidMixing(writer, Fluids.WATER, ForgeMod.MILK.get(), Items.SLIME_BLOCK);
         barrelMixing(writer, ingredient(Items.SNOWBALL), Fluids.WATER, Items.ICE);
         barrelFluidMixing(writer, Fluids.WATER, Fluids.LAVA, Items.STONE);
         // lava
