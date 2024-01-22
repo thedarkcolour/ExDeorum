@@ -141,6 +141,13 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
     }
 
     @Override
+    public void applyBiomeDecoration(WorldGenLevel pLevel, ChunkAccess pChunk, StructureManager pStructureManager) {
+        if (this.generateNormal) {
+            super.applyBiomeDecoration(pLevel, pChunk, pStructureManager);
+        }
+    }
+
+    @Override
     public void createReferences(WorldGenLevel level, StructureManager pStructureManager, ChunkAccess pChunk) {
         if (this.generateNormal || hasStructures(level.registryAccess())) {
             super.createReferences(level, pStructureManager, pChunk);
