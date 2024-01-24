@@ -75,7 +75,7 @@ public class BarrelBlockEntity extends EBlockEntity {
     public short compost;
     // compost colors
     public short r, g, b;
-    // used to avoid obsidian dupe
+    // Used to avoid triggering obsidian dupes in onContentsChanged, because Forge's FluidUtil actually modifies the tank for some reason
     private boolean isBeingFilledByPlayer;
 
     public BarrelBlockEntity(BlockPos pos, BlockState state) {
