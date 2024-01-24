@@ -1,5 +1,11 @@
-## Ex Deorum 1.17
+## Ex Deorum 1.18
 - Added Mechanical Hammer, a machine that uses FE to hammer blocks automatically. Uses 20 FE a tick by default and takes 200 ticks (10 seconds) to hammer an item with a hammer that has no efficiency.
+
+## Ex Deorum 1.17
+- Added Nether Wart as a sieve drop from Soul Sand
+- Fixed Frozen Ocean biomes spawning floating icebergs in the void world type
+- Fixed Slime Block barrel recipe not working in the barrel when a mod enables the Milk fluid
+- Fixed duplication bug with top left player inventory slot in the Mechanical Sieve menu
 
 ## Ex Deorum 1.16
 - Fixed barrels not correctly rendering their fluid contents when modified by pipes.
