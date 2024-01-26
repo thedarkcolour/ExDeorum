@@ -81,5 +81,4 @@ public class TranslationKeys {
     public static final String REDSTONE_CONTROL_LABEL = "gui." + ExDeorum.ID + ".redstone_control.label";
     public static final String REDSTONE_CONTROL_MODE = "gui." + ExDeorum.ID + ".redstone_control.mode";
     public static final String MECHANICAL_HAMMER_SCREEN_TITLE = ExDeorum.ID + ".container.mechanical_hammer";
-    public static final String MACHINE_FE_PER_TICK = "gui." + ExDeorum.ID + ".machine_fe_per_tick";
 }

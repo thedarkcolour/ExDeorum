@@ -36,6 +36,8 @@ public class MechanicalHammerBlock extends EBlock {
 
     public MechanicalHammerBlock(Properties properties) {
         super(properties, EBlockEntities.MECHANICAL_HAMMER);
+
+        registerDefaultState(defaultBlockState().setValue(RUNNING, false));
     }
 
     @Override

@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:block/orientable",
   "textures": {
-    "front": "exdeorum:block/mechanical_hammer_front_off",
+    "front": "exdeorum:block/mechanical_hammer_front",
     "side": "exdeorum:block/mechanical_hammer_side",
     "top": "exdeorum:block/mechanical_hammer_top"
   }

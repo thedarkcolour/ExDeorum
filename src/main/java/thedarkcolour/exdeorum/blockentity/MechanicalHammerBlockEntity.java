@@ -49,12 +49,12 @@ public class MechanicalHammerBlockEntity extends AbstractMachineBlockEntity<Mech
     private static final int HAMMER_SLOT = 1;
     private static final int OUTPUT_SLOT = 2;
     public static final int TOTAL_PROGRESS = 10_000_000;
-    // process should take 320 ticks or 10 seconds with no efficiency
+    // process should take 200 ticks or 10 seconds with no efficiency
     private static final int PROGRESS_INTERVAL = TOTAL_PROGRESS / 200;
     public static final int NOT_RUNNING = -1;
 
     // an integer from 0 to 10,000,000 instead of a decimal number which is inaccurate and buggy
-    private int progress = -1;
+    private int progress = NOT_RUNNING;
     private float efficiency;
 
     public MechanicalHammerBlockEntity(BlockPos pos, BlockState state) {
@@ -99,12 +99,16 @@ public class MechanicalHammerBlockEntity extends AbstractMachineBlockEntity<Mech
     protected void tryStartRunning() {
         var input = this.inventory.getStackInSlot(INPUT_SLOT);
 
-        if (!input.isEmpty() && !this.inventory.getStackInSlot(HAMMER_SLOT).isEmpty()) {
+        if (!input.isEmpty()) {
             if (canFitResultIntoOutput(input) != null) {
                 this.progress = 0;
                 this.level.setBlock(this.worldPosition, this.getBlockState().setValue(MechanicalHammerBlock.RUNNING, true), 3);
+
+                return;
             }
         }
+
+        this.level.setBlock(this.worldPosition, this.getBlockState().setValue(MechanicalHammerBlock.RUNNING, false), 3);
     }
 
     @Nullable
@@ -130,7 +134,7 @@ public class MechanicalHammerBlockEntity extends AbstractMachineBlockEntity<Mech
     protected void runMachineTick() {
         var input = this.inventory.getStackInSlot(INPUT_SLOT);
 
-        if (!input.isEmpty() && !this.inventory.getStackInSlot(HAMMER_SLOT).isEmpty()) {
+        if (!input.isEmpty()) {
             this.progress += PROGRESS_INTERVAL * this.efficiency;
 
             if (this.progress >= TOTAL_PROGRESS) {
@@ -178,9 +182,13 @@ public class MechanicalHammerBlockEntity extends AbstractMachineBlockEntity<Mech
     private void onHammerChanged() {
         var hammer = this.inventory.getStackInSlot(HAMMER_SLOT);
         if (hammer.isEmpty()) {
-            this.progress = NOT_RUNNING;
+            this.efficiency = 1f;
+        } else {
+            // This timing allows full efficiency hammer to match full efficiency sieve (55 ticks/craft
+            // Rewards player for using hammer by doubling speed right off the bat, before efficiency
+            // although not as fast as Mekanism's crusher, still pretty fast and much cheaper
+            this.efficiency = 2f + hammer.getEnchantmentLevel(Enchantments.BLOCK_EFFICIENCY) * 0.33f;
         }
-        this.efficiency = 1f + hammer.getEnchantmentLevel(Enchantments.BLOCK_EFFICIENCY) * 0.17f;
     }
 
     @Override
