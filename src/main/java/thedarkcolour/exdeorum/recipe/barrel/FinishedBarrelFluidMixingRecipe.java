@@ -33,13 +33,15 @@ public class FinishedBarrelFluidMixingRecipe implements EFinishedRecipe {
     private final int baseFluidAmount;
     private final Fluid additiveFluid;
     private final Item result;
+    private final boolean consumesAdditive;
 
-    public FinishedBarrelFluidMixingRecipe(ResourceLocation id, Fluid baseFluid, int baseFluidAmount, Fluid additiveFluid, Item result) {
+    public FinishedBarrelFluidMixingRecipe(ResourceLocation id, Fluid baseFluid, int baseFluidAmount, Fluid additiveFluid, Item result, boolean consumesAdditive) {
         this.id = id;
         this.baseFluid = baseFluid;
         this.baseFluidAmount = baseFluidAmount;
         this.additiveFluid = additiveFluid;
         this.result = result;
+        this.consumesAdditive = consumesAdditive;
     }
 
     @Override
@@ -47,6 +49,7 @@ public class FinishedBarrelFluidMixingRecipe implements EFinishedRecipe {
         json.addProperty("base_fluid", ForgeRegistries.FLUIDS.getKey(this.baseFluid).toString());
         json.addProperty("base_fluid_amount", this.baseFluidAmount);
         json.addProperty("additive_fluid", ForgeRegistries.FLUIDS.getKey(this.additiveFluid).toString());
+        json.addProperty("consumes_additive", this.consumesAdditive);
         json.addProperty("result", ForgeRegistries.ITEMS.getKey(this.result).toString());
     }
 

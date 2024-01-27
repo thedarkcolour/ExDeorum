@@ -124,6 +124,7 @@
   "gui.exdeorum.category.barrel_compost": "Barrel Compost",
   "gui.exdeorum.category.barrel_compost.volume": "Compost: %s",
   "gui.exdeorum.category.barrel_fluid_mixing": "Barrel Fluid Mixing",
+  "gui.exdeorum.category.barrel_fluid_mixing.contents_are_consumed": "Contents are consumed",
   "gui.exdeorum.category.barrel_mixing": "Barrel Mixing",
   "gui.exdeorum.category.crucible_heat_source": "Crucible Heat Sources",
   "gui.exdeorum.category.crucible_heat_source.multiplier": "Melt Rate: %sx",

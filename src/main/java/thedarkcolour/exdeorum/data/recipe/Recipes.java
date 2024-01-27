@@ -29,6 +29,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
@@ -550,14 +551,14 @@ public class Recipes {
         barrelMixing(writer, ingredient(EItems.DUST.get()), Fluids.WATER, Items.CLAY);
         barrelMixing(writer, ingredient(Items.MILK_BUCKET), Fluids.WATER, Items.SLIME_BLOCK);
         barrelMixing(writer, "_from_porcelain_bucket", ingredient(EItems.PORCELAIN_MILK_BUCKET.get()), Fluids.WATER, Items.SLIME_BLOCK);
-        barrelFluidMixing(writer, Fluids.WATER, ForgeMod.MILK.get(), Items.SLIME_BLOCK);
+        barrelFluidMixing(writer, Fluids.WATER, ForgeMod.MILK.get(), Items.SLIME_BLOCK, true);
         barrelMixing(writer, ingredient(Items.SNOWBALL), Fluids.WATER, Items.ICE);
-        barrelFluidMixing(writer, Fluids.WATER, Fluids.LAVA, Items.STONE);
+        barrelFluidMixing(writer, Fluids.WATER, Fluids.LAVA, Items.STONE, false);
         // lava
-        barrelFluidMixing(writer, EFluids.WITCH_WATER.get(), Fluids.LAVA, Items.NETHERRACK);
-        barrelFluidMixing(writer, Fluids.LAVA, EFluids.WITCH_WATER.get(), Items.BLACKSTONE);
+        barrelFluidMixing(writer, EFluids.WITCH_WATER.get(), Fluids.LAVA, Items.NETHERRACK, true);
+        barrelFluidMixing(writer, Fluids.LAVA, EFluids.WITCH_WATER.get(), Items.BLACKSTONE, true);
         barrelMixing(writer, ingredient(Items.GLOWSTONE_DUST), Fluids.LAVA, Items.END_STONE);
-        barrelFluidMixing(writer, Fluids.LAVA, Fluids.WATER, Items.OBSIDIAN);
+        barrelFluidMixing(writer, Fluids.LAVA, Fluids.WATER, Items.OBSIDIAN, false);
         barrelMixing(writer, ingredient(Items.SLIME_BALL), Fluids.LAVA, Items.MAGMA_CREAM);
         barrelMixing(writer, ingredient(Items.SOUL_SAND), Fluids.LAVA, Items.SOUL_SOIL);
         // witch water
@@ -572,8 +573,8 @@ public class Recipes {
         writer.accept(new FinishedBarrelMixingRecipe(new ResourceLocation(ExDeorum.ID, "barrel_mixing/" + path(result) + suffix), ingredient, fluidType, 1000, result));
     }
 
-    private static void barrelFluidMixing(Consumer<FinishedRecipe> writer, Fluid base, Fluid additive, Item result) {
-        writer.accept(new FinishedBarrelFluidMixingRecipe(new ResourceLocation(ExDeorum.ID, "barrel_fluid_mixing/" + path(result)), base, 1000, additive, result));
+    private static void barrelFluidMixing(Consumer<FinishedRecipe> writer, Fluid base, Fluid additive, Item result, boolean consumesAdditive) {
+        writer.accept(new FinishedBarrelFluidMixingRecipe(new ResourceLocation(ExDeorum.ID, "barrel_fluid_mixing/" + path(result)), base, 1000, additive, result, consumesAdditive));
     }
 
     static ICondition tagNotEmpty(TagKey<Item> tag) {

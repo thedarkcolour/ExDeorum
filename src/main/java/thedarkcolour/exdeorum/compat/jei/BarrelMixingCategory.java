@@ -19,6 +19,7 @@
 package thedarkcolour.exdeorum.compat.jei;
 
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
+import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
@@ -26,6 +27,7 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
@@ -98,6 +100,8 @@ public abstract class BarrelMixingCategory<T> implements IRecipeCategory<T> {
     }
 
     public static class Fluids extends BarrelMixingCategory<BarrelFluidMixingRecipe> {
+        private static final Component CONTENTS_ARE_CONSUMED_TOOLTIP = Component.translatable(TranslationKeys.BARREL_FLUID_MIXING_CONTENTS_ARE_CONSUMED).withStyle(ChatFormatting.RED);
+
         public Fluids(IGuiHelper helper, IDrawable plus, IDrawable arrow) {
             super(helper, plus, arrow, TranslationKeys.BARREL_FLUID_MIXING_CATEGORY_TITLE, EItems.STONE_BARREL.get());
         }
@@ -105,13 +109,25 @@ public abstract class BarrelMixingCategory<T> implements IRecipeCategory<T> {
         @Override
         public void setRecipe(IRecipeLayoutBuilder builder, BarrelFluidMixingRecipe recipe, IFocusGroup focuses) {
             builder.addSlot(RecipeIngredientRole.INPUT, 1, 1).addFluidStack(recipe.baseFluid, recipe.baseFluidAmount).setFluidRenderer(1000, false, 16, 16);
-            builder.addSlot(RecipeIngredientRole.INPUT, 33, 1).addFluidStack(recipe.additiveFluid, 1000).setFluidRenderer(1000, false, 16, 16);
+            IRecipeSlotBuilder additiveSlot = builder.addSlot(RecipeIngredientRole.INPUT, 33, 1).addFluidStack(recipe.additiveFluid, 1000).setFluidRenderer(1000, false, 16, 16);
+            if (recipe.consumesAdditive) {
+                additiveSlot.addTooltipCallback((view, tooltip) -> tooltip.add(CONTENTS_ARE_CONSUMED_TOOLTIP));
+            }
             builder.addSlot(RecipeIngredientRole.OUTPUT, 79, 1).addItemStack(new ItemStack(recipe.result));
         }
 
         @Override
         public RecipeType<BarrelFluidMixingRecipe> getRecipeType() {
             return ExDeorumJeiPlugin.BARREL_FLUID_MIXING;
+        }
+
+        @Override
+        public void draw(BarrelFluidMixingRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
+            super.draw(recipe, recipeSlotsView, graphics, mouseX, mouseY);
+
+            if (recipe.consumesAdditive) {
+                ClientJeiUtil.renderAsterisk(graphics, 18 + 3 + 3 + 8, 0);
+            }
         }
     }
 }

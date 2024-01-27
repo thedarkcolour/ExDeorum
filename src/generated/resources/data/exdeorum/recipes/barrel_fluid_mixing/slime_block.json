@@ -3,5 +3,6 @@
   "additive_fluid": "minecraft:milk",
   "base_fluid": "minecraft:water",
   "base_fluid_amount": 1000,
+  "consumes_additive": true,
   "result": "minecraft:slime_block"
 }
