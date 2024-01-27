@@ -1,5 +1,9 @@
-## Ex Deorum 1.18
+## Ex Deorum 1.19
 - Added Mechanical Hammer, a machine that uses FE to hammer blocks automatically. Uses 20 FE a tick by default and takes 200 ticks (10 seconds) to hammer an item with a hammer that has no efficiency.
+
+## Ex Deorum 1.18
+- Fixed bug with milk and slime recipe.
+- Barrel fluid mixing recipes can now consume the additive fluid using the `consumes_additive` boolean property in the recipe JSON. (ex. Water and Milk making slime)
 
 ## Ex Deorum 1.17
 - Added Nether Wart as a sieve drop from Soul Sand
