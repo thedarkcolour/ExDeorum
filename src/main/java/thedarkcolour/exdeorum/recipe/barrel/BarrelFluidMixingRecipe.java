@@ -112,6 +112,7 @@ public class BarrelFluidMixingRecipe implements Recipe<Container> {
             buffer.writeVarInt(recipe.baseFluidAmount);
             buffer.writeRegistryId(ForgeRegistries.FLUIDS, recipe.additiveFluid);
             buffer.writeRegistryId(ForgeRegistries.ITEMS, recipe.result);
+            buffer.writeBoolean(recipe.consumesAdditive);
         }
 
         @Override
