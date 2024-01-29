@@ -420,26 +420,28 @@ public class BarrelBlockEntity extends EBlockEntity {
      * <li> When the fluid in the barrel changes (see {@link FluidHandler#onContentsChanged()}) </li>
      */
     public void tryInWorldFluidMixing() {
-        if (!this.tank.isEmpty() && this.item.getStackInSlot(0).isEmpty()) {
-            var abovePos = this.worldPosition.above();
-            var aboveBlockState = this.level.getBlockState(abovePos);
-            var aboveFluidState = aboveBlockState.getFluidState();
-            var aboveFluid = aboveFluidState.getType();
+        if (!this.level.isClientSide) {
+            if (!this.tank.isEmpty() && this.item.getStackInSlot(0).isEmpty()) {
+                var abovePos = this.worldPosition.above();
+                var aboveBlockState = this.level.getBlockState(abovePos);
+                var aboveFluidState = aboveBlockState.getFluidState();
+                var aboveFluid = aboveFluidState.getType();
 
-            if (aboveFluid != Fluids.EMPTY) {
-                BarrelFluidMixingRecipe recipe = RecipeUtil.getFluidMixingRecipe(this.tank.getFluid(), aboveFluid instanceof FlowingFluid flowing ? flowing.getSource() : aboveFluid);
+                if (aboveFluid != Fluids.EMPTY) {
+                    BarrelFluidMixingRecipe recipe = RecipeUtil.getFluidMixingRecipe(this.tank.getFluid(), aboveFluid instanceof FlowingFluid flowing ? flowing.getSource() : aboveFluid);
 
-                if (recipe != null) {
-                    // If additive is not consumed, just craft
-                    // If additive is consumed, check that the additive can be consumed before crafting
-                    if (!recipe.consumesAdditive) {
-                        this.tank.drain(recipe.baseFluidAmount, IFluidHandler.FluidAction.EXECUTE);
-                        setItem(new ItemStack(recipe.result));
-                    } else if (aboveBlockState.getBlock() instanceof BucketPickup pickup) {
-                        // If something was picked up, we can craft
-                        if (!pickup.pickupBlock(this.level, abovePos, aboveBlockState).isEmpty()) {
+                    if (recipe != null) {
+                        // If additive is not consumed, just craft
+                        // If additive is consumed, check that the additive can be consumed before crafting
+                        if (!recipe.consumesAdditive) {
                             this.tank.drain(recipe.baseFluidAmount, IFluidHandler.FluidAction.EXECUTE);
                             setItem(new ItemStack(recipe.result));
+                        } else if (aboveBlockState.getBlock() instanceof BucketPickup pickup) {
+                            // If something was picked up, we can craft
+                            if (!pickup.pickupBlock(this.level, abovePos, aboveBlockState).isEmpty()) {
+                                this.tank.drain(recipe.baseFluidAmount, IFluidHandler.FluidAction.EXECUTE);
+                                setItem(new ItemStack(recipe.result));
+                            }
                         }
                     }
                 }
@@ -618,6 +620,45 @@ public class BarrelBlockEntity extends EBlockEntity {
                 BarrelBlockEntity.this.tryInWorldFluidMixing();
                 BarrelBlockEntity.this.markUpdated();
             }
+        }
+
+        @Override
+        public int fill(FluidStack resource, FluidAction action) {
+            if (resource.isEmpty() || !isFluidValid(resource)) {
+                return 0;
+            }
+            if (action.simulate()) {
+                if (this.fluid.isEmpty()) {
+                    return Math.min(this.capacity, resource.getAmount());
+                }
+                if (!this.fluid.isFluidEqual(resource)) {
+                    return 0;
+                }
+                return Math.min(this.capacity - this.fluid.getAmount(), resource.getAmount());
+            }
+            if (this.fluid.isEmpty()) {
+                // fix forge's implementation to avoid dupes
+                int amount = Math.min(this.capacity, resource.getAmount());
+                this.fluid = new FluidStack(resource, Math.min(this.capacity, amount));
+                onContentsChanged();
+                return amount;
+            }
+            if (!this.fluid.isFluidEqual(resource))
+            {
+                return 0;
+            }
+            int filled = this.capacity - this.fluid.getAmount();
+
+            if (resource.getAmount() < filled) {
+                this.fluid.grow(resource.getAmount());
+                filled = resource.getAmount();
+            } else {
+                this.fluid.setAmount(this.capacity);
+            }
+            if (filled > 0) {
+                onContentsChanged();
+            }
+            return filled;
         }
     }
 }
