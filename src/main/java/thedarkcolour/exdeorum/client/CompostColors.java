@@ -152,7 +152,10 @@ public class CompostColors {
 
             if (!readMods.contains(modid)) {
                 var id = entry.getKey().location().getPath();
-                var jarFile = ModList.get().getModFileById(modid).getFile();
+                var modFile = ModList.get().getModFileById(modid);
+                if (modFile == null)
+                    continue;
+                var jarFile = modFile.getFile();
                 var modelPath = jarFile.findResource("assets/" + modid + "/models/item/" + id + ".json");
 
                 if (Files.exists(modelPath)) {
