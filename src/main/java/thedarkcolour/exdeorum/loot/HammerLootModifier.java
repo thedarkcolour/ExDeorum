@@ -21,6 +21,7 @@ package thedarkcolour.exdeorum.loot;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -56,22 +57,8 @@ public class HammerLootModifier extends LootModifier {
 
                     // fortune handling; more likely to boost drops if there are none to begin with
                     if (context.hasParam(LootContextParams.TOOL)) {
-                        var stack = context.getParam(LootContextParams.TOOL);
-                        var fortune = stack.getEnchantmentLevel(Enchantments.BLOCK_FORTUNE);
-
-                        if (fortune != 0) {
-                            var chance = context.getRandom().nextFloat();
-
-                            if (resultAmount == 0) {
-                                if (chance < 0.06 * fortune) {
-                                    resultAmount++;
-                                }
-                            } else {
-                                if (chance < 0.03 * fortune) {
-                                    resultAmount++;
-                                }
-                            }
-                        }
+                        var hammer = context.getParam(LootContextParams.TOOL);
+                        resultAmount += calculateFortuneBonus(hammer, context.getRandom(), resultAmount == 0);
                     }
 
                     if (resultAmount > 0) {
@@ -88,6 +75,33 @@ public class HammerLootModifier extends LootModifier {
     @Override
     public Codec<? extends IGlobalLootModifier> codec() {
         return CODEC;
+    }
+
+    /**
+     * Calculates the bonus number of drops for a hammer enchanted with fortune.
+     * @param hammer The hammer in question
+     * @param rand RNG
+     * @param zeroBaseDrops Whether there were no drops to begin with
+     * @return The additional number of drops, to be added to the number of base drops
+     */
+    public static int calculateFortuneBonus(ItemStack hammer, RandomSource rand, boolean zeroBaseDrops) {
+        var fortune = hammer.getEnchantmentLevel(Enchantments.BLOCK_FORTUNE);
+
+        if (fortune != 0) {
+            var chance = rand.nextFloat();
+
+            if (zeroBaseDrops) {
+                if (chance < 0.06f * fortune) {
+                    return 1;
+                }
+            } else {
+                if (chance < 0.03f * fortune) {
+                    return 1;
+                }
+            }
+        }
+
+        return 0;
     }
 }
 

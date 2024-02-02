@@ -27,13 +27,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.LootParams;
 import thedarkcolour.exdeorum.config.EConfig;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.recipe.sieve.SieveRecipe;
 import thedarkcolour.exdeorum.tag.EItemTags;
-
-import java.util.Map;
 
 public class SieveLogic {
     private final Owner owner;
@@ -80,7 +77,7 @@ public class SieveLogic {
         // Need epsilon because floating point decimals suck
         if (this.progress >= 1.0f - Mth.EPSILON) {
             var level = this.owner.getServerLevel();
-            var context = new LootContext.Builder(new LootParams(level, Map.of(), Map.of(), 0)).create(null);
+            var context = RecipeUtil.emptyLootContext(level);
             var rand = level.random;
             var limitDrops = this.contents.getItem() == Items.MOSS_BLOCK && EConfig.SERVER.limitMossSieveDrops.get();
             var handledAnyDrops = false;
@@ -207,5 +204,7 @@ public class SieveLogic {
         boolean handleResultItem(ItemStack result, ServerLevel level, RandomSource rand);
 
         void markUpdated();
+
+        SieveLogic getLogic();
     }
 }

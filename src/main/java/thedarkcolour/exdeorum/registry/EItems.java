@@ -225,6 +225,7 @@ public class EItems {
     public static final RegistryObject<BlockItem> CRYSTALLIZED_SIEVE = registerItemBlock(EBlocks.CRYSTALLIZED_SIEVE);
     // Mechanical Sieves
     public static final RegistryObject<BlockItem> MECHANICAL_SIEVE = registerItemBlock(EBlocks.MECHANICAL_SIEVE);
+    public static final RegistryObject<BlockItem> MECHANICAL_HAMMER = registerItemBlock(EBlocks.MECHANICAL_HAMMER);
 
     // Lava Crucibles
     public static final RegistryObject<BlockItem> PORCELAIN_CRUCIBLE = registerItemBlock(EBlocks.PORCELAIN_CRUCIBLE);
@@ -365,6 +366,7 @@ public class EItems {
             output.accept(CRYSTALLIZED_SIEVE.get());
         }
         output.accept(MECHANICAL_SIEVE.get());
+        output.accept(MECHANICAL_HAMMER.get());
 
         output.accept(PORCELAIN_CRUCIBLE.get());
         output.accept(WARPED_CRUCIBLE.get());

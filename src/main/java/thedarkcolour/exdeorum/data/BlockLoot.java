@@ -65,6 +65,11 @@ class BlockLoot extends BlockLootSubProvider {
                         .setRolls(ConstantValue.exactly(1.0F))
                         .add(LootItem.lootTableItem(EItems.MECHANICAL_SIEVE.get())
                                 .apply(MachineLootFunction.machineLoot())))));
+        add(EBlocks.MECHANICAL_HAMMER.get(), LootTable.lootTable()
+                .withPool(applyExplosionCondition(EItems.MECHANICAL_HAMMER.get(), LootPool.lootPool()
+                        .setRolls(ConstantValue.exactly(1.0F))
+                        .add(LootItem.lootTableItem(EItems.MECHANICAL_HAMMER.get())
+                                .apply(MachineLootFunction.machineLoot())))));
     }
 
     @Override

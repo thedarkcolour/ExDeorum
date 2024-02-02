@@ -48,6 +48,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.ModList;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.blockentity.LavaCrucibleBlockEntity;
+import thedarkcolour.exdeorum.client.screen.MechanicalHammerScreen;
 import thedarkcolour.exdeorum.client.screen.MechanicalSieveScreen;
 import thedarkcolour.exdeorum.compat.GroupedSieveRecipe;
 import thedarkcolour.exdeorum.compat.ModIds;
@@ -214,6 +215,7 @@ public class ExDeorumJeiPlugin implements IModPlugin {
         registration.addRecipeCatalyst(new ItemStack(EItems.IRON_HAMMER.get()), HAMMER);
         registration.addRecipeCatalyst(new ItemStack(EItems.DIAMOND_HAMMER.get()), HAMMER);
         registration.addRecipeCatalyst(new ItemStack(EItems.NETHERITE_HAMMER.get()), HAMMER);
+        registration.addRecipeCatalyst(new ItemStack(EItems.MECHANICAL_HAMMER.get()), HAMMER);
     }
 
     @Override
@@ -231,6 +233,7 @@ public class ExDeorumJeiPlugin implements IModPlugin {
         registration.addItemStackInfo(new ItemStack(EItems.CRIMSON_NYLIUM_SPORES.get()), Component.translatable(TranslationKeys.CRIMSON_NYLIUM_SPORES_JEI_INFO));
         registration.addItemStackInfo(new ItemStack(EItems.SCULK_CORE.get()), Component.translatable(TranslationKeys.SCULK_CORE_JEI_INFO));
         registration.addItemStackInfo(new ItemStack(EItems.MECHANICAL_SIEVE.get()), Component.translatable(TranslationKeys.MECHANICAL_SIEVE_JEI_INFO));
+        registration.addItemStackInfo(new ItemStack(EItems.MECHANICAL_HAMMER.get()), Component.translatable(TranslationKeys.MECHANICAL_HAMMER_JEI_INFO));
 
         var toRemove = new ArrayList<ItemStack>();
 
@@ -315,6 +318,22 @@ public class ExDeorumJeiPlugin implements IModPlugin {
 
             @Override
             public List<Rect2i> getGuiExtraAreas(MechanicalSieveScreen containerScreen) {
+                var widget = containerScreen.getRedstoneControlWidget();
+                if (widget != null) {
+                    return widget.getJeiBounds();
+                }
+                return List.of();
+            }
+        });
+        registration.addGuiContainerHandler(MechanicalHammerScreen.class, new IGuiContainerHandler<>() {
+            @Override
+            public Collection<IGuiClickableArea> getGuiClickableAreas(MechanicalHammerScreen containerScreen, double mouseX, double mouseY) {
+                IGuiClickableArea clickableArea = IGuiClickableArea.createBasic(MechanicalHammerScreen.RECIPE_CLICK_AREA_POS_X, MechanicalHammerScreen.RECIPE_CLICK_AREA_POS_Y, MechanicalHammerScreen.RECIPE_CLICK_AREA_WIDTH, MechanicalHammerScreen.RECIPE_CLICK_AREA_HEIGHT, HAMMER);
+                return List.of(clickableArea);
+            }
+
+            @Override
+            public List<Rect2i> getGuiExtraAreas(MechanicalHammerScreen containerScreen) {
                 var widget = containerScreen.getRedstoneControlWidget();
                 if (widget != null) {
                     return widget.getJeiBounds();

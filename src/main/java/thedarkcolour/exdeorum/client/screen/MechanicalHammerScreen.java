@@ -27,28 +27,26 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.ExDeorum;
+import thedarkcolour.exdeorum.blockentity.MechanicalHammerMenu;
 import thedarkcolour.exdeorum.config.EConfig;
 import thedarkcolour.exdeorum.data.TranslationKeys;
-import thedarkcolour.exdeorum.menu.MechanicalSieveMenu;
 
-public class MechanicalSieveScreen extends AbstractContainerScreen<MechanicalSieveMenu> {
-    private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(ExDeorum.ID, "textures/gui/container/mechanical_sieve.png");
+public class MechanicalHammerScreen extends AbstractContainerScreen<MechanicalHammerMenu> {
+    private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(ExDeorum.ID, "textures/gui/container/mechanical_hammer.png");
 
-    // Used by JEI and REI, these are bounds of the little grains texture between the mesh/input and the output slots
-    public static final int RECIPE_CLICK_AREA_POS_X = 51;
-    public static final int RECIPE_CLICK_AREA_POS_Y = 42;
-    public static final int RECIPE_CLICK_AREA_WIDTH = 21;
-    public static final int RECIPE_CLICK_AREA_HEIGHT = 14;
+    public static final int RECIPE_CLICK_AREA_POS_X = 80;
+    public static final int RECIPE_CLICK_AREA_POS_Y = 34;
+    public static final int RECIPE_CLICK_AREA_WIDTH = 23;
+    public static final int RECIPE_CLICK_AREA_HEIGHT = 16;
 
     @Nullable
     private RedstoneControlWidget redstoneControlWidget;
 
-    public MechanicalSieveScreen(MechanicalSieveMenu menu, Inventory playerInventory, Component title) {
+    public MechanicalHammerScreen(MechanicalHammerMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
 
         this.imageWidth = 176;
-        this.imageHeight = 173;
-        this.inventoryLabelY += 7;
+        this.imageHeight = 166;
     }
 
     @Override
@@ -65,30 +63,30 @@ public class MechanicalSieveScreen extends AbstractContainerScreen<MechanicalSie
     }
 
     @Override
-    protected void renderBg(GuiGraphics graphics, float partialTick, int mX, int mY) {
+    protected void renderBg(GuiGraphics graphics, float pPartialTick, int pMouseX, int pMouseY) {
         int left = this.leftPos;
         int top = this.topPos;
         graphics.blit(BACKGROUND_TEXTURE, left, top, 0, 0, this.imageWidth, this.imageHeight);
 
         // energy bar
         int energy = Mth.floor(54 * ((float) this.menu.prevEnergy / EConfig.SERVER.mechanicalSieveEnergyStorage.get()));
-        graphics.blit(BACKGROUND_TEXTURE, left + 10, top + 22 + 54 - energy, this.imageWidth, 14 + 54 - energy, 12, energy);
+        graphics.blit(BACKGROUND_TEXTURE, left + 10, top + 15 + 54 - energy, this.imageWidth, 16 + 54 - energy, 12, energy);
 
         // progress arrow
-        int progress = Math.min(21, (int) (this.menu.machine.getLogic().getProgress() * 22));
-        graphics.blit(BACKGROUND_TEXTURE, left + RECIPE_CLICK_AREA_POS_X, top + RECIPE_CLICK_AREA_POS_Y, this.imageWidth, 0, progress, 14);
+        int progress = Math.min(23, this.menu.machine.getGuiProgress());
+        graphics.blit(BACKGROUND_TEXTURE, left + RECIPE_CLICK_AREA_POS_X, top + RECIPE_CLICK_AREA_POS_Y, this.imageWidth, 0, progress, 16);
     }
 
     @Override
-    public void render(GuiGraphics graphics, int mx, int my, float partialTicks) {
+    public void render(GuiGraphics graphics, int mx, int my, float pPartialTick) {
         renderBackground(graphics);
-        super.render(graphics, mx, my, partialTicks);
+        super.render(graphics, mx, my, pPartialTick);
         renderTooltip(graphics, mx, my);
 
         int rx = mx - this.leftPos;
         int ry = my - this.topPos;
 
-        if (9 <= rx && rx < 23 && 21 <= ry && ry < 77) {
+        if (9 <= rx && rx < 23 && 14 <= ry && ry < 70) {
             var energyTooltip = Component.translatable(TranslationKeys.ENERGY).append(Component.translatable(TranslationKeys.FRACTION_DISPLAY, this.menu.prevEnergy, EConfig.SERVER.mechanicalSieveEnergyStorage.get())).append(" FE");
             graphics.renderTooltip(Minecraft.getInstance().font, energyTooltip, mx, my);
         }

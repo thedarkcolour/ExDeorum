@@ -31,6 +31,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import thedarkcolour.exdeorum.data.TranslationKeys;
+import thedarkcolour.exdeorum.menu.AbstractMachineMenu;
 
 import java.util.List;
 
@@ -46,7 +47,7 @@ public class RedstoneControlWidget implements GuiEventListener, NarratableEntry,
     };
     private static final Component REDSTONE_CONTROL_LABEL = Component.translatable(TranslationKeys.REDSTONE_CONTROL_LABEL);
 
-    private final MechanicalSieveScreen screen;
+    private final AbstractMachineMenu<?> screen;
     private final ResourceLocation texture;
     private final int posX;
     private final int posY;
@@ -68,7 +69,7 @@ public class RedstoneControlWidget implements GuiEventListener, NarratableEntry,
     // Last time (from currentTimeMillis) this button was clicked, used in animation lerp
     private long lastClicked = -1L;
 
-    public RedstoneControlWidget(MechanicalSieveScreen screen, ResourceLocation texture, int posX, int posY) {
+    public RedstoneControlWidget(AbstractMachineMenu<?> screen, ResourceLocation texture, int posX, int posY) {
         this.screen = screen;
         this.texture = texture;
         this.posX = posX;
@@ -106,7 +107,7 @@ public class RedstoneControlWidget implements GuiEventListener, NarratableEntry,
         var font = Minecraft.getInstance().font;
 
         if (this.expanded) {
-            var redstoneMode = this.screen.getMenu().sieve.getRedstoneMode();
+            var redstoneMode = this.screen.machine.getRedstoneMode();
             graphics.blit(this.texture, this.posX, this.posY, this.expandedU, this.expandedV, this.expandedWidth, this.expandedHeight);
             for (int i = 0; i < 3; ++i) {
                 graphics.blit(this.texture, this.buttonsPosX + (i * 19), this.buttonsPosY, (redstoneMode == i ? this.tabU + 16 : this.tabU), this.tabV + this.tabHeight, 16, 16);
@@ -157,9 +158,10 @@ public class RedstoneControlWidget implements GuiEventListener, NarratableEntry,
         return false;
     }
 
+    @SuppressWarnings("DataFlowIssue")
     private void setRedstoneMode(int redstoneMode) {
-        this.screen.getMenu().clickMenuButton(Minecraft.getInstance().player, redstoneMode);
-        Minecraft.getInstance().gameMode.handleInventoryButtonClick(this.screen.getMenu().containerId, redstoneMode);
+        this.screen.clickMenuButton(Minecraft.getInstance().player, redstoneMode);
+        Minecraft.getInstance().gameMode.handleInventoryButtonClick(this.screen.containerId, redstoneMode);
     }
 
     private void drawPartialConfig(GuiGraphics graphics) {

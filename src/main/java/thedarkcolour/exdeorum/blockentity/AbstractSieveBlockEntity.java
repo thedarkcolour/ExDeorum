@@ -63,19 +63,9 @@ public abstract class AbstractSieveBlockEntity extends EBlockEntity implements S
         this.logic.loadNbt(nbt);
     }
 
-    // Used for rendering and for TOP
-    public ItemStack getMesh() {
-        return this.logic.getMesh();
-    }
-
-    // Used for rendering
-    public float getProgress() {
-        return this.logic.getProgress();
-    }
-
-    // Used for rendering
-    public ItemStack getContents() {
-        return this.logic.getContents();
+    @Override
+    public SieveLogic getLogic() {
+        return this.logic;
     }
 
     @Override

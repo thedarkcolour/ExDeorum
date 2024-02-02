@@ -57,7 +57,7 @@ public class SieveBlock extends EBlock {
         if (!level.isClientSide) {
             if (!state.is(newState.getBlock())) {
                 if (level.getBlockEntity(pos) instanceof SieveBlockEntity sieve) {
-                    var mesh = sieve.getMesh();
+                    var mesh = sieve.getLogic().getMesh();
 
                     if (!mesh.isEmpty()) {
                         dropItem(level, pos, mesh);

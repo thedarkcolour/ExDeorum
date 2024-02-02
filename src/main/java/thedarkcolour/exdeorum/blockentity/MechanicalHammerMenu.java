@@ -16,40 +16,41 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package thedarkcolour.exdeorum.menu;
+package thedarkcolour.exdeorum.blockentity;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemStack;
 import thedarkcolour.exdeorum.ExDeorum;
-import thedarkcolour.exdeorum.blockentity.MechanicalSieveBlockEntity;
+import thedarkcolour.exdeorum.menu.AbstractMachineMenu;
 import thedarkcolour.exdeorum.registry.EMenus;
+import thedarkcolour.exdeorum.tag.EItemTags;
 
-public class MechanicalSieveMenu extends AbstractMachineMenu<MechanicalSieveBlockEntity> {
-    private static final ResourceLocation EMPTY_SLOT_MESH = new ResourceLocation(ExDeorum.ID, "item/empty_slot_mesh");
-    private static final int NUM_SLOTS = 22; // input + mesh, 20 output slots
+public class MechanicalHammerMenu extends AbstractMachineMenu<MechanicalHammerBlockEntity> {
+    private static final ResourceLocation EMPTY_SLOT_HAMMER = new ResourceLocation(ExDeorum.ID, "item/empty_slot_hammer");
+    private static final int NUM_SLOTS = 3;
 
-    public MechanicalSieveMenu(int containerId, Inventory playerInventory, FriendlyByteBuf data) {
-        this(containerId, playerInventory, (MechanicalSieveBlockEntity) readPayload(playerInventory, data));
+    public MechanicalHammerMenu(int containerId, Inventory playerInventory, FriendlyByteBuf data) {
+        this(containerId, playerInventory, (MechanicalHammerBlockEntity) readPayload(playerInventory, data));
     }
 
-    public MechanicalSieveMenu(int containerId, Inventory playerInventory, MechanicalSieveBlockEntity sieve) {
-        super(EMenus.MECHANICAL_SIEVE.get(), containerId, playerInventory, sieve);
+    public MechanicalHammerMenu(int containerId, Inventory playerInventory, MechanicalHammerBlockEntity machine) {
+        super(EMenus.MECHANICAL_HAMMER.get(), containerId, playerInventory, machine);
 
         // input slot
-        addSlot(sieve.inventory.createSlot(0, 26, 30));
-        // mesh slot
-        addSlot(sieve.inventory.createSlot(1, 26, 53).setBackground(InventoryMenu.BLOCK_ATLAS, EMPTY_SLOT_MESH));
-        // output slots
-        for (int r = 0; r < 4; ++r) {
-            for (int c = 0; c < 5; ++c) {
-                addSlot(sieve.inventory.createSlot(2 + r * 5 + c, 80 + c * 18, 15 + r * 18));
-            }
-        }
-        addPlayerSlots(playerInventory, 91);
+        addSlot(machine.inventory.createSlot(0, 32, 35));
+        // hammer slot
+        addSlot(machine.inventory.createSlot(1, 56, 35).setBackground(InventoryMenu.BLOCK_ATLAS, EMPTY_SLOT_HAMMER));
+        // output slot
+        addSlot(machine.inventory.createSlot(2, 116, 35));
+
+        addPlayerSlots(playerInventory, 84);
+
+        addDataSlot(new ProgressDataSlot());
     }
 
     @Override
@@ -61,7 +62,7 @@ public class MechanicalSieveMenu extends AbstractMachineMenu<MechanicalSieveBloc
             var clickedStack = slot.getItem();
             stack = clickedStack.copy();
 
-            if (clickedSlot > 1 && clickedSlot < NUM_SLOTS) { // moving out of output slots
+            if (clickedSlot > 1 && clickedSlot <= NUM_SLOTS) { // moving out of output slots
                 if (!moveItemStackTo(clickedStack, NUM_SLOTS, PLAYER_SLOTS + NUM_SLOTS, true)) {
                     return ItemStack.EMPTY;
                 }
@@ -69,11 +70,11 @@ public class MechanicalSieveMenu extends AbstractMachineMenu<MechanicalSieveBloc
                 if (!moveItemStackTo(clickedStack, NUM_SLOTS, NUM_SLOTS + PLAYER_SLOTS, false)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (this.machine.getLogic().isValidInput(clickedStack)) { // attempting to move into input slot
+            } else if (MechanicalHammerBlockEntity.isValidInput(clickedStack)) { // attempting to move into input slot
                 if (!moveItemStackTo(clickedStack, 0, 1, false)) {
                     return ItemStack.EMPTY;
                 }
-            }  else if (this.machine.getLogic().isValidMesh(clickedStack)) { // attempting to move into mesh slot
+            }  else if (clickedStack.is(EItemTags.HAMMERS)) { // attempting to move into mesh slot
                 if (!moveItemStackTo(clickedStack, 1, 2, false)) {
                     return ItemStack.EMPTY;
                 }
@@ -99,5 +100,17 @@ public class MechanicalSieveMenu extends AbstractMachineMenu<MechanicalSieveBloc
         }
 
         return stack;
+    }
+
+    private class ProgressDataSlot extends DataSlot {
+        @Override
+        public int get() {
+            return MechanicalHammerMenu.this.machine.getGuiProgress();
+        }
+
+        @Override
+        public void set(int value) {
+            MechanicalHammerMenu.this.machine.setGuiProgress(value);
+        }
     }
 }

@@ -26,20 +26,22 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.pathfinder.PathComputationType;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
-import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.Nullable;
+import thedarkcolour.exdeorum.blockentity.MechanicalHammerBlockEntity;
 import thedarkcolour.exdeorum.blockentity.MechanicalSieveBlockEntity;
 import thedarkcolour.exdeorum.config.EConfig;
 import thedarkcolour.exdeorum.data.TranslationKeys;
@@ -47,29 +49,26 @@ import thedarkcolour.exdeorum.registry.EBlockEntities;
 
 import java.util.List;
 
-public class MechanicalSieveBlock extends EBlock {
-    private static final VoxelShape SHAPE = Shapes.or(
-            box(0, 8, 0, 16, 16, 16),
-            box(1, 0, 1, 3, 8, 3),
-            box(1, 0, 13, 3, 8, 15),
-            box(13, 0, 1, 15, 8, 3),
-            box(13, 0, 13, 15, 8, 15)
-    );
+public class MechanicalHammerBlock extends EBlock {
+    public static final BooleanProperty RUNNING = BooleanProperty.create("running");
+    public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 
-    public MechanicalSieveBlock(Properties properties) {
-        super(properties, EBlockEntities.MECHANICAL_SIEVE);
+    public MechanicalHammerBlock(Properties properties) {
+        super(properties, EBlockEntities.MECHANICAL_HAMMER);
+
+        registerDefaultState(defaultBlockState().setValue(RUNNING, false));
     }
 
     @Override
-    public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
-        return SHAPE;
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        builder.add(RUNNING, FACING);
     }
 
     @SuppressWarnings("unchecked")
     @Nullable
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState pState, BlockEntityType<T> type) {
-        return type == EBlockEntities.MECHANICAL_SIEVE.get() && !level.isClientSide ? (BlockEntityTicker<T>) new MechanicalSieveBlockEntity.ServerTicker<>() : null;
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+        return type == EBlockEntities.MECHANICAL_HAMMER.get() && !level.isClientSide ? (BlockEntityTicker<T>) new MechanicalHammerBlockEntity.ServerTicker<>() : null;
     }
 
     @Override
@@ -79,23 +78,22 @@ public class MechanicalSieveBlock extends EBlock {
             var inventoryNbt = nbt.getCompound("inventory");
             var inventory = new ItemStackHandler();
             inventory.deserializeNBT(inventoryNbt);
-            var mesh = inventory.getStackInSlot(MechanicalSieveBlockEntity.MESH_SLOT);
-            if (!mesh.isEmpty()) {
-                tooltip.add(Component.translatable(TranslationKeys.MECHANICAL_SIEVE_MESH_LABEL).withStyle(ChatFormatting.GRAY).append(Component.translatable(mesh.getDescriptionId())));
+            var hammer = inventory.getStackInSlot(MechanicalHammerBlockEntity.HAMMER_SLOT);
+            if (!hammer.isEmpty()) {
+                tooltip.add(Component.translatable(TranslationKeys.MECHANICAL_HAMMER_HAMMER_LABEL).withStyle(ChatFormatting.GRAY).append(Component.translatable(hammer.getDescriptionId())));
             }
             var energy = nbt.getInt("energy");
             tooltip.add(Component.translatable(TranslationKeys.ENERGY).withStyle(ChatFormatting.GRAY).append(Component.translatable(TranslationKeys.FRACTION_DISPLAY, energy, EConfig.SERVER.mechanicalSieveEnergyStorage.get())).append(" FE"));
         }
     }
 
-    // Drops the item for creative mode players
     @Override
     public void playerWillDestroy(Level level, BlockPos pos, BlockState pState, Player player) {
         if (!level.isClientSide && player.isCreative() && level.getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS)) {
-            if (level.getBlockEntity(pos) instanceof MechanicalSieveBlockEntity sieve) {
-                if (!sieve.getLogic().getMesh().isEmpty()) {
+            if (level.getBlockEntity(pos) instanceof MechanicalHammerBlockEntity sieve) {
+                if (!sieve.inventory.getStackInSlot(MechanicalHammerBlockEntity.HAMMER_SLOT).isEmpty()) {
                     var stack = new ItemStack(this);
-                    BlockItem.setBlockEntityData(stack, EBlockEntities.MECHANICAL_SIEVE.get(), sieve.saveWithoutMetadata());
+                    BlockItem.setBlockEntityData(stack, EBlockEntities.MECHANICAL_HAMMER.get(), sieve.saveWithoutMetadata());
                     var itemEntity = new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, stack);
                     itemEntity.setDefaultPickUpDelay();
                     level.addFreshEntity(itemEntity);
@@ -107,23 +105,29 @@ public class MechanicalSieveBlock extends EBlock {
     }
 
     @Override
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
+        var nbt = BlockItem.getBlockEntityData(context.getItemInHand());
+        var state = defaultBlockState();
+        if (nbt != null && nbt.contains("progress") && nbt.getInt("progress") != MechanicalHammerBlockEntity.NOT_RUNNING) {
+            state = state.setValue(RUNNING, true);
+        }
+
+        return state.setValue(FACING, context.getHorizontalDirection().getOpposite());
+    }
+
+    @Override
     public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving) {
         if (!oldState.is(state.getBlock())) {
-            if (level.getBlockEntity(pos) instanceof MechanicalSieveBlockEntity sieve) {
-                sieve.checkPoweredState(level, pos);
+            if (level.getBlockEntity(pos) instanceof MechanicalHammerBlockEntity hammer) {
+                hammer.checkPoweredState(level, pos);
             }
         }
     }
 
     @Override
     public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
-        if (level.getBlockEntity(pos) instanceof MechanicalSieveBlockEntity sieve) {
-            sieve.checkPoweredState(level, pos);
+        if (level.getBlockEntity(pos) instanceof MechanicalHammerBlockEntity hammer) {
+            hammer.checkPoweredState(level, pos);
         }
-    }
-
-    @Override
-    public boolean isPathfindable(BlockState state, BlockGetter level, BlockPos pos, PathComputationType type) {
-        return false;
     }
 }

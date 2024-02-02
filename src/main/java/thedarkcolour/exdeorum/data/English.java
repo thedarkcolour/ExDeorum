@@ -31,6 +31,7 @@ class English {
         english.add(TranslationKeys.VOID_WORLD_TYPE, "Void World");
         english.add(TranslationKeys.FRACTION_DISPLAY, ": %s / %s");
         english.add(TranslationKeys.MECHANICAL_SIEVE_MESH_LABEL, "Mesh: ");
+        english.add(TranslationKeys.MECHANICAL_HAMMER_HAMMER_LABEL, "Hammer: ");
         english.add(TranslationKeys.ENERGY, "Energy");
 
         english.add(TranslationKeys.ROOT_ADVANCEMENT_TITLE, "Don't Look Down...");
@@ -55,6 +56,7 @@ class English {
         english.add(TranslationKeys.CRIMSON_NYLIUM_SPORES_JEI_INFO, "Use on netherrack to turn it into a crimson nylium block.");
         english.add(TranslationKeys.SCULK_CORE_JEI_INFO, "Use a sculk core on a Sculk Shrieker to enable it to spawn Wardens. Normally, Sculk Shriekers placed by players cannot spawn Wardens, so this item is useful for obtaining Sculk items in a SkyBlock world.");
         english.add(TranslationKeys.MECHANICAL_SIEVE_JEI_INFO, "The Mechanical Sieve is a machine that, when supplied with a mesh and Forge Energy (FE), will sift blocks without a player having to do it themselves. It also supports three different modes of redstone control. Since Ex Deorum does not provide a way to generate FE, you will need another mod to provide power.");
+        english.add(TranslationKeys.MECHANICAL_HAMMER_JEI_INFO, "The Mechanical Hammer is a machine that, when supplied with Forge Energy (FE), will hammer blocks without a player having to do it themselves. It can operate without a hammer, but adding any hammer will double the speed, and efficiency enchantments on the hammer will further increase speed. It also supports three different modes of redstone control. Since Ex Deorum does not provide a way to generate FE, you will need another mod to provide power.");
 
         english.add(TranslationKeys.BARREL_COMPOST_CATEGORY_TITLE, "Barrel Compost");
         english.add(TranslationKeys.BARREL_COMPOST_RECIPE_VOLUME, "Compost: %s");
@@ -79,6 +81,7 @@ class English {
         english.add(TranslationKeys.REDSTONE_CONTROL_MODES[RedstoneControlWidget.REDSTONE_MODE_POWERED], "Powered");
         english.add(TranslationKeys.REDSTONE_CONTROL_LABEL, "Redstone Mode");
         english.add(TranslationKeys.REDSTONE_CONTROL_MODE, "Mode: ");
+        english.add(TranslationKeys.MECHANICAL_HAMMER_SCREEN_TITLE, "Mechanical Hammer");
 
         english.addBlock(EBlocks.VEXING_ARCHWOOD_CRUCIBLE, "Vexing Archwood Crucible");
         english.addBlock(EBlocks.CASCADING_ARCHWOOD_CRUCIBLE, "Cascading Archwood Crucible");

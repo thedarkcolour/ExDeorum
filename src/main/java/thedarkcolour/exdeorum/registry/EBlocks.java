@@ -121,6 +121,8 @@ public class EBlocks {
     public static final RegistryObject<SieveBlock> CRYSTALLIZED_SIEVE = registerSieve("crystallized_sieve", SoundType.GLASS);
     // Mechanical Sieve
     public static final RegistryObject<MechanicalSieveBlock> MECHANICAL_SIEVE = BLOCKS.register("mechanical_sieve", () -> new MechanicalSieveBlock(of().mapColor(MapColor.METAL).requiresCorrectToolForDrops().strength(5f, 1200f)));
+    // Mechanical Hammer
+    public static final RegistryObject<MechanicalHammerBlock> MECHANICAL_HAMMER = BLOCKS.register("mechanical_hammer", () -> new MechanicalHammerBlock(of()));
 
     // Lava Crucibles
     public static final RegistryObject<LavaCrucibleBlock> PORCELAIN_CRUCIBLE = registerLavaCrucible("porcelain_crucible", true, SoundType.STONE);

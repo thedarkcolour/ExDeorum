@@ -23,31 +23,33 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.registries.ForgeRegistries;
-import thedarkcolour.exdeorum.blockentity.AbstractSieveBlockEntity;
+import thedarkcolour.exdeorum.blockentity.EBlockEntity;
+import thedarkcolour.exdeorum.blockentity.logic.SieveLogic;
 import thedarkcolour.exdeorum.client.RenderUtil;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class SieveRenderer<T extends AbstractSieveBlockEntity> implements BlockEntityRenderer<T> {
+public class SieveRenderer<T extends EBlockEntity & SieveLogic.Owner> implements BlockEntityRenderer<T> {
     public static final Map<Item, TextureAtlasSprite> MESH_TEXTURES = new HashMap<>();
 
     @Override
     public void render(T sieve, float partialTicks, PoseStack stack, MultiBufferSource buffers, int light, int overlay) {
-        var contents = sieve.getContents();
+        var logic = sieve.getLogic();
+        var contents = logic.getContents();
 
         if (!contents.isEmpty() && contents.getItem() instanceof BlockItem blockItem) {
             var block = blockItem.getBlock();
-            var percentage = sieve.getProgress();
+            var percentage = logic.getProgress();
             var face = RenderUtil.getTopFace(block);
             face.renderFlatSpriteLerp(buffers, stack, percentage, 0xff, 0xff, 0xff, light, 1.0f, 15f, 13f);
         }
 
-        var mesh = sieve.getMesh();
+        var mesh = logic.getMesh();
 
         if (!mesh.isEmpty()) {
             var builder = buffers.getBuffer(RenderType.cutoutMipped());
@@ -57,7 +59,8 @@ public class SieveRenderer<T extends AbstractSieveBlockEntity> implements BlockE
             if (MESH_TEXTURES.containsKey(meshItem)) {
                 meshSprite = MESH_TEXTURES.get(meshItem);
             } else {
-                ResourceLocation registryName = ForgeRegistries.ITEMS.getKey(meshItem);
+                @SuppressWarnings("deprecation")
+                ResourceLocation registryName = BuiltInRegistries.ITEM.getKey(meshItem);
                 ResourceLocation textureLoc = registryName.withPrefix("item/mesh/");
                 meshSprite = RenderUtil.blockAtlas.getSprite(textureLoc);
                 MESH_TEXTURES.put(meshItem, meshSprite);
