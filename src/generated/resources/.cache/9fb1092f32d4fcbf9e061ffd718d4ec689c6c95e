@@ -1,4 +1,4 @@
-// 1.20.1	2024-01-26T13:06:21.1726482	Recipes
+// 1.20.1	2024-02-01T18:59:58.2852543	Recipes
 e37b64428f17e304e91539ac0513456d7ce40cd1 data/exdeorum/advancements/recipes/building_blocks/sponge.json
 5ad481a0c376c1a1785a5d3b992064d0ec0bf3b0 data/exdeorum/advancements/recipes/food/end_cake.json
 25dd027e844a72b03c95dbe5e3c3dd8c738ceb00 data/exdeorum/advancements/recipes/misc/acacia_barrel.json
@@ -43,6 +43,7 @@ f3d25fad0818f06ed341008daa157732a41702f0 data/exdeorum/advancements/recipes/misc
 ef344cd03adefba1ff628f494569cb1e61ff5a5f data/exdeorum/advancements/recipes/misc/mangrove_barrel.json
 a4325e653eba3a2cd86fa5055414c0b8f391d80d data/exdeorum/advancements/recipes/misc/mangrove_crucible.json
 47657db106b7291a5fc2ebf281daa03dc7ec71c0 data/exdeorum/advancements/recipes/misc/mangrove_sieve.json
+9073425076ced5fc311a87ebb614669bb680d715 data/exdeorum/advancements/recipes/misc/mechanical_hammer.json
 3dc9943b92b254be691be3f6f555992e687fe0e1 data/exdeorum/advancements/recipes/misc/mechanical_sieve.json
 8cde46d6245da58277653bb9877518f099150e3d data/exdeorum/advancements/recipes/misc/moss_block.json
 a21315f6c45ed3300ae2dd79b1dbdbecce9d1305 data/exdeorum/advancements/recipes/misc/netherite_mesh.json
@@ -293,6 +294,7 @@ b012c1b39678d3e560365bc01a59c9a88182388e data/exdeorum/recipes/mahogany_barrel.j
 e288683a0ad5496b43667307e9a22b35a0482d77 data/exdeorum/recipes/maple_barrel.json
 c6ab33d03646b9af8b2d624e28b7d21083772dda data/exdeorum/recipes/maple_crucible.json
 f1b143b0f52102366fd79d608540e67e9909c43f data/exdeorum/recipes/maple_sieve.json
+dd1b8a3eb6bcdf27034d1a456df4164b831b9fde data/exdeorum/recipes/mechanical_hammer.json
 0e8f6c50263bda0f9c41da7df9f726f27ff0b374 data/exdeorum/recipes/mechanical_sieve.json
 962586e6665baef84b573df40211ff3ce36d88b0 data/exdeorum/recipes/moss_block.json
 f92abca4ddd5f75b770e81fc745a735a7fd0ee68 data/exdeorum/recipes/netherite_hammer.json

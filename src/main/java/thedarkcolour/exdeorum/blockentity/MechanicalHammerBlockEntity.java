@@ -102,19 +102,21 @@ public class MechanicalHammerBlockEntity extends AbstractMachineBlockEntity<Mech
         if (!input.isEmpty()) {
             if (canFitResultIntoOutput(input) != null) {
                 this.progress = 0;
-                this.level.setBlock(this.worldPosition, this.getBlockState().setValue(MechanicalHammerBlock.RUNNING, true), 3);
+                this.level.setBlock(this.worldPosition, getBlockState().setValue(MechanicalHammerBlock.RUNNING, true), 3);
 
                 return;
             }
         }
 
-        this.level.setBlock(this.worldPosition, this.getBlockState().setValue(MechanicalHammerBlock.RUNNING, false), 3);
+        if (getBlockState().getValue(MechanicalHammerBlock.RUNNING)) {
+            this.level.setBlock(this.worldPosition, getBlockState().setValue(MechanicalHammerBlock.RUNNING, false), 3);
+        }
     }
 
     @Override
     protected void noEnergyTick() {
         if (getBlockState().getValue(MechanicalHammerBlock.RUNNING)) {
-            this.level.setBlock(this.worldPosition, this.getBlockState().setValue(MechanicalHammerBlock.RUNNING, false), 3);
+            this.level.setBlock(this.worldPosition, getBlockState().setValue(MechanicalHammerBlock.RUNNING, false), 3);
         }
     }
 
@@ -142,7 +144,7 @@ public class MechanicalHammerBlockEntity extends AbstractMachineBlockEntity<Mech
         var input = this.inventory.getStackInSlot(INPUT_SLOT);
 
         if (!input.isEmpty()) {
-            this.progress += PROGRESS_INTERVAL * this.efficiency;
+            this.progress += (int) (PROGRESS_INTERVAL * this.efficiency);
 
             if (this.progress >= TOTAL_PROGRESS) {
                 var recipe = canFitResultIntoOutput(input);
