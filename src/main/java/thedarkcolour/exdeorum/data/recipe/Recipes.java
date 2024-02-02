@@ -291,6 +291,16 @@ public class Recipes {
             recipe.pattern("I I");
             MKRecipeProvider.unlockedByHaving(recipe, Items.HOPPER);
         });
+        recipes.shapedCrafting(RecipeCategory.MISC, EItems.MECHANICAL_HAMMER.get(), recipe -> {
+            recipe.define('#', Items.IRON_BLOCK);
+            recipe.define('H', Items.HOPPER);
+            recipe.define('T', EItemTags.HAMMERS);
+            recipe.define('I', Items.IRON_INGOT);
+            recipe.pattern("III");
+            recipe.pattern("ITI");
+            recipe.pattern("#H#");
+            MKRecipeProvider.unlockedByHaving(recipe, Items.HOPPER);
+        });
     }
 
     private static void modUShaped(MKRecipeProvider recipes, String modid, RegistryObject<? extends Item> sides, RegistryObject<? extends Item> middle, RegistryObject<? extends Item> result) {

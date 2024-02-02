@@ -46,7 +46,7 @@ import thedarkcolour.exdeorum.tag.EItemTags;
 public class MechanicalHammerBlockEntity extends AbstractMachineBlockEntity<MechanicalHammerBlockEntity> {
     private static final Component TITLE = Component.translatable(TranslationKeys.MECHANICAL_HAMMER_SCREEN_TITLE);
     private static final int INPUT_SLOT = 0;
-    private static final int HAMMER_SLOT = 1;
+    public static final int HAMMER_SLOT = 1;
     private static final int OUTPUT_SLOT = 2;
     public static final int TOTAL_PROGRESS = 10_000_000;
     // process should take 200 ticks or 10 seconds with no efficiency
@@ -109,6 +109,13 @@ public class MechanicalHammerBlockEntity extends AbstractMachineBlockEntity<Mech
         }
 
         this.level.setBlock(this.worldPosition, this.getBlockState().setValue(MechanicalHammerBlock.RUNNING, false), 3);
+    }
+
+    @Override
+    protected void noEnergyTick() {
+        if (getBlockState().getValue(MechanicalHammerBlock.RUNNING)) {
+            this.level.setBlock(this.worldPosition, this.getBlockState().setValue(MechanicalHammerBlock.RUNNING, false), 3);
+        }
     }
 
     @Nullable

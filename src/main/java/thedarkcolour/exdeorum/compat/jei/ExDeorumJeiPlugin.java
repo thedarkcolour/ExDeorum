@@ -215,6 +215,7 @@ public class ExDeorumJeiPlugin implements IModPlugin {
         registration.addRecipeCatalyst(new ItemStack(EItems.IRON_HAMMER.get()), HAMMER);
         registration.addRecipeCatalyst(new ItemStack(EItems.DIAMOND_HAMMER.get()), HAMMER);
         registration.addRecipeCatalyst(new ItemStack(EItems.NETHERITE_HAMMER.get()), HAMMER);
+        registration.addRecipeCatalyst(new ItemStack(EItems.MECHANICAL_HAMMER.get()), HAMMER);
     }
 
     @Override
@@ -232,6 +233,7 @@ public class ExDeorumJeiPlugin implements IModPlugin {
         registration.addItemStackInfo(new ItemStack(EItems.CRIMSON_NYLIUM_SPORES.get()), Component.translatable(TranslationKeys.CRIMSON_NYLIUM_SPORES_JEI_INFO));
         registration.addItemStackInfo(new ItemStack(EItems.SCULK_CORE.get()), Component.translatable(TranslationKeys.SCULK_CORE_JEI_INFO));
         registration.addItemStackInfo(new ItemStack(EItems.MECHANICAL_SIEVE.get()), Component.translatable(TranslationKeys.MECHANICAL_SIEVE_JEI_INFO));
+        registration.addItemStackInfo(new ItemStack(EItems.MECHANICAL_HAMMER.get()), Component.translatable(TranslationKeys.MECHANICAL_HAMMER_JEI_INFO));
 
         var toRemove = new ArrayList<ItemStack>();
 

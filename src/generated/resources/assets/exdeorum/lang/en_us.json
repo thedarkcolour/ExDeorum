@@ -146,6 +146,7 @@
   "gui.exdeorum.redstone_control.unpowered": "Unpowered",
   "info.exdeorum.crimson_nylium_spores": "Use on netherrack to turn it into a crimson nylium block.",
   "info.exdeorum.grass_seeds": "Use on dirt to turn it into a grass block.",
+  "info.exdeorum.mechanical_hammer": "The Mechanical Hammer is a machine that, when supplied with Forge Energy (FE), will hammer blocks without a player having to do it themselves. It can operate without a hammer, but adding any hammer will double the speed, and efficiency enchantments on the hammer will further increase speed. It also supports three different modes of redstone control. Since Ex Deorum does not provide a way to generate FE, you will need another mod to provide power.",
   "info.exdeorum.mechanical_sieve": "The Mechanical Sieve is a machine that, when supplied with a mesh and Forge Energy (FE), will sift blocks without a player having to do it themselves. It also supports three different modes of redstone control. Since Ex Deorum does not provide a way to generate FE, you will need another mod to provide power.",
   "info.exdeorum.mycelium_spores": "Use on dirt to turn it into mycelium.",
   "info.exdeorum.sculk_core": "Use a sculk core on a Sculk Shrieker to enable it to spawn Wardens. Normally, Sculk Shriekers placed by players cannot spawn Wardens, so this item is useful for obtaining Sculk items in a SkyBlock world.",

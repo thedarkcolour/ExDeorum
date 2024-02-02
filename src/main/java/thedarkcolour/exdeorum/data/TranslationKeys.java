@@ -27,6 +27,7 @@ public class TranslationKeys {
     // ": %s / %s"
     public static final String FRACTION_DISPLAY = "item." + ExDeorum.ID + ".watering_can_fluid_display";
     public static final String MECHANICAL_SIEVE_MESH_LABEL = "item." + ExDeorum.ID + ".mechanical_sieve.mesh_label";
+    public static final String MECHANICAL_HAMMER_HAMMER_LABEL = "item." + ExDeorum.ID + ".mechanical_hammer.hammer_label";
     public static final String ENERGY = "gui." + ExDeorum.ID + ".energy_label";
 
     // Advancements
@@ -53,6 +54,7 @@ public class TranslationKeys {
     public static final String CRIMSON_NYLIUM_SPORES_JEI_INFO = "info." + ExDeorum.ID + ".crimson_nylium_spores";
     public static final String SCULK_CORE_JEI_INFO = "info." + ExDeorum.ID + ".sculk_core";
     public static final String MECHANICAL_SIEVE_JEI_INFO = "info." + ExDeorum.ID + ".mechanical_sieve";
+    public static final String MECHANICAL_HAMMER_JEI_INFO = "info." + ExDeorum.ID + ".mechanical_hammer";
 
     // JEI recipe categories
     public static final String BARREL_COMPOST_CATEGORY_TITLE = "gui." + ExDeorum.ID + ".category.barrel_compost";

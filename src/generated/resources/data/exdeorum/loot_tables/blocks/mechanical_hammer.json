@@ -11,6 +11,11 @@
       "entries": [
         {
           "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "exdeorum:machine"
+            }
+          ],
           "name": "exdeorum:mechanical_hammer"
         }
       ],

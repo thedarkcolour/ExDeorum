@@ -149,6 +149,8 @@ public abstract class AbstractMachineBlockEntity<M extends AbstractMachineBlockE
 
     protected abstract int getEnergyConsumption();
 
+    protected void noEnergyTick() {}
+
     public static class ServerTicker<M extends AbstractMachineBlockEntity<M>> implements BlockEntityTicker<M> {
         @Override
         public void tick(Level level, BlockPos pos, BlockState state, M machine) {
@@ -163,6 +165,8 @@ public abstract class AbstractMachineBlockEntity<M extends AbstractMachineBlockE
                         machine.energy.extractEnergy(energyConsumption, false);
                         machine.runMachineTick();
                     }
+                } else {
+                    machine.noEnergyTick();
                 }
             }
         }
