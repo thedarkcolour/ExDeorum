@@ -1,5 +1,6 @@
 ## Ex Deorum 1.20
 - Added Mechanical Hammer, a machine that uses FE to hammer blocks automatically. Uses 20 FE a tick by default and takes 200 ticks (10 seconds) to hammer an item with a hammer that has no efficiency.
+- Fixed network bug when joining a server (PR #43 by CPearl0)
 
 ## Ex Deorum 1.19
 - Fixed Cyclic pipes infinitely filling barrels when crafting fluid mixing recipes (ex. obsidian)
