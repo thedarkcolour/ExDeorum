@@ -37,9 +37,10 @@ import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.BucketPickup;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.capabilities.Capability;
@@ -63,9 +64,6 @@ import thedarkcolour.exdeorum.recipe.barrel.BarrelFluidMixingRecipe;
 import thedarkcolour.exdeorum.registry.EBlockEntities;
 import thedarkcolour.exdeorum.registry.EFluids;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 public class BarrelBlockEntity extends EBlockEntity {
     private static final int MOSS_SPREAD_RANGE = 2;
 
@@ -73,9 +71,9 @@ public class BarrelBlockEntity extends EBlockEntity {
     private final BarrelBlockEntity.FluidHandler tank = new BarrelBlockEntity.FluidHandler();
     public float progress;
     public short compost;
-    // compost colors
+    // compost colors (has to be shorts because Java bytes are signed and only go to 127, when need 255)
     public short r, g, b;
-    // used to avoid obsidian dupe
+    // Used to avoid triggering obsidian dupes in onContentsChanged, because Forge's FluidUtil actually modifies the tank for some reason
     private boolean isBeingFilledByPlayer;
 
     public BarrelBlockEntity(BlockPos pos, BlockState state) {
@@ -85,9 +83,8 @@ public class BarrelBlockEntity extends EBlockEntity {
     private final LazyOptional<IItemHandler> itemHandler = LazyOptional.of(() -> this.item);
     private final LazyOptional<IFluidHandler> fluidHandler = LazyOptional.of(() -> this.tank);
 
-    @Nonnull
     @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+    public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
         if (cap == ForgeCapabilities.FLUID_HANDLER) {
             return this.fluidHandler.cast();
         } else if (cap == ForgeCapabilities.ITEM_HANDLER) {
@@ -257,13 +254,22 @@ public class BarrelBlockEntity extends EBlockEntity {
                 }
 
                 // Otherwise, mix the item's fluid into the barrel's fluid
-                var itemFluidCap = playerItem.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).resolve();
-                if (itemFluidCap.isPresent()) {
-                    var fluidInTank = itemFluidCap.get().getFluidInTank(0);
+                var itemFluidCapOptional = playerItem.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).resolve();
+                if (itemFluidCapOptional.isPresent()) {
+                    var itemFluidCap = itemFluidCapOptional.get();
+                    var itemFluid = itemFluidCap.drain(1000, IFluidHandler.FluidAction.SIMULATE);
+                    BarrelFluidMixingRecipe recipe = RecipeUtil.getFluidMixingRecipe(this.tank.getFluid(), itemFluid.getFluid());
 
-                    if (this.tank.getFluidAmount() >= 1000) {
+                    // If draining item fluid was possible and tank has enough fluid to mix...
+                    if (recipe != null && this.tank.getFluidAmount() >= recipe.baseFluidAmount && itemFluid.getAmount() == 1000) {
                         if (!level.isClientSide) {
-                            tryFluidMixing(fluidInTank.getFluid());
+                            this.tank.drain(recipe.baseFluidAmount, IFluidHandler.FluidAction.EXECUTE);
+                            setItem(new ItemStack(recipe.result));
+
+                            if (recipe.consumesAdditive) {
+                                itemFluidCap.drain(1000, IFluidHandler.FluidAction.EXECUTE);
+                                player.setItemInHand(hand, itemFluidCap.getContainer());
+                            }
                         }
                         // If a mix was successful, skip rest of logic
                         return InteractionResult.sidedSuccess(level.isClientSide);
@@ -414,21 +420,32 @@ public class BarrelBlockEntity extends EBlockEntity {
      * <li> When the fluid in the barrel changes (see {@link FluidHandler#onContentsChanged()}) </li>
      */
     public void tryInWorldFluidMixing() {
-        if (!this.tank.isEmpty() && this.item.getStackInSlot(0).isEmpty()) {
-            var aboveFluid = this.level.getBlockState(this.worldPosition.above()).getFluidState().getType();
+        if (!this.level.isClientSide) {
+            if (!this.tank.isEmpty() && this.item.getStackInSlot(0).isEmpty()) {
+                var abovePos = this.worldPosition.above();
+                var aboveBlockState = this.level.getBlockState(abovePos);
+                var aboveFluidState = aboveBlockState.getFluidState();
+                var aboveFluid = aboveFluidState.getType();
 
-            if (aboveFluid != Fluids.EMPTY) {
-                tryFluidMixing(aboveFluid);
+                if (aboveFluid != Fluids.EMPTY) {
+                    BarrelFluidMixingRecipe recipe = RecipeUtil.getFluidMixingRecipe(this.tank.getFluid(), aboveFluid instanceof FlowingFluid flowing ? flowing.getSource() : aboveFluid);
+
+                    if (recipe != null) {
+                        // If additive is not consumed, just craft
+                        // If additive is consumed, check that the additive can be consumed before crafting
+                        if (!recipe.consumesAdditive) {
+                            this.tank.drain(recipe.baseFluidAmount, IFluidHandler.FluidAction.EXECUTE);
+                            setItem(new ItemStack(recipe.result));
+                        } else if (aboveBlockState.getBlock() instanceof BucketPickup pickup) {
+                            // If something was picked up, we can craft
+                            if (!pickup.pickupBlock(this.level, abovePos, aboveBlockState).isEmpty()) {
+                                this.tank.drain(recipe.baseFluidAmount, IFluidHandler.FluidAction.EXECUTE);
+                                setItem(new ItemStack(recipe.result));
+                            }
+                        }
+                    }
+                }
             }
-        }
-    }
-
-    private void tryFluidMixing(Fluid additive) {
-        BarrelFluidMixingRecipe recipe = RecipeUtil.getFluidMixingRecipe(this.tank.getFluid(), additive);
-
-        if (recipe != null) {
-            this.tank.drain(recipe.baseFluidAmount, IFluidHandler.FluidAction.EXECUTE);
-            setItem(new ItemStack(recipe.result));
         }
     }
 
@@ -540,12 +557,12 @@ public class BarrelBlockEntity extends EBlockEntity {
     // Inner class
     private class ItemHandler extends ItemStackHandler {
         @Override
-        protected int getStackLimit(int slot, @Nonnull ItemStack stack) {
+        protected int getStackLimit(int slot, ItemStack stack) {
             return 1;
         }
 
         @Override
-        public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
+        public boolean isItemValid(int slot, ItemStack stack) {
             return tryCrafting(stack, true);
         }
 
@@ -565,7 +582,6 @@ public class BarrelBlockEntity extends EBlockEntity {
                     return ItemHandlerHelper.copyStackWithSize(stack, stack.getCount() - 1);
                 }
             } else {
-                stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).ifPresent(itemFluid -> tryFluidMixing(itemFluid.getFluidInTank(0).getFluid()));
                 return stack;
             }
         }
@@ -602,7 +618,47 @@ public class BarrelBlockEntity extends EBlockEntity {
         protected void onContentsChanged() {
             if (!BarrelBlockEntity.this.isBeingFilledByPlayer) {
                 BarrelBlockEntity.this.tryInWorldFluidMixing();
+                BarrelBlockEntity.this.markUpdated();
             }
+        }
+
+        @Override
+        public int fill(FluidStack resource, FluidAction action) {
+            if (resource.isEmpty() || !isFluidValid(resource)) {
+                return 0;
+            }
+            if (action.simulate()) {
+                if (this.fluid.isEmpty()) {
+                    return Math.min(this.capacity, resource.getAmount());
+                }
+                if (!this.fluid.isFluidEqual(resource)) {
+                    return 0;
+                }
+                return Math.min(this.capacity - this.fluid.getAmount(), resource.getAmount());
+            }
+            if (this.fluid.isEmpty()) {
+                // fix forge's implementation to avoid dupes
+                int amount = Math.min(this.capacity, resource.getAmount());
+                this.fluid = new FluidStack(resource, Math.min(this.capacity, amount));
+                onContentsChanged();
+                return amount;
+            }
+            if (!this.fluid.isFluidEqual(resource))
+            {
+                return 0;
+            }
+            int filled = this.capacity - this.fluid.getAmount();
+
+            if (resource.getAmount() < filled) {
+                this.fluid.grow(resource.getAmount());
+                filled = resource.getAmount();
+            } else {
+                this.fluid.setAmount(this.capacity);
+            }
+            if (filled > 0) {
+                onContentsChanged();
+            }
+            return filled;
         }
     }
 }

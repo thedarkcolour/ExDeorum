@@ -786,6 +786,7 @@ class SieveRecipes {
             addDrop.accept(Items.GUNPOWDER, chance(0.07f));
             addDrop.accept(Items.BONE, chance(0.08f));
             addDrop.accept(Items.GHAST_TEAR, chance(0.06f));
+            addDrop.accept(Items.NETHER_WART, chance(0.06f));
             addDrop.accept(Items.GLOWSTONE_DUST, chance(0.06f));
         });
         forMesh(writer, ingredient(Items.SOUL_SAND), EItems.FLINT_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
@@ -794,6 +795,7 @@ class SieveRecipes {
             addDrop.accept(Items.BONE, chance(0.1f));
             addDrop.accept(Items.GHAST_TEAR, chance(0.07f));
             addDrop.accept(Items.GLOWSTONE_DUST, chance(0.07f));
+            addDrop.accept(Items.NETHER_WART, chance(0.06f));
             addDrop.accept(EItems.WARPED_NYLIUM_SPORES.get(), chance(0.03f));
             addDrop.accept(EItems.CRIMSON_NYLIUM_SPORES.get(), chance(0.03f));
         });
@@ -803,6 +805,7 @@ class SieveRecipes {
             addDrop.accept(Items.BONE, chance(0.08f));
             addDrop.accept(Items.GHAST_TEAR, chance(0.06f));
             addDrop.accept(Items.GLOWSTONE_DUST, chance(0.06f));
+            addDrop.accept(Items.NETHER_WART, chance(0.05f));
         });
         forMesh(writer, ingredient(Items.SOUL_SAND), EItems.GOLDEN_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
             addDrop.accept(Items.QUARTZ, chance(0.17f));
@@ -810,6 +813,7 @@ class SieveRecipes {
             addDrop.accept(Items.BONE, chance(0.11f));
             addDrop.accept(Items.GHAST_TEAR, chance(0.08f));
             addDrop.accept(Items.GLOWSTONE_DUST, chance(0.09f));
+            addDrop.accept(Items.NETHER_WART, chance(0.08f));
             addDrop.accept(Items.GOLD_NUGGET, chance(0.15f));
         });
         forMesh(writer, ingredient(Items.SOUL_SAND), EItems.DIAMOND_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
@@ -817,12 +821,14 @@ class SieveRecipes {
             addDrop.accept(Items.GUNPOWDER, chance(0.11f));
             addDrop.accept(Items.GHAST_TEAR, chance(0.09f));
             addDrop.accept(Items.GLOWSTONE_DUST, chance(0.11f));
+            addDrop.accept(Items.NETHER_WART, chance(0.1f));
         });
         forMesh(writer, ingredient(Items.SOUL_SAND), EItems.NETHERITE_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
             addDrop.accept(Items.QUARTZ, chance(0.21f));
             addDrop.accept(Items.GUNPOWDER, chance(0.14f));
             addDrop.accept(Items.GHAST_TEAR, chance(0.11f));
             addDrop.accept(Items.GLOWSTONE_DUST, chance(0.13f));
+            addDrop.accept(Items.NETHER_WART, chance(0.12f));
         });
 
         forMesh(writer, ingredient(EItems.CRUSHED_END_STONE), EItems.STRING_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {

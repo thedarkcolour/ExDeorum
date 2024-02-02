@@ -30,6 +30,7 @@ import net.minecraft.CrashReport;
 import net.minecraft.CrashReportCategory;
 import net.minecraft.ReportedException;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -119,14 +120,21 @@ class ClientJeiUtil {
         poseStack.popPose();
     }
 
-    static void renderItemWithAsterisk(GuiGraphics graphics, ItemStack stack, int xOffset, int yOffset) {
+    static void renderItemWithAsterisk(GuiGraphics graphics, ItemStack stack) {
         Minecraft mc = Minecraft.getInstance();
         BakedModel model = mc.getItemRenderer().getModel(stack, mc.level, null, 0);
-        renderItemAlternativeModel(graphics, model, stack, xOffset, yOffset);
+        renderItemAlternativeModel(graphics, model, stack, 0, 0);
+        renderAsterisk(graphics, 0, 0);
+    }
+
+    static void renderAsterisk(GuiGraphics graphics, int xOffset, int yOffset) {
         graphics.pose().pushPose();
         graphics.pose().translate(0f, 0f, 200f);
+
+        var font = Minecraft.getInstance().font;
         // 0xff5555 is Minecraft's red text color.
-        graphics.drawString(mc.font, "*", xOffset + 19 - 2 - mc.font.width("*"), yOffset + 12, 0xff5555, true);
+        graphics.drawString(font, "*", xOffset + 19 - 2 - font.width("*"), yOffset + 12, 0xff5555, true);
+
         graphics.pose().popPose();
     }
 
@@ -224,14 +232,14 @@ class ClientJeiUtil {
         }
     }
 
-    enum AsteriskRenderer implements IIngredientRenderer<ItemStack> {
+    enum AsteriskItemRenderer implements IIngredientRenderer<ItemStack> {
         INSTANCE;
 
         @Override
         public void render(GuiGraphics graphics, ItemStack ingredient) {
             // From mezz.jei.library.render.ItemStackRenderer
             RenderSystem.enableDepthTest();
-            ClientJeiUtil.renderItemWithAsterisk(graphics, ingredient, 0, 0);
+            ClientJeiUtil.renderItemWithAsterisk(graphics, ingredient);
             // From end of DrawableIngredient
             RenderSystem.disableDepthTest();
         }

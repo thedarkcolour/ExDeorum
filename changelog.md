@@ -1,10 +1,29 @@
-## Ex Deorum 1.16
+## Ex Deorum 1.20
 - Added Mechanical Hammer, a machine that uses FE to hammer blocks automatically. Uses 20 FE a tick by default and takes 200 ticks (10 seconds) to hammer an item with a hammer that has no efficiency.
+- Fixed network bug when joining a server (PR #43 by CPearl0)
+
+## Ex Deorum 1.19
+- Fixed Cyclic pipes infinitely filling barrels when crafting fluid mixing recipes (ex. obsidian)
+- Fixed network issue with fluid mixing recipes (PR #42 by CPearl0)
+
+## Ex Deorum 1.18
+- Fixed bug with milk and slime recipe.
+- Barrel fluid mixing recipes can now consume the additive fluid using the `consumes_additive` boolean property in the recipe JSON. (ex. Water and Milk making slime)
+
+## Ex Deorum 1.17
+- Added Nether Wart as a sieve drop from Soul Sand
+- Fixed Frozen Ocean biomes spawning floating icebergs in the void world type
+- Fixed Slime Block barrel recipe not working in the barrel when a mod enables the Milk fluid
+- Fixed duplication bug with top left player inventory slot in the Mechanical Sieve menu
+
+## Ex Deorum 1.16
+- Fixed barrels not correctly rendering their fluid contents when modified by pipes.
+- Fixed Mechanical Sieve being instantly breakable with no tool. Now requires a pickaxe to destroy, like machines added by other mods.
 
 ## Ex Deorum 1.15
 - Fixed not being able to enchant sieve meshes in the Enchanting Table.
 - Fixed Barrels not rendering their contents properly
-- Fixed Inventory Sorter by voxcpw voiding items when middle clicking slots in the Mechanical Sieve GUI.
+- Fixed Inventory Sorter by voxcpw voiding items when middle-clicking slots in the Mechanical Sieve GUI.
 - Improved appearance of witch water to better match water so that the transformation animation looks smoother.
 
 ## Ex Deorum 1.14

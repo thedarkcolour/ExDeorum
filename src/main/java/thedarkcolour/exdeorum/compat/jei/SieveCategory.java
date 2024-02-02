@@ -109,7 +109,7 @@ class SieveCategory implements IRecipeCategory<GroupedSieveRecipe> {
 
         if (byHandOnly) {
             tooltipLines.add(BY_HAND_ONLY_LABEL);
-            slot.setCustomRenderer(VanillaTypes.ITEM_STACK, ClientJeiUtil.AsteriskRenderer.INSTANCE);
+            slot.setCustomRenderer(VanillaTypes.ITEM_STACK, ClientJeiUtil.AsteriskItemRenderer.INSTANCE);
         }
         if (provider instanceof BinomialDistributionGenerator binomial) {
             if (binomial.n instanceof ConstantValue constant && constant.value == 1) {

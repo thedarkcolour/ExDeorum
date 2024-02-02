@@ -1,4 +1,4 @@
-// 1.20.1	2024-01-11T17:10:41.051025	Recipes
+// 1.20.1	2024-01-26T13:06:21.1726482	Recipes
 e37b64428f17e304e91539ac0513456d7ce40cd1 data/exdeorum/advancements/recipes/building_blocks/sponge.json
 5ad481a0c376c1a1785a5d3b992064d0ec0bf3b0 data/exdeorum/advancements/recipes/food/end_cake.json
 25dd027e844a72b03c95dbe5e3c3dd8c738ceb00 data/exdeorum/advancements/recipes/misc/acacia_barrel.json
@@ -164,10 +164,11 @@ f17f12ac67e700f7838cb3bab740ec254bbfe13c data/exdeorum/recipes/barrel_compost/tw
 c4ecb4272c220282de403852031b3ca92651d91c data/exdeorum/recipes/barrel_compost/weeping_vines.json
 5677e23fdc74130523d602ebf9e557f659af57c5 data/exdeorum/recipes/barrel_compost/wheat.json
 b9a34df74ce0ee9c4247a9a64784c851eb1de58c data/exdeorum/recipes/barrel_compost/wood_chippings.json
-d08b7a270dff3f7bb45338798227a69d775e7c32 data/exdeorum/recipes/barrel_fluid_mixing/blackstone.json
-1a87de0d21b9677fda38f7a520cbffbdc41d8532 data/exdeorum/recipes/barrel_fluid_mixing/netherrack.json
-8b42ca284eaea721e8e7589e5fb0b16ccbe66ee5 data/exdeorum/recipes/barrel_fluid_mixing/obsidian.json
-7cfc5db0d6fbb804a7bd1d3bbbbace986d90f3c4 data/exdeorum/recipes/barrel_fluid_mixing/stone.json
+2a58c97cdeb49be251c4abc9284ec31d587cda04 data/exdeorum/recipes/barrel_fluid_mixing/blackstone.json
+990221ead2f72a9c74b27edfa387c88c7d8da3f8 data/exdeorum/recipes/barrel_fluid_mixing/netherrack.json
+6d2469e79cbc88817a4582fa467857d65d9b70ed data/exdeorum/recipes/barrel_fluid_mixing/obsidian.json
+4657af4003335ca25d2f92c43fd82dc3b3ad7fb2 data/exdeorum/recipes/barrel_fluid_mixing/slime_block.json
+5e2a7bd06a83260c18c007bcf793c336faef264d data/exdeorum/recipes/barrel_fluid_mixing/stone.json
 bdcdeae9d06028ce943d06c367b58677efe03fa8 data/exdeorum/recipes/barrel_mixing/clay.json
 72f969f4db1f82a627df573c866a1b291e540a0a data/exdeorum/recipes/barrel_mixing/end_stone.json
 37f73e219fda3c6f56bf55f8ec7f97586ecdbae1 data/exdeorum/recipes/barrel_mixing/ice.json
@@ -1145,12 +1146,14 @@ d93c2410827c81c2dc033cb52ac4cf6af79cfee1 data/exdeorum/recipes/sieve/sand/string
 c773bd94981602bdb5a3ed2ce60486e26ecaa4f7 data/exdeorum/recipes/sieve/soul_sand/diamond/ghast_tear.json
 69fb6c91d6229c8df9cdb41d5d5e9c7fb04d4907 data/exdeorum/recipes/sieve/soul_sand/diamond/glowstone_dust.json
 1ec5f811536c5b23245a60c2b3a6f6fd835a92f7 data/exdeorum/recipes/sieve/soul_sand/diamond/gunpowder.json
+f39164c39e7b108fc9c116208d789fdc09208156 data/exdeorum/recipes/sieve/soul_sand/diamond/nether_wart.json
 ac2498b96a04af149549b0390c3162a9a1c76b33 data/exdeorum/recipes/sieve/soul_sand/diamond/quartz.json
 23e1a8617e4d85bedb0a3baab1d590336ac7513e data/exdeorum/recipes/sieve/soul_sand/flint/bone.json
 83e5588c267594a63f8203457209f5b87cbe4b48 data/exdeorum/recipes/sieve/soul_sand/flint/crimson_nylium_spores.json
 d089d069430307c89b18484a54671f3dafa58712 data/exdeorum/recipes/sieve/soul_sand/flint/ghast_tear.json
 e07e424b7298ad8a6b69878168671cf404f75bc4 data/exdeorum/recipes/sieve/soul_sand/flint/glowstone_dust.json
 e58e778a1e441227f1f03eaa9eaa330dc2b95ef9 data/exdeorum/recipes/sieve/soul_sand/flint/gunpowder.json
+dcda96bfdc79881fcc740313dfdb14eeb84f45f6 data/exdeorum/recipes/sieve/soul_sand/flint/nether_wart.json
 de2e5cfecb7bb764276756e382f2aa72d7276c57 data/exdeorum/recipes/sieve/soul_sand/flint/quartz.json
 e127381da2e8116f1525db4387cb7d3ea0c48062 data/exdeorum/recipes/sieve/soul_sand/flint/warped_nylium_spores.json
 564b5d6e5e4666d0d0af0acb7b6b5f2ceccb8429 data/exdeorum/recipes/sieve/soul_sand/golden/bone.json
@@ -1158,20 +1161,24 @@ e127381da2e8116f1525db4387cb7d3ea0c48062 data/exdeorum/recipes/sieve/soul_sand/f
 14b560a232180873720b852253ac8aa1db93e826 data/exdeorum/recipes/sieve/soul_sand/golden/glowstone_dust.json
 a9aae4ed59c4d9d257c25aff3c46dca091ec375e data/exdeorum/recipes/sieve/soul_sand/golden/gold_nugget.json
 4ee169bf9a649fb624da77931a4389bdfc7ae675 data/exdeorum/recipes/sieve/soul_sand/golden/gunpowder.json
+c7696add10509d3411e127d3cbd285b2fe105fe1 data/exdeorum/recipes/sieve/soul_sand/golden/nether_wart.json
 eaca2cf33cd025b5b9018a3278f89fa2b17f80d1 data/exdeorum/recipes/sieve/soul_sand/golden/quartz.json
 8d9798f1571cf24c13047f641cb4a35d4347388c data/exdeorum/recipes/sieve/soul_sand/iron/bone.json
 f94140a871e4b290e1b27839fd13e266a484acc9 data/exdeorum/recipes/sieve/soul_sand/iron/ghast_tear.json
 adc67fcc8b6ec1ffbb36a26155af01b015842c46 data/exdeorum/recipes/sieve/soul_sand/iron/glowstone_dust.json
 57844114c8cd33cac53af182307d4e143091e18a data/exdeorum/recipes/sieve/soul_sand/iron/gunpowder.json
+e5422e5e971bef67f08f97af8cefd732aebd25c1 data/exdeorum/recipes/sieve/soul_sand/iron/nether_wart.json
 35f408ac12d41ea636cf81b8a785dba80f0535ce data/exdeorum/recipes/sieve/soul_sand/iron/quartz.json
 49199e67cb63ba0f30815c9b090b197a3abac4ee data/exdeorum/recipes/sieve/soul_sand/netherite/ghast_tear.json
 4d3804e110f9cb9de11a7548ad72b6a32e10e554 data/exdeorum/recipes/sieve/soul_sand/netherite/glowstone_dust.json
 1e78a124a62cd6f1f986023769d32a3a3c08bf6d data/exdeorum/recipes/sieve/soul_sand/netherite/gunpowder.json
+dde85c1f2ec293a6d34db925521f13e94b2346a3 data/exdeorum/recipes/sieve/soul_sand/netherite/nether_wart.json
 93104291e3221a15c651576b8f7124082978e53a data/exdeorum/recipes/sieve/soul_sand/netherite/quartz.json
 40841ef9cb7f318b8aee0a56b8b391109b3df081 data/exdeorum/recipes/sieve/soul_sand/string/bone.json
 3ccfe21e5a2d9351a6923c9c3490135ebcb96ba5 data/exdeorum/recipes/sieve/soul_sand/string/ghast_tear.json
 584ece6c099a190de75d1d88431c59e5b930dc33 data/exdeorum/recipes/sieve/soul_sand/string/glowstone_dust.json
 efa24078ae05e89dcaf7869ed7973e9688456c90 data/exdeorum/recipes/sieve/soul_sand/string/gunpowder.json
+e5079fc3f8c018c7f2895eacecba955c2be1ef09 data/exdeorum/recipes/sieve/soul_sand/string/nether_wart.json
 fe809175ad8570b7338b3aff029c040ca0fe5095 data/exdeorum/recipes/sieve/soul_sand/string/quartz.json
 9ab74f344d31bf2bde6ce9c2aad2d739e7b5f234 data/exdeorum/recipes/skyroot_barrel.json
 8e724e34a3107b459a0f6be31c2acd7e9782be97 data/exdeorum/recipes/skyroot_crucible.json

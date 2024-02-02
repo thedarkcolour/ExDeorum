@@ -48,13 +48,15 @@ public class BarrelFluidMixingRecipe implements Recipe<Container> {
     public final int baseFluidAmount;
     public final Fluid additiveFluid;
     public final Item result;
+    public final boolean consumesAdditive;
 
-    public BarrelFluidMixingRecipe(ResourceLocation id, Fluid baseFluid, int baseFluidAmount, Fluid additiveFluid, Item result) {
+    public BarrelFluidMixingRecipe(ResourceLocation id, Fluid baseFluid, int baseFluidAmount, Fluid additiveFluid, Item result, boolean consumesAdditive) {
         this.id = id;
         this.baseFluid = baseFluid;
         this.baseFluidAmount = baseFluidAmount;
         this.additiveFluid = additiveFluid;
         this.result = result;
+        this.consumesAdditive = consumesAdditive;
     }
 
     @Override
@@ -99,8 +101,9 @@ public class BarrelFluidMixingRecipe implements Recipe<Container> {
             int baseFluidAmount = GsonHelper.getAsInt(json, "base_fluid_amount");
             Fluid additiveFluid = RecipeUtil.readFluid(json, "additive_fluid");
             Item result = RecipeUtil.readItem(json, "result");
+            boolean consumesAdditive = GsonHelper.getAsBoolean(json, "consumes_additive");
 
-            return new BarrelFluidMixingRecipe(id, baseFluid, baseFluidAmount, additiveFluid, result);
+            return new BarrelFluidMixingRecipe(id, baseFluid, baseFluidAmount, additiveFluid, result, consumesAdditive);
         }
 
         @Override
@@ -109,6 +112,7 @@ public class BarrelFluidMixingRecipe implements Recipe<Container> {
             buffer.writeVarInt(recipe.baseFluidAmount);
             buffer.writeRegistryId(ForgeRegistries.FLUIDS, recipe.additiveFluid);
             buffer.writeRegistryId(ForgeRegistries.ITEMS, recipe.result);
+            buffer.writeBoolean(recipe.consumesAdditive);
         }
 
         @Override
@@ -117,8 +121,9 @@ public class BarrelFluidMixingRecipe implements Recipe<Container> {
             int baseFluidAmount = buffer.readVarInt();
             Fluid additiveFluid = buffer.readRegistryId();
             Item result = buffer.readRegistryId();
+            boolean consumesAdditive = buffer.readBoolean();
 
-            return new BarrelFluidMixingRecipe(id, baseFluid, baseFluidAmount, additiveFluid, result);
+            return new BarrelFluidMixingRecipe(id, baseFluid, baseFluidAmount, additiveFluid, result, consumesAdditive);
         }
     }
 }
