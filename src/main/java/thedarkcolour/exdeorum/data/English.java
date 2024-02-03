@@ -46,11 +46,11 @@ class English {
         english.add(TranslationKeys.STRING_MESH_ADVANCEMENT_DESCRIPTION, "Craft a string mesh to use in a sieve");
 
         english.add(TranslationKeys.SILK_WORM_JEI_INFO, "Silk worms have a 1 in 100 chance to drop from leaves harvested with a Crook. Using a silk worm on a tree's leaves will infest them, gradually spreading through the entire tree. 100% infested leaves can be harvested for string, but do not drop saplings.");
-        english.add(TranslationKeys.SIEVE_JEI_INFO, "Sieves are used to sift for items from soft blocks like gravel and dirt. A mesh is required to use the sieve. Meshes can be enchanted with Fortune and Efficiency. Sieves in a 3x3 area can be used simultaneously.");
+        english.add(TranslationKeys.SIEVE_JEI_INFO, "Sieves are used to sift for items from soft blocks like gravel and dirt. A mesh is required to use the sieve. Meshes can be enchanted with Fortune and Efficiency. Sieves in a 5x5 area can be used simultaneously.");
         english.add(TranslationKeys.SIEVE_MESH_JEI_INFO, "Meshes are used in sieves. Different meshes yield different drops. Meshes can be enchanted with Fortune and Efficiency to increase likelihood of drops and sifting speed, respectively.");
         english.add(TranslationKeys.WATERING_CAN_JEI_INFO, "Watering cans speed up crop growth, tree growth, and grass spreading, among other things. They can be filled with water from barrels and wooden crucibles. Golden and above watering cans do not need to be refilled once full. Diamond watering cans water in a 3x3 area, and Netherite watering cans are usable by machinery.");
         english.add(TranslationKeys.WITCH_WATER_JEI_INFO, "Witch water is obtained by putting water in a barrel on top of mycelium. More mycelium speeds up the process. A barrel with witch water will grow mushrooms on nearby mycelium. Witch water and lava can make a netherrack generator, similar to a cobblestone generator.");
-        english.add(TranslationKeys.MYCELIUM_SPORES_JEI_INFO, "Use on dirt to turn it into mycelium.");
+        english.add(TranslationKeys.MYCELIUM_SPORES_JEI_INFO, "Use on dirt to turn it into mycelium. Use on cow to turn it into mooshroom");
         english.add(TranslationKeys.GRASS_SEEDS_JEI_INFO, "Use on dirt to turn it into a grass block.");
         english.add(TranslationKeys.WARPED_NYLIUM_SPORES_JEI_INFO, "Use on netherrack to turn it into a warped nylium block.");
         english.add(TranslationKeys.CRIMSON_NYLIUM_SPORES_JEI_INFO, "Use on netherrack to turn it into a crimson nylium block.");
