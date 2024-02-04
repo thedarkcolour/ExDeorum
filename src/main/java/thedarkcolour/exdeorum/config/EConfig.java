@@ -135,6 +135,7 @@ public class EConfig {
         public final IntValue mechanicalSieveEnergyConsumption;
         public final IntValue mechanicalHammerEnergyStorage;
         public final IntValue mechanicalHammerEnergyConsumption;
+        public final IntValue sieveIntervalTicks;
 
         public Server(ForgeConfigSpec.Builder builder) {
             builder.comment("Server configuration for Ex Deorum").push("server");
@@ -187,7 +188,9 @@ public class EConfig {
             this.mechanicalHammerEnergyConsumption = builder
                     .comment("The amount of FE/t a tick consumed by the mechanical hammer when crushing a block.")
                     .defineInRange("mechanical_hammer_energy_consumption", 20, 0, Integer.MAX_VALUE);
-
+            this.sieveIntervalTicks = builder
+                    .comment("The minimum interval ticks between two sifting operation. Only for handy sifting. 0 means no limit.")
+                    .defineInRange("sieve_interval", 1, 0, Integer.MAX_VALUE);
             builder.pop();
         }
     }

@@ -45,11 +45,14 @@ public class SieveLogic {
     private float progress;
     private float efficiency;
     private int fortune;
+    private long lastTime = 0;
+    private final long minInterval;
 
     public SieveLogic(Owner owner, boolean saveMesh, boolean mechanical) {
         this.owner = owner;
         this.saveMesh = saveMesh;
         this.mechanical = mechanical;
+        this.minInterval = EConfig.SERVER.sieveIntervalTicks.get();
     }
 
     public ItemStack getMesh() {
@@ -71,7 +74,11 @@ public class SieveLogic {
     }
 
     // Do not call on the client side
-    public void sift(float incrementProgress) {
+    public void sift(float incrementProgress, long time) {
+        if (time < lastTime + minInterval)
+            return;
+        lastTime = time;
+
         this.progress += incrementProgress * this.efficiency;
 
         // Need epsilon because floating point decimals suck

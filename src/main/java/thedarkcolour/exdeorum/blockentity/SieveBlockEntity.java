@@ -109,6 +109,7 @@ public class SieveBlockEntity extends AbstractSieveBlockEntity {
                     }
                 }
             } else {
+                var time = level.getGameTime();
                 var realPlayer = !(player instanceof FakePlayer);
 
                 if (realPlayer && EConfig.SERVER.simultaneousSieveUsage.get()) {
@@ -121,7 +122,7 @@ public class SieveBlockEntity extends AbstractSieveBlockEntity {
                             if (level.getBlockEntity(cursor) instanceof SieveBlockEntity other) {
                                 if (!other.logic.getContents().isEmpty()) {
                                     if (this.logic.getMesh().getItem() == other.logic.getMesh().getItem()) {
-                                        other.logic.sift(SIEVE_INTERVAL);
+                                        other.logic.sift(SIEVE_INTERVAL, time);
                                     }
                                 }
                             }
@@ -130,7 +131,7 @@ public class SieveBlockEntity extends AbstractSieveBlockEntity {
                         cursor.move(1, 0, (-2 * range) - 1);
                     }
                 } else if (realPlayer || EConfig.SERVER.automatedSieves.get()) {
-                    this.logic.sift(SIEVE_INTERVAL);
+                    this.logic.sift(SIEVE_INTERVAL, time);
                 }
             }
         }
