@@ -75,10 +75,11 @@ public class SieveLogic {
 
     // Do not call on the client side
     public void sift(float incrementProgress, long time) {
-        if (time < lastTime + minInterval)
+        if (time < this.lastTime + this.minInterval) {
             return;
-        lastTime = time;
-
+        }
+        
+        this.lastTime = time;
         this.progress += incrementProgress * this.efficiency;
 
         // Need epsilon because floating point decimals suck
