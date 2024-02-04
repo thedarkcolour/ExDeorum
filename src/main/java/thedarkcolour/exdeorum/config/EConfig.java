@@ -189,7 +189,7 @@ public class EConfig {
                     .comment("The amount of FE/t a tick consumed by the mechanical hammer when crushing a block.")
                     .defineInRange("mechanical_hammer_energy_consumption", 20, 0, Integer.MAX_VALUE);
             this.sieveIntervalTicks = builder
-                    .comment("The minimum interval ticks between two sifting operation. Only for handy sifting. 0 means no limit.")
+                    .comment("The minimum number of ticks a player must wait between two sifting operations. Only affects sifting by hand. 0 means no limit.")
                     .defineInRange("sieve_interval", 1, 0, Integer.MAX_VALUE);
             builder.pop();
         }
