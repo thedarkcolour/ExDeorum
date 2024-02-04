@@ -147,8 +147,8 @@
   "gui.exdeorum.redstone_control.unpowered": "未充能的",
   "info.exdeorum.crimson_nylium_spores": "在下界岩上右键使用，将其转化为绯红菌岩。",
   "info.exdeorum.grass_seeds": "在泥土上右键使用，将其转化为一个草方块。",
-  "info.exdeorum.mechanical_hammer": "机械锤是一种自动锤，需要提供FE能量。它可以在没有锤子的情况下运行，但添加任何锤子都会使速度加倍，锤子上的效率附魔会进一步提高速度。它支持三种不同模式的红石控制。无中生有不提供产生FE能量的方法，你需要另一个模组来供电。",
-  "info.exdeorum.mechanical_sieve": "机械筛子是一种自动筛子，需要提供FE能量。它支持三种不同模式的红石控制。无中生有不提供产生FE能量的方法，你需要另一个模组来供电。",
+  "info.exdeorum.mechanical_hammer": "机械锤是一种自动锤，需要提供FE能量。它可以在没有锤子的情况下运行，但添加任何锤子都会使速度加倍，锤子上的效率附魔会进一步提高速度。它支持三种不同模式的红石控制。无中生有：神赐不提供产生FE能量的方法，你需要另一个模组来供电。",
+  "info.exdeorum.mechanical_sieve": "机械筛子是一种自动筛子，需要提供FE能量。它支持三种不同模式的红石控制。无中生有：神赐不提供产生FE能量的方法，你需要另一个模组来供电。",
   "info.exdeorum.mycelium_spores": "在泥土上右键使用，将其转化为一个菌丝体。在牛牛上右键使用，它会发生奇妙的变化！",
   "info.exdeorum.sculk_core": "在幽匿尖啸体上使用幽匿核心，使其能够产生监守者。正常情况下，玩家放置的幽匿尖啸体不能生成监守者，因此该物品对于在空岛世界中获取幽匿物品非常有用。",
   "info.exdeorum.sieve": "筛子用于从砂砾和泥土等方块中筛子选物品。使用筛子需要筛网。筛网可以被附魔时运和效率。5×5区域内的筛子可同时使用。",
@@ -225,5 +225,5 @@
   "item.exdeorum.wooden_hammer": "木锤",
   "item.exdeorum.wooden_watering_can": "木洒水壶",
   "item.exdeorum.zinc_ore_chunk": "锌矿物碎块",
-  "itemGroup.exdeorum.main": "无中生有"
+  "itemGroup.exdeorum.main": "无中生有：神赐"
 }
