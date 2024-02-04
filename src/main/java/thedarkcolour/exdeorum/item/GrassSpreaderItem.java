@@ -97,7 +97,8 @@ public class GrassSpreaderItem extends Item {
                 mushroomCow.setInvulnerable(cow.isInvulnerable());
                 cow.level().addFreshEntity(mushroomCow);
 
-                ((ServerLevel)cow.level()).sendParticles(ParticleTypes.EXPLOSION, cow.getX(), cow.getY(0.5D), cow.getZ(), 1, 0.0D, 0.0D, 0.0D, 0.0D);
+                if (!cow.level().isClientSide)
+                    ((ServerLevel)cow.level()).sendParticles(ParticleTypes.EXPLOSION, cow.getX(), cow.getY(0.5D), cow.getZ(), 1, 0.0D, 0.0D, 0.0D, 0.0D);
                 cow.playSound(SoundEvents.MOOSHROOM_CONVERT, 2.0F, 1.0F);
             }
 
