@@ -83,7 +83,7 @@ public class MechanicalSieveBlockEntity extends AbstractMachineBlockEntity<Mecha
 
     @Override
     protected void runMachineTick() {
-        this.logic.sift(0.01f);
+        this.logic.sift(0.01f, Long.MAX_VALUE);
     }
 
     @Override
