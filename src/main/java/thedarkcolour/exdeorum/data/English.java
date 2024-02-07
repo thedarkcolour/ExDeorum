@@ -87,5 +87,11 @@ class English {
         english.addBlock(EBlocks.CASCADING_ARCHWOOD_CRUCIBLE, "Cascading Archwood Crucible");
         english.addBlock(EBlocks.BLAZING_ARCHWOOD_CRUCIBLE, "Blazing Archwood Crucible");
         english.addBlock(EBlocks.FLOURISHING_ARCHWOOD_CRUCIBLE, "Flourishing Archwood Crucible");
+
+        // Jade translation (what does this look like?)
+        english.add("config.jade.plugin_exdeorum.infested_leaves", "Infested Leaves");
+        english.add("config.jade.plugin_exdeorum.barrel", "Barrel");
+        english.add("config.jade.plugin_exdeorum.sieve", "Sieve");
+        english.add("config.jade.plugin_exdeorum.crucible", "Crucible");
     }
 }

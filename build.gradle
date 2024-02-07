@@ -151,9 +151,11 @@ dependencies {
     minecraft("net.minecraftforge:forge:${mc_version}-${forge_version}")
 
     // TOP OPTIONAL
-    implementation(fg.deobf("mcjty.theoneprobe:theoneprobe:1.20.1-${top_version}") {
+    compileOnly(fg.deobf("mcjty.theoneprobe:theoneprobe:1.20.1-${top_version}") {
         transitive = false
     })
+    // JADE OPTIONAL
+    implementation(fg.deobf("curse.maven:jade-324717:4986594"))
     // JEI OPTIONAL
     compileOnly(fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}"))
     compileOnly(fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}"))

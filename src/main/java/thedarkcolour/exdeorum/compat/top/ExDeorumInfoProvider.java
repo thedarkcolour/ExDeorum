@@ -50,8 +50,8 @@ public class ExDeorumInfoProvider implements IProbeInfoProvider {
         var te = level.getBlockEntity(data.getPos());
 
         if (state.getBlock() == EBlocks.INFESTED_LEAVES.get()) {
-            if (te instanceof InfestedLeavesBlockEntity) {
-                int progress = (int) (((InfestedLeavesBlockEntity) te).getProgress() * 100.0f);
+            if (te instanceof InfestedLeavesBlockEntity leaves) {
+                int progress = (int) (leaves.getProgress() * 100.0f);
 
                 info.text(CompoundText.create().style(TextStyleClass.LABEL).text("Progress: ").style(TextStyleClass.WARNING).text(progress + "%"));
             }
