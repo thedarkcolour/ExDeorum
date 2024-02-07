@@ -23,26 +23,24 @@ import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraftforge.network.PacketDistributor;
 import thedarkcolour.exdeorum.blockentity.EBlockEntity;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.WeakHashMap;
+import java.util.*;
 
 // Syncs certain block entity data to the client for visual purposes
 // Since some block entities might change their data multiple times a tick, this class keeps track of
 // whether a block entity has updated and then pushes out the changes once at the end of each tick.
 public class VisualUpdateTracker {
     // WeakHashMap is faster than Guava mapmaker
-    private static final Map<LevelChunk, List<BlockPos>> UPDATES = new WeakHashMap<>();
+    // Use sets to avoid duplicate updates
+    private static final Map<LevelChunk, Set<BlockPos>> UPDATES = new WeakHashMap<>();
 
     public static void sendVisualUpdate(EBlockEntity blockEntity) {
         var level = blockEntity.getLevel();
 
         if (level != null && !level.isClientSide) {
             var dimension = level.getChunkAt(blockEntity.getBlockPos());
-            List<BlockPos> updatesList;
+            Set<BlockPos> updatesList;
             if (!UPDATES.containsKey(dimension)) {
-                UPDATES.put(dimension, updatesList = new ArrayList<>());
+                UPDATES.put(dimension, updatesList = new HashSet<>());
             } else {
                 updatesList = UPDATES.get(dimension);
             }
