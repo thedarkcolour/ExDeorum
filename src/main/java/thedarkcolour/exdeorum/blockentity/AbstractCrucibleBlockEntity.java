@@ -333,28 +333,39 @@ public abstract class AbstractCrucibleBlockEntity extends EBlockEntity {
                 crucible.needsLightUpdate = false;
             }
             // Update twice per tick
-            if (!level.isClientSide && (level.getGameTime() % 10L) == 0L) {
-                short delta = (short) Math.min(crucible.solids, crucible.getMeltingRate());
+            if (!level.isClientSide) {
+                if ((level.getGameTime() % 10L) == 0L) {
+                    short delta = (short) Math.min(crucible.solids, crucible.getMeltingRate());
 
-                // Skip if no heat
-                if (delta <= 0) return;
+                    // Skip if no heat
+                    if (delta <= 0) return;
 
-                if (crucible.tank.getSpace() >= delta) {
-                    // Remove solids
-                    crucible.solids -= delta;
+                    if (crucible.tank.getSpace() >= delta) {
+                        // Remove solids
+                        crucible.solids -= delta;
 
-                    // Add lava
-                    if (crucible.tank.isEmpty()) {
-                        if (crucible.fluid != null) {
-                            crucible.tank.setFluid(new FluidStack(crucible.fluid, delta));
-                            crucible.needsLightUpdate = true;
+                        // Add lava
+                        if (crucible.tank.isEmpty()) {
+                            if (crucible.fluid != null) {
+                                crucible.tank.setFluid(new FluidStack(crucible.fluid, delta));
+                                crucible.needsLightUpdate = true;
+                            }
+                        } else {
+                            crucible.tank.getFluid().grow(delta);
                         }
-                    } else {
-                        crucible.tank.getFluid().grow(delta);
-                    }
 
-                    // Sync to client
-                    crucible.markUpdated();
+                        // Sync to client
+                        crucible.markUpdated();
+                    }
+                }
+                if (crucible instanceof WaterCrucibleBlockEntity && level.isRainingAt(pos.above())) {
+                    if (crucible.tank.isEmpty()) {
+                        crucible.tank.setFluid(new FluidStack(Fluids.WATER, 1));
+                        crucible.markUpdated();
+                    } else if (crucible.tank.getFluid().getFluid() == Fluids.WATER) {
+                        crucible.tank.getFluid().grow(1);
+                        crucible.markUpdated();
+                    }
                 }
             }
         }
