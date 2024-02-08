@@ -28,13 +28,11 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import thedarkcolour.exdeorum.block.InfestedLeavesBlock;
 import thedarkcolour.exdeorum.blockentity.InfestedLeavesBlockEntity;
+import thedarkcolour.exdeorum.config.EConfig;
 import thedarkcolour.exdeorum.registry.ELootFunctions;
 
 // Sets the correct amount based on the progress of the infested leaves
 public class InfestedStringFunction extends LootItemConditionalFunction {
-    // todo move to config
-    public static final float STRING_CHANCE = 0.4f;
-
     protected InfestedStringFunction(LootItemCondition[] conditions) {
         super(conditions);
     }
@@ -49,9 +47,10 @@ public class InfestedStringFunction extends LootItemConditionalFunction {
                 var progress = leaves.getProgress();
                 var rand = context.getRandom();
                 var count = 0;
+                var chance = EConfig.SERVER.infestedLeavesStringChance.get();
 
-                if (rand.nextFloat() < progress * STRING_CHANCE) {
-                    if (rand.nextFloat() < progress * STRING_CHANCE / 4f) {
+                if (rand.nextFloat() < progress * chance) {
+                    if (rand.nextFloat() < progress * chance / 4f) {
                         ++count;
                     }
                     ++count;
