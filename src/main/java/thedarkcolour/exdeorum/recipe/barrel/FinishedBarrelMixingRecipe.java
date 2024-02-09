@@ -19,12 +19,12 @@
 package thedarkcolour.exdeorum.recipe.barrel;
 
 import com.google.gson.JsonObject;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.registries.ForgeRegistries;
 import thedarkcolour.exdeorum.recipe.EFinishedRecipe;
 import thedarkcolour.exdeorum.registry.ERecipeSerializers;
 
@@ -46,9 +46,9 @@ public class FinishedBarrelMixingRecipe implements EFinishedRecipe {
     @Override
     public void serializeRecipeData(JsonObject json) {
         json.add("ingredient", this.ingredient.toJson());
-        json.addProperty("fluid", ForgeRegistries.FLUIDS.getKey(this.fluid).toString());
+        json.addProperty("fluid", BuiltInRegistries.FLUID.getKey(this.fluid).toString());
         json.addProperty("fluid_amount", this.fluidAmount);
-        json.addProperty("result", ForgeRegistries.ITEMS.getKey(this.result).toString());
+        json.addProperty("result", BuiltInRegistries.ITEM.getKey(this.result).toString());
     }
 
     @Override

@@ -1,0 +1,8 @@
+{
+  "type": "exdeorum:crook",
+  "block_predicate": {
+    "block_tag": "minecraft:leaves"
+  },
+  "chance": 0.01,
+  "result": "exdeorum:silk_worm"
+}

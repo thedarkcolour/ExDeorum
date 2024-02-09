@@ -16,41 +16,35 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package thedarkcolour.exdeorum.recipe.barrel;
+package thedarkcolour.exdeorum.recipe.crook;
 
 import com.google.gson.JsonObject;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.level.material.Fluid;
+import thedarkcolour.exdeorum.recipe.BlockPredicate;
 import thedarkcolour.exdeorum.recipe.EFinishedRecipe;
 import thedarkcolour.exdeorum.registry.ERecipeSerializers;
 
-public class FinishedBarrelFluidMixingRecipe implements EFinishedRecipe {
+public class FinishedCrookRecipe implements EFinishedRecipe {
     private final ResourceLocation id;
-    private final Fluid baseFluid;
-    private final int baseFluidAmount;
-    private final Fluid additiveFluid;
+    private final BlockPredicate predicate;
     private final Item result;
-    private final boolean consumesAdditive;
+    private final float chance;
 
-    public FinishedBarrelFluidMixingRecipe(ResourceLocation id, Fluid baseFluid, int baseFluidAmount, Fluid additiveFluid, Item result, boolean consumesAdditive) {
+    public FinishedCrookRecipe(ResourceLocation id, BlockPredicate predicate, Item result, float chance) {
         this.id = id;
-        this.baseFluid = baseFluid;
-        this.baseFluidAmount = baseFluidAmount;
-        this.additiveFluid = additiveFluid;
+        this.predicate = predicate;
         this.result = result;
-        this.consumesAdditive = consumesAdditive;
+        this.chance = chance;
     }
 
     @Override
     public void serializeRecipeData(JsonObject json) {
-        json.addProperty("base_fluid", BuiltInRegistries.FLUID.getKey(this.baseFluid).toString());
-        json.addProperty("base_fluid_amount", this.baseFluidAmount);
-        json.addProperty("additive_fluid", BuiltInRegistries.FLUID.getKey(this.additiveFluid).toString());
-        json.addProperty("consumes_additive", this.consumesAdditive);
+        json.add("block_predicate", this.predicate.toJson());
         json.addProperty("result", BuiltInRegistries.ITEM.getKey(this.result).toString());
+        json.addProperty("chance", this.chance);
     }
 
     @Override
@@ -60,6 +54,6 @@ public class FinishedBarrelFluidMixingRecipe implements EFinishedRecipe {
 
     @Override
     public RecipeSerializer<?> getType() {
-        return ERecipeSerializers.BARREL_FLUID_MIXING.get();
+        return ERecipeSerializers.CROOK.get();
     }
 }

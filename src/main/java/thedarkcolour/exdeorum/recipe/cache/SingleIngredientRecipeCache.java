@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package thedarkcolour.exdeorum.recipe;
+package thedarkcolour.exdeorum.recipe.cache;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.world.item.Item;
@@ -24,6 +24,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 import org.jetbrains.annotations.Nullable;
+import thedarkcolour.exdeorum.recipe.SingleIngredientRecipe;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -84,7 +85,6 @@ public class SingleIngredientRecipeCache<T extends SingleIngredientRecipe> {
         if (this.simpleRecipes == null) {
             buildRecipes();
         }
-        //noinspection DataFlowIssue
         return this.allRecipes;
     }
 

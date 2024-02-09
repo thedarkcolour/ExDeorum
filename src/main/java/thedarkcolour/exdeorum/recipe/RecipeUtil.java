@@ -35,6 +35,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -50,6 +51,11 @@ import thedarkcolour.exdeorum.item.HammerItem;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelCompostRecipe;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelFluidMixingRecipe;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelMixingRecipe;
+import thedarkcolour.exdeorum.recipe.cache.BarrelFluidMixingRecipeCache;
+import thedarkcolour.exdeorum.recipe.cache.CrookRecipeCache;
+import thedarkcolour.exdeorum.recipe.cache.SieveRecipeCache;
+import thedarkcolour.exdeorum.recipe.cache.SingleIngredientRecipeCache;
+import thedarkcolour.exdeorum.recipe.crook.CrookRecipe;
 import thedarkcolour.exdeorum.recipe.crucible.CrucibleRecipe;
 import thedarkcolour.exdeorum.recipe.hammer.HammerRecipe;
 import thedarkcolour.exdeorum.recipe.sieve.SieveRecipe;
@@ -73,6 +79,7 @@ public final class RecipeUtil {
     private static SingleIngredientRecipeCache<HammerRecipe> hammerRecipeCache;
     private static SieveRecipeCache sieveRecipeCache;
     private static BarrelFluidMixingRecipeCache barrelFluidMixingRecipeCache;
+    private static CrookRecipeCache crookRecipeCache;
 
     public static void reload(RecipeManager recipes) {
         barrelCompostRecipeCache = new SingleIngredientRecipeCache<>(recipes, ERecipeTypes.BARREL_COMPOST);
@@ -81,6 +88,7 @@ public final class RecipeUtil {
         hammerRecipeCache = new SingleIngredientRecipeCache<>(recipes, ERecipeTypes.HAMMER).trackAllRecipes();
         sieveRecipeCache = new SieveRecipeCache(recipes);
         barrelFluidMixingRecipeCache = new BarrelFluidMixingRecipeCache(recipes);
+        crookRecipeCache = new CrookRecipeCache(recipes);
         HammerItem.refreshValidBlocks();
     }
 
@@ -91,6 +99,7 @@ public final class RecipeUtil {
         hammerRecipeCache = null;
         sieveRecipeCache = null;
         barrelFluidMixingRecipeCache = null;
+        crookRecipeCache = null;
     }
 
     public static List<SieveRecipe> getSieveRecipes(Item mesh, ItemStack item) {
@@ -309,5 +318,9 @@ public final class RecipeUtil {
 
     public static LootContext emptyLootContext(ServerLevel level) {
         return new LootContext.Builder(new LootParams(level, Map.of(), Map.of(), 0)).create(null);
+    }
+
+    public static List<CrookRecipe> getCrookRecipes(BlockState state) {
+        return crookRecipeCache.getRecipes(state);
     }
 }

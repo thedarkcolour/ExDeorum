@@ -1,4 +1,4 @@
-// 1.20.1	2024-02-01T18:59:58.2852543	Recipes
+// 1.20.1	2024-02-07T21:04:33.4555528	Recipes
 e37b64428f17e304e91539ac0513456d7ce40cd1 data/exdeorum/advancements/recipes/building_blocks/sponge.json
 5ad481a0c376c1a1785a5d3b992064d0ec0bf3b0 data/exdeorum/advancements/recipes/food/end_cake.json
 25dd027e844a72b03c95dbe5e3c3dd8c738ceb00 data/exdeorum/advancements/recipes/misc/acacia_barrel.json
@@ -205,6 +205,8 @@ ba90fbda213e52dc15ea532c8f10c63ea47747de data/exdeorum/recipes/cobblestone.json
 20ddd97165d2b2c1c9c04f364ddec810ca7d73d6 data/exdeorum/recipes/crimson_crucible.json
 21057c2afeda8c54e808b82818c93c8102326f98 data/exdeorum/recipes/crimson_sieve.json
 f6a9036c1bbc4fa0cdc25ef4c851de5ddac0a4ff data/exdeorum/recipes/crook.json
+ae7e544d3e51182204eeb1efe15079103ea09802 data/exdeorum/recipes/crook/silkworm.json
+b8636418dc9384bd44313de1d17fd4bbc06c0152 data/exdeorum/recipes/crook/silkworm_bonus.json
 c81379fe022f3667ce506e4927aac97d1b66999f data/exdeorum/recipes/crystallized_barrel.json
 77cf611f4e10c507fc4ec116ba0a9d9d1ce58273 data/exdeorum/recipes/crystallized_crucible.json
 324b6222287940a7fb008b9c6a1e9caecada8af3 data/exdeorum/recipes/crystallized_sieve.json

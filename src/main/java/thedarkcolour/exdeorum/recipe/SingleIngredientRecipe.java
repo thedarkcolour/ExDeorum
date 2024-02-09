@@ -35,7 +35,7 @@ import net.minecraft.world.level.Level;
  */
 public abstract class SingleIngredientRecipe implements Recipe<Container> {
     private final ResourceLocation id;
-    protected final Ingredient ingredient;
+    public final Ingredient ingredient;
     public final boolean dependsOnNbt;
 
     public SingleIngredientRecipe(ResourceLocation id, Ingredient ingredient) {

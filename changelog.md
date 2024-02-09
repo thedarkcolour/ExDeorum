@@ -1,3 +1,11 @@
+## Ex Deorum 1.21
+- Added Jade compatibility
+- Added partial compatibility with Roughly Enough Items to hide compat blocks for mods that aren't installed (use REI Plugin Compatibilities mod to gain full compatibility with Ex Deorum)
+- Added configurable sifting interval to limit speed of sifting by hand in order to curb the speed of autoclickers on sieves. (PR #47 by CPearl0)
+- Added Chinese translation (PR #45 by CPearl0)
+- Infested leaves string drop rate can now be configured in the server config.
+- Fixed dedicated server crash when using Mycelium Spores to convert a cow into a Mooshroom (PR #44 by CPearl0)
+
 ## Ex Deorum 1.20
 - Added Mechanical Hammer, a machine that uses FE to hammer blocks automatically. Uses 20 FE a tick by default and takes 200 ticks (10 seconds) to hammer an item with a hammer that has no efficiency.
 - Fixed network bug when joining a server (PR #43 by CPearl0)

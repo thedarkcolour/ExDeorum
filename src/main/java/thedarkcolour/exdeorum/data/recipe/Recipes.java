@@ -18,9 +18,11 @@
 
 package thedarkcolour.exdeorum.data.recipe;
 
+import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -29,7 +31,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
@@ -44,12 +45,15 @@ import net.minecraftforge.common.crafting.conditions.TagEmptyCondition;
 import net.minecraftforge.registries.RegistryObject;
 import org.apache.commons.lang3.mutable.MutableObject;
 import thedarkcolour.exdeorum.ExDeorum;
+import thedarkcolour.exdeorum.block.InfestedLeavesBlock;
 import thedarkcolour.exdeorum.compat.ModIds;
 import thedarkcolour.exdeorum.data.ModCompatData;
 import thedarkcolour.exdeorum.recipe.TagResultRecipe;
 import thedarkcolour.exdeorum.recipe.barrel.FinishedBarrelCompostRecipe;
 import thedarkcolour.exdeorum.recipe.barrel.FinishedBarrelFluidMixingRecipe;
 import thedarkcolour.exdeorum.recipe.barrel.FinishedBarrelMixingRecipe;
+import thedarkcolour.exdeorum.recipe.BlockPredicate;
+import thedarkcolour.exdeorum.recipe.crook.FinishedCrookRecipe;
 import thedarkcolour.exdeorum.recipe.crucible.FinishedCrucibleRecipe;
 import thedarkcolour.exdeorum.recipe.hammer.FinishedHammerRecipe;
 import thedarkcolour.exdeorum.registry.EBlocks;
@@ -75,6 +79,7 @@ public class Recipes {
         SieveRecipes.sieveRecipes(writer);
         crucibleRecipes(writer);
         hammerRecipes(writer);
+        crookRecipes(writer);
         barrelCompostRecipes(writer);
         barrelMixingRecipes(writer);
     }
@@ -479,6 +484,16 @@ public class Recipes {
 
     private static void hammerRecipe(Consumer<FinishedRecipe> writer, String name, Ingredient block, ItemLike result, NumberProvider resultAmount) {
         writer.accept(new FinishedHammerRecipe(new ResourceLocation(ExDeorum.ID, "hammer/" + name), block, result.asItem(), resultAmount));
+    }
+
+    private static void crookRecipes(Consumer<FinishedRecipe> writer) {
+        crookRecipe(writer, "silkworm", BlockPredicate.blockTag(BlockTags.LEAVES), EItems.SILK_WORM.get(), 0.01f);
+        var fullyInfestedLeaves = BlockPredicate.blockState(EBlocks.INFESTED_LEAVES.get(), StatePropertiesPredicate.Builder.properties().hasProperty(InfestedLeavesBlock.FULLY_INFESTED, true).build());
+        crookRecipe(writer, "silkworm_bonus", fullyInfestedLeaves, EItems.SILK_WORM.get(), 0.01f);
+    }
+
+    private static void crookRecipe(Consumer<FinishedRecipe> writer, String name, BlockPredicate blockPredicate, ItemLike result, float chance) {
+        writer.accept(new FinishedCrookRecipe(new ResourceLocation(ExDeorum.ID, "crook/" + name), blockPredicate, result.asItem(), chance));
     }
 
     private static void barrelCompostRecipes(Consumer<FinishedRecipe> writer) {

@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package thedarkcolour.exdeorum.recipe;
+package thedarkcolour.exdeorum.recipe.cache;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.world.item.Item;

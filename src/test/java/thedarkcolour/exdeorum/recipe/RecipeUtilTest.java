@@ -1,6 +1,6 @@
 /*
  * Ex Deorum
- * Copyright (c) 2023 thedarkcolour
+ * Copyright (c) 2024 thedarkcolour
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package thedarkcolour.exdeorum.test.recipe;
+package thedarkcolour.exdeorum.recipe;
 
 import net.minecraft.SharedConstants;
 import net.minecraft.WorldVersion;
@@ -42,7 +42,7 @@ class RecipeUtilTest {
 
     @Test
     void areIngredientsEqual() {
-        Assertions.assertTrue(RecipeUtil.areIngredientsEqual(Ingredient.of(Items.OAK_SLAB), Ingredient.of(Items.OAK_SLAB)));
+        assertTrue(RecipeUtil.areIngredientsEqual(Ingredient.of(Items.OAK_SLAB), Ingredient.of(Items.OAK_SLAB)));
         assertFalse(RecipeUtil.areIngredientsEqual(Ingredient.of(Items.BIRCH_SLAB), Ingredient.of(Items.OAK_SLAB)));
         assertTrue(RecipeUtil.areIngredientsEqual(Ingredient.of(Tags.Items.GEMS_DIAMOND), Ingredient.of(Tags.Items.GEMS_DIAMOND)));
         assertFalse(RecipeUtil.areIngredientsEqual(Ingredient.of(Tags.Items.INGOTS_IRON), Ingredient.of(Tags.Items.GEMS_DIAMOND)));

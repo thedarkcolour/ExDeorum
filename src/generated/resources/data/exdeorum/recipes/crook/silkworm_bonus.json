@@ -1,0 +1,11 @@
+{
+  "type": "exdeorum:crook",
+  "block_predicate": {
+    "block": "exdeorum:infested_leaves",
+    "state": {
+      "fully_infested": "true"
+    }
+  },
+  "chance": 0.01,
+  "result": "exdeorum:silk_worm"
+}

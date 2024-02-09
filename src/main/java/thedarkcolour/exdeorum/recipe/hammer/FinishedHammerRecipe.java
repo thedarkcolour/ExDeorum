@@ -19,13 +19,13 @@
 package thedarkcolour.exdeorum.recipe.hammer;
 
 import com.google.gson.JsonObject;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.storage.loot.LootDataType;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
-import net.minecraftforge.registries.ForgeRegistries;
 import thedarkcolour.exdeorum.recipe.EFinishedRecipe;
 import thedarkcolour.exdeorum.registry.ERecipeSerializers;
 
@@ -45,7 +45,7 @@ public class FinishedHammerRecipe implements EFinishedRecipe {
     @Override
     public void serializeRecipeData(JsonObject object) {
         object.add("ingredient", this.ingredient.toJson());
-        object.addProperty("result", ForgeRegistries.ITEMS.getKey(this.result).toString());
+        object.addProperty("result", BuiltInRegistries.ITEM.getKey(this.result).toString());
         object.add("result_amount", LootDataType.PREDICATE.parser().toJsonTree(this.resultAmount));
     }
 
