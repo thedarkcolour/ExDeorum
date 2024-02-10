@@ -242,7 +242,6 @@ public final class EventHandler {
         event.addListener((prepBarrier, resourceManager, prepProfiler, reloadProfiler, backgroundExecutor, gameExecutor) -> {
             return prepBarrier.wait(Unit.INSTANCE).thenRunAsync(() -> {
                 RecipeUtil.reload(recipes);
-                LavaCrucibleBlockEntity.putDefaultHeatValues();
             }, gameExecutor);
         });
     }

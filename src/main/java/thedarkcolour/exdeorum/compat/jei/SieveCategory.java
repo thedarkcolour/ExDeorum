@@ -32,6 +32,7 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.providers.number.BinomialDistributionGenerator;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
@@ -104,6 +105,13 @@ class SieveCategory implements IRecipeCategory<GroupedSieveRecipe> {
         }
     }
 
+    // Takes a decimal probability and returns a user-friendly percentage value
+    // todo move into JeiUtil
+    public static Component formatChance(double probability) {
+        var chance = FORMATTER.format(probability * 100);
+        return Component.translatable(TranslationKeys.SIEVE_RECIPE_CHANCE, chance).withStyle(ChatFormatting.GRAY);
+    }
+
     public static void addTooltips(IRecipeSlotBuilder slot, boolean byHandOnly, NumberProvider provider) {
         var tooltipLines = new ImmutableList.Builder<Component>();
 
@@ -113,8 +121,8 @@ class SieveCategory implements IRecipeCategory<GroupedSieveRecipe> {
         }
         if (provider instanceof BinomialDistributionGenerator binomial) {
             if (binomial.n instanceof ConstantValue constant && constant.value == 1) {
-                var chance = FORMATTER.format(RecipeUtil.getExpectedValue(binomial.p) * 100);
-                tooltipLines.add(Component.translatable(TranslationKeys.SIEVE_RECIPE_CHANCE, chance).withStyle(ChatFormatting.GRAY));
+                var chanceLabel = formatChance(RecipeUtil.getExpectedValue(binomial.p));
+                tooltipLines.add(chanceLabel);
             } else {
                 addAvgOutput(tooltipLines, RecipeUtil.getExpectedValue(provider));
             }

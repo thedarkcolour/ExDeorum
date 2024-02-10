@@ -34,6 +34,8 @@ class English {
         english.add(TranslationKeys.MECHANICAL_HAMMER_HAMMER_LABEL, "Hammer: ");
         english.add(TranslationKeys.ENERGY, "Energy");
 
+        english.add(TranslationKeys.INFESTED_LEAVES_FULLY_INFESTED, "Fully Infested");
+
         english.add(TranslationKeys.ROOT_ADVANCEMENT_TITLE, "Don't Look Down...");
         english.add(TranslationKeys.ROOT_ADVANCEMENT_DESCRIPTION, "Spawn into a SkyBlock void world");
         english.add(TranslationKeys.CROOK_ADVANCEMENT_TITLE, "Give Him The Hook");
@@ -69,7 +71,7 @@ class English {
         english.add(TranslationKeys.CRUCIBLE_HEAT_SOURCE_CATEGORY_MULTIPLIER, "Melt Rate: %sx");
         english.add(TranslationKeys.HAMMER_CATEGORY_TITLE, "Hammer");
         english.add(TranslationKeys.CROOK_CATEGORY_TITLE, "Crook");
-        english.add(TranslationKeys.CROOK_CATEGORY_REQUIRES_STATE, "Requires specific block state");
+        english.add(TranslationKeys.CROOK_CATEGORY_REQUIRES_STATE, "Requires properties:");
         english.add(TranslationKeys.SIEVE_CATEGORY_TITLE, "Sieve");
         english.add(TranslationKeys.SIEVE_RECIPE_CHANCE, "Chance: %s%%");
         english.add(TranslationKeys.SIEVE_RECIPE_AVERAGE_OUTPUT, "Avg. Output: %s");

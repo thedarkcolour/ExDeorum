@@ -31,6 +31,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -69,7 +70,7 @@ public sealed interface BlockPredicate extends Predicate<BlockState> {
             if (block == Blocks.AIR) return null;
 
             if (json.has("state")) {
-                return new BlockStatePredicate(block, StatePropertiesPredicate.fromJson(json.get("block_state")));
+                return new BlockStatePredicate(block, StatePropertiesPredicate.fromJson(json.get("state")));
             } else {
                 return new SingleBlockPredicate(block);
             }
@@ -141,6 +142,15 @@ public sealed interface BlockPredicate extends Predicate<BlockState> {
         @Override
         public Stream<BlockState> possibleStates() {
             return this.block.getStateDefinition().getPossibleStates().stream().filter(this.properties::matches);
+        }
+
+        // Although slow, this is useful for testing
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            BlockStatePredicate that = (BlockStatePredicate) o;
+            return Objects.equals(block, that.block) && Objects.equals(properties.serializeToJson(), that.properties.serializeToJson());
         }
     }
 

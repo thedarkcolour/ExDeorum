@@ -1,10 +1,12 @@
 ## Ex Deorum 1.21
+- Added Crook recipes. It is now possible to add drops to the crook, for example, you could make it so that using a Crook on tall grass would have a 1% chance of dropping a diamond.
+- Added Crucible Heat Source recipes. Instead of using KubeJS, crucible heat sources can now be added with datapacks. Old KubeJS scripts will still work fine.
 - Added Jade compatibility
-- Added partial compatibility with Roughly Enough Items to hide compat blocks for mods that aren't installed (use REI Plugin Compatibilities mod to gain full compatibility with Ex Deorum)
+- Added Roughly Enough Items compatibility to hide compat blocks for mods that aren't installed (use REI Plugin Compatibilities mod to gain full compatibility with Ex Deorum)
 - Added configurable sifting interval to limit speed of sifting by hand in order to curb the speed of autoclickers on sieves. (PR #47 by CPearl0)
 - Added Chinese translation (PR #45 by CPearl0)
-- Infested leaves string drop rate can now be configured in the server config.
 - Fixed dedicated server crash when using Mycelium Spores to convert a cow into a Mooshroom (PR #44 by CPearl0)
+- Fixed incorrect block lighting in JEI displays for Crucible heat sources and Crook recipes
 
 ## Ex Deorum 1.20
 - Added Mechanical Hammer, a machine that uses FE to hammer blocks automatically. Uses 20 FE a tick by default and takes 200 ticks (10 seconds) to hammer an item with a hammer that has no efficiency.

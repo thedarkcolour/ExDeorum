@@ -1,0 +1,7 @@
+{
+  "type": "exdeorum:crucible_heat_source",
+  "block_predicate": {
+    "block": "minecraft:wall_torch"
+  },
+  "heat_value": 1
+}

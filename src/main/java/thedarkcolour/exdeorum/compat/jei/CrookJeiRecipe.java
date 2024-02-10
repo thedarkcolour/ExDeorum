@@ -19,22 +19,26 @@
 package thedarkcolour.exdeorum.compat.jei;
 
 import com.google.common.collect.ImmutableList;
+import com.google.gson.JsonObject;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.recipe.RecipeIngredientRole;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.recipe.BlockPredicate;
 import thedarkcolour.exdeorum.recipe.crook.CrookRecipe;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public sealed abstract class CrookJeiRecipe {
     public final List<BlockState> states;
@@ -51,7 +55,7 @@ public sealed abstract class CrookJeiRecipe {
 
     static CrookJeiRecipe create(CrookRecipe recipe) {
         if (recipe.blockPredicate() instanceof BlockPredicate.BlockStatePredicate state) {
-            return new StatesRecipe(state.possibleStates().collect(Collectors.toList()), recipe.result(), recipe.chance());
+            return new StatesRecipe(state, state.possibleStates().filter(blockState -> !blockState.hasProperty(BlockStateProperties.WATERLOGGED) || !blockState.getValue(BlockStateProperties.WATERLOGGED)).toList(), recipe.result(), recipe.chance());
         } else if (recipe.blockPredicate() instanceof BlockPredicate.SingleBlockPredicate block) {
             return new BlockRecipe(block.block(), recipe.result(), recipe.chance());
         } else if (recipe.blockPredicate() instanceof BlockPredicate.TagPredicate tag) {
@@ -71,26 +75,38 @@ public sealed abstract class CrookJeiRecipe {
 
     sealed static class StatesRecipe extends CrookJeiRecipe {
         private final List<ItemStack> itemIngredients;
+        public final List<Component> requirements;
 
-        StatesRecipe(List<BlockState> states, Item result, float chance) {
+        StatesRecipe(@Nullable BlockPredicate.BlockStatePredicate predicate, List<BlockState> states, Item result, float chance) {
             super(states, result, chance);
-            ImmutableList.Builder<ItemStack> temp = ImmutableList.builder();
+            ImmutableList.Builder<ItemStack> itemIngredients = ImmutableList.builder();
 
             var blocks = new HashSet<Block>();
 
-            for (var state : states) {
+            for (var state : this.states) {
                 var block = state.getBlock();
 
                 if (blocks.add(block)) {
                     var item = block.asItem();
 
                     if (item != Items.AIR) {
-                        temp.add(new ItemStack(item));
+                        itemIngredients.add(new ItemStack(item));
                     }
                 }
             }
 
-            this.itemIngredients = temp.build();
+            this.itemIngredients = itemIngredients.build();
+
+            ImmutableList.Builder<Component> requirements = ImmutableList.builder();
+            if (predicate != null) {
+                var json = predicate.properties().serializeToJson();
+                if (json instanceof JsonObject obj) {
+                    for (var entry : obj.entrySet()) {
+                        requirements.add(Component.literal("  " + entry.getKey() + "=" + entry.getValue().toString()).withStyle(ChatFormatting.GRAY));
+                    }
+                }
+            }
+            this.requirements = requirements.build();
         }
 
         @Override
@@ -105,7 +121,7 @@ public sealed abstract class CrookJeiRecipe {
         public final TagKey<Block> tag;
 
         public TagRecipe(TagKey<Block> tag, List<BlockState> states, Item result, float chance) {
-            super(states, result, chance);
+            super(null, states, result, chance);
             this.tag = tag;
         }
     }

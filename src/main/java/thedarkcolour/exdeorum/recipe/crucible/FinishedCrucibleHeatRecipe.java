@@ -20,34 +20,26 @@ package thedarkcolour.exdeorum.recipe.crucible;
 
 import com.google.gson.JsonObject;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import thedarkcolour.exdeorum.recipe.CodecUtil;
+import thedarkcolour.exdeorum.recipe.BlockPredicate;
 import thedarkcolour.exdeorum.recipe.EFinishedRecipe;
+import thedarkcolour.exdeorum.registry.ERecipeSerializers;
 
-public class FinishedCrucibleRecipe implements EFinishedRecipe {
+public class FinishedCrucibleHeatRecipe implements EFinishedRecipe {
     private final ResourceLocation id;
-    private final RecipeSerializer<?> serializer;
-    private final Ingredient ingredient;
-    private final FluidStack fluidStack;
+    private final BlockPredicate blockPredicate;
+    private final int heatValue;
 
-    public FinishedCrucibleRecipe(ResourceLocation id, RecipeSerializer<?> serializer, Ingredient ingredient, Fluid fluid, int amount) {
-        this(id, serializer, ingredient, new FluidStack(fluid, amount));
-    }
-
-    public FinishedCrucibleRecipe(ResourceLocation id, RecipeSerializer<?> serializer, Ingredient ingredient, FluidStack fluidStack) {
+    public FinishedCrucibleHeatRecipe(ResourceLocation id, BlockPredicate blockPredicate, int heatValue) {
         this.id = id;
-        this.serializer = serializer;
-        this.ingredient = ingredient;
-        this.fluidStack = fluidStack;
+        this.blockPredicate = blockPredicate;
+        this.heatValue = heatValue;
     }
 
     @Override
     public void serializeRecipeData(JsonObject json) {
-        json.add("ingredient", this.ingredient.toJson());
-        json.add("fluid", CodecUtil.encode(FluidStack.CODEC, this.fluidStack));
+        json.add("block_predicate", this.blockPredicate.toJson());
+        json.addProperty("heat_value", this. heatValue);
     }
 
     @Override
@@ -57,6 +49,6 @@ public class FinishedCrucibleRecipe implements EFinishedRecipe {
 
     @Override
     public RecipeSerializer<?> getType() {
-        return this.serializer;
+        return ERecipeSerializers.CRUCIBLE_HEAT_SOURCE.get();
     }
 }

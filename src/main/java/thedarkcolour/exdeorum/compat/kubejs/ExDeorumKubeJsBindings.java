@@ -19,17 +19,28 @@
 package thedarkcolour.exdeorum.compat.kubejs;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import dev.latvian.mods.kubejs.bindings.event.ServerEvents;
 import dev.latvian.mods.kubejs.recipe.RecipesEventJS;
 import dev.latvian.mods.kubejs.recipe.ReplacementMatch;
 import dev.latvian.mods.kubejs.recipe.filter.RecipeFilter;
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import dev.latvian.mods.kubejs.script.ScriptType;
+import dev.latvian.mods.rhino.util.HideFromJS;
+import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.commands.arguments.blocks.BlockStateParser;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraftforge.registries.RegistryObject;
 import thedarkcolour.exdeorum.ExDeorum;
-import thedarkcolour.exdeorum.blockentity.LavaCrucibleBlockEntity;
+import thedarkcolour.exdeorum.recipe.BlockPredicate;
+import thedarkcolour.exdeorum.recipe.crucible.FinishedCrucibleHeatRecipe;
 import thedarkcolour.exdeorum.registry.ERecipeTypes;
+
+import java.util.Comparator;
+import java.util.function.Consumer;
 
 @SuppressWarnings("unused")
 class ExDeorumKubeJsBindings {
@@ -47,33 +58,53 @@ class ExDeorumKubeJsBindings {
     }
 
     // This method previously accepted a BlockState, which made it impossible to call through KubeJS.
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public void setCrucibleHeatValueForState(String stateString, int value) {
-        try {
-            LavaCrucibleBlockEntity.KUBEJS_HEAT_VALUES.put(BlockStateParser.parseForBlock(BuiltInRegistries.BLOCK.asLookup(), stateString, false).blockState(), value);
-        } catch (CommandSyntaxException exception) {
-            // Throw a more appropriate exception.
-            throw new IllegalArgumentException("Failed to parse BlockState string \"" + stateString + "\"");
-        }
-    }
-
-    public void setCrucibleHeatValueForBlock(Block block, int value) {
-        for (var state : block.getStateDefinition().getPossibleStates()) {
-            LavaCrucibleBlockEntity.KUBEJS_HEAT_VALUES.put(state, value);
-        }
-    }
-
-    public void removeDefaultSieveRecipes(RecipesEventJS recipesEvent) {
-        recipesEvent.remove(r -> {
-            return r.kjs$getType().equals(ERecipeTypes.SIEVE.getId()) && r.kjs$getOrCreateId().getNamespace().equals(ExDeorum.ID);
+        onRecipesEvent(event -> {
+            try {
+                var state = BlockStateParser.parseForBlock(BuiltInRegistries.BLOCK.asLookup(), stateString, false).blockState();
+                var properties = StatePropertiesPredicate.Builder.properties();
+                for (Property prop : state.getProperties()) {
+                    bypassTypeChecking(properties, prop, state);
+                }
+                event.custom(new FinishedCrucibleHeatRecipe(null, BlockPredicate.blockState(state.getBlock(), properties.build()), value).serializeRecipe());
+            } catch (CommandSyntaxException exception) {
+                // Throw a more appropriate exception.
+                throw new IllegalArgumentException("Failed to parse BlockState string \"" + stateString + "\"");
+            }
         });
     }
 
-    // not the most elegant solution, but if it works, it works
+    @HideFromJS
+    private static <T extends Comparable<T>> void bypassTypeChecking(StatePropertiesPredicate.Builder properties, Property<T> prop, BlockState state) {
+        properties.hasProperty(prop, prop.getName(state.getValue(prop)));
+    }
+
+    @SuppressWarnings("DataFlowIssue")
+    public void setCrucibleHeatValueForBlock(Block block, int value) {
+        onRecipesEvent(event -> {
+            event.custom(new FinishedCrucibleHeatRecipe(null, BlockPredicate.singleBlock(block), value).serializeRecipe());
+        });
+    }
+
+    public void removeDefaultSieveRecipes(RecipesEventJS recipesEvent) {
+        removeDefaultRecipes(recipesEvent, ERecipeTypes.SIEVE);
+    }
+
     public void removeDefaultHeatSources() {
-        var map = new Object2IntOpenHashMap<BlockState>();
-        LavaCrucibleBlockEntity.putDefaults(map);
-        for (var key : map.keySet()) {
-            LavaCrucibleBlockEntity.KUBEJS_HEAT_VALUES.put(key, 0);
-        }
+        onRecipesEvent(event -> removeDefaultRecipes(event, ERecipeTypes.CRUCIBLE_HEAT_SOURCE));
+    }
+
+    @HideFromJS
+    private static void removeDefaultRecipes(RecipesEventJS event, RegistryObject<? extends RecipeType<?>> recipeType) {
+        event.remove(r -> r.kjs$getType().equals(recipeType.getId()) && r.kjs$getOrCreateId().getNamespace().equals(ExDeorum.ID));
+    }
+
+    @HideFromJS
+    private static void onRecipesEvent(Consumer<RecipesEventJS> action) {
+        ServerEvents.RECIPES.listenJava(ScriptType.SERVER, null, jsEvent -> {
+            action.accept((RecipesEventJS) jsEvent);
+            return null;
+        });
     }
 }

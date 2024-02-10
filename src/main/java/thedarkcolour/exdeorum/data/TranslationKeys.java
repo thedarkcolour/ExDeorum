@@ -30,6 +30,9 @@ public class TranslationKeys {
     public static final String MECHANICAL_HAMMER_HAMMER_LABEL = "item." + ExDeorum.ID + ".mechanical_hammer.hammer_label";
     public static final String ENERGY = "gui." + ExDeorum.ID + ".energy_label";
 
+    // Blocks
+    public static final String INFESTED_LEAVES_FULLY_INFESTED = "block." + ExDeorum.ID + ".infested_leaves.fully_infested";
+
     // Advancements
     public static final String ROOT_ADVANCEMENT_TITLE = "advancements." + ExDeorum.ID + ".core.root.title";
     public static final String ROOT_ADVANCEMENT_DESCRIPTION = "advancements." + ExDeorum.ID + ".core.root.description";

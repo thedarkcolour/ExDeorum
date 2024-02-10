@@ -18,6 +18,7 @@
 
 package thedarkcolour.exdeorum.compat.jade;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import snownee.jade.api.BlockAccessor;
@@ -25,6 +26,7 @@ import snownee.jade.api.IBlockComponentProvider;
 import snownee.jade.api.ITooltip;
 import snownee.jade.api.config.IPluginConfig;
 import thedarkcolour.exdeorum.blockentity.InfestedLeavesBlockEntity;
+import thedarkcolour.exdeorum.data.TranslationKeys;
 
 enum InfestedLeavesComponentProvider implements IBlockComponentProvider {
     INSTANCE;
@@ -33,7 +35,11 @@ enum InfestedLeavesComponentProvider implements IBlockComponentProvider {
     public void appendTooltip(ITooltip tooltip, BlockAccessor blockAccessor, IPluginConfig config) {
         if (blockAccessor.getBlockEntity() instanceof InfestedLeavesBlockEntity leaves) {
             int progress = (int) (leaves.getProgress() * 100.0f);
-            tooltip.add(Component.literal("Progress: ").append(Component.literal(progress + "%")));
+            if (progress == 100) {
+                tooltip.add(Component.translatable(TranslationKeys.INFESTED_LEAVES_FULLY_INFESTED));
+            } else {
+                tooltip.add(Component.literal("Progress: ").append(Component.literal(progress + "%")));
+            }
         }
     }
 

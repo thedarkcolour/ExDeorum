@@ -136,7 +136,6 @@ public class EConfig {
         public final IntValue mechanicalHammerEnergyStorage;
         public final IntValue mechanicalHammerEnergyConsumption;
         public final IntValue sieveIntervalTicks;
-        public final DoubleValue infestedLeavesStringChance;
 
         public Server(ForgeConfigSpec.Builder builder) {
             builder.comment("Server configuration for Ex Deorum").push("server");
@@ -192,9 +191,6 @@ public class EConfig {
             this.sieveIntervalTicks = builder
                     .comment("The minimum number of ticks a player must wait between two sifting operations. Only affects sifting by hand. 0 means no limit.")
                     .defineInRange("sieve_interval", 1, 0, Integer.MAX_VALUE);
-            this.infestedLeavesStringChance = builder
-                    .comment("The chance for infested leaves to drop string. 0 means infested leaves never drop string, 1 means infested leaves always drop string.")
-                    .defineInRange("infested_leaves_string_chance", 0.4, 0.0, 1.0);
             builder.pop();
         }
     }

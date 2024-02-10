@@ -1,0 +1,10 @@
+{
+  "type": "exdeorum:crucible_heat_source",
+  "block_predicate": {
+    "block": "minecraft:campfire",
+    "state": {
+      "lit": "true"
+    }
+  },
+  "heat_value": 2
+}

@@ -29,7 +29,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import thedarkcolour.exdeorum.ExDeorum;
-import thedarkcolour.exdeorum.loot.InfestedStringFunction;
+import thedarkcolour.exdeorum.block.MechanicalHammerBlock;
 import thedarkcolour.exdeorum.loot.MachineLootFunction;
 import thedarkcolour.exdeorum.registry.EBlocks;
 import thedarkcolour.exdeorum.registry.EItems;
@@ -54,21 +54,16 @@ class BlockLoot extends BlockLootSubProvider {
             }
         });
 
-        add(EBlocks.INFESTED_LEAVES.get(), LootTable.lootTable()
-                .withPool(LootPool.lootPool()
-                        .setRolls(ConstantValue.exactly(1))
-                        .add(LootItem.lootTableItem(Items.STRING)
-                                .apply(InfestedStringFunction.infestedString()))));
-        // see createSingleItemTable() for reference
-        add(EBlocks.MECHANICAL_SIEVE.get(), LootTable.lootTable()
-                .withPool(applyExplosionCondition(EItems.MECHANICAL_SIEVE.get(), LootPool.lootPool()
+        machineDrop(EBlocks.MECHANICAL_HAMMER.get());
+        machineDrop(EBlocks.MECHANICAL_SIEVE.get());
+    }
+
+    // see createSingleItemTable() for reference
+    private void machineDrop(Block machine) {
+        add(machine, LootTable.lootTable()
+                .withPool(applyExplosionCondition(machine, LootPool.lootPool()
                         .setRolls(ConstantValue.exactly(1.0F))
-                        .add(LootItem.lootTableItem(EItems.MECHANICAL_SIEVE.get())
-                                .apply(MachineLootFunction.machineLoot())))));
-        add(EBlocks.MECHANICAL_HAMMER.get(), LootTable.lootTable()
-                .withPool(applyExplosionCondition(EItems.MECHANICAL_HAMMER.get(), LootPool.lootPool()
-                        .setRolls(ConstantValue.exactly(1.0F))
-                        .add(LootItem.lootTableItem(EItems.MECHANICAL_HAMMER.get())
+                        .add(LootItem.lootTableItem(machine)
                                 .apply(MachineLootFunction.machineLoot())))));
     }
 

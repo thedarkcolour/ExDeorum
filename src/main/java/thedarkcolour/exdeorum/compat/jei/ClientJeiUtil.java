@@ -24,13 +24,20 @@ import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.math.Axis;
+import me.shedaniel.rei.api.client.view.ViewSearchBuilder;
+import me.shedaniel.rei.jeicompat.JEIPluginDetector;
 import mezz.jei.api.ingredients.IIngredientRenderer;
+import mezz.jei.api.ingredients.IIngredientType;
+import mezz.jei.api.ingredients.ITypedIngredient;
+import mezz.jei.api.recipe.IFocusFactory;
+import mezz.jei.api.recipe.RecipeIngredientRole;
+import mezz.jei.api.runtime.IIngredientManager;
+import mezz.jei.api.runtime.IRecipesGui;
 import net.minecraft.ChatFormatting;
 import net.minecraft.CrashReport;
 import net.minecraft.CrashReportCategory;
 import net.minecraft.ReportedException;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -55,19 +62,27 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.lighting.LevelLightEngine;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.ModList;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
+import thedarkcolour.exdeorum.compat.ModIds;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 class ClientJeiUtil {
     private static final FluidState EMPTY = Fluids.EMPTY.defaultFluidState();
     private static final BlockState AIR = Blocks.AIR.defaultBlockState();
 
+    // From https://github.com/The-Aether-Team/Nitrogen/blob/1.20.1-develop/src/main/java/com/aetherteam/nitrogen/integration/jei/BlockStateRenderer.java
+    private static final Vector3f L1 = new Vector3f(0.4F, 0.0F, 1.0F).normalize();
+    private static final Vector3f L2 = new Vector3f(-0.4F, 1.0F, -0.2F).normalize();
+
     // https://github.com/way2muchnoise/JustEnoughResources/blob/89ee40ff068c8d6eb6ab103f76381445691cffc9/Common/src/main/java/jeresources/util/RenderHelper.java#L100
-    static void renderBlock(GuiGraphics guiGraphics, BlockState block, float x, float y, float z, float scale) {
-        Minecraft mc = Minecraft.getInstance();
+    static void renderBlock(GuiGraphics guiGraphics, BlockState block, float x, float y, float z, float scale, RenderBlockFn renderFunction) {
         PoseStack poseStack = guiGraphics.pose();
 
         poseStack.translate(x, y, z);
@@ -85,9 +100,10 @@ class ClientJeiUtil {
         FluidState fluidState = block.getFluidState();
 
         if (fluidState.isEmpty()) {
-            MultiBufferSource.BufferSource buffers = mc.renderBuffers().bufferSource();
+            MultiBufferSource.BufferSource buffers = Minecraft.getInstance().renderBuffers().bufferSource();
 
-            mc.getBlockRenderer().renderSingleBlock(block, poseStack, buffers, 15728880, OverlayTexture.NO_OVERLAY);
+            RenderSystem.setupGui3DDiffuseLighting(L1, L2);
+            renderFunction.renderBlock(block, poseStack, buffers);
 
             buffers.endBatch();
         } else {
@@ -104,7 +120,7 @@ class ClientJeiUtil {
 
             Dummy.tempState = block;
             Dummy.tempFluid = fluidState;
-            mc.getBlockRenderer().renderLiquid(BlockPos.ZERO, Dummy.INSTANCE, builder, block, block.getFluidState());
+            Minecraft.getInstance().getBlockRenderer().renderLiquid(BlockPos.ZERO, Dummy.INSTANCE, builder, block, block.getFluidState());
             Dummy.tempFluid = EMPTY;
             Dummy.tempState = AIR;
 
@@ -172,6 +188,35 @@ class ClientJeiUtil {
 
         // From end of ItemStackRenderer
         RenderSystem.disableBlend();
+    }
+
+    // Required due to broken JEI implementation in REI plugin compatibility
+    public static <T> void checkTypedIngredient(IIngredientManager manager, IIngredientType<T> ingredientType, T uncheckedIngredient, Consumer<ITypedIngredient<T>> action) {
+        if ((uncheckedIngredient instanceof ItemStack stack && !stack.isEmpty()) || (uncheckedIngredient instanceof FluidStack fluidStack && !fluidStack.isEmpty())) {
+            manager.createTypedIngredient(ingredientType, uncheckedIngredient).ifPresent(action);
+        }
+    }
+
+    public static <T> void showRecipes(IFocusFactory focusFactory, ITypedIngredient<T> ingredient) {
+        if (Minecraft.getInstance().screen instanceof IRecipesGui recipesGui) {
+            recipesGui.show(focusFactory.createFocus(RecipeIngredientRole.OUTPUT, ingredient));
+        } else if (ModList.get().isLoaded(ModIds.REI_PC)) {
+            ViewSearchBuilder.builder().addRecipesFor(JEIPluginDetector.unwrapStack(ingredient)).open();
+        }
+    }
+
+    public static <T> void showUsages(IFocusFactory focusFactory, ITypedIngredient<T> ingredient) {
+        if (Minecraft.getInstance().screen instanceof IRecipesGui recipesGui) {
+            // input + catalyst
+            recipesGui.show(List.of(focusFactory.createFocus(RecipeIngredientRole.INPUT, ingredient), focusFactory.createFocus(RecipeIngredientRole.CATALYST, ingredient)));
+        } else if (ModList.get().isLoaded(ModIds.REI_PC)) {
+            ViewSearchBuilder.builder().addUsagesFor(JEIPluginDetector.unwrapStack(ingredient)).open();
+        }
+    }
+
+    @FunctionalInterface
+    interface RenderBlockFn {
+        void renderBlock(BlockState block, PoseStack poseStack, MultiBufferSource.BufferSource buffers);
     }
 
     private enum Dummy implements BlockAndTintGetter {

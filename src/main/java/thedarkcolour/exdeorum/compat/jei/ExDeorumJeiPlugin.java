@@ -44,7 +44,6 @@ import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.WallTorchBlock;
 import net.minecraftforge.fluids.FluidStack;
 import thedarkcolour.exdeorum.ExDeorum;
-import thedarkcolour.exdeorum.blockentity.LavaCrucibleBlockEntity;
 import thedarkcolour.exdeorum.client.screen.MechanicalHammerScreen;
 import thedarkcolour.exdeorum.client.screen.MechanicalSieveScreen;
 import thedarkcolour.exdeorum.compat.CompatHelper;
@@ -55,7 +54,6 @@ import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelCompostRecipe;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelFluidMixingRecipe;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelMixingRecipe;
-import thedarkcolour.exdeorum.recipe.crook.CrookRecipe;
 import thedarkcolour.exdeorum.recipe.crucible.CrucibleRecipe;
 import thedarkcolour.exdeorum.recipe.hammer.HammerRecipe;
 import thedarkcolour.exdeorum.registry.EBlocks;
@@ -202,7 +200,7 @@ public class ExDeorumJeiPlugin implements IModPlugin {
 
     private static void addCrucibleHeatSources(IRecipeRegistration registration) {
         var values = new Object2IntOpenHashMap<Block>();
-        for (var entry : LavaCrucibleBlockEntity.HEAT_REGISTRY.object2IntEntrySet()) {
+        for (var entry : RecipeUtil.getHeatSources()) {
             var state = entry.getKey();
             var block = state.getBlock();
 

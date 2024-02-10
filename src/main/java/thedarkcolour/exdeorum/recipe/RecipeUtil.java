@@ -20,7 +20,9 @@ package thedarkcolour.exdeorum.recipe;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import it.unimi.dsi.fastutil.objects.ObjectSet;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -46,15 +48,13 @@ import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
+import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.compat.PreferredOres;
 import thedarkcolour.exdeorum.item.HammerItem;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelCompostRecipe;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelFluidMixingRecipe;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelMixingRecipe;
-import thedarkcolour.exdeorum.recipe.cache.BarrelFluidMixingRecipeCache;
-import thedarkcolour.exdeorum.recipe.cache.CrookRecipeCache;
-import thedarkcolour.exdeorum.recipe.cache.SieveRecipeCache;
-import thedarkcolour.exdeorum.recipe.cache.SingleIngredientRecipeCache;
+import thedarkcolour.exdeorum.recipe.cache.*;
 import thedarkcolour.exdeorum.recipe.crook.CrookRecipe;
 import thedarkcolour.exdeorum.recipe.crucible.CrucibleRecipe;
 import thedarkcolour.exdeorum.recipe.hammer.HammerRecipe;
@@ -80,6 +80,7 @@ public final class RecipeUtil {
     private static SieveRecipeCache sieveRecipeCache;
     private static BarrelFluidMixingRecipeCache barrelFluidMixingRecipeCache;
     private static CrookRecipeCache crookRecipeCache;
+    private static CrucibleHeatRecipeCache crucibleHeatRecipeCache;
 
     public static void reload(RecipeManager recipes) {
         barrelCompostRecipeCache = new SingleIngredientRecipeCache<>(recipes, ERecipeTypes.BARREL_COMPOST);
@@ -89,6 +90,7 @@ public final class RecipeUtil {
         sieveRecipeCache = new SieveRecipeCache(recipes);
         barrelFluidMixingRecipeCache = new BarrelFluidMixingRecipeCache(recipes);
         crookRecipeCache = new CrookRecipeCache(recipes);
+        crucibleHeatRecipeCache = new CrucibleHeatRecipeCache(recipes);
         HammerItem.refreshValidBlocks();
     }
 
@@ -100,6 +102,7 @@ public final class RecipeUtil {
         sieveRecipeCache = null;
         barrelFluidMixingRecipeCache = null;
         crookRecipeCache = null;
+        crucibleHeatRecipeCache = null;
     }
 
     public static List<SieveRecipe> getSieveRecipes(Item mesh, ItemStack item) {
@@ -311,6 +314,26 @@ public final class RecipeUtil {
         }
     }
 
+    @Nullable
+    public static BlockPredicate readBlockPredicate(ResourceLocation recipeId, JsonObject json) {
+        BlockPredicate blockPredicate = BlockPredicate.fromJson(json.getAsJsonObject("block_predicate"));
+
+        if (blockPredicate == null) {
+            ExDeorum.LOGGER.error("Invalid block_predicate for recipe {}, refer to Ex Deorum documentation for syntax: {}", recipeId, json.getAsJsonObject("block_predicate"));
+        }
+        return blockPredicate;
+    }
+
+    @Nullable
+    public static BlockPredicate readBlockPredicateNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
+        BlockPredicate blockPredicate = BlockPredicate.fromNetwork(buffer);
+
+        if (blockPredicate == null) {
+            ExDeorum.LOGGER.error("Failed to read block_predicate from network for recipe {}", recipeId);
+        }
+        return blockPredicate;
+    }
+
     @SuppressWarnings("deprecation")
     public static boolean isTagEmpty(TagKey<Item> tag) {
         return BuiltInRegistries.ITEM.getTag(tag).map(set -> !set.iterator().hasNext()).orElse(PreferredOres.getPreferredOre(tag) == Items.AIR);
@@ -322,5 +345,13 @@ public final class RecipeUtil {
 
     public static List<CrookRecipe> getCrookRecipes(BlockState state) {
         return crookRecipeCache.getRecipes(state);
+    }
+
+    public static int getHeatValue(BlockState state) {
+        return crucibleHeatRecipeCache.getValue(state);
+    }
+
+    public static ObjectSet<Object2IntMap.Entry<BlockState>> getHeatSources() {
+        return crucibleHeatRecipeCache.getEntries();
     }
 }

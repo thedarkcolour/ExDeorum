@@ -19,13 +19,9 @@
 package thedarkcolour.exdeorum.compat.top;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import mcjty.theoneprobe.api.CompoundText;
-import mcjty.theoneprobe.api.ElementAlignment;
-import mcjty.theoneprobe.api.IProbeHitData;
-import mcjty.theoneprobe.api.IProbeInfo;
-import mcjty.theoneprobe.api.IProbeInfoProvider;
-import mcjty.theoneprobe.api.ProbeMode;
-import mcjty.theoneprobe.api.TextStyleClass;
+import kroppeb.stareval.element.token.BinaryOperatorToken;
+import mcjty.theoneprobe.api.*;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
@@ -37,6 +33,7 @@ import thedarkcolour.exdeorum.blockentity.AbstractCrucibleBlockEntity;
 import thedarkcolour.exdeorum.blockentity.BarrelBlockEntity;
 import thedarkcolour.exdeorum.blockentity.InfestedLeavesBlockEntity;
 import thedarkcolour.exdeorum.blockentity.SieveBlockEntity;
+import thedarkcolour.exdeorum.data.TranslationKeys;
 import thedarkcolour.exdeorum.registry.EBlocks;
 
 public class ExDeorumInfoProvider implements IProbeInfoProvider {
@@ -61,7 +58,11 @@ public class ExDeorumInfoProvider implements IProbeInfoProvider {
             if (volume == 1000 || barrel.isBrewing()) {
                 int progress = (int) (barrel.progress * 100.0f);
 
-                info.text(CompoundText.create().style(TextStyleClass.LABEL).text("Progress: ").style(TextStyleClass.WARNING).text(progress + "%"));
+                if (progress == 100) {
+                    info.text(Component.translatable(TranslationKeys.INFESTED_LEAVES_FULLY_INFESTED).withStyle(ChatFormatting.GRAY));
+                } else {
+                    info.text(CompoundText.create().style(TextStyleClass.LABEL).text("Progress: ").style(TextStyleClass.WARNING).text(progress + "%"));
+                }
             } else if (volume > 0) {
                 int volumePercent = (int) (volume / 10.0f);
 

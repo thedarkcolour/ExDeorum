@@ -31,9 +31,9 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.runtime.IIngredientManager;
-import mezz.jei.api.runtime.IRecipesGui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -103,7 +103,9 @@ class CrucibleHeatSourcesCategory implements IRecipeCategory<CrucibleHeatSourceR
 
         graphics.drawString(font, volumeLabel, 60 - font.width(volumeLabel) / 2, 5, 0xff808080, false);
 
-        ClientJeiUtil.renderBlock(graphics, recipe.blockState(), 60, 24, 10, 20F);
+        ClientJeiUtil.renderBlock(graphics, recipe.blockState(), 60, 24, 10, 20F, (block, poseStack, buffers) -> {
+            Minecraft.getInstance().getBlockRenderer().renderSingleBlock(block, poseStack, buffers, 15728880, OverlayTexture.NO_OVERLAY);
+        });
     }
 
     @Override
@@ -113,7 +115,6 @@ class CrucibleHeatSourcesCategory implements IRecipeCategory<CrucibleHeatSourceR
                 var tooltip = this.ingredientManager.getIngredientRenderer(recipe.ingredientType()).getTooltip(recipe.ingredient(), Minecraft.getInstance().options.advancedItemTooltips ? TooltipFlag.ADVANCED : TooltipFlag.NORMAL);
                 return this.modIdHelper.addModNameToIngredientTooltip(tooltip, recipe.ingredient(), this.ingredientManager.getIngredientHelper(recipe.ingredientType()));
             } else {
-
                 var block = recipe.blockState().getBlock();
                 var modId = ForgeRegistries.BLOCKS.getKey(block).getNamespace();
                 return List.of(Component.translatable(block.getDescriptionId()), Component.literal(this.modIdHelper.getFormattedModNameForModId(modId)));
@@ -128,14 +129,11 @@ class CrucibleHeatSourcesCategory implements IRecipeCategory<CrucibleHeatSourceR
         if (input.getType() == InputConstants.Type.MOUSE && (input.getValue() == InputConstants.MOUSE_BUTTON_LEFT || input.getValue() == InputConstants.MOUSE_BUTTON_RIGHT)) {
             if (44.0 < mouseX && mouseX < 76.0 && 16 < mouseY && mouseY < 48) {
                 if (recipe.ingredientType() != null) {
-                    this.ingredientManager.createTypedIngredient(recipe.ingredientType(), recipe.ingredient()).ifPresent(ingredient -> {
-                        if (Minecraft.getInstance().screen instanceof IRecipesGui recipesGui) {
-                            if (input.getValue() == InputConstants.MOUSE_BUTTON_LEFT) {
-                                recipesGui.show(this.focusFactory.createFocus(RecipeIngredientRole.OUTPUT, ingredient));
-                            } else {
-                                // INPUT + CATALYST
-                                recipesGui.show(List.of(this.focusFactory.createFocus(RecipeIngredientRole.CATALYST, ingredient), this.focusFactory.createFocus(RecipeIngredientRole.INPUT, ingredient)));
-                            }
+                    ClientJeiUtil.checkTypedIngredient(this.ingredientManager, recipe.ingredientType(), recipe.ingredient(), ingredient -> {
+                        if (input.getValue() == InputConstants.MOUSE_BUTTON_LEFT) {
+                            ClientJeiUtil.showRecipes(this.focusFactory, ingredient);
+                        } else if (input.getValue() == InputConstants.MOUSE_BUTTON_RIGHT) {
+                            ClientJeiUtil.showUsages(this.focusFactory, ingredient);
                         }
                     });
                 }

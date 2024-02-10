@@ -18,6 +18,8 @@
 
 package thedarkcolour.exdeorum.recipe;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import io.netty.buffer.Unpooled;
 import net.minecraft.SharedConstants;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
@@ -30,6 +32,8 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.stream.Collectors;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class BlockPredicateTest {
@@ -37,6 +41,23 @@ class BlockPredicateTest {
     void setUp() {
         SharedConstants.tryDetectVersion();
         Bootstrap.bootStrap();
+    }
+
+    @Test
+    void jsonTest() {
+        var testPredicate = """         
+             {
+               "block": "minecraft:oak_wood",
+               "state": {
+                 "axis": "y"
+               }
+             }
+        """;
+        var json = JsonParser.parseString(testPredicate);
+        var expected = BlockPredicate.blockState(Blocks.OAK_WOOD, StatePropertiesPredicate.Builder.properties().hasProperty(BlockStateProperties.AXIS, Direction.Axis.Y).build());
+        var actual = BlockPredicate.fromJson((JsonObject) json);
+        assertNotNull(actual);
+        assertEquals(expected.possibleStates().collect(Collectors.toSet()), actual.possibleStates().collect(Collectors.toSet()));
     }
 
     @Test

@@ -16,17 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package thedarkcolour.exdeorum.recipe.crook;
+package thedarkcolour.exdeorum.recipe.crucible;
 
 import com.google.gson.JsonObject;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -36,7 +33,7 @@ import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.registry.ERecipeSerializers;
 import thedarkcolour.exdeorum.registry.ERecipeTypes;
 
-public record CrookRecipe(ResourceLocation id, BlockPredicate blockPredicate, Item result, float chance) implements Recipe<Container> {
+public record CrucibleHeatRecipe(ResourceLocation id, BlockPredicate blockPredicate, int heatValue) implements Recipe<Container> {
     @Override
     public boolean matches(Container pContainer, Level pLevel) {
         return false;
@@ -54,7 +51,7 @@ public record CrookRecipe(ResourceLocation id, BlockPredicate blockPredicate, It
 
     @Override
     public ItemStack getResultItem(RegistryAccess pRegistryAccess) {
-        return new ItemStack(this.result);
+        return ItemStack.EMPTY;
     }
 
     @Override
@@ -64,47 +61,35 @@ public record CrookRecipe(ResourceLocation id, BlockPredicate blockPredicate, It
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return ERecipeSerializers.CROOK.get();
+        return ERecipeSerializers.CRUCIBLE_HEAT_SOURCE.get();
     }
 
     @Override
     public RecipeType<?> getType() {
-        return ERecipeTypes.CROOK.get();
+        return ERecipeTypes.CRUCIBLE_HEAT_SOURCE.get();
     }
 
-    @SuppressWarnings("deprecation")
-    public static class Serializer implements RecipeSerializer<CrookRecipe> {
+    public static class Serializer implements RecipeSerializer<CrucibleHeatRecipe> {
         @Override
-        public CrookRecipe fromJson(ResourceLocation id, JsonObject json) {
+        public CrucibleHeatRecipe fromJson(ResourceLocation id, JsonObject json) {
             BlockPredicate blockPredicate = RecipeUtil.readBlockPredicate(id, json);
             if (blockPredicate == null) return null;
-
-            Item result = RecipeUtil.readItem(json, "result");
-            float chance = json.get("chance").getAsFloat();
-
-
-            return new CrookRecipe(id, blockPredicate, result, chance);
+            int heatValue = json.get("heat_value").getAsInt();
+            return new CrucibleHeatRecipe(id, blockPredicate, heatValue);
         }
 
         @Override
-        public CrookRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buffer) {
+        public CrucibleHeatRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buffer) {
             BlockPredicate blockPredicate = RecipeUtil.readBlockPredicateNetwork(id, buffer);
             if (blockPredicate == null) return null;
-
-            Item result = buffer.readById(BuiltInRegistries.ITEM);
-            if (result == null || result == Items.AIR) {
-                return null;
-            }
-            float chance = buffer.readFloat();
-
-            return new CrookRecipe(id, blockPredicate, result, chance);
+            int heatValue = buffer.readVarInt();
+            return new CrucibleHeatRecipe(id, blockPredicate, heatValue);
         }
 
         @Override
-        public void toNetwork(FriendlyByteBuf buffer, CrookRecipe recipe) {
+        public void toNetwork(FriendlyByteBuf buffer, CrucibleHeatRecipe recipe) {
             recipe.blockPredicate.toNetwork(buffer);
-            buffer.writeId(BuiltInRegistries.ITEM, recipe.result);
-            buffer.writeFloat(recipe.chance);
+            buffer.writeVarInt(recipe.heatValue);
         }
     }
 }

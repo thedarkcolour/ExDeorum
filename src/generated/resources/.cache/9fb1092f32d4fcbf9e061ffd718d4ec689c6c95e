@@ -1,4 +1,4 @@
-// 1.20.1	2024-02-07T21:04:33.4555528	Recipes
+// 1.20.1	2024-02-09T20:14:05.875864	Recipes
 e37b64428f17e304e91539ac0513456d7ce40cd1 data/exdeorum/advancements/recipes/building_blocks/sponge.json
 5ad481a0c376c1a1785a5d3b992064d0ec0bf3b0 data/exdeorum/advancements/recipes/food/end_cake.json
 25dd027e844a72b03c95dbe5e3c3dd8c738ceb00 data/exdeorum/advancements/recipes/misc/acacia_barrel.json
@@ -207,6 +207,19 @@ ba90fbda213e52dc15ea532c8f10c63ea47747de data/exdeorum/recipes/cobblestone.json
 f6a9036c1bbc4fa0cdc25ef4c851de5ddac0a4ff data/exdeorum/recipes/crook.json
 ae7e544d3e51182204eeb1efe15079103ea09802 data/exdeorum/recipes/crook/silkworm.json
 b8636418dc9384bd44313de1d17fd4bbc06c0152 data/exdeorum/recipes/crook/silkworm_bonus.json
+00b082310773af07d2d418d34c25f5772d0e4a20 data/exdeorum/recipes/crook/string_roll_1.json
+47dce4f15c91271429cfab63d22ce4d33ff3fa99 data/exdeorum/recipes/crook/string_roll_2.json
+96f8d146949641588a2cc309e031ac19ed80e041 data/exdeorum/recipes/crucible_heat_source/fire.json
+e70d081bb3c73fad2e7925b9a6e606f6e4c4a418 data/exdeorum/recipes/crucible_heat_source/lantern.json
+43a4cc20f18334fc43f35879bc9af381254c5671 data/exdeorum/recipes/crucible_heat_source/lava.json
+fac62befa53f1a335136c50d24808df52b8a050b data/exdeorum/recipes/crucible_heat_source/lit_campfire.json
+01c9ed5d8be13335868f9b5ac500425b277c3745 data/exdeorum/recipes/crucible_heat_source/lit_soul_campfire.json
+77eb7e88dbfedd36935e66b171163cfe642f981b data/exdeorum/recipes/crucible_heat_source/soul_fire.json
+09735fcbbd7aa4379d87bda8e1a3c776e057d8fc data/exdeorum/recipes/crucible_heat_source/soul_lantern.json
+c633abee6307560c55a4de010a1a827ef4870b70 data/exdeorum/recipes/crucible_heat_source/soul_torch.json
+46a18c4e353ef57c4cedb047dc2c66a84338fcf0 data/exdeorum/recipes/crucible_heat_source/soul_wall_torch.json
+d6996ab8fbd7d4b49a497947c8bab2652d2e665f data/exdeorum/recipes/crucible_heat_source/torch.json
+85e99f299ad22301b07dc770a981b6d69c6d307a data/exdeorum/recipes/crucible_heat_source/wall_torch.json
 c81379fe022f3667ce506e4927aac97d1b66999f data/exdeorum/recipes/crystallized_barrel.json
 77cf611f4e10c507fc4ec116ba0a9d9d1ce58273 data/exdeorum/recipes/crystallized_crucible.json
 324b6222287940a7fb008b9c6a1e9caecada8af3 data/exdeorum/recipes/crystallized_sieve.json
