@@ -19,17 +19,12 @@
 package thedarkcolour.exdeorum.recipe;
 
 import net.minecraft.SharedConstants;
-import net.minecraft.WorldVersion;
 import net.minecraft.server.Bootstrap;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.Tags;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import thedarkcolour.exdeorum.recipe.RecipeUtil;
-
-import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
 

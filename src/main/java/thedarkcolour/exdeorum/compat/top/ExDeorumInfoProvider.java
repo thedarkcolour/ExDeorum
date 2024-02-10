@@ -19,7 +19,6 @@
 package thedarkcolour.exdeorum.compat.top;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import kroppeb.stareval.element.token.BinaryOperatorToken;
 import mcjty.theoneprobe.api.*;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;

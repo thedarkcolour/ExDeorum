@@ -68,7 +68,9 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import thedarkcolour.exdeorum.compat.ModIds;
+import thedarkcolour.exdeorum.data.TranslationKeys;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -80,6 +82,7 @@ class ClientJeiUtil {
     // From https://github.com/The-Aether-Team/Nitrogen/blob/1.20.1-develop/src/main/java/com/aetherteam/nitrogen/integration/jei/BlockStateRenderer.java
     private static final Vector3f L1 = new Vector3f(0.4F, 0.0F, 1.0F).normalize();
     private static final Vector3f L2 = new Vector3f(-0.4F, 1.0F, -0.2F).normalize();
+    static final DecimalFormat FORMATTER = new DecimalFormat();
 
     // https://github.com/way2muchnoise/JustEnoughResources/blob/89ee40ff068c8d6eb6ab103f76381445691cffc9/Common/src/main/java/jeresources/util/RenderHelper.java#L100
     static void renderBlock(GuiGraphics guiGraphics, BlockState block, float x, float y, float z, float scale, RenderBlockFn renderFunction) {
@@ -212,6 +215,12 @@ class ClientJeiUtil {
         } else if (ModList.get().isLoaded(ModIds.REI_PC)) {
             ViewSearchBuilder.builder().addUsagesFor(JEIPluginDetector.unwrapStack(ingredient)).open();
         }
+    }
+
+    // Takes a decimal probability and returns a user-friendly percentage value
+    public static Component formatChance(double probability) {
+        var chance = FORMATTER.format(probability * 100);
+        return Component.translatable(TranslationKeys.SIEVE_RECIPE_CHANCE, chance).withStyle(ChatFormatting.GRAY);
     }
 
     @FunctionalInterface

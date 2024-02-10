@@ -101,7 +101,7 @@ public class CrookCategory implements IRecipeCategory<CrookJeiRecipe> {
     public void setRecipe(IRecipeLayoutBuilder builder, CrookJeiRecipe recipe, IFocusGroup focuses) {
         recipe.addIngredients(builder);
         builder.addSlot(RecipeIngredientRole.OUTPUT, 80, 18).addItemStack(new ItemStack(recipe.result)).addTooltipCallback((recipeSlotView, tooltip) -> {
-            tooltip.add(SieveCategory.formatChance(recipe.chance));
+            tooltip.add(ClientJeiUtil.formatChance(recipe.chance));
         });
     }
 

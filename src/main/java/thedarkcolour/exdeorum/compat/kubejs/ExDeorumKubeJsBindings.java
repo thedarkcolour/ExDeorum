@@ -28,7 +28,6 @@ import dev.latvian.mods.rhino.util.HideFromJS;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.commands.arguments.blocks.BlockStateParser;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -39,7 +38,6 @@ import thedarkcolour.exdeorum.recipe.BlockPredicate;
 import thedarkcolour.exdeorum.recipe.crucible.FinishedCrucibleHeatRecipe;
 import thedarkcolour.exdeorum.registry.ERecipeTypes;
 
-import java.util.Comparator;
 import java.util.function.Consumer;
 
 @SuppressWarnings("unused")

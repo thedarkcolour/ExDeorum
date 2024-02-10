@@ -36,7 +36,6 @@ import net.minecraftforge.common.loot.LootModifier;
 import org.jetbrains.annotations.NotNull;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.recipe.crook.CrookRecipe;
-import thedarkcolour.exdeorum.registry.EItems;
 
 import java.util.List;
 

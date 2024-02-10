@@ -18,7 +18,6 @@
 
 package thedarkcolour.exdeorum.compat.jade;
 
-import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import snownee.jade.api.BlockAccessor;

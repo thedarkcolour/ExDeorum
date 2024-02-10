@@ -32,7 +32,6 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.providers.number.BinomialDistributionGenerator;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
@@ -44,18 +43,15 @@ import thedarkcolour.exdeorum.data.TranslationKeys;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.registry.EBlocks;
 
-import java.text.DecimalFormat;
-
 class SieveCategory implements IRecipeCategory<GroupedSieveRecipe> {
-    private static final DecimalFormat FORMATTER = new DecimalFormat();
     private static final Component BY_HAND_ONLY_LABEL = Component.translatable(TranslationKeys.SIEVE_RECIPE_BY_HAND_ONLY).withStyle(ChatFormatting.RED);
 
     public static final int WIDTH = 162;
     public static final int ROW_START = 28;
 
     static {
-        FORMATTER.setMinimumFractionDigits(0);
-        FORMATTER.setMaximumFractionDigits(3);
+        ClientJeiUtil.FORMATTER.setMinimumFractionDigits(0);
+        ClientJeiUtil.FORMATTER.setMaximumFractionDigits(3);
     }
 
     private final Lazy<IDrawable> background;
@@ -105,13 +101,6 @@ class SieveCategory implements IRecipeCategory<GroupedSieveRecipe> {
         }
     }
 
-    // Takes a decimal probability and returns a user-friendly percentage value
-    // todo move into JeiUtil
-    public static Component formatChance(double probability) {
-        var chance = FORMATTER.format(probability * 100);
-        return Component.translatable(TranslationKeys.SIEVE_RECIPE_CHANCE, chance).withStyle(ChatFormatting.GRAY);
-    }
-
     public static void addTooltips(IRecipeSlotBuilder slot, boolean byHandOnly, NumberProvider provider) {
         var tooltipLines = new ImmutableList.Builder<Component>();
 
@@ -121,7 +110,7 @@ class SieveCategory implements IRecipeCategory<GroupedSieveRecipe> {
         }
         if (provider instanceof BinomialDistributionGenerator binomial) {
             if (binomial.n instanceof ConstantValue constant && constant.value == 1) {
-                var chanceLabel = formatChance(RecipeUtil.getExpectedValue(binomial.p));
+                var chanceLabel = ClientJeiUtil.formatChance(RecipeUtil.getExpectedValue(binomial.p));
                 tooltipLines.add(chanceLabel);
             } else {
                 addAvgOutput(tooltipLines, RecipeUtil.getExpectedValue(provider));
@@ -146,14 +135,14 @@ class SieveCategory implements IRecipeCategory<GroupedSieveRecipe> {
     }
 
     private static void addAvgOutput(ImmutableList.Builder<Component> tooltipLines, double avgValue) {
-        String avgOutput = FORMATTER.format(avgValue);
+        String avgOutput = ClientJeiUtil.FORMATTER.format(avgValue);
         tooltipLines.add(Component.translatable(TranslationKeys.SIEVE_RECIPE_AVERAGE_OUTPUT, avgOutput).withStyle(ChatFormatting.GRAY));
     }
 
     // when the player holds shift, they can see the min/max amounts of a drop
     private static void addMinMaxes(ImmutableList.Builder<Component> tooltipLines, NumberProvider min, NumberProvider max) {
-        var minFormatted = FORMATTER.format(RecipeUtil.getExpectedValue(min));
-        var maxFormatted = FORMATTER.format(RecipeUtil.getExpectedValue(max));
+        var minFormatted = ClientJeiUtil.FORMATTER.format(RecipeUtil.getExpectedValue(min));
+        var maxFormatted = ClientJeiUtil.FORMATTER.format(RecipeUtil.getExpectedValue(max));
 
         tooltipLines.add(Component.translatable(TranslationKeys.SIEVE_RECIPE_MIN_OUTPUT, minFormatted).withStyle(ChatFormatting.GRAY));
         tooltipLines.add(Component.translatable(TranslationKeys.SIEVE_RECIPE_MAX_OUTPUT, maxFormatted).withStyle(ChatFormatting.GRAY));

@@ -21,7 +21,6 @@ package thedarkcolour.exdeorum.data;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootPool;
@@ -29,10 +28,8 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import thedarkcolour.exdeorum.ExDeorum;
-import thedarkcolour.exdeorum.block.MechanicalHammerBlock;
 import thedarkcolour.exdeorum.loot.MachineLootFunction;
 import thedarkcolour.exdeorum.registry.EBlocks;
-import thedarkcolour.exdeorum.registry.EItems;
 import thedarkcolour.modkit.MKUtils;
 
 import java.util.ArrayList;
