@@ -236,18 +236,20 @@ public class PorcelainBucket extends Item {
         private final LazyOptional<IFluidHandlerItem> holder = LazyOptional.of(() -> this);
         private ItemStack container;
 
-        public CapabilityProvider(@NotNull ItemStack container) {
+        public CapabilityProvider(ItemStack container) {
             this.container = container;
         }
 
         @Override
-        public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-            return ForgeCapabilities.FLUID_HANDLER_ITEM.orEmpty(cap, this.holder);
+        @NotNull
+        public ItemStack getContainer() {
+            return this.container;
         }
 
         @Override
-        public @NotNull ItemStack getContainer() {
-            return this.container;
+        @NotNull
+        public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
+            return ForgeCapabilities.FLUID_HANDLER_ITEM.orEmpty(cap, this.holder);
         }
 
         @Override
@@ -256,7 +258,8 @@ public class PorcelainBucket extends Item {
         }
 
         @Override
-        public @NotNull FluidStack getFluidInTank(int tank) {
+        @NotNull
+        public FluidStack getFluidInTank(int tank) {
             return getFluid();
         }
 
@@ -267,7 +270,7 @@ public class PorcelainBucket extends Item {
 
         @Override
         public boolean isFluidValid(int tank, @NotNull FluidStack stack) {
-            return stack.getFluid() == Fluids.LAVA || stack.getFluid() == Fluids.WATER || stack.getFluid() == EFluids.WITCH_WATER.get();
+            return stack.getFluid() == Fluids.LAVA || stack.getFluid() == Fluids.WATER || stack.getFluid() == EFluids.WITCH_WATER.get() || (ForgeMod.MILK.isPresent() && stack.getFluid() == ForgeMod.MILK.get());
         }
 
         @Override
@@ -282,7 +285,8 @@ public class PorcelainBucket extends Item {
         }
 
         @Override
-        public @NotNull FluidStack drain(FluidStack resource, IFluidHandler.FluidAction action) {
+        @NotNull
+        public FluidStack drain(FluidStack resource, IFluidHandler.FluidAction action) {
             if (this.container.getCount() != 1 || resource.getAmount() < 1000) {
                 return FluidStack.EMPTY;
             }
@@ -298,7 +302,8 @@ public class PorcelainBucket extends Item {
         }
 
         @Override
-        public @NotNull FluidStack drain(int maxDrain, IFluidHandler.FluidAction action) {
+        @NotNull
+        public FluidStack drain(int maxDrain, IFluidHandler.FluidAction action) {
             if (this.container.getCount() != 1 || maxDrain < 1000) {
                 return FluidStack.EMPTY;
             }
@@ -323,12 +328,14 @@ public class PorcelainBucket extends Item {
                 return new FluidStack(Fluids.WATER, 1000);
             } else if (item == EItems.PORCELAIN_WITCH_WATER_BUCKET.get()) {
                 return new FluidStack(EFluids.WITCH_WATER.get(), 1000);
+            } else if (item == EItems.PORCELAIN_MILK_BUCKET.get() && ForgeMod.MILK.isPresent()) {
+                return new FluidStack(ForgeMod.MILK.get(), 1000);
             }
 
             return FluidStack.EMPTY;
         }
 
-        void setFluid(FluidStack fluidStack) {
+        protected void setFluid(FluidStack fluidStack) {
             if (fluidStack.isEmpty()) {
                 this.container = new ItemStack(EItems.PORCELAIN_BUCKET.get());
             } else if (fluidStack.getFluid() == Fluids.LAVA) {
@@ -337,6 +344,8 @@ public class PorcelainBucket extends Item {
                 this.container = new ItemStack(EItems.PORCELAIN_WATER_BUCKET.get());
             } else if (fluidStack.getFluid() == EFluids.WITCH_WATER.get()) {
                 this.container = new ItemStack(EItems.PORCELAIN_WITCH_WATER_BUCKET.get());
+            } else if (ForgeMod.MILK.isPresent() && fluidStack.getFluid() == ForgeMod.MILK.get()) {
+                this.container = new ItemStack(EItems.PORCELAIN_MILK_BUCKET.get());
             }
         }
     }

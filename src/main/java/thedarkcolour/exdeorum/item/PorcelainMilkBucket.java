@@ -24,6 +24,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.MilkBucketItem;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
@@ -48,7 +49,7 @@ public class PorcelainMilkBucket extends MilkBucketItem {
 
     @Override
     public @Nullable ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-        return new CapabilityProvider(stack);
+        return new PorcelainBucket.CapabilityProvider(stack);
     }
 
     private static class CapabilityProvider extends PorcelainBucket.CapabilityProvider {
@@ -58,7 +59,7 @@ public class PorcelainMilkBucket extends MilkBucketItem {
 
         @Override
         public boolean isFluidValid(int tank, @NotNull FluidStack stack) {
-            return false;
+            return ForgeMod.MILK.isPresent();
         }
     }
 }
