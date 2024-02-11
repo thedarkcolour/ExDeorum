@@ -19,16 +19,20 @@
 package thedarkcolour.exdeorum.client.ter;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import thedarkcolour.exdeorum.ExDeorum;
@@ -38,17 +42,19 @@ import thedarkcolour.exdeorum.client.RenderUtil;
 public class BarrelRenderer implements BlockEntityRenderer<BarrelBlockEntity> {
     public static final ResourceLocation COMPOST_DIRT_TEXTURE = new ResourceLocation(ExDeorum.ID, "block/compost_dirt");
     private final BlockRenderDispatcher blockRenderer;
+    private final ItemRenderer itemRenderer;
 
     public BarrelRenderer(BlockEntityRendererProvider.Context ctx) {
         this.blockRenderer = ctx.getBlockRenderDispatcher();
+        this.itemRenderer = ctx.getItemRenderer();
     }
 
     @Override
     public void render(BarrelBlockEntity barrel, float partialTicks, PoseStack stack, MultiBufferSource buffers, int light, int overlay) {
-        var item = barrel.getItem().getItem();
+        var item = barrel.getItem();
 
         // render an output
-        if (item instanceof BlockItem blockItem) {
+        if (item.getItem() instanceof BlockItem blockItem) {
             var block = blockItem.getBlock();
             var state = block.defaultBlockState();
 
@@ -60,7 +66,11 @@ public class BarrelRenderer implements BlockEntityRenderer<BarrelBlockEntity> {
 
             stack.popPose();
         } else {
-            // todo render a flat item
+            stack.pushPose();
+            stack.translate(0.5, 1.5 / 16f + (barrel.getTank().getFluidAmount() / 1000f) * 13f / 16f, 0.5);
+            stack.mulPose(Axis.XP.rotation(Mth.HALF_PI));
+            this.itemRenderer.renderStatic(item, ItemDisplayContext.FIXED, light, OverlayTexture.NO_OVERLAY, stack, buffers, null, 0);
+            stack.popPose();
         }
 
         barrel.getCapability(ForgeCapabilities.FLUID_HANDLER).ifPresent(tank -> {
