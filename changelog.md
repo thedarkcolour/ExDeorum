@@ -1,3 +1,8 @@
+## Ex Deorum 1.22
+- Fixed behavior of Porcelain Milk Bucket when the milk fluid is enabled
+- Fixed barrel not rendering flat item contents like Magma Cream
+- Fixed Infested Leaves not dropping any string or silkworms
+
 ## Ex Deorum 1.21
 - Added Crook recipes. It is now possible to add drops to the crook, for example, you could make it so that using a Crook on tall grass would have a 1% chance of dropping a diamond.
 - Added Crucible Heat Source recipes. Instead of using KubeJS, crucible heat sources can now be added with datapacks. Old KubeJS scripts will still work fine.
