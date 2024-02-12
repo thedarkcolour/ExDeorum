@@ -51,6 +51,8 @@ class BlockLoot extends BlockLootSubProvider {
             }
         });
 
+        add(EBlocks.INFESTED_LEAVES.get(), noDrop().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1))));
+
         machineDrop(EBlocks.MECHANICAL_HAMMER.get());
         machineDrop(EBlocks.MECHANICAL_SIEVE.get());
     }

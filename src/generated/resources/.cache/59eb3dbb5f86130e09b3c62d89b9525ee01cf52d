@@ -1,4 +1,4 @@
-// 1.20.1	2024-02-09T12:37:53.8355693	Loot Tables
+// 1.20.1	2024-02-12T09:38:22.3873783	Loot Tables
 105d8a61ea7145d7798146d385d4aad24fd1588d data/exdeorum/loot_tables/blocks/acacia_barrel.json
 1e77127a82cbba0937bb02694f65cf1893aeffcb data/exdeorum/loot_tables/blocks/acacia_crucible.json
 fcc00910a8cc94bed6339d6833fcec53c501a0d7 data/exdeorum/loot_tables/blocks/acacia_sieve.json
@@ -51,6 +51,7 @@ b3b8c57f4614b036263f1e107bb1e0acf4a69122 data/exdeorum/loot_tables/blocks/green_
 32602e363024f1bbd0a174a19c61b4cb0e4f3b2c data/exdeorum/loot_tables/blocks/hellbark_barrel.json
 cbf36cffd7f38d618435ca03142ded5e74f217aa data/exdeorum/loot_tables/blocks/hellbark_crucible.json
 bf41c8c33133269ddde2c6b098aca056acd7e4ea data/exdeorum/loot_tables/blocks/hellbark_sieve.json
+3b759445e6d4ee6dd1690aaa792bb070e19cde4f data/exdeorum/loot_tables/blocks/infested_leaves.json
 ce4254c53a4ce6c2712775708415f14e63f21b67 data/exdeorum/loot_tables/blocks/jacaranda_barrel.json
 b23b0494ef9f535744f7390f74a35527442aee6f data/exdeorum/loot_tables/blocks/jacaranda_crucible.json
 1817eb94fb9656a3ad853f2cca138c1cd012bd26 data/exdeorum/loot_tables/blocks/jacaranda_sieve.json
