@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "tag": "forge:gems/diamond"
+    },
+    "M": {
+      "item": "exdeorum:golden_mesh"
+    }
+  },
+  "pattern": [
+    " # ",
+    "#M#",
+    " # "
+  ],
+  "result": {
+    "item": "exdeorum:diamond_mesh"
+  },
+  "show_notification": true
+}

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "tag": "forge:ingots/iron"
+    },
+    "M": {
+      "item": "exdeorum:flint_mesh"
+    }
+  },
+  "pattern": [
+    " # ",
+    "#M#",
+    " # "
+  ],
+  "result": {
+    "item": "exdeorum:iron_mesh"
+  },
+  "show_notification": true
+}

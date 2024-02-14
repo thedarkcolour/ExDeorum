@@ -247,10 +247,14 @@ public class Recipes {
 
         // Meshes
         recipes.grid3x3(EItems.STRING_MESH.get(), ingredient(Tags.Items.STRING));
-        mesh(recipes, EItems.FLINT_MESH.get(), ingredient(Items.FLINT));
-        mesh(recipes, EItems.IRON_MESH.get(), ingredient(Tags.Items.INGOTS_IRON));
-        mesh(recipes, EItems.GOLDEN_MESH.get(), ingredient(Tags.Items.INGOTS_GOLD));
-        mesh(recipes, EItems.DIAMOND_MESH.get(), ingredient(Tags.Items.GEMS_DIAMOND));
+        mesh(recipes, EItems.FLINT_MESH, ingredient(Items.FLINT));
+        mesh(recipes, EItems.IRON_MESH, ingredient(Tags.Items.INGOTS_IRON));
+        mesh(recipes, EItems.GOLDEN_MESH, ingredient(Tags.Items.INGOTS_GOLD));
+        mesh(recipes, EItems.DIAMOND_MESH, ingredient(Tags.Items.GEMS_DIAMOND));
+        meshUpgrade(recipes, EItems.FLINT_MESH, EItems.STRING_MESH, ingredient(Items.FLINT));
+        meshUpgrade(recipes, EItems.IRON_MESH, EItems.FLINT_MESH, ingredient(Tags.Items.INGOTS_IRON));
+        meshUpgrade(recipes, EItems.GOLDEN_MESH, EItems.IRON_MESH, ingredient(Tags.Items.INGOTS_GOLD));
+        meshUpgrade(recipes, EItems.DIAMOND_MESH, EItems.GOLDEN_MESH, ingredient(Tags.Items.GEMS_DIAMOND));
         recipes.netheriteUpgrade(RecipeCategory.MISC, ingredient(EItems.DIAMOND_MESH), EItems.NETHERITE_MESH.get());
 
         // Watering cans
@@ -380,13 +384,23 @@ public class Recipes {
         });
     }
 
-    private static void mesh(MKRecipeProvider recipes, Item result, Ingredient ingredient) {
-        recipes.shapedCrafting(RecipeCategory.MISC, result, recipe -> {
+    private static void mesh(MKRecipeProvider recipes, Supplier<? extends Item> result, Ingredient ingredient) {
+        recipes.shapedCrafting(RecipeCategory.MISC, result.get(), recipe -> {
             recipe.define('#', ingredient);
             recipe.define('S', ingredient(Tags.Items.STRING));
             recipe.pattern("S#S");
             recipe.pattern("#S#");
             recipe.pattern("S#S");
+        });
+    }
+
+    private static void meshUpgrade(MKRecipeProvider recipes, RegistryObject<? extends Item> newMesh, RegistryObject<? extends Item> previousMesh, Ingredient ingredient) {
+        recipes.shapedCrafting(newMesh.getId().getPath() + "_from_" + previousMesh.getId().getPath(), RecipeCategory.MISC, newMesh.get(), recipe -> {
+            recipe.define('#', ingredient);
+            recipe.define('M', previousMesh.get());
+            recipe.pattern(" # ");
+            recipe.pattern("#M#");
+            recipe.pattern(" # ");
         });
     }
 
