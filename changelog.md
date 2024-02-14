@@ -1,3 +1,7 @@
+## Ex Deorum 1.23
+- Fixed rendering crash with crucibles
+- Added recipes to upgrade meshes to the next tier
+
 ## Ex Deorum 1.22
 - Fixed behavior of Porcelain Milk Bucket when the milk fluid is enabled
 - Fixed barrel not rendering flat item contents like Magma Cream
