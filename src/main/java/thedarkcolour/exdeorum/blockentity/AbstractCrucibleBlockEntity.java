@@ -362,7 +362,8 @@ public abstract class AbstractCrucibleBlockEntity extends EBlockEntity {
                     if (crucible.tank.isEmpty()) {
                         crucible.tank.setFluid(new FluidStack(Fluids.WATER, 1));
                         crucible.markUpdated();
-                    } else if (crucible.tank.getFluid().getFluid() == Fluids.WATER) {
+                    } else if (crucible.tank.getFluid().getFluid() == Fluids.WATER &&
+                            crucible.tank.getFluidAmount() < crucible.tank.getCapacity()) {
                         crucible.tank.getFluid().grow(1);
                         crucible.markUpdated();
                     }
