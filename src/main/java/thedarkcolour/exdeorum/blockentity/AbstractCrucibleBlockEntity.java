@@ -52,6 +52,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import thedarkcolour.exdeorum.blockentity.helper.FluidHelper;
 import thedarkcolour.exdeorum.config.EConfig;
 import thedarkcolour.exdeorum.recipe.crucible.CrucibleRecipe;
 import thedarkcolour.exdeorum.registry.EBlockEntities;
@@ -291,7 +292,7 @@ public abstract class AbstractCrucibleBlockEntity extends EBlockEntity {
         }
     }
 
-    private static class FluidHandler extends FluidTank {
+    private static class FluidHandler extends FluidHelper {
         public FluidHandler() {
             super(4_000);
         }

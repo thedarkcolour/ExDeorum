@@ -18,14 +18,20 @@
 
 package thedarkcolour.exdeorum.blockentity.helper;
 
-import net.minecraftforge.energy.EnergyStorage;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraftforge.fluids.capability.templates.FluidTank;
 
-public class EnergyHelper extends EnergyStorage {
-    public EnergyHelper(int capacity) {
+// Only changed behavior from FluidTank is that fluid stacks read from NBT are clamped and removed validator predicate.
+public class FluidHelper extends FluidTank {
+    public FluidHelper(int capacity) {
         super(capacity);
     }
 
-    public void setStoredEnergy(int energy) {
-        this.energy = energy;
+    @Override
+    public FluidTank readFromNBT(CompoundTag nbt) {
+        super.readFromNBT(nbt);
+        this.fluid.setAmount(Math.min(this.capacity, this.fluid.getAmount()));
+
+        return this;
     }
 }
