@@ -119,6 +119,10 @@ public class InfestedLeavesBlockEntity extends EBlockEntity {
         return this.progress;
     }
 
+    public void setProgress(float progress) {
+        this.progress = progress;
+    }
+
     public BlockState getMimic() {
         return this.mimic;
     }

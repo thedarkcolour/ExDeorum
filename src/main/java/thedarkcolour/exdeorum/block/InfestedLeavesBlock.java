@@ -21,8 +21,10 @@ package thedarkcolour.exdeorum.block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -54,6 +56,23 @@ public class InfestedLeavesBlock extends LeavesBlock implements EntityBlock {
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(FULLY_INFESTED);
+    }
+
+    @Override
+    public BlockState getStateForPlacement(BlockPlaceContext ctx) {
+        if (ctx.getPlayer() != null) {
+            return defaultBlockState().setValue(FULLY_INFESTED, true);
+        }
+        return super.getStateForPlacement(ctx);
+    }
+
+    @Override
+    public void setPlacedBy(Level level, BlockPos pos, BlockState pState, @Nullable LivingEntity player, ItemStack pStack) {
+        if (player != null) {
+            if (!level.isClientSide && level.getBlockEntity(pos) instanceof InfestedLeavesBlockEntity leaves) {
+                leaves.setProgress(1.0f);
+            }
+        }
     }
 
     @Nullable

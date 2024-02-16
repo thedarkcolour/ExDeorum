@@ -1,4 +1,4 @@
-// 1.20.1	2024-01-25T14:16:46.2347562	ModKit Item Models for mod 'exdeorum'
+// 1.20.1	2024-02-15T19:28:58.9458068	ModKit Item Models for mod 'exdeorum'
 4ba3bb2c6174ac3728a4b85e34681f118ec8eb34 assets/exdeorum/models/item/acacia_barrel.json
 c03ce41f7c071498fcbd5f5225e91dcb2f365fbb assets/exdeorum/models/item/acacia_crucible.json
 3b4f1d45c0d9c4cd1d9a5cdf6ddc8d2c9791bca5 assets/exdeorum/models/item/acacia_sieve.json
@@ -76,6 +76,7 @@ a117ad0a6e1d193ee65c0a2af1a88f7f5be444fd assets/exdeorum/models/item/green_archw
 b0d0d1ec41f465872243ea5b59a22caeadc1b81a assets/exdeorum/models/item/hellbark_barrel.json
 4de47af7d2a66a6e18ce93c9e3a1582b33073a6b assets/exdeorum/models/item/hellbark_crucible.json
 c3a5bdc2c3e8b12b41e9c3aae44839a331a5d238 assets/exdeorum/models/item/hellbark_sieve.json
+53eb28442e7df2970b24a79fe0830c41c2388487 assets/exdeorum/models/item/infested_leaves.json
 abd9901aa00893690461a6c6e276bb6bc96a60bb assets/exdeorum/models/item/iridium_ore_chunk.json
 b91a19335ff248805cf0861cae82b93d71a9e805 assets/exdeorum/models/item/iron_hammer.json
 3398985db718bd990d9f7cfdf4bacf67a858b906 assets/exdeorum/models/item/iron_mesh.json
