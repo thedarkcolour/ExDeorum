@@ -1,3 +1,8 @@
+## Ex Deorum 1.24
+- Fixed water crucibles filling infinitely with rainwater. (PR #54 by CPearl0)
+- Add option (disabled by default) to make dirt from flowing water and witch water
+- Fix Infested Leaves not showing in REI composite mode
+
 ## Ex Deorum 1.23
 - Fixed rendering crash with crucibles
 - Added recipes to upgrade meshes to the next tier
