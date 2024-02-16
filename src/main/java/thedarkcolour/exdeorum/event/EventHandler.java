@@ -18,6 +18,7 @@
 
 package thedarkcolour.exdeorum.event;
 
+import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -28,12 +29,15 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.RandomSource;
 import net.minecraft.util.Unit;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.XoroshiroRandomSource;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
@@ -170,6 +174,12 @@ public final class EventHandler {
                     EFluids.WITCH_WATER_TYPE.get(),
                     fluidState -> fluidState.isSource() ? Blocks.OBSIDIAN.defaultBlockState() : (EConfig.SERVER.witchWaterNetherrackGenerator.get() ? Blocks.NETHERRACK.defaultBlockState() : Blocks.COBBLESTONE.defaultBlockState())
             ));
+            var dirtVariants = new BlockState[]{Blocks.DIRT.defaultBlockState(), Blocks.PODZOL.defaultBlockState(), Blocks.COARSE_DIRT.defaultBlockState()};
+            var rng = RandomSource.create();
+            FluidInteractionRegistry.addInteraction(EFluids.WITCH_WATER_TYPE.get(), new FluidInteractionRegistry.InteractionInformation(
+                    (level, pos, relative, state) -> level.getFluidState(relative).getFluidType() == ForgeMod.WATER_TYPE.get() && EConfig.SERVER.witchWaterDirtGenerator.get(),
+                    fluidState -> Util.getRandom(dirtVariants, rng)
+            ));
         });
     }
 
@@ -230,7 +240,6 @@ public final class EventHandler {
         if (ModList.get().isLoaded(ModIds.THE_ONE_PROBE)) {
             InterModComms.sendTo(ModIds.THE_ONE_PROBE, "getTheOneProbe", ExDeorumTopCompat::new);
         }
-        // todo instead of doing this, figure out the real reason sorting voids items
         if (ModList.get().isLoaded(ModIds.INVENTORY_SORTER)) {
             InterModComms.sendTo(ModIds.INVENTORY_SORTER, "slotblacklist", ItemHelper.Slot.class::getName);
         }
