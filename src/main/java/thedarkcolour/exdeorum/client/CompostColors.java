@@ -361,7 +361,7 @@ public class CompostColors {
     // The given list should be sorted
     private static void export(String modid, List<Item> sortedToExport) {
         try {
-            if (createConfigFolder()) {
+            if (createConfigFolder(COMPOST_COLORS_CONFIGS)) {
                 var path = COMPOST_COLORS_CONFIGS.resolve(modid + ".txt");
                 var file = path.toFile();
 
@@ -397,9 +397,9 @@ public class CompostColors {
         }
     }
 
-    private static boolean createConfigFolder() {
-        var colorsFolder = COMPOST_COLORS_CONFIGS.toFile();
-        var configFolder = COMPOST_COLORS_CONFIGS.getParent().toFile();
+    public static boolean createConfigFolder(Path configPath) {
+        var colorsFolder = configPath.toFile();
+        var configFolder = configPath.getParent().toFile();
 
         return (configFolder.exists() || configFolder.mkdir()) && (colorsFolder.exists() || colorsFolder.mkdir());
     }

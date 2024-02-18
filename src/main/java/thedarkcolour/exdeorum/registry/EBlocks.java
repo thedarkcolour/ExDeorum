@@ -35,6 +35,7 @@ import thedarkcolour.exdeorum.block.*;
 import static net.minecraft.world.level.block.state.BlockBehaviour.Properties.copy;
 import static net.minecraft.world.level.block.state.BlockBehaviour.Properties.of;
 
+// READER'S NOTE: More blocks are found in DefaultMaterials.java
 public class EBlocks {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, ExDeorum.ID);
 
@@ -44,44 +45,6 @@ public class EBlocks {
     public static final RegistryObject<Block> CRUSHED_END_STONE = BLOCKS.register("crushed_end_stone", () -> new FallingBlock(of().mapColor(MapColor.SAND).sound(SoundType.SAND).strength(0.6f)));
     public static final RegistryObject<Block> CRUSHED_DEEPSLATE = BLOCKS.register("crushed_deepslate", () -> new FallingBlock(of().mapColor(DyeColor.GRAY).sound(SoundType.SAND).strength(0.8f)));
     public static final RegistryObject<Block> CRUSHED_BLACKSTONE = BLOCKS.register("crushed_blackstone", () -> new FallingBlock(of().mapColor(DyeColor.BLACK).sound(SoundType.SAND).strength(0.6f)));
-
-    // Barrels
-    public static final RegistryObject<BarrelBlock> OAK_BARREL = registerBarrel("oak_barrel", false, false, MapColor.WOOD);
-    public static final RegistryObject<BarrelBlock> SPRUCE_BARREL = registerBarrel("spruce_barrel", false, false, MapColor.PODZOL);
-    public static final RegistryObject<BarrelBlock> BIRCH_BARREL = registerBarrel("birch_barrel", false, false, MapColor.SAND);
-    public static final RegistryObject<BarrelBlock> JUNGLE_BARREL = registerBarrel("jungle_barrel", false, false, MapColor.DIRT);
-    public static final RegistryObject<BarrelBlock> ACACIA_BARREL = registerBarrel("acacia_barrel", false, false, MapColor.COLOR_ORANGE);
-    public static final RegistryObject<BarrelBlock> DARK_OAK_BARREL = registerBarrel("dark_oak_barrel", false, false, MapColor.COLOR_BROWN);
-    public static final RegistryObject<BarrelBlock> MANGROVE_BARREL = registerBarrel("mangrove_barrel", false, false, MapColor.COLOR_RED);
-    public static final RegistryObject<BarrelBlock> CHERRY_BARREL = registerBarrel("cherry_barrel", false, false, MapColor.TERRACOTTA_WHITE);
-    public static final RegistryObject<BarrelBlock> BAMBOO_BARREL = registerBarrel("bamboo_barrel", false, false, MapColor.COLOR_YELLOW);
-    public static final RegistryObject<BarrelBlock> CRIMSON_BARREL = registerBarrel("crimson_barrel", false, true, MapColor.CRIMSON_STEM);
-    public static final RegistryObject<BarrelBlock> WARPED_BARREL = registerBarrel("warped_barrel", false, true, MapColor.WARPED_STEM);
-    public static final RegistryObject<BarrelBlock> STONE_BARREL = registerBarrel("stone_barrel", true, true, MapColor.STONE);
-    // BOP Barrels
-    public static final RegistryObject<BarrelBlock> FIR_BARREL = registerBarrel("fir_barrel", false, false, MapColor.TERRACOTTA_WHITE);
-    public static final RegistryObject<BarrelBlock> REDWOOD_BARREL = registerBarrel("redwood_barrel", false, false, MapColor.TERRACOTTA_ORANGE);
-    public static final RegistryObject<BarrelBlock> MAHOGANY_BARREL = registerBarrel("mahogany_barrel", false, false, MapColor.TERRACOTTA_PINK);
-    public static final RegistryObject<BarrelBlock> JACARANDA_BARREL = registerBarrel("jacaranda_barrel", false, false, MapColor.QUARTZ);
-    public static final RegistryObject<BarrelBlock> PALM_BARREL = registerBarrel("palm_barrel", false, false, MapColor.TERRACOTTA_YELLOW);
-    public static final RegistryObject<BarrelBlock> WILLOW_BARREL = registerBarrel("willow_barrel", false, false, MapColor.TERRACOTTA_LIGHT_GREEN);
-    public static final RegistryObject<BarrelBlock> DEAD_BARREL = registerBarrel("dead_barrel", false, false, MapColor.STONE);
-    public static final RegistryObject<BarrelBlock> MAGIC_BARREL = registerBarrel("magic_barrel", false, false, MapColor.COLOR_BLUE);
-    public static final RegistryObject<BarrelBlock> UMBRAN_BARREL = registerBarrel("umbran_barrel", false, false, MapColor.TERRACOTTA_BLUE);
-    public static final RegistryObject<BarrelBlock> HELLBARK_BARREL = registerBarrel("hellbark_barrel", false, false, MapColor.TERRACOTTA_GRAY);
-    // Ars Nouveau Barrels
-    public static final RegistryObject<BarrelBlock> ARCHWOOD_BARREL = registerBarrel("archwood_barrel", false, false, MapColor.COLOR_GRAY);
-    // Aether Barrels
-    public static final RegistryObject<BarrelBlock> SKYROOT_BARREL = registerBarrel("skyroot_barrel", false, false, MapColor.WOOD);
-    // Blue Skies Barrels
-    public static final RegistryObject<BarrelBlock> BLUEBRIGHT_BARREL = registerBarrel("bluebright_barrel", false, false, MapColor.WOOD);
-    public static final RegistryObject<BarrelBlock> STARLIT_BARREL = registerBarrel("starlit_barrel", false, false, MapColor.WOOD);
-    public static final RegistryObject<BarrelBlock> FROSTBRIGHT_BARREL = registerBarrel("frostbright_barrel", false, false, MapColor.WOOD);
-    public static final RegistryObject<BarrelBlock> COMET_BARREL = registerBarrel("comet_barrel", false, false, MapColor.WOOD);
-    public static final RegistryObject<BarrelBlock> LUNAR_BARREL = registerBarrel("lunar_barrel", false, false, MapColor.WOOD);
-    public static final RegistryObject<BarrelBlock> DUSK_BARREL = registerBarrel("dusk_barrel", false, false, MapColor.WOOD);
-    public static final RegistryObject<BarrelBlock> MAPLE_BARREL = registerBarrel("maple_barrel", false, false, MapColor.WOOD);
-    public static final RegistryObject<BarrelBlock> CRYSTALLIZED_BARREL = registerBarrel("crystallized_barrel", true, true, MapColor.TERRACOTTA_WHITE);
 
     // Sieves
     public static final RegistryObject<SieveBlock> OAK_SIEVE = registerSieve("oak_sieve");
@@ -182,24 +145,6 @@ public class EBlocks {
 
     public static RegistryObject<SieveBlock> registerSieve(String name, SoundType sound) {
         return BLOCKS.register(name, () -> new SieveBlock(of().strength(2.0f).noOcclusion().sound(sound)));
-    }
-
-    public static RegistryObject<BarrelBlock> registerBarrel(String name, boolean stone, boolean fireproof, MapColor color) {
-        var bamboo = name.equals("bamboo_barrel");
-        var crystallized = name.equals("crystallized_barrel");
-
-        return BLOCKS.register(name, () -> {
-            var props = of().noOcclusion().strength(stone ? 4.0f : 2.0f).sound(stone ? (crystallized ? SoundType.GLASS : SoundType.STONE) : (bamboo ? SoundType.BAMBOO_WOOD : SoundType.WOOD));
-            if (!stone) {
-                if (!fireproof) {
-                    props.ignitedByLava();
-                }
-            } else {
-                props.requiresCorrectToolForDrops();
-            }
-            props.mapColor(color);
-            return new BarrelBlock(props);
-        });
     }
 
     public static RegistryObject<LavaCrucibleBlock> registerLavaCrucible(String name, boolean stone, SoundType sound) {

@@ -33,9 +33,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import thedarkcolour.exdeorum.data.TranslationKeys;
+import thedarkcolour.exdeorum.material.DefaultMaterials;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelFluidMixingRecipe;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelMixingRecipe;
-import thedarkcolour.exdeorum.registry.EItems;
 
 public abstract class BarrelMixingCategory<T> implements IRecipeCategory<T> {
     public static final int WIDTH = 120;
@@ -83,7 +83,7 @@ public abstract class BarrelMixingCategory<T> implements IRecipeCategory<T> {
 
     public static class Items extends BarrelMixingCategory<BarrelMixingRecipe> {
         public Items(IGuiHelper helper, IDrawable plus, IDrawable arrow) {
-            super(helper, plus, arrow, TranslationKeys.BARREL_MIXING_CATEGORY_TITLE, EItems.OAK_BARREL.get());
+            super(helper, plus, arrow, TranslationKeys.BARREL_MIXING_CATEGORY_TITLE, DefaultMaterials.OAK_BARREL.getItem());
         }
 
         @Override
@@ -103,7 +103,7 @@ public abstract class BarrelMixingCategory<T> implements IRecipeCategory<T> {
         private static final Component CONTENTS_ARE_CONSUMED_TOOLTIP = Component.translatable(TranslationKeys.BARREL_FLUID_MIXING_CONTENTS_ARE_CONSUMED).withStyle(ChatFormatting.RED);
 
         public Fluids(IGuiHelper helper, IDrawable plus, IDrawable arrow) {
-            super(helper, plus, arrow, TranslationKeys.BARREL_FLUID_MIXING_CATEGORY_TITLE, EItems.STONE_BARREL.get());
+            super(helper, plus, arrow, TranslationKeys.BARREL_FLUID_MIXING_CATEGORY_TITLE, DefaultMaterials.STONE_BARREL.getItem());
         }
 
         @Override

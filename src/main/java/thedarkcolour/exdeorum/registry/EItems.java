@@ -34,6 +34,7 @@ import net.minecraftforge.registries.RegistryObject;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.compat.ModIds;
 import thedarkcolour.exdeorum.item.*;
+import thedarkcolour.exdeorum.material.BarrelMaterial;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.tag.EItemTags;
 
@@ -149,44 +150,6 @@ public class EItems {
     public static final RegistryObject<BlockItem> CRUSHED_DEEPSLATE = registerItemBlock(EBlocks.CRUSHED_DEEPSLATE);
     public static final RegistryObject<BlockItem> CRUSHED_BLACKSTONE = registerItemBlock(EBlocks.CRUSHED_BLACKSTONE);
 
-    // Barrels
-    public static final RegistryObject<BlockItem> OAK_BARREL = registerItemBlock(EBlocks.OAK_BARREL);
-    public static final RegistryObject<BlockItem> SPRUCE_BARREL = registerItemBlock(EBlocks.SPRUCE_BARREL);
-    public static final RegistryObject<BlockItem> BIRCH_BARREL = registerItemBlock(EBlocks.BIRCH_BARREL);
-    public static final RegistryObject<BlockItem> JUNGLE_BARREL = registerItemBlock(EBlocks.JUNGLE_BARREL);
-    public static final RegistryObject<BlockItem> ACACIA_BARREL = registerItemBlock(EBlocks.ACACIA_BARREL);
-    public static final RegistryObject<BlockItem> DARK_OAK_BARREL = registerItemBlock(EBlocks.DARK_OAK_BARREL);
-    public static final RegistryObject<BlockItem> MANGROVE_BARREL = registerItemBlock(EBlocks.MANGROVE_BARREL);
-    public static final RegistryObject<BlockItem> CHERRY_BARREL = registerItemBlock(EBlocks.CHERRY_BARREL);
-    public static final RegistryObject<BlockItem> BAMBOO_BARREL = registerItemBlock(EBlocks.BAMBOO_BARREL);
-    public static final RegistryObject<BlockItem> CRIMSON_BARREL = registerItemBlock(EBlocks.CRIMSON_BARREL);
-    public static final RegistryObject<BlockItem> WARPED_BARREL = registerItemBlock(EBlocks.WARPED_BARREL);
-    public static final RegistryObject<BlockItem> STONE_BARREL = registerItemBlock(EBlocks.STONE_BARREL);
-    // BOP Barrels
-    public static final RegistryObject<BlockItem> FIR_BARREL = registerItemBlock(EBlocks.FIR_BARREL);
-    public static final RegistryObject<BlockItem> REDWOOD_BARREL = registerItemBlock(EBlocks.REDWOOD_BARREL);
-    public static final RegistryObject<BlockItem> MAHOGANY_BARREL = registerItemBlock(EBlocks.MAHOGANY_BARREL);
-    public static final RegistryObject<BlockItem> JACARANDA_BARREL = registerItemBlock(EBlocks.JACARANDA_BARREL);
-    public static final RegistryObject<BlockItem> PALM_BARREL = registerItemBlock(EBlocks.PALM_BARREL);
-    public static final RegistryObject<BlockItem> WILLOW_BARREL = registerItemBlock(EBlocks.WILLOW_BARREL);
-    public static final RegistryObject<BlockItem> DEAD_BARREL = registerItemBlock(EBlocks.DEAD_BARREL);
-    public static final RegistryObject<BlockItem> MAGIC_BARREL = registerItemBlock(EBlocks.MAGIC_BARREL);
-    public static final RegistryObject<BlockItem> UMBRAN_BARREL = registerItemBlock(EBlocks.UMBRAN_BARREL);
-    public static final RegistryObject<BlockItem> HELLBARK_BARREL = registerItemBlock(EBlocks.HELLBARK_BARREL);
-    // Ars Nouveau Barrels
-    public static final RegistryObject<BlockItem> ARCHWOOD_BARREL = registerItemBlock(EBlocks.ARCHWOOD_BARREL);
-    // Aether Barrels
-    public static final RegistryObject<BlockItem> SKYROOT_BARREL = registerItemBlock(EBlocks.SKYROOT_BARREL);
-    // Blue Skies Barrels
-    public static final RegistryObject<BlockItem> BLUEBRIGHT_BARREL = registerItemBlock(EBlocks.BLUEBRIGHT_BARREL);
-    public static final RegistryObject<BlockItem> STARLIT_BARREL = registerItemBlock(EBlocks.STARLIT_BARREL);
-    public static final RegistryObject<BlockItem> FROSTBRIGHT_BARREL = registerItemBlock(EBlocks.FROSTBRIGHT_BARREL);
-    public static final RegistryObject<BlockItem> COMET_BARREL = registerItemBlock(EBlocks.COMET_BARREL);
-    public static final RegistryObject<BlockItem> LUNAR_BARREL = registerItemBlock(EBlocks.LUNAR_BARREL);
-    public static final RegistryObject<BlockItem> DUSK_BARREL = registerItemBlock(EBlocks.DUSK_BARREL);
-    public static final RegistryObject<BlockItem> MAPLE_BARREL = registerItemBlock(EBlocks.MAPLE_BARREL);
-    public static final RegistryObject<BlockItem> CRYSTALLIZED_BARREL = registerItemBlock(EBlocks.CRYSTALLIZED_BARREL);
-
     // Sieves
     public static final RegistryObject<BlockItem> OAK_SIEVE = registerItemBlock(EBlocks.OAK_SIEVE);
     public static final RegistryObject<BlockItem> SPRUCE_SIEVE = registerItemBlock(EBlocks.SPRUCE_SIEVE);
@@ -282,50 +245,13 @@ public class EItems {
         boolean aether = ModList.get().isLoaded(ModIds.AETHER);
         boolean blueSkies = ModList.get().isLoaded(ModIds.BLUE_SKIES);
 
-        output.accept(OAK_BARREL.get());
-        output.accept(SPRUCE_BARREL.get());
-        output.accept(BIRCH_BARREL.get());
-        output.accept(JUNGLE_BARREL.get());
-        output.accept(ACACIA_BARREL.get());
-        output.accept(DARK_OAK_BARREL.get());
-        output.accept(MANGROVE_BARREL.get());
-        output.accept(CHERRY_BARREL.get());
-        output.accept(BAMBOO_BARREL.get());
-        output.accept(CRIMSON_BARREL.get());
-        output.accept(WARPED_BARREL.get());
-        output.accept(STONE_BARREL.get());
-
-        if (biomesOPlenty) {
-            output.accept(FIR_BARREL.get());
-            output.accept(REDWOOD_BARREL.get());
-            output.accept(MAHOGANY_BARREL.get());
-            output.accept(JACARANDA_BARREL.get());
-            output.accept(PALM_BARREL.get());
-            output.accept(WILLOW_BARREL.get());
-            output.accept(DEAD_BARREL.get());
-            output.accept(MAGIC_BARREL.get());
-            output.accept(UMBRAN_BARREL.get());
-            output.accept(HELLBARK_BARREL.get());
-        }
-        if (arsNouveau) {
-            output.accept(ARCHWOOD_BARREL.get());
-        }
-        if (aether) {
-            output.accept(SKYROOT_BARREL.get());
-        }
-        if (blueSkies) {
-            output.accept(BLUEBRIGHT_BARREL.get());
-            output.accept(STARLIT_BARREL.get());
-            output.accept(FROSTBRIGHT_BARREL.get());
-            output.accept(COMET_BARREL.get());
-            output.accept(LUNAR_BARREL.get());
-            output.accept(DUSK_BARREL.get());
-            output.accept(MAPLE_BARREL.get());
-            output.accept(CRYSTALLIZED_BARREL.get());
+        for (var material : BarrelMaterial.REGISTERED_MATERIALS) {
+            if (ModList.get().isLoaded(material.requiredModId)) {
+                output.accept(material.getItem());
+            }
         }
 
         output.accept(OAK_SIEVE.get());
-
         output.accept(SPRUCE_SIEVE.get());
         output.accept(BIRCH_SIEVE.get());
         output.accept(JUNGLE_SIEVE.get());

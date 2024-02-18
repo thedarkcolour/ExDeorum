@@ -33,8 +33,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import thedarkcolour.exdeorum.client.ClientHandler;
 import thedarkcolour.exdeorum.data.TranslationKeys;
+import thedarkcolour.exdeorum.material.DefaultMaterials;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelCompostRecipe;
-import thedarkcolour.exdeorum.registry.EItems;
 
 class BarrelCompostCategory implements IRecipeCategory<BarrelCompostRecipe> {
     public static final int WIDTH = 120;
@@ -88,7 +88,7 @@ class BarrelCompostCategory implements IRecipeCategory<BarrelCompostRecipe> {
     }
 
     private static class DrawableIcon implements IDrawable {
-        private final ItemStack oakBarrel = new ItemStack(EItems.OAK_BARREL.get());
+        private final ItemStack oakBarrel = new ItemStack(DefaultMaterials.OAK_BARREL.getItem());
 
         @Override
         public int getWidth() {
