@@ -44,10 +44,12 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public final class BarrelMaterial {
     // Use a linked hash map to maintain insertion order
     public static final List<BarrelMaterial> REGISTERED_MATERIALS = new ArrayList<>();
+    public static final Set<Block> TRANSPARENT_BARRELS = new HashSet<>();
 
     private static final Path CUSTOM_BARREL_MATERIAL_CONFIGS = Paths.get("config/exdeorum/barrel_materials");
 
@@ -224,6 +226,14 @@ public final class BarrelMaterial {
         }
 
         return new BlockEntityType<>(BarrelBlockEntity::new, validBlocks, null);
+    }
+
+    public static void loadTransparentBlocks() {
+        for (var material : REGISTERED_MATERIALS) {
+            if (material.transparent) {
+                TRANSPARENT_BARRELS.add(material.getBlock());
+            }
+        }
     }
 
     // Does not check if the mod is registered

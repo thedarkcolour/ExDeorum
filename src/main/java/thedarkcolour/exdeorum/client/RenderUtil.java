@@ -49,6 +49,7 @@ import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.client.model.CompositeModel;
 import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.client.ter.SieveRenderer;
@@ -169,6 +170,70 @@ public class RenderUtil {
         var builder = buffers.getBuffer(Sheets.translucentCullBlockSheet());
 
         RenderUtil.renderFlatSprite(builder, stack, y, r, g, b, RenderUtil.blockAtlas.getSprite(extensions.getStillTexture(state, level, pos)), light, edge);
+    }
+
+    @SuppressWarnings("DuplicatedCode")
+    public static void renderFluidCube(MultiBufferSource buffers, PoseStack stack, Level level, BlockPos pos, float minY, float maxY, float edge, int light, int r, int g, int b, Fluid fluid) {
+        var extensions = IClientFluidTypeExtensions.of(fluid);
+        var state = fluid.defaultFluidState();
+        var builder = buffers.getBuffer(Sheets.translucentCullBlockSheet());
+        var pose = stack.last().pose();
+        var poseNormal = stack.last().normal();
+
+        Vector3f normal;
+        TextureAtlasSprite sprite = RenderUtil.blockAtlas.getSprite(extensions.getStillTexture(state, level, pos));
+        float uMin = sprite.getU0();
+        float uMax = sprite.getU1();
+        float vMin = sprite.getV0();
+        float vMax = sprite.getV1();
+
+        float edgeMin = edge / 16f;
+        float edgeMax = 1f - edge / 16f;
+
+        // Top face
+        normal = poseNormal.transform(new Vector3f(0, 1, 0));
+        builder.vertex(pose, edgeMin, maxY, edgeMin).color(r, g, b, 255).uv(uMin, vMin).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.vertex(pose, edgeMin, maxY, edgeMax).color(r, g, b, 255).uv(uMin, vMax).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.vertex(pose, edgeMax, maxY, edgeMax).color(r, g, b, 255).uv(uMax, vMax).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.vertex(pose, edgeMax, maxY, edgeMin).color(r, g, b, 255).uv(uMax, vMin).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
+        // Bottom face
+        normal = poseNormal.transform(new Vector3f(0, -1, 0));
+        builder.vertex(pose, edgeMin, minY, edgeMin).color(r, g, b, 255).uv(uMin, vMin).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.vertex(pose, edgeMax, minY, edgeMin).color(r, g, b, 255).uv(uMax, vMin).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.vertex(pose, edgeMax, minY, edgeMax).color(r, g, b, 255).uv(uMax, vMax).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.vertex(pose, edgeMin, minY, edgeMax).color(r, g, b, 255).uv(uMin, vMax).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
+
+        // Flowing texture coordinates
+        //sprite = RenderUtil.blockAtlas.getSprite(extensions.getFlowingTexture(state, level, pos));
+        //uMin = sprite.getU0();
+        //uMax = sprite.getU(8);
+        //vMin = sprite.getV0();
+        //vMax = sprite.getV(8);
+
+        // South face
+        normal = poseNormal.transform(new Vector3f(0, 0, 1));
+        builder.vertex(pose, edgeMax, maxY, edgeMax).color(r, g, b, 255).uv(uMax, vMin).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.vertex(pose, edgeMin, maxY, edgeMax).color(r, g, b, 255).uv(uMin, vMin).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.vertex(pose, edgeMin, minY, edgeMax).color(r, g, b, 255).uv(uMin, vMax).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.vertex(pose, edgeMax, minY, edgeMax).color(r, g, b, 255).uv(uMax, vMax).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
+        // North face
+        normal = poseNormal.transform(new Vector3f(0, 0, -1));
+        builder.vertex(pose, edgeMin, maxY, edgeMin).color(r, g, b, 255).uv(uMin, vMin).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.vertex(pose, edgeMax, maxY, edgeMin).color(r, g, b, 255).uv(uMax, vMin).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.vertex(pose, edgeMax, minY, edgeMin).color(r, g, b, 255).uv(uMax, vMax).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.vertex(pose, edgeMin, minY, edgeMin).color(r, g, b, 255).uv(uMin, vMax).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
+        // East face
+        normal = poseNormal.transform(new Vector3f(1, 0, 0));
+        builder.vertex(pose, edgeMax, maxY, edgeMin).color(r, g, b, 255).uv(uMin, vMin).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.vertex(pose, edgeMax, maxY, edgeMax).color(r, g, b, 255).uv(uMax, vMin).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.vertex(pose, edgeMax, minY, edgeMax).color(r, g, b, 255).uv(uMax, vMax).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.vertex(pose, edgeMax, minY, edgeMin).color(r, g, b, 255).uv(uMin, vMax).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
+        // West face
+        normal = poseNormal.transform(new Vector3f(-1, 0, 0));
+        builder.vertex(pose, edgeMin, maxY, edgeMax).color(r, g, b, 255).uv(uMax, vMin).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.vertex(pose, edgeMin, maxY, edgeMin).color(r, g, b, 255).uv(uMin, vMin).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.vertex(pose, edgeMin, minY, edgeMin).color(r, g, b, 255).uv(uMin, vMax).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.vertex(pose, edgeMin, minY, edgeMax).color(r, g, b, 255).uv(uMax, vMax).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
     }
 
     // Renders a sprite inside the barrel with the height determined by how full the barrel is.

@@ -62,6 +62,7 @@ import thedarkcolour.exdeorum.compat.ModIds;
 import thedarkcolour.exdeorum.compat.top.ExDeorumTopCompat;
 import thedarkcolour.exdeorum.config.EConfig;
 import thedarkcolour.exdeorum.item.WateringCanItem;
+import thedarkcolour.exdeorum.material.BarrelMaterial;
 import thedarkcolour.exdeorum.network.NetworkHandler;
 import thedarkcolour.exdeorum.network.VisualUpdateTracker;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
@@ -170,6 +171,7 @@ public final class EventHandler {
                     EFluids.WITCH_WATER_TYPE.get(),
                     fluidState -> fluidState.isSource() ? Blocks.OBSIDIAN.defaultBlockState() : (EConfig.SERVER.witchWaterNetherrackGenerator.get() ? Blocks.NETHERRACK.defaultBlockState() : Blocks.COBBLESTONE.defaultBlockState())
             ));
+            BarrelMaterial.loadTransparentBlocks();
         });
     }
 
