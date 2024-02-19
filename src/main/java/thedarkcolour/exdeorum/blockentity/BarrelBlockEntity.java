@@ -51,12 +51,12 @@ import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import thedarkcolour.exdeorum.block.BarrelBlock;
+import thedarkcolour.exdeorum.blockentity.helper.FluidHelper;
 import thedarkcolour.exdeorum.client.CompostColors;
 import thedarkcolour.exdeorum.config.EConfig;
 import thedarkcolour.exdeorum.material.BarrelMaterial;
@@ -608,7 +608,7 @@ public class BarrelBlockEntity extends EBlockEntity {
     }
 
     // Inner class
-    private class FluidHandler extends FluidTank {
+    private class FluidHandler extends FluidHelper {
         public FluidHandler() {
             super(1000);
         }

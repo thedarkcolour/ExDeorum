@@ -125,6 +125,7 @@ public class EConfig {
         public final IntValue simultaneousSieveUsageRange;
         public final BooleanValue automatedSieves;
         public final DoubleValue barrelProgressStep;
+        public final BooleanValue witchWaterDirtGenerator;
         public final BooleanValue witchWaterNetherrackGenerator;
         public final ConfigValue<String> defaultSpawnTreeFeature;
         public final BooleanValue useBiomeAppropriateTree;
@@ -158,6 +159,9 @@ public class EConfig {
             this.barrelProgressStep = builder
                     .comment("The progress to increment by each tick for barrel composting.")
                     .defineInRange("barrel_progress_step", 0.004, 0.0f, 1.0f);
+            this.witchWaterDirtGenerator = builder
+                    .comment("Whether Witch Water forms dirt when water flows into it, allowing for a dirt version of a cobblestone generator.")
+                    .define("witch_water_dirt_generator", false);
             this.witchWaterNetherrackGenerator = builder
                     .comment("Whether Witch Water forms netherrack when lava flows into it, allowing for a netherrack version of a cobblestone generator.")
                     .define("witch_water_netherrack_generator", true);

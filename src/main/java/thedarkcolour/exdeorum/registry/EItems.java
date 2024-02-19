@@ -238,6 +238,8 @@ public class EItems {
     public static final RegistryObject<BlockItem> MAPLE_CRUCIBLE = registerItemBlock(EBlocks.MAPLE_CRUCIBLE);
 
     public static final RegistryObject<BlockItem> END_CAKE = registerItemBlock(EBlocks.END_CAKE);
+    public static final RegistryObject<BlockItem> INFESTED_LEAVES = registerItemBlock(EBlocks.INFESTED_LEAVES);
+
 
     public static void addItemsToMainTab(CreativeModeTab.Output output) {
         boolean biomesOPlenty = ModList.get().isLoaded(ModIds.BIOMES_O_PLENTY);
