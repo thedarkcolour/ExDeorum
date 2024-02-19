@@ -97,7 +97,11 @@ public class BarrelRenderer implements BlockEntityRenderer<BarrelBlockEntity> {
                     b = (int) Mth.lerp(progress, b, 65);
                 }
 
-                RenderUtil.renderFlatFluidSprite(buffers, stack, level, pos, y, 2.0f, light, r, g, b, fluid);
+                if (barrel.transparent) {
+                    RenderUtil.renderFluidCube(buffers, stack, level, pos, 1 / 16f, y, 2.0f, light, r, g, b, fluid);
+                } else {
+                    RenderUtil.renderFlatFluidSprite(buffers, stack, level, pos, y, 2.0f, light, r, g, b, fluid);
+                }
             }
         });
 

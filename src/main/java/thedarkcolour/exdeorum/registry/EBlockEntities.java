@@ -30,6 +30,7 @@ import thedarkcolour.exdeorum.blockentity.MechanicalHammerBlockEntity;
 import thedarkcolour.exdeorum.blockentity.MechanicalSieveBlockEntity;
 import thedarkcolour.exdeorum.blockentity.SieveBlockEntity;
 import thedarkcolour.exdeorum.blockentity.WaterCrucibleBlockEntity;
+import thedarkcolour.exdeorum.material.BarrelMaterial;
 
 public class EBlockEntities {
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, ExDeorum.ID);
@@ -81,44 +82,7 @@ public class EBlockEntities {
             EBlocks.DUSK_CRUCIBLE.get(),
             EBlocks.MAPLE_CRUCIBLE.get()
     ).build(null));
-    public static final RegistryObject<BlockEntityType<BarrelBlockEntity>> BARREL = BLOCK_ENTITIES.register("barrel", () -> BlockEntityType.Builder.of(BarrelBlockEntity::new,
-            EBlocks.OAK_BARREL.get(),
-            EBlocks.SPRUCE_BARREL.get(),
-            EBlocks.BIRCH_BARREL.get(),
-            EBlocks.JUNGLE_BARREL.get(),
-            EBlocks.ACACIA_BARREL.get(),
-            EBlocks.DARK_OAK_BARREL.get(),
-            EBlocks.MANGROVE_BARREL.get(),
-            EBlocks.CHERRY_BARREL.get(),
-            EBlocks.BAMBOO_BARREL.get(),
-            EBlocks.CRIMSON_BARREL.get(),
-            EBlocks.WARPED_BARREL.get(),
-            EBlocks.STONE_BARREL.get(),
-            // BOP
-            EBlocks.FIR_BARREL.get(),
-            EBlocks.REDWOOD_BARREL.get(),
-            EBlocks.MAHOGANY_BARREL.get(),
-            EBlocks.JACARANDA_BARREL.get(),
-            EBlocks.PALM_BARREL.get(),
-            EBlocks.WILLOW_BARREL.get(),
-            EBlocks.DEAD_BARREL.get(),
-            EBlocks.MAGIC_BARREL.get(),
-            EBlocks.UMBRAN_BARREL.get(),
-            EBlocks.HELLBARK_BARREL.get(),
-            // Ars Nouveau
-            EBlocks.ARCHWOOD_BARREL.get(),
-            // Aether
-            EBlocks.SKYROOT_BARREL.get(),
-            // Blue Skies
-            EBlocks.BLUEBRIGHT_BARREL.get(),
-            EBlocks.STARLIT_BARREL.get(),
-            EBlocks.FROSTBRIGHT_BARREL.get(),
-            EBlocks.COMET_BARREL.get(),
-            EBlocks.LUNAR_BARREL.get(),
-            EBlocks.DUSK_BARREL.get(),
-            EBlocks.MAPLE_BARREL.get(),
-            EBlocks.CRYSTALLIZED_BARREL.get()
-    ).build(null));
+    public static final RegistryObject<BlockEntityType<BarrelBlockEntity>> BARREL = BLOCK_ENTITIES.register("barrel", BarrelMaterial::createBlockEntityType);
     public static final RegistryObject<BlockEntityType<SieveBlockEntity>> SIEVE = BLOCK_ENTITIES.register("sieve", () -> BlockEntityType.Builder.of(SieveBlockEntity::new,
             EBlocks.OAK_SIEVE.get(),
             EBlocks.SPRUCE_SIEVE.get(),

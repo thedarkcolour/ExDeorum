@@ -59,6 +59,7 @@ import thedarkcolour.exdeorum.block.BarrelBlock;
 import thedarkcolour.exdeorum.blockentity.helper.FluidHelper;
 import thedarkcolour.exdeorum.client.CompostColors;
 import thedarkcolour.exdeorum.config.EConfig;
+import thedarkcolour.exdeorum.material.BarrelMaterial;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelFluidMixingRecipe;
 import thedarkcolour.exdeorum.registry.EBlockEntities;
@@ -75,13 +76,16 @@ public class BarrelBlockEntity extends EBlockEntity {
     public short r, g, b;
     // Used to avoid triggering obsidian dupes in onContentsChanged, because Forge's FluidUtil actually modifies the tank for some reason
     private boolean isBeingFilledByPlayer;
-
-    public BarrelBlockEntity(BlockPos pos, BlockState state) {
-        super(EBlockEntities.BARREL.get(), pos, state);
-    }
+    public final boolean transparent;
 
     private final LazyOptional<IItemHandler> itemHandler = LazyOptional.of(() -> this.item);
     private final LazyOptional<IFluidHandler> fluidHandler = LazyOptional.of(() -> this.tank);
+
+    public BarrelBlockEntity(BlockPos pos, BlockState state) {
+        super(EBlockEntities.BARREL.get(), pos, state);
+
+        this.transparent = BarrelMaterial.TRANSPARENT_BARRELS.contains(state.getBlock());
+    }
 
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {

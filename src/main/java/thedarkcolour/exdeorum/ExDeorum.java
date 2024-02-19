@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 import thedarkcolour.exdeorum.client.ClientHandler;
 import thedarkcolour.exdeorum.config.EConfig;
 import thedarkcolour.exdeorum.event.EventHandler;
+import thedarkcolour.exdeorum.material.DefaultMaterials;
 import thedarkcolour.exdeorum.network.NetworkHandler;
 import thedarkcolour.exdeorum.registry.EBlockEntities;
 import thedarkcolour.exdeorum.registry.EBlocks;
@@ -76,8 +77,8 @@ public class ExDeorum {
     private static void createRegistries() {
         var modBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        EBlockEntities.BLOCK_ENTITIES.register(modBus);
         EBlocks.BLOCKS.register(modBus);
+        EBlockEntities.BLOCK_ENTITIES.register(modBus);
         EChunkGenerators.CHUNK_GENERATORS.register(modBus);
         ECreativeTabs.CREATIVE_TABS.register(modBus);
         EFluids.FLUID_TYPES.register(modBus);
@@ -88,6 +89,7 @@ public class ExDeorum {
         EMenus.MENUS.register(modBus);
         ERecipeSerializers.RECIPE_SERIALIZERS.register(modBus);
         ERecipeTypes.RECIPE_TYPES.register(modBus);
+        DefaultMaterials.registerMaterials();
     }
 
     private interface ClientHandlerRegistrar {

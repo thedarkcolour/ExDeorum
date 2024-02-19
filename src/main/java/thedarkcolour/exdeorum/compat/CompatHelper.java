@@ -21,6 +21,7 @@ package thedarkcolour.exdeorum.compat;
 import com.google.common.collect.Lists;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.fml.ModList;
+import thedarkcolour.exdeorum.material.BarrelMaterial;
 import thedarkcolour.exdeorum.registry.EItems;
 
 import java.util.ArrayList;
@@ -28,39 +29,12 @@ import java.util.List;
 
 public class CompatHelper {
     public static List<Item> getAvailableBarrels(boolean registered) {
-        // Vanilla barrels
-        List<Item> barrels = registered ? Lists.newArrayList(EItems.OAK_BARREL.get(), EItems.SPRUCE_BARREL.get(), EItems.BIRCH_BARREL.get(), EItems.JUNGLE_BARREL.get(), EItems.ACACIA_BARREL.get(), EItems.DARK_OAK_BARREL.get(), EItems.MANGROVE_BARREL.get(), EItems.CHERRY_BARREL.get(), EItems.BAMBOO_BARREL.get(), EItems.CRIMSON_BARREL.get(), EItems.WARPED_BARREL.get(), EItems.STONE_BARREL.get()) : new ArrayList<>();
-        ModList mods = ModList.get();
-
-        if (mods.isLoaded(ModIds.BIOMES_O_PLENTY) == registered) {
-            barrels.add(EItems.FIR_BARREL.get());
-            barrels.add(EItems.REDWOOD_BARREL.get());
-            barrels.add(EItems.MAHOGANY_BARREL.get());
-            barrels.add(EItems.JACARANDA_BARREL.get());
-            barrels.add(EItems.PALM_BARREL.get());
-            barrels.add(EItems.WILLOW_BARREL.get());
-            barrels.add(EItems.DEAD_BARREL.get());
-            barrels.add(EItems.MAGIC_BARREL.get());
-            barrels.add(EItems.UMBRAN_BARREL.get());
-            barrels.add(EItems.HELLBARK_BARREL.get());
+        List<Item> barrels = new ArrayList<>();
+        for (var material : BarrelMaterial.REGISTERED_MATERIALS) {
+            if (registered == ModList.get().isLoaded(material.requiredModId)) {
+                barrels.add(material.getItem());
+            }
         }
-        if (mods.isLoaded(ModIds.ARS_NOUVEAU) == registered) {
-            barrels.add(EItems.ARCHWOOD_BARREL.get());
-        }
-        if (mods.isLoaded(ModIds.AETHER) == registered) {
-            barrels.add(EItems.SKYROOT_BARREL.get());
-        }
-        if (mods.isLoaded(ModIds.BLUE_SKIES) == registered) {
-            barrels.add(EItems.BLUEBRIGHT_BARREL.get());
-            barrels.add(EItems.STARLIT_BARREL.get());
-            barrels.add(EItems.FROSTBRIGHT_BARREL.get());
-            barrels.add(EItems.COMET_BARREL.get());
-            barrels.add(EItems.LUNAR_BARREL.get());
-            barrels.add(EItems.DUSK_BARREL.get());
-            barrels.add(EItems.MAPLE_BARREL.get());
-            barrels.add(EItems.CRYSTALLIZED_BARREL.get());
-        }
-
         return barrels;
     }
 

@@ -66,6 +66,7 @@ import thedarkcolour.exdeorum.compat.ModIds;
 import thedarkcolour.exdeorum.compat.top.ExDeorumTopCompat;
 import thedarkcolour.exdeorum.config.EConfig;
 import thedarkcolour.exdeorum.item.WateringCanItem;
+import thedarkcolour.exdeorum.material.BarrelMaterial;
 import thedarkcolour.exdeorum.network.NetworkHandler;
 import thedarkcolour.exdeorum.network.VisualUpdateTracker;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
@@ -180,6 +181,8 @@ public final class EventHandler {
                     (level, pos, relative, state) -> level.getFluidState(relative).getFluidType() == ForgeMod.WATER_TYPE.get() && EConfig.SERVER.witchWaterDirtGenerator.get(),
                     fluidState -> Util.getRandom(dirtVariants, rng)
             ));
+
+            BarrelMaterial.loadTransparentBlocks();
         });
     }
 

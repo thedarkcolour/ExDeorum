@@ -24,11 +24,11 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.client.model.generators.BlockModelBuilder;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.registries.ForgeRegistries;
+import thedarkcolour.exdeorum.material.DefaultMaterials;
 import thedarkcolour.exdeorum.registry.EBlocks;
 import thedarkcolour.modkit.data.MKBlockModelProvider;
 
 import java.util.Objects;
-import java.util.function.Supplier;
 
 class BlockModels {
     public static void addBlockModels(MKBlockModelProvider models) {
@@ -39,18 +39,18 @@ class BlockModels {
         models.simpleBlock(EBlocks.CRUSHED_BLACKSTONE.get());
 
         // Barrels
-        barrel(models, EBlocks.OAK_BARREL, Blocks.OAK_PLANKS);
-        barrel(models, EBlocks.SPRUCE_BARREL, Blocks.SPRUCE_PLANKS);
-        barrel(models, EBlocks.BIRCH_BARREL, Blocks.BIRCH_PLANKS);
-        barrel(models, EBlocks.JUNGLE_BARREL, Blocks.JUNGLE_PLANKS);
-        barrel(models, EBlocks.ACACIA_BARREL, Blocks.ACACIA_PLANKS);
-        barrel(models, EBlocks.DARK_OAK_BARREL, Blocks.DARK_OAK_PLANKS);
-        barrel(models, EBlocks.MANGROVE_BARREL, Blocks.MANGROVE_PLANKS);
-        barrel(models, EBlocks.CHERRY_BARREL, Blocks.CHERRY_PLANKS);
-        barrel(models, EBlocks.BAMBOO_BARREL, Blocks.BAMBOO_PLANKS);
-        barrel(models, EBlocks.CRIMSON_BARREL, Blocks.CRIMSON_PLANKS);
-        barrel(models, EBlocks.WARPED_BARREL, Blocks.WARPED_PLANKS);
-        barrel(models, EBlocks.STONE_BARREL, Blocks.STONE);
+        barrel(models, DefaultMaterials.OAK_BARREL.getBlock(), Blocks.OAK_PLANKS);
+        barrel(models, DefaultMaterials.SPRUCE_BARREL.getBlock(), Blocks.SPRUCE_PLANKS);
+        barrel(models, DefaultMaterials.BIRCH_BARREL.getBlock(), Blocks.BIRCH_PLANKS);
+        barrel(models, DefaultMaterials.JUNGLE_BARREL.getBlock(), Blocks.JUNGLE_PLANKS);
+        barrel(models, DefaultMaterials.ACACIA_BARREL.getBlock(), Blocks.ACACIA_PLANKS);
+        barrel(models, DefaultMaterials.DARK_OAK_BARREL.getBlock(), Blocks.DARK_OAK_PLANKS);
+        barrel(models, DefaultMaterials.MANGROVE_BARREL.getBlock(), Blocks.MANGROVE_PLANKS);
+        barrel(models, DefaultMaterials.CHERRY_BARREL.getBlock(), Blocks.CHERRY_PLANKS);
+        barrel(models, DefaultMaterials.BAMBOO_BARREL.getBlock(), Blocks.BAMBOO_PLANKS);
+        barrel(models, DefaultMaterials.CRIMSON_BARREL.getBlock(), Blocks.CRIMSON_PLANKS);
+        barrel(models, DefaultMaterials.WARPED_BARREL.getBlock(), Blocks.WARPED_PLANKS);
+        barrel(models, DefaultMaterials.STONE_BARREL.getBlock(), Blocks.STONE);
 
         sieve(models, EBlocks.OAK_SIEVE.get(), Blocks.OAK_PLANKS);
         sieve(models, EBlocks.SPRUCE_SIEVE.get(), Blocks.SPRUCE_PLANKS);
@@ -89,7 +89,7 @@ class BlockModels {
     }
 
     private static void arsNouveauModels(MKBlockModelProvider models) {
-        barrel(models, EBlocks.ARCHWOOD_BARREL, ModCompatData.ARCHWOOD_PLANKS.get());
+        barrel(models, DefaultMaterials.ARCHWOOD_BARREL.getBlock(), ModCompatData.ARCHWOOD_PLANKS.get());
 
         sieve(models, EBlocks.ARCHWOOD_SIEVE.get(), ModCompatData.ARCHWOOD_PLANKS.get());
 
@@ -100,7 +100,7 @@ class BlockModels {
     }
 
     private static void aetherModels(MKBlockModelProvider models) {
-        barrel(models, EBlocks.SKYROOT_BARREL, ModCompatData.SKYROOT_PLANKS.get(), "construction/");
+        barrel(models, DefaultMaterials.SKYROOT_BARREL.getBlock(), ModCompatData.SKYROOT_PLANKS.get(), "construction/");
 
         sieve(models, EBlocks.SKYROOT_SIEVE.get(), ModCompatData.SKYROOT_PLANKS.get(), "construction/");
 
@@ -112,14 +112,14 @@ class BlockModels {
         final String woodPrefix = "wood/";
         final String logSuffix = "_side";
 
-        barrel(models, EBlocks.BLUEBRIGHT_BARREL, ModCompatData.BLUEBRIGHT_PLANKS.get(), woodPrefix);
-        barrel(models, EBlocks.STARLIT_BARREL, ModCompatData.STARLIT_PLANKS.get(), woodPrefix);
-        barrel(models, EBlocks.FROSTBRIGHT_BARREL, ModCompatData.FROSTBRIGHT_PLANKS.get(), woodPrefix);
-        barrel(models, EBlocks.COMET_BARREL, ModCompatData.COMET_PLANKS.get(), woodPrefix);
-        barrel(models, EBlocks.LUNAR_BARREL, ModCompatData.LUNAR_PLANKS.get(), woodPrefix);
-        barrel(models, EBlocks.DUSK_BARREL, ModCompatData.DUSK_PLANKS.get(), woodPrefix);
-        barrel(models, EBlocks.MAPLE_BARREL, ModCompatData.MAPLE_PLANKS.get(), woodPrefix);
-        barrel(models, EBlocks.CRYSTALLIZED_BARREL, ModCompatData.CRYSTALLIZED_PLANKS.get(), woodPrefix).renderType("translucent");
+        barrel(models, DefaultMaterials.BLUEBRIGHT_BARREL.getBlock(), ModCompatData.BLUEBRIGHT_PLANKS.get(), woodPrefix);
+        barrel(models, DefaultMaterials.STARLIT_BARREL.getBlock(), ModCompatData.STARLIT_PLANKS.get(), woodPrefix);
+        barrel(models, DefaultMaterials.FROSTBRIGHT_BARREL.getBlock(), ModCompatData.FROSTBRIGHT_PLANKS.get(), woodPrefix);
+        barrel(models, DefaultMaterials.COMET_BARREL.getBlock(), ModCompatData.COMET_PLANKS.get(), woodPrefix);
+        barrel(models, DefaultMaterials.LUNAR_BARREL.getBlock(), ModCompatData.LUNAR_PLANKS.get(), woodPrefix);
+        barrel(models, DefaultMaterials.DUSK_BARREL.getBlock(), ModCompatData.DUSK_PLANKS.get(), woodPrefix);
+        barrel(models, DefaultMaterials.MAPLE_BARREL.getBlock(), ModCompatData.MAPLE_PLANKS.get(), woodPrefix);
+        barrel(models, DefaultMaterials.CRYSTALLIZED_BARREL.getBlock(), ModCompatData.CRYSTALLIZED_PLANKS.get(), woodPrefix).renderType("translucent");
 
         sieve(models, EBlocks.BLUEBRIGHT_SIEVE.get(), ModCompatData.BLUEBRIGHT_PLANKS.get(), woodPrefix);
         sieve(models, EBlocks.STARLIT_SIEVE.get(), ModCompatData.STARLIT_PLANKS.get(), woodPrefix);
@@ -141,16 +141,16 @@ class BlockModels {
     }
 
     private static void bopModels(MKBlockModelProvider models) {
-        barrel(models, EBlocks.FIR_BARREL, ModCompatData.FIR_PLANKS.get());
-        barrel(models, EBlocks.REDWOOD_BARREL, ModCompatData.REDWOOD_PLANKS.get());
-        barrel(models, EBlocks.MAHOGANY_BARREL, ModCompatData.MAHOGANY_PLANKS.get());
-        barrel(models, EBlocks.JACARANDA_BARREL, ModCompatData.JACARANDA_PLANKS.get());
-        barrel(models, EBlocks.PALM_BARREL, ModCompatData.PALM_PLANKS.get());
-        barrel(models, EBlocks.WILLOW_BARREL, ModCompatData.WILLOW_PLANKS.get());
-        barrel(models, EBlocks.DEAD_BARREL, ModCompatData.DEAD_PLANKS.get());
-        barrel(models, EBlocks.MAGIC_BARREL, ModCompatData.MAGIC_PLANKS.get());
-        barrel(models, EBlocks.UMBRAN_BARREL, ModCompatData.UMBRAN_PLANKS.get());
-        barrel(models, EBlocks.HELLBARK_BARREL, ModCompatData.HELLBARK_PLANKS.get());
+        barrel(models, DefaultMaterials.FIR_BARREL.getBlock(), ModCompatData.FIR_PLANKS.get());
+        barrel(models, DefaultMaterials.REDWOOD_BARREL.getBlock(), ModCompatData.REDWOOD_PLANKS.get());
+        barrel(models, DefaultMaterials.MAHOGANY_BARREL.getBlock(), ModCompatData.MAHOGANY_PLANKS.get());
+        barrel(models, DefaultMaterials.JACARANDA_BARREL.getBlock(), ModCompatData.JACARANDA_PLANKS.get());
+        barrel(models, DefaultMaterials.PALM_BARREL.getBlock(), ModCompatData.PALM_PLANKS.get());
+        barrel(models, DefaultMaterials.WILLOW_BARREL.getBlock(), ModCompatData.WILLOW_PLANKS.get());
+        barrel(models, DefaultMaterials.DEAD_BARREL.getBlock(), ModCompatData.DEAD_PLANKS.get());
+        barrel(models, DefaultMaterials.MAGIC_BARREL.getBlock(), ModCompatData.MAGIC_PLANKS.get());
+        barrel(models, DefaultMaterials.UMBRAN_BARREL.getBlock(), ModCompatData.UMBRAN_PLANKS.get());
+        barrel(models, DefaultMaterials.HELLBARK_BARREL.getBlock(), ModCompatData.HELLBARK_PLANKS.get());
 
         sieve(models, EBlocks.FIR_SIEVE.get(), ModCompatData.FIR_PLANKS.get());
         sieve(models, EBlocks.REDWOOD_SIEVE.get(), ModCompatData.REDWOOD_PLANKS.get());
@@ -200,12 +200,12 @@ class BlockModels {
         return new ResourceLocation(key.getNamespace(), "block/" + prefix + key.getPath() + suffix);
     }
 
-    public static void barrel(MKBlockModelProvider models, Supplier<? extends Block> block, Block appearance) {
+    public static void barrel(MKBlockModelProvider models, Block block, Block appearance) {
         barrel(models, block, appearance, "");
     }
 
-    public static BlockModelBuilder barrel(MKBlockModelProvider models, Supplier<? extends Block> block, Block appearance, String pathPrefix) {
-        return singleModel(models, block.get())
+    public static BlockModelBuilder barrel(MKBlockModelProvider models, Block block, Block appearance, String pathPrefix) {
+        return singleModel(models, block)
                 .parent(models.modFile("template_barrel"))
                 .texture("barrel", texture(appearance, pathPrefix, ""));
     }

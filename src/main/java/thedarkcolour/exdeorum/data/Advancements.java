@@ -29,6 +29,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.common.data.ForgeAdvancementProvider;
 import thedarkcolour.exdeorum.ExDeorum;
+import thedarkcolour.exdeorum.material.DefaultMaterials;
 import thedarkcolour.exdeorum.registry.EItems;
 import thedarkcolour.exdeorum.tag.EItemTags;
 
@@ -83,7 +84,7 @@ class Advancements extends ForgeAdvancementProvider {
             var barrel = advancement()
                     .parent(root)
                     .display(
-                            EItems.OAK_BARREL.get(),
+                            DefaultMaterials.OAK_BARREL.getItem(),
                             Component.translatable(TranslationKeys.BARREL_ADVANCEMENT_TITLE),
                             Component.translatable(TranslationKeys.BARREL_ADVANCEMENT_DESCRIPTION),
                             null,
