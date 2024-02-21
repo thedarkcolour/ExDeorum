@@ -51,6 +51,7 @@ import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.compat.PreferredOres;
 import thedarkcolour.exdeorum.item.HammerItem;
+import thedarkcolour.exdeorum.loot.SummationGenerator;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelCompostRecipe;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelFluidMixingRecipe;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelMixingRecipe;
@@ -59,6 +60,7 @@ import thedarkcolour.exdeorum.recipe.crook.CrookRecipe;
 import thedarkcolour.exdeorum.recipe.crucible.CrucibleRecipe;
 import thedarkcolour.exdeorum.recipe.hammer.HammerRecipe;
 import thedarkcolour.exdeorum.recipe.sieve.SieveRecipe;
+import thedarkcolour.exdeorum.registry.ENumberProviders;
 import thedarkcolour.exdeorum.registry.ERecipeTypes;
 
 import java.util.Collection;
@@ -71,6 +73,7 @@ public final class RecipeUtil {
     private static final int CONSTANT_TYPE = 1;
     private static final int UNIFORM_TYPE = 2;
     private static final int BINOMIAL_TYPE = 3;
+    private static final int SUMMATION_TYPE = 4;
     private static final int UNKNOWN_TYPE = 99;
 
     private static SingleIngredientRecipeCache<BarrelCompostRecipe> barrelCompostRecipeCache;
@@ -181,6 +184,15 @@ public final class RecipeUtil {
             buffer.writeByte(BINOMIAL_TYPE);
             toNetworkNumberProvider(buffer, binomial.n);
             toNetworkNumberProvider(buffer, binomial.p);
+        } else if (provider.getType() == ENumberProviders.SUMMATION.get()) {
+            var summation = (SummationGenerator) provider;
+            var providers = summation.providers();
+            int length = providers.length;
+            buffer.writeByte(SUMMATION_TYPE);
+            buffer.writeByte(length);
+            for (int i = 0; i < length; i++) {
+                toNetworkNumberProvider(buffer, providers[i]);
+            }
         } else {
             buffer.writeByte(UNKNOWN_TYPE);
         }
@@ -193,6 +205,14 @@ public final class RecipeUtil {
                     new UniformGenerator(fromNetworkNumberProvider(buffer), fromNetworkNumberProvider(buffer));
             case BINOMIAL_TYPE ->
                     new BinomialDistributionGenerator(fromNetworkNumberProvider(buffer), fromNetworkNumberProvider(buffer));
+            case SUMMATION_TYPE -> {
+                var length = buffer.readByte();
+                var providers = new NumberProvider[length];
+                for (int i = 0; i < length; i++) {
+                    providers[i] = fromNetworkNumberProvider(buffer);
+                }
+                yield new SummationGenerator(providers);
+            }
             default -> ConstantValue.exactly(1f);
         };
     }
