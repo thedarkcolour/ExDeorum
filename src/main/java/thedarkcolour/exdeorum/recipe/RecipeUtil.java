@@ -328,6 +328,20 @@ public final class RecipeUtil {
             return getExpectedValue(uniform.min) + getExpectedValue(uniform.max) / 2.0;
         } else if (provider instanceof BinomialDistributionGenerator binomial) {
             return getExpectedValue(binomial.n) * getExpectedValue(binomial.p);
+        } else if (provider instanceof SummationGenerator summation) {
+            double avgSum = 0.0;
+
+            for (var child : summation.providers()) {
+                double expectedValue = getExpectedValue(child);
+
+                if (expectedValue == -1.0f) {
+                    return -1.0f;
+                } else {
+                    avgSum += expectedValue;
+                }
+            }
+
+            return avgSum;
         } else {
             // no way of knowing beforehand so just put them last
             return -1.0;

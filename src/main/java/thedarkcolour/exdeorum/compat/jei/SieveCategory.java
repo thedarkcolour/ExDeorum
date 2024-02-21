@@ -40,6 +40,7 @@ import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.minecraftforge.common.util.Lazy;
 import thedarkcolour.exdeorum.compat.GroupedSieveRecipe;
 import thedarkcolour.exdeorum.data.TranslationKeys;
+import thedarkcolour.exdeorum.loot.SummationGenerator;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.registry.EBlocks;
 
@@ -116,14 +117,14 @@ class SieveCategory implements IRecipeCategory<GroupedSieveRecipe> {
                 addAvgOutput(tooltipLines, RecipeUtil.getExpectedValue(provider));
             }
 
-            addMinMaxes(tooltipLines, ConstantValue.exactly(0), binomial.n);
+            addMinMaxes(tooltipLines, 0, getMax(binomial.n));
         } else if (provider.getClass() != ConstantValue.class) {
             var val = RecipeUtil.getExpectedValue(provider);
             if (val != -1.0) {
                 addAvgOutput(tooltipLines, val);
 
-                if (provider instanceof UniformGenerator uniform) {
-                    addMinMaxes(tooltipLines, uniform.min, uniform.max);
+                if (provider instanceof UniformGenerator || provider instanceof SummationGenerator) {
+                    addMinMaxes(tooltipLines, getMin(provider), getMax(provider));
                 }
             }
         }
@@ -134,15 +135,55 @@ class SieveCategory implements IRecipeCategory<GroupedSieveRecipe> {
         });
     }
 
+    private static double getMin(NumberProvider provider) {
+        if (provider instanceof ConstantValue value) {
+            return value.value;
+        } else if (provider instanceof UniformGenerator uniform) {
+            return getMin(uniform.min);
+        } else if (provider instanceof BinomialDistributionGenerator) {
+            return 0;
+        } else if (provider instanceof SummationGenerator summation) {
+            double sum = 0;
+
+            for (var child : summation.providers()) {
+                sum += getMin(child);
+            }
+
+            return sum;
+        }
+
+        return 0;
+    }
+
+    private static double getMax(NumberProvider provider) {
+        if (provider instanceof ConstantValue value) {
+            return value.value;
+        } else if (provider instanceof UniformGenerator uniform) {
+            return getMax(uniform.max);
+        } else if (provider instanceof BinomialDistributionGenerator binomial) {
+            return getMax(binomial.n);
+        } else if (provider instanceof SummationGenerator summation) {
+            double sum = 0;
+
+            for (var child : summation.providers()) {
+                sum += getMax(child);
+            }
+
+            return sum;
+        }
+
+        return 0;
+    }
+
     private static void addAvgOutput(ImmutableList.Builder<Component> tooltipLines, double avgValue) {
         String avgOutput = ClientJeiUtil.FORMATTER.format(avgValue);
         tooltipLines.add(Component.translatable(TranslationKeys.SIEVE_RECIPE_AVERAGE_OUTPUT, avgOutput).withStyle(ChatFormatting.GRAY));
     }
 
     // when the player holds shift, they can see the min/max amounts of a drop
-    private static void addMinMaxes(ImmutableList.Builder<Component> tooltipLines, NumberProvider min, NumberProvider max) {
-        var minFormatted = ClientJeiUtil.FORMATTER.format(RecipeUtil.getExpectedValue(min));
-        var maxFormatted = ClientJeiUtil.FORMATTER.format(RecipeUtil.getExpectedValue(max));
+    private static void addMinMaxes(ImmutableList.Builder<Component> tooltipLines, double min, double max) {
+        String minFormatted = ClientJeiUtil.FORMATTER.format(min);
+        String maxFormatted = ClientJeiUtil.FORMATTER.format(max);
 
         tooltipLines.add(Component.translatable(TranslationKeys.SIEVE_RECIPE_MIN_OUTPUT, minFormatted).withStyle(ChatFormatting.GRAY));
         tooltipLines.add(Component.translatable(TranslationKeys.SIEVE_RECIPE_MAX_OUTPUT, maxFormatted).withStyle(ChatFormatting.GRAY));
