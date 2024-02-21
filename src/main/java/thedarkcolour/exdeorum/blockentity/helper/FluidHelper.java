@@ -30,7 +30,9 @@ public class FluidHelper extends FluidTank {
     @Override
     public FluidTank readFromNBT(CompoundTag nbt) {
         super.readFromNBT(nbt);
-        this.fluid.setAmount(Math.min(this.capacity, this.fluid.getAmount()));
+        if (!this.fluid.isEmpty()) {
+            this.fluid.setAmount(Math.min(this.capacity, this.fluid.getAmount()));
+        }
 
         return this;
     }
