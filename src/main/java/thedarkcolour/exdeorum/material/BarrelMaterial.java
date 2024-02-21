@@ -18,10 +18,8 @@
 
 package thedarkcolour.exdeorum.material;
 
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.block.BarrelBlock;
 
@@ -35,9 +33,6 @@ public final class BarrelMaterial extends AbstractMaterial {
     public final boolean fireproof;
     // Whether fluids should be rendered with sides instead of just the top
     public final boolean transparent;
-
-    private RegistryObject<BarrelBlock> block;
-    private RegistryObject<BlockItem> item;
 
     BarrelMaterial(SoundType soundType, float strength, boolean needsCorrectTool, boolean fireproof, int mapColor, String requiredModId, boolean transparent) {
         super(soundType, strength, needsCorrectTool, mapColor, requiredModId);
