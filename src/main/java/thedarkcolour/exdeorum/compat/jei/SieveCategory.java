@@ -41,8 +41,8 @@ import net.minecraftforge.common.util.Lazy;
 import thedarkcolour.exdeorum.compat.GroupedSieveRecipe;
 import thedarkcolour.exdeorum.data.TranslationKeys;
 import thedarkcolour.exdeorum.loot.SummationGenerator;
+import thedarkcolour.exdeorum.material.DefaultMaterials;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
-import thedarkcolour.exdeorum.registry.EBlocks;
 
 class SieveCategory implements IRecipeCategory<GroupedSieveRecipe> {
     private static final Component BY_HAND_ONLY_LABEL = Component.translatable(TranslationKeys.SIEVE_RECIPE_BY_HAND_ONLY).withStyle(ChatFormatting.RED);
@@ -65,7 +65,7 @@ class SieveCategory implements IRecipeCategory<GroupedSieveRecipe> {
         this.background = Lazy.of(() -> helper.createBlankDrawable(WIDTH, ROW_START + 18 * GroupedSieveRecipe.maxSieveRows));
         this.slot = helper.getSlotDrawable();
         this.row = helper.createDrawable(ExDeorumJeiPlugin.EX_DEORUM_JEI_TEXTURE, 0, 0, 162, 18);
-        this.icon = helper.createDrawableItemStack(new ItemStack(EBlocks.OAK_SIEVE.get()));
+        this.icon = helper.createDrawableItemStack(new ItemStack(DefaultMaterials.OAK_SIEVE.getItem()));
         this.title = Component.translatable(TranslationKeys.SIEVE_CATEGORY_TITLE);
     }
 

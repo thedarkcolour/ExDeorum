@@ -23,14 +23,8 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import thedarkcolour.exdeorum.ExDeorum;
-import thedarkcolour.exdeorum.blockentity.BarrelBlockEntity;
-import thedarkcolour.exdeorum.blockentity.InfestedLeavesBlockEntity;
-import thedarkcolour.exdeorum.blockentity.LavaCrucibleBlockEntity;
-import thedarkcolour.exdeorum.blockentity.MechanicalHammerBlockEntity;
-import thedarkcolour.exdeorum.blockentity.MechanicalSieveBlockEntity;
-import thedarkcolour.exdeorum.blockentity.SieveBlockEntity;
-import thedarkcolour.exdeorum.blockentity.WaterCrucibleBlockEntity;
-import thedarkcolour.exdeorum.material.BarrelMaterial;
+import thedarkcolour.exdeorum.blockentity.*;
+import thedarkcolour.exdeorum.material.DefaultMaterials;
 
 public class EBlockEntities {
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, ExDeorum.ID);
@@ -82,44 +76,8 @@ public class EBlockEntities {
             EBlocks.DUSK_CRUCIBLE.get(),
             EBlocks.MAPLE_CRUCIBLE.get()
     ).build(null));
-    public static final RegistryObject<BlockEntityType<BarrelBlockEntity>> BARREL = BLOCK_ENTITIES.register("barrel", BarrelMaterial::createBlockEntityType);
-    public static final RegistryObject<BlockEntityType<SieveBlockEntity>> SIEVE = BLOCK_ENTITIES.register("sieve", () -> BlockEntityType.Builder.of(SieveBlockEntity::new,
-            EBlocks.OAK_SIEVE.get(),
-            EBlocks.SPRUCE_SIEVE.get(),
-            EBlocks.BIRCH_SIEVE.get(),
-            EBlocks.JUNGLE_SIEVE.get(),
-            EBlocks.ACACIA_SIEVE.get(),
-            EBlocks.DARK_OAK_SIEVE.get(),
-            EBlocks.MANGROVE_SIEVE.get(),
-            EBlocks.CHERRY_SIEVE.get(),
-            EBlocks.BAMBOO_SIEVE.get(),
-            EBlocks.CRIMSON_SIEVE.get(),
-            EBlocks.WARPED_SIEVE.get(),
-            // BOP
-            EBlocks.FIR_SIEVE.get(),
-            EBlocks.REDWOOD_SIEVE.get(),
-            EBlocks.MAHOGANY_SIEVE.get(),
-            EBlocks.JACARANDA_SIEVE.get(),
-            EBlocks.PALM_SIEVE.get(),
-            EBlocks.WILLOW_SIEVE.get(),
-            EBlocks.DEAD_SIEVE.get(),
-            EBlocks.MAGIC_SIEVE.get(),
-            EBlocks.UMBRAN_SIEVE.get(),
-            EBlocks.HELLBARK_SIEVE.get(),
-            // Ars Nouveau
-            EBlocks.ARCHWOOD_SIEVE.get(),
-            // Aether
-            EBlocks.SKYROOT_SIEVE.get(),
-            // Blue Skies
-            EBlocks.BLUEBRIGHT_SIEVE.get(),
-            EBlocks.STARLIT_SIEVE.get(),
-            EBlocks.FROSTBRIGHT_SIEVE.get(),
-            EBlocks.COMET_SIEVE.get(),
-            EBlocks.LUNAR_SIEVE.get(),
-            EBlocks.DUSK_SIEVE.get(),
-            EBlocks.MAPLE_SIEVE.get(),
-            EBlocks.CRYSTALLIZED_SIEVE.get()
-    ).build(null));
+    public static final RegistryObject<BlockEntityType<BarrelBlockEntity>> BARREL = BLOCK_ENTITIES.register("barrel", () -> DefaultMaterials.BARRELS.createBlockEntityType(BarrelBlockEntity::new));
+    public static final RegistryObject<BlockEntityType<SieveBlockEntity>> SIEVE = BLOCK_ENTITIES.register("sieve", () -> DefaultMaterials.SIEVES.createBlockEntityType(SieveBlockEntity::new));
     public static final RegistryObject<BlockEntityType<MechanicalSieveBlockEntity>> MECHANICAL_SIEVE = BLOCK_ENTITIES.register("mechanical_sieve", () -> BlockEntityType.Builder.of(MechanicalSieveBlockEntity::new, EBlocks.MECHANICAL_SIEVE.get()).build(null));
     public static final RegistryObject<BlockEntityType<MechanicalHammerBlockEntity>> MECHANICAL_HAMMER = BLOCK_ENTITIES.register("mechanical_hammer", () -> BlockEntityType.Builder.of(MechanicalHammerBlockEntity::new, EBlocks.MECHANICAL_HAMMER.get()).build(null));
 }

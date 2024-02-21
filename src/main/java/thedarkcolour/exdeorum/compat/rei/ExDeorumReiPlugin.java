@@ -38,7 +38,7 @@ public class ExDeorumReiPlugin implements REIClientPlugin {
             for (var barrel : CompatHelper.getAvailableBarrels(false)) {
                 builder.add(EntryStack.of(VanillaEntryTypes.ITEM, new ItemStack(barrel)));
             }
-            for (var sieve : CompatHelper.getAvailableSieves(false)) {
+            for (var sieve : CompatHelper.getAvailableSieves(false, false)) {
                 builder.add(EntryStack.of(VanillaEntryTypes.ITEM, new ItemStack(sieve)));
             }
             for (var crucible : CompatHelper.getAvailableLavaCrucibles(false)) {

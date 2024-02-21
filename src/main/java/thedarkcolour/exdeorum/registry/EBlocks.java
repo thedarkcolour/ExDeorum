@@ -46,42 +46,6 @@ public class EBlocks {
     public static final RegistryObject<Block> CRUSHED_DEEPSLATE = BLOCKS.register("crushed_deepslate", () -> new FallingBlock(of().mapColor(DyeColor.GRAY).sound(SoundType.SAND).strength(0.8f)));
     public static final RegistryObject<Block> CRUSHED_BLACKSTONE = BLOCKS.register("crushed_blackstone", () -> new FallingBlock(of().mapColor(DyeColor.BLACK).sound(SoundType.SAND).strength(0.6f)));
 
-    // Sieves
-    public static final RegistryObject<SieveBlock> OAK_SIEVE = registerSieve("oak_sieve");
-    public static final RegistryObject<SieveBlock> SPRUCE_SIEVE = registerSieve("spruce_sieve");
-    public static final RegistryObject<SieveBlock> BIRCH_SIEVE = registerSieve("birch_sieve");
-    public static final RegistryObject<SieveBlock> JUNGLE_SIEVE = registerSieve("jungle_sieve");
-    public static final RegistryObject<SieveBlock> ACACIA_SIEVE = registerSieve("acacia_sieve");
-    public static final RegistryObject<SieveBlock> DARK_OAK_SIEVE = registerSieve("dark_oak_sieve");
-    public static final RegistryObject<SieveBlock> MANGROVE_SIEVE = registerSieve("mangrove_sieve");
-    public static final RegistryObject<SieveBlock> CHERRY_SIEVE = registerSieve("cherry_sieve");
-    public static final RegistryObject<SieveBlock> BAMBOO_SIEVE = registerSieve("bamboo_sieve", SoundType.BAMBOO_WOOD);
-    public static final RegistryObject<SieveBlock> CRIMSON_SIEVE = registerSieve("crimson_sieve");
-    public static final RegistryObject<SieveBlock> WARPED_SIEVE = registerSieve("warped_sieve");
-    // BOP Sieves
-    public static final RegistryObject<SieveBlock> FIR_SIEVE = registerSieve("fir_sieve");
-    public static final RegistryObject<SieveBlock> REDWOOD_SIEVE = registerSieve("redwood_sieve");
-    public static final RegistryObject<SieveBlock> MAHOGANY_SIEVE = registerSieve("mahogany_sieve");
-    public static final RegistryObject<SieveBlock> JACARANDA_SIEVE = registerSieve("jacaranda_sieve");
-    public static final RegistryObject<SieveBlock> PALM_SIEVE = registerSieve("palm_sieve");
-    public static final RegistryObject<SieveBlock> WILLOW_SIEVE = registerSieve("willow_sieve");
-    public static final RegistryObject<SieveBlock> DEAD_SIEVE = registerSieve("dead_sieve");
-    public static final RegistryObject<SieveBlock> MAGIC_SIEVE = registerSieve("magic_sieve");
-    public static final RegistryObject<SieveBlock> UMBRAN_SIEVE = registerSieve("umbran_sieve");
-    public static final RegistryObject<SieveBlock> HELLBARK_SIEVE = registerSieve("hellbark_sieve");
-    // Ars Nouveau Sieves
-    public static final RegistryObject<SieveBlock> ARCHWOOD_SIEVE = registerSieve("archwood_sieve");
-    // Aether Sieves
-    public static final RegistryObject<SieveBlock> SKYROOT_SIEVE = registerSieve("skyroot_sieve");
-    // Blue Skies Sieves
-    public static final RegistryObject<SieveBlock> BLUEBRIGHT_SIEVE = registerSieve("bluebright_sieve");
-    public static final RegistryObject<SieveBlock> STARLIT_SIEVE = registerSieve("starlit_sieve");
-    public static final RegistryObject<SieveBlock> FROSTBRIGHT_SIEVE = registerSieve("frostbright_sieve");
-    public static final RegistryObject<SieveBlock> COMET_SIEVE = registerSieve("comet_sieve");
-    public static final RegistryObject<SieveBlock> LUNAR_SIEVE = registerSieve("lunar_sieve");
-    public static final RegistryObject<SieveBlock> DUSK_SIEVE = registerSieve("dusk_sieve");
-    public static final RegistryObject<SieveBlock> MAPLE_SIEVE = registerSieve("maple_sieve");
-    public static final RegistryObject<SieveBlock> CRYSTALLIZED_SIEVE = registerSieve("crystallized_sieve", SoundType.GLASS);
     // Mechanical Sieve
     public static final RegistryObject<MechanicalSieveBlock> MECHANICAL_SIEVE = BLOCKS.register("mechanical_sieve", () -> new MechanicalSieveBlock(of().mapColor(MapColor.METAL).requiresCorrectToolForDrops().strength(5f, 1200f)));
     // Mechanical Hammer

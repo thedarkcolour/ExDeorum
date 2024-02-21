@@ -21,7 +21,7 @@ package thedarkcolour.exdeorum.compat;
 import com.google.common.collect.Lists;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.fml.ModList;
-import thedarkcolour.exdeorum.material.BarrelMaterial;
+import thedarkcolour.exdeorum.material.DefaultMaterials;
 import thedarkcolour.exdeorum.registry.EItems;
 
 import java.util.ArrayList;
@@ -30,7 +30,7 @@ import java.util.List;
 public class CompatHelper {
     public static List<Item> getAvailableBarrels(boolean registered) {
         List<Item> barrels = new ArrayList<>();
-        for (var material : BarrelMaterial.REGISTERED_MATERIALS) {
+        for (var material : DefaultMaterials.BARRELS) {
             if (registered == ModList.get().isLoaded(material.requiredModId)) {
                 barrels.add(material.getItem());
             }
@@ -38,49 +38,15 @@ public class CompatHelper {
         return barrels;
     }
 
-    public static List<Item> getAvailableSieves(boolean registered) {
-        List<Item> sieves = registered ? Lists.newArrayList(
-                EItems.OAK_SIEVE.get(),
-                EItems.SPRUCE_SIEVE.get(),
-                EItems.BIRCH_SIEVE.get(),
-                EItems.JUNGLE_SIEVE.get(),
-                EItems.ACACIA_SIEVE.get(),
-                EItems.DARK_OAK_SIEVE.get(),
-                EItems.MANGROVE_SIEVE.get(),
-                EItems.CHERRY_SIEVE.get(),
-                EItems.BAMBOO_SIEVE.get(),
-                EItems.CRIMSON_SIEVE.get(),
-                EItems.WARPED_SIEVE.get(),
-                EItems.MECHANICAL_SIEVE.get()
-        ) : new ArrayList<>();
-
-        if (ModList.get().isLoaded(ModIds.BIOMES_O_PLENTY) == registered) {
-            sieves.add(EItems.FIR_SIEVE.get());
-            sieves.add(EItems.REDWOOD_SIEVE.get());
-            sieves.add(EItems.MAHOGANY_SIEVE.get());
-            sieves.add(EItems.JACARANDA_SIEVE.get());
-            sieves.add(EItems.PALM_SIEVE.get());
-            sieves.add(EItems.WILLOW_SIEVE.get());
-            sieves.add(EItems.DEAD_SIEVE.get());
-            sieves.add(EItems.MAGIC_SIEVE.get());
-            sieves.add(EItems.UMBRAN_SIEVE.get());
-            sieves.add(EItems.HELLBARK_SIEVE.get());
+    public static List<Item> getAvailableSieves(boolean registered, boolean includeMechanical) {
+        List<Item> sieves = new ArrayList<>();
+        for (var material : DefaultMaterials.SIEVES) {
+            if (registered == ModList.get().isLoaded(material.requiredModId)) {
+                sieves.add(material.getItem());
+            }
         }
-        if (ModList.get().isLoaded(ModIds.ARS_NOUVEAU) == registered) {
-            sieves.add(EItems.ARCHWOOD_SIEVE.get());
-        }
-        if (ModList.get().isLoaded(ModIds.AETHER) == registered) {
-            sieves.add(EItems.SKYROOT_SIEVE.get());
-        }
-        if (ModList.get().isLoaded(ModIds.BLUE_SKIES) == registered) {
-            sieves.add(EItems.BLUEBRIGHT_SIEVE.get());
-            sieves.add(EItems.STARLIT_SIEVE.get());
-            sieves.add(EItems.FROSTBRIGHT_SIEVE.get());
-            sieves.add(EItems.COMET_SIEVE.get());
-            sieves.add(EItems.LUNAR_SIEVE.get());
-            sieves.add(EItems.DUSK_SIEVE.get());
-            sieves.add(EItems.MAPLE_SIEVE.get());
-            sieves.add(EItems.CRYSTALLIZED_SIEVE.get());
+        if (includeMechanical) {
+            sieves.add(EItems.MECHANICAL_SIEVE.get());
         }
 
         return sieves;

@@ -214,38 +214,38 @@ public class Recipes {
         grid2x2TagResult(writer, recipes, EItemTags.ORES_BORON, ingredient(EItems.BORON_ORE_CHUNK));
 
         // Sieves
-        sieve(recipes, EItems.OAK_SIEVE, Items.OAK_PLANKS, Items.OAK_SLAB);
-        sieve(recipes, EItems.SPRUCE_SIEVE, Items.SPRUCE_PLANKS, Items.SPRUCE_SLAB);
-        sieve(recipes, EItems.BIRCH_SIEVE, Items.BIRCH_PLANKS, Items.BIRCH_SLAB);
-        sieve(recipes, EItems.JUNGLE_SIEVE, Items.JUNGLE_PLANKS, Items.JUNGLE_SLAB);
-        sieve(recipes, EItems.ACACIA_SIEVE, Items.ACACIA_PLANKS, Items.ACACIA_SLAB);
-        sieve(recipes, EItems.DARK_OAK_SIEVE, Items.DARK_OAK_PLANKS, Items.DARK_OAK_SLAB);
-        sieve(recipes, EItems.MANGROVE_SIEVE, Items.MANGROVE_PLANKS, Items.MANGROVE_SLAB);
-        sieve(recipes, EItems.CHERRY_SIEVE, Items.CHERRY_PLANKS, Items.CHERRY_SLAB);
-        sieve(recipes, EItems.BAMBOO_SIEVE, Items.BAMBOO_PLANKS, Items.BAMBOO_SLAB);
-        sieve(recipes, EItems.CRIMSON_SIEVE, Items.CRIMSON_PLANKS, Items.CRIMSON_SLAB);
-        sieve(recipes, EItems.WARPED_SIEVE, Items.WARPED_PLANKS, Items.WARPED_SLAB);
+        sieve(recipes, DefaultMaterials.OAK_SIEVE.getItem(), Items.OAK_PLANKS, Items.OAK_SLAB);
+        sieve(recipes, DefaultMaterials.SPRUCE_SIEVE.getItem(), Items.SPRUCE_PLANKS, Items.SPRUCE_SLAB);
+        sieve(recipes, DefaultMaterials.BIRCH_SIEVE.getItem(), Items.BIRCH_PLANKS, Items.BIRCH_SLAB);
+        sieve(recipes, DefaultMaterials.JUNGLE_SIEVE.getItem(), Items.JUNGLE_PLANKS, Items.JUNGLE_SLAB);
+        sieve(recipes, DefaultMaterials.ACACIA_SIEVE.getItem(), Items.ACACIA_PLANKS, Items.ACACIA_SLAB);
+        sieve(recipes, DefaultMaterials.DARK_OAK_SIEVE.getItem(), Items.DARK_OAK_PLANKS, Items.DARK_OAK_SLAB);
+        sieve(recipes, DefaultMaterials.MANGROVE_SIEVE.getItem(), Items.MANGROVE_PLANKS, Items.MANGROVE_SLAB);
+        sieve(recipes, DefaultMaterials.CHERRY_SIEVE.getItem(), Items.CHERRY_PLANKS, Items.CHERRY_SLAB);
+        sieve(recipes, DefaultMaterials.BAMBOO_SIEVE.getItem(), Items.BAMBOO_PLANKS, Items.BAMBOO_SLAB);
+        sieve(recipes, DefaultMaterials.CRIMSON_SIEVE.getItem(), Items.CRIMSON_PLANKS, Items.CRIMSON_SLAB);
+        sieve(recipes, DefaultMaterials.WARPED_SIEVE.getItem(), Items.WARPED_PLANKS, Items.WARPED_SLAB);
         // Modded sieves
-        modSieve(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.FIR_PLANKS_ITEM, ModCompatData.FIR_SLAB, EItems.FIR_SIEVE);
-        modSieve(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.REDWOOD_PLANKS_ITEM, ModCompatData.REDWOOD_SLAB, EItems.REDWOOD_SIEVE);
-        modSieve(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.MAHOGANY_PLANKS_ITEM, ModCompatData.MAHOGANY_SLAB, EItems.MAHOGANY_SIEVE);
-        modSieve(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.JACARANDA_PLANKS_ITEM, ModCompatData.JACARANDA_SLAB, EItems.JACARANDA_SIEVE);
-        modSieve(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.PALM_PLANKS_ITEM, ModCompatData.PALM_SLAB, EItems.PALM_SIEVE);
-        modSieve(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.WILLOW_PLANKS_ITEM, ModCompatData.WILLOW_SLAB, EItems.WILLOW_SIEVE);
-        modSieve(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.DEAD_PLANKS_ITEM, ModCompatData.DEAD_SLAB, EItems.DEAD_SIEVE);
-        modSieve(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.MAGIC_PLANKS_ITEM, ModCompatData.MAGIC_SLAB, EItems.MAGIC_SIEVE);
-        modSieve(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.UMBRAN_PLANKS_ITEM, ModCompatData.UMBRAN_SLAB, EItems.UMBRAN_SIEVE);
-        modSieve(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.HELLBARK_PLANKS_ITEM, ModCompatData.HELLBARK_SLAB, EItems.HELLBARK_SIEVE);
-        modSieve(recipes, ModIds.ARS_NOUVEAU, ModCompatData.ARCHWOOD_PLANKS_ITEM, ModCompatData.ARCHWOOD_SLAB,  EItems.ARCHWOOD_SIEVE);
-        modSieve(recipes, ModIds.AETHER, ModCompatData.SKYROOT_PLANKS_ITEM, ModCompatData.SKYROOT_SLAB, EItems.SKYROOT_SIEVE);
-        modSieve(recipes, ModIds.BLUE_SKIES, ModCompatData.BLUEBRIGHT_PLANKS_ITEM, ModCompatData.BLUEBRIGHT_SLAB, EItems.BLUEBRIGHT_SIEVE);
-        modSieve(recipes, ModIds.BLUE_SKIES, ModCompatData.STARLIT_PLANKS_ITEM, ModCompatData.STARLIT_SLAB, EItems.STARLIT_SIEVE);
-        modSieve(recipes, ModIds.BLUE_SKIES, ModCompatData.FROSTBRIGHT_PLANKS_ITEM, ModCompatData.FROSTBRIGHT_SLAB, EItems.FROSTBRIGHT_SIEVE);
-        modSieve(recipes, ModIds.BLUE_SKIES, ModCompatData.COMET_PLANKS_ITEM, ModCompatData.COMET_SLAB, EItems.COMET_SIEVE);
-        modSieve(recipes, ModIds.BLUE_SKIES, ModCompatData.LUNAR_PLANKS_ITEM, ModCompatData.LUNAR_SLAB, EItems.LUNAR_SIEVE);
-        modSieve(recipes, ModIds.BLUE_SKIES, ModCompatData.DUSK_PLANKS_ITEM, ModCompatData.DUSK_SLAB, EItems.DUSK_SIEVE);
-        modSieve(recipes, ModIds.BLUE_SKIES, ModCompatData.MAPLE_PLANKS_ITEM, ModCompatData.MAPLE_SLAB, EItems.MAPLE_SIEVE);
-        modSieve(recipes, ModIds.BLUE_SKIES, ModCompatData.CRYSTALLIZED_PLANKS_ITEM, ModCompatData.CRYSTALLIZED_SLAB, EItems.CRYSTALLIZED_SIEVE);
+        modSieve(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.FIR_PLANKS_ITEM, ModCompatData.FIR_SLAB, DefaultMaterials.FIR_SIEVE.getItem());
+        modSieve(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.REDWOOD_PLANKS_ITEM, ModCompatData.REDWOOD_SLAB, DefaultMaterials.REDWOOD_SIEVE.getItem());
+        modSieve(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.MAHOGANY_PLANKS_ITEM, ModCompatData.MAHOGANY_SLAB, DefaultMaterials.MAHOGANY_SIEVE.getItem());
+        modSieve(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.JACARANDA_PLANKS_ITEM, ModCompatData.JACARANDA_SLAB, DefaultMaterials.JACARANDA_SIEVE.getItem());
+        modSieve(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.PALM_PLANKS_ITEM, ModCompatData.PALM_SLAB, DefaultMaterials.PALM_SIEVE.getItem());
+        modSieve(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.WILLOW_PLANKS_ITEM, ModCompatData.WILLOW_SLAB, DefaultMaterials.WILLOW_SIEVE.getItem());
+        modSieve(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.DEAD_PLANKS_ITEM, ModCompatData.DEAD_SLAB, DefaultMaterials.DEAD_SIEVE.getItem());
+        modSieve(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.MAGIC_PLANKS_ITEM, ModCompatData.MAGIC_SLAB, DefaultMaterials.MAGIC_SIEVE.getItem());
+        modSieve(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.UMBRAN_PLANKS_ITEM, ModCompatData.UMBRAN_SLAB, DefaultMaterials.UMBRAN_SIEVE.getItem());
+        modSieve(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.HELLBARK_PLANKS_ITEM, ModCompatData.HELLBARK_SLAB, DefaultMaterials.HELLBARK_SIEVE.getItem());
+        modSieve(recipes, ModIds.ARS_NOUVEAU, ModCompatData.ARCHWOOD_PLANKS_ITEM, ModCompatData.ARCHWOOD_SLAB,  DefaultMaterials.ARCHWOOD_SIEVE.getItem());
+        modSieve(recipes, ModIds.AETHER, ModCompatData.SKYROOT_PLANKS_ITEM, ModCompatData.SKYROOT_SLAB, DefaultMaterials.SKYROOT_SIEVE.getItem());
+        modSieve(recipes, ModIds.BLUE_SKIES, ModCompatData.BLUEBRIGHT_PLANKS_ITEM, ModCompatData.BLUEBRIGHT_SLAB, DefaultMaterials.BLUEBRIGHT_SIEVE.getItem());
+        modSieve(recipes, ModIds.BLUE_SKIES, ModCompatData.STARLIT_PLANKS_ITEM, ModCompatData.STARLIT_SLAB, DefaultMaterials.STARLIT_SIEVE.getItem());
+        modSieve(recipes, ModIds.BLUE_SKIES, ModCompatData.FROSTBRIGHT_PLANKS_ITEM, ModCompatData.FROSTBRIGHT_SLAB, DefaultMaterials.FROSTBRIGHT_SIEVE.getItem());
+        modSieve(recipes, ModIds.BLUE_SKIES, ModCompatData.COMET_PLANKS_ITEM, ModCompatData.COMET_SLAB, DefaultMaterials.COMET_SIEVE.getItem());
+        modSieve(recipes, ModIds.BLUE_SKIES, ModCompatData.LUNAR_PLANKS_ITEM, ModCompatData.LUNAR_SLAB, DefaultMaterials.LUNAR_SIEVE.getItem());
+        modSieve(recipes, ModIds.BLUE_SKIES, ModCompatData.DUSK_PLANKS_ITEM, ModCompatData.DUSK_SLAB, DefaultMaterials.DUSK_SIEVE.getItem());
+        modSieve(recipes, ModIds.BLUE_SKIES, ModCompatData.MAPLE_PLANKS_ITEM, ModCompatData.MAPLE_SLAB, DefaultMaterials.MAPLE_SIEVE.getItem());
+        modSieve(recipes, ModIds.BLUE_SKIES, ModCompatData.CRYSTALLIZED_PLANKS_ITEM, ModCompatData.CRYSTALLIZED_SLAB, DefaultMaterials.CRYSTALLIZED_SIEVE.getItem());
 
         // Meshes
         recipes.grid3x3(EItems.STRING_MESH.get(), ingredient(Tags.Items.STRING));
@@ -327,8 +327,8 @@ public class Recipes {
         });
     }
 
-    private static void modSieve(MKRecipeProvider recipes, String modid, RegistryObject<? extends Item> planks, RegistryObject<? extends Item> slab, RegistryObject<? extends Item> result) {
-        recipes.conditional(result.getId().getPath(), List.of(modInstalled(modid)), writer1 -> {
+    private static void modSieve(MKRecipeProvider recipes, String modid, RegistryObject<? extends Item> planks, RegistryObject<? extends Item> slab, Item result) {
+        recipes.conditional(path(result), List.of(modInstalled(modid)), writer1 -> {
             sieve(recipes, result, planks.get(), slab.get());
         });
     }
@@ -375,8 +375,8 @@ public class Recipes {
         });
     }
 
-    private static void sieve(MKRecipeProvider recipes, Supplier<? extends Item> result, Item planks, Item slab) {
-        recipes.shapedCrafting(RecipeCategory.MISC, result.get(), recipe -> {
+    private static void sieve(MKRecipeProvider recipes, Item result, Item planks, Item slab) {
+        recipes.shapedCrafting(RecipeCategory.MISC, result, recipe -> {
             recipe.define('O', planks);
             recipe.define('_', slab);
             recipe.define('I', Tags.Items.RODS_WOODEN);

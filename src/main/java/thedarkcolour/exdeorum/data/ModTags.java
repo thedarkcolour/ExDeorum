@@ -34,6 +34,7 @@ import net.minecraft.world.level.material.Fluid;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.material.BarrelMaterial;
 import thedarkcolour.exdeorum.material.DefaultMaterials;
+import thedarkcolour.exdeorum.material.SieveMaterial;
 import thedarkcolour.exdeorum.registry.EBlocks;
 import thedarkcolour.exdeorum.registry.EFluids;
 import thedarkcolour.exdeorum.registry.EItems;
@@ -50,7 +51,7 @@ class ModTags {
     private static final List<BarrelMaterial> WOODEN_BARRELS = new ArrayList<>();
 
     static {
-        for (var material : BarrelMaterial.REGISTERED_MATERIALS) {
+        for (var material : DefaultMaterials.BARRELS) {
             if (!STONE_MATERIALS.contains(material)) {
                 WOODEN_BARRELS.add(material);
             }
@@ -64,17 +65,10 @@ class ModTags {
             wateringCanTickable.addOptional(path);
         }
 
-        tags.tag(BlockTags.MINEABLE_WITH_AXE).add(WOODEN_BARRELS.stream().map(BarrelMaterial::getBlock).toArray(Block[]::new)).add(
-                // Vanilla sieves
-                EBlocks.OAK_SIEVE.get(), EBlocks.SPRUCE_SIEVE.get(), EBlocks.BIRCH_SIEVE.get(), EBlocks.JUNGLE_SIEVE.get(), EBlocks.ACACIA_SIEVE.get(), EBlocks.DARK_OAK_SIEVE.get(), EBlocks.MANGROVE_SIEVE.get(), EBlocks.CHERRY_SIEVE.get(), EBlocks.BAMBOO_SIEVE.get(), EBlocks.CRIMSON_SIEVE.get(), EBlocks.WARPED_SIEVE.get(),
-                // BOP sieves
-                EBlocks.FIR_SIEVE.get(), EBlocks.REDWOOD_SIEVE.get(), EBlocks.MAHOGANY_SIEVE.get(), EBlocks.JACARANDA_SIEVE.get(), EBlocks.PALM_SIEVE.get(), EBlocks.WILLOW_SIEVE.get(), EBlocks.DEAD_SIEVE.get(), EBlocks.MAGIC_SIEVE.get(), EBlocks.UMBRAN_SIEVE.get(), EBlocks.HELLBARK_SIEVE.get(),
-                // Ars Nouveau sieves
-                EBlocks.ARCHWOOD_SIEVE.get(),
-                // Aether sieves
-                EBlocks.SKYROOT_SIEVE.get(),
-                // Blue Skies sieves
-                EBlocks.BLUEBRIGHT_SIEVE.get(), EBlocks.STARLIT_SIEVE.get(), EBlocks.FROSTBRIGHT_SIEVE.get(), EBlocks.COMET_SIEVE.get(), EBlocks.LUNAR_SIEVE.get(), EBlocks.DUSK_SIEVE.get(), EBlocks.MAPLE_SIEVE.get(),
+        tags.tag(BlockTags.MINEABLE_WITH_AXE)
+                .add(WOODEN_BARRELS.stream().map(BarrelMaterial::getBlock).toArray(Block[]::new))
+                .add(DefaultMaterials.SIEVES.stream().filter(material -> material != DefaultMaterials.CRYSTALLIZED_SIEVE).map(SieveMaterial::getBlock).toArray(Block[]::new))
+                .add(
                 // Vanilla crucibles
                 EBlocks.WARPED_CRUCIBLE.get(), EBlocks.CRIMSON_CRUCIBLE.get(), EBlocks.OAK_CRUCIBLE.get(), EBlocks.SPRUCE_CRUCIBLE.get(), EBlocks.BIRCH_CRUCIBLE.get(), EBlocks.JUNGLE_CRUCIBLE.get(), EBlocks.ACACIA_CRUCIBLE.get(), EBlocks.DARK_OAK_CRUCIBLE.get(), EBlocks.MANGROVE_CRUCIBLE.get(), EBlocks.CHERRY_CRUCIBLE.get(), EBlocks.BAMBOO_CRUCIBLE.get(),
                 // BOP crucibles
@@ -87,8 +81,8 @@ class ModTags {
                 EBlocks.BLUEBRIGHT_CRUCIBLE.get(), EBlocks.STARLIT_CRUCIBLE.get(), EBlocks.FROSTBRIGHT_CRUCIBLE.get(), EBlocks.COMET_CRUCIBLE.get(), EBlocks.LUNAR_CRUCIBLE.get(), EBlocks.DUSK_CRUCIBLE.get(), EBlocks.MAPLE_CRUCIBLE.get()
         );
         tags.tag(BlockTags.MINEABLE_WITH_PICKAXE)
-                .add(EBlocks.PORCELAIN_CRUCIBLE, EBlocks.UNFIRED_PORCELAIN_CRUCIBLE, EBlocks.CRYSTALLIZED_CRUCIBLE, EBlocks.CRYSTALLIZED_SIEVE, EBlocks.MECHANICAL_SIEVE, EBlocks.MECHANICAL_HAMMER)
-                .add(DefaultMaterials.STONE_BARREL.getBlock(), DefaultMaterials.CRYSTALLIZED_BARREL.getBlock());
+                .add(EBlocks.PORCELAIN_CRUCIBLE, EBlocks.UNFIRED_PORCELAIN_CRUCIBLE, EBlocks.CRYSTALLIZED_CRUCIBLE, EBlocks.MECHANICAL_SIEVE, EBlocks.MECHANICAL_HAMMER)
+                .add(DefaultMaterials.STONE_BARREL.getBlock(), DefaultMaterials.CRYSTALLIZED_BARREL.getBlock(), DefaultMaterials.CRYSTALLIZED_SIEVE.getBlock());
         tags.tag(BlockTags.MINEABLE_WITH_SHOVEL).add(EBlocks.DUST, EBlocks.CRUSHED_NETHERRACK, EBlocks.CRUSHED_END_STONE, EBlocks.CRUSHED_DEEPSLATE, EBlocks.CRUSHED_BLACKSTONE);
         tags.tag(BlockTags.MINEABLE_WITH_HOE).add(EBlocks.INFESTED_LEAVES);
         tags.tag(BlockTags.LEAVES).add(EBlocks.INFESTED_LEAVES);

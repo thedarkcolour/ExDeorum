@@ -1,7 +1,7 @@
-// 1.20.1	2024-02-01T18:59:58.282244	Tags for minecraft:block mod id exdeorum
+// 1.20.1	2024-02-21T14:54:39.5258231	Tags for minecraft:block mod id exdeorum
 77dfab311d3714c77bcac2df0397d23d4707f03b data/exdeorum/tags/blocks/watering_can_tickable.json
 f6a9610ebae09549baf17e27200037cd17318055 data/minecraft/tags/blocks/leaves.json
 6118dd1a976e5c95335fe0271c784eef3dac5bf5 data/minecraft/tags/blocks/mineable/axe.json
 f6a9610ebae09549baf17e27200037cd17318055 data/minecraft/tags/blocks/mineable/hoe.json
-0cdcc5fc12eebe1808d6af184772b92e587e853f data/minecraft/tags/blocks/mineable/pickaxe.json
+1fc4853812de00ec64713040f42af2e37b581955 data/minecraft/tags/blocks/mineable/pickaxe.json
 0fc927ffe01dd23fd511dea057c7894680ae9807 data/minecraft/tags/blocks/mineable/shovel.json

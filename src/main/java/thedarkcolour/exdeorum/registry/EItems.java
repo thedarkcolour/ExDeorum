@@ -19,11 +19,7 @@
 package thedarkcolour.exdeorum.registry;
 
 import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.Tiers;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.Fluids;
@@ -34,7 +30,7 @@ import net.minecraftforge.registries.RegistryObject;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.compat.ModIds;
 import thedarkcolour.exdeorum.item.*;
-import thedarkcolour.exdeorum.material.BarrelMaterial;
+import thedarkcolour.exdeorum.material.DefaultMaterials;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.tag.EItemTags;
 
@@ -150,42 +146,6 @@ public class EItems {
     public static final RegistryObject<BlockItem> CRUSHED_DEEPSLATE = registerItemBlock(EBlocks.CRUSHED_DEEPSLATE);
     public static final RegistryObject<BlockItem> CRUSHED_BLACKSTONE = registerItemBlock(EBlocks.CRUSHED_BLACKSTONE);
 
-    // Sieves
-    public static final RegistryObject<BlockItem> OAK_SIEVE = registerItemBlock(EBlocks.OAK_SIEVE);
-    public static final RegistryObject<BlockItem> SPRUCE_SIEVE = registerItemBlock(EBlocks.SPRUCE_SIEVE);
-    public static final RegistryObject<BlockItem> BIRCH_SIEVE = registerItemBlock(EBlocks.BIRCH_SIEVE);
-    public static final RegistryObject<BlockItem> JUNGLE_SIEVE = registerItemBlock(EBlocks.JUNGLE_SIEVE);
-    public static final RegistryObject<BlockItem> ACACIA_SIEVE = registerItemBlock(EBlocks.ACACIA_SIEVE);
-    public static final RegistryObject<BlockItem> DARK_OAK_SIEVE = registerItemBlock(EBlocks.DARK_OAK_SIEVE);
-    public static final RegistryObject<BlockItem> MANGROVE_SIEVE = registerItemBlock(EBlocks.MANGROVE_SIEVE);
-    public static final RegistryObject<BlockItem> CHERRY_SIEVE = registerItemBlock(EBlocks.CHERRY_SIEVE);
-    public static final RegistryObject<BlockItem> BAMBOO_SIEVE = registerItemBlock(EBlocks.BAMBOO_SIEVE);
-    public static final RegistryObject<BlockItem> CRIMSON_SIEVE = registerItemBlock(EBlocks.CRIMSON_SIEVE);
-    public static final RegistryObject<BlockItem> WARPED_SIEVE = registerItemBlock(EBlocks.WARPED_SIEVE);
-    // BOP Sieves
-    public static final RegistryObject<BlockItem> FIR_SIEVE = registerItemBlock(EBlocks.FIR_SIEVE);
-    public static final RegistryObject<BlockItem> REDWOOD_SIEVE = registerItemBlock(EBlocks.REDWOOD_SIEVE);
-    public static final RegistryObject<BlockItem> MAHOGANY_SIEVE = registerItemBlock(EBlocks.MAHOGANY_SIEVE);
-    public static final RegistryObject<BlockItem> JACARANDA_SIEVE = registerItemBlock(EBlocks.JACARANDA_SIEVE);
-    public static final RegistryObject<BlockItem> PALM_SIEVE = registerItemBlock(EBlocks.PALM_SIEVE);
-    public static final RegistryObject<BlockItem> WILLOW_SIEVE = registerItemBlock(EBlocks.WILLOW_SIEVE);
-    public static final RegistryObject<BlockItem> DEAD_SIEVE = registerItemBlock(EBlocks.DEAD_SIEVE);
-    public static final RegistryObject<BlockItem> MAGIC_SIEVE = registerItemBlock(EBlocks.MAGIC_SIEVE);
-    public static final RegistryObject<BlockItem> UMBRAN_SIEVE = registerItemBlock(EBlocks.UMBRAN_SIEVE);
-    public static final RegistryObject<BlockItem> HELLBARK_SIEVE = registerItemBlock(EBlocks.HELLBARK_SIEVE);
-    // Ars Nouveau Sieves
-    public static final RegistryObject<BlockItem> ARCHWOOD_SIEVE = registerItemBlock(EBlocks.ARCHWOOD_SIEVE);
-    // Aether Sieves
-    public static final RegistryObject<BlockItem> SKYROOT_SIEVE = registerItemBlock(EBlocks.SKYROOT_SIEVE);
-    // Blue Skies Sieves
-    public static final RegistryObject<BlockItem> BLUEBRIGHT_SIEVE = registerItemBlock(EBlocks.BLUEBRIGHT_SIEVE);
-    public static final RegistryObject<BlockItem> STARLIT_SIEVE = registerItemBlock(EBlocks.STARLIT_SIEVE);
-    public static final RegistryObject<BlockItem> FROSTBRIGHT_SIEVE = registerItemBlock(EBlocks.FROSTBRIGHT_SIEVE);
-    public static final RegistryObject<BlockItem> COMET_SIEVE = registerItemBlock(EBlocks.COMET_SIEVE);
-    public static final RegistryObject<BlockItem> LUNAR_SIEVE = registerItemBlock(EBlocks.LUNAR_SIEVE);
-    public static final RegistryObject<BlockItem> DUSK_SIEVE = registerItemBlock(EBlocks.DUSK_SIEVE);
-    public static final RegistryObject<BlockItem> MAPLE_SIEVE = registerItemBlock(EBlocks.MAPLE_SIEVE);
-    public static final RegistryObject<BlockItem> CRYSTALLIZED_SIEVE = registerItemBlock(EBlocks.CRYSTALLIZED_SIEVE);
     // Mechanical Sieves
     public static final RegistryObject<BlockItem> MECHANICAL_SIEVE = registerItemBlock(EBlocks.MECHANICAL_SIEVE);
     public static final RegistryObject<BlockItem> MECHANICAL_HAMMER = registerItemBlock(EBlocks.MECHANICAL_HAMMER);
@@ -247,52 +207,18 @@ public class EItems {
         boolean aether = ModList.get().isLoaded(ModIds.AETHER);
         boolean blueSkies = ModList.get().isLoaded(ModIds.BLUE_SKIES);
 
-        for (var material : BarrelMaterial.REGISTERED_MATERIALS) {
+        for (var material : DefaultMaterials.BARRELS) {
             if (ModList.get().isLoaded(material.requiredModId)) {
                 output.accept(material.getItem());
             }
         }
 
-        output.accept(OAK_SIEVE.get());
-        output.accept(SPRUCE_SIEVE.get());
-        output.accept(BIRCH_SIEVE.get());
-        output.accept(JUNGLE_SIEVE.get());
-        output.accept(ACACIA_SIEVE.get());
-        output.accept(DARK_OAK_SIEVE.get());
-        output.accept(MANGROVE_SIEVE.get());
-        output.accept(CHERRY_SIEVE.get());
-        output.accept(BAMBOO_SIEVE.get());
-        output.accept(CRIMSON_SIEVE.get());
-        output.accept(WARPED_SIEVE.get());
+        for (var material : DefaultMaterials.SIEVES) {
+            if (ModList.get().isLoaded(material.requiredModId)) {
+                output.accept(material.getItem());
+            }
+        }
 
-        if (biomesOPlenty) {
-            output.accept(FIR_SIEVE.get());
-            output.accept(REDWOOD_SIEVE.get());
-            output.accept(MAHOGANY_SIEVE.get());
-            output.accept(JACARANDA_SIEVE.get());
-            output.accept(PALM_SIEVE.get());
-            output.accept(WILLOW_SIEVE.get());
-            output.accept(DEAD_SIEVE.get());
-            output.accept(MAGIC_SIEVE.get());
-            output.accept(UMBRAN_SIEVE.get());
-            output.accept(HELLBARK_SIEVE.get());
-        }
-        if (arsNouveau) {
-            output.accept(ARCHWOOD_SIEVE.get());
-        }
-        if (aether) {
-            output.accept(SKYROOT_SIEVE.get());
-        }
-        if (blueSkies) {
-            output.accept(BLUEBRIGHT_SIEVE.get());
-            output.accept(STARLIT_SIEVE.get());
-            output.accept(FROSTBRIGHT_SIEVE.get());
-            output.accept(COMET_SIEVE.get());
-            output.accept(LUNAR_SIEVE.get());
-            output.accept(DUSK_SIEVE.get());
-            output.accept(MAPLE_SIEVE.get());
-            output.accept(CRYSTALLIZED_SIEVE.get());
-        }
         output.accept(MECHANICAL_SIEVE.get());
         output.accept(MECHANICAL_HAMMER.get());
 

@@ -52,17 +52,17 @@ class BlockModels {
         barrel(models, DefaultMaterials.WARPED_BARREL.getBlock(), Blocks.WARPED_PLANKS);
         barrel(models, DefaultMaterials.STONE_BARREL.getBlock(), Blocks.STONE);
 
-        sieve(models, EBlocks.OAK_SIEVE.get(), Blocks.OAK_PLANKS);
-        sieve(models, EBlocks.SPRUCE_SIEVE.get(), Blocks.SPRUCE_PLANKS);
-        sieve(models, EBlocks.BIRCH_SIEVE.get(), Blocks.BIRCH_PLANKS);
-        sieve(models, EBlocks.JUNGLE_SIEVE.get(), Blocks.JUNGLE_PLANKS);
-        sieve(models, EBlocks.ACACIA_SIEVE.get(), Blocks.ACACIA_PLANKS);
-        sieve(models, EBlocks.DARK_OAK_SIEVE.get(), Blocks.DARK_OAK_PLANKS);
-        sieve(models, EBlocks.MANGROVE_SIEVE.get(), Blocks.MANGROVE_PLANKS);
-        sieve(models, EBlocks.CHERRY_SIEVE.get(), Blocks.CHERRY_PLANKS);
-        sieve(models, EBlocks.BAMBOO_SIEVE.get(), Blocks.BAMBOO_PLANKS);
-        sieve(models, EBlocks.CRIMSON_SIEVE.get(), Blocks.CRIMSON_PLANKS);
-        sieve(models, EBlocks.WARPED_SIEVE.get(), Blocks.WARPED_PLANKS);
+        sieve(models, DefaultMaterials.OAK_SIEVE.getBlock(), Blocks.OAK_PLANKS);
+        sieve(models, DefaultMaterials.SPRUCE_SIEVE.getBlock(), Blocks.SPRUCE_PLANKS);
+        sieve(models, DefaultMaterials.BIRCH_SIEVE.getBlock(), Blocks.BIRCH_PLANKS);
+        sieve(models, DefaultMaterials.JUNGLE_SIEVE.getBlock(), Blocks.JUNGLE_PLANKS);
+        sieve(models, DefaultMaterials.ACACIA_SIEVE.getBlock(), Blocks.ACACIA_PLANKS);
+        sieve(models, DefaultMaterials.DARK_OAK_SIEVE.getBlock(), Blocks.DARK_OAK_PLANKS);
+        sieve(models, DefaultMaterials.MANGROVE_SIEVE.getBlock(), Blocks.MANGROVE_PLANKS);
+        sieve(models, DefaultMaterials.CHERRY_SIEVE.getBlock(), Blocks.CHERRY_PLANKS);
+        sieve(models, DefaultMaterials.BAMBOO_SIEVE.getBlock(), Blocks.BAMBOO_PLANKS);
+        sieve(models, DefaultMaterials.CRIMSON_SIEVE.getBlock(), Blocks.CRIMSON_PLANKS);
+        sieve(models, DefaultMaterials.WARPED_SIEVE.getBlock(), Blocks.WARPED_PLANKS);
 
         // Lava Crucible
         crucible(models, EBlocks.UNFIRED_PORCELAIN_CRUCIBLE.get());
@@ -91,7 +91,7 @@ class BlockModels {
     private static void arsNouveauModels(MKBlockModelProvider models) {
         barrel(models, DefaultMaterials.ARCHWOOD_BARREL.getBlock(), ModCompatData.ARCHWOOD_PLANKS.get());
 
-        sieve(models, EBlocks.ARCHWOOD_SIEVE.get(), ModCompatData.ARCHWOOD_PLANKS.get());
+        sieve(models, DefaultMaterials.ARCHWOOD_SIEVE.getBlock(), ModCompatData.ARCHWOOD_PLANKS.get());
 
         crucible(models, EBlocks.CASCADING_ARCHWOOD_CRUCIBLE.get(), ModCompatData.CASCADING_ARCHWOOD_LOG.get());
         crucible(models, EBlocks.BLAZING_ARCHWOOD_CRUCIBLE.get(), ModCompatData.BLAZING_ARCHWOOD_LOG.get());
@@ -102,7 +102,7 @@ class BlockModels {
     private static void aetherModels(MKBlockModelProvider models) {
         barrel(models, DefaultMaterials.SKYROOT_BARREL.getBlock(), ModCompatData.SKYROOT_PLANKS.get(), "construction/");
 
-        sieve(models, EBlocks.SKYROOT_SIEVE.get(), ModCompatData.SKYROOT_PLANKS.get(), "construction/");
+        sieve(models, DefaultMaterials.SKYROOT_SIEVE.getBlock(), ModCompatData.SKYROOT_PLANKS.get(), "construction/");
 
         crucible(models, EBlocks.SKYROOT_CRUCIBLE.get(), ModCompatData.SKYROOT_LOG.get(), "natural/", "");
         crucible(models, EBlocks.GOLDEN_OAK_CRUCIBLE.get(), ModCompatData.GOLDEN_OAK_LOG.get(), "natural/", "");
@@ -121,14 +121,14 @@ class BlockModels {
         barrel(models, DefaultMaterials.MAPLE_BARREL.getBlock(), ModCompatData.MAPLE_PLANKS.get(), woodPrefix);
         barrel(models, DefaultMaterials.CRYSTALLIZED_BARREL.getBlock(), ModCompatData.CRYSTALLIZED_PLANKS.get(), woodPrefix).renderType("translucent");
 
-        sieve(models, EBlocks.BLUEBRIGHT_SIEVE.get(), ModCompatData.BLUEBRIGHT_PLANKS.get(), woodPrefix);
-        sieve(models, EBlocks.STARLIT_SIEVE.get(), ModCompatData.STARLIT_PLANKS.get(), woodPrefix);
-        sieve(models, EBlocks.FROSTBRIGHT_SIEVE.get(), ModCompatData.FROSTBRIGHT_PLANKS.get(), woodPrefix);
-        sieve(models, EBlocks.COMET_SIEVE.get(), ModCompatData.COMET_PLANKS.get(), woodPrefix);
-        sieve(models, EBlocks.LUNAR_SIEVE.get(), ModCompatData.LUNAR_PLANKS.get(), woodPrefix);
-        sieve(models, EBlocks.DUSK_SIEVE.get(), ModCompatData.DUSK_PLANKS.get(), woodPrefix);
-        sieve(models, EBlocks.MAPLE_SIEVE.get(), ModCompatData.MAPLE_PLANKS.get(), woodPrefix);
-        sieve(models, EBlocks.CRYSTALLIZED_SIEVE.get(), ModCompatData.CRYSTALLIZED_PLANKS.get(), woodPrefix).renderType("translucent");
+        sieve(models, DefaultMaterials.BLUEBRIGHT_SIEVE.getBlock(), ModCompatData.BLUEBRIGHT_PLANKS.get(), woodPrefix);
+        sieve(models, DefaultMaterials.STARLIT_SIEVE.getBlock(), ModCompatData.STARLIT_PLANKS.get(), woodPrefix);
+        sieve(models, DefaultMaterials.FROSTBRIGHT_SIEVE.getBlock(), ModCompatData.FROSTBRIGHT_PLANKS.get(), woodPrefix);
+        sieve(models, DefaultMaterials.COMET_SIEVE.getBlock(), ModCompatData.COMET_PLANKS.get(), woodPrefix);
+        sieve(models, DefaultMaterials.LUNAR_SIEVE.getBlock(), ModCompatData.LUNAR_PLANKS.get(), woodPrefix);
+        sieve(models, DefaultMaterials.DUSK_SIEVE.getBlock(), ModCompatData.DUSK_PLANKS.get(), woodPrefix);
+        sieve(models, DefaultMaterials.MAPLE_SIEVE.getBlock(), ModCompatData.MAPLE_PLANKS.get(), woodPrefix);
+        sieve(models, DefaultMaterials.CRYSTALLIZED_SIEVE.getBlock(), ModCompatData.CRYSTALLIZED_PLANKS.get(), woodPrefix).renderType("translucent");
 
         crucible(models, EBlocks.BLUEBRIGHT_CRUCIBLE.get(), ModCompatData.BLUEBRIGHT_LOG.get(), woodPrefix, logSuffix);
         crucible(models, EBlocks.STARLIT_CRUCIBLE.get(), ModCompatData.STARLIT_LOG.get(), woodPrefix, logSuffix);
@@ -152,16 +152,16 @@ class BlockModels {
         barrel(models, DefaultMaterials.UMBRAN_BARREL.getBlock(), ModCompatData.UMBRAN_PLANKS.get());
         barrel(models, DefaultMaterials.HELLBARK_BARREL.getBlock(), ModCompatData.HELLBARK_PLANKS.get());
 
-        sieve(models, EBlocks.FIR_SIEVE.get(), ModCompatData.FIR_PLANKS.get());
-        sieve(models, EBlocks.REDWOOD_SIEVE.get(), ModCompatData.REDWOOD_PLANKS.get());
-        sieve(models, EBlocks.MAHOGANY_SIEVE.get(), ModCompatData.MAHOGANY_PLANKS.get());
-        sieve(models, EBlocks.JACARANDA_SIEVE.get(), ModCompatData.JACARANDA_PLANKS.get());
-        sieve(models, EBlocks.PALM_SIEVE.get(), ModCompatData.PALM_PLANKS.get());
-        sieve(models, EBlocks.WILLOW_SIEVE.get(), ModCompatData.WILLOW_PLANKS.get());
-        sieve(models, EBlocks.DEAD_SIEVE.get(), ModCompatData.DEAD_PLANKS.get());
-        sieve(models, EBlocks.MAGIC_SIEVE.get(), ModCompatData.MAGIC_PLANKS.get());
-        sieve(models, EBlocks.UMBRAN_SIEVE.get(), ModCompatData.UMBRAN_PLANKS.get());
-        sieve(models, EBlocks.HELLBARK_SIEVE.get(), ModCompatData.HELLBARK_PLANKS.get());
+        sieve(models, DefaultMaterials.FIR_SIEVE.getBlock(), ModCompatData.FIR_PLANKS.get());
+        sieve(models, DefaultMaterials.REDWOOD_SIEVE.getBlock(), ModCompatData.REDWOOD_PLANKS.get());
+        sieve(models, DefaultMaterials.MAHOGANY_SIEVE.getBlock(), ModCompatData.MAHOGANY_PLANKS.get());
+        sieve(models, DefaultMaterials.JACARANDA_SIEVE.getBlock(), ModCompatData.JACARANDA_PLANKS.get());
+        sieve(models, DefaultMaterials.PALM_SIEVE.getBlock(), ModCompatData.PALM_PLANKS.get());
+        sieve(models, DefaultMaterials.WILLOW_SIEVE.getBlock(), ModCompatData.WILLOW_PLANKS.get());
+        sieve(models, DefaultMaterials.DEAD_SIEVE.getBlock(), ModCompatData.DEAD_PLANKS.get());
+        sieve(models, DefaultMaterials.MAGIC_SIEVE.getBlock(), ModCompatData.MAGIC_PLANKS.get());
+        sieve(models, DefaultMaterials.UMBRAN_SIEVE.getBlock(), ModCompatData.UMBRAN_PLANKS.get());
+        sieve(models, DefaultMaterials.HELLBARK_SIEVE.getBlock(), ModCompatData.HELLBARK_PLANKS.get());
 
         crucible(models, EBlocks.FIR_CRUCIBLE.get(), ModCompatData.FIR_LOG.get());
         crucible(models, EBlocks.REDWOOD_CRUCIBLE.get(), ModCompatData.REDWOOD_LOG.get());
