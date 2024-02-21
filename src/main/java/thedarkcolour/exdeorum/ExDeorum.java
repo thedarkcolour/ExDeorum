@@ -34,17 +34,7 @@ import thedarkcolour.exdeorum.config.EConfig;
 import thedarkcolour.exdeorum.event.EventHandler;
 import thedarkcolour.exdeorum.material.DefaultMaterials;
 import thedarkcolour.exdeorum.network.NetworkHandler;
-import thedarkcolour.exdeorum.registry.EBlockEntities;
-import thedarkcolour.exdeorum.registry.EBlocks;
-import thedarkcolour.exdeorum.registry.ECreativeTabs;
-import thedarkcolour.exdeorum.registry.EFluids;
-import thedarkcolour.exdeorum.registry.EGlobalLootModifiers;
-import thedarkcolour.exdeorum.registry.EItems;
-import thedarkcolour.exdeorum.registry.ELootFunctions;
-import thedarkcolour.exdeorum.registry.EMenus;
-import thedarkcolour.exdeorum.registry.ERecipeSerializers;
-import thedarkcolour.exdeorum.registry.ERecipeTypes;
-import thedarkcolour.exdeorum.registry.EChunkGenerators;
+import thedarkcolour.exdeorum.registry.*;
 
 import java.util.Calendar;
 
@@ -89,6 +79,7 @@ public class ExDeorum {
         EMenus.MENUS.register(modBus);
         ERecipeSerializers.RECIPE_SERIALIZERS.register(modBus);
         ERecipeTypes.RECIPE_TYPES.register(modBus);
+        ENumberProviders.NUMBER_PROVIDERS.register(modBus);
         DefaultMaterials.registerMaterials();
     }
 
