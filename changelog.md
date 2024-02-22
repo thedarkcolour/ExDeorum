@@ -1,3 +1,9 @@
+## Ex Deorum 1.25
+- Fixed crash with fluid containers
+- Added `exdeorum:summation` result count type for sieve recipes, mostly for converting Ex Nihilo Sequentia recipes over (also usable for loot tables)
+- It is now possible to define custom barrel, crucible, and sieve types. This may be useful for modpack authors who want to add enhanced compatibility with Ex Deorum. Documentation will be available soon.
+- Fixed inconsistencies with barrel and sieve sounds
+
 ## Ex Deorum 1.24
 - Fixed water crucibles filling infinitely with rainwater. (PR #54 by CPearl0)
 - Add option (disabled by default) to make dirt from flowing water and witch water

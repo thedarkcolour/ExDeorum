@@ -60,8 +60,6 @@
     "exdeorum:lunar_sieve",
     "exdeorum:dusk_sieve",
     "exdeorum:maple_sieve",
-    "exdeorum:warped_crucible",
-    "exdeorum:crimson_crucible",
     "exdeorum:oak_crucible",
     "exdeorum:spruce_crucible",
     "exdeorum:birch_crucible",
@@ -80,7 +78,6 @@
     "exdeorum:dead_crucible",
     "exdeorum:magic_crucible",
     "exdeorum:umbran_crucible",
-    "exdeorum:hellbark_crucible",
     "exdeorum:blue_archwood_crucible",
     "exdeorum:red_archwood_crucible",
     "exdeorum:purple_archwood_crucible",
@@ -93,6 +90,9 @@
     "exdeorum:comet_crucible",
     "exdeorum:lunar_crucible",
     "exdeorum:dusk_crucible",
-    "exdeorum:maple_crucible"
+    "exdeorum:maple_crucible",
+    "exdeorum:warped_crucible",
+    "exdeorum:crimson_crucible",
+    "exdeorum:hellbark_crucible"
   ]
 }

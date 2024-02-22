@@ -26,14 +26,12 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import thedarkcolour.exdeorum.data.TranslationKeys;
+import thedarkcolour.exdeorum.material.DefaultMaterials;
 import thedarkcolour.exdeorum.recipe.crucible.CrucibleRecipe;
-import thedarkcolour.exdeorum.registry.EItems;
-
-import java.util.function.Supplier;
 
 abstract class CrucibleCategory extends OneToOneCategory<CrucibleRecipe> {
-    public CrucibleCategory(IGuiHelper helper, IDrawable arrow, Supplier<? extends Item> iconItem, String titleKey) {
-        super(helper, arrow, helper.createDrawableItemStack(new ItemStack(iconItem.get())), Component.translatable(titleKey));
+    public CrucibleCategory(IGuiHelper helper, IDrawable arrow, Item iconItem, String titleKey) {
+        super(helper, arrow, helper.createDrawableItemStack(new ItemStack(iconItem)), Component.translatable(titleKey));
     }
 
     @Override
@@ -49,7 +47,7 @@ abstract class CrucibleCategory extends OneToOneCategory<CrucibleRecipe> {
 
     static class LavaCrucible extends CrucibleCategory {
         public LavaCrucible(IGuiHelper helper, IDrawable arrow) {
-            super(helper, arrow, EItems.PORCELAIN_CRUCIBLE, TranslationKeys.LAVA_CRUCIBLE_CATEGORY_TITLE);
+            super(helper, arrow, DefaultMaterials.PORCELAIN_CRUCIBLE.getItem(), TranslationKeys.LAVA_CRUCIBLE_CATEGORY_TITLE);
         }
 
         @Override
@@ -60,7 +58,7 @@ abstract class CrucibleCategory extends OneToOneCategory<CrucibleRecipe> {
 
     static class WaterCrucible extends CrucibleCategory {
         public WaterCrucible(IGuiHelper helper, IDrawable arrow) {
-            super(helper, arrow, EItems.OAK_CRUCIBLE, TranslationKeys.WATER_CRUCIBLE_CATEGORY_TITLE);
+            super(helper, arrow, DefaultMaterials.OAK_CRUCIBLE.getItem(), TranslationKeys.WATER_CRUCIBLE_CATEGORY_TITLE);
         }
 
         @Override

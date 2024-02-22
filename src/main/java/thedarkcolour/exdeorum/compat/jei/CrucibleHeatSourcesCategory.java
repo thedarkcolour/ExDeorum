@@ -39,7 +39,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraftforge.registries.ForgeRegistries;
 import thedarkcolour.exdeorum.data.TranslationKeys;
-import thedarkcolour.exdeorum.registry.EItems;
+import thedarkcolour.exdeorum.material.DefaultMaterials;
 
 import java.util.List;
 
@@ -59,7 +59,7 @@ class CrucibleHeatSourcesCategory implements IRecipeCategory<CrucibleHeatSourceR
         var helper = helpers.getGuiHelper();
         this.background = helper.createBlankDrawable(WIDTH, HEIGHT);
         this.title = Component.translatable(TranslationKeys.CRUCIBLE_HEAT_SOURCE_CATEGORY_TITLE);
-        this.icon = helper.createDrawableItemStack(new ItemStack(EItems.PORCELAIN_CRUCIBLE.get()));
+        this.icon = helper.createDrawableItemStack(new ItemStack(DefaultMaterials.PORCELAIN_CRUCIBLE.getItem()));
 
         this.focusFactory = helpers.getFocusFactory();
         this.ingredientManager = helpers.getIngredientManager();

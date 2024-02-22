@@ -105,46 +105,46 @@ public class Recipes {
         recipes.netheriteUpgrade(RecipeCategory.TOOLS, ingredient(EItems.DIAMOND_HAMMER.get()), EItems.NETHERITE_HAMMER.get());
 
         // Crucibles
-        uShaped(recipes, EItems.OAK_CRUCIBLE.get(), ingredient(Items.OAK_LOG), ingredient(Items.OAK_SLAB));
-        uShaped(recipes, EItems.SPRUCE_CRUCIBLE.get(), ingredient(Items.SPRUCE_LOG), ingredient(Items.SPRUCE_SLAB));
-        uShaped(recipes, EItems.BIRCH_CRUCIBLE.get(), ingredient(Items.BIRCH_LOG), ingredient(Items.BIRCH_SLAB));
-        uShaped(recipes, EItems.JUNGLE_CRUCIBLE.get(), ingredient(Items.JUNGLE_LOG), ingredient(Items.JUNGLE_SLAB));
-        uShaped(recipes, EItems.ACACIA_CRUCIBLE.get(), ingredient(Items.ACACIA_LOG), ingredient(Items.ACACIA_SLAB));
-        uShaped(recipes, EItems.DARK_OAK_CRUCIBLE.get(), ingredient(Items.DARK_OAK_LOG), ingredient(Items.DARK_OAK_SLAB));
-        uShaped(recipes, EItems.MANGROVE_CRUCIBLE.get(), ingredient(Items.MANGROVE_LOG), ingredient(Items.MANGROVE_SLAB));
-        uShaped(recipes, EItems.CHERRY_CRUCIBLE.get(), ingredient(Items.CHERRY_LOG), ingredient(Items.CHERRY_SLAB));
-        uShaped(recipes, EItems.BAMBOO_CRUCIBLE.get(), ingredient(Items.BAMBOO_BLOCK), ingredient(Items.BAMBOO_SLAB));
-        uShaped(recipes, EItems.CRIMSON_CRUCIBLE.get(), ingredient(Items.CRIMSON_STEM), ingredient(Items.CRIMSON_SLAB));
-        uShaped(recipes, EItems.WARPED_CRUCIBLE.get(), ingredient(Items.WARPED_STEM), ingredient(Items.WARPED_SLAB));
+        uShaped(recipes, DefaultMaterials.OAK_CRUCIBLE.getItem(), ingredient(Items.OAK_LOG), ingredient(Items.OAK_SLAB));
+        uShaped(recipes, DefaultMaterials.SPRUCE_CRUCIBLE.getItem(), ingredient(Items.SPRUCE_LOG), ingredient(Items.SPRUCE_SLAB));
+        uShaped(recipes, DefaultMaterials.BIRCH_CRUCIBLE.getItem(), ingredient(Items.BIRCH_LOG), ingredient(Items.BIRCH_SLAB));
+        uShaped(recipes, DefaultMaterials.JUNGLE_CRUCIBLE.getItem(), ingredient(Items.JUNGLE_LOG), ingredient(Items.JUNGLE_SLAB));
+        uShaped(recipes, DefaultMaterials.ACACIA_CRUCIBLE.getItem(), ingredient(Items.ACACIA_LOG), ingredient(Items.ACACIA_SLAB));
+        uShaped(recipes, DefaultMaterials.DARK_OAK_CRUCIBLE.getItem(), ingredient(Items.DARK_OAK_LOG), ingredient(Items.DARK_OAK_SLAB));
+        uShaped(recipes, DefaultMaterials.MANGROVE_CRUCIBLE.getItem(), ingredient(Items.MANGROVE_LOG), ingredient(Items.MANGROVE_SLAB));
+        uShaped(recipes, DefaultMaterials.CHERRY_CRUCIBLE.getItem(), ingredient(Items.CHERRY_LOG), ingredient(Items.CHERRY_SLAB));
+        uShaped(recipes, DefaultMaterials.BAMBOO_CRUCIBLE.getItem(), ingredient(Items.BAMBOO_BLOCK), ingredient(Items.BAMBOO_SLAB));
+        uShaped(recipes, DefaultMaterials.CRIMSON_CRUCIBLE.getItem(), ingredient(Items.CRIMSON_STEM), ingredient(Items.CRIMSON_SLAB));
+        uShaped(recipes, DefaultMaterials.WARPED_CRUCIBLE.getItem(), ingredient(Items.WARPED_STEM), ingredient(Items.WARPED_SLAB));
         uShaped(recipes, EItems.UNFIRED_PORCELAIN_CRUCIBLE.get(), ingredient(EItems.PORCELAIN_CLAY_BALL.get()), ingredient(EItems.PORCELAIN_CLAY_BALL.get()));
         // BOP crucibles
-        modUShaped(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.FIR_LOG_ITEM, ModCompatData.FIR_SLAB, EItems.FIR_CRUCIBLE.get());
-        modUShaped(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.REDWOOD_LOG_ITEM, ModCompatData.REDWOOD_SLAB, EItems.REDWOOD_CRUCIBLE.get());
-        modUShaped(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.MAHOGANY_LOG_ITEM, ModCompatData.MAHOGANY_SLAB, EItems.MAHOGANY_CRUCIBLE.get());
-        modUShaped(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.JACARANDA_LOG_ITEM, ModCompatData.JACARANDA_SLAB, EItems.JACARANDA_CRUCIBLE.get());
-        modUShaped(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.PALM_LOG_ITEM, ModCompatData.PALM_SLAB, EItems.PALM_CRUCIBLE.get());
-        modUShaped(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.WILLOW_LOG_ITEM, ModCompatData.WILLOW_SLAB, EItems.WILLOW_CRUCIBLE.get());
-        modUShaped(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.DEAD_LOG_ITEM, ModCompatData.DEAD_SLAB, EItems.DEAD_CRUCIBLE.get());
-        modUShaped(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.MAGIC_LOG_ITEM, ModCompatData.MAGIC_SLAB, EItems.MAGIC_CRUCIBLE.get());
-        modUShaped(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.UMBRAN_LOG_ITEM, ModCompatData.UMBRAN_SLAB, EItems.UMBRAN_CRUCIBLE.get());
-        modUShaped(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.HELLBARK_LOG_ITEM, ModCompatData.HELLBARK_SLAB, EItems.HELLBARK_CRUCIBLE.get());
+        modUShaped(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.FIR_LOG_ITEM, ModCompatData.FIR_SLAB, DefaultMaterials.FIR_CRUCIBLE.getItem());
+        modUShaped(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.REDWOOD_LOG_ITEM, ModCompatData.REDWOOD_SLAB, DefaultMaterials.REDWOOD_CRUCIBLE.getItem());
+        modUShaped(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.MAHOGANY_LOG_ITEM, ModCompatData.MAHOGANY_SLAB, DefaultMaterials.MAHOGANY_CRUCIBLE.getItem());
+        modUShaped(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.JACARANDA_LOG_ITEM, ModCompatData.JACARANDA_SLAB, DefaultMaterials.JACARANDA_CRUCIBLE.getItem());
+        modUShaped(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.PALM_LOG_ITEM, ModCompatData.PALM_SLAB, DefaultMaterials.PALM_CRUCIBLE.getItem());
+        modUShaped(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.WILLOW_LOG_ITEM, ModCompatData.WILLOW_SLAB, DefaultMaterials.WILLOW_CRUCIBLE.getItem());
+        modUShaped(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.DEAD_LOG_ITEM, ModCompatData.DEAD_SLAB, DefaultMaterials.DEAD_CRUCIBLE.getItem());
+        modUShaped(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.MAGIC_LOG_ITEM, ModCompatData.MAGIC_SLAB, DefaultMaterials.MAGIC_CRUCIBLE.getItem());
+        modUShaped(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.UMBRAN_LOG_ITEM, ModCompatData.UMBRAN_SLAB, DefaultMaterials.UMBRAN_CRUCIBLE.getItem());
+        modUShaped(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.HELLBARK_LOG_ITEM, ModCompatData.HELLBARK_SLAB, DefaultMaterials.HELLBARK_CRUCIBLE.getItem());
         // Ars crucibles
-        modUShaped(recipes, ModIds.ARS_NOUVEAU, ModCompatData.CASCADING_ARCHWOOD_LOG_ITEM, ModCompatData.ARCHWOOD_SLAB, EItems.CASCADING_ARCHWOOD_CRUCIBLE.get());
-        modUShaped(recipes, ModIds.ARS_NOUVEAU, ModCompatData.BLAZING_ARCHWOOD_LOG_ITEM, ModCompatData.ARCHWOOD_SLAB, EItems.BLAZING_ARCHWOOD_CRUCIBLE.get());
-        modUShaped(recipes, ModIds.ARS_NOUVEAU, ModCompatData.VEXING_ARCHWOOD_LOG_ITEM, ModCompatData.ARCHWOOD_SLAB, EItems.VEXING_ARCHWOOD_CRUCIBLE.get());
-        modUShaped(recipes, ModIds.ARS_NOUVEAU, ModCompatData.FLOURISHING_ARCHWOOD_LOG_ITEM, ModCompatData.ARCHWOOD_SLAB, EItems.FLOURISHING_ARCHWOOD_CRUCIBLE.get());
+        modUShaped(recipes, ModIds.ARS_NOUVEAU, ModCompatData.CASCADING_ARCHWOOD_LOG_ITEM, ModCompatData.ARCHWOOD_SLAB, DefaultMaterials.CASCADING_ARCHWOOD_CRUCIBLE.getItem());
+        modUShaped(recipes, ModIds.ARS_NOUVEAU, ModCompatData.BLAZING_ARCHWOOD_LOG_ITEM, ModCompatData.ARCHWOOD_SLAB, DefaultMaterials.BLAZING_ARCHWOOD_CRUCIBLE.getItem());
+        modUShaped(recipes, ModIds.ARS_NOUVEAU, ModCompatData.VEXING_ARCHWOOD_LOG_ITEM, ModCompatData.ARCHWOOD_SLAB, DefaultMaterials.VEXING_ARCHWOOD_CRUCIBLE.getItem());
+        modUShaped(recipes, ModIds.ARS_NOUVEAU, ModCompatData.FLOURISHING_ARCHWOOD_LOG_ITEM, ModCompatData.ARCHWOOD_SLAB, DefaultMaterials.FLOURISHING_ARCHWOOD_CRUCIBLE.getItem());
         // Aether crucibles
-        modUShaped(recipes, ModIds.AETHER, ModCompatData.GOLDEN_OAK_LOG_ITEM, ModCompatData.SKYROOT_SLAB, EItems.GOLDEN_OAK_CRUCIBLE.get());
-        modUShaped(recipes, ModIds.AETHER, ModCompatData.SKYROOT_LOG_ITEM, ModCompatData.SKYROOT_SLAB, EItems.SKYROOT_CRUCIBLE.get());
+        modUShaped(recipes, ModIds.AETHER, ModCompatData.GOLDEN_OAK_LOG_ITEM, ModCompatData.SKYROOT_SLAB, DefaultMaterials.GOLDEN_OAK_CRUCIBLE.getItem());
+        modUShaped(recipes, ModIds.AETHER, ModCompatData.SKYROOT_LOG_ITEM, ModCompatData.SKYROOT_SLAB, DefaultMaterials.SKYROOT_CRUCIBLE.getItem());
         // Blue Skies crucibles
-        modUShaped(recipes, ModIds.BLUE_SKIES, ModCompatData.BLUEBRIGHT_LOG_ITEM, ModCompatData.BLUEBRIGHT_SLAB, EItems.BLUEBRIGHT_CRUCIBLE.get());
-        modUShaped(recipes, ModIds.BLUE_SKIES, ModCompatData.STARLIT_LOG_ITEM, ModCompatData.STARLIT_SLAB, EItems.STARLIT_CRUCIBLE.get());
-        modUShaped(recipes, ModIds.BLUE_SKIES, ModCompatData.FROSTBRIGHT_LOG_ITEM, ModCompatData.FROSTBRIGHT_SLAB, EItems.FROSTBRIGHT_CRUCIBLE.get());
-        modUShaped(recipes, ModIds.BLUE_SKIES, ModCompatData.COMET_LOG_ITEM, ModCompatData.COMET_SLAB, EItems.COMET_CRUCIBLE.get());
-        modUShaped(recipes, ModIds.BLUE_SKIES, ModCompatData.LUNAR_LOG_ITEM, ModCompatData.LUNAR_SLAB, EItems.LUNAR_CRUCIBLE.get());
-        modUShaped(recipes, ModIds.BLUE_SKIES, ModCompatData.DUSK_LOG_ITEM, ModCompatData.DUSK_SLAB, EItems.DUSK_CRUCIBLE.get());
-        modUShaped(recipes, ModIds.BLUE_SKIES, ModCompatData.MAPLE_LOG_ITEM, ModCompatData.MAPLE_SLAB, EItems.MAPLE_CRUCIBLE.get());
-        modUShaped(recipes, ModIds.BLUE_SKIES, ModCompatData.CRYSTALLIZED_LOG_ITEM, ModCompatData.CRYSTALLIZED_SLAB, EItems.CRYSTALLIZED_CRUCIBLE.get());
+        modUShaped(recipes, ModIds.BLUE_SKIES, ModCompatData.BLUEBRIGHT_LOG_ITEM, ModCompatData.BLUEBRIGHT_SLAB, DefaultMaterials.BLUEBRIGHT_CRUCIBLE.getItem());
+        modUShaped(recipes, ModIds.BLUE_SKIES, ModCompatData.STARLIT_LOG_ITEM, ModCompatData.STARLIT_SLAB, DefaultMaterials.STARLIT_CRUCIBLE.getItem());
+        modUShaped(recipes, ModIds.BLUE_SKIES, ModCompatData.FROSTBRIGHT_LOG_ITEM, ModCompatData.FROSTBRIGHT_SLAB, DefaultMaterials.FROSTBRIGHT_CRUCIBLE.getItem());
+        modUShaped(recipes, ModIds.BLUE_SKIES, ModCompatData.COMET_LOG_ITEM, ModCompatData.COMET_SLAB, DefaultMaterials.COMET_CRUCIBLE.getItem());
+        modUShaped(recipes, ModIds.BLUE_SKIES, ModCompatData.LUNAR_LOG_ITEM, ModCompatData.LUNAR_SLAB, DefaultMaterials.LUNAR_CRUCIBLE.getItem());
+        modUShaped(recipes, ModIds.BLUE_SKIES, ModCompatData.DUSK_LOG_ITEM, ModCompatData.DUSK_SLAB, DefaultMaterials.DUSK_CRUCIBLE.getItem());
+        modUShaped(recipes, ModIds.BLUE_SKIES, ModCompatData.MAPLE_LOG_ITEM, ModCompatData.MAPLE_SLAB, DefaultMaterials.MAPLE_CRUCIBLE.getItem());
+        modUShaped(recipes, ModIds.BLUE_SKIES, ModCompatData.CRYSTALLIZED_LOG_ITEM, ModCompatData.CRYSTALLIZED_SLAB, DefaultMaterials.CRYSTALLIZED_CRUCIBLE.getItem());
 
         // Barrels
         uShaped(recipes, DefaultMaterials.OAK_BARREL.getItem(), ingredient(Items.OAK_PLANKS), ingredient(Items.OAK_SLAB));
@@ -417,7 +417,7 @@ public class Recipes {
     }
 
     private static void smeltingRecipes(MKRecipeProvider recipes) {
-        recipes.smelting(ingredient(EItems.UNFIRED_PORCELAIN_CRUCIBLE), EItems.PORCELAIN_CRUCIBLE.get(), 0.1f);
+        recipes.smelting(ingredient(EItems.UNFIRED_PORCELAIN_CRUCIBLE), DefaultMaterials.PORCELAIN_CRUCIBLE.getItem(), 0.1f);
         recipes.smelting(ingredient(EItems.UNFIRED_PORCELAIN_BUCKET), EItems.PORCELAIN_BUCKET.get(), 0.1f);
 
         recipes.foodCooking(EItems.SILK_WORM.get(), EItems.COOKED_SILK_WORM.get(), 0.1f);

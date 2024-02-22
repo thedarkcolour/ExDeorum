@@ -18,32 +18,30 @@
 
 package thedarkcolour.exdeorum.material;
 
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import org.jetbrains.annotations.Nullable;
-import thedarkcolour.exdeorum.block.SieveBlock;
 
-public class SieveMaterial extends AbstractMaterial {
-    protected SieveMaterial(SoundType soundType, float strength, boolean needsCorrectTool, String requiredModId) {
-        super(soundType, strength, needsCorrectTool, 0, requiredModId);
-    }
-
-    @Override
-    protected Block createBlock() {
-        return new SieveBlock(props().noOcclusion());
+public abstract class AbstractCrucibleMaterial extends AbstractMaterial {
+    public AbstractCrucibleMaterial(SoundType soundType, float strength, boolean needsCorrectTool, int mapColor, String requiredModId) {
+        super(soundType, strength, needsCorrectTool, mapColor, requiredModId);
     }
 
     @Nullable
-    public static SieveMaterial readFromJson(MaterialParser parser) {
+    public static <T extends AbstractCrucibleMaterial> T readFromJson(MaterialParser parser, Factory<T> factory) {
         SoundType soundType = parser.getSoundType();
         float strength = parser.getStrength();
         boolean needsCorrectTool = parser.getOptionalBoolean("needs_correct_tool");
+        int mapColor = parser.getMapColor();
         String requiredModId = parser.getRequiredModId();
 
         if (parser.error) {
             return null;
         } else {
-            return new SieveMaterial(soundType, strength, needsCorrectTool, requiredModId);
+            return factory.create(soundType, strength, needsCorrectTool, mapColor, requiredModId);
         }
+    }
+
+    public interface Factory<T> {
+        T create(SoundType soundType, float strength, boolean needsCorrectTool, int mapColor, String requiredModId);
     }
 }

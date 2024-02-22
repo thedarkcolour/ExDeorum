@@ -26,7 +26,7 @@ import thedarkcolour.exdeorum.block.BarrelBlock;
 import java.util.HashSet;
 import java.util.Set;
 
-public final class BarrelMaterial extends AbstractMaterial {
+public class BarrelMaterial extends AbstractMaterial {
     public static final Set<Block> TRANSPARENT_BARRELS = new HashSet<>();
 
     // Whether the barrel can hold hot fluids
@@ -34,7 +34,7 @@ public final class BarrelMaterial extends AbstractMaterial {
     // Whether fluids should be rendered with sides instead of just the top
     public final boolean transparent;
 
-    BarrelMaterial(SoundType soundType, float strength, boolean needsCorrectTool, boolean fireproof, int mapColor, String requiredModId, boolean transparent) {
+    protected BarrelMaterial(SoundType soundType, float strength, boolean needsCorrectTool, boolean fireproof, int mapColor, String requiredModId, boolean transparent) {
         super(soundType, strength, needsCorrectTool, mapColor, requiredModId);
 
         this.fireproof = fireproof;
@@ -43,7 +43,7 @@ public final class BarrelMaterial extends AbstractMaterial {
 
     @Override
     protected Block createBlock() {
-        var props = props();
+        var props = props().noOcclusion();
         if (!this.fireproof) props.ignitedByLava();
         return new BarrelBlock(props);
     }

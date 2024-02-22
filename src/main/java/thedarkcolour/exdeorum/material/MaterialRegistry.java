@@ -42,17 +42,23 @@ import java.util.stream.Stream;
 
 public class MaterialRegistry<M extends AbstractMaterial> implements Iterable<M> {
     private final List<M> values = new ArrayList<>();
+    private final String configSubfolder;
     private final String suffix;
 
+    public MaterialRegistry(String configSubfolder) {
+        this(configSubfolder, configSubfolder);
+    }
+
     // Suffix should NOT start with an underscore
-    public MaterialRegistry(String suffix) {
+    public MaterialRegistry(String configSubfolder, String suffix) {
+        this.configSubfolder = configSubfolder;
         this.suffix = suffix;
 
         Preconditions.checkArgument(!suffix.startsWith("_"));
     }
 
     public void search(Function<MaterialParser, @Nullable M> materialRegistrar) {
-        var configPath = Paths.get("config/exdeorum/" + this.suffix + "_materials");
+        var configPath = Paths.get("config/exdeorum/" + this.configSubfolder + "_materials");
 
         if (!DatagenModLoader.isRunningDataGen()) {
             if (CompostColors.createConfigFolder(configPath)) {
@@ -85,10 +91,10 @@ public class MaterialRegistry<M extends AbstractMaterial> implements Iterable<M>
 
     public void register(String name, M material) {
         var id = name + "_" + this.suffix;
-        ExDeorum.LOGGER.info("Registered \"{}\" for {} material {}.json", id, this.suffix, name);
+        ExDeorum.LOGGER.info("Registered \"{}\" for {} material {}.json", id, this.configSubfolder, name);
 
         if (material.block != null) {
-            throw new IllegalStateException(this.suffix + " material with name " + name + " already registered: duplicate material?");
+            throw new IllegalStateException(this.configSubfolder + " material with name " + name + " already registered: duplicate material?");
         }
 
         material.block = EBlocks.BLOCKS.register(id, material::createBlock);

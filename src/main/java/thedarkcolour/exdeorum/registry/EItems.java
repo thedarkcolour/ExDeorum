@@ -28,7 +28,6 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import thedarkcolour.exdeorum.ExDeorum;
-import thedarkcolour.exdeorum.compat.ModIds;
 import thedarkcolour.exdeorum.item.*;
 import thedarkcolour.exdeorum.material.DefaultMaterials;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
@@ -150,63 +149,13 @@ public class EItems {
     public static final RegistryObject<BlockItem> MECHANICAL_SIEVE = registerItemBlock(EBlocks.MECHANICAL_SIEVE);
     public static final RegistryObject<BlockItem> MECHANICAL_HAMMER = registerItemBlock(EBlocks.MECHANICAL_HAMMER);
 
-    // Lava Crucibles
-    public static final RegistryObject<BlockItem> PORCELAIN_CRUCIBLE = registerItemBlock(EBlocks.PORCELAIN_CRUCIBLE);
-    public static final RegistryObject<BlockItem> WARPED_CRUCIBLE = registerItemBlock(EBlocks.WARPED_CRUCIBLE);
-    public static final RegistryObject<BlockItem> CRIMSON_CRUCIBLE = registerItemBlock(EBlocks.CRIMSON_CRUCIBLE);
     public static final RegistryObject<BlockItem> UNFIRED_PORCELAIN_CRUCIBLE = registerItemBlock(EBlocks.UNFIRED_PORCELAIN_CRUCIBLE);
-    // BOP Lava Crucibles
-    public static final RegistryObject<BlockItem> HELLBARK_CRUCIBLE = registerItemBlock(EBlocks.HELLBARK_CRUCIBLE);
-    // Blue Skies Lava Crucibles
-    public static final RegistryObject<BlockItem> CRYSTALLIZED_CRUCIBLE = registerItemBlock(EBlocks.CRYSTALLIZED_CRUCIBLE);
-
-    // Water Crucibles
-    public static final RegistryObject<BlockItem> OAK_CRUCIBLE = registerItemBlock(EBlocks.OAK_CRUCIBLE);
-    public static final RegistryObject<BlockItem> SPRUCE_CRUCIBLE = registerItemBlock(EBlocks.SPRUCE_CRUCIBLE);
-    public static final RegistryObject<BlockItem> BIRCH_CRUCIBLE = registerItemBlock(EBlocks.BIRCH_CRUCIBLE);
-    public static final RegistryObject<BlockItem> JUNGLE_CRUCIBLE = registerItemBlock(EBlocks.JUNGLE_CRUCIBLE);
-    public static final RegistryObject<BlockItem> ACACIA_CRUCIBLE = registerItemBlock(EBlocks.ACACIA_CRUCIBLE);
-    public static final RegistryObject<BlockItem> DARK_OAK_CRUCIBLE = registerItemBlock(EBlocks.DARK_OAK_CRUCIBLE);
-    public static final RegistryObject<BlockItem> MANGROVE_CRUCIBLE = registerItemBlock(EBlocks.MANGROVE_CRUCIBLE);
-    public static final RegistryObject<BlockItem> CHERRY_CRUCIBLE = registerItemBlock(EBlocks.CHERRY_CRUCIBLE);
-    public static final RegistryObject<BlockItem> BAMBOO_CRUCIBLE = registerItemBlock(EBlocks.BAMBOO_CRUCIBLE);
-    // BOP Water Crucibles
-    public static final RegistryObject<BlockItem> FIR_CRUCIBLE = registerItemBlock(EBlocks.FIR_CRUCIBLE);
-    public static final RegistryObject<BlockItem> REDWOOD_CRUCIBLE = registerItemBlock(EBlocks.REDWOOD_CRUCIBLE);
-    public static final RegistryObject<BlockItem> MAHOGANY_CRUCIBLE = registerItemBlock(EBlocks.MAHOGANY_CRUCIBLE);
-    public static final RegistryObject<BlockItem> JACARANDA_CRUCIBLE = registerItemBlock(EBlocks.JACARANDA_CRUCIBLE);
-    public static final RegistryObject<BlockItem> PALM_CRUCIBLE = registerItemBlock(EBlocks.PALM_CRUCIBLE);
-    public static final RegistryObject<BlockItem> WILLOW_CRUCIBLE = registerItemBlock(EBlocks.WILLOW_CRUCIBLE);
-    public static final RegistryObject<BlockItem> DEAD_CRUCIBLE = registerItemBlock(EBlocks.DEAD_CRUCIBLE);
-    public static final RegistryObject<BlockItem> MAGIC_CRUCIBLE = registerItemBlock(EBlocks.MAGIC_CRUCIBLE);
-    public static final RegistryObject<BlockItem> UMBRAN_CRUCIBLE = registerItemBlock(EBlocks.UMBRAN_CRUCIBLE);
-    // Ars Nouveau Water Crucibles
-    public static final RegistryObject<BlockItem> CASCADING_ARCHWOOD_CRUCIBLE = registerItemBlock(EBlocks.CASCADING_ARCHWOOD_CRUCIBLE);
-    public static final RegistryObject<BlockItem> BLAZING_ARCHWOOD_CRUCIBLE = registerItemBlock(EBlocks.BLAZING_ARCHWOOD_CRUCIBLE);
-    public static final RegistryObject<BlockItem> VEXING_ARCHWOOD_CRUCIBLE = registerItemBlock(EBlocks.VEXING_ARCHWOOD_CRUCIBLE);
-    public static final RegistryObject<BlockItem> FLOURISHING_ARCHWOOD_CRUCIBLE = registerItemBlock(EBlocks.FLOURISHING_ARCHWOOD_CRUCIBLE);
-    // Aether Water Crucibles
-    public static final RegistryObject<BlockItem> SKYROOT_CRUCIBLE = registerItemBlock(EBlocks.SKYROOT_CRUCIBLE);
-    public static final RegistryObject<BlockItem> GOLDEN_OAK_CRUCIBLE = registerItemBlock(EBlocks.GOLDEN_OAK_CRUCIBLE);
-    // Blue Skies Water Crucibles
-    public static final RegistryObject<BlockItem> BLUEBRIGHT_CRUCIBLE = registerItemBlock(EBlocks.BLUEBRIGHT_CRUCIBLE);
-    public static final RegistryObject<BlockItem> STARLIT_CRUCIBLE = registerItemBlock(EBlocks.STARLIT_CRUCIBLE);
-    public static final RegistryObject<BlockItem> FROSTBRIGHT_CRUCIBLE = registerItemBlock(EBlocks.FROSTBRIGHT_CRUCIBLE);
-    public static final RegistryObject<BlockItem> COMET_CRUCIBLE = registerItemBlock(EBlocks.COMET_CRUCIBLE);
-    public static final RegistryObject<BlockItem> LUNAR_CRUCIBLE = registerItemBlock(EBlocks.LUNAR_CRUCIBLE);
-    public static final RegistryObject<BlockItem> DUSK_CRUCIBLE = registerItemBlock(EBlocks.DUSK_CRUCIBLE);
-    public static final RegistryObject<BlockItem> MAPLE_CRUCIBLE = registerItemBlock(EBlocks.MAPLE_CRUCIBLE);
 
     public static final RegistryObject<BlockItem> END_CAKE = registerItemBlock(EBlocks.END_CAKE);
     public static final RegistryObject<BlockItem> INFESTED_LEAVES = registerItemBlock(EBlocks.INFESTED_LEAVES);
 
 
     public static void addItemsToMainTab(CreativeModeTab.Output output) {
-        boolean biomesOPlenty = ModList.get().isLoaded(ModIds.BIOMES_O_PLENTY);
-        boolean arsNouveau = ModList.get().isLoaded(ModIds.ARS_NOUVEAU);
-        boolean aether = ModList.get().isLoaded(ModIds.AETHER);
-        boolean blueSkies = ModList.get().isLoaded(ModIds.BLUE_SKIES);
-
         for (var material : DefaultMaterials.BARRELS) {
             if (ModList.get().isLoaded(material.requiredModId)) {
                 output.accept(material.getItem());
@@ -222,55 +171,16 @@ public class EItems {
         output.accept(MECHANICAL_SIEVE.get());
         output.accept(MECHANICAL_HAMMER.get());
 
-        output.accept(PORCELAIN_CRUCIBLE.get());
-        output.accept(WARPED_CRUCIBLE.get());
-        output.accept(CRIMSON_CRUCIBLE.get());
         output.accept(UNFIRED_PORCELAIN_CRUCIBLE.get());
-        if (biomesOPlenty) {
-            output.accept(HELLBARK_CRUCIBLE.get());
+        for (var material : DefaultMaterials.LAVA_CRUCIBLES) {
+            if (ModList.get().isLoaded(material.requiredModId)) {
+                output.accept(material.getItem());
+            }
         }
-        if (blueSkies) {
-            output.accept(CRYSTALLIZED_CRUCIBLE.get());
-        }
-        output.accept(OAK_CRUCIBLE.get());
-        output.accept(SPRUCE_CRUCIBLE.get());
-        output.accept(BIRCH_CRUCIBLE.get());
-        output.accept(JUNGLE_CRUCIBLE.get());
-        output.accept(ACACIA_CRUCIBLE.get());
-        output.accept(DARK_OAK_CRUCIBLE.get());
-        output.accept(MANGROVE_CRUCIBLE.get());
-        output.accept(CHERRY_CRUCIBLE.get());
-        output.accept(BAMBOO_CRUCIBLE.get());
-
-        if (biomesOPlenty) {
-            output.accept(FIR_CRUCIBLE.get());
-            output.accept(REDWOOD_CRUCIBLE.get());
-            output.accept(MAHOGANY_CRUCIBLE.get());
-            output.accept(JACARANDA_CRUCIBLE.get());
-            output.accept(PALM_CRUCIBLE.get());
-            output.accept(WILLOW_CRUCIBLE.get());
-            output.accept(DEAD_CRUCIBLE.get());
-            output.accept(MAGIC_CRUCIBLE.get());
-            output.accept(UMBRAN_CRUCIBLE.get());
-        }
-        if (arsNouveau) {
-            output.accept(CASCADING_ARCHWOOD_CRUCIBLE.get());
-            output.accept(BLAZING_ARCHWOOD_CRUCIBLE.get());
-            output.accept(VEXING_ARCHWOOD_CRUCIBLE.get());
-            output.accept(FLOURISHING_ARCHWOOD_CRUCIBLE.get());
-        }
-        if (aether) {
-            output.accept(SKYROOT_CRUCIBLE.get());
-            output.accept(GOLDEN_OAK_CRUCIBLE.get());
-        }
-        if (blueSkies) {
-            output.accept(BLUEBRIGHT_CRUCIBLE.get());
-            output.accept(STARLIT_CRUCIBLE.get());
-            output.accept(FROSTBRIGHT_CRUCIBLE.get());
-            output.accept(COMET_CRUCIBLE.get());
-            output.accept(LUNAR_CRUCIBLE.get());
-            output.accept(DUSK_CRUCIBLE.get());
-            output.accept(MAPLE_CRUCIBLE.get());
+        for (var material : DefaultMaterials.WATER_CRUCIBLES) {
+            if (ModList.get().isLoaded(material.requiredModId)) {
+                output.accept(material.getItem());
+            }
         }
 
         output.accept(DUST.get());

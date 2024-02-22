@@ -20,30 +20,15 @@ package thedarkcolour.exdeorum.material;
 
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
-import org.jetbrains.annotations.Nullable;
-import thedarkcolour.exdeorum.block.SieveBlock;
+import thedarkcolour.exdeorum.block.WaterCrucibleBlock;
 
-public class SieveMaterial extends AbstractMaterial {
-    protected SieveMaterial(SoundType soundType, float strength, boolean needsCorrectTool, String requiredModId) {
-        super(soundType, strength, needsCorrectTool, 0, requiredModId);
+public class WaterCrucibleMaterial extends AbstractCrucibleMaterial {
+    protected WaterCrucibleMaterial(SoundType soundType, float strength, boolean needsCorrectTool, int mapColor, String requiredModId) {
+        super(soundType, strength, needsCorrectTool, mapColor, requiredModId);
     }
 
     @Override
     protected Block createBlock() {
-        return new SieveBlock(props().noOcclusion());
-    }
-
-    @Nullable
-    public static SieveMaterial readFromJson(MaterialParser parser) {
-        SoundType soundType = parser.getSoundType();
-        float strength = parser.getStrength();
-        boolean needsCorrectTool = parser.getOptionalBoolean("needs_correct_tool");
-        String requiredModId = parser.getRequiredModId();
-
-        if (parser.error) {
-            return null;
-        } else {
-            return new SieveMaterial(soundType, strength, needsCorrectTool, requiredModId);
-        }
+        return new WaterCrucibleBlock(props().noOcclusion());
     }
 }

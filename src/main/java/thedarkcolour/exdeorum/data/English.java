@@ -20,6 +20,7 @@ package thedarkcolour.exdeorum.data;
 
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.client.screen.RedstoneControlWidget;
+import thedarkcolour.exdeorum.material.DefaultMaterials;
 import thedarkcolour.exdeorum.registry.EBlocks;
 import thedarkcolour.modkit.data.MKEnglishProvider;
 
@@ -87,10 +88,10 @@ class English {
         english.add(TranslationKeys.REDSTONE_CONTROL_MODE, "Mode: ");
         english.add(TranslationKeys.MECHANICAL_HAMMER_SCREEN_TITLE, "Mechanical Hammer");
 
-        english.addBlock(EBlocks.VEXING_ARCHWOOD_CRUCIBLE, "Vexing Archwood Crucible");
-        english.addBlock(EBlocks.CASCADING_ARCHWOOD_CRUCIBLE, "Cascading Archwood Crucible");
-        english.addBlock(EBlocks.BLAZING_ARCHWOOD_CRUCIBLE, "Blazing Archwood Crucible");
-        english.addBlock(EBlocks.FLOURISHING_ARCHWOOD_CRUCIBLE, "Flourishing Archwood Crucible");
+        english.add(DefaultMaterials.VEXING_ARCHWOOD_CRUCIBLE.getBlock(), "Vexing Archwood Crucible");
+        english.add(DefaultMaterials.CASCADING_ARCHWOOD_CRUCIBLE.getBlock(), "Cascading Archwood Crucible");
+        english.add(DefaultMaterials.BLAZING_ARCHWOOD_CRUCIBLE.getBlock(), "Blazing Archwood Crucible");
+        english.add(DefaultMaterials.FLOURISHING_ARCHWOOD_CRUCIBLE.getBlock(), "Flourishing Archwood Crucible");
 
         // Jade translation (what does this look like?)
         english.add("config.jade.plugin_exdeorum.infested_leaves", "Infested Leaves");

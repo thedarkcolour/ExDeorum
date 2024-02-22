@@ -32,6 +32,8 @@ import net.minecraft.world.level.levelgen.structure.BuiltinStructureSets;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.material.Fluid;
 import thedarkcolour.exdeorum.ExDeorum;
+import thedarkcolour.exdeorum.block.AbstractCrucibleBlock;
+import thedarkcolour.exdeorum.material.AbstractCrucibleMaterial;
 import thedarkcolour.exdeorum.material.BarrelMaterial;
 import thedarkcolour.exdeorum.material.DefaultMaterials;
 import thedarkcolour.exdeorum.material.SieveMaterial;
@@ -68,21 +70,11 @@ class ModTags {
         tags.tag(BlockTags.MINEABLE_WITH_AXE)
                 .add(WOODEN_BARRELS.stream().map(BarrelMaterial::getBlock).toArray(Block[]::new))
                 .add(DefaultMaterials.SIEVES.stream().filter(material -> material != DefaultMaterials.CRYSTALLIZED_SIEVE).map(SieveMaterial::getBlock).toArray(Block[]::new))
-                .add(
-                // Vanilla crucibles
-                EBlocks.WARPED_CRUCIBLE.get(), EBlocks.CRIMSON_CRUCIBLE.get(), EBlocks.OAK_CRUCIBLE.get(), EBlocks.SPRUCE_CRUCIBLE.get(), EBlocks.BIRCH_CRUCIBLE.get(), EBlocks.JUNGLE_CRUCIBLE.get(), EBlocks.ACACIA_CRUCIBLE.get(), EBlocks.DARK_OAK_CRUCIBLE.get(), EBlocks.MANGROVE_CRUCIBLE.get(), EBlocks.CHERRY_CRUCIBLE.get(), EBlocks.BAMBOO_CRUCIBLE.get(),
-                // BOP crucibles
-                EBlocks.FIR_CRUCIBLE.get(), EBlocks.REDWOOD_CRUCIBLE.get(), EBlocks.MAHOGANY_CRUCIBLE.get(), EBlocks.JACARANDA_CRUCIBLE.get(), EBlocks.PALM_CRUCIBLE.get(), EBlocks.WILLOW_CRUCIBLE.get(), EBlocks.DEAD_CRUCIBLE.get(), EBlocks.MAGIC_CRUCIBLE.get(), EBlocks.UMBRAN_CRUCIBLE.get(), EBlocks.HELLBARK_CRUCIBLE.get(),
-                // Ars Nouveau crucibles
-                EBlocks.CASCADING_ARCHWOOD_CRUCIBLE.get(), EBlocks.BLAZING_ARCHWOOD_CRUCIBLE.get(), EBlocks.VEXING_ARCHWOOD_CRUCIBLE.get(), EBlocks.FLOURISHING_ARCHWOOD_CRUCIBLE.get(),
-                // Aether crucibles
-                EBlocks.SKYROOT_CRUCIBLE.get(), EBlocks.GOLDEN_OAK_CRUCIBLE.get(),
-                // Blue Skies crucibles
-                EBlocks.BLUEBRIGHT_CRUCIBLE.get(), EBlocks.STARLIT_CRUCIBLE.get(), EBlocks.FROSTBRIGHT_CRUCIBLE.get(), EBlocks.COMET_CRUCIBLE.get(), EBlocks.LUNAR_CRUCIBLE.get(), EBlocks.DUSK_CRUCIBLE.get(), EBlocks.MAPLE_CRUCIBLE.get()
-        );
+                .add(DefaultMaterials.WATER_CRUCIBLES.stream().map(AbstractCrucibleMaterial::getBlock).toArray(Block[]::new))
+                .add(DefaultMaterials.WARPED_CRUCIBLE.getBlock(), DefaultMaterials.CRIMSON_CRUCIBLE.getBlock(), DefaultMaterials.HELLBARK_CRUCIBLE.getBlock());
         tags.tag(BlockTags.MINEABLE_WITH_PICKAXE)
-                .add(EBlocks.PORCELAIN_CRUCIBLE, EBlocks.UNFIRED_PORCELAIN_CRUCIBLE, EBlocks.CRYSTALLIZED_CRUCIBLE, EBlocks.MECHANICAL_SIEVE, EBlocks.MECHANICAL_HAMMER)
-                .add(DefaultMaterials.STONE_BARREL.getBlock(), DefaultMaterials.CRYSTALLIZED_BARREL.getBlock(), DefaultMaterials.CRYSTALLIZED_SIEVE.getBlock());
+                .add(EBlocks.UNFIRED_PORCELAIN_CRUCIBLE, EBlocks.MECHANICAL_SIEVE, EBlocks.MECHANICAL_HAMMER)
+                .add(DefaultMaterials.STONE_BARREL.getBlock(), DefaultMaterials.CRYSTALLIZED_BARREL.getBlock(), DefaultMaterials.CRYSTALLIZED_SIEVE.getBlock(), DefaultMaterials.PORCELAIN_CRUCIBLE.getBlock(), DefaultMaterials.CRYSTALLIZED_CRUCIBLE.getBlock());
         tags.tag(BlockTags.MINEABLE_WITH_SHOVEL).add(EBlocks.DUST, EBlocks.CRUSHED_NETHERRACK, EBlocks.CRUSHED_END_STONE, EBlocks.CRUSHED_DEEPSLATE, EBlocks.CRUSHED_BLACKSTONE);
         tags.tag(BlockTags.MINEABLE_WITH_HOE).add(EBlocks.INFESTED_LEAVES);
         tags.tag(BlockTags.LEAVES).add(EBlocks.INFESTED_LEAVES);
