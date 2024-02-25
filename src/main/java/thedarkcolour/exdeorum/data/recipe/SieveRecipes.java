@@ -158,7 +158,7 @@ class SieveRecipes {
             addDrop.accept(Items.COAL, chance(0.1f));
             addDrop.accept(Items.LAPIS_LAZULI, chance(0.03f));
             addDrop.accept(EItems.COPPER_ORE_CHUNK.get(), chance(0.08f));
-            addDrop.accept(EItems.IRON_ORE_CHUNK.get(), chance(0.07f));
+            addDrop.accept(EItems.IRON_ORE_CHUNK.get(), chance(0.10f));
             addDrop.accept(EItems.GOLD_ORE_CHUNK.get(), chance(0.03f));
             addDrop.accept(Items.DIAMOND, chance(0.02f));
             addDrop.accept(Items.EMERALD, chance(0.01f));
@@ -187,7 +187,7 @@ class SieveRecipes {
             addDrop.accept(Items.COAL, chance(0.125f));
             addDrop.accept(Items.LAPIS_LAZULI, chance(0.05f));
             addDrop.accept(EItems.COPPER_ORE_CHUNK.get(), chance(0.1f));
-            addDrop.accept(EItems.IRON_ORE_CHUNK.get(), chance(0.08f));
+            addDrop.accept(EItems.IRON_ORE_CHUNK.get(), chance(0.12f));
             addDrop.accept(EItems.GOLD_ORE_CHUNK.get(), chance(0.04f));
             addDrop.accept(Items.DIAMOND, chance(0.03f));
             addDrop.accept(Items.EMERALD, chance(0.015f));
@@ -213,7 +213,7 @@ class SieveRecipes {
             addDrop.accept(Items.COAL, chance(0.15f));
             addDrop.accept(Items.LAPIS_LAZULI, chance(0.08f));
             addDrop.accept(EItems.COPPER_ORE_CHUNK.get(), chance(0.12f));
-            addDrop.accept(EItems.IRON_ORE_CHUNK.get(), chance(0.11f));
+            addDrop.accept(EItems.IRON_ORE_CHUNK.get(), chance(0.14f));
             addDrop.accept(EItems.GOLD_ORE_CHUNK.get(), chance(0.06f));
             addDrop.accept(Items.DIAMOND, chance(0.05f));
             addDrop.accept(Items.EMERALD, chance(0.04f));
@@ -240,7 +240,7 @@ class SieveRecipes {
             addDrop.accept(Items.COAL, chance(0.2f));
             addDrop.accept(Items.LAPIS_LAZULI, chance(0.1f));
             addDrop.accept(EItems.COPPER_ORE_CHUNK.get(), chance(0.07f));
-            addDrop.accept(EItems.IRON_ORE_CHUNK.get(), chance(0.07f));
+            addDrop.accept(EItems.IRON_ORE_CHUNK.get(), chance(0.14f));
             addDrop.accept(EItems.GOLD_ORE_CHUNK.get(), chance(0.1f));
             addDrop.accept(Items.DIAMOND, chance(0.09f));
             addDrop.accept(Items.EMERALD, chance(0.09f));
@@ -267,7 +267,7 @@ class SieveRecipes {
             addDrop.accept(Items.COAL, chance(0.06f));
             addDrop.accept(Items.LAPIS_LAZULI, chance(0.11f));
             addDrop.accept(EItems.COPPER_ORE_CHUNK.get(), chance(0.07f));
-            addDrop.accept(EItems.IRON_ORE_CHUNK.get(), chance(0.13f));
+            addDrop.accept(EItems.IRON_ORE_CHUNK.get(), chance(0.15f));
             addDrop.accept(EItems.GOLD_ORE_CHUNK.get(), chance(0.08f));
             addDrop.accept(Items.DIAMOND, chance(0.08f));
             addDrop.accept(Items.EMERALD, chance(0.07f));
@@ -291,7 +291,7 @@ class SieveRecipes {
             addDrop.accept(Items.COAL, chance(0.06f));
             addDrop.accept(Items.LAPIS_LAZULI, chance(0.11f));
             addDrop.accept(EItems.COPPER_ORE_CHUNK.get(), chance(0.1f));
-            addDrop.accept(EItems.IRON_ORE_CHUNK.get(), chance(0.13f));
+            addDrop.accept(EItems.IRON_ORE_CHUNK.get(), chance(0.17f));
             addDrop.accept(EItems.GOLD_ORE_CHUNK.get(), chance(0.09f));
             addDrop.accept(Items.DIAMOND, chance(0.1f));
             addDrop.accept(Items.EMERALD, chance(0.09f));
@@ -515,7 +515,7 @@ class SieveRecipes {
         forMesh(writer, ingredient(EItems.CRUSHED_DEEPSLATE.get()), EItems.STRING_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
             addDrop.accept(EItems.DEEPSLATE_PEBBLE.get(), binomial(4, 0.5f));
             addDrop.accept(EItems.COPPER_ORE_CHUNK.get(), chance(0.12f));
-            addDrop.accept(EItems.IRON_ORE_CHUNK.get(), chance(0.10f));
+            addDrop.accept(EItems.IRON_ORE_CHUNK.get(), chance(0.12f));
             addDrop.accept(EItems.GOLD_ORE_CHUNK.get(), chance(0.08f));
             addDrop.accept(Items.AMETHYST_SHARD, chance(0.05f));
             addDrop.accept(Items.DIAMOND, chance(0.04f));
@@ -541,7 +541,7 @@ class SieveRecipes {
             addDrop.accept(EItems.CALCITE_PEBBLE.get(), binomial(4, 0.4f));
             addDrop.accept(EItems.BASALT_PEBBLE.get(), binomial(4, 0.4f));
             addDrop.accept(EItems.COPPER_ORE_CHUNK.get(), chance(0.11f));
-            addDrop.accept(EItems.IRON_ORE_CHUNK.get(), chance(0.11f));
+            addDrop.accept(EItems.IRON_ORE_CHUNK.get(), chance(0.13f));
             addDrop.accept(EItems.GOLD_ORE_CHUNK.get(), chance(0.08f));
             addDrop.accept(Items.AMETHYST_SHARD, chance(0.06f));
             addDrop.accept(Items.DIAMOND, chance(0.05f));
@@ -564,7 +564,7 @@ class SieveRecipes {
         forMesh(writer, ingredient(EItems.CRUSHED_DEEPSLATE.get()), EItems.IRON_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
             addDrop.accept(EItems.DEEPSLATE_PEBBLE.get(), binomial(4, 0.6f));
             addDrop.accept(EItems.COPPER_ORE_CHUNK.get(), chance(0.10f));
-            addDrop.accept(EItems.IRON_ORE_CHUNK.get(), chance(0.12f));
+            addDrop.accept(EItems.IRON_ORE_CHUNK.get(), chance(0.15f));
             addDrop.accept(EItems.GOLD_ORE_CHUNK.get(), chance(0.09f));
             addDrop.accept(Items.AMETHYST_SHARD, chance(0.06f));
             addDrop.accept(Items.DIAMOND, chance(0.06f));
@@ -587,7 +587,7 @@ class SieveRecipes {
         forMesh(writer, ingredient(EItems.CRUSHED_DEEPSLATE.get()), EItems.GOLDEN_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
             addDrop.accept(EItems.DEEPSLATE_PEBBLE.get(), binomial(4, 0.65f));
             addDrop.accept(EItems.COPPER_ORE_CHUNK.get(), chance(0.09f));
-            addDrop.accept(EItems.IRON_ORE_CHUNK.get(), chance(0.13f));
+            addDrop.accept(EItems.IRON_ORE_CHUNK.get(), chance(0.15f));
             addDrop.accept(EItems.GOLD_ORE_CHUNK.get(), chance(0.15f));
             addDrop.accept(Items.AMETHYST_SHARD, chance(0.08f));
             addDrop.accept(Items.DIAMOND, chance(0.08f));
@@ -612,7 +612,7 @@ class SieveRecipes {
         forMesh(writer, ingredient(EItems.CRUSHED_DEEPSLATE.get()), EItems.DIAMOND_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
             addDrop.accept(EItems.DEEPSLATE_PEBBLE.get(), binomial(4, 0.65f));
             addDrop.accept(EItems.COPPER_ORE_CHUNK.get(), chance(0.09f));
-            addDrop.accept(EItems.IRON_ORE_CHUNK.get(), chance(0.16f));
+            addDrop.accept(EItems.IRON_ORE_CHUNK.get(), chance(0.18f));
             addDrop.accept(EItems.GOLD_ORE_CHUNK.get(), chance(0.13f));
             addDrop.accept(Items.AMETHYST_SHARD, chance(0.07f));
             addDrop.accept(Items.DIAMOND, chance(0.08f));
@@ -635,7 +635,7 @@ class SieveRecipes {
         forMesh(writer, ingredient(EItems.CRUSHED_DEEPSLATE.get()), EItems.NETHERITE_MESH, (addDrop, addTagDrop, addConditionalDrop) -> {
             addDrop.accept(EItems.DEEPSLATE_PEBBLE.get(), binomial(4, 0.7f));
             addDrop.accept(EItems.COPPER_ORE_CHUNK.get(), chance(0.10f));
-            addDrop.accept(EItems.IRON_ORE_CHUNK.get(), chance(0.17f));
+            addDrop.accept(EItems.IRON_ORE_CHUNK.get(), chance(0.20f));
             addDrop.accept(EItems.GOLD_ORE_CHUNK.get(), chance(0.15f));
             addDrop.accept(Items.AMETHYST_SHARD, chance(0.1f));
             addDrop.accept(Items.DIAMOND, chance(0.1f));
