@@ -1,8 +1,8 @@
 {
   "type": "exdeorum:water_crucible",
   "fluid": {
-    "Amount": 250,
-    "FluidName": "minecraft:water"
+    "amount": 250,
+    "fluid": "minecraft:water"
   },
   "ingredient": {
     "item": "minecraft:pumpkin"

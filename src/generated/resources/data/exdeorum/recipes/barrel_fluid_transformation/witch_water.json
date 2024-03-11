@@ -1,0 +1,20 @@
+{
+  "type": "exdeorum:barrel_fluid_transformation",
+  "base_fluid": "minecraft:lava",
+  "byproducts": [
+    {
+      "value": "minecraft:red_mushroom",
+      "weight": 50
+    },
+    {
+      "value": "minecraft:brown_mushroom",
+      "weight": 50
+    }
+  ],
+  "catalyst": {
+    "block": "minecraft:mycelium"
+  },
+  "duration": 1700,
+  "result_color": 2822231,
+  "result_fluid": "exdeorum:witch_water"
+}

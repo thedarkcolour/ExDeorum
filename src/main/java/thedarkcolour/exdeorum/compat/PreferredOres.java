@@ -42,6 +42,7 @@ public class PreferredOres {
     private static final Map<TagKey<Item>, Item> PREFERRED_ORE_ITEMS = new Object2ObjectOpenHashMap<>(11, Hash.DEFAULT_LOAD_FACTOR);
 
     static {
+        // todo these should update whenever data is reloaded
         putPreferredOre(EItemTags.ORES_ALUMINUM, EConfig.COMMON.preferredAluminumOre, getDefaultAluminumOre());
         putPreferredOre(EItemTags.ORES_COBALT, EConfig.COMMON.preferredCobaltOre, getDefaultCobaltOre());
         putPreferredOre(EItemTags.ORES_SILVER, EConfig.COMMON.preferredSilverOre, getDefaultSilverOre());

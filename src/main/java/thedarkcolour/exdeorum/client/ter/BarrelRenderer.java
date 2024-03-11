@@ -33,6 +33,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemDisplayContext;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import thedarkcolour.exdeorum.ExDeorum;
@@ -82,19 +83,19 @@ public class BarrelRenderer implements BlockEntityRenderer<BarrelBlockEntity> {
                 var pos = barrel.getBlockPos();
                 var percentage = fluidStack.getAmount() / 1000.0f;
                 var y = Mth.lerp(percentage, 1.0f, 14.0f) / 16f;
-                var col = RenderUtil.getFluidColor(fluid, level, pos);
+                var inputFluidColor = RenderUtil.getFluidColor(fluid, level, pos);
                 // Split into RGB components
-                var r = (col >> 16) & 0xff;
-                var g = (col >> 8) & 0xff;
-                var b = col & 0xff;
+                var r = (inputFluidColor >> 16) & 0xff;
+                var g = (inputFluidColor >> 8) & 0xff;
+                var b = inputFluidColor & 0xff;
 
                 if (barrel.isBrewing()) {
                     float progress = barrel.progress;
 
                     // Transition between water color and witch water color (200B41)
-                    r = (int) Mth.lerp(progress, r, 32);
-                    g = (int) Mth.lerp(progress, g, 11);
-                    b = (int) Mth.lerp(progress, b, 65);
+                    r = (int) Mth.lerp(progress, r, barrel.r);
+                    g = (int) Mth.lerp(progress, g, barrel.g);
+                    b = (int) Mth.lerp(progress, b, barrel.b);
                 }
 
                 if (barrel.transparent) {

@@ -34,6 +34,7 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CampfireBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
@@ -53,9 +54,8 @@ import thedarkcolour.exdeorum.compat.ModIds;
 import thedarkcolour.exdeorum.data.ModCompatData;
 import thedarkcolour.exdeorum.material.DefaultMaterials;
 import thedarkcolour.exdeorum.recipe.TagResultRecipe;
-import thedarkcolour.exdeorum.recipe.barrel.FinishedBarrelCompostRecipe;
-import thedarkcolour.exdeorum.recipe.barrel.FinishedBarrelFluidMixingRecipe;
-import thedarkcolour.exdeorum.recipe.barrel.FinishedBarrelMixingRecipe;
+import thedarkcolour.exdeorum.recipe.WeightedList;
+import thedarkcolour.exdeorum.recipe.barrel.*;
 import thedarkcolour.exdeorum.recipe.BlockPredicate;
 import thedarkcolour.exdeorum.recipe.crook.FinishedCrookRecipe;
 import thedarkcolour.exdeorum.recipe.crucible.FinishedCrucibleHeatRecipe;
@@ -89,6 +89,7 @@ public class Recipes {
         crucibleHeatSources(writer);
         barrelCompostRecipes(writer);
         barrelMixingRecipes(writer);
+        fluidTransformationRecipes(writer);
     }
 
     private static void craftingRecipes(Consumer<FinishedRecipe> writer, MKRecipeProvider recipes) {
@@ -646,6 +647,14 @@ public class Recipes {
 
     private static void barrelFluidMixing(Consumer<FinishedRecipe> writer, Fluid base, Fluid additive, Item result, boolean consumesAdditive) {
         writer.accept(new FinishedBarrelFluidMixingRecipe(new ResourceLocation(ExDeorum.ID, "barrel_fluid_mixing/" + path(result)), base, 1000, additive, result, consumesAdditive));
+    }
+
+    private static void fluidTransformationRecipes(Consumer<FinishedRecipe> writer) {
+        writer.accept(new FinishedFluidTransformationRecipe(modLoc("barrel_fluid_transformation/witch_water"), Fluids.WATER, EFluids.WITCH_WATER.get(), 0x2B1057, BlockPredicate.singleBlock(Blocks.MYCELIUM), WeightedList.<BlockState>builder().add(50, Blocks.RED_MUSHROOM.defaultBlockState()).add(50, Blocks.BROWN_MUSHROOM.defaultBlockState()).build(), 1700));
+    }
+
+    static ResourceLocation modLoc(String path) {
+        return new ResourceLocation(ExDeorum.ID, path);
     }
 
     static ICondition tagNotEmpty(TagKey<Item> tag) {

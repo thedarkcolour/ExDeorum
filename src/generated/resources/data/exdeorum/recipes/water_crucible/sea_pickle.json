@@ -1,8 +1,8 @@
 {
   "type": "exdeorum:water_crucible",
   "fluid": {
-    "Amount": 200,
-    "FluidName": "minecraft:water"
+    "amount": 200,
+    "fluid": "minecraft:water"
   },
   "ingredient": {
     "item": "minecraft:sea_pickle"

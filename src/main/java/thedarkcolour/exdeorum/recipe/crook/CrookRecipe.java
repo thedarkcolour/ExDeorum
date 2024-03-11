@@ -76,7 +76,7 @@ public record CrookRecipe(ResourceLocation id, BlockPredicate blockPredicate, It
     public static class Serializer implements RecipeSerializer<CrookRecipe> {
         @Override
         public CrookRecipe fromJson(ResourceLocation id, JsonObject json) {
-            BlockPredicate blockPredicate = RecipeUtil.readBlockPredicate(id, json);
+            BlockPredicate blockPredicate = RecipeUtil.readBlockPredicate(id, json, "block_predicate");
             if (blockPredicate == null) return null;
 
             Item result = RecipeUtil.readItem(json, "result");

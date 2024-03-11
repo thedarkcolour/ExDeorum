@@ -20,40 +20,45 @@ package thedarkcolour.exdeorum.recipe.barrel;
 
 import com.google.gson.JsonObject;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
+import thedarkcolour.exdeorum.recipe.BlockPredicate;
 import thedarkcolour.exdeorum.recipe.EFinishedRecipe;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
+import thedarkcolour.exdeorum.recipe.WeightedList;
 import thedarkcolour.exdeorum.registry.ERecipeSerializers;
 
-public class FinishedBarrelFluidMixingRecipe extends EFinishedRecipe {
+public class FinishedFluidTransformationRecipe extends EFinishedRecipe {
     private final Fluid baseFluid;
-    private final int baseFluidAmount;
-    private final Fluid additiveFluid;
-    private final Item result;
-    private final boolean consumesAdditive;
+    private final Fluid resultFluid;
+    private final int resultColor;
+    private final BlockPredicate catalyst;
+    private final WeightedList<BlockState> byproducts;
+    private final int duration;
 
-    public FinishedBarrelFluidMixingRecipe(ResourceLocation id, Fluid baseFluid, int baseFluidAmount, Fluid additiveFluid, Item result, boolean consumesAdditive) {
+    public FinishedFluidTransformationRecipe(ResourceLocation id, Fluid baseFluid, Fluid resultFluid, int resultColor, BlockPredicate catalyst, WeightedList<BlockState> byproducts, int duration) {
         super(id);
         this.baseFluid = baseFluid;
-        this.baseFluidAmount = baseFluidAmount;
-        this.additiveFluid = additiveFluid;
-        this.result = result;
-        this.consumesAdditive = consumesAdditive;
+        this.resultFluid = resultFluid;
+        this.resultColor = resultColor;
+        this.catalyst = catalyst;
+        this.byproducts = byproducts;
+        this.duration = duration;
     }
 
     @Override
     public void serializeRecipeData(JsonObject json) {
         json.addProperty("base_fluid", RecipeUtil.getFluidId(this.baseFluid));
-        json.addProperty("base_fluid_amount", this.baseFluidAmount);
-        json.addProperty("additive_fluid", RecipeUtil.getFluidId(this.additiveFluid));
-        json.addProperty("consumes_additive", this.consumesAdditive);
-        json.addProperty("result", RecipeUtil.writeItemJson(this.result));
+        json.addProperty("result_fluid", RecipeUtil.getFluidId(this.resultFluid));
+        json.addProperty("result_color", this.resultColor);
+        json.addProperty("duration", this.duration);
+        json.add("catalyst", this.catalyst.toJson());
+        json.add("byproducts", this.byproducts.toJson(RecipeUtil::writeBlockState));
     }
 
     @Override
     public RecipeSerializer<?> getType() {
-        return ERecipeSerializers.BARREL_FLUID_MIXING.get();
+        return ERecipeSerializers.BARREL_FLUID_TRANSFORMATION.get();
     }
 }

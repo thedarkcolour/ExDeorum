@@ -26,6 +26,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -54,7 +55,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.block.BarrelBlock;
 import thedarkcolour.exdeorum.blockentity.helper.FluidHelper;
 import thedarkcolour.exdeorum.client.CompostColors;
@@ -62,6 +63,7 @@ import thedarkcolour.exdeorum.config.EConfig;
 import thedarkcolour.exdeorum.material.BarrelMaterial;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelFluidMixingRecipe;
+import thedarkcolour.exdeorum.recipe.barrel.FluidTransformationRecipe;
 import thedarkcolour.exdeorum.registry.EBlockEntities;
 import thedarkcolour.exdeorum.registry.EFluids;
 
@@ -73,10 +75,14 @@ public class BarrelBlockEntity extends EBlockEntity {
     public float progress;
     public short compost;
     // compost colors (has to be shorts because Java bytes are signed and only go to 127, when need 255)
+    // also used for fluid transformation (destination color)
     public short r, g, b;
     // Used to avoid triggering obsidian dupes in onContentsChanged, because Forge's FluidUtil actually modifies the tank for some reason
     private boolean isBeingFilledByPlayer;
     public final boolean transparent;
+    // Current transformation recipe
+    @Nullable
+    public FluidTransformationRecipe currentTransformRecipe = null;
 
     private final LazyOptional<IItemHandler> itemHandler = LazyOptional.of(() -> this.item);
     private final LazyOptional<IFluidHandler> fluidHandler = LazyOptional.of(() -> this.tank);
@@ -158,7 +164,7 @@ public class BarrelBlockEntity extends EBlockEntity {
     }
 
     public boolean isBurning() {
-        return isHotFluid(this.tank.getFluid().getFluid().getFluidType()) && this.progress != 0.0f;
+        return this.getBlockState().ignitedByLava() && isHotFluid(this.tank.getFluid().getFluid().getFluidType()) && this.progress != 0.0f;
     }
 
     // Composting is in progress if at 1000. When finished, compost is set back to 0
@@ -453,6 +459,26 @@ public class BarrelBlockEntity extends EBlockEntity {
         }
     }
 
+    public void updateFluidTransform() {
+        if (!this.level.isClientSide) {
+            var belowState = this.level.getBlockState(this.worldPosition.below());
+            if (this.tank.getFluidAmount() != 1000) {
+                this.currentTransformRecipe = null;
+            } else {
+                this.currentTransformRecipe = RecipeUtil.getFluidTransformationRecipe(this.tank.getFluid().getFluid(), belowState);
+
+                if (this.currentTransformRecipe != null) {
+                    var color = this.currentTransformRecipe.resultColor;
+                    this.r = (short) ((color >> 16) & 0xff);
+                    this.g = (short) ((color >> 8) & 0xff);
+                    this.b = (short) ((color) & 0xff);
+                    markUpdated();
+                }
+            }
+            this.progress = 0.0f;
+        }
+    }
+
     public static class Ticker implements BlockEntityTicker<BarrelBlockEntity> {
         @Override
         public void tick(Level level, BlockPos pos, BlockState state, BarrelBlockEntity barrel) {
@@ -460,31 +486,61 @@ public class BarrelBlockEntity extends EBlockEntity {
                 // Turn compost to dirt
                 if (barrel.isComposting()) {
                     barrel.doCompost();
-                } else if (barrel.hasFullWater()) {
-                    var rand = level.random;
-                    var mycelium = 0f;
+                } else if (isHotFluid(barrel.tank.getFluid().getFluid().getFluidType()) && state.ignitedByLava()) {
+                    if ((barrel.progress += getProgressStep()) >= 1.0f) {
+                        if (barrel.tank.getFluidAmount() == 1000) {
+                            var fluid = barrel.tank.getFluid().getFluid();
+                            level.setBlockAndUpdate(pos, fluid.getFluidType().getBlockForFluidState(level, pos, fluid.defaultFluidState()));
+                        } else {
+                            level.setBlockAndUpdate(pos, Blocks.FIRE.defaultBlockState());
+                        }
+                    }
+                    barrel.markUpdated();
+                } else if (level.isRainingAt(pos.above()) && barrel.item.getStackInSlot(0).isEmpty() && barrel.compost == 0) {
+                    fillRainWater(barrel, barrel.tank);
+                } else if (barrel.currentTransformRecipe != null) {
+                    var recipe = barrel.currentTransformRecipe;
+                    var catalysts = 0;
 
-                    for (BlockPos cursor : BlockPos.betweenClosed(pos.getX() - 1, pos.getY() - 1, pos.getZ() - 1, pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1)) {
-                        if (level.getBlockState(cursor).getBlock() == Blocks.MYCELIUM) {
-                            mycelium += 0.15f;
+                    for (var cursor : BlockPos.betweenClosed(pos.getX() - 1, pos.getY() - 1, pos.getZ() - 1, pos.getX() + 1, pos.getY() - 1, pos.getZ() + 1)) {
+                        if (recipe.catalyst.test(level.getBlockState(cursor))) {
+                            catalysts++;
 
-                            if (rand.nextInt(1500) == 0) {
-                                BlockPos above = cursor.above();
+                            if (!recipe.byproducts.isEmpty()) {
+                                var rand = level.random;
 
-                                if (level.getBlockState(above).isAir()) {
-                                    if (rand.nextBoolean()) {
-                                        level.setBlockAndUpdate(above, Blocks.RED_MUSHROOM.defaultBlockState());
-                                    } else {
-                                        level.setBlockAndUpdate(above, Blocks.BROWN_MUSHROOM.defaultBlockState());
+                                if (rand.nextInt(1500) == 0) {
+                                    var above = cursor.above();
+
+                                    if (level.getBlockState(above).isAir()) {
+                                        var byproduct = recipe.byproducts.getRandom(rand);
+                                        if (byproduct.canSurvive(level, above)) {
+                                            level.setBlockAndUpdate(above, byproduct);
+                                        }
                                     }
                                 }
                             }
                         }
                     }
 
-                    // Try to perform a fluid transformation recipe
+                    if (catalysts == 0) {
+                        barrel.currentTransformRecipe = null;
+                    } else {
+                        barrel.progress += catalysts * (1.0f / barrel.currentTransformRecipe.duration);
+                        if (barrel.progress >= 1.0f - Mth.EPSILON) {
+                            // Reset progress
+                            barrel.progress = 0.0f;
+                            level.playSound(null, pos, SoundEvents.BREWING_STAND_BREW, SoundSource.BLOCKS, 1.0f, 0.6f);
+                            barrel.tank.setFluid(FluidStack.EMPTY);
+                            barrel.tank.fill(new FluidStack(EFluids.WITCH_WATER.get(), 1000), IFluidHandler.FluidAction.EXECUTE);
+                        }
+                        barrel.markUpdated();
+                    }
+                } else if (barrel.hasFullWater()) {
                     if (barrel.tank.getFluid().getFluid().getFluidType() == ForgeMod.WATER_TYPE.get()) {
-                        if (mycelium == 0 && state.ignitedByLava() && rand.nextInt(500) == 0) {
+                        var rand = level.random;
+                        // Leak water to create moss (only wooden barrels do this)
+                        if (state.ignitedByLava() && rand.nextInt(500) == 0) {
                             var randomPos = pos.offset(rand.nextIntBetweenInclusive(-MOSS_SPREAD_RANGE, MOSS_SPREAD_RANGE), -1, rand.nextIntBetweenInclusive(-MOSS_SPREAD_RANGE, MOSS_SPREAD_RANGE));
                             var randomBlock = level.getBlockState(randomPos).getBlock();
 
@@ -494,42 +550,21 @@ public class BarrelBlockEntity extends EBlockEntity {
                                 level.setBlock(randomPos, Blocks.MOSSY_STONE_BRICKS.defaultBlockState(), 3);
                             }
                         }
-
-                        if (barrel.progress != (barrel.progress += mycelium * getProgressStep())) {
-                            barrel.markUpdated();
-                        }
-
-                        if (barrel.progress >= 1.0f) {
-                            // Reset progress
-                            barrel.progress = 0.0f;
-                            level.playSound(null, pos, SoundEvents.BREWING_STAND_BREW, SoundSource.BLOCKS, 1.0f, 0.6f);
-                            barrel.tank.setFluid(new FluidStack(EFluids.WITCH_WATER.get(), barrel.tank.getFluidAmount()));
-                        }
-                    }
-                } else if (isHotFluid(barrel.tank.getFluid().getFluid().getFluidType())) {
-                    if (state.ignitedByLava()) {
-                        if ((barrel.progress += getProgressStep()) >= 1.0f) {
-                            if (barrel.tank.getFluidAmount() == 1000) {
-                                var fluid = barrel.tank.getFluid().getFluid();
-                                level.setBlockAndUpdate(pos, fluid.getFluidType().getBlockForFluidState(level, pos, fluid.defaultFluidState()));
-                            } else {
-                                level.setBlockAndUpdate(pos, Blocks.FIRE.defaultBlockState());
-                            }
-                        }
-                        barrel.markUpdated();
-                    }
-                } else if (level.isRainingAt(pos.above()) && barrel.item.getStackInSlot(0).isEmpty() && barrel.compost == 0) {
-                    if (barrel.tank.isEmpty()) {
-                        barrel.tank.setFluid(new FluidStack(Fluids.WATER, 1));
-                        barrel.markUpdated();
-                    } else if (barrel.tank.getFluid().getFluid() == Fluids.WATER) {
-                        barrel.tank.getFluid().grow(1);
-                        barrel.markUpdated();
                     }
                 }
             } else {
                 barrel.spawnParticlesIfBurning();
             }
+        }
+    }
+
+    public static void fillRainWater(EBlockEntity block, FluidHelper tank) {
+        if (tank.isEmpty()) {
+            tank.setFluid(new FluidStack(Fluids.WATER, 1));
+            block.markUpdated();
+        } else if (tank.getFluid().getFluid() == Fluids.WATER && tank.getFluidAmount() < tank.getCapacity()) {
+            tank.getFluid().grow(1);
+            block.markUpdated();
         }
     }
 
@@ -556,6 +591,7 @@ public class BarrelBlockEntity extends EBlockEntity {
     @Override
     public void onLoad() {
         tryInWorldFluidMixing();
+        updateFluidTransform();
     }
 
     // Inner class
@@ -571,7 +607,7 @@ public class BarrelBlockEntity extends EBlockEntity {
         }
 
         @Override
-        public @NotNull ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
+        public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
             if (stack.isEmpty())
                 return ItemStack.EMPTY;
             validateSlotIndex(slot);
@@ -595,7 +631,7 @@ public class BarrelBlockEntity extends EBlockEntity {
         }
 
         @Override
-        public @NotNull ItemStack extractItem(int slot, int amount, boolean simulate) {
+        public ItemStack extractItem(int slot, int amount, boolean simulate) {
             return super.extractItem(slot, amount, simulate);
         }
 
@@ -624,45 +660,7 @@ public class BarrelBlockEntity extends EBlockEntity {
                 BarrelBlockEntity.this.tryInWorldFluidMixing();
                 BarrelBlockEntity.this.markUpdated();
             }
-        }
-
-        @Override
-        public int fill(FluidStack resource, FluidAction action) {
-            if (resource.isEmpty() || !isFluidValid(resource)) {
-                return 0;
-            }
-            if (action.simulate()) {
-                if (this.fluid.isEmpty()) {
-                    return Math.min(this.capacity, resource.getAmount());
-                }
-                if (!this.fluid.isFluidEqual(resource)) {
-                    return 0;
-                }
-                return Math.min(this.capacity - this.fluid.getAmount(), resource.getAmount());
-            }
-            if (this.fluid.isEmpty()) {
-                // fix forge's implementation to avoid dupes
-                int amount = Math.min(this.capacity, resource.getAmount());
-                this.fluid = new FluidStack(resource, Math.min(this.capacity, amount));
-                onContentsChanged();
-                return amount;
-            }
-            if (!this.fluid.isFluidEqual(resource))
-            {
-                return 0;
-            }
-            int filled = this.capacity - this.fluid.getAmount();
-
-            if (resource.getAmount() < filled) {
-                this.fluid.grow(resource.getAmount());
-                filled = resource.getAmount();
-            } else {
-                this.fluid.setAmount(this.capacity);
-            }
-            if (filled > 0) {
-                onContentsChanged();
-            }
-            return filled;
+            BarrelBlockEntity.this.updateFluidTransform();
         }
     }
 }

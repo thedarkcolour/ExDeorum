@@ -72,7 +72,7 @@ public record CrucibleHeatRecipe(ResourceLocation id, BlockPredicate blockPredic
     public static class Serializer implements RecipeSerializer<CrucibleHeatRecipe> {
         @Override
         public CrucibleHeatRecipe fromJson(ResourceLocation id, JsonObject json) {
-            BlockPredicate blockPredicate = RecipeUtil.readBlockPredicate(id, json);
+            BlockPredicate blockPredicate = RecipeUtil.readBlockPredicate(id, json, "block_predicate");
             if (blockPredicate == null) return null;
             int heatValue = json.get("heat_value").getAsInt();
             return new CrucibleHeatRecipe(id, blockPredicate, heatValue);

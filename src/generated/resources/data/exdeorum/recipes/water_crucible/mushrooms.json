@@ -1,8 +1,8 @@
 {
   "type": "exdeorum:water_crucible",
   "fluid": {
-    "Amount": 100,
-    "FluidName": "minecraft:water"
+    "amount": 100,
+    "fluid": "minecraft:water"
   },
   "ingredient": {
     "tag": "forge:mushrooms"

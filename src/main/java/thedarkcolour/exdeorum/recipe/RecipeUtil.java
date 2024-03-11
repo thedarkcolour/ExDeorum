@@ -18,11 +18,15 @@
 
 package thedarkcolour.exdeorum.recipe;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSyntaxException;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectSet;
+import net.minecraft.commands.arguments.blocks.BlockStateParser;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -38,6 +42,7 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -54,6 +59,7 @@ import thedarkcolour.exdeorum.item.HammerItem;
 import thedarkcolour.exdeorum.loot.SummationGenerator;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelCompostRecipe;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelFluidMixingRecipe;
+import thedarkcolour.exdeorum.recipe.barrel.FluidTransformationRecipe;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelMixingRecipe;
 import thedarkcolour.exdeorum.recipe.cache.*;
 import thedarkcolour.exdeorum.recipe.crook.CrookRecipe;
@@ -82,6 +88,7 @@ public final class RecipeUtil {
     private static SingleIngredientRecipeCache<HammerRecipe> hammerRecipeCache;
     private static SieveRecipeCache sieveRecipeCache;
     private static BarrelFluidMixingRecipeCache barrelFluidMixingRecipeCache;
+    private static FluidTransformationRecipeCache fluidTransformationRecipeCache;
     private static CrookRecipeCache crookRecipeCache;
     private static CrucibleHeatRecipeCache crucibleHeatRecipeCache;
 
@@ -92,6 +99,7 @@ public final class RecipeUtil {
         hammerRecipeCache = new SingleIngredientRecipeCache<>(recipes, ERecipeTypes.HAMMER).trackAllRecipes();
         sieveRecipeCache = new SieveRecipeCache(recipes);
         barrelFluidMixingRecipeCache = new BarrelFluidMixingRecipeCache(recipes);
+        fluidTransformationRecipeCache = new FluidTransformationRecipeCache(recipes);
         crookRecipeCache = new CrookRecipeCache(recipes);
         crucibleHeatRecipeCache = new CrucibleHeatRecipeCache(recipes);
         HammerItem.refreshValidBlocks();
@@ -104,6 +112,7 @@ public final class RecipeUtil {
         hammerRecipeCache = null;
         sieveRecipeCache = null;
         barrelFluidMixingRecipeCache = null;
+        fluidTransformationRecipeCache = null;
         crookRecipeCache = null;
         crucibleHeatRecipeCache = null;
     }
@@ -321,6 +330,15 @@ public final class RecipeUtil {
         }
     }
 
+    @Nullable
+    public static FluidTransformationRecipe getFluidTransformationRecipe(Fluid baseFluid, BlockState catalystState) {
+        if (baseFluid != Fluids.EMPTY) {
+            return fluidTransformationRecipeCache.getRecipe(baseFluid, catalystState);
+        } else {
+            return null;
+        }
+    }
+
     public static double getExpectedValue(NumberProvider provider) {
         if (provider instanceof ConstantValue constant) {
             return constant.value;
@@ -349,11 +367,11 @@ public final class RecipeUtil {
     }
 
     @Nullable
-    public static BlockPredicate readBlockPredicate(ResourceLocation recipeId, JsonObject json) {
-        BlockPredicate blockPredicate = BlockPredicate.fromJson(json.getAsJsonObject("block_predicate"));
+    public static BlockPredicate readBlockPredicate(ResourceLocation recipeId, JsonObject json, String key) {
+        BlockPredicate blockPredicate = BlockPredicate.fromJson(json.getAsJsonObject(key));
 
         if (blockPredicate == null) {
-            ExDeorum.LOGGER.error("Invalid block_predicate for recipe {}, refer to Ex Deorum documentation for syntax: {}", recipeId, json.getAsJsonObject("block_predicate"));
+            ExDeorum.LOGGER.error("Invalid {} for recipe {}, refer to Ex Deorum documentation for syntax: {}", key, recipeId, json.getAsJsonObject(key));
         }
         return blockPredicate;
     }
@@ -387,5 +405,79 @@ public final class RecipeUtil {
 
     public static ObjectSet<Object2IntMap.Entry<BlockState>> getHeatSources() {
         return crucibleHeatRecipeCache.getEntries();
+    }
+
+    public static FluidStack readFluidStack(JsonObject json, String key) {
+        if (json.has(key)) {
+            var fluidJson = json.getAsJsonObject(key);
+            // Since we aren't using codec anymore, we can use consistent naming with other JSON objects
+            if (fluidJson.has("FluidName")) {
+                var stack = new FluidStack(RecipeUtil.readFluid(fluidJson, "FluidName"), GsonHelper.getAsInt(fluidJson, "Amount"));
+                if (fluidJson.has("Tag")) {
+                    stack.setTag(CraftingHelper.getNBT(fluidJson.get("Tag")));
+                }
+                return stack;
+            } else {
+                var stack = new FluidStack(RecipeUtil.readFluid(fluidJson, "fluid"), GsonHelper.getAsInt(fluidJson, "amount"));
+                if (fluidJson.has("nbt")) {
+                    stack.setTag(CraftingHelper.getNBT(fluidJson.get("nbt")));
+                }
+                return stack;
+            }
+        } else {
+            throw new JsonSyntaxException("Missing fluid");
+        }
+    }
+
+    public static JsonElement writeFluidStackJson(FluidStack fluidStack) {
+        JsonObject object = new JsonObject();
+        object.addProperty("fluid", getFluidId(fluidStack.getFluid()));
+        object.addProperty("amount", fluidStack.getAmount());
+        if (fluidStack.hasTag()) {
+            object.addProperty("nbt", fluidStack.getTag().getAsString());
+        }
+        return object;
+    }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public static JsonPrimitive writeBlockState(BlockState state) {
+        var registryKey = BuiltInRegistries.BLOCK.getKey(state.getBlock());
+
+        Collection<Property> properties = (Collection<Property>) ((Collection)state.getProperties());
+
+        if (properties.isEmpty()) {
+            return new JsonPrimitive(registryKey.toString());
+        } else {
+            StringBuilder builder = new StringBuilder();
+            builder.append(registryKey);
+            builder.append('[');
+            for (Iterator<Property> iterator = properties.iterator(); iterator.hasNext(); ) {
+                var property = iterator.next();
+                builder.append(property.getName());
+                builder.append('=');
+                builder.append(property.getName(state.getValue(property)));
+                if (iterator.hasNext()) {
+                    builder.append(',');
+                }
+            }
+            builder.append(']');
+            return new JsonPrimitive(builder.toString());
+        }
+    }
+
+    public static BlockState parseBlockState(String stateString) {
+        try {
+            return BlockStateParser.parseForBlock(BuiltInRegistries.BLOCK.asLookup(), stateString, false).blockState();
+        } catch (CommandSyntaxException e) {
+            throw new IllegalArgumentException("Failed to parse BlockState string \"" + stateString + "\"");
+        }
+    }
+
+    public static String getFluidId(Fluid baseFluid) {
+        return BuiltInRegistries.FLUID.getKey(baseFluid).toString();
+    }
+
+    public static String writeItemJson(Item result) {
+        return BuiltInRegistries.ITEM.getKey(result).toString();
     }
 }

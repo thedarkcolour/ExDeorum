@@ -1,3 +1,9 @@
+## Ex Deorum 1.26
+- Fluid transformation recipes are now data driven
+- Increased drop rate of Iron Ore Chunk
+- Updated documentation to explain how to add Ex Deorum recipes through JSON data packs. If you are using KubeJS/CraftTweaker, this will probably be useful to you as well. Check it out [here](https://exdeorum.readthedocs.io/en/latest/datapack/).
+- Fixed Witch Water spawning mushrooms when not converting (now, they only spawn while converting from water to witch water)
+
 ## Ex Deorum 1.25
 - Fixed crash with fluid containers
 - Added `exdeorum:summation` result count type for sieve recipes, mostly for converting Ex Nihilo Sequentia recipes over (also usable for loot tables)

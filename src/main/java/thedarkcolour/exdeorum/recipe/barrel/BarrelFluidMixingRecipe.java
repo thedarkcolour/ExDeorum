@@ -76,7 +76,7 @@ public class BarrelFluidMixingRecipe implements Recipe<Container> {
 
     @Override
     public ItemStack getResultItem(RegistryAccess pRegistryAccess) {
-        return ItemStack.EMPTY;
+        return new ItemStack(this.result);
     }
 
     @Override

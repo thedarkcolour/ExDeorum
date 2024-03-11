@@ -18,7 +18,6 @@
 
 package thedarkcolour.exdeorum.compat.kubejs;
 
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.latvian.mods.kubejs.bindings.event.ServerEvents;
 import dev.latvian.mods.kubejs.recipe.RecipesEventJS;
 import dev.latvian.mods.kubejs.recipe.ReplacementMatch;
@@ -26,8 +25,6 @@ import dev.latvian.mods.kubejs.recipe.filter.RecipeFilter;
 import dev.latvian.mods.kubejs.script.ScriptType;
 import dev.latvian.mods.rhino.util.HideFromJS;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
-import net.minecraft.commands.arguments.blocks.BlockStateParser;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -35,6 +32,7 @@ import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraftforge.registries.RegistryObject;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.recipe.BlockPredicate;
+import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.recipe.crucible.FinishedCrucibleHeatRecipe;
 import thedarkcolour.exdeorum.registry.ERecipeTypes;
 
@@ -59,17 +57,12 @@ class ExDeorumKubeJsBindings {
     @SuppressWarnings({"rawtypes", "unchecked"})
     public void setCrucibleHeatValueForState(String stateString, int value) {
         onRecipesEvent(event -> {
-            try {
-                var state = BlockStateParser.parseForBlock(BuiltInRegistries.BLOCK.asLookup(), stateString, false).blockState();
-                var properties = StatePropertiesPredicate.Builder.properties();
-                for (Property prop : state.getProperties()) {
-                    bypassTypeChecking(properties, prop, state);
-                }
-                event.custom(new FinishedCrucibleHeatRecipe(null, BlockPredicate.blockState(state.getBlock(), properties.build()), value).serializeRecipe());
-            } catch (CommandSyntaxException exception) {
-                // Throw a more appropriate exception.
-                throw new IllegalArgumentException("Failed to parse BlockState string \"" + stateString + "\"");
+            var state = RecipeUtil.parseBlockState(stateString);
+            var properties = StatePropertiesPredicate.Builder.properties();
+            for (Property prop : state.getProperties()) {
+                bypassTypeChecking(properties, prop, state);
             }
+            event.custom(new FinishedCrucibleHeatRecipe(null, BlockPredicate.blockState(state.getBlock(), properties.build()), value).serializeRecipe());
         });
     }
 

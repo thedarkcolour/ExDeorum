@@ -29,14 +29,13 @@ import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import thedarkcolour.exdeorum.recipe.EFinishedRecipe;
 import thedarkcolour.exdeorum.registry.ERecipeSerializers;
 
-public class FinishedHammerRecipe implements EFinishedRecipe {
-    private final ResourceLocation id;
+public class FinishedHammerRecipe extends EFinishedRecipe {
     private final Ingredient ingredient;
     private final Item result;
     private final NumberProvider resultAmount;
 
     public FinishedHammerRecipe(ResourceLocation id, Ingredient ingredient, Item result, NumberProvider resultAmount) {
-        this.id = id;
+        super(id);
         this.ingredient = ingredient;
         this.result = result;
         this.resultAmount = resultAmount;
@@ -47,11 +46,6 @@ public class FinishedHammerRecipe implements EFinishedRecipe {
         object.add("ingredient", this.ingredient.toJson());
         object.addProperty("result", BuiltInRegistries.ITEM.getKey(this.result).toString());
         object.add("result_amount", LootDataType.PREDICATE.parser().toJsonTree(this.resultAmount));
-    }
-
-    @Override
-    public ResourceLocation getId() {
-        return this.id;
     }
 
     @Override

@@ -31,15 +31,14 @@ import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import thedarkcolour.exdeorum.recipe.EFinishedRecipe;
 import thedarkcolour.exdeorum.registry.ERecipeSerializers;
 
-public class FinishedSieveRecipe implements EFinishedRecipe {
-    private final ResourceLocation id;
+public class FinishedSieveRecipe extends EFinishedRecipe {
     private final Ingredient ingredient;
     private final Item mesh;
     private final Either<Item, TagKey<Item>> result;
     private final NumberProvider resultAmount;
 
     public FinishedSieveRecipe(ResourceLocation id, Item mesh, Ingredient ingredient, Either<Item, TagKey<Item>> result, NumberProvider resultAmount) {
-        this.id = id;
+        super(id);
         this.mesh = mesh;
         this.ingredient = ingredient;
         this.result =  result;
@@ -56,11 +55,6 @@ public class FinishedSieveRecipe implements EFinishedRecipe {
             object.addProperty("result_tag", tag.location().toString());
         });
         object.add("result_amount", LootDataType.PREDICATE.parser().toJsonTree(this.resultAmount));
-    }
-
-    @Override
-    public ResourceLocation getId() {
-        return this.id;
     }
 
     @Override

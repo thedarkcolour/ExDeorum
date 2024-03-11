@@ -23,16 +23,27 @@ import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
-public interface EFinishedRecipe extends FinishedRecipe {
+public abstract class EFinishedRecipe implements FinishedRecipe {
+    private final ResourceLocation id;
+
+    public EFinishedRecipe(ResourceLocation id) {
+        this.id = id;
+    }
+
+    @Override
+    public ResourceLocation getId() {
+        return this.id;
+    }
+
     @Nullable
     @Override
-    default JsonObject serializeAdvancement() {
+    public JsonObject serializeAdvancement() {
         return null;
     }
 
     @Nullable
     @Override
-    default ResourceLocation getAdvancementId() {
+    public ResourceLocation getAdvancementId() {
         return null;
     }
 }

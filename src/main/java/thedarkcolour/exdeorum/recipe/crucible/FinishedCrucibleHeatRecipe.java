@@ -25,13 +25,12 @@ import thedarkcolour.exdeorum.recipe.BlockPredicate;
 import thedarkcolour.exdeorum.recipe.EFinishedRecipe;
 import thedarkcolour.exdeorum.registry.ERecipeSerializers;
 
-public class FinishedCrucibleHeatRecipe implements EFinishedRecipe {
-    private final ResourceLocation id;
+public class FinishedCrucibleHeatRecipe extends EFinishedRecipe {
     private final BlockPredicate blockPredicate;
     private final int heatValue;
 
     public FinishedCrucibleHeatRecipe(ResourceLocation id, BlockPredicate blockPredicate, int heatValue) {
-        this.id = id;
+        super(id);
         this.blockPredicate = blockPredicate;
         this.heatValue = heatValue;
     }
@@ -40,11 +39,6 @@ public class FinishedCrucibleHeatRecipe implements EFinishedRecipe {
     public void serializeRecipeData(JsonObject json) {
         json.add("block_predicate", this.blockPredicate.toJson());
         json.addProperty("heat_value", this. heatValue);
-    }
-
-    @Override
-    public ResourceLocation getId() {
-        return this.id;
     }
 
     @Override

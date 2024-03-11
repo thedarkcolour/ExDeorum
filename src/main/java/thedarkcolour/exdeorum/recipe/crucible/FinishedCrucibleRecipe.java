@@ -24,11 +24,10 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-import thedarkcolour.exdeorum.recipe.CodecUtil;
 import thedarkcolour.exdeorum.recipe.EFinishedRecipe;
+import thedarkcolour.exdeorum.recipe.RecipeUtil;
 
-public class FinishedCrucibleRecipe implements EFinishedRecipe {
-    private final ResourceLocation id;
+public class FinishedCrucibleRecipe extends EFinishedRecipe {
     private final RecipeSerializer<?> serializer;
     private final Ingredient ingredient;
     private final FluidStack fluidStack;
@@ -38,7 +37,7 @@ public class FinishedCrucibleRecipe implements EFinishedRecipe {
     }
 
     public FinishedCrucibleRecipe(ResourceLocation id, RecipeSerializer<?> serializer, Ingredient ingredient, FluidStack fluidStack) {
-        this.id = id;
+        super(id);
         this.serializer = serializer;
         this.ingredient = ingredient;
         this.fluidStack = fluidStack;
@@ -47,12 +46,8 @@ public class FinishedCrucibleRecipe implements EFinishedRecipe {
     @Override
     public void serializeRecipeData(JsonObject json) {
         json.add("ingredient", this.ingredient.toJson());
-        json.add("fluid", CodecUtil.encode(FluidStack.CODEC, this.fluidStack));
-    }
-
-    @Override
-    public ResourceLocation getId() {
-        return this.id;
+        JsonObject fluidObj = new JsonObject();
+        json.add("fluid", RecipeUtil.writeFluidStackJson(this.fluidStack));
     }
 
     @Override

@@ -27,14 +27,13 @@ import thedarkcolour.exdeorum.recipe.BlockPredicate;
 import thedarkcolour.exdeorum.recipe.EFinishedRecipe;
 import thedarkcolour.exdeorum.registry.ERecipeSerializers;
 
-public class FinishedCrookRecipe implements EFinishedRecipe {
-    private final ResourceLocation id;
+public class FinishedCrookRecipe extends EFinishedRecipe {
     private final BlockPredicate predicate;
     private final Item result;
     private final float chance;
 
     public FinishedCrookRecipe(ResourceLocation id, BlockPredicate predicate, Item result, float chance) {
-        this.id = id;
+        super(id);
         this.predicate = predicate;
         this.result = result;
         this.chance = chance;
@@ -45,11 +44,6 @@ public class FinishedCrookRecipe implements EFinishedRecipe {
         json.add("block_predicate", this.predicate.toJson());
         json.addProperty("result", BuiltInRegistries.ITEM.getKey(this.result).toString());
         json.addProperty("chance", this.chance);
-    }
-
-    @Override
-    public ResourceLocation getId() {
-        return this.id;
     }
 
     @Override

@@ -58,6 +58,7 @@ public class WitchWaterFluid extends FluidType {
     @Override
     public void initializeClient(Consumer<IClientFluidTypeExtensions> consumer) {
         consumer.accept(new IClientFluidTypeExtensions() {
+            private static final Vector3f FOG_COLOR = new Vector3f(32f / 255f, 12f / 255f, 64f / 255f);
             @Override
             public ResourceLocation getStillTexture() {
                 return STILL_TEXTURE;
@@ -75,13 +76,12 @@ public class WitchWaterFluid extends FluidType {
 
             @Override
             public @NotNull Vector3f modifyFogColor(Camera camera, float partialTick, ClientLevel level, int renderDistance, float darkenWorldAmount, Vector3f fluidFogColor) {
-                return new Vector3f(32f / 255f, 12f / 255f, 64f / 255f);
+                return FOG_COLOR;
             }
 
-            // todo return the correct value here
             @Override
             public int getTintColor() {
-                return 0xFFFFFFFF;
+                return 0xffffffff;
             }
         });
     }

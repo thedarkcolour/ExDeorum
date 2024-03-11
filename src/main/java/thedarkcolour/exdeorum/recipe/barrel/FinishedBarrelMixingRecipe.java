@@ -28,15 +28,14 @@ import net.minecraft.world.level.material.Fluid;
 import thedarkcolour.exdeorum.recipe.EFinishedRecipe;
 import thedarkcolour.exdeorum.registry.ERecipeSerializers;
 
-public class FinishedBarrelMixingRecipe implements EFinishedRecipe {
-    private final ResourceLocation id;
+public class FinishedBarrelMixingRecipe extends EFinishedRecipe {
     private final Ingredient ingredient;
     private final Fluid fluid;
     private final int fluidAmount;
     private final Item result;
 
     public FinishedBarrelMixingRecipe(ResourceLocation id, Ingredient ingredient, Fluid fluid, int fluidAmount, Item result) {
-        this.id = id;
+        super(id);
         this.ingredient = ingredient;
         this.fluid = fluid;
         this.fluidAmount = fluidAmount;
@@ -49,11 +48,6 @@ public class FinishedBarrelMixingRecipe implements EFinishedRecipe {
         json.addProperty("fluid", BuiltInRegistries.FLUID.getKey(this.fluid).toString());
         json.addProperty("fluid_amount", this.fluidAmount);
         json.addProperty("result", BuiltInRegistries.ITEM.getKey(this.result).toString());
-    }
-
-    @Override
-    public ResourceLocation getId() {
-        return this.id;
     }
 
     @Override
