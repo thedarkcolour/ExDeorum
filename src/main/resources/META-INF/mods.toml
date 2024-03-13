@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[47,)"
+loaderVersion="${loader_version_range}"
 license="GNU GPLv3"
 
 [[mods]]
@@ -12,9 +12,9 @@ description='''
 Bringing back the original Ex Nihilo.
 '''
 [[dependencies.exdeorum]]
-    modId="forge"
+    modId="neoforge"
     mandatory=true
-    versionRange="[47,)"
+    versionRange="${neo_version_range}"
     ordering="NONE"
     side="BOTH"
 
