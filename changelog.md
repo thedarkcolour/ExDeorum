@@ -1,3 +1,6 @@
+## Ex Deorum 1.27
+- Fix a dupe glitch with Mechanical Sieve
+
 ## Ex Deorum 1.26
 - Fluid transformation recipes are now data driven
 - Increased drop rate of Iron Ore Chunk

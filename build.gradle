@@ -5,7 +5,7 @@ plugins {
     id 'org.spongepowered.mixin' version '0.7.+'
 }
 
-version = '1.26'
+version = '1.27'
 group = 'thedarkcolour.exdeorum'
 base {
     archivesName = 'exdeorum'
