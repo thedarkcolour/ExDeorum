@@ -50,6 +50,7 @@ public record SummationGenerator(NumberProvider[] providers) implements NumberPr
             for (var provider : value.providers) {
                 array.add(ctx.serialize(provider, NumberProvider.class));
             }
+            json.add("values", array);
         }
 
         @Override
