@@ -1,3 +1,6 @@
+## Ex Deorum 1.28
+- Fix a bug from 1.26 that made Witch Water crafted from Lava instead of Water
+
 ## Ex Deorum 1.27
 - Fix a dupe glitch with Mechanical Hammer
 
