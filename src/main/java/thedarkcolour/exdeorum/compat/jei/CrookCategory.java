@@ -40,8 +40,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.RenderTypeHelper;
-import net.minecraftforge.client.model.data.ModelData;
+import net.neoforged.neoforge.client.RenderTypeHelper;
+import net.neoforged.neoforge.client.model.data.ModelData;
 import thedarkcolour.exdeorum.data.TranslationKeys;
 import thedarkcolour.exdeorum.registry.EBlocks;
 import thedarkcolour.exdeorum.registry.EItems;
@@ -124,7 +124,8 @@ public class CrookCategory implements IRecipeCategory<CrookJeiRecipe> {
             });
         } else {
             ClientJeiUtil.renderBlock(graphics, state, 28, 18, 10, 20f, (block, poseStack, buffers) -> {
-                Minecraft.getInstance().getBlockRenderer().renderSingleBlock(block, poseStack, buffers, 15728880, OverlayTexture.NO_OVERLAY);
+                //noinspection DataFlowIssue
+                Minecraft.getInstance().getBlockRenderer().renderSingleBlock(block, poseStack, buffers, 15728880, OverlayTexture.NO_OVERLAY, ModelData.EMPTY, null);
             });
         }
     }

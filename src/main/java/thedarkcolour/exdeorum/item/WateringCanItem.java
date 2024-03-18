@@ -25,7 +25,6 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -51,15 +50,13 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
-import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
-import org.jetbrains.annotations.NotNull;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
+import net.neoforged.neoforge.common.NeoForgeMod;
+import net.neoforged.neoforge.common.util.FakePlayer;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.capability.templates.FluidHandlerItemStack;
 import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.blockentity.BarrelBlockEntity;
 import thedarkcolour.exdeorum.data.TranslationKeys;
@@ -97,13 +94,21 @@ public class WateringCanItem extends Item {
 
     public static ItemStack getFull(Supplier<? extends Item> wateringCan) {
         var stack = new ItemStack(wateringCan.get());
-        stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).ifPresent(handler -> handler.fill(new FluidStack(Fluids.WATER, Integer.MAX_VALUE), IFluidHandler.FluidAction.EXECUTE));
+        var fluidHandler = stack.getCapability(Capabilities.FluidHandler.ITEM);
+        if (fluidHandler != null) {
+            fluidHandler.fill(new FluidStack(Fluids.WATER, Integer.MAX_VALUE), IFluidHandler.FluidAction.EXECUTE);
+        }
         return stack;
     }
 
     @Override
     public boolean isBarVisible(ItemStack stack) {
-        return this.renewing ? stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).map(handler -> handler.getFluidInTank(0).getAmount() < this.capacity).orElse(true) : true;
+        if (this.renewing) {
+            var fluidHandler = stack.getCapability(Capabilities.FluidHandler.ITEM);
+            return fluidHandler == null || fluidHandler.getFluidInTank(0).getAmount() < this.capacity;
+        } else {
+            return false;
+        }
     }
 
     @Override
@@ -113,9 +118,12 @@ public class WateringCanItem extends Item {
 
     @Override
     public int getBarWidth(ItemStack stack) {
-        return stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).map(fluidHandler -> {
-            return Math.round((float) fluidHandler.getFluidInTank(0).getAmount() * 13.0F / (float) this.capacity);
-        }).orElse(0);
+        var fluidHandler = stack.getCapability(Capabilities.FluidHandler.ITEM);
+        if (fluidHandler != null) {
+            return Math.round((float) fluidHandler.getFluidInTank(0).getAmount() * 13f / (float) this.capacity);
+        } else {
+            return 0;
+        }
     }
 
     @Override
@@ -130,16 +138,18 @@ public class WateringCanItem extends Item {
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level pLevel, List<Component> tooltip, TooltipFlag pIsAdvanced) {
-        stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).ifPresent(fluidHandler -> {
+        var fluidHandler = stack.getCapability(Capabilities.FluidHandler.ITEM);
+        if (fluidHandler != null) {
             // use the block name which is guaranteed to have a vanilla translation
             tooltip.add(Component.translatable("block.minecraft.water").append(Component.translatable(TranslationKeys.FRACTION_DISPLAY, fluidHandler.getFluidInTank(0).getAmount(), this.capacity)).withStyle(ChatFormatting.GRAY));
-        });
+        }
     }
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         var itemInHand = player.getItemInHand(hand);
-        return itemInHand.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).map(fluidHandler -> {
+        var fluidHandler = itemInHand.getCapability(Capabilities.FluidHandler.ITEM);
+        if (fluidHandler != null) {
             if (fluidHandler.getFluidInTank(0).getAmount() < this.capacity) {
                 var hitResult = getPlayerPOVHitResult(level, player, ClipContext.Fluid.SOURCE_ONLY);
 
@@ -150,7 +160,7 @@ public class WateringCanItem extends Item {
                     if (state.getFluidState().getType() == Fluids.WATER && state.getBlock() instanceof BucketPickup pickup) {
                         if (!level.isClientSide) {
                             fluidHandler.fill(new FluidStack(Fluids.WATER, 1000), IFluidHandler.FluidAction.EXECUTE);
-                            pickup.pickupBlock(level, pos, state);
+                            pickup.pickupBlock(player, level, pos, state);
                             pickup.getPickupSound(state).ifPresent(sound -> player.playSound(sound, 1.0F, 1.0F));
                         }
 
@@ -170,8 +180,8 @@ public class WateringCanItem extends Item {
 
                 return InteractionResultHolder.consume(itemInHand);
             }
-            return InteractionResultHolder.pass(itemInHand);
-        }).orElse(InteractionResultHolder.pass(itemInHand));
+        }
+        return InteractionResultHolder.pass(itemInHand);
     }
 
     @Override
@@ -179,10 +189,11 @@ public class WateringCanItem extends Item {
         var useTicks = 72000 - remainingTicks;
 
         if (useTicks >= STARTUP_TIME || living instanceof FakePlayer) {
-            stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).ifPresent(fluidHandler -> {
+            var fluidHandler = stack.getCapability(Capabilities.FluidHandler.ITEM);
+            if (fluidHandler != null) {
                 if (!fluidHandler.getFluidInTank(0).isEmpty()) {
                     // do watering can
-                    var reachDist = living instanceof Player player ? player.getBlockReach() : living.getAttributeValue(ForgeMod.BLOCK_REACH.get());
+                    var reachDist = living instanceof Player player ? player.getBlockReach() : living.getAttributeValue(NeoForgeMod.BLOCK_REACH.value());
                     var hit = living.pick(reachDist, 0, true);
 
                     if (hit instanceof BlockHitResult blockHit && blockHit.getType() == HitResult.Type.BLOCK) {
@@ -195,7 +206,7 @@ public class WateringCanItem extends Item {
 
                                 if (!this.renewing || fluidHandler.getFluidInTank(0).getAmount() != this.capacity) {
                                     if (!(living instanceof Player player && player.getAbilities().instabuild)) {
-                                        ((CapabilityProvider) fluidHandler).drain();
+                                        ((FluidHandler) fluidHandler).drain();
                                     }
                                 }
                             }
@@ -215,7 +226,7 @@ public class WateringCanItem extends Item {
                     living.stopUsingItem();
                     isWatering = false;
                 }
-            });
+            }
         }
     }
 
@@ -236,7 +247,7 @@ public class WateringCanItem extends Item {
             } else if (state.getBlock() instanceof SugarCaneBlock block) {
                 var cursor = pos.mutable();
                 while (level.isInWorldBounds(cursor.move(0, 1, 0)) && level.getBlockState(cursor).getBlock() == block) {
-                    // just keep looping
+                    // just keep looping, cursor is moved up each check
                 }
                 // randomTick only works on the top sugarcane block
                 var topState = level.getBlockState(cursor.move(0, -1, 0));
@@ -295,18 +306,21 @@ public class WateringCanItem extends Item {
     }
 
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-        return new CapabilityProvider(stack, this.capacity);
-    }
-
-    @Override
     public void initializeClient(Consumer<IClientItemExtensions> consumer) {
         consumer.accept(ClientExtensions.INSTANCE);
     }
 
-    private static class CapabilityProvider extends FluidHandlerItemStack {
-        public CapabilityProvider(@NotNull ItemStack container, int capacity) {
-            super(container, capacity);
+    public static class FluidHandler extends FluidHandlerItemStack {
+        public FluidHandler(ItemStack container) {
+            super(container, determineCapacityFromItem(container.getItem()));
+        }
+
+        private static int determineCapacityFromItem(Item item) {
+            if (item instanceof WateringCanItem wateringCan) {
+                return wateringCan.capacity;
+            } else {
+                throw new IllegalArgumentException("Invalid watering can");
+            }
         }
 
         @Override

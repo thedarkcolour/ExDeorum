@@ -39,10 +39,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraftforge.items.ItemStackHandler;
+import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.blockentity.MechanicalHammerBlockEntity;
-import thedarkcolour.exdeorum.blockentity.MechanicalSieveBlockEntity;
 import thedarkcolour.exdeorum.config.EConfig;
 import thedarkcolour.exdeorum.data.TranslationKeys;
 import thedarkcolour.exdeorum.registry.EBlockEntities;
@@ -88,7 +87,7 @@ public class MechanicalHammerBlock extends EBlock {
     }
 
     @Override
-    public void playerWillDestroy(Level level, BlockPos pos, BlockState pState, Player player) {
+    public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState pState, Player player) {
         if (!level.isClientSide && player.isCreative() && level.getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS)) {
             if (level.getBlockEntity(pos) instanceof MechanicalHammerBlockEntity sieve) {
                 if (!sieve.inventory.getStackInSlot(MechanicalHammerBlockEntity.HAMMER_SLOT).isEmpty()) {
@@ -101,7 +100,7 @@ public class MechanicalHammerBlock extends EBlock {
             }
         }
 
-        super.playerWillDestroy(level, pos, pState, player);
+        return super.playerWillDestroy(level, pos, pState, player);
     }
 
     @Override

@@ -37,6 +37,7 @@ import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -45,11 +46,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.LegacyRandomSource;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
-import net.minecraftforge.client.model.CompositeModel;
-import net.minecraftforge.client.model.data.ModelData;
-import net.minecraftforge.registries.ForgeRegistries;
-import org.joml.Matrix4f;
+import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.neoforged.neoforge.client.model.CompositeModel;
+import net.neoforged.neoforge.client.model.data.ModelData;
 import org.joml.Vector3f;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.client.ter.SieveRenderer;
@@ -148,7 +147,7 @@ public class RenderUtil {
     }
 
     private static TextureAtlasSprite getTopTexture(Block block, BakedModel model) {
-        var registryName = ForgeRegistries.BLOCKS.getKey(block);
+        var registryName = BuiltInRegistries.BLOCK.getKey(block);
         var sprite = blockAtlas.getSprite(registryName.withPrefix("block/"));
         // for stuff like azalea bush, retry to get the top texture
         if (isMissingTexture(sprite)) {

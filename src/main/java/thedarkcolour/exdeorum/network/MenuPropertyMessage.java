@@ -19,27 +19,27 @@
 package thedarkcolour.exdeorum.network;
 
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.network.NetworkEvent;
-
-import java.util.function.Supplier;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
+import thedarkcolour.exdeorum.ExDeorum;
 
 // Like ClientboundContainerSetDataPacket except that the value is 32 bits instead of 16 bits
-public record MenuPropertyMessage(int containerId, int index, int value) {
-    public static void encode(MenuPropertyMessage msg, FriendlyByteBuf buffer) {
-        buffer.writeByte(msg.containerId);
-        buffer.writeShort(msg.index);
-        buffer.writeVarInt(msg.value);
+public record MenuPropertyMessage(int containerId, int index, int value) implements CustomPacketPayload {
+    public static final ResourceLocation ID = new ResourceLocation(ExDeorum.ID, "menu_property");
+
+    @Override
+    public void write(FriendlyByteBuf buffer) {
+        buffer.writeByte(this.containerId);
+        buffer.writeShort(this.index);
+        buffer.writeVarInt(this.value);
+    }
+
+    @Override
+    public ResourceLocation id() {
+        return ID;
     }
 
     public static MenuPropertyMessage decode(FriendlyByteBuf buffer) {
         return new MenuPropertyMessage(buffer.readByte(), buffer.readShort(), buffer.readVarInt());
-    }
-
-    public static void handle(MenuPropertyMessage msg, Supplier<NetworkEvent.Context> ctxSupplier) {
-        NetworkHandler.handle(ctxSupplier, ctx -> {
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientMessageHandler.handleMenuProperty(msg));
-        });
     }
 }

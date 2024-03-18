@@ -25,7 +25,7 @@ import me.shedaniel.rei.api.common.entry.EntryStack;
 import me.shedaniel.rei.api.common.entry.type.VanillaEntryTypes;
 import me.shedaniel.rei.forge.REIPluginClient;
 import net.minecraft.world.item.ItemStack;
-import thedarkcolour.exdeorum.compat.CompatHelper;
+import thedarkcolour.exdeorum.compat.CompatUtil;
 
 @SuppressWarnings("UnstableApiUsage")
 @REIPluginClient
@@ -35,16 +35,16 @@ public class ExDeorumReiPlugin implements REIClientPlugin {
         rule.hide(() -> {
             var builder = EntryIngredient.builder();
 
-            for (var barrel : CompatHelper.getAvailableBarrels(false)) {
+            for (var barrel : CompatUtil.getAvailableBarrels(false)) {
                 builder.add(EntryStack.of(VanillaEntryTypes.ITEM, new ItemStack(barrel)));
             }
-            for (var sieve : CompatHelper.getAvailableSieves(false, false)) {
+            for (var sieve : CompatUtil.getAvailableSieves(false, false)) {
                 builder.add(EntryStack.of(VanillaEntryTypes.ITEM, new ItemStack(sieve)));
             }
-            for (var crucible : CompatHelper.getAvailableLavaCrucibles(false)) {
+            for (var crucible : CompatUtil.getAvailableLavaCrucibles(false)) {
                 builder.add(EntryStack.of(VanillaEntryTypes.ITEM, new ItemStack(crucible)));
             }
-            for (var crucible : CompatHelper.getAvailableWaterCrucibles(false)) {
+            for (var crucible : CompatUtil.getAvailableWaterCrucibles(false)) {
                 builder.add(EntryStack.of(VanillaEntryTypes.ITEM, new ItemStack(crucible)));
             }
             return builder.build();

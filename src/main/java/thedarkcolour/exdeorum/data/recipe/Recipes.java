@@ -20,8 +20,8 @@ package thedarkcolour.exdeorum.data.recipe;
 
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
@@ -40,36 +40,33 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
-import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.crafting.conditions.ICondition;
-import net.minecraftforge.common.crafting.conditions.ModLoadedCondition;
-import net.minecraftforge.common.crafting.conditions.NotCondition;
-import net.minecraftforge.common.crafting.conditions.TagEmptyCondition;
-import net.minecraftforge.registries.RegistryObject;
-import org.apache.commons.lang3.mutable.MutableObject;
+import net.neoforged.neoforge.common.NeoForgeMod;
+import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.common.conditions.ICondition;
+import net.neoforged.neoforge.common.conditions.ModLoadedCondition;
+import net.neoforged.neoforge.common.conditions.NotCondition;
+import net.neoforged.neoforge.common.conditions.TagEmptyCondition;
+import net.neoforged.neoforge.fluids.FluidStack;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.block.InfestedLeavesBlock;
 import thedarkcolour.exdeorum.compat.ModIds;
 import thedarkcolour.exdeorum.data.ModCompatData;
 import thedarkcolour.exdeorum.material.DefaultMaterials;
-import thedarkcolour.exdeorum.recipe.TagResultRecipe;
+import thedarkcolour.exdeorum.recipe.OreChunkRecipe;
 import thedarkcolour.exdeorum.recipe.WeightedList;
 import thedarkcolour.exdeorum.recipe.barrel.*;
 import thedarkcolour.exdeorum.recipe.BlockPredicate;
-import thedarkcolour.exdeorum.recipe.crook.FinishedCrookRecipe;
-import thedarkcolour.exdeorum.recipe.crucible.FinishedCrucibleHeatRecipe;
-import thedarkcolour.exdeorum.recipe.crucible.FinishedCrucibleRecipe;
-import thedarkcolour.exdeorum.recipe.hammer.FinishedHammerRecipe;
+import thedarkcolour.exdeorum.recipe.crook.CrookRecipe;
+import thedarkcolour.exdeorum.recipe.crucible.CrucibleHeatRecipe;
+import thedarkcolour.exdeorum.recipe.crucible.CrucibleRecipe;
+import thedarkcolour.exdeorum.recipe.hammer.HammerRecipe;
 import thedarkcolour.exdeorum.registry.EBlocks;
 import thedarkcolour.exdeorum.registry.EFluids;
 import thedarkcolour.exdeorum.registry.EItems;
-import thedarkcolour.exdeorum.registry.ERecipeSerializers;
 import thedarkcolour.exdeorum.tag.EItemTags;
 import thedarkcolour.modkit.data.MKRecipeProvider;
 
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import static net.minecraft.world.level.storage.loot.providers.number.UniformGenerator.between;
@@ -79,7 +76,7 @@ import static thedarkcolour.modkit.data.MKRecipeProvider.path;
 public class Recipes {
     private static final Ingredient SPORES_AND_SEEDS = ingredient(EItems.GRASS_SEEDS, EItems.MYCELIUM_SPORES, EItems.WARPED_NYLIUM_SPORES, EItems.CRIMSON_NYLIUM_SPORES);
 
-    public static void addRecipes(Consumer<FinishedRecipe> writer, MKRecipeProvider recipes) {
+    public static void addRecipes(RecipeOutput writer, MKRecipeProvider recipes) {
         craftingRecipes(writer, recipes);
         smeltingRecipes(recipes);
         SieveRecipes.sieveRecipes(writer);
@@ -92,7 +89,7 @@ public class Recipes {
         fluidTransformationRecipes(writer);
     }
 
-    private static void craftingRecipes(Consumer<FinishedRecipe> writer, MKRecipeProvider recipes) {
+    private static void craftingRecipes(RecipeOutput writer, MKRecipeProvider recipes) {
         // Crooks
         shapedCrook(recipes, EItems.CROOK, ingredient(Tags.Items.RODS_WOODEN));
         shapedCrook(recipes, EItems.BONE_CROOK, ingredient(Items.BONE));
@@ -183,36 +180,36 @@ public class Recipes {
         modUShaped(recipes, ModIds.BLUE_SKIES, ModCompatData.CRYSTALLIZED_PLANKS_ITEM, ModCompatData.CRYSTALLIZED_SLAB, DefaultMaterials.CRYSTALLIZED_BARREL.getItem());
 
         // Pebbles and ore chunks
-        recipes.grid2x2(Items.COBBLESTONE, ingredient(EItems.STONE_PEBBLE));
-        recipes.grid2x2(Items.ANDESITE, ingredient(EItems.ANDESITE_PEBBLE));
-        recipes.grid2x2(Items.DIORITE, ingredient(EItems.DIORITE_PEBBLE));
-        recipes.grid2x2(Items.GRANITE, ingredient(EItems.GRANITE_PEBBLE));
-        recipes.grid2x2(Items.COBBLED_DEEPSLATE, ingredient(EItems.DEEPSLATE_PEBBLE));
-        recipes.grid2x2(Items.TUFF, ingredient(EItems.TUFF_PEBBLE));
-        recipes.grid2x2(Items.CALCITE, ingredient(EItems.CALCITE_PEBBLE));
-        recipes.grid2x2(Items.BLACKSTONE, ingredient(EItems.BLACKSTONE_PEBBLE));
-        recipes.grid2x2(Items.BASALT, ingredient(EItems.BASALT_PEBBLE));
-        recipes.grid2x2(Items.IRON_ORE, ingredient(EItems.IRON_ORE_CHUNK));
-        recipes.grid2x2(Items.GOLD_ORE, ingredient(EItems.GOLD_ORE_CHUNK));
-        recipes.grid2x2(Items.COPPER_ORE, ingredient(EItems.COPPER_ORE_CHUNK));
-        recipes.grid2x2(Items.MOSS_BLOCK, ingredient(EItems.GRASS_SEEDS));
+        recipes.grid2x2(RecipeCategory.BUILDING_BLOCKS, Items.COBBLESTONE, ingredient(EItems.STONE_PEBBLE));
+        recipes.grid2x2(RecipeCategory.BUILDING_BLOCKS, Items.ANDESITE, ingredient(EItems.ANDESITE_PEBBLE));
+        recipes.grid2x2(RecipeCategory.BUILDING_BLOCKS, Items.DIORITE, ingredient(EItems.DIORITE_PEBBLE));
+        recipes.grid2x2(RecipeCategory.BUILDING_BLOCKS, Items.GRANITE, ingredient(EItems.GRANITE_PEBBLE));
+        recipes.grid2x2(RecipeCategory.BUILDING_BLOCKS, Items.COBBLED_DEEPSLATE, ingredient(EItems.DEEPSLATE_PEBBLE));
+        recipes.grid2x2(RecipeCategory.BUILDING_BLOCKS, Items.TUFF, ingredient(EItems.TUFF_PEBBLE));
+        recipes.grid2x2(RecipeCategory.BUILDING_BLOCKS, Items.CALCITE, ingredient(EItems.CALCITE_PEBBLE));
+        recipes.grid2x2(RecipeCategory.BUILDING_BLOCKS, Items.BLACKSTONE, ingredient(EItems.BLACKSTONE_PEBBLE));
+        recipes.grid2x2(RecipeCategory.BUILDING_BLOCKS, Items.BASALT, ingredient(EItems.BASALT_PEBBLE));
+        recipes.grid2x2(RecipeCategory.BUILDING_BLOCKS, Items.IRON_ORE, ingredient(EItems.IRON_ORE_CHUNK));
+        recipes.grid2x2(RecipeCategory.BUILDING_BLOCKS, Items.GOLD_ORE, ingredient(EItems.GOLD_ORE_CHUNK));
+        recipes.grid2x2(RecipeCategory.BUILDING_BLOCKS, Items.COPPER_ORE, ingredient(EItems.COPPER_ORE_CHUNK));
+        recipes.grid2x2(RecipeCategory.BUILDING_BLOCKS, Items.MOSS_BLOCK, ingredient(EItems.GRASS_SEEDS));
 
         // Modded ores
-        grid2x2TagResult(writer, recipes, EItemTags.ORES_ALUMINUM, ingredient(EItems.ALUMINUM_ORE_CHUNK));
-        grid2x2TagResult(writer, recipes, EItemTags.ORES_COBALT, ingredient(EItems.COBALT_ORE_CHUNK));
-        grid2x2TagResult(writer, recipes, EItemTags.ORES_SILVER, ingredient(EItems.SILVER_ORE_CHUNK));
-        grid2x2TagResult(writer, recipes, EItemTags.ORES_LEAD, ingredient(EItems.LEAD_ORE_CHUNK));
-        grid2x2TagResult(writer, recipes, EItemTags.ORES_PLATINUM, ingredient(EItems.PLATINUM_ORE_CHUNK));
-        grid2x2TagResult(writer, recipes, EItemTags.ORES_NICKEL, ingredient(EItems.NICKEL_ORE_CHUNK));
-        grid2x2TagResult(writer, recipes, EItemTags.ORES_URANIUM, ingredient(EItems.URANIUM_ORE_CHUNK));
-        grid2x2TagResult(writer, recipes, EItemTags.ORES_OSMIUM, ingredient(EItems.OSMIUM_ORE_CHUNK));
-        grid2x2TagResult(writer, recipes, EItemTags.ORES_TIN, ingredient(EItems.TIN_ORE_CHUNK));
-        grid2x2TagResult(writer, recipes, EItemTags.ORES_ZINC, ingredient(EItems.ZINC_ORE_CHUNK));
-        grid2x2TagResult(writer, recipes, EItemTags.ORES_IRIDIUM, ingredient(EItems.IRIDIUM_ORE_CHUNK));
-        grid2x2TagResult(writer, recipes, EItemTags.ORES_THORIUM, ingredient(EItems.THORIUM_ORE_CHUNK));
-        grid2x2TagResult(writer, recipes, EItemTags.ORES_MAGNESIUM, ingredient(EItems.MAGNESIUM_ORE_CHUNK));
-        grid2x2TagResult(writer, recipes, EItemTags.ORES_LITHIUM, ingredient(EItems.LITHIUM_ORE_CHUNK));
-        grid2x2TagResult(writer, recipes, EItemTags.ORES_BORON, ingredient(EItems.BORON_ORE_CHUNK));
+        grid2x2TagResult(writer, EItemTags.ORES_ALUMINUM, ingredient(EItems.ALUMINUM_ORE_CHUNK));
+        grid2x2TagResult(writer, EItemTags.ORES_COBALT, ingredient(EItems.COBALT_ORE_CHUNK));
+        grid2x2TagResult(writer, EItemTags.ORES_SILVER, ingredient(EItems.SILVER_ORE_CHUNK));
+        grid2x2TagResult(writer, EItemTags.ORES_LEAD, ingredient(EItems.LEAD_ORE_CHUNK));
+        grid2x2TagResult(writer, EItemTags.ORES_PLATINUM, ingredient(EItems.PLATINUM_ORE_CHUNK));
+        grid2x2TagResult(writer, EItemTags.ORES_NICKEL, ingredient(EItems.NICKEL_ORE_CHUNK));
+        grid2x2TagResult(writer, EItemTags.ORES_URANIUM, ingredient(EItems.URANIUM_ORE_CHUNK));
+        grid2x2TagResult(writer, EItemTags.ORES_OSMIUM, ingredient(EItems.OSMIUM_ORE_CHUNK));
+        grid2x2TagResult(writer, EItemTags.ORES_TIN, ingredient(EItems.TIN_ORE_CHUNK));
+        grid2x2TagResult(writer, EItemTags.ORES_ZINC, ingredient(EItems.ZINC_ORE_CHUNK));
+        grid2x2TagResult(writer, EItemTags.ORES_IRIDIUM, ingredient(EItems.IRIDIUM_ORE_CHUNK));
+        grid2x2TagResult(writer, EItemTags.ORES_THORIUM, ingredient(EItems.THORIUM_ORE_CHUNK));
+        grid2x2TagResult(writer, EItemTags.ORES_MAGNESIUM, ingredient(EItems.MAGNESIUM_ORE_CHUNK));
+        grid2x2TagResult(writer, EItemTags.ORES_LITHIUM, ingredient(EItems.LITHIUM_ORE_CHUNK));
+        grid2x2TagResult(writer, EItemTags.ORES_BORON, ingredient(EItems.BORON_ORE_CHUNK));
 
         // Sieves
         sieve(recipes, DefaultMaterials.OAK_SIEVE.getItem(), Items.OAK_PLANKS, Items.OAK_SLAB);
@@ -322,33 +319,24 @@ public class Recipes {
         });
     }
 
-    private static void modUShaped(MKRecipeProvider recipes, String modid, RegistryObject<? extends Item> sides, RegistryObject<? extends Item> middle, Item result) {
+    private static void modUShaped(MKRecipeProvider recipes, String modid, ItemLike sides, ItemLike middle, Item result) {
         recipes.conditional(path(result), List.of(modInstalled(modid)), writer1 -> {
             uShaped(recipes, result, ingredient(sides), ingredient(middle));
         });
     }
 
-    private static void modSieve(MKRecipeProvider recipes, String modid, RegistryObject<? extends Item> planks, RegistryObject<? extends Item> slab, Item result) {
+    private static void modSieve(MKRecipeProvider recipes, String modid, ItemLike planks, ItemLike slab, Item result) {
         recipes.conditional(path(result), List.of(modInstalled(modid)), writer1 -> {
-            sieve(recipes, result, planks.get(), slab.get());
+            sieve(recipes, result, planks, slab);
         });
     }
 
-    private static void grid2x2TagResult(Consumer<FinishedRecipe> writer, MKRecipeProvider recipes, TagKey<Item> resultTag, Ingredient ingredient) {
-        // capture the generated recipe and wrap it in a TagResultRecipe
-        var wrappedRecipe = new MutableObject<FinishedRecipe>();
-        recipes.pushWriter(wrappedRecipe::setValue, newWriter -> {
-            recipes.shapedCrafting(resultTag.location().getPath() + "_tag", RecipeCategory.MISC, Items.AIR, recipe -> {
-                recipe.define('#', ingredient);
-                recipe.pattern("##");
-                recipe.pattern("##");
-            });
-        });
-        writer.accept(new TagResultRecipe.Finished(resultTag, wrappedRecipe.getValue()));
+    private static void grid2x2TagResult(RecipeOutput writer, TagKey<Item> resultTag, Ingredient ingredient) {
+        writer.accept(new ResourceLocation(resultTag.location().getPath() + "_from_chunks"), new OreChunkRecipe(ingredient, resultTag), null, tagNotEmpty(resultTag));
     }
 
-    private static void shapedCrook(MKRecipeProvider recipes, RegistryObject<? extends Item> crook, Ingredient stick) {
-        recipes.shapedCrafting(RecipeCategory.TOOLS, crook.get(), recipe -> {
+    private static void shapedCrook(MKRecipeProvider recipes, ItemLike crook, Ingredient stick) {
+        recipes.shapedCrafting(RecipeCategory.TOOLS, crook, recipe -> {
             recipe.define('x', stick);
             recipe.pattern("xx");
             recipe.pattern(" x");
@@ -356,8 +344,8 @@ public class Recipes {
         });
     }
 
-    private static void shapedHammer(MKRecipeProvider recipes, RegistryObject<? extends Item> hammer, Ingredient material) {
-        recipes.shapedCrafting(RecipeCategory.TOOLS, hammer.get(), recipe -> {
+    private static void shapedHammer(MKRecipeProvider recipes, ItemLike hammer, Ingredient material) {
+        recipes.shapedCrafting(RecipeCategory.TOOLS, hammer, recipe -> {
             recipe.define('m', material);
             recipe.define('s', Tags.Items.RODS_WOODEN);
             recipe.pattern(" m ");
@@ -376,7 +364,7 @@ public class Recipes {
         });
     }
 
-    private static void sieve(MKRecipeProvider recipes, Item result, Item planks, Item slab) {
+    private static void sieve(MKRecipeProvider recipes, ItemLike result, ItemLike planks, ItemLike slab) {
         recipes.shapedCrafting(RecipeCategory.MISC, result, recipe -> {
             recipe.define('O', planks);
             recipe.define('_', slab);
@@ -397,10 +385,10 @@ public class Recipes {
         });
     }
 
-    private static void meshUpgrade(MKRecipeProvider recipes, RegistryObject<? extends Item> newMesh, RegistryObject<? extends Item> previousMesh, Ingredient ingredient) {
-        recipes.shapedCrafting(newMesh.getId().getPath() + "_from_" + previousMesh.getId().getPath(), RecipeCategory.MISC, newMesh.get(), recipe -> {
+    private static void meshUpgrade(MKRecipeProvider recipes, ItemLike newMesh, ItemLike previousMesh, Ingredient ingredient) {
+        recipes.shapedCrafting(path(newMesh) + "_from_" + path(previousMesh), RecipeCategory.MISC, newMesh, recipe -> {
             recipe.define('#', ingredient);
-            recipe.define('M', previousMesh.get());
+            recipe.define('M', previousMesh);
             recipe.pattern(" # ");
             recipe.pattern("#M#");
             recipe.pattern(" # ");
@@ -423,7 +411,7 @@ public class Recipes {
 
         recipes.foodCooking(EItems.SILK_WORM.get(), EItems.COOKED_SILK_WORM.get(), 0.1f);
     }
-    private static void crucibleRecipes(Consumer<FinishedRecipe> writer) {
+    private static void crucibleRecipes(RecipeOutput writer) {
         lavaCrucible(writer, "cobblestone", ingredient(Tags.Items.COBBLESTONE), 250);
         lavaCrucible(writer, "stone", ingredient(Tags.Items.STONE), 250);
         lavaCrucible(writer, "gravel", ingredient(Tags.Items.GRAVEL), 250);
@@ -439,7 +427,7 @@ public class Recipes {
         waterCrucible(writer, "vine", ingredient(Items.VINE), 100);
         waterCrucible(writer, "seeds_and_spores", SPORES_AND_SEEDS, 50);
         waterCrucible(writer, "seeds", ingredient(Tags.Items.SEEDS), 50);
-        waterCrucible(writer, "grass", ingredient(Items.GRASS, Items.TALL_GRASS), 100);
+        waterCrucible(writer, "grass", ingredient(Items.SHORT_GRASS, Items.TALL_GRASS), 100);
         waterCrucible(writer, "grass_block", ingredient(Items.GRASS_BLOCK), 150);
         waterCrucible(writer, "sweet_berries", ingredient(Items.SWEET_BERRIES, Items.GLOW_BERRIES), 50);
         waterCrucible(writer, "melon_slice", ingredient(Items.MELON_SLICE), 50);
@@ -457,15 +445,15 @@ public class Recipes {
         waterCrucible(writer, "spore_blossom", ingredient(Items.SPORE_BLOSSOM), 150);
     }
 
-    private static void lavaCrucible(Consumer<FinishedRecipe> writer, String id, Ingredient ingredient, int volume) {
-        writer.accept(new FinishedCrucibleRecipe(new ResourceLocation(ExDeorum.ID, "lava_crucible/" + id), ERecipeSerializers.LAVA_CRUCIBLE.get(), ingredient, Fluids.LAVA, volume));
+    private static void lavaCrucible(RecipeOutput writer, String id, Ingredient ingredient, int volume) {
+        writer.accept(new ResourceLocation(ExDeorum.ID, "lava_crucible/" + id), new CrucibleRecipe.Lava(ingredient, new FluidStack(Fluids.LAVA, volume)), null);
     }
 
-    private static void waterCrucible(Consumer<FinishedRecipe> writer, String id, Ingredient ingredient, int volume) {
-        writer.accept(new FinishedCrucibleRecipe(new ResourceLocation(ExDeorum.ID, "water_crucible/" + id), ERecipeSerializers.WATER_CRUCIBLE.get(), ingredient, Fluids.WATER, volume));
+    private static void waterCrucible(RecipeOutput writer, String id, Ingredient ingredient, int volume) {
+        writer.accept(new ResourceLocation(ExDeorum.ID, "water_crucible/" + id), new CrucibleRecipe.Water(ingredient, new FluidStack(Fluids.WATER, volume)), null);
     }
 
-    private static void hammerRecipes(Consumer<FinishedRecipe> writer) {
+    private static void hammerRecipes(RecipeOutput writer) {
         // Cobblestone -> Gravel -> Sand -> Dust
         hammerRecipe(writer, "gravel", ingredient(Items.COBBLESTONE, Items.DIORITE, Items.GRANITE, Items.ANDESITE), Blocks.GRAVEL);
         hammerRecipe(writer, "sand", ingredient(Items.GRAVEL), Blocks.SAND);
@@ -500,27 +488,29 @@ public class Recipes {
         hammerRecipe(writer, "pointed_dripstone", ingredient(Items.DRIPSTONE_BLOCK), Items.POINTED_DRIPSTONE, between(2, 4));
     }
 
-    private static void hammerRecipe(Consumer<FinishedRecipe> writer, String name, Ingredient block, ItemLike result) {
+    private static void hammerRecipe(RecipeOutput writer, String name, Ingredient block, ItemLike result) {
         hammerRecipe(writer, name, block, result, ConstantValue.exactly(1f));
     }
 
-    private static void hammerRecipe(Consumer<FinishedRecipe> writer, String name, Ingredient block, ItemLike result, NumberProvider resultAmount) {
-        writer.accept(new FinishedHammerRecipe(new ResourceLocation(ExDeorum.ID, "hammer/" + name), block, result.asItem(), resultAmount));
+    private static void hammerRecipe(RecipeOutput writer, String name, Ingredient block, ItemLike result, NumberProvider resultAmount) {
+        writer.accept(new ResourceLocation(ExDeorum.ID, "hammer/" + name), new HammerRecipe(block, result.asItem(), resultAmount), null);
     }
 
-    private static void crookRecipes(Consumer<FinishedRecipe> writer) {
+    private static void crookRecipes(RecipeOutput writer) {
         crookRecipe(writer, "silkworm", BlockPredicate.blockTag(BlockTags.LEAVES), EItems.SILK_WORM.get(), 0.01f);
-        var fullyInfestedLeaves = BlockPredicate.blockState(EBlocks.INFESTED_LEAVES.get(), StatePropertiesPredicate.Builder.properties().hasProperty(InfestedLeavesBlock.FULLY_INFESTED, true).build());
+        @SuppressWarnings("OptionalGetWithoutIsPresent")
+        var fullyInfestedLeaves = BlockPredicate.blockState(EBlocks.INFESTED_LEAVES.get(), StatePropertiesPredicate.Builder.properties().hasProperty(InfestedLeavesBlock.FULLY_INFESTED, true).build().get());
         crookRecipe(writer, "silkworm_bonus", fullyInfestedLeaves, EItems.SILK_WORM.get(), 0.01f);
         crookRecipe(writer, "string_roll_1", fullyInfestedLeaves, Items.STRING, 0.4f);
         crookRecipe(writer, "string_roll_2", fullyInfestedLeaves, Items.STRING, 0.1f);
     }
 
-    private static void crookRecipe(Consumer<FinishedRecipe> writer, String name, BlockPredicate blockPredicate, ItemLike result, float chance) {
-        writer.accept(new FinishedCrookRecipe(new ResourceLocation(ExDeorum.ID, "crook/" + name), blockPredicate, result.asItem(), chance));
+    private static void crookRecipe(RecipeOutput writer, String name, BlockPredicate blockPredicate, ItemLike result, float chance) {
+        writer.accept(new ResourceLocation(ExDeorum.ID, "crook/" + name), new CrookRecipe(blockPredicate, result.asItem(), chance), null);
     }
 
-    private static void crucibleHeatSources(Consumer<FinishedRecipe> writer) {
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
+    private static void crucibleHeatSources(RecipeOutput writer) {
         crucibleHeatSource(writer, Blocks.TORCH, 1);
         crucibleHeatSource(writer, Blocks.WALL_TORCH, 1);
         crucibleHeatSource(writer, Blocks.LANTERN, 1);
@@ -531,19 +521,19 @@ public class Recipes {
         crucibleHeatSource(writer, Blocks.FIRE, 5);
         crucibleHeatSource(writer, Blocks.SOUL_FIRE, 5);
 
-        crucibleHeatSource(writer, "lit_campfire", BlockPredicate.blockState(Blocks.CAMPFIRE, StatePropertiesPredicate.Builder.properties().hasProperty(CampfireBlock.LIT, true).build()), 2);
-        crucibleHeatSource(writer, "lit_soul_campfire", BlockPredicate.blockState(Blocks.SOUL_CAMPFIRE, StatePropertiesPredicate.Builder.properties().hasProperty(CampfireBlock.LIT, true).build()), 2);
+        crucibleHeatSource(writer, "lit_campfire", BlockPredicate.blockState(Blocks.CAMPFIRE, StatePropertiesPredicate.Builder.properties().hasProperty(CampfireBlock.LIT, true).build().get()), 2);
+        crucibleHeatSource(writer, "lit_soul_campfire", BlockPredicate.blockState(Blocks.SOUL_CAMPFIRE, StatePropertiesPredicate.Builder.properties().hasProperty(CampfireBlock.LIT, true).build().get()), 2);
     }
 
-    private static void crucibleHeatSource(Consumer<FinishedRecipe> writer, Block block, int heatValue) {
+    private static void crucibleHeatSource(RecipeOutput writer, Block block, int heatValue) {
         crucibleHeatSource(writer, BuiltInRegistries.BLOCK.getKey(block).getPath(), BlockPredicate.singleBlock(block), heatValue);
     }
 
-    private static void crucibleHeatSource(Consumer<FinishedRecipe> writer, String name, BlockPredicate blockPredicate, int heatValue) {
-        writer.accept(new FinishedCrucibleHeatRecipe(new ResourceLocation(ExDeorum.ID, "crucible_heat_source/" + name), blockPredicate, heatValue));
+    private static void crucibleHeatSource(RecipeOutput writer, String name, BlockPredicate blockPredicate, int heatValue) {
+        writer.accept(new ResourceLocation(ExDeorum.ID, "crucible_heat_source/" + name), new CrucibleHeatRecipe(blockPredicate, heatValue), null);
     }
 
-    private static void barrelCompostRecipes(Consumer<FinishedRecipe> writer) {
+    private static void barrelCompostRecipes(RecipeOutput writer) {
         // plants
         barrelCompost(writer, "saplings", ingredient(ItemTags.SAPLINGS), 125);
         barrelCompost(writer, "leaves", ingredient(ItemTags.LEAVES), 125);
@@ -553,7 +543,7 @@ public class Recipes {
         barrelCompost(writer, "lily_pad", ingredient(Items.LILY_PAD), 100);
         barrelCompost(writer, "sugar_cane", ingredient(Items.SUGAR_CANE), 80);
         barrelCompost(writer, "vine", ingredient(Items.VINE), 100);
-        barrelCompost(writer, "grass", ingredient(Items.GRASS, Items.FERN), 100);
+        barrelCompost(writer, "grass", ingredient(Items.SHORT_GRASS, Items.FERN), 100);
         barrelCompost(writer, "tall_grass", ingredient(Items.TALL_GRASS, Items.LARGE_FERN), 150);
         barrelCompost(writer, "seagrass", ingredient(Items.SEAGRASS), 80);
         barrelCompost(writer, "nether_wart", ingredient(Items.NETHER_WART), 100);
@@ -614,16 +604,16 @@ public class Recipes {
         barrelCompost(writer, "golden_apples", ingredient(Items.GOLDEN_APPLE, Items.ENCHANTED_GOLDEN_APPLE), 1000);
     }
 
-    private static void barrelCompost(Consumer<FinishedRecipe> writer, String id, Ingredient ingredient, int volume) {
-        writer.accept(new FinishedBarrelCompostRecipe(new ResourceLocation(ExDeorum.ID, "barrel_compost/" + id), ingredient, volume));
+    private static void barrelCompost(RecipeOutput writer, String id, Ingredient ingredient, int volume) {
+        writer.accept(new ResourceLocation(ExDeorum.ID, "barrel_compost/" + id), new BarrelCompostRecipe(ingredient, volume), null);
     }
 
-    private static void barrelMixingRecipes(Consumer<FinishedRecipe> writer) {
+    private static void barrelMixingRecipes(RecipeOutput writer) {
         // water
         barrelMixing(writer, ingredient(EItems.DUST.get()), Fluids.WATER, Items.CLAY);
         barrelMixing(writer, ingredient(Items.MILK_BUCKET), Fluids.WATER, Items.SLIME_BLOCK);
         barrelMixing(writer, "_from_porcelain_bucket", ingredient(EItems.PORCELAIN_MILK_BUCKET.get()), Fluids.WATER, Items.SLIME_BLOCK);
-        barrelFluidMixing(writer, Fluids.WATER, ForgeMod.MILK.get(), Items.SLIME_BLOCK, true);
+        barrelFluidMixing(writer, Fluids.WATER, NeoForgeMod.MILK.get(), Items.SLIME_BLOCK, true);
         barrelMixing(writer, ingredient(Items.SNOWBALL), Fluids.WATER, Items.ICE);
         barrelFluidMixing(writer, Fluids.WATER, Fluids.LAVA, Items.STONE, false);
         // lava
@@ -637,20 +627,20 @@ public class Recipes {
         barrelMixing(writer, ingredient(Items.SAND), EFluids.WITCH_WATER.get(), Items.SOUL_SAND);
     }
 
-    private static void barrelMixing(Consumer<FinishedRecipe> writer, Ingredient ingredient, Fluid fluidType, Item result) {
+    private static void barrelMixing(RecipeOutput writer, Ingredient ingredient, Fluid fluidType, Item result) {
         barrelMixing(writer, "", ingredient, fluidType, result);
     }
 
-    private static void barrelMixing(Consumer<FinishedRecipe> writer, String suffix, Ingredient ingredient, Fluid fluidType, Item result) {
-        writer.accept(new FinishedBarrelMixingRecipe(new ResourceLocation(ExDeorum.ID, "barrel_mixing/" + path(result) + suffix), ingredient, fluidType, 1000, result));
+    private static void barrelMixing(RecipeOutput writer, String suffix, Ingredient ingredient, Fluid fluidType, Item result) {
+        writer.accept(modLoc("barrel_mixing/" + path(result) + suffix), new BarrelMixingRecipe(ingredient, fluidType, 1000, result), null);
     }
 
-    private static void barrelFluidMixing(Consumer<FinishedRecipe> writer, Fluid base, Fluid additive, Item result, boolean consumesAdditive) {
-        writer.accept(new FinishedBarrelFluidMixingRecipe(new ResourceLocation(ExDeorum.ID, "barrel_fluid_mixing/" + path(result)), base, 1000, additive, result, consumesAdditive));
+    private static void barrelFluidMixing(RecipeOutput writer, Fluid base, Fluid additive, Item result, boolean consumesAdditive) {
+        writer.accept(modLoc("barrel_fluid_mixing/" + path(result)), new BarrelFluidMixingRecipe(base, 1000, additive, result, consumesAdditive), null);
     }
 
-    private static void fluidTransformationRecipes(Consumer<FinishedRecipe> writer) {
-        writer.accept(new FinishedFluidTransformationRecipe(modLoc("barrel_fluid_transformation/witch_water"), Fluids.WATER, EFluids.WITCH_WATER.get(), 0x2B1057, BlockPredicate.singleBlock(Blocks.MYCELIUM), WeightedList.<BlockState>builder().add(50, Blocks.RED_MUSHROOM.defaultBlockState()).add(50, Blocks.BROWN_MUSHROOM.defaultBlockState()).build(), 1700));
+    private static void fluidTransformationRecipes(RecipeOutput writer) {
+        writer.accept(modLoc("barrel_fluid_transformation/witch_water"), new FluidTransformationRecipe(Fluids.WATER, EFluids.WITCH_WATER.get(), 0x2B1057, BlockPredicate.singleBlock(Blocks.MYCELIUM), WeightedList.<BlockState>builder().add(50, Blocks.RED_MUSHROOM.defaultBlockState()).add(50, Blocks.BROWN_MUSHROOM.defaultBlockState()).build(), 1700), null);
     }
 
     static ResourceLocation modLoc(String path) {

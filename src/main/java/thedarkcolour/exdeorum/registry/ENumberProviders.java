@@ -20,13 +20,13 @@ package thedarkcolour.exdeorum.registry;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.loot.SummationGenerator;
 
 public class ENumberProviders {
     public static final DeferredRegister<LootNumberProviderType> NUMBER_PROVIDERS = DeferredRegister.create(Registries.LOOT_NUMBER_PROVIDER_TYPE, ExDeorum.ID);
 
-    public static final RegistryObject<LootNumberProviderType> SUMMATION = NUMBER_PROVIDERS.register("summation", () -> new LootNumberProviderType(new SummationGenerator.Serializer()));
+    public static final DeferredHolder<LootNumberProviderType, LootNumberProviderType> SUMMATION = NUMBER_PROVIDERS.register("summation", () -> new LootNumberProviderType(SummationGenerator.CODEC));
 }

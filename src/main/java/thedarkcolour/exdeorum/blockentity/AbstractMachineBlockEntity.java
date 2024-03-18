@@ -19,7 +19,6 @@
 package thedarkcolour.exdeorum.blockentity;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
@@ -31,16 +30,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.EnergyStorage;
-import net.minecraftforge.network.NetworkHooks;
+import net.neoforged.neoforge.energy.IEnergyStorage;
+import net.neoforged.neoforge.items.IItemHandler;
 import thedarkcolour.exdeorum.blockentity.helper.EnergyHelper;
 import thedarkcolour.exdeorum.blockentity.helper.ItemHelper;
 import thedarkcolour.exdeorum.client.screen.RedstoneControlWidget;
 
-import javax.annotation.Nonnull;
 import java.util.function.Function;
 
 public abstract class AbstractMachineBlockEntity<M extends AbstractMachineBlockEntity<M>> extends EBlockEntity implements MenuProvider {
@@ -50,18 +45,12 @@ public abstract class AbstractMachineBlockEntity<M extends AbstractMachineBlockE
     // not saved to NBT
     protected boolean hasRedstonePower;
 
-    private final LazyOptional<ItemHelper> capabilityInventory;
-    private final LazyOptional<EnergyStorage> capabilityEnergy;
-
     @SuppressWarnings("unchecked")
     public AbstractMachineBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state, Function<M, ItemHelper> inventory, int maxEnergy) {
         super(type, pos, state);
 
         this.inventory = inventory.apply((M) this);
         this.energy = new EnergyHelper(maxEnergy);
-
-        this.capabilityInventory = LazyOptional.of(() -> this.inventory);
-        this.capabilityEnergy = LazyOptional.of(() -> this.energy);
     }
 
     @Override
@@ -99,31 +88,10 @@ public abstract class AbstractMachineBlockEntity<M extends AbstractMachineBlockE
         return this.redstoneMode;
     }
 
-
-    @SuppressWarnings("NullableProblems")
-    @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @javax.annotation.Nullable Direction side) {
-        if (cap == ForgeCapabilities.ENERGY) {
-            return this.capabilityEnergy.cast();
-        } else if (cap == ForgeCapabilities.ITEM_HANDLER) {
-            return this.capabilityInventory.cast();
-        }
-
-        return super.getCapability(cap, side);
-    }
-
-    @Override
-    public void invalidateCaps() {
-        super.invalidateCaps();
-
-        this.capabilityEnergy.invalidate();
-        this.capabilityInventory.invalidate();
-    }
-
     @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         if (player instanceof ServerPlayer serverPlayer) {
-            NetworkHooks.openScreen(serverPlayer, this, buffer -> {
+            serverPlayer.openMenu(this, buffer -> {
                 buffer.writeBlockPos(getBlockPos());
                 buffer.writeByte(this.redstoneMode);
             });
@@ -150,6 +118,14 @@ public abstract class AbstractMachineBlockEntity<M extends AbstractMachineBlockE
     protected abstract int getEnergyConsumption();
 
     protected void noEnergyTick() {}
+
+    public IItemHandler getItemHandler() {
+        return this.inventory;
+    }
+
+    public IEnergyStorage getEnergyStorage() {
+        return this.energy;
+    }
 
     public static class ServerTicker<M extends AbstractMachineBlockEntity<M>> implements BlockEntityTicker<M> {
         @Override

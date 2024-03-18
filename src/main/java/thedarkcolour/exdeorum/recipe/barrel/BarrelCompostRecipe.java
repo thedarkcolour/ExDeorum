@@ -18,23 +18,27 @@
 
 package thedarkcolour.exdeorum.recipe.barrel;
 
-import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
-import thedarkcolour.exdeorum.recipe.RecipeUtil;
+import thedarkcolour.exdeorum.recipe.CodecUtil;
 import thedarkcolour.exdeorum.recipe.SingleIngredientRecipe;
 import thedarkcolour.exdeorum.registry.ERecipeSerializers;
 import thedarkcolour.exdeorum.registry.ERecipeTypes;
 
 public class BarrelCompostRecipe extends SingleIngredientRecipe {
+    public static final Codec<BarrelCompostRecipe> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            CodecUtil.ingredientField(),
+            Codec.INT.fieldOf("volume").forGetter(BarrelCompostRecipe::getVolume)
+    ).apply(instance, BarrelCompostRecipe::new));
+
     private final int volume;
 
-    public BarrelCompostRecipe(ResourceLocation id, Ingredient ingredient, int volume) {
-        super(id, ingredient);
+    public BarrelCompostRecipe(Ingredient ingredient, int volume) {
+        super(ingredient);
 
         this.volume = volume;
     }
@@ -54,12 +58,9 @@ public class BarrelCompostRecipe extends SingleIngredientRecipe {
     }
 
     public static class Serializer implements RecipeSerializer<BarrelCompostRecipe> {
-        @Override // Creates the recipe object from a JSON file
-        public BarrelCompostRecipe fromJson(ResourceLocation name, JsonObject json) {
-            Ingredient ingredient = RecipeUtil.readIngredient(json, "ingredient");
-            int volume = GsonHelper.getAsInt(json, "volume");
-
-            return new BarrelCompostRecipe(name, ingredient, volume);
+        @Override
+        public Codec<BarrelCompostRecipe> codec() {
+            return CODEC;
         }
 
         @Override
@@ -69,11 +70,11 @@ public class BarrelCompostRecipe extends SingleIngredientRecipe {
         }
 
         @Override
-        public BarrelCompostRecipe fromNetwork(ResourceLocation name, FriendlyByteBuf buffer) {
+        public BarrelCompostRecipe fromNetwork(FriendlyByteBuf buffer) {
             Ingredient ingredient = Ingredient.fromNetwork(buffer);
             int volume = buffer.readVarInt();
 
-            return new BarrelCompostRecipe(name, ingredient, volume);
+            return new BarrelCompostRecipe(ingredient, volume);
         }
     }
 }

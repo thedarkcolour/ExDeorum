@@ -45,8 +45,9 @@ public class CrucibleHeatRecipeCache {
     private void buildRecipes() {
         this.recipes = new Object2IntOpenHashMap<>();
 
-        for (var recipe : this.recipeManager.byType(ERecipeTypes.CRUCIBLE_HEAT_SOURCE.get()).values()) {
-            recipe.blockPredicate().possibleStates().forEach(state -> recipes.put(state, recipe.heatValue()));
+        for (var holder : this.recipeManager.byType(ERecipeTypes.CRUCIBLE_HEAT_SOURCE.get()).values()) {
+            var recipe = holder.value();
+            recipe.blockPredicate().possibleStates().forEach(state -> this.recipes.put(state, recipe.heatValue()));
         }
 
         this.recipeManager = null;

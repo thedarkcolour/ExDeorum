@@ -21,16 +21,16 @@ package thedarkcolour.exdeorum.registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.MenuType;
-import net.minecraftforge.network.IContainerFactory;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.network.IContainerFactory;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
 import thedarkcolour.exdeorum.ExDeorum;
-import thedarkcolour.exdeorum.blockentity.MechanicalHammerMenu;
+import thedarkcolour.exdeorum.menu.MechanicalHammerMenu;
 import thedarkcolour.exdeorum.menu.MechanicalSieveMenu;
 
 public class EMenus {
     public static final DeferredRegister<MenuType<?>> MENUS = DeferredRegister.create(Registries.MENU, ExDeorum.ID);
 
-    public static final RegistryObject<MenuType<MechanicalSieveMenu>> MECHANICAL_SIEVE = MENUS.register("mechanical_sieve", () -> new MenuType<>((IContainerFactory<MechanicalSieveMenu>) MechanicalSieveMenu::new, FeatureFlags.DEFAULT_FLAGS));
-    public static final RegistryObject<MenuType<MechanicalHammerMenu>> MECHANICAL_HAMMER = MENUS.register("mechanical_hammer", () -> new MenuType<>((IContainerFactory<MechanicalHammerMenu>) MechanicalHammerMenu::new, FeatureFlags.DEFAULT_FLAGS));
+    public static final DeferredHolder<MenuType<?>, MenuType<MechanicalSieveMenu>> MECHANICAL_SIEVE = MENUS.register("mechanical_sieve", () -> new MenuType<>((IContainerFactory<MechanicalSieveMenu>) MechanicalSieveMenu::new, FeatureFlags.DEFAULT_FLAGS));
+    public static final DeferredHolder<MenuType<?>, MenuType<MechanicalHammerMenu>> MECHANICAL_HAMMER = MENUS.register("mechanical_hammer", () -> new MenuType<>((IContainerFactory<MechanicalHammerMenu>) MechanicalHammerMenu::new, FeatureFlags.DEFAULT_FLAGS));
 }

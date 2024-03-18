@@ -18,15 +18,25 @@
 
 package thedarkcolour.exdeorum.compat;
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.minecraft.client.Minecraft;
+import net.minecraft.world.Container;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.fml.ModList;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.neoforged.fml.ModList;
 import thedarkcolour.exdeorum.material.DefaultMaterials;
+import thedarkcolour.exdeorum.recipe.sieve.SieveRecipe;
 import thedarkcolour.exdeorum.registry.EItems;
+import thedarkcolour.exdeorum.registry.ERecipeTypes;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.function.Function;
 
-public class CompatHelper {
+public class CompatUtil {
     public static List<Item> getAvailableBarrels(boolean registered) {
         List<Item> barrels = new ArrayList<>();
         for (var material : DefaultMaterials.BARRELS) {
@@ -72,7 +82,15 @@ public class CompatHelper {
             }
         }
 
-
         return waterCrucibles;
+    }
+
+    public static <C extends Container, R extends Recipe<C>, T> List<T> collectAllRecipes(RecipeType<R> recipeType, Function<R, T> mapper) {
+        var byType = Objects.requireNonNull(Minecraft.getInstance().level).getRecipeManager().byType(recipeType).values();
+        List<T> recipes = new ObjectArrayList<>(byType.size());
+        for (RecipeHolder<R> value : byType) {
+            recipes.add(mapper.apply(value.value()));
+        }
+        return recipes;
     }
 }

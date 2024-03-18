@@ -158,7 +158,7 @@ public class SieveLogic {
 
     public void saveNbt(CompoundTag nbt) {
         if (!this.contents.isEmpty()) {
-            nbt.put("contents", this.contents.serializeNBT());
+            nbt.put("contents", this.contents.save(new CompoundTag()));
         }
         if (this.saveMesh && !this.mesh.isEmpty()) {
             nbt.put("mesh", this.mesh.save(new CompoundTag()));

@@ -31,11 +31,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import thedarkcolour.exdeorum.recipe.barrel.FinishedFluidTransformationRecipe;
 import thedarkcolour.exdeorum.recipe.barrel.FluidTransformationRecipe;
 import thedarkcolour.exdeorum.recipe.crook.CrookRecipe;
 import thedarkcolour.exdeorum.recipe.crucible.CrucibleHeatRecipe;
-import thedarkcolour.exdeorum.recipe.crucible.FinishedCrucibleHeatRecipe;
 
 import java.util.function.Function;
 
@@ -55,22 +53,8 @@ public class RecipeSerializationTests {
     }
 
     @Test
-    void crucibleHeatSourceJson() {
-        testJson(new CrucibleHeatRecipe(null, BlockPredicate.blockTag(BlockTags.DIRT), 3), new CrucibleHeatRecipe.Serializer(), recipe -> {
-            return new FinishedCrucibleHeatRecipe(recipe.id(), recipe.blockPredicate(), recipe.heatValue());
-        });
-    }
-
-    @Test
     void barrelFluidTransformationNetwork() {
         testNetwork(new FluidTransformationRecipe(null, Fluids.WATER, Fluids.LAVA, 1, BlockPredicate.blockTag(BlockTags.DIRT), WeightedList.<BlockState>builder().build(), 1000), new FluidTransformationRecipe.Serializer());
-    }
-
-    @Test
-    void barrelFluidTransformationJson() {
-        testJson(new FluidTransformationRecipe(null, Fluids.WATER, Fluids.LAVA, 1, BlockPredicate.blockTag(BlockTags.DIRT), WeightedList.<BlockState>builder().build(), 1000), new FluidTransformationRecipe.Serializer(), recipe -> {
-            return new FinishedFluidTransformationRecipe(recipe.getId(), recipe.baseFluid, recipe.resultFluid, recipe.resultColor, recipe.catalyst, recipe.byproducts, recipe.duration);
-        });
     }
 
     @Test
@@ -85,13 +69,5 @@ public class RecipeSerializationTests {
         var buffer = new FriendlyByteBuf(Unpooled.buffer());
         serializer.toNetwork(buffer, recipe);
         assertEquals(recipe, serializer.fromNetwork(id, buffer));
-    }
-
-    private static <T extends Recipe<?>> void testJson(T recipe, RecipeSerializer<T> serializer, Function<T, EFinishedRecipe> toJson) {
-        var id = recipe.getId();
-        var finishedRecipe = toJson.apply(recipe);
-        var json = new JsonObject();
-        finishedRecipe.serializeRecipeData(json);
-        assertEquals(recipe, serializer.fromJson(id, json));
     }
 }

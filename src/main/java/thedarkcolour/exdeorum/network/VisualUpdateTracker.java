@@ -20,16 +20,19 @@ package thedarkcolour.exdeorum.network;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.chunk.LevelChunk;
-import net.minecraftforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.PacketDistributor;
 import thedarkcolour.exdeorum.blockentity.EBlockEntity;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.WeakHashMap;
 
 // Syncs certain block entity data to the client for visual purposes
 // Since some block entities might change their data multiple times a tick, this class keeps track of
 // whether a block entity has updated and then pushes out the changes once at the end of each tick.
 public class VisualUpdateTracker {
-    // WeakHashMap is faster than Guava mapmaker
+    // WeakHashMap is faster than Guava mapmaker because it isn't thread safe
     // Use sets to avoid duplicate updates
     private static final Map<LevelChunk, Set<BlockPos>> UPDATES = new WeakHashMap<>();
 
@@ -57,7 +60,7 @@ public class VisualUpdateTracker {
 
                 if (chunk.getBlockEntity(updatePos) instanceof EBlockEntity blockEntity) {
                     // packet uses strong reference
-                    NetworkHandler.CHANNEL.send(PacketDistributor.TRACKING_CHUNK.with(entry::getKey), new VisualUpdateMessage(updatePos, blockEntity, null));
+                    PacketDistributor.TRACKING_CHUNK.with(chunk).send(new VisualUpdateMessage(updatePos, blockEntity, null));
                 }
             }
 

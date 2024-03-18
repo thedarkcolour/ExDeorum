@@ -18,13 +18,11 @@
 
 package thedarkcolour.exdeorum.recipe.barrel;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
@@ -34,10 +32,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.registries.ForgeRegistries;
-import org.jetbrains.annotations.Nullable;
-import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.recipe.BlockPredicate;
+import thedarkcolour.exdeorum.recipe.CodecUtil;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.recipe.WeightedList;
 import thedarkcolour.exdeorum.registry.ERecipeSerializers;
@@ -46,25 +42,22 @@ import thedarkcolour.exdeorum.registry.ERecipeTypes;
 import java.util.Objects;
 
 // todo consider NBT tag of input fluid?
-public class FluidTransformationRecipe implements Recipe<Container> {
-    private final ResourceLocation id;
-
-    public final Fluid baseFluid;
-    public final Fluid resultFluid;
-    public final int resultColor;
-    public final BlockPredicate catalyst;
-    public final WeightedList<BlockState> byproducts;
-    public final int duration;
-
-    public FluidTransformationRecipe(ResourceLocation id, Fluid baseFluid, Fluid resultFluid, int resultColor, BlockPredicate catalyst, WeightedList<BlockState> byproducts, int duration) {
-        this.id = id;
-        this.baseFluid = baseFluid;
-        this.resultFluid = resultFluid;
-        this.resultColor = resultColor;
-        this.catalyst = catalyst;
-        this.byproducts = byproducts;
-        this.duration = duration;
-    }
+public record FluidTransformationRecipe(
+        Fluid baseFluid,
+        Fluid resultFluid,
+        int resultColor,
+        BlockPredicate catalyst,
+        WeightedList<BlockState> byproducts,
+        int duration
+) implements Recipe<Container> {
+    public static final Codec<FluidTransformationRecipe> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            CodecUtil.fluidField("base_fluid", FluidTransformationRecipe::baseFluid),
+            CodecUtil.fluidField("result_fluid", FluidTransformationRecipe::resultFluid),
+            Codec.INT.fieldOf("result_color").forGetter(FluidTransformationRecipe::resultColor),
+            BlockPredicate.CODEC.fieldOf("catalyst").forGetter(FluidTransformationRecipe::catalyst),
+            WeightedList.codec(Codec.STRING.xmap(RecipeUtil::parseBlockState, RecipeUtil::writeBlockState)).fieldOf("byproducts").forGetter(FluidTransformationRecipe::byproducts),
+            Codec.INT.fieldOf("duration").forGetter(FluidTransformationRecipe::duration)
+    ).apply(instance, FluidTransformationRecipe::new));
 
     @Override
     public boolean matches(Container pContainer, Level pLevel) {
@@ -87,11 +80,6 @@ public class FluidTransformationRecipe implements Recipe<Container> {
     }
 
     @Override
-    public ResourceLocation getId() {
-        return this.id;
-    }
-
-    @Override
     public RecipeSerializer<?> getSerializer() {
         return ERecipeSerializers.BARREL_FLUID_TRANSFORMATION.get();
     }
@@ -103,32 +91,14 @@ public class FluidTransformationRecipe implements Recipe<Container> {
 
     public static class Serializer implements RecipeSerializer<FluidTransformationRecipe> {
         @Override
-        public FluidTransformationRecipe fromJson(ResourceLocation id, JsonObject json) {
-            Fluid baseFluid = RecipeUtil.readFluid(json, "base_fluid");
-            Fluid resultFluid = RecipeUtil.readFluid(json, "result_fluid");
-            int resultColor = GsonHelper.getAsInt(json, "result_color");
-            int duration = GsonHelper.getAsInt(json, "duration");
-            BlockPredicate catalyst = RecipeUtil.readBlockPredicate(id, json, "catalyst");
-            var byproducts = WeightedList.fromJson(json.getAsJsonArray("byproducts"), element -> {
-                if (element.isJsonPrimitive()) {
-                    return RecipeUtil.parseBlockState(element.getAsString());
-                } else {
-                    return null;
-                }
-            });
-            if (catalyst == null) {
-                throw new JsonSyntaxException("Failed to read barrel fluid transformation recipe catalyst");
-            }
-            if (byproducts == null) {
-                throw new JsonSyntaxException("Failed to read barrel fluid transformation recipe byproducts");
-            }
-            return new FluidTransformationRecipe(id, baseFluid, resultFluid, resultColor, catalyst, byproducts, duration);
+        public Codec<FluidTransformationRecipe> codec() {
+            return CODEC;
         }
 
         @Override
         public void toNetwork(FriendlyByteBuf buffer, FluidTransformationRecipe recipe) {
-            buffer.writeRegistryId(ForgeRegistries.FLUIDS, recipe.baseFluid);
-            buffer.writeRegistryId(ForgeRegistries.FLUIDS, recipe.resultFluid);
+            buffer.writeId(BuiltInRegistries.FLUID, recipe.baseFluid);
+            buffer.writeId(BuiltInRegistries.FLUID, recipe.resultFluid);
             buffer.writeInt(recipe.resultColor);
             recipe.catalyst.toNetwork(buffer);
             recipe.byproducts.toNetwork(buffer, (buf, state) -> buf.writeId(Block.BLOCK_STATE_REGISTRY, state));
@@ -136,30 +106,15 @@ public class FluidTransformationRecipe implements Recipe<Container> {
         }
 
         @Override
-        public @Nullable FluidTransformationRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buffer) {
-            Fluid baseFluid = buffer.readRegistryId();
-            Fluid resultFluid = buffer.readRegistryId();
+        public FluidTransformationRecipe fromNetwork(FriendlyByteBuf buffer) {
+            Fluid baseFluid = Objects.requireNonNull(buffer.readById(BuiltInRegistries.FLUID));
+            Fluid resultFluid = Objects.requireNonNull(buffer.readById(BuiltInRegistries.FLUID));
             int resultColor = buffer.readInt();
-            BlockPredicate catalyst = RecipeUtil.readBlockPredicateNetwork(id, buffer);
-            if (catalyst == null) {
-                return null;
-            }
+            BlockPredicate catalyst = RecipeUtil.readBlockPredicateNetwork(buffer);
             WeightedList<BlockState> byproducts = WeightedList.fromNetwork(buffer, buf -> buf.readById(Block.BLOCK_STATE_REGISTRY));
             int duration = buffer.readVarInt();
-            return new FluidTransformationRecipe(id, baseFluid, resultFluid, resultColor, catalyst, byproducts, duration);
+            return new FluidTransformationRecipe(baseFluid, resultFluid, resultColor, catalyst, byproducts, duration);
         }
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        FluidTransformationRecipe that = (FluidTransformationRecipe) o;
-        return this.resultColor == that.resultColor && this.duration == that.duration && Objects.equals(this.id, that.id) && Objects.equals(this.baseFluid, that.baseFluid) && Objects.equals(this.resultFluid, that.resultFluid) && Objects.equals(this.catalyst, that.catalyst) && Objects.equals(this.byproducts, that.byproducts);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(this.id, this.baseFluid, this.resultFluid, this.resultColor, this.catalyst, this.byproducts, this.duration);
-    }
 }

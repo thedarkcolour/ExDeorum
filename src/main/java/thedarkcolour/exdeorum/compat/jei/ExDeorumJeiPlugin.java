@@ -22,9 +22,9 @@ import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.handlers.IGuiClickableArea;
 import mezz.jei.api.gui.handlers.IGuiContainerHandler;
+import mezz.jei.api.neoforge.NeoForgeTypes;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.registration.IGuiHandlerRegistration;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
@@ -42,11 +42,11 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.WallTorchBlock;
-import net.minecraftforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStack;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.client.screen.MechanicalHammerScreen;
 import thedarkcolour.exdeorum.client.screen.MechanicalSieveScreen;
-import thedarkcolour.exdeorum.compat.CompatHelper;
+import thedarkcolour.exdeorum.compat.CompatUtil;
 import thedarkcolour.exdeorum.compat.GroupedSieveRecipe;
 import thedarkcolour.exdeorum.data.TranslationKeys;
 import thedarkcolour.exdeorum.item.WateringCanItem;
@@ -65,6 +65,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 @JeiPlugin
@@ -105,10 +106,10 @@ public class ExDeorumJeiPlugin implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        var barrels = CompatHelper.getAvailableBarrels(true);
-        var sieves = CompatHelper.getAvailableSieves(true, true);
-        var lavaCrucibles = CompatHelper.getAvailableLavaCrucibles(true);
-        var waterCrucibles = CompatHelper.getAvailableWaterCrucibles(true);
+        var barrels = CompatUtil.getAvailableBarrels(true);
+        var sieves = CompatUtil.getAvailableSieves(true, true);
+        var lavaCrucibles = CompatUtil.getAvailableLavaCrucibles(true);
+        var waterCrucibles = CompatUtil.getAvailableWaterCrucibles(true);
 
         for (var barrel : barrels) {
             var stack = new ItemStack(barrel);
@@ -143,12 +144,12 @@ public class ExDeorumJeiPlugin implements IModPlugin {
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
         registration.addItemStackInfo(List.of(new ItemStack(EItems.INFESTED_LEAVES.get()), new ItemStack(EItems.SILK_WORM.get())), Component.translatable(TranslationKeys.SILK_WORM_JEI_INFO));
-        registration.addItemStackInfo(CompatHelper.getAvailableSieves(true, false).stream().map(ItemStack::new).toList(), Component.translatable(TranslationKeys.SIEVE_JEI_INFO));
+        registration.addItemStackInfo(CompatUtil.getAvailableSieves(true, false).stream().map(ItemStack::new).toList(), Component.translatable(TranslationKeys.SIEVE_JEI_INFO));
         registration.addItemStackInfo(List.of(new ItemStack(EItems.STRING_MESH.get()), new ItemStack(EItems.STRING_MESH.get()), new ItemStack(EItems.FLINT_MESH.get()), new ItemStack(EItems.IRON_MESH.get()), new ItemStack(EItems.GOLDEN_MESH.get()), new ItemStack(EItems.DIAMOND_MESH.get()), new ItemStack(EItems.NETHERITE_MESH.get())), Component.translatable(TranslationKeys.SIEVE_MESH_JEI_INFO));
         registration.addItemStackInfo(List.of(WateringCanItem.getFull(EItems.WOODEN_WATERING_CAN), WateringCanItem.getFull(EItems.STONE_WATERING_CAN), WateringCanItem.getFull(EItems.IRON_WATERING_CAN), WateringCanItem.getFull(EItems.GOLDEN_WATERING_CAN), WateringCanItem.getFull(EItems.DIAMOND_WATERING_CAN), WateringCanItem.getFull(EItems.NETHERITE_WATERING_CAN)), Component.translatable(TranslationKeys.WATERING_CAN_JEI_INFO));
         var witchWaterInfo = Component.translatable(TranslationKeys.WITCH_WATER_JEI_INFO);
         registration.addItemStackInfo(List.of(new ItemStack(EItems.WITCH_WATER_BUCKET.get()), new ItemStack(EItems.PORCELAIN_WITCH_WATER_BUCKET.get())), witchWaterInfo);
-        registration.addIngredientInfo(new FluidStack(EFluids.WITCH_WATER.get(), 1000), ForgeTypes.FLUID_STACK, witchWaterInfo);
+        registration.addIngredientInfo(new FluidStack(EFluids.WITCH_WATER.get(), 1000), NeoForgeTypes.FLUID_STACK, witchWaterInfo);
         registration.addItemStackInfo(new ItemStack(EItems.GRASS_SEEDS.get()), Component.translatable(TranslationKeys.GRASS_SEEDS_JEI_INFO));
         registration.addItemStackInfo(new ItemStack(EItems.MYCELIUM_SPORES.get()), Component.translatable(TranslationKeys.MYCELIUM_SPORES_JEI_INFO));
         registration.addItemStackInfo(new ItemStack(EItems.WARPED_NYLIUM_SPORES.get()), Component.translatable(TranslationKeys.WARPED_NYLIUM_SPORES_JEI_INFO));
@@ -187,11 +188,7 @@ public class ExDeorumJeiPlugin implements IModPlugin {
         addRecipes(registration, LAVA_CRUCIBLE, ERecipeTypes.LAVA_CRUCIBLE);
         addRecipes(registration, WATER_CRUCIBLE, ERecipeTypes.WATER_CRUCIBLE);
         addRecipes(registration, HAMMER, ERecipeTypes.HAMMER);
-        var crookRecipes = new ArrayList<CrookJeiRecipe>();
-        for (var recipe : Objects.requireNonNull(Minecraft.getInstance().level).getRecipeManager().getAllRecipesFor(ERecipeTypes.CROOK.get())) {
-            crookRecipes.add(CrookJeiRecipe.create(recipe));
-        }
-        registration.addRecipes(CROOK, crookRecipes);
+        registration.addRecipes(CROOK, CompatUtil.collectAllRecipes(ERecipeTypes.CROOK.get(), CrookJeiRecipe::create));
         registration.addRecipes(SIEVE, GroupedSieveRecipe.getAllRecipesGrouped());
 
         addCrucibleHeatSources(registration);
@@ -275,6 +272,6 @@ public class ExDeorumJeiPlugin implements IModPlugin {
     }
 
     private static <C extends Container, T extends Recipe<C>> void addRecipes(IRecipeRegistration registration, RecipeType<T> category, Supplier<net.minecraft.world.item.crafting.RecipeType<T>> type) {
-        registration.addRecipes(category, Objects.requireNonNull(Minecraft.getInstance().level).getRecipeManager().getAllRecipesFor(type.get()));
+        registration.addRecipes(category, CompatUtil.collectAllRecipes(type.get(), Function.identity()));
     }
 }

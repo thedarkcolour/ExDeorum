@@ -21,16 +21,17 @@ package thedarkcolour.exdeorum.network;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.network.NetworkEvent;
 import org.jetbrains.annotations.Nullable;
+import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.blockentity.EBlockEntity;
 
-import java.util.function.Supplier;
+// todo change this into two classes instead of having nullable fields
+class VisualUpdateMessage implements CustomPacketPayload {
+    public static final ResourceLocation ID = new ResourceLocation(ExDeorum.ID, "visual_update");
 
-class VisualUpdateMessage {
     final BlockEntityType<?> blockEntityType;
     final BlockPos pos;
     // Null on the client side
@@ -40,6 +41,7 @@ class VisualUpdateMessage {
     @Nullable
     final FriendlyByteBuf payload;
 
+    @SuppressWarnings("DataFlowIssue")
     public VisualUpdateMessage(BlockPos pos, @Nullable EBlockEntity blockEntity, @Nullable FriendlyByteBuf payload) {
         this.pos = pos;
         this.blockEntity = blockEntity;
@@ -54,20 +56,21 @@ class VisualUpdateMessage {
         }
     }
 
-    public static void encode(VisualUpdateMessage msg, FriendlyByteBuf buffer) {
-        buffer.writeBlockPos(msg.pos);
-        buffer.writeId(BuiltInRegistries.BLOCK_ENTITY_TYPE, msg.blockEntityType);
+    @SuppressWarnings("DataFlowIssue")
+    @Override
+    public void write(FriendlyByteBuf buffer) {
+        buffer.writeBlockPos(this.pos);
+        buffer.writeId(BuiltInRegistries.BLOCK_ENTITY_TYPE, this.blockEntityType);
         // never null on the server side, where this packet is meant to be encoded
-        msg.blockEntity.writeVisualData(buffer);
+        this.blockEntity.writeVisualData(buffer);
+    }
+
+    @Override
+    public ResourceLocation id() {
+        return ID;
     }
 
     public static VisualUpdateMessage decode(FriendlyByteBuf buffer) {
         return new VisualUpdateMessage(buffer.readBlockPos(), null, buffer);
-    }
-
-    public static void handle(VisualUpdateMessage msg, Supplier<NetworkEvent.Context> ctxSupplier) {
-        NetworkHandler.handle(ctxSupplier, ctx -> {
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientMessageHandler.handleVisualUpdate(msg));
-        });
     }
 }

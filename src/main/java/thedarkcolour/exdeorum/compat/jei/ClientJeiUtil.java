@@ -25,7 +25,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.math.Axis;
 import me.shedaniel.rei.api.client.view.ViewSearchBuilder;
-import me.shedaniel.rei.jeicompat.JEIPluginDetector;
 import mezz.jei.api.ingredients.IIngredientRenderer;
 import mezz.jei.api.ingredients.IIngredientType;
 import mezz.jei.api.ingredients.ITypedIngredient;
@@ -62,8 +61,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.lighting.LevelLightEngine;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.ModList;
+import net.neoforged.fml.ModList;
+import net.neoforged.neoforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
@@ -194,31 +193,33 @@ class ClientJeiUtil {
     }
 
     // Required due to broken JEI implementation in REI plugin compatibility
-    public static <T> void checkTypedIngredient(IIngredientManager manager, IIngredientType<T> ingredientType, T uncheckedIngredient, Consumer<ITypedIngredient<T>> action) {
+    static <T> void checkTypedIngredient(IIngredientManager manager, IIngredientType<T> ingredientType, @Nullable T uncheckedIngredient, Consumer<ITypedIngredient<T>> action) {
         if ((uncheckedIngredient instanceof ItemStack stack && !stack.isEmpty()) || (uncheckedIngredient instanceof FluidStack fluidStack && !fluidStack.isEmpty())) {
             manager.createTypedIngredient(ingredientType, uncheckedIngredient).ifPresent(action);
         }
     }
 
-    public static <T> void showRecipes(IFocusFactory focusFactory, ITypedIngredient<T> ingredient) {
+    static <T> void showRecipes(IFocusFactory focusFactory, ITypedIngredient<T> ingredient) {
         if (Minecraft.getInstance().screen instanceof IRecipesGui recipesGui) {
             recipesGui.show(focusFactory.createFocus(RecipeIngredientRole.OUTPUT, ingredient));
         } else if (ModList.get().isLoaded(ModIds.REI_PC)) {
-            ViewSearchBuilder.builder().addRecipesFor(JEIPluginDetector.unwrapStack(ingredient)).open();
+            // todo fix when REIPC is on 1.20.4
+            //ViewSearchBuilder.builder().addRecipesFor(JEIPluginDetector.unwrapStack(ingredient)).open();
         }
     }
 
-    public static <T> void showUsages(IFocusFactory focusFactory, ITypedIngredient<T> ingredient) {
+    static <T> void showUsages(IFocusFactory focusFactory, ITypedIngredient<T> ingredient) {
         if (Minecraft.getInstance().screen instanceof IRecipesGui recipesGui) {
             // input + catalyst
             recipesGui.show(List.of(focusFactory.createFocus(RecipeIngredientRole.INPUT, ingredient), focusFactory.createFocus(RecipeIngredientRole.CATALYST, ingredient)));
         } else if (ModList.get().isLoaded(ModIds.REI_PC)) {
-            ViewSearchBuilder.builder().addUsagesFor(JEIPluginDetector.unwrapStack(ingredient)).open();
+            // todo fix when REIPC is on 1.20.4
+            //ViewSearchBuilder.builder().addUsagesFor(JEIPluginDetector.unwrapStack(ingredient)).open();
         }
     }
 
     // Takes a decimal probability and returns a user-friendly percentage value
-    public static Component formatChance(double probability) {
+    static Component formatChance(double probability) {
         var chance = FORMATTER.format(probability * 100);
         return Component.translatable(TranslationKeys.SIEVE_RECIPE_CHANCE, chance).withStyle(ChatFormatting.GRAY);
     }
@@ -239,6 +240,7 @@ class ClientJeiUtil {
             return 1;
         }
 
+        @SuppressWarnings("DataFlowIssue")
         @Override
         public LevelLightEngine getLightEngine() {
             return Minecraft.getInstance().level.getLightEngine();

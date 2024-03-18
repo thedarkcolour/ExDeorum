@@ -20,13 +20,13 @@ package thedarkcolour.exdeorum.registry;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.loot.MachineLootFunction;
 
 public class ELootFunctions {
     public static final DeferredRegister<LootItemFunctionType> LOOT_FUNCTIONS = DeferredRegister.create(Registries.LOOT_FUNCTION_TYPE, ExDeorum.ID);
 
-    public static final RegistryObject<LootItemFunctionType> MACHINE = LOOT_FUNCTIONS.register("machine", () -> new LootItemFunctionType(new MachineLootFunction.LootSerializer()));
+    public static final DeferredHolder<LootItemFunctionType, LootItemFunctionType> MACHINE = LOOT_FUNCTIONS.register("machine", () -> new LootItemFunctionType(MachineLootFunction.CODEC));
 }

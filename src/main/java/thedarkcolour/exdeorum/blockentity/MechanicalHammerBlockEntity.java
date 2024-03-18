@@ -38,6 +38,7 @@ import thedarkcolour.exdeorum.blockentity.helper.ItemHelper;
 import thedarkcolour.exdeorum.config.EConfig;
 import thedarkcolour.exdeorum.data.TranslationKeys;
 import thedarkcolour.exdeorum.loot.HammerLootModifier;
+import thedarkcolour.exdeorum.menu.MechanicalHammerMenu;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.recipe.hammer.HammerRecipe;
 import thedarkcolour.exdeorum.registry.EBlockEntities;

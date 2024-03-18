@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package thedarkcolour.exdeorum.blockentity;
+package thedarkcolour.exdeorum.menu;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -26,7 +26,7 @@ import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemStack;
 import thedarkcolour.exdeorum.ExDeorum;
-import thedarkcolour.exdeorum.menu.AbstractMachineMenu;
+import thedarkcolour.exdeorum.blockentity.MechanicalHammerBlockEntity;
 import thedarkcolour.exdeorum.registry.EMenus;
 import thedarkcolour.exdeorum.tag.EItemTags;
 

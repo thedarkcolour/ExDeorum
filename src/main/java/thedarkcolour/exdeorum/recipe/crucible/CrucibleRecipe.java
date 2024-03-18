@@ -18,26 +18,25 @@
 
 package thedarkcolour.exdeorum.recipe.crucible;
 
-import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraftforge.fluids.FluidStack;
-import thedarkcolour.exdeorum.recipe.RecipeUtil;
+import net.neoforged.neoforge.fluids.FluidStack;
+import thedarkcolour.exdeorum.recipe.CodecUtil;
 import thedarkcolour.exdeorum.recipe.SingleIngredientRecipe;
 import thedarkcolour.exdeorum.registry.ERecipeSerializers;
+import thedarkcolour.exdeorum.registry.ERecipeTypes;
 
-import javax.annotation.Nullable;
+import java.util.function.BiFunction;
 
-public class CrucibleRecipe extends SingleIngredientRecipe {
-    private final RecipeType<?> type;
+public abstract class CrucibleRecipe extends SingleIngredientRecipe {
     private final FluidStack result;
 
-    public CrucibleRecipe(ResourceLocation id, RecipeType<?> type, Ingredient ingredient, FluidStack result) {
-        super(id, ingredient);
-        this.type = type;
+    protected CrucibleRecipe(Ingredient ingredient, FluidStack result) {
+        super(ingredient);
         this.result = result;
 
         if (this.dependsOnNbt) {
@@ -49,35 +48,58 @@ public class CrucibleRecipe extends SingleIngredientRecipe {
         return this.result;
     }
 
-    @Override
-    public RecipeSerializer<?> getSerializer() {
-        return ERecipeSerializers.LAVA_CRUCIBLE.get();
+    private static <R extends CrucibleRecipe> Codec<R> codec(BiFunction<Ingredient, FluidStack, R> factory) {
+        return RecordCodecBuilder.create(instance -> instance.group(
+                CodecUtil.ingredientField(),
+                CodecUtil.FLUIDSTACK_CODEC.fieldOf("result").forGetter(CrucibleRecipe::getResult)
+        ).apply(instance, factory));
     }
 
-    @Override
-    public RecipeType<?> getType() {
-        return this.type;
-    }
+    public static class Lava extends CrucibleRecipe {
+        public static final Codec<Lava> CODEC = codec(Lava::new);
 
-    public static class Serializer implements RecipeSerializer<CrucibleRecipe> {
-        private final RecipeType<?> type;
-
-        public Serializer(RecipeType<?> type) {
-            this.type = type;
+        public Lava(Ingredient ingredient, FluidStack result) {
+            super(ingredient, result);
         }
 
         @Override
-        public CrucibleRecipe fromJson(ResourceLocation id, JsonObject json) {
-            Ingredient ingredient = RecipeUtil.readIngredient(json, "ingredient");
-            FluidStack stack = RecipeUtil.readFluidStack(json, "fluid");
-
-            return new CrucibleRecipe(id, this.type, ingredient, stack);
+        public RecipeSerializer<?> getSerializer() {
+            return ERecipeSerializers.LAVA_CRUCIBLE.get();
         }
 
-        @Nullable
         @Override
-        public CrucibleRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buffer) {
-            return new CrucibleRecipe(id, this.type, Ingredient.fromNetwork(buffer), FluidStack.readFromPacket(buffer));
+        public RecipeType<?> getType() {
+            return ERecipeTypes.LAVA_CRUCIBLE.get();
+        }
+    }
+
+    public static class Water extends CrucibleRecipe {
+        public static final Codec<Water> CODEC = codec(Water::new);
+
+        public Water(Ingredient ingredient, FluidStack result) {
+            super(ingredient, result);
+        }
+
+        @Override
+        public RecipeSerializer<?> getSerializer() {
+            return ERecipeSerializers.WATER_CRUCIBLE.get();
+        }
+
+        @Override
+        public RecipeType<?> getType() {
+            return ERecipeTypes.WATER_CRUCIBLE.get();
+        }
+    }
+
+    public record Serializer<R extends CrucibleRecipe>(Codec<R> recipeCodec, BiFunction<Ingredient, FluidStack, R> factory) implements RecipeSerializer<R> {
+        @Override
+        public Codec<R> codec() {
+            return this.recipeCodec;
+        }
+
+        @Override
+        public R fromNetwork(FriendlyByteBuf buffer) {
+            return this.factory.apply(Ingredient.fromNetwork(buffer), FluidStack.readFromPacket(buffer));
         }
 
         @Override

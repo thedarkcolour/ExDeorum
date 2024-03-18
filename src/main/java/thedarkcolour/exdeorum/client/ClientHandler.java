@@ -21,7 +21,6 @@ package thedarkcolour.exdeorum.client;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.gui.screens.worldselection.CreateWorldScreen;
 import net.minecraft.client.gui.screens.worldselection.WorldCreationUiState;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
@@ -30,18 +29,13 @@ import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Unit;
-import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
-import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.ModelEvent;
-import net.minecraftforge.client.event.RegisterClientReloadListenersEvent;
-import net.minecraftforge.client.event.RegisterShadersEvent;
-import net.minecraftforge.client.event.ScreenEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.TagsUpdatedEvent;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.event.config.ModConfigEvent;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.*;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.TagsUpdatedEvent;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.client.screen.MechanicalHammerScreen;
 import thedarkcolour.exdeorum.client.screen.MechanicalSieveScreen;
@@ -66,11 +60,11 @@ public class ClientHandler {
     // This is set to true whenever the server tells a client to do so, then set back to false after cache is refreshed.
     public static boolean needsRecipeCacheRefresh;
 
-    public static void register() {
-        var modBus = FMLJavaModLoadingContext.get().getModEventBus();
-        var fmlBus = MinecraftForge.EVENT_BUS;
+    public static void register(IEventBus modBus) {
+        var fmlBus = NeoForge.EVENT_BUS;
 
         modBus.addListener(ClientHandler::clientSetup);
+        modBus.addListener(ClientHandler::registerMenuScreens);
         modBus.addListener(ClientHandler::registerRenderers);
         modBus.addListener(ClientHandler::registerShaders);
         modBus.addListener(ClientHandler::addClientReloadListeners);
@@ -99,11 +93,12 @@ public class ClientHandler {
     }
 
     private static void clientSetup(FMLClientSetupEvent event) {
-        event.enqueueWork(() -> {
-            setRenderLayers();
-            MenuScreens.register(EMenus.MECHANICAL_SIEVE.get(), MechanicalSieveScreen::new);
-            MenuScreens.register(EMenus.MECHANICAL_HAMMER.get(), MechanicalHammerScreen::new);
-        });
+        event.enqueueWork(ClientHandler::setRenderLayers);
+    }
+
+    private static void registerMenuScreens(RegisterMenuScreensEvent event) {
+        event.register(EMenus.MECHANICAL_SIEVE.get(), MechanicalSieveScreen::new);
+        event.register(EMenus.MECHANICAL_HAMMER.get(), MechanicalHammerScreen::new);
     }
 
     private static void setRenderLayers() {

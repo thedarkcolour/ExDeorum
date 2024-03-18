@@ -18,36 +18,47 @@
 
 package thedarkcolour.exdeorum.recipe.sieve;
 
-import com.google.gson.JsonObject;
+import com.google.common.base.Preconditions;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.TagKey;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
-import org.jetbrains.annotations.Nullable;
-import thedarkcolour.exdeorum.ExDeorum;
-import thedarkcolour.exdeorum.compat.PreferredOres;
+import thedarkcolour.exdeorum.recipe.CodecUtil;
 import thedarkcolour.exdeorum.recipe.ProbabilityRecipe;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.registry.ERecipeSerializers;
 import thedarkcolour.exdeorum.registry.ERecipeTypes;
 
+import java.util.Objects;
+
 public class SieveRecipe extends ProbabilityRecipe {
+    public static final Codec<SieveRecipe> CODEC = RecordCodecBuilder.create(instance -> commonFields(instance).and(
+            instance.group(
+                    CodecUtil.itemField("mesh", SieveRecipe::getMesh),
+                    Codec.BOOL.optionalFieldOf("by_hand_only", false).forGetter(SieveRecipe::isByHandOnly)
+            )).apply(instance, SieveRecipe::new));
+
     public final Item mesh;
     public final boolean byHandOnly;
 
-    public SieveRecipe(ResourceLocation id, Ingredient ingredient, Item mesh, Item result, NumberProvider resultAmount, boolean byHandOnly) {
-        super(id, ingredient, result, resultAmount);
+    public SieveRecipe(Ingredient ingredient, Item result, NumberProvider resultAmount, Item mesh, boolean byHandOnly) {
+        super(ingredient, result, resultAmount);
 
         this.mesh = mesh;
         this.byHandOnly = byHandOnly;
+    }
+
+    public Item getMesh() {
+        return this.mesh;
+    }
+
+    public boolean isByHandOnly() {
+        return this.byHandOnly;
     }
 
     @Override
@@ -62,42 +73,19 @@ public class SieveRecipe extends ProbabilityRecipe {
 
     public static class Serializer implements RecipeSerializer<SieveRecipe> {
         @Override
-        public SieveRecipe fromJson(ResourceLocation id, JsonObject json) {
-            Ingredient ingredient = RecipeUtil.readIngredient(json, "ingredient");
-            Item mesh = RecipeUtil.readItem(json, "mesh");
-            Item result;
-
-            if (json.has("result")) {
-                result = RecipeUtil.readItem(json, "result");
-            } else if (json.has("result_tag")) {
-                TagKey<Item> tag = TagKey.create(Registries.ITEM, new ResourceLocation(GsonHelper.getAsString(json, "result_tag")));
-                result = PreferredOres.getPreferredOre(tag);
-
-                if (result == Items.AIR) {
-                    ExDeorum.LOGGER.info("Skipped loading recipe {} as result_tag {} was empty", id, tag);
-                    return null;
-                }
-            } else {
-                ExDeorum.LOGGER.error("Failed to load recipe {}, missing \"result\" item location or \"result_tag\" tag location", id);
-                return null;
-            }
-
-            NumberProvider resultAmount = RecipeUtil.readNumberProvider(json, "result_amount");
-            boolean byHandOnly = json.has("by_hand_only") && json.get("by_hand_only").getAsBoolean();
-            return new SieveRecipe(id, ingredient, mesh, result, resultAmount, byHandOnly);
+        public Codec<SieveRecipe> codec() {
+            return CODEC;
         }
 
-        @SuppressWarnings("deprecation")
         @Override
-        public @Nullable SieveRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buffer) {
+        public SieveRecipe fromNetwork(FriendlyByteBuf buffer) {
             Ingredient ingredient = Ingredient.fromNetwork(buffer);
-            Item mesh = buffer.readById(BuiltInRegistries.ITEM);
-            Item result = buffer.readById(BuiltInRegistries.ITEM);
+            Item mesh = Objects.requireNonNull(buffer.readById(BuiltInRegistries.ITEM));
+            Item result = Objects.requireNonNull(buffer.readById(BuiltInRegistries.ITEM));
             NumberProvider resultAmount = RecipeUtil.fromNetworkNumberProvider(buffer);
-            return new SieveRecipe(id, ingredient, mesh, result, resultAmount, buffer.readBoolean());
+            return new SieveRecipe(ingredient, result, resultAmount, mesh, buffer.readBoolean());
         }
 
-        @SuppressWarnings("deprecation")
         @Override
         public void toNetwork(FriendlyByteBuf buffer, SieveRecipe recipe) {
             recipe.getIngredient().toNetwork(buffer);

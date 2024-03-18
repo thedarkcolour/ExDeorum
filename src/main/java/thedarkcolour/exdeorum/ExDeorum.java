@@ -18,19 +18,22 @@
 
 package thedarkcolour.exdeorum;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.data.loading.DatagenModLoader;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.common.NeoForgeMod;
+import net.neoforged.neoforge.data.loading.DatagenModLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import thedarkcolour.exdeorum.client.ClientHandler;
 import thedarkcolour.exdeorum.config.EConfig;
+import thedarkcolour.exdeorum.data.Data;
+import thedarkcolour.exdeorum.data.ModCompatData;
 import thedarkcolour.exdeorum.event.EventHandler;
 import thedarkcolour.exdeorum.material.DefaultMaterials;
 import thedarkcolour.exdeorum.network.NetworkHandler;
@@ -45,28 +48,29 @@ public class ExDeorum {
     public static final boolean DEBUG = ModList.get().isLoaded("modkit");
     public static final boolean IS_JUNE = Calendar.getInstance().get(Calendar.MONTH) == Calendar.JUNE;
 
-    public ExDeorum() {
-        createRegistries();
-        NetworkHandler.register();
+    public ExDeorum(IEventBus modBus) {
+        createRegistries(modBus);
 
         // Still enabled in Dev environment because KubeJS enables milk fluid
         if (DatagenModLoader.isRunningDataGen()) {
-            ForgeMod.enableMilkFluid();
+            NeoForgeMod.enableMilkFluid();
+            ModCompatData.registerModData(modBus);
+            modBus.addListener(Data::generateData);
         }
 
         // Game Events
-        EventHandler.register();
-        // Client init
-        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> ClientHandlerRegistrar::register);
+        EventHandler.register(modBus);
+        // Client init (todo test that this doesn't crash servers)
+        if (FMLEnvironment.dist == Dist.CLIENT) {
+            ClientHandler.register(modBus);
+        }
         // Config init
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, EConfig.SERVER_SPEC);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, EConfig.COMMON_SPEC);
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, EConfig.CLIENT_SPEC);
     }
 
-    private static void createRegistries() {
-        var modBus = FMLJavaModLoadingContext.get().getModEventBus();
-
+    private static void createRegistries(IEventBus modBus) {
         EBlocks.BLOCKS.register(modBus);
         EBlockEntities.BLOCK_ENTITIES.register(modBus);
         EChunkGenerators.CHUNK_GENERATORS.register(modBus);
@@ -81,11 +85,5 @@ public class ExDeorum {
         ERecipeTypes.RECIPE_TYPES.register(modBus);
         ENumberProviders.NUMBER_PROVIDERS.register(modBus);
         DefaultMaterials.registerMaterials();
-    }
-
-    private interface ClientHandlerRegistrar {
-        private static void register() {
-            ClientHandler.register();
-        }
     }
 }

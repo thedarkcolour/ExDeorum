@@ -20,8 +20,8 @@ package thedarkcolour.exdeorum.registry;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelCompostRecipe;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelFluidMixingRecipe;
@@ -36,17 +36,17 @@ import thedarkcolour.exdeorum.recipe.sieve.SieveRecipe;
 public class ERecipeTypes {
     public static final DeferredRegister<RecipeType<?>> RECIPE_TYPES = DeferredRegister.create(Registries.RECIPE_TYPE, ExDeorum.ID);
 
-    public static final RegistryObject<RecipeType<BarrelCompostRecipe>> BARREL_COMPOST = RECIPE_TYPES.register("barrel_compost", () -> RecipeType.simple(ERecipeTypes.BARREL_COMPOST.getId()));
-    public static final RegistryObject<RecipeType<BarrelMixingRecipe>> BARREL_MIXING = RECIPE_TYPES.register("barrel_mixing", () -> RecipeType.simple(ERecipeTypes.BARREL_MIXING.getId()));
-    public static final RegistryObject<RecipeType<BarrelFluidMixingRecipe>> BARREL_FLUID_MIXING = RECIPE_TYPES.register("barrel_fluid_mixing", () -> RecipeType.simple(ERecipeTypes.BARREL_FLUID_MIXING.getId()));
-    public static final RegistryObject<RecipeType<FluidTransformationRecipe>> BARREL_FLUID_TRANSFORMATION = RECIPE_TYPES.register("barrel_fluid_transformation", () -> RecipeType.simple(ERecipeTypes.BARREL_FLUID_TRANSFORMATION.getId()));
+    public static final DeferredHolder<RecipeType<?>, RecipeType<BarrelCompostRecipe>> BARREL_COMPOST = RECIPE_TYPES.register("barrel_compost", () -> RecipeType.simple(ERecipeTypes.BARREL_COMPOST.getId()));
+    public static final DeferredHolder<RecipeType<?>, RecipeType<BarrelMixingRecipe>> BARREL_MIXING = RECIPE_TYPES.register("barrel_mixing", () -> RecipeType.simple(ERecipeTypes.BARREL_MIXING.getId()));
+    public static final DeferredHolder<RecipeType<?>, RecipeType<BarrelFluidMixingRecipe>> BARREL_FLUID_MIXING = RECIPE_TYPES.register("barrel_fluid_mixing", () -> RecipeType.simple(ERecipeTypes.BARREL_FLUID_MIXING.getId()));
+    public static final DeferredHolder<RecipeType<?>, RecipeType<FluidTransformationRecipe>> BARREL_FLUID_TRANSFORMATION = RECIPE_TYPES.register("barrel_fluid_transformation", () -> RecipeType.simple(ERecipeTypes.BARREL_FLUID_TRANSFORMATION.getId()));
 
-    public static final RegistryObject<RecipeType<CrucibleRecipe>> LAVA_CRUCIBLE = RECIPE_TYPES.register("lava_crucible", () -> RecipeType.simple(ERecipeTypes.LAVA_CRUCIBLE.getId()));
-    public static final RegistryObject<RecipeType<CrucibleRecipe>> WATER_CRUCIBLE = RECIPE_TYPES.register("water_crucible", () -> RecipeType.simple(ERecipeTypes.WATER_CRUCIBLE.getId()));
+    public static final DeferredHolder<RecipeType<?>, RecipeType<CrucibleRecipe>> LAVA_CRUCIBLE = RECIPE_TYPES.register("lava_crucible", () -> RecipeType.simple(ERecipeTypes.LAVA_CRUCIBLE.getId()));
+    public static final DeferredHolder<RecipeType<?>, RecipeType<CrucibleRecipe>> WATER_CRUCIBLE = RECIPE_TYPES.register("water_crucible", () -> RecipeType.simple(ERecipeTypes.WATER_CRUCIBLE.getId()));
 
-    public static final RegistryObject<RecipeType<HammerRecipe>> HAMMER = RECIPE_TYPES.register("hammer", () -> RecipeType.simple(ERecipeTypes.HAMMER.getId()));
-    public static final RegistryObject<RecipeType<CrookRecipe>> CROOK = RECIPE_TYPES.register("crook", () -> RecipeType.simple(ERecipeTypes.CROOK.getId()));
-    public static final RegistryObject<RecipeType<CrucibleHeatRecipe>> CRUCIBLE_HEAT_SOURCE = RECIPE_TYPES.register("crucible_heat_source", () -> RecipeType.simple(ERecipeTypes.CRUCIBLE_HEAT_SOURCE.getId()));
+    public static final DeferredHolder<RecipeType<?>, RecipeType<HammerRecipe>> HAMMER = RECIPE_TYPES.register("hammer", () -> RecipeType.simple(ERecipeTypes.HAMMER.getId()));
+    public static final DeferredHolder<RecipeType<?>, RecipeType<CrookRecipe>> CROOK = RECIPE_TYPES.register("crook", () -> RecipeType.simple(ERecipeTypes.CROOK.getId()));
+    public static final DeferredHolder<RecipeType<?>, RecipeType<CrucibleHeatRecipe>> CRUCIBLE_HEAT_SOURCE = RECIPE_TYPES.register("crucible_heat_source", () -> RecipeType.simple(ERecipeTypes.CRUCIBLE_HEAT_SOURCE.getId()));
 
-    public static final RegistryObject<RecipeType<SieveRecipe>> SIEVE = RECIPE_TYPES.register("sieve", () -> RecipeType.simple(ERecipeTypes.SIEVE.getId()));
+    public static final DeferredHolder<RecipeType<?>, RecipeType<SieveRecipe>> SIEVE = RECIPE_TYPES.register("sieve", () -> RecipeType.simple(ERecipeTypes.SIEVE.getId()));
 }

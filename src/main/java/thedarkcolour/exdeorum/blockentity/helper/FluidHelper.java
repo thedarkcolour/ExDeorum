@@ -19,8 +19,8 @@
 package thedarkcolour.exdeorum.blockentity.helper;
 
 import net.minecraft.nbt.CompoundTag;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 
 // Changed behavior from FluidTank:
 // - fluid stacks read from NBT are clamped.

@@ -18,43 +18,36 @@
 
 package thedarkcolour.exdeorum.network;
 
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.network.NetworkDirection;
-import net.minecraftforge.network.NetworkEvent;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.simple.SimpleChannel;
-import thedarkcolour.exdeorum.ExDeorum;
-
-import java.util.function.Consumer;
-import java.util.function.Supplier;
+import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.registration.IPayloadRegistrar;
 
 public final class NetworkHandler {
-    public static final String PROTOCOL_VERSION = "1";
-    public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(new ResourceLocation(ExDeorum.ID, "channel"), () -> PROTOCOL_VERSION, PROTOCOL_VERSION::equals, PROTOCOL_VERSION::equals);
-
-    public static void register() {
-        CHANNEL.registerMessage(0, VoidWorldMessage.class, VoidWorldMessage::encode, VoidWorldMessage::decode, VoidWorldMessage::handle);
-        CHANNEL.registerMessage(1, PlayerDataMessage.class, (msg, buffer) -> {}, buffer -> new PlayerDataMessage(), PlayerDataMessage::handle);
-        CHANNEL.registerMessage(2, VisualUpdateMessage.class, VisualUpdateMessage::encode, VisualUpdateMessage::decode, VisualUpdateMessage::handle);
-        CHANNEL.registerMessage(3, MenuPropertyMessage.class, MenuPropertyMessage::encode, MenuPropertyMessage::decode, MenuPropertyMessage::handle);
+    public static void register(IPayloadRegistrar registrar) {
+        registrar.play(MenuPropertyMessage.ID, MenuPropertyMessage::decode, sidedHandler -> {
+            sidedHandler.client((msg, ctx) -> ClientMessageHandler.handleMenuProperty(msg));
+        });
+        registrar.play(VisualUpdateMessage.ID, VisualUpdateMessage::decode, sidedHandler -> {
+            sidedHandler.client((msg, ctx) -> ClientMessageHandler.handleVisualUpdate(msg));
+        });
+        // not sure if these stop working if they're in the wrong phase, so I'll put them in both
+        registrar.common(VoidWorldMessage.ID, buffer -> VoidWorldMessage.INSTANCE, sidedHandler -> {
+            sidedHandler.client((msg, ctx) -> ClientMessageHandler.disableVoidFogRendering());
+        });
+        registrar.common(RecipeCacheResetMessage.ID, buffer -> RecipeCacheResetMessage.INSTANCE, sidedHandler -> {
+            sidedHandler.client((msg, ctx) -> ClientMessageHandler.reloadClientRecipeCache());
+        });
     }
 
-    public static void sendVoidWorld(ServerPlayer pPlayer) {
-        CHANNEL.sendTo(new VoidWorldMessage(), pPlayer.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
+    public static void sendVoidWorld(ServerPlayer player) {
+        PacketDistributor.PLAYER.with(player).send(VoidWorldMessage.INSTANCE);
     }
 
     public static void sendRecipeCacheReset(ServerPlayer player) {
-        CHANNEL.sendTo(new PlayerDataMessage(), player.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
-    }
-
-    static void handle(Supplier<NetworkEvent.Context> ctxSupplier, Consumer<NetworkEvent.Context> handler) {
-        var ctx = ctxSupplier.get();
-        ctx.enqueueWork(() -> handler.accept(ctx));
-        ctx.setPacketHandled(true);
+        PacketDistributor.PLAYER.with(player).send(RecipeCacheResetMessage.INSTANCE);
     }
 
     public static void sendMenuProperty(ServerPlayer player, int containerId, int index, int prevSieveEnergy) {
-        CHANNEL.sendTo(new MenuPropertyMessage(containerId, index, prevSieveEnergy), player.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
+        PacketDistributor.PLAYER.with(player).send(new MenuPropertyMessage(containerId, index, prevSieveEnergy));
     }
 }

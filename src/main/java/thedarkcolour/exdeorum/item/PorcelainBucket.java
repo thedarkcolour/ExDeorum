@@ -20,9 +20,7 @@ package thedarkcolour.exdeorum.item;
 
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -49,14 +47,13 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandlerItem;
+import net.neoforged.neoforge.common.NeoForgeMod;
+import net.neoforged.neoforge.common.SoundActions;
+import net.neoforged.neoforge.event.EventHooks;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidUtil;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.registry.EFluids;
@@ -94,7 +91,7 @@ public class PorcelainBucket extends Item {
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand pHand) {
         var stack = player.getItemInHand(pHand);
         var hitResult = getPlayerPOVHitResult(level, player, this.fluid.get() == Fluids.EMPTY ? ClipContext.Fluid.SOURCE_ONLY : ClipContext.Fluid.NONE);
-        var ret = net.minecraftforge.event.ForgeEventFactory.onBucketUse(player, level, stack, hitResult);
+        var ret = EventHooks.onBucketUse(player, level, stack, hitResult);
         if (ret != null) return ret;
         if (hitResult.getType() == HitResult.Type.MISS) {
             return InteractionResultHolder.pass(stack);
@@ -109,13 +106,13 @@ public class PorcelainBucket extends Item {
                     var state = level.getBlockState(pos);
                     var fluidType = state.getFluidState().getFluidType();
 
-                    if (fluidType == ForgeMod.WATER_TYPE.get() || fluidType == ForgeMod.LAVA_TYPE.get() || fluidType == EFluids.WITCH_WATER_TYPE.get()) {
+                    if (fluidType == NeoForgeMod.WATER_TYPE.value() || fluidType == NeoForgeMod.LAVA_TYPE.value() || fluidType == EFluids.WITCH_WATER_TYPE.value()) {
                         if (state.getBlock() instanceof BucketPickup pickup) {
-                            var result = pickup.pickupBlock(level, pos, state);
+                            var result = pickup.pickupBlock(player, level, pos, state);
 
-                            if (fluidType == ForgeMod.WATER_TYPE.get()) {
+                            if (fluidType == NeoForgeMod.WATER_TYPE.value()) {
                                 result = new ItemStack(EItems.PORCELAIN_WATER_BUCKET.get());
-                            } else if (fluidType == ForgeMod.LAVA_TYPE.get()) {
+                            } else if (fluidType == NeoForgeMod.LAVA_TYPE.value()) {
                                 result = new ItemStack(EItems.PORCELAIN_LAVA_BUCKET.get());
                             } else {
                                 result = new ItemStack(EItems.PORCELAIN_WITCH_WATER_BUCKET.get());
@@ -138,7 +135,7 @@ public class PorcelainBucket extends Item {
                     return InteractionResultHolder.fail(stack);
                 } else {
                     var state = level.getBlockState(pos);
-                    var placePos = canBlockContainFluid(level, pos, state) ? pos : relative;
+                    var placePos = canBlockContainFluid(player, level, pos, state) ? pos : relative;
 
                     if (emptyContents(player, level, placePos, hitResult, stack)) {
                         if (player instanceof ServerPlayer serverPlayer) {
@@ -176,8 +173,8 @@ public class PorcelainBucket extends Item {
             var state = level.getBlockState(pos);
             var block = state.getBlock();
             var replacing = state.canBeReplaced(this.fluid.get());
-            var canPlaceAtPos = state.isAir() || replacing || block instanceof LiquidBlockContainer liquidContainer && liquidContainer.canPlaceLiquid(level, pos, state, this.fluid.get());
-            var containedFluidStack = java.util.Optional.ofNullable(container).flatMap(net.minecraftforge.fluids.FluidUtil::getFluidContained);
+            var canPlaceAtPos = state.isAir() || replacing || block instanceof LiquidBlockContainer liquidContainer && liquidContainer.canPlaceLiquid(player, level, pos, state, this.fluid.get());
+            var containedFluidStack = java.util.Optional.ofNullable(container).flatMap(FluidUtil::getFluidContained);
 
             if (!canPlaceAtPos) {
                 return hitResult != null && this.emptyContents(player, level, hitResult.getBlockPos().relative(hitResult.getDirection()), null, container);
@@ -195,7 +192,7 @@ public class PorcelainBucket extends Item {
                 }
 
                 return true;
-            } else if (block instanceof LiquidBlockContainer liquidContainer && liquidContainer.canPlaceLiquid(level, pos, state, this.fluid.get())) {
+            } else if (block instanceof LiquidBlockContainer liquidContainer && liquidContainer.canPlaceLiquid(player, level, pos, state, this.fluid.get())) {
                 liquidContainer.placeLiquid(level, pos, state, ((FlowingFluid)this.fluid.get()).getSource(false));
                 playEmptySound(player, level, pos);
                 return true;
@@ -215,7 +212,7 @@ public class PorcelainBucket extends Item {
     }
 
     protected void playEmptySound(@Nullable Player pPlayer, LevelAccessor pLevel, BlockPos pPos) {
-        var sound = this.fluid.get().getFluidType().getSound(pPlayer, pLevel, pPos, net.minecraftforge.common.SoundActions.BUCKET_EMPTY);
+        var sound = this.fluid.get().getFluidType().getSound(pPlayer, pLevel, pPos, SoundActions.BUCKET_EMPTY);
         if (sound == null) {
             sound = this.fluid.get().is(FluidTags.LAVA) ? SoundEvents.BUCKET_EMPTY_LAVA : SoundEvents.BUCKET_EMPTY;
         }
@@ -223,20 +220,14 @@ public class PorcelainBucket extends Item {
         pLevel.gameEvent(pPlayer, GameEvent.FLUID_PLACE, pPos);
     }
 
-    protected boolean canBlockContainFluid(Level level, BlockPos pos, BlockState state) {
-        return state.getBlock() instanceof LiquidBlockContainer block && block.canPlaceLiquid(level, pos, state, this.fluid.get());
+    protected boolean canBlockContainFluid(Player player, Level level, BlockPos pos, BlockState state) {
+        return state.getBlock() instanceof LiquidBlockContainer block && block.canPlaceLiquid(player, level, pos, state, this.fluid.get());
     }
 
-    @Override
-    public @Nullable ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-        return new PorcelainBucket.CapabilityProvider(stack);
-    }
-
-    static class CapabilityProvider implements ICapabilityProvider, IFluidHandlerItem {
-        private final LazyOptional<IFluidHandlerItem> holder = LazyOptional.of(() -> this);
+    public static class ItemHandler implements IFluidHandlerItem {
         private ItemStack container;
 
-        public CapabilityProvider(ItemStack container) {
+        public ItemHandler(ItemStack container) {
             this.container = container;
         }
 
@@ -244,12 +235,6 @@ public class PorcelainBucket extends Item {
         @NotNull
         public ItemStack getContainer() {
             return this.container;
-        }
-
-        @Override
-        @NotNull
-        public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-            return ForgeCapabilities.FLUID_HANDLER_ITEM.orEmpty(cap, this.holder);
         }
 
         @Override
@@ -270,7 +255,7 @@ public class PorcelainBucket extends Item {
 
         @Override
         public boolean isFluidValid(int tank, @NotNull FluidStack stack) {
-            return stack.getFluid() == Fluids.LAVA || stack.getFluid() == Fluids.WATER || stack.getFluid() == EFluids.WITCH_WATER.get() || (ForgeMod.MILK.isPresent() && stack.getFluid() == ForgeMod.MILK.get());
+            return stack.getFluid() == Fluids.LAVA || stack.getFluid() == Fluids.WATER || stack.getFluid() == EFluids.WITCH_WATER.get() || (NeoForgeMod.MILK.isBound() && stack.getFluid() == NeoForgeMod.MILK.value());
         }
 
         @Override
@@ -328,8 +313,8 @@ public class PorcelainBucket extends Item {
                 return new FluidStack(Fluids.WATER, 1000);
             } else if (item == EItems.PORCELAIN_WITCH_WATER_BUCKET.get()) {
                 return new FluidStack(EFluids.WITCH_WATER.get(), 1000);
-            } else if (item == EItems.PORCELAIN_MILK_BUCKET.get() && ForgeMod.MILK.isPresent()) {
-                return new FluidStack(ForgeMod.MILK.get(), 1000);
+            } else if (item == EItems.PORCELAIN_MILK_BUCKET.get() && NeoForgeMod.MILK.isBound()) {
+                return new FluidStack(NeoForgeMod.MILK.get(), 1000);
             }
 
             return FluidStack.EMPTY;
@@ -344,7 +329,7 @@ public class PorcelainBucket extends Item {
                 this.container = new ItemStack(EItems.PORCELAIN_WATER_BUCKET.get());
             } else if (fluidStack.getFluid() == EFluids.WITCH_WATER.get()) {
                 this.container = new ItemStack(EItems.PORCELAIN_WITCH_WATER_BUCKET.get());
-            } else if (ForgeMod.MILK.isPresent() && fluidStack.getFluid() == ForgeMod.MILK.get()) {
+            } else if (NeoForgeMod.MILK.isBound() && fluidStack.getFluid() == NeoForgeMod.MILK.get()) {
                 this.container = new ItemStack(EItems.PORCELAIN_MILK_BUCKET.get());
             }
         }

@@ -28,17 +28,17 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import it.unimi.dsi.fastutil.objects.ObjectSet;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.model.data.ModelData;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.loading.FMLEnvironment;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.client.model.data.ModelData;
 import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3i;
@@ -54,11 +54,7 @@ import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.StringTokenizer;
+import java.util.*;
 import java.util.stream.Collectors;
 
 // ExDeorum comes with a precomputed list of vanilla colors, since textures don't exist on the server.
@@ -109,8 +105,7 @@ public class CompostColors {
             // alpha doesn't matter, only RGB
             image.downloadTexture(0, false);
 
-            for (var entry : ForgeRegistries.ITEMS.getEntries()) {
-                var item = entry.getValue();
+            for (var item : BuiltInRegistries.ITEM) {
                 var model = Minecraft.getInstance().getItemRenderer().getItemModelShaper().getItemModel(item);
 
                 if (model != null) {
@@ -147,11 +142,12 @@ public class CompostColors {
     private static void loadModded() {
         var readMods = readModdedColorFiles();
 
-        for (var entry : ForgeRegistries.ITEMS.getEntries()) {
-            var modid = entry.getKey().location().getNamespace();
+        for (var entry : BuiltInRegistries.ITEM.entrySet()) {
+            var key = entry.getKey().location();
+            var modid = key.getNamespace();
 
             if (!readMods.contains(modid)) {
-                var id = entry.getKey().location().getPath();
+                var id = key.getPath();
                 var modFile = ModList.get().getModFileById(modid);
                 if (modFile == null)
                     continue;
@@ -209,8 +205,10 @@ public class CompostColors {
             }
         }
 
-        @SuppressWarnings("DataFlowIssue")
-        var entries = COLORS.keySet().stream().sorted(Comparator.comparing(ForgeRegistries.ITEMS::getKey)).collect(Collectors.groupingBy(item -> ForgeRegistries.ITEMS.getKey(item).getNamespace()));
+        // todo should i sort the registry before iterating it, or should I keep the sort here?
+        Map<String, List<Item>> entries = COLORS.keySet().stream()
+                .sorted(Comparator.comparing(BuiltInRegistries.ITEM::getKey))
+                .collect(Collectors.groupingBy(item -> BuiltInRegistries.ITEM.getKey(item).getNamespace()));
 
         for (var entry : entries.entrySet()) {
             if (!readMods.contains(entry.getKey())) {
@@ -317,11 +315,11 @@ public class CompostColors {
                         var tokenizer = new StringTokenizer(line, ", #");
                         try {
                             var id = new ResourceLocation(modid, tokenizer.nextToken());
-                            var item = ForgeRegistries.ITEMS.getValue(id);
+                            var item = BuiltInRegistries.ITEM.get(id);
                             String token = tokenizer.nextToken();
                             var color = Integer.parseInt(token, 16);
 
-                            if (item != null && item != Items.AIR) {
+                            if (item != Items.AIR) {
                                 readColors++;
 
                                 COLORS.put(item, new Vector3i(
@@ -353,9 +351,8 @@ public class CompostColors {
         return false;
     }
 
-    @SuppressWarnings("DataFlowIssue")
     public static void export(String modid) {
-        export(modid, COLORS.keySet().stream().filter(key -> ForgeRegistries.ITEMS.getKey(key).getNamespace().equals(modid)).sorted(Comparator.comparing(ForgeRegistries.ITEMS::getKey)).toList());
+        export(modid, COLORS.keySet().stream().filter(key -> BuiltInRegistries.ITEM.getKey(key).getNamespace().equals(modid)).sorted(Comparator.comparing(BuiltInRegistries.ITEM::getKey)).toList());
     }
 
     // The given list should be sorted
@@ -370,13 +367,13 @@ public class CompostColors {
                         try (var writer = new BufferedWriter(fileWriter)) {
                             // sort file entries alphabetically
                             var alphabeticalItems = new ArrayList<>(sortedToExport);
-                            alphabeticalItems.sort(Comparator.comparing(item -> ForgeRegistries.ITEMS.getKey(item).getPath()));
+                            alphabeticalItems.sort(Comparator.comparing(item -> BuiltInRegistries.ITEM.getKey(item).getPath()));
 
                             writer.write("// Compost colors for " + modid + ". You may add your own colors, change existing ones, or remove colors that aren't needed.\n");
 
                             for (var item : alphabeticalItems) {
                                 if (COLORS.containsKey(item)) {
-                                    writer.write(ForgeRegistries.ITEMS.getKey(item).getPath());
+                                    writer.write(BuiltInRegistries.ITEM.getKey(item).getPath());
                                     writer.write(", #");
                                     var colorVec = COLORS.get(item);
                                     writer.write(Integer.toHexString(new Color(colorVec.x, colorVec.y, colorVec.z).getRGB() & 0xffffff));
@@ -393,7 +390,7 @@ public class CompostColors {
 
             ExDeorum.LOGGER.error("Unable to save compost colors for mod \"{}\"", modid);
         } catch (IOException e) {
-            e.printStackTrace();
+            ExDeorum.LOGGER.error("Encountered exception while trying to save compost colors for mod \"{}\"", modid, e);
         }
     }
 

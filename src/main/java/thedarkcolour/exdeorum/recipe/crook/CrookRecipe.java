@@ -18,25 +18,33 @@
 
 package thedarkcolour.exdeorum.recipe.crook;
 
-import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import thedarkcolour.exdeorum.recipe.BlockPredicate;
+import thedarkcolour.exdeorum.recipe.CodecUtil;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.registry.ERecipeSerializers;
 import thedarkcolour.exdeorum.registry.ERecipeTypes;
 
-public record CrookRecipe(ResourceLocation id, BlockPredicate blockPredicate, Item result, float chance) implements Recipe<Container> {
+import java.util.Objects;
+
+public record CrookRecipe(BlockPredicate blockPredicate, Item result, float chance) implements Recipe<Container> {
+    public static final Codec<CrookRecipe> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            BlockPredicate.CODEC.fieldOf("block_predicate").forGetter(CrookRecipe::blockPredicate),
+            CodecUtil.itemField("result", CrookRecipe::result),
+            Codec.FLOAT.fieldOf("chance").forGetter(CrookRecipe::chance)
+    ).apply(instance, CrookRecipe::new));
+
     @Override
     public boolean matches(Container pContainer, Level pLevel) {
         return false;
@@ -58,11 +66,6 @@ public record CrookRecipe(ResourceLocation id, BlockPredicate blockPredicate, It
     }
 
     @Override
-    public ResourceLocation getId() {
-        return this.id;
-    }
-
-    @Override
     public RecipeSerializer<?> getSerializer() {
         return ERecipeSerializers.CROOK.get();
     }
@@ -72,32 +75,19 @@ public record CrookRecipe(ResourceLocation id, BlockPredicate blockPredicate, It
         return ERecipeTypes.CROOK.get();
     }
 
-    @SuppressWarnings("deprecation")
     public static class Serializer implements RecipeSerializer<CrookRecipe> {
         @Override
-        public CrookRecipe fromJson(ResourceLocation id, JsonObject json) {
-            BlockPredicate blockPredicate = RecipeUtil.readBlockPredicate(id, json, "block_predicate");
-            if (blockPredicate == null) return null;
-
-            Item result = RecipeUtil.readItem(json, "result");
-            float chance = json.get("chance").getAsFloat();
-
-
-            return new CrookRecipe(id, blockPredicate, result, chance);
+        public Codec<CrookRecipe> codec() {
+            return CODEC;
         }
 
         @Override
-        public CrookRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buffer) {
-            BlockPredicate blockPredicate = RecipeUtil.readBlockPredicateNetwork(id, buffer);
-            if (blockPredicate == null) return null;
-
-            Item result = buffer.readById(BuiltInRegistries.ITEM);
-            if (result == null || result == Items.AIR) {
-                return null;
-            }
+        public CrookRecipe fromNetwork(FriendlyByteBuf buffer) {
+            BlockPredicate blockPredicate = RecipeUtil.readBlockPredicateNetwork(buffer);
+            Item result = Objects.requireNonNull(buffer.readById(BuiltInRegistries.ITEM));
             float chance = buffer.readFloat();
 
-            return new CrookRecipe(id, blockPredicate, result, chance);
+            return new CrookRecipe(blockPredicate, result, chance);
         }
 
         @Override

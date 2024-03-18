@@ -18,49 +18,38 @@
 
 package thedarkcolour.exdeorum.recipe;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
-import com.google.gson.JsonSyntaxException;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectSet;
 import net.minecraft.commands.arguments.blocks.BlockStateParser;
+import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
-import net.minecraft.util.GsonHelper;
-import net.minecraft.world.Container;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeManager;
-import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.LootDataType;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.providers.number.*;
-import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
-import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.compat.PreferredOres;
 import thedarkcolour.exdeorum.item.HammerItem;
 import thedarkcolour.exdeorum.loot.SummationGenerator;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelCompostRecipe;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelFluidMixingRecipe;
-import thedarkcolour.exdeorum.recipe.barrel.FluidTransformationRecipe;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelMixingRecipe;
+import thedarkcolour.exdeorum.recipe.barrel.FluidTransformationRecipe;
 import thedarkcolour.exdeorum.recipe.cache.*;
 import thedarkcolour.exdeorum.recipe.crook.CrookRecipe;
 import thedarkcolour.exdeorum.recipe.crucible.CrucibleRecipe;
@@ -69,11 +58,7 @@ import thedarkcolour.exdeorum.recipe.sieve.SieveRecipe;
 import thedarkcolour.exdeorum.registry.ENumberProviders;
 import thedarkcolour.exdeorum.registry.ERecipeTypes;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public final class RecipeUtil {
     private static final int CONSTANT_TYPE = 1;
@@ -96,7 +81,7 @@ public final class RecipeUtil {
         barrelCompostRecipeCache = new SingleIngredientRecipeCache<>(recipes, ERecipeTypes.BARREL_COMPOST);
         lavaCrucibleRecipeCache = new SingleIngredientRecipeCache<>(recipes, ERecipeTypes.LAVA_CRUCIBLE);
         waterCrucibleRecipeCache = new SingleIngredientRecipeCache<>(recipes, ERecipeTypes.WATER_CRUCIBLE);
-        hammerRecipeCache = new SingleIngredientRecipeCache<>(recipes, ERecipeTypes.HAMMER).trackAllRecipes();
+        hammerRecipeCache = new SingleIngredientRecipeCache<>(recipes, ERecipeTypes.HAMMER);
         sieveRecipeCache = new SieveRecipeCache(recipes);
         barrelFluidMixingRecipeCache = new BarrelFluidMixingRecipeCache(recipes);
         fluidTransformationRecipeCache = new FluidTransformationRecipeCache(recipes);
@@ -141,66 +126,28 @@ public final class RecipeUtil {
         return hammerRecipeCache.getRecipe(item);
     }
 
-    public static Collection<HammerRecipe> getCachedHammerRecipes() {
-        return hammerRecipeCache.getAllRecipes();
-    }
-
-    public static <C extends Container, T extends Recipe<C>> Collection<T> byType(RecipeManager manager, RecipeType<T> type) {
-        return manager.byType(type).values();
-    }
-
-    public static Ingredient readIngredient(JsonObject json, String key) {
-        if (GsonHelper.isArrayNode(json, key)) {
-            return Ingredient.fromJson(GsonHelper.getAsJsonArray(json, key));
-        } else {
-            return Ingredient.fromJson(GsonHelper.getAsJsonObject(json, key));
-        }
-    }
-
-    public static Item readItem(JsonObject json, String key) {
-        return CraftingHelper.getItem(GsonHelper.getAsString(json, key), true);
-    }
-
-    public static Fluid readFluid(JsonObject json, String key) {
-        String fluidName = GsonHelper.getAsString(json, key);
-        ResourceLocation fluidKey = new ResourceLocation(fluidName);
-        if (!ForgeRegistries.FLUIDS.containsKey(fluidKey)) {
-            throw new JsonSyntaxException("Unknown fluid '" + fluidName + "'");
-        }
-        Fluid fluid = ForgeRegistries.FLUIDS.getValue(fluidKey);
-        if (fluid == Fluids.EMPTY) {
-            throw new JsonSyntaxException("Invalid Fluid: " + fluidName);
-        }
-        return Objects.requireNonNull(fluid);
-    }
-
-    public static NumberProvider readNumberProvider(JsonObject json, String key) {
-        var obj = json.get(key);
-        return LootDataType.PREDICATE.parser().fromJson(obj, NumberProvider.class);
-    }
-
     public static void toNetworkNumberProvider(FriendlyByteBuf buffer, NumberProvider provider) {
         if (provider.getType() == NumberProviders.CONSTANT) {
             buffer.writeByte(CONSTANT_TYPE);
-            buffer.writeFloat(((ConstantValue) provider).value);
+            buffer.writeFloat(((ConstantValue) provider).value());
         } else if (provider.getType() == NumberProviders.UNIFORM) {
             var uniform = (UniformGenerator) provider;
             buffer.writeByte(UNIFORM_TYPE);
-            toNetworkNumberProvider(buffer, uniform.min);
-            toNetworkNumberProvider(buffer, uniform.max);
+            toNetworkNumberProvider(buffer, uniform.min());
+            toNetworkNumberProvider(buffer, uniform.max());
         } else if (provider.getType() == NumberProviders.BINOMIAL) {
             var binomial = (BinomialDistributionGenerator) provider;
             buffer.writeByte(BINOMIAL_TYPE);
-            toNetworkNumberProvider(buffer, binomial.n);
-            toNetworkNumberProvider(buffer, binomial.p);
+            toNetworkNumberProvider(buffer, binomial.n());
+            toNetworkNumberProvider(buffer, binomial.p());
         } else if (provider.getType() == ENumberProviders.SUMMATION.get()) {
             var summation = (SummationGenerator) provider;
             var providers = summation.providers();
-            int length = providers.length;
+            int length = providers.size();
             buffer.writeByte(SUMMATION_TYPE);
             buffer.writeByte(length);
             for (int i = 0; i < length; i++) {
-                toNetworkNumberProvider(buffer, providers[i]);
+                toNetworkNumberProvider(buffer, providers.get(i));
             }
         } else {
             buffer.writeByte(UNKNOWN_TYPE);
@@ -220,7 +167,7 @@ public final class RecipeUtil {
                 for (int i = 0; i < length; i++) {
                     providers[i] = fromNetworkNumberProvider(buffer);
                 }
-                yield new SummationGenerator(providers);
+                yield new SummationGenerator(List.of(providers));
             }
             default -> ConstantValue.exactly(1f);
         };
@@ -231,7 +178,7 @@ public final class RecipeUtil {
         // although unlikely, we should check this anyway
         if (first == second) return true;
 
-        if (first.isVanilla() && second.isVanilla()) {
+        if (first.getClass() == Ingredient.class && second.getClass() == Ingredient.class) {
             var firstValues = new ObjectArrayList<>(first.values);
             var secondValues = new ObjectArrayList<>(second.values);
 
@@ -270,11 +217,11 @@ public final class RecipeUtil {
         if (firstKlass == secondKlass) {
             if (firstKlass == Ingredient.ItemValue.class) {
                 // if items are different, return false
-                return ItemStack.matches(((Ingredient.ItemValue) firstValue).item, ((Ingredient.ItemValue) secondValue).item);
+                return ItemStack.matches(((Ingredient.ItemValue) firstValue).item(), ((Ingredient.ItemValue) secondValue).item());
             } else if (firstKlass == Ingredient.TagValue.class) {
                 // if tags are different, return false
                 // identity comparison is okay because tags are always interned in vanilla
-                return ((Ingredient.TagValue) firstValue).tag == ((Ingredient.TagValue) secondValue).tag;
+                return ((Ingredient.TagValue) firstValue).tag() == ((Ingredient.TagValue) secondValue).tag();
             } else {
                 var firstItems = firstValue.getItems();
                 var secondItems = secondValue.getItems();
@@ -311,9 +258,9 @@ public final class RecipeUtil {
     // todo stop using the RecipeManager
     @Nullable
     public static BarrelMixingRecipe getBarrelMixingRecipe(RecipeManager recipes, ItemStack stack, FluidStack fluid) {
-        for (var recipe : byType(recipes, ERecipeTypes.BARREL_MIXING.get())) {
-            if (recipe.matches(stack, fluid)) {
-                return recipe;
+        for (var recipe : recipes.byType(ERecipeTypes.BARREL_MIXING.get()).values()) {
+            if (recipe.value().matches(stack, fluid)) {
+                return recipe.value();
             }
         }
 
@@ -323,7 +270,7 @@ public final class RecipeUtil {
     @Nullable
     public static BarrelFluidMixingRecipe getFluidMixingRecipe(FluidStack base, Fluid additive) {
         var recipe = barrelFluidMixingRecipeCache.getRecipe(base.getFluid(), additive);
-        if (recipe != null && base.getAmount() >= recipe.baseFluidAmount) {
+        if (recipe != null && base.getAmount() >= recipe.baseFluidAmount()) {
             return recipe;
         } else {
             return null;
@@ -341,11 +288,11 @@ public final class RecipeUtil {
 
     public static double getExpectedValue(NumberProvider provider) {
         if (provider instanceof ConstantValue constant) {
-            return constant.value;
+            return constant.value();
         } else if (provider instanceof UniformGenerator uniform) {
-            return getExpectedValue(uniform.min) + getExpectedValue(uniform.max) / 2.0;
+            return getExpectedValue(uniform.min()) + getExpectedValue(uniform.max()) / 2.0;
         } else if (provider instanceof BinomialDistributionGenerator binomial) {
-            return getExpectedValue(binomial.n) * getExpectedValue(binomial.p);
+            return getExpectedValue(binomial.n()) * getExpectedValue(binomial.p());
         } else if (provider instanceof SummationGenerator summation) {
             double avgSum = 0.0;
 
@@ -366,33 +313,21 @@ public final class RecipeUtil {
         }
     }
 
-    @Nullable
-    public static BlockPredicate readBlockPredicate(ResourceLocation recipeId, JsonObject json, String key) {
-        BlockPredicate blockPredicate = BlockPredicate.fromJson(json.getAsJsonObject(key));
-
-        if (blockPredicate == null) {
-            ExDeorum.LOGGER.error("Invalid {} for recipe {}, refer to Ex Deorum documentation for syntax: {}", key, recipeId, json.getAsJsonObject(key));
-        }
-        return blockPredicate;
-    }
-
-    @Nullable
-    public static BlockPredicate readBlockPredicateNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
+    public static BlockPredicate readBlockPredicateNetwork(FriendlyByteBuf buffer) {
         BlockPredicate blockPredicate = BlockPredicate.fromNetwork(buffer);
 
         if (blockPredicate == null) {
-            ExDeorum.LOGGER.error("Failed to read block_predicate from network for recipe {}", recipeId);
+            throw new IllegalStateException("Failed to read block predicate from network");
         }
         return blockPredicate;
     }
 
-    @SuppressWarnings("deprecation")
     public static boolean isTagEmpty(TagKey<Item> tag) {
         return BuiltInRegistries.ITEM.getTag(tag).map(set -> !set.iterator().hasNext()).orElse(PreferredOres.getPreferredOre(tag) == Items.AIR);
     }
 
     public static LootContext emptyLootContext(ServerLevel level) {
-        return new LootContext.Builder(new LootParams(level, Map.of(), Map.of(), 0)).create(null);
+        return new LootContext.Builder(new LootParams(level, Map.of(), Map.of(), 0)).create(Optional.empty());
     }
 
     public static List<CrookRecipe> getCrookRecipes(BlockState state) {
@@ -407,46 +342,14 @@ public final class RecipeUtil {
         return crucibleHeatRecipeCache.getEntries();
     }
 
-    public static FluidStack readFluidStack(JsonObject json, String key) {
-        if (json.has(key)) {
-            var fluidJson = json.getAsJsonObject(key);
-            // Since we aren't using codec anymore, we can use consistent naming with other JSON objects
-            if (fluidJson.has("FluidName")) {
-                var stack = new FluidStack(RecipeUtil.readFluid(fluidJson, "FluidName"), GsonHelper.getAsInt(fluidJson, "Amount"));
-                if (fluidJson.has("Tag")) {
-                    stack.setTag(CraftingHelper.getNBT(fluidJson.get("Tag")));
-                }
-                return stack;
-            } else {
-                var stack = new FluidStack(RecipeUtil.readFluid(fluidJson, "fluid"), GsonHelper.getAsInt(fluidJson, "amount"));
-                if (fluidJson.has("nbt")) {
-                    stack.setTag(CraftingHelper.getNBT(fluidJson.get("nbt")));
-                }
-                return stack;
-            }
-        } else {
-            throw new JsonSyntaxException("Missing fluid");
-        }
-    }
-
-    public static JsonElement writeFluidStackJson(FluidStack fluidStack) {
-        JsonObject object = new JsonObject();
-        object.addProperty("fluid", getFluidId(fluidStack.getFluid()));
-        object.addProperty("amount", fluidStack.getAmount());
-        if (fluidStack.hasTag()) {
-            object.addProperty("nbt", fluidStack.getTag().getAsString());
-        }
-        return object;
-    }
-
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public static JsonPrimitive writeBlockState(BlockState state) {
+    public static String writeBlockState(BlockState state) {
         var registryKey = BuiltInRegistries.BLOCK.getKey(state.getBlock());
 
         Collection<Property> properties = (Collection<Property>) ((Collection)state.getProperties());
 
         if (properties.isEmpty()) {
-            return new JsonPrimitive(registryKey.toString());
+            return registryKey.toString();
         } else {
             StringBuilder builder = new StringBuilder();
             builder.append(registryKey);
@@ -461,7 +364,7 @@ public final class RecipeUtil {
                 }
             }
             builder.append(']');
-            return new JsonPrimitive(builder.toString());
+            return builder.toString();
         }
     }
 
@@ -473,11 +376,11 @@ public final class RecipeUtil {
         }
     }
 
-    public static String getFluidId(Fluid baseFluid) {
-        return BuiltInRegistries.FLUID.getKey(baseFluid).toString();
+    public static void writeTag(FriendlyByteBuf buffer, TagKey<?> ore) {
+        buffer.writeResourceLocation(ore.location());
     }
 
-    public static String writeItemJson(Item result) {
-        return BuiltInRegistries.ITEM.getKey(result).toString();
+    public static <T> TagKey<T> readTag(FriendlyByteBuf buffer, ResourceKey<Registry<T>> registry) {
+        return TagKey.create(registry, buffer.readResourceLocation());
     }
 }

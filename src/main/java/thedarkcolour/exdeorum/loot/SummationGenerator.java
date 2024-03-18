@@ -18,17 +18,19 @@
 
 package thedarkcolour.exdeorum.loot;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSerializationContext;
-import net.minecraft.util.GsonHelper;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 import thedarkcolour.exdeorum.registry.ENumberProviders;
 
-public record SummationGenerator(NumberProvider[] providers) implements NumberProvider {
+import java.util.List;
+
+public record SummationGenerator(List<NumberProvider> providers) implements NumberProvider {
+    public static final Codec<SummationGenerator> CODEC = RecordCodecBuilder.create(instance -> instance.group(NumberProviders.CODEC.listOf().fieldOf("values").forGetter(SummationGenerator::providers)).apply(instance, SummationGenerator::new));
+
     @Override
     public float getFloat(LootContext context) {
         float sum = 0f;
@@ -41,27 +43,5 @@ public record SummationGenerator(NumberProvider[] providers) implements NumberPr
     @Override
     public LootNumberProviderType getType() {
         return ENumberProviders.SUMMATION.get();
-    }
-
-    public static class Serializer implements net.minecraft.world.level.storage.loot.Serializer<SummationGenerator> {
-        @Override
-        public void serialize(JsonObject json, SummationGenerator value, JsonSerializationContext ctx) {
-            JsonArray array = new JsonArray();
-            for (var provider : value.providers) {
-                array.add(ctx.serialize(provider, NumberProvider.class));
-            }
-        }
-
-        @Override
-        public SummationGenerator deserialize(JsonObject json, JsonDeserializationContext ctx) {
-            var valuesJson = GsonHelper.getAsJsonArray(json, "values");
-            NumberProvider[] providers = new NumberProvider[valuesJson.size()];
-            int i = 0;
-            for (var valueJson : valuesJson) {
-                providers[i++] = ctx.deserialize(valueJson, NumberProvider.class);
-            }
-
-            return new SummationGenerator(providers);
-        }
     }
 }

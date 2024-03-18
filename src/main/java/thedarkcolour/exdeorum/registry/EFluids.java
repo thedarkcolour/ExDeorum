@@ -18,21 +18,22 @@
 
 package thedarkcolour.exdeorum.registry;
 
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.fluids.FluidType;
-import net.minecraftforge.fluids.ForgeFlowingFluid;
-import net.minecraftforge.registries.RegistryObject;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.fluids.BaseFlowingFluid;
+import net.neoforged.neoforge.fluids.FluidType;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.fluid.WitchWaterFluid;
 
 public class EFluids {
-    public static final DeferredRegister<FluidType> FLUID_TYPES = DeferredRegister.create(ForgeRegistries.Keys.FLUID_TYPES, ExDeorum.ID);
-    public static final DeferredRegister<Fluid> FLUIDS = DeferredRegister.create(ForgeRegistries.FLUIDS, ExDeorum.ID);
+    public static final DeferredRegister<FluidType> FLUID_TYPES = DeferredRegister.create(NeoForgeRegistries.Keys.FLUID_TYPES, ExDeorum.ID);
+    public static final DeferredRegister<Fluid> FLUIDS = DeferredRegister.create(Registries.FLUID, ExDeorum.ID);
 
-    public static final RegistryObject<FluidType> WITCH_WATER_TYPE = FLUID_TYPES.register("witch_water", WitchWaterFluid::new);
+    public static final DeferredHolder<FluidType, WitchWaterFluid> WITCH_WATER_TYPE = FLUID_TYPES.register("witch_water", WitchWaterFluid::new);
 
-    public static final RegistryObject<ForgeFlowingFluid> WITCH_WATER = FLUIDS.register("witch_water", () -> new ForgeFlowingFluid.Source(WitchWaterFluid.properties()));
-    public static final RegistryObject<ForgeFlowingFluid> WITCH_WATER_FLOWING = FLUIDS.register("flowing_witch_water", () -> new ForgeFlowingFluid.Flowing(WitchWaterFluid.properties()));
+    public static final DeferredHolder<Fluid, BaseFlowingFluid> WITCH_WATER = FLUIDS.register("witch_water", () -> new BaseFlowingFluid.Source(WitchWaterFluid.properties()));
+    public static final DeferredHolder<Fluid, BaseFlowingFluid> WITCH_WATER_FLOWING = FLUIDS.register("flowing_witch_water", () -> new BaseFlowingFluid.Flowing(WitchWaterFluid.properties()));
 }

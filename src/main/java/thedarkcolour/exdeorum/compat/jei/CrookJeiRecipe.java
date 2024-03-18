@@ -20,9 +20,11 @@ package thedarkcolour.exdeorum.compat.jei;
 
 import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonObject;
+import com.mojang.serialization.JsonOps;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.minecraft.ChatFormatting;
+import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
@@ -34,6 +36,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.recipe.BlockPredicate;
+import thedarkcolour.exdeorum.recipe.CodecUtil;
 import thedarkcolour.exdeorum.recipe.crook.CrookRecipe;
 
 import java.util.ArrayList;
@@ -99,7 +102,7 @@ public sealed abstract class CrookJeiRecipe {
 
             ImmutableList.Builder<Component> requirements = ImmutableList.builder();
             if (predicate != null) {
-                var json = predicate.properties().serializeToJson();
+                var json = CodecUtil.encode(StatePropertiesPredicate.CODEC, predicate.properties());
                 if (json instanceof JsonObject obj) {
                     for (var entry : obj.entrySet()) {
                         requirements.add(Component.literal("  " + entry.getKey() + "=" + entry.getValue().toString()).withStyle(ChatFormatting.GRAY));

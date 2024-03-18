@@ -18,7 +18,6 @@
 
 package thedarkcolour.exdeorum.recipe;
 
-import com.google.gson.JsonObject;
 import net.minecraft.SharedConstants;
 import net.minecraft.core.Direction;
 import net.minecraft.server.Bootstrap;
@@ -26,9 +25,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.material.Fluids;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.fluids.FluidStack;
+import net.neoforged.neoforge.common.Tags;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -39,19 +36,6 @@ class RecipeUtilTest {
     void setUp() {
         SharedConstants.tryDetectVersion();
         Bootstrap.bootStrap();
-    }
-
-    @Test
-    void jsonFluidStack() {
-        var fluidStack = new FluidStack(Fluids.LAVA, 345);
-        var root = new JsonObject();
-        root.add("test", RecipeUtil.writeFluidStackJson(fluidStack));
-        var testStack = RecipeUtil.readFluidStack(root, "test");
-        assertTrue(
-                testStack.getAmount() == fluidStack.getAmount() &&
-                testStack.getFluid() == fluidStack.getFluid() &&
-                testStack.getTag() == fluidStack.getTag()
-        );
     }
 
     @Test
@@ -68,6 +52,6 @@ class RecipeUtilTest {
     @Test
     void stringBlockState() {
         var state = Blocks.ACACIA_LOG.defaultBlockState().setValue(BlockStateProperties.AXIS, Direction.Axis.Z);
-        assertEquals(state, RecipeUtil.parseBlockState(RecipeUtil.writeBlockState(state).getAsString()));
+        assertEquals(state, RecipeUtil.parseBlockState(RecipeUtil.writeBlockState(state)));
     }
 }

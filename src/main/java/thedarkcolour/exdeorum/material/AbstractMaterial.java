@@ -23,7 +23,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredBlock;
+import net.neoforged.neoforge.registries.DeferredItem;
 
 public abstract class AbstractMaterial {
     // The sound this block makes (a string corresponding to a field in SoundType or a JSON object with the five sound events used to create a sound type)
@@ -37,8 +38,8 @@ public abstract class AbstractMaterial {
     // ID of mod that should be present
     public final String requiredModId;
 
-    RegistryObject<Block> block;
-    RegistryObject<BlockItem> item;
+    DeferredBlock<Block> block;
+    DeferredItem<BlockItem> item;
 
     protected AbstractMaterial(SoundType soundType, float strength, boolean needsCorrectTool, int mapColor, String requiredModId) {
         this.soundType = soundType;

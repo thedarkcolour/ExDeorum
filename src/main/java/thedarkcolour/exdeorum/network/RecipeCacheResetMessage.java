@@ -18,19 +18,25 @@
 
 package thedarkcolour.exdeorum.network;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.network.NetworkEvent;
-
-import java.util.function.Supplier;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
+import thedarkcolour.exdeorum.ExDeorum;
 
 // Server -> Client
 // Fired whenever a player joins an LAN world or dedicated server to load the recipe caches
 // Also fired whenever those servers reload data
-public class PlayerDataMessage {
-    public void handle(Supplier<NetworkEvent.Context> ctxSupplier) {
-        NetworkHandler.handle(ctxSupplier, ctx -> {
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ClientMessageHandler::reloadClientRecipeCache);
-        });
+public enum RecipeCacheResetMessage implements CustomPacketPayload {
+    INSTANCE;
+
+    public static final ResourceLocation ID = new ResourceLocation(ExDeorum.ID, "recipe_cache_reset");
+
+    @Override
+    public void write(FriendlyByteBuf pBuffer) {
+    }
+
+    @Override
+    public ResourceLocation id() {
+        return ID;
     }
 }

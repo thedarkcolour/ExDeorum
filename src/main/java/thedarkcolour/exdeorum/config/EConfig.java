@@ -19,11 +19,11 @@
 package thedarkcolour.exdeorum.config;
 
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
-import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
-import net.minecraftforge.common.ForgeConfigSpec.DoubleValue;
-import net.minecraftforge.common.ForgeConfigSpec.IntValue;
+import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec.BooleanValue;
+import net.neoforged.neoforge.common.ModConfigSpec.ConfigValue;
+import net.neoforged.neoforge.common.ModConfigSpec.IntValue;
+import net.neoforged.neoforge.common.ModConfigSpec.DoubleValue;
 import org.apache.commons.lang3.text.WordUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import thedarkcolour.exdeorum.compat.ModIds;
@@ -31,9 +31,9 @@ import thedarkcolour.exdeorum.compat.ModIds;
 import java.util.List;
 
 public class EConfig {
-    public static final ForgeConfigSpec CLIENT_SPEC;
-    public static final ForgeConfigSpec COMMON_SPEC;
-    public static final ForgeConfigSpec SERVER_SPEC;
+    public static final ModConfigSpec CLIENT_SPEC;
+    public static final ModConfigSpec COMMON_SPEC;
+    public static final ModConfigSpec SERVER_SPEC;
     public static final Client CLIENT;
     public static final Common COMMON;
     public static final Server SERVER;
@@ -42,7 +42,7 @@ public class EConfig {
         public final BooleanValue useFastInfestedLeaves;
         public final BooleanValue setVoidWorldAsDefault;
 
-        public Client(ForgeConfigSpec.Builder builder) {
+        public Client(ModConfigSpec.Builder builder) {
             builder.comment("Client configuration for Ex Deorum").push("client");
 
             this.useFastInfestedLeaves = builder
@@ -78,7 +78,7 @@ public class EConfig {
         public final BooleanValue voidNetherGeneration;
         public final BooleanValue voidEndGeneration;
 
-        public Common(ForgeConfigSpec.Builder builder) {
+        public Common(ModConfigSpec.Builder builder) {
             // Preferred items
             builder.comment("Common configuration for Ex Deorum").push("common");
 
@@ -138,7 +138,7 @@ public class EConfig {
         public final IntValue mechanicalHammerEnergyConsumption;
         public final IntValue sieveIntervalTicks;
 
-        public Server(ForgeConfigSpec.Builder builder) {
+        public Server(ModConfigSpec.Builder builder) {
             builder.comment("Server configuration for Ex Deorum").push("server");
 
             this.startingTorch = builder
@@ -200,7 +200,7 @@ public class EConfig {
     }
 
     @SuppressWarnings("deprecation")
-    private static ConfigValue<String> preferredOreConfig(ForgeConfigSpec.Builder builder, String name, String defaultId) {
+    private static ConfigValue<String> preferredOreConfig(ModConfigSpec.Builder builder, String name, String defaultId) {
         return builder
                 .comment("The ID of the item to use for Ex Deorum recipes that craft into " + WordUtils.capitalize(name.replace('_', ' ')) + ". Leave as air for default preference, which chooses alphabetically by mod name.")
                 .define(List.of("preferred_" + name), defaultId, o -> o != null && o.getClass() == String.class && ResourceLocation.isValidResourceLocation((String) o));
@@ -208,17 +208,17 @@ public class EConfig {
 
     static {
         {
-            Pair<Client, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(Client::new);
+            Pair<Client, ModConfigSpec> specPair = new ModConfigSpec.Builder().configure(Client::new);
             CLIENT = specPair.getLeft();
             CLIENT_SPEC = specPair.getRight();
         }
         {
-            Pair<Common, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(Common::new);
+            Pair<Common, ModConfigSpec> specPair = new ModConfigSpec.Builder().configure(Common::new);
             COMMON = specPair.getLeft();
             COMMON_SPEC = specPair.getRight();
         }
         {
-            Pair<Server, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(Server::new);
+            Pair<Server, ModConfigSpec> specPair = new ModConfigSpec.Builder().configure(Server::new);
             SERVER = specPair.getLeft();
             SERVER_SPEC = specPair.getRight();
         }

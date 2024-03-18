@@ -49,8 +49,8 @@ public class CrookRecipeCache {
         var tempRecipes = new HashMap<BlockState, HashSet<CrookRecipe>>();
 
         for (var recipe : this.recipeManager.byType(ERecipeTypes.CROOK.get()).values()) {
-            recipe.blockPredicate().possibleStates().forEach(state -> {
-                tempRecipes.computeIfAbsent(state, key -> new HashSet<>()).add(recipe);
+            recipe.value().blockPredicate().possibleStates().forEach(state -> {
+                tempRecipes.computeIfAbsent(state, key -> new HashSet<>()).add(recipe.value());
             });
         }
         // map equal sets to a single list object instead of using a bunch of duplicate sets

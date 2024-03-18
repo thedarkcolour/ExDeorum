@@ -23,7 +23,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.client.model.data.ModelData;
+import net.neoforged.neoforge.client.model.data.ModelData;
 import thedarkcolour.exdeorum.blockentity.InfestedLeavesBlockEntity;
 import thedarkcolour.exdeorum.client.RenderUtil;
 import thedarkcolour.exdeorum.config.EConfig;
@@ -46,7 +46,7 @@ public class InfestedLeavesRenderer implements BlockEntityRenderer<InfestedLeave
         }
 
         // Get infested percentage
-        int progress = Math.min((int) (te.getProgress() * 16000), 16000);
+        int progress = Math.min(te.getProgress(), 16000);
         // Render
         var model = mc.getBlockRenderer().getBlockModel(state);
         var pos = te.getBlockPos();

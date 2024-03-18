@@ -37,7 +37,7 @@ import net.minecraft.world.level.storage.loot.providers.number.BinomialDistribut
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
-import net.minecraftforge.common.util.Lazy;
+import net.neoforged.neoforge.common.util.Lazy;
 import thedarkcolour.exdeorum.compat.GroupedSieveRecipe;
 import thedarkcolour.exdeorum.data.TranslationKeys;
 import thedarkcolour.exdeorum.loot.SummationGenerator;
@@ -110,14 +110,14 @@ class SieveCategory implements IRecipeCategory<GroupedSieveRecipe> {
             slot.setCustomRenderer(VanillaTypes.ITEM_STACK, ClientJeiUtil.AsteriskItemRenderer.INSTANCE);
         }
         if (provider instanceof BinomialDistributionGenerator binomial) {
-            if (binomial.n instanceof ConstantValue constant && constant.value == 1) {
-                var chanceLabel = ClientJeiUtil.formatChance(RecipeUtil.getExpectedValue(binomial.p));
+            if (binomial.n() instanceof ConstantValue constant && constant.value() == 1) {
+                var chanceLabel = ClientJeiUtil.formatChance(RecipeUtil.getExpectedValue(binomial.p()));
                 tooltipLines.add(chanceLabel);
             } else {
                 addAvgOutput(tooltipLines, RecipeUtil.getExpectedValue(provider));
             }
 
-            addMinMaxes(tooltipLines, 0, getMax(binomial.n));
+            addMinMaxes(tooltipLines, 0, getMax(binomial.n()));
         } else if (provider.getClass() != ConstantValue.class) {
             var val = RecipeUtil.getExpectedValue(provider);
             if (val != -1.0) {
@@ -137,9 +137,9 @@ class SieveCategory implements IRecipeCategory<GroupedSieveRecipe> {
 
     private static double getMin(NumberProvider provider) {
         if (provider instanceof ConstantValue value) {
-            return value.value;
+            return value.value();
         } else if (provider instanceof UniformGenerator uniform) {
-            return getMin(uniform.min);
+            return getMin(uniform.min());
         } else if (provider instanceof BinomialDistributionGenerator) {
             return 0;
         } else if (provider instanceof SummationGenerator summation) {
@@ -157,11 +157,11 @@ class SieveCategory implements IRecipeCategory<GroupedSieveRecipe> {
 
     private static double getMax(NumberProvider provider) {
         if (provider instanceof ConstantValue value) {
-            return value.value;
+            return value.value();
         } else if (provider instanceof UniformGenerator uniform) {
-            return getMax(uniform.max);
+            return getMax(uniform.max());
         } else if (provider instanceof BinomialDistributionGenerator binomial) {
-            return getMax(binomial.n);
+            return getMax(binomial.n());
         } else if (provider instanceof SummationGenerator summation) {
             double sum = 0;
 

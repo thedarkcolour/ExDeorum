@@ -23,15 +23,15 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.data.TranslationKeys;
 
 public class ECreativeTabs {
     public static final DeferredRegister<CreativeModeTab> CREATIVE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, ExDeorum.ID);
 
-    public static final RegistryObject<CreativeModeTab> MAIN = CREATIVE_TABS.register("main", () -> {
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> MAIN = CREATIVE_TABS.register("main", () -> {
         var builder = new CreativeModeTab.Builder(CreativeModeTab.Row.TOP, 0);
         ECreativeTabs.mainTab(builder);
         return builder.build();

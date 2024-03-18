@@ -18,10 +18,10 @@
 
 package thedarkcolour.exdeorum.recipe.crucible;
 
-import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
@@ -33,7 +33,12 @@ import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.registry.ERecipeSerializers;
 import thedarkcolour.exdeorum.registry.ERecipeTypes;
 
-public record CrucibleHeatRecipe(ResourceLocation id, BlockPredicate blockPredicate, int heatValue) implements Recipe<Container> {
+public record CrucibleHeatRecipe(BlockPredicate blockPredicate, int heatValue) implements Recipe<Container> {
+    public static final Codec<CrucibleHeatRecipe> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            BlockPredicate.CODEC.fieldOf("block_predicate").forGetter(CrucibleHeatRecipe::blockPredicate),
+            Codec.INT.fieldOf("heat_value").forGetter(CrucibleHeatRecipe::heatValue)
+    ).apply(instance, CrucibleHeatRecipe::new));
+
     @Override
     public boolean matches(Container pContainer, Level pLevel) {
         return false;
@@ -55,11 +60,6 @@ public record CrucibleHeatRecipe(ResourceLocation id, BlockPredicate blockPredic
     }
 
     @Override
-    public ResourceLocation getId() {
-        return this.id;
-    }
-
-    @Override
     public RecipeSerializer<?> getSerializer() {
         return ERecipeSerializers.CRUCIBLE_HEAT_SOURCE.get();
     }
@@ -71,19 +71,15 @@ public record CrucibleHeatRecipe(ResourceLocation id, BlockPredicate blockPredic
 
     public static class Serializer implements RecipeSerializer<CrucibleHeatRecipe> {
         @Override
-        public CrucibleHeatRecipe fromJson(ResourceLocation id, JsonObject json) {
-            BlockPredicate blockPredicate = RecipeUtil.readBlockPredicate(id, json, "block_predicate");
-            if (blockPredicate == null) return null;
-            int heatValue = json.get("heat_value").getAsInt();
-            return new CrucibleHeatRecipe(id, blockPredicate, heatValue);
+        public Codec<CrucibleHeatRecipe> codec() {
+            return CODEC;
         }
 
         @Override
-        public CrucibleHeatRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buffer) {
-            BlockPredicate blockPredicate = RecipeUtil.readBlockPredicateNetwork(id, buffer);
-            if (blockPredicate == null) return null;
+        public CrucibleHeatRecipe fromNetwork(FriendlyByteBuf buffer) {
+            BlockPredicate blockPredicate = RecipeUtil.readBlockPredicateNetwork(buffer);
             int heatValue = buffer.readVarInt();
-            return new CrucibleHeatRecipe(id, blockPredicate, heatValue);
+            return new CrucibleHeatRecipe(blockPredicate, heatValue);
         }
 
         @Override

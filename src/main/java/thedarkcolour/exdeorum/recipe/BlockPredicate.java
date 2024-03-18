@@ -18,9 +18,16 @@
 
 package thedarkcolour.exdeorum.recipe;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.DynamicOps;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
+import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
@@ -36,10 +43,12 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-@SuppressWarnings("deprecation")
 public sealed interface BlockPredicate extends Predicate<BlockState> {
     // used for network
     byte SINGLE_BLOCK = 0, BLOCK_STATE = 1, BLOCK_TAG = 2;
+
+    // todo test this
+    Codec<BlockPredicate> CODEC = new BlockPredicate.SpecialCodec();
 
     JsonObject toJson();
 
@@ -70,7 +79,7 @@ public sealed interface BlockPredicate extends Predicate<BlockState> {
             if (block == Blocks.AIR) return null;
 
             if (json.has("state")) {
-                return new BlockStatePredicate(block, StatePropertiesPredicate.fromJson(json.get("state")));
+                return new BlockStatePredicate(block, CodecUtil.decode(StatePropertiesPredicate.CODEC, json.get("state")));
             } else {
                 return new SingleBlockPredicate(block);
             }
@@ -84,14 +93,24 @@ public sealed interface BlockPredicate extends Predicate<BlockState> {
     @Nullable
     static BlockPredicate fromNetwork(FriendlyByteBuf buffer) {
         return switch (buffer.readByte()) {
-            case SINGLE_BLOCK -> new SingleBlockPredicate(buffer.readById(BuiltInRegistries.BLOCK));
-            case BLOCK_STATE -> new BlockStatePredicate(buffer.readById(BuiltInRegistries.BLOCK), StatePropertiesPredicate.fromJson(JsonParser.parseString(buffer.readUtf())));
-            case BLOCK_TAG -> new TagPredicate(TagKey.create(Registries.BLOCK, buffer.readResourceLocation()));
+            case SINGLE_BLOCK -> new SingleBlockPredicate(Objects.requireNonNull(buffer.readById(BuiltInRegistries.BLOCK)));
+            case BLOCK_STATE -> new BlockStatePredicate(Objects.requireNonNull(buffer.readById(BuiltInRegistries.BLOCK)), decodeStatePredicate(JsonParser.parseString(buffer.readUtf())));
+            case BLOCK_TAG -> new TagPredicate(RecipeUtil.readTag(buffer, Registries.BLOCK));
             default -> null;
         };
     }
 
+    private static StatePropertiesPredicate decodeStatePredicate(JsonElement json) {
+        return CodecUtil.decode(StatePropertiesPredicate.CODEC, json);
+    }
+
+    private static JsonElement encodeStatePredicate(StatePropertiesPredicate predicate) {
+        return CodecUtil.encode(StatePropertiesPredicate.CODEC, predicate);
+    }
+
     record TagPredicate(TagKey<Block> tag) implements BlockPredicate {
+        private static final Codec<TagPredicate> CODEC = RecordCodecBuilder.create(instance -> instance.group(TagKey.codec(Registries.BLOCK).fieldOf("tag").forGetter(TagPredicate::tag)).apply(instance, TagPredicate::new));
+
         @Override
         public JsonObject toJson() {
             var json = new JsonObject();
@@ -102,7 +121,7 @@ public sealed interface BlockPredicate extends Predicate<BlockState> {
         @Override
         public void toNetwork(FriendlyByteBuf buffer) {
             buffer.writeByte(BLOCK_TAG);
-            buffer.writeResourceLocation(this.tag.location());
+            RecipeUtil.writeTag(buffer, this.tag);
         }
 
         @Override
@@ -114,16 +133,20 @@ public sealed interface BlockPredicate extends Predicate<BlockState> {
         public Stream<BlockState> possibleStates() {
             return StreamSupport.stream(BuiltInRegistries.BLOCK.getTagOrEmpty(this.tag).spliterator(), false)
                     .filter(holder -> holder.is(this.tag))
-                    .flatMap(holder -> holder.get().getStateDefinition().getPossibleStates().stream());
+                    .flatMap(holder -> holder.value().getStateDefinition().getPossibleStates().stream());
         }
     }
 
     record BlockStatePredicate(Block block, StatePropertiesPredicate properties) implements BlockPredicate {
+        private static final Codec<BlockStatePredicate> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                CodecUtil.blockField("block", BlockStatePredicate::block),
+                StatePropertiesPredicate.CODEC.fieldOf("properties").forGetter(BlockStatePredicate::properties)
+        ).apply(instance, BlockStatePredicate::new));
         @Override
         public JsonObject toJson() {
             var json = new JsonObject();
             json.addProperty("block", BuiltInRegistries.BLOCK.getKey(this.block).toString());
-            json.add("state", this.properties.serializeToJson());
+            json.add("state", encodeStatePredicate(this.properties));
             return json;
         }
 
@@ -131,7 +154,7 @@ public sealed interface BlockPredicate extends Predicate<BlockState> {
         public void toNetwork(FriendlyByteBuf buffer) {
             buffer.writeByte(BLOCK_STATE);
             buffer.writeId(BuiltInRegistries.BLOCK, this.block);
-            buffer.writeUtf(this.properties.serializeToJson().toString());
+            buffer.writeUtf(encodeStatePredicate(this.properties).toString());
         }
 
         @Override
@@ -150,7 +173,7 @@ public sealed interface BlockPredicate extends Predicate<BlockState> {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             BlockStatePredicate that = (BlockStatePredicate) o;
-            return Objects.equals(block, that.block) && Objects.equals(properties.serializeToJson(), that.properties.serializeToJson());
+            return this.block == that.block && Objects.equals(encodeStatePredicate(this.properties), encodeStatePredicate(that.properties));
         }
     }
 
@@ -176,6 +199,39 @@ public sealed interface BlockPredicate extends Predicate<BlockState> {
         @Override
         public Stream<BlockState> possibleStates() {
             return this.block.getStateDefinition().getPossibleStates().stream();
+        }
+    }
+
+    class SpecialCodec implements Codec<BlockPredicate> {
+        @Override
+        public <T> DataResult<Pair<BlockPredicate, T>> decode(DynamicOps<T> ops, T input) {
+            var tagResult = TagPredicate.CODEC.decode(ops, input);
+
+            if (tagResult.error().isEmpty()) {
+                return CodecUtil.cast(tagResult);
+            } else {
+                var stateResult = BlockStatePredicate.CODEC.decode(ops, input);
+
+                if (stateResult.error().isEmpty()) {
+                    return CodecUtil.cast(stateResult);
+                } else {
+                    var blockResult = SingleBlockPredicate.CODEC.decode(ops, input);
+
+                    return blockResult.error().isEmpty() ? CodecUtil.cast(blockResult) : DataResult.error(() -> "Invalid block predicate");
+                }
+            }
+        }
+
+        @Override
+        public <T> DataResult<T> encode(BlockPredicate input, DynamicOps<T> ops, T prefix) {
+            // in newer java, this should be replaced with pattern matching
+            if (input instanceof SingleBlockPredicate block) {
+                return SingleBlockPredicate.CODEC.encode(block, ops, prefix);
+            } else if (input instanceof BlockStatePredicate state) {
+                return BlockStatePredicate.CODEC.encode(state, ops, prefix);
+            } else {
+                return TagPredicate.CODEC.encode((TagPredicate) input, ops, prefix);
+            }
         }
     }
 }

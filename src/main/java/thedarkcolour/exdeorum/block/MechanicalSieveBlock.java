@@ -38,7 +38,7 @@ import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.items.ItemStackHandler;
+import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.blockentity.MechanicalSieveBlockEntity;
 import thedarkcolour.exdeorum.config.EConfig;
@@ -90,7 +90,7 @@ public class MechanicalSieveBlock extends EBlock {
 
     // Drops the item for creative mode players
     @Override
-    public void playerWillDestroy(Level level, BlockPos pos, BlockState pState, Player player) {
+    public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState pState, Player player) {
         if (!level.isClientSide && player.isCreative() && level.getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS)) {
             if (level.getBlockEntity(pos) instanceof MechanicalSieveBlockEntity sieve) {
                 if (!sieve.getLogic().getMesh().isEmpty()) {
@@ -103,7 +103,7 @@ public class MechanicalSieveBlock extends EBlock {
             }
         }
 
-        super.playerWillDestroy(level, pos, pState, player);
+        return super.playerWillDestroy(level, pos, pState, player);
     }
 
     @Override

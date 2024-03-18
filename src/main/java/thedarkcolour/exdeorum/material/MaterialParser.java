@@ -23,8 +23,8 @@ import com.google.gson.JsonPrimitive;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraftforge.common.util.ForgeSoundType;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.common.util.DeferredSoundType;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.ExDeorum;
 
@@ -49,7 +49,7 @@ public class MaterialParser {
 
             if (soundTypeJson.isJsonPrimitive()) {
                 String soundTypeString = soundTypeJson.getAsString();
-                var soundType = SoundTypeResolver.VANILLA_SOUND_TYPES.get(soundTypeString);
+                var soundType = SoundTypeResolver.resolve(soundTypeString);
 
                 if (soundType == null) {
                     ExDeorum.LOGGER.error("Unknown sound type \"{}\" for material {}", soundTypeString, this.jsonPath);
@@ -59,12 +59,12 @@ public class MaterialParser {
                 }
             } else if (soundTypeJson instanceof JsonObject soundTypeObj) {
                 if (soundTypeObj.has("break_sound") && soundTypeObj.has("step_sound") && soundTypeObj.has("place_sound") && soundTypeObj.has("hit_sound") && soundTypeObj.has("fall_sound")) {
-                    return new ForgeSoundType(1.0f, 1.0f,
-                            RegistryObject.create(new ResourceLocation(soundTypeObj.get("break_sound").getAsString()), Registries.SOUND_EVENT, ExDeorum.ID),
-                            RegistryObject.create(new ResourceLocation(soundTypeObj.get("step_sound").getAsString()), Registries.SOUND_EVENT, ExDeorum.ID),
-                            RegistryObject.create(new ResourceLocation(soundTypeObj.get("place_sound").getAsString()), Registries.SOUND_EVENT, ExDeorum.ID),
-                            RegistryObject.create(new ResourceLocation(soundTypeObj.get("hit_sound").getAsString()), Registries.SOUND_EVENT, ExDeorum.ID),
-                            RegistryObject.create(new ResourceLocation(soundTypeObj.get("fall_sound").getAsString()), Registries.SOUND_EVENT, ExDeorum.ID)
+                    return new DeferredSoundType(1.0f, 1.0f,
+                            DeferredHolder.create(Registries.SOUND_EVENT, new ResourceLocation(soundTypeObj.get("break_sound").getAsString())),
+                            DeferredHolder.create(Registries.SOUND_EVENT, new ResourceLocation(soundTypeObj.get("step_sound").getAsString())),
+                            DeferredHolder.create(Registries.SOUND_EVENT, new ResourceLocation(soundTypeObj.get("place_sound").getAsString())),
+                            DeferredHolder.create(Registries.SOUND_EVENT, new ResourceLocation(soundTypeObj.get("hit_sound").getAsString())),
+                            DeferredHolder.create(Registries.SOUND_EVENT, new ResourceLocation(soundTypeObj.get("fall_sound").getAsString()))
                     );
                 }
             } else {

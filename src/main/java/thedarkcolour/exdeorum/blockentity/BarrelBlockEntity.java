@@ -19,7 +19,6 @@
 package thedarkcolour.exdeorum.blockentity;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -43,18 +42,16 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidType;
-import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.IFluidTank;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
-import net.minecraftforge.items.ItemStackHandler;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.common.NeoForgeMod;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidType;
+import net.neoforged.neoforge.fluids.FluidUtil;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
+import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.block.BarrelBlock;
 import thedarkcolour.exdeorum.blockentity.helper.FluidHelper;
@@ -84,31 +81,10 @@ public class BarrelBlockEntity extends EBlockEntity {
     @Nullable
     public FluidTransformationRecipe currentTransformRecipe = null;
 
-    private final LazyOptional<IItemHandler> itemHandler = LazyOptional.of(() -> this.item);
-    private final LazyOptional<IFluidHandler> fluidHandler = LazyOptional.of(() -> this.tank);
-
     public BarrelBlockEntity(BlockPos pos, BlockState state) {
         super(EBlockEntities.BARREL.get(), pos, state);
 
         this.transparent = BarrelMaterial.TRANSPARENT_BARRELS.contains(state.getBlock());
-    }
-
-    @Override
-    public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
-        if (cap == ForgeCapabilities.FLUID_HANDLER) {
-            return this.fluidHandler.cast();
-        } else if (cap == ForgeCapabilities.ITEM_HANDLER) {
-            return this.itemHandler.cast();
-        }
-
-        return super.getCapability(cap, side);
-    }
-
-    @Override
-    public void invalidateCaps() {
-        super.invalidateCaps();
-        this.fluidHandler.invalidate();
-        this.itemHandler.invalidate();
     }
 
     @Override
@@ -177,6 +153,7 @@ public class BarrelBlockEntity extends EBlockEntity {
         return this.compost <= 0 && this.item.getStackInSlot(0).isEmpty();
     }
 
+    @SuppressWarnings("deprecation")
     public boolean hasFullWater() {
         return this.tank.getFluidAmount() == 1000 && this.tank.getFluid().getFluid().is(FluidTags.WATER);
     }
@@ -187,15 +164,15 @@ public class BarrelBlockEntity extends EBlockEntity {
         return fluidType.getTemperature() > 575;
     }
 
-    private void spawnParticlesIfBurning() {
+    private void spawnParticlesIfBurning(Level level) {
         if (isBurning()) {
             BlockPos pos = getBlockPos();
             int burnTicks = (int) (this.progress * 300);
 
             if (burnTicks % 30 == 0) {
-                this.level.addParticle(ParticleTypes.LARGE_SMOKE, pos.getX() + Math.random(), pos.getY() + 1.2, pos.getZ() + Math.random(), 0.0, 0.0, 0.0);
+                level.addParticle(ParticleTypes.LARGE_SMOKE, pos.getX() + Math.random(), pos.getY() + 1.2, pos.getZ() + Math.random(), 0.0, 0.0, 0.0);
             } else if (burnTicks % 5 == 0) {
-                this.level.addParticle(ParticleTypes.SMOKE, pos.getX() + Math.random(), pos.getY() + 1.2, pos.getZ() + Math.random(), 0.0, 0.0, 0.0);
+                level.addParticle(ParticleTypes.SMOKE, pos.getX() + Math.random(), pos.getY() + 1.2, pos.getZ() + Math.random(), 0.0, 0.0, 0.0);
             }
         }
     }
@@ -208,7 +185,7 @@ public class BarrelBlockEntity extends EBlockEntity {
         this.item.setStackInSlot(0, item);
     }
 
-    public IFluidTank getTank() {
+    public FluidTank getTank() {
         return this.tank;
     }
 
@@ -264,19 +241,18 @@ public class BarrelBlockEntity extends EBlockEntity {
                 }
 
                 // Otherwise, mix the item's fluid into the barrel's fluid
-                var itemFluidCapOptional = playerItem.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).resolve();
-                if (itemFluidCapOptional.isPresent()) {
-                    var itemFluidCap = itemFluidCapOptional.get();
+                var itemFluidCap = playerItem.getCapability(Capabilities.FluidHandler.ITEM);
+                if (itemFluidCap != null) {
                     var itemFluid = itemFluidCap.drain(1000, IFluidHandler.FluidAction.SIMULATE);
                     BarrelFluidMixingRecipe recipe = RecipeUtil.getFluidMixingRecipe(this.tank.getFluid(), itemFluid.getFluid());
 
                     // If draining item fluid was possible and tank has enough fluid to mix...
-                    if (recipe != null && this.tank.getFluidAmount() >= recipe.baseFluidAmount && itemFluid.getAmount() == 1000) {
+                    if (recipe != null && this.tank.getFluidAmount() >= recipe.baseFluidAmount() && itemFluid.getAmount() == 1000) {
                         if (!level.isClientSide) {
-                            this.tank.drain(recipe.baseFluidAmount, IFluidHandler.FluidAction.EXECUTE);
-                            setItem(new ItemStack(recipe.result));
+                            this.tank.drain(recipe.baseFluidAmount(), IFluidHandler.FluidAction.EXECUTE);
+                            setItem(new ItemStack(recipe.result()));
 
-                            if (recipe.consumesAdditive) {
+                            if (recipe.consumesAdditive()) {
                                 itemFluidCap.drain(1000, IFluidHandler.FluidAction.EXECUTE);
                                 player.setItemInHand(hand, itemFluidCap.getContainer());
                             }
@@ -443,14 +419,14 @@ public class BarrelBlockEntity extends EBlockEntity {
                     if (recipe != null) {
                         // If additive is not consumed, just craft
                         // If additive is consumed, check that the additive can be consumed before crafting
-                        if (!recipe.consumesAdditive) {
-                            this.tank.drain(recipe.baseFluidAmount, IFluidHandler.FluidAction.EXECUTE);
-                            setItem(new ItemStack(recipe.result));
+                        if (!recipe.consumesAdditive()) {
+                            this.tank.drain(recipe.baseFluidAmount(), IFluidHandler.FluidAction.EXECUTE);
+                            setItem(new ItemStack(recipe.result()));
                         } else if (aboveBlockState.getBlock() instanceof BucketPickup pickup) {
                             // If something was picked up, we can craft
-                            if (!pickup.pickupBlock(this.level, abovePos, aboveBlockState).isEmpty()) {
-                                this.tank.drain(recipe.baseFluidAmount, IFluidHandler.FluidAction.EXECUTE);
-                                setItem(new ItemStack(recipe.result));
+                            if (!pickup.pickupBlock(null, this.level, abovePos, aboveBlockState).isEmpty()) {
+                                this.tank.drain(recipe.baseFluidAmount(), IFluidHandler.FluidAction.EXECUTE);
+                                setItem(new ItemStack(recipe.result()));
                             }
                         }
                     }
@@ -468,7 +444,7 @@ public class BarrelBlockEntity extends EBlockEntity {
                 this.currentTransformRecipe = RecipeUtil.getFluidTransformationRecipe(this.tank.getFluid().getFluid(), belowState);
 
                 if (this.currentTransformRecipe != null) {
-                    var color = this.currentTransformRecipe.resultColor;
+                    var color = this.currentTransformRecipe.resultColor();
                     this.r = (short) ((color >> 16) & 0xff);
                     this.g = (short) ((color >> 8) & 0xff);
                     this.b = (short) ((color) & 0xff);
@@ -477,6 +453,10 @@ public class BarrelBlockEntity extends EBlockEntity {
             }
             this.progress = 0.0f;
         }
+    }
+
+    public IItemHandler getItemHandler() {
+        return this.item;
     }
 
     public static class Ticker implements BlockEntityTicker<BarrelBlockEntity> {
@@ -503,17 +483,17 @@ public class BarrelBlockEntity extends EBlockEntity {
                     var catalysts = 0;
 
                     for (var cursor : BlockPos.betweenClosed(pos.getX() - 1, pos.getY() - 1, pos.getZ() - 1, pos.getX() + 1, pos.getY() - 1, pos.getZ() + 1)) {
-                        if (recipe.catalyst.test(level.getBlockState(cursor))) {
+                        if (recipe.catalyst().test(level.getBlockState(cursor))) {
                             catalysts++;
 
-                            if (!recipe.byproducts.isEmpty()) {
+                            if (!recipe.byproducts().isEmpty()) {
                                 var rand = level.random;
 
                                 if (rand.nextInt(1500) == 0) {
                                     var above = cursor.above();
 
                                     if (level.getBlockState(above).isAir()) {
-                                        var byproduct = recipe.byproducts.getRandom(rand);
+                                        var byproduct = recipe.byproducts().getRandom(rand);
                                         if (byproduct.canSurvive(level, above)) {
                                             level.setBlockAndUpdate(above, byproduct);
                                         }
@@ -526,7 +506,7 @@ public class BarrelBlockEntity extends EBlockEntity {
                     if (catalysts == 0) {
                         barrel.currentTransformRecipe = null;
                     } else {
-                        barrel.progress += catalysts * (1.0f / barrel.currentTransformRecipe.duration);
+                        barrel.progress += catalysts * (1.0f / barrel.currentTransformRecipe.duration());
                         if (barrel.progress >= 1.0f - Mth.EPSILON) {
                             // Reset progress
                             barrel.progress = 0.0f;
@@ -537,7 +517,7 @@ public class BarrelBlockEntity extends EBlockEntity {
                         barrel.markUpdated();
                     }
                 } else if (barrel.hasFullWater()) {
-                    if (barrel.tank.getFluid().getFluid().getFluidType() == ForgeMod.WATER_TYPE.get()) {
+                    if (barrel.tank.getFluid().getFluid().getFluidType() == NeoForgeMod.WATER_TYPE.value()) {
                         var rand = level.random;
                         // Leak water to create moss (only wooden barrels do this)
                         if (state.ignitedByLava() && rand.nextInt(500) == 0) {
@@ -553,7 +533,7 @@ public class BarrelBlockEntity extends EBlockEntity {
                     }
                 }
             } else {
-                barrel.spawnParticlesIfBurning();
+                barrel.spawnParticlesIfBurning(level);
             }
         }
     }

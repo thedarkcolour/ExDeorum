@@ -20,7 +20,6 @@ package thedarkcolour.exdeorum.recipe;
 
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -34,12 +33,10 @@ import net.minecraft.world.level.Level;
  * of any container will be checked, so only one slot should be present.
  */
 public abstract class SingleIngredientRecipe implements Recipe<Container> {
-    private final ResourceLocation id;
     public final Ingredient ingredient;
     public final boolean dependsOnNbt;
 
-    public SingleIngredientRecipe(ResourceLocation id, Ingredient ingredient) {
-        this.id = id;
+    public SingleIngredientRecipe(Ingredient ingredient) {
         this.ingredient = ingredient;
         this.dependsOnNbt = !ingredient.isSimple();
     }
@@ -61,11 +58,6 @@ public abstract class SingleIngredientRecipe implements Recipe<Container> {
     @Override
     public boolean canCraftInDimensions(int width, int height) {
         return false;
-    }
-
-    @Override
-    public ResourceLocation getId() {
-        return this.id;
     }
 
     @Override

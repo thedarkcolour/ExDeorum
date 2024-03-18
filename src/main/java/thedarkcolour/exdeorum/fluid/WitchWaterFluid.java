@@ -22,10 +22,10 @@ import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
-import net.minecraftforge.common.SoundActions;
-import net.minecraftforge.fluids.FluidType;
-import net.minecraftforge.fluids.ForgeFlowingFluid;
+import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.neoforged.neoforge.common.SoundActions;
+import net.neoforged.neoforge.fluids.BaseFlowingFluid;
+import net.neoforged.neoforge.fluids.FluidType;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3f;
 import thedarkcolour.exdeorum.ExDeorum;
@@ -40,8 +40,8 @@ public class WitchWaterFluid extends FluidType {
     private static final ResourceLocation FLOWING_TEXTURE = new ResourceLocation(ExDeorum.ID, "block/witch_water_flowing");
     private static final ResourceLocation OVERLAY_TEXTURE = new ResourceLocation("block/water_overlay");
 
-    public static ForgeFlowingFluid.Properties properties() {
-        return new ForgeFlowingFluid.Properties(EFluids.WITCH_WATER_TYPE, EFluids.WITCH_WATER, EFluids.WITCH_WATER_FLOWING).block(EBlocks.WITCH_WATER).bucket(EItems.WITCH_WATER_BUCKET);
+    public static BaseFlowingFluid.Properties properties() {
+        return new BaseFlowingFluid.Properties(EFluids.WITCH_WATER_TYPE, EFluids.WITCH_WATER, EFluids.WITCH_WATER_FLOWING).block(EBlocks.WITCH_WATER).bucket(EItems.WITCH_WATER_BUCKET);
     }
 
     public WitchWaterFluid() {

@@ -18,7 +18,7 @@
 
 package thedarkcolour.exdeorum.blockentity.helper;
 
-import net.minecraftforge.energy.EnergyStorage;
+import net.neoforged.neoforge.energy.EnergyStorage;
 
 public class EnergyHelper extends EnergyStorage {
     public EnergyHelper(int capacity) {

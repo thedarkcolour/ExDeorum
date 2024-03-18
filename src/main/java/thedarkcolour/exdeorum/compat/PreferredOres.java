@@ -26,9 +26,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.fml.ModList;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.config.EConfig;
 import thedarkcolour.exdeorum.tag.EItemTags;
@@ -67,13 +66,12 @@ public class PreferredOres {
      * @param config     A config which holds an override value chosen by the user. Could even be something that isn't an ore.
      * @param defaultOre The default ore choice, picked by Ex Deorum based on which mod is the "best" choice according to thedarkcolour.
      */
-    @SuppressWarnings("deprecation")
-    private static void putPreferredOre(TagKey<Item> tag, ForgeConfigSpec.ConfigValue<String> config, Item defaultOre) {
-        var item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(config.get()));
+    private static void putPreferredOre(TagKey<Item> tag, ModConfigSpec.ConfigValue<String> config, Item defaultOre) {
+        var item = BuiltInRegistries.ITEM.get(new ResourceLocation(config.get()));
 
         if (item == Items.AIR) {
             item = defaultOre;
-            ExDeorum.LOGGER.debug("No preferred ore was set for tag {}. Using default choice {}", tag.location(), item.builtInRegistryHolder().key().location());
+            ExDeorum.LOGGER.debug("No preferred ore was set for tag {}. Using default choice {}", tag.location(), BuiltInRegistries.ITEM.getKey(item));
         }
         PREFERRED_ORE_ITEMS.put(tag, defaultOre);
     }
@@ -84,7 +82,6 @@ public class PreferredOres {
      * @return The preferred (as specified by config, or by alphabetical order)
      * item from the given tag or {@link Items#AIR} if the tag is empty.
      */
-    @SuppressWarnings("deprecation")
     public static Item getPreferredOre(TagKey<Item> tag) {
         Item preferred = PREFERRED_ORE_ITEMS.get(tag);
 
@@ -96,10 +93,10 @@ public class PreferredOres {
             if (collection.isEmpty()) {
                 return Items.AIR;
             } else {
-                collection.sort(Comparator.comparing(holder -> BuiltInRegistries.ITEM.getKey(holder.get())));
+                collection.sort(Comparator.comparing(holder -> BuiltInRegistries.ITEM.getKey(holder.value())));
 
                 // todo should the PREFERRED_ORE map be updated with this value?
-                return collection.get(0).get();
+                return collection.get(0).value();
             }
         }
     }
@@ -175,9 +172,9 @@ public class PreferredOres {
 
         if (modId != null) {
             if (modId.equals(ModIds.FACTORIUM)) {
-                return ForgeRegistries.ITEMS.getValue(new ResourceLocation(modId, "mat_" + path));
+                return BuiltInRegistries.ITEM.get(new ResourceLocation(modId, "mat_" + path));
             } else {
-                return ForgeRegistries.ITEMS.getValue(new ResourceLocation(modId, path));
+                return BuiltInRegistries.ITEM.get(new ResourceLocation(modId, path));
             }
         } else {
             return Items.AIR;

@@ -18,17 +18,11 @@
 
 package thedarkcolour.exdeorum.item;
 
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.MilkBucketItem;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.fluids.FluidStack;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.registry.EItems;
 
 public class PorcelainMilkBucket extends MilkBucketItem {
@@ -44,22 +38,6 @@ public class PorcelainMilkBucket extends MilkBucketItem {
             return new ItemStack(EItems.PORCELAIN_BUCKET.get());
         } else {
             return stack;
-        }
-    }
-
-    @Override
-    public @Nullable ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-        return new PorcelainBucket.CapabilityProvider(stack);
-    }
-
-    private static class CapabilityProvider extends PorcelainBucket.CapabilityProvider {
-        public CapabilityProvider(@NotNull ItemStack container) {
-            super(container);
-        }
-
-        @Override
-        public boolean isFluidValid(int tank, @NotNull FluidStack stack) {
-            return ForgeMod.MILK.isPresent();
         }
     }
 }

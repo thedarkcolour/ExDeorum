@@ -32,7 +32,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.Tags;
+import net.neoforged.neoforge.common.Tags;
 import thedarkcolour.exdeorum.registry.EItems;
 
 // Silk worms have a 1 in 100 chance to drop from regular leaves, 1 in 15 if the block is infested.

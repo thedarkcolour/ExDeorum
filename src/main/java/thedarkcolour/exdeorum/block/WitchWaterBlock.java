@@ -36,7 +36,7 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FlowingFluid;
-import net.minecraftforge.event.ForgeEventFactory;
+import net.neoforged.neoforge.event.EventHooks;
 import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.config.EConfig;
 
@@ -70,7 +70,7 @@ public class WitchWaterBlock extends LiquidBlock {
                                 zombieVillager.setTradeOffers(villager.getOffers().createTag());
                                 zombieVillager.setVillagerXp(villager.getVillagerXp());
 
-                                net.minecraftforge.event.ForgeEventFactory.onLivingConvert(villager, zombieVillager);
+                                EventHooks.onLivingConvert(villager, zombieVillager);
 
                                 villager.discard();
                             }
@@ -123,7 +123,7 @@ public class WitchWaterBlock extends LiquidBlock {
             if (newEntity != null) {
                 var serverLevel = (ServerLevelAccessor) level;
                 newEntity.copyPosition(entity);
-                ForgeEventFactory.onFinalizeSpawn(newEntity, serverLevel, level.getCurrentDifficultyAt(entity.blockPosition()), MobSpawnType.CONVERSION, null, null);
+                EventHooks.onFinalizeSpawn(newEntity, serverLevel, level.getCurrentDifficultyAt(entity.blockPosition()), MobSpawnType.CONVERSION, null, null);
                 newEntity.setNoAi(newEntity.isNoAi());
 
                 if (entity.hasCustomName()) {
@@ -132,7 +132,7 @@ public class WitchWaterBlock extends LiquidBlock {
                 }
 
                 newEntity.setPersistenceRequired();
-                net.minecraftforge.event.ForgeEventFactory.onLivingConvert((LivingEntity) entity, newEntity);
+                EventHooks.onLivingConvert((LivingEntity) entity, newEntity);
                 serverLevel.addFreshEntityWithPassengers(newEntity);
                 entity.discard();
             }

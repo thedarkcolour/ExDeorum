@@ -30,6 +30,7 @@ final class CrucibleHeatSourceRecipe {
     @Nullable
     private final Object ingredient;
 
+    @SuppressWarnings({"rawtypes", "unchecked"})
     CrucibleHeatSourceRecipe(int meltRate, BlockState blockState, @Nullable IIngredientType ingredientType, @Nullable Object ingredient) {
         this.meltRate = meltRate;
         this.blockState = blockState;

@@ -27,7 +27,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.ExDeorum;
-import thedarkcolour.exdeorum.blockentity.MechanicalHammerMenu;
+import thedarkcolour.exdeorum.menu.MechanicalHammerMenu;
 import thedarkcolour.exdeorum.config.EConfig;
 import thedarkcolour.exdeorum.data.TranslationKeys;
 
@@ -79,7 +79,7 @@ public class MechanicalHammerScreen extends AbstractContainerScreen<MechanicalHa
 
     @Override
     public void render(GuiGraphics graphics, int mx, int my, float pPartialTick) {
-        renderBackground(graphics);
+        renderBackground(graphics, mx, my, pPartialTick);
         super.render(graphics, mx, my, pPartialTick);
         renderTooltip(graphics, mx, my);
 

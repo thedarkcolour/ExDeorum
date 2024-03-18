@@ -23,7 +23,10 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.objects.ObjectImmutableList;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.RandomSource;
@@ -92,10 +95,6 @@ public class WeightedList<T> {
         return result;
     }
 
-    public static <T> Builder<T> builder() {
-        return new Builder<>();
-    }
-
     public static <T> WeightedList<T> fromNetwork(FriendlyByteBuf buffer, Function<FriendlyByteBuf, T> valueReader) {
         int size = buffer.readVarInt();
         Object[] values = new Object[size];
@@ -140,6 +139,39 @@ public class WeightedList<T> {
             }
         }
         return list.build();
+    }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public static <T> Codec<WeightedList<T>> codec(Codec<T> valueCodec) {
+        return Entry.codec(valueCodec).listOf().xmap(entries -> {
+            var builder = WeightedList.<T>builder();
+            for (var entry : entries) {
+                builder.add(entry.weight, entry.value);
+            }
+            return builder.build();
+        }, list -> {
+            var entries = new Entry[list.values.length];
+            var entryList = new ObjectImmutableList<Entry<T>>(entries);
+            for (int i = 0; i < list.values.length; i++) {
+                entries[i] = new Entry(list.values[i], list.weights[i]);
+            }
+
+            return entryList;
+        });
+    }
+
+    // Used only for Codec
+    private record Entry<T>(T value, int weight) {
+        private static <T> Codec<Entry<T>> codec(Codec<T> valueCodec) {
+            return RecordCodecBuilder.create(instance -> instance.group(
+                    valueCodec.fieldOf("value").forGetter(Entry::value),
+                    Codec.INT.fieldOf("weight").forGetter(Entry::weight)
+            ).apply(instance, Entry::new));
+        }
+    }
+
+    public static <T> Builder<T> builder() {
+        return new Builder<>();
     }
 
     public static class Builder<T> {

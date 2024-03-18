@@ -18,24 +18,25 @@
 
 package thedarkcolour.exdeorum.recipe.hammer;
 
-import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
-import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.recipe.ProbabilityRecipe;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.registry.ERecipeSerializers;
 import thedarkcolour.exdeorum.registry.ERecipeTypes;
 
 public class HammerRecipe extends ProbabilityRecipe {
-    public HammerRecipe(ResourceLocation id, Ingredient ingredient, Item result, NumberProvider resultAmount) {
-        super(id, ingredient, result, resultAmount);
+    public static final Codec<HammerRecipe> CODEC = RecordCodecBuilder.create(instance -> ProbabilityRecipe.commonFields(instance).apply(instance, HammerRecipe::new));
+
+    public HammerRecipe(Ingredient ingredient, Item result, NumberProvider resultAmount) {
+        super(ingredient, result, resultAmount);
     }
 
     @Override
@@ -50,19 +51,16 @@ public class HammerRecipe extends ProbabilityRecipe {
 
     public static class Serializer implements RecipeSerializer<HammerRecipe> {
         @Override
-        public HammerRecipe fromJson(ResourceLocation name, JsonObject json) {
-            Ingredient ingredient = RecipeUtil.readIngredient(json, "ingredient");
-            Item result = RecipeUtil.readItem(json, "result");
-            NumberProvider resultAmount = RecipeUtil.readNumberProvider(json, "result_amount");
-            return new HammerRecipe(name, ingredient, result, resultAmount);
+        public Codec<HammerRecipe> codec() {
+            return CODEC;
         }
 
         @Override
-        public @Nullable HammerRecipe fromNetwork(ResourceLocation name, FriendlyByteBuf buffer) {
+        public HammerRecipe fromNetwork(FriendlyByteBuf buffer) {
             Ingredient ingredient = Ingredient.fromNetwork(buffer);
             Item result = buffer.readById(BuiltInRegistries.ITEM);
             NumberProvider resultAmount = RecipeUtil.fromNetworkNumberProvider(buffer);
-            return new HammerRecipe(name, ingredient, result, resultAmount);
+            return new HammerRecipe(ingredient, result, resultAmount);
         }
 
         @Override

@@ -24,7 +24,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.compat.ModIds;
 
@@ -32,7 +32,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class EBiomeTags {
-    public static final Map<TagKey<Biome>, RegistryObject<ConfiguredFeature<?, ?>>> TREE_TAGS = new HashMap<>();
+    public static final Map<TagKey<Biome>, DeferredHolder<ConfiguredFeature<?, ?>, ConfiguredFeature<?, ?>>> TREE_TAGS = new HashMap<>();
 
     static {
         // Vanilla
@@ -57,7 +57,7 @@ public class EBiomeTags {
 
     private static void addTreeTag(String tagName, ResourceLocation id) {
         var tag = tag(tagName);
-        if (TREE_TAGS.put(tag, RegistryObject.createOptional(id, Registries.CONFIGURED_FEATURE, ExDeorum.ID)) != null) {
+        if (TREE_TAGS.put(tag, DeferredHolder.create(Registries.CONFIGURED_FEATURE, id)) != null) {
             throw new IllegalStateException("Already added a tree tag under " + tag);
         }
     }

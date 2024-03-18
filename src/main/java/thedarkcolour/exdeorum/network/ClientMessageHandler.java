@@ -43,7 +43,7 @@ public class ClientMessageHandler {
     }
 
     @SuppressWarnings("DataFlowIssue")
-    public static void handleVisualUpdate(VisualUpdateMessage msg) {
+    static void handleVisualUpdate(VisualUpdateMessage msg) {
         ClientLevel level = Minecraft.getInstance().level;
         if (level != null && level.getBlockEntity(msg.pos) instanceof EBlockEntity blockEntity) {
             // payload should be nonnull on the client side

@@ -52,9 +52,10 @@ public class FluidTransformationRecipeCache {
     private void buildRecipes() {
         this.recipes = new HashMap<>();
 
-        for (var recipe : this.recipeManager.byType(ERecipeTypes.BARREL_FLUID_TRANSFORMATION.get()).values()) {
-            recipe.catalyst.possibleStates().forEach(state -> {
-                this.recipes.computeIfAbsent(state, key -> new HashMap<>()).put(recipe.baseFluid, recipe);
+        for (var holder : this.recipeManager.byType(ERecipeTypes.BARREL_FLUID_TRANSFORMATION.get()).values()) {
+            var recipe = holder.value();
+            recipe.catalyst().possibleStates().forEach(state -> {
+                this.recipes.computeIfAbsent(state, key -> new HashMap<>()).put(recipe.baseFluid(), recipe);
             });
         }
 

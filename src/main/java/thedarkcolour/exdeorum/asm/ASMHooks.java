@@ -29,6 +29,7 @@ import thedarkcolour.exdeorum.voidworld.VoidChunkGenerator;
 
 import java.util.Properties;
 
+// todo test that all of these patches still work properly
 @SuppressWarnings("unused")
 public final class ASMHooks {
     /**

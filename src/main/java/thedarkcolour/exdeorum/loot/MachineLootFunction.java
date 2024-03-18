@@ -18,8 +18,8 @@
 
 package thedarkcolour.exdeorum.loot;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -29,8 +29,12 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import thedarkcolour.exdeorum.registry.ELootFunctions;
 
+import java.util.List;
+
 public class MachineLootFunction extends LootItemConditionalFunction {
-    protected MachineLootFunction(LootItemCondition[] conditions) {
+    public static final Codec<MachineLootFunction> CODEC = RecordCodecBuilder.create(instance -> commonFields(instance).apply(instance, MachineLootFunction::new));
+
+    protected MachineLootFunction(List<LootItemCondition> conditions) {
         super(conditions);
     }
 
@@ -51,12 +55,5 @@ public class MachineLootFunction extends LootItemConditionalFunction {
 
     public static LootItemConditionalFunction.Builder<?> machineLoot() {
         return LootItemConditionalFunction.simpleBuilder(MachineLootFunction::new);
-    }
-
-    public static class LootSerializer extends LootItemConditionalFunction.Serializer<MachineLootFunction> {
-        @Override
-        public MachineLootFunction deserialize(JsonObject json, JsonDeserializationContext ctx, LootItemCondition[] conditions) {
-            return new MachineLootFunction(conditions);
-        }
     }
 }

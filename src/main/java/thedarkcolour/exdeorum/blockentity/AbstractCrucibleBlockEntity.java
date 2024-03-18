@@ -19,7 +19,6 @@
 package thedarkcolour.exdeorum.blockentity;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -39,17 +38,14 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.Lazy;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.common.util.Lazy;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidUtil;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.blockentity.helper.FluidHelper;
@@ -61,7 +57,6 @@ import thedarkcolour.exdeorum.registry.EItems;
 import java.util.HashMap;
 import java.util.function.Consumer;
 
-@SuppressWarnings("deprecation")
 public abstract class AbstractCrucibleBlockEntity extends EBlockEntity {
     public static final Lazy<HashMap<Item, Block>> MELT_OVERRIDES = Lazy.concurrentOf(() -> {
         var map = new HashMap<Item, Block>();
@@ -73,9 +68,6 @@ public abstract class AbstractCrucibleBlockEntity extends EBlockEntity {
 
     private final AbstractCrucibleBlockEntity.ItemHandler item = new AbstractCrucibleBlockEntity.ItemHandler();
     private final AbstractCrucibleBlockEntity.FluidHandler tank = new AbstractCrucibleBlockEntity.FluidHandler();
-    // Capabilities
-    private final LazyOptional<IItemHandler> itemHandler = LazyOptional.of(() -> this.item);
-    private final LazyOptional<IFluidHandler> fluidHandler = LazyOptional.of(() -> this.tank);
 
     @Nullable
     private Block lastMelted;
@@ -88,35 +80,18 @@ public abstract class AbstractCrucibleBlockEntity extends EBlockEntity {
         super(type, pos, state);
     }
 
-    @NotNull
-    @Override
-    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if (!this.remove) {
-            if (cap == ForgeCapabilities.FLUID_HANDLER) {
-                return this.fluidHandler.cast();
-            } else if (cap == ForgeCapabilities.ITEM_HANDLER) {
-                return this.itemHandler.cast();
-            }
-        }
-
-        return super.getCapability(cap, side);
-    }
-
-    @Override
-    public void invalidateCaps() {
-        super.invalidateCaps();
-        this.fluidHandler.invalidate();
-        this.itemHandler.invalidate();
-    }
-
     // NBT
     @Override
     public void saveAdditional(CompoundTag nbt) {
         super.saveAdditional(nbt);
 
         nbt.put("Tank", this.tank.writeToNBT(new CompoundTag()));
-        nbt.putString("LastMelted", ForgeRegistries.BLOCKS.getKey(this.lastMelted).toString());
-        nbt.putString("Fluid", ForgeRegistries.FLUIDS.getKey(this.fluid).toString());
+        if (this.lastMelted != null) {
+            nbt.putString("LastMelted", BuiltInRegistries.BLOCK.getKey(this.lastMelted).toString());
+        }
+        if (this.fluid != null) {
+            nbt.putString("Fluid", BuiltInRegistries.FLUID.getKey(this.fluid).toString());
+        }
         nbt.putShort("Solids", this.solids);
     }
 
@@ -125,8 +100,8 @@ public abstract class AbstractCrucibleBlockEntity extends EBlockEntity {
         super.load(nbt);
 
         this.tank.readFromNBT(nbt.getCompound("Tank"));
-        this.lastMelted = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(nbt.getString("LastMelted")));
-        this.fluid = ForgeRegistries.FLUIDS.getValue(new ResourceLocation(nbt.getString("Fluid")));
+        this.lastMelted = BuiltInRegistries.BLOCK.get(new ResourceLocation(nbt.getString("LastMelted")));
+        this.fluid = BuiltInRegistries.FLUID.get(new ResourceLocation(nbt.getString("Fluid")));
         this.solids = nbt.getShort("Solids");
         this.needsLightUpdate = true;
     }
@@ -156,7 +131,7 @@ public abstract class AbstractCrucibleBlockEntity extends EBlockEntity {
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         var playerItem = player.getItemInHand(hand);
 
-        if (playerItem.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent()) {
+        if (playerItem.getCapability(Capabilities.FluidHandler.ITEM) != null) {
             return FluidUtil.interactWithFluidHandler(player, hand, this.tank) ? InteractionResult.sidedSuccess(level.isClientSide) : InteractionResult.PASS;
         }
 
@@ -247,18 +222,15 @@ public abstract class AbstractCrucibleBlockEntity extends EBlockEntity {
         return this.tank;
     }
 
+    public IItemHandler getItem() {
+        return this.item;
+    }
+
     public abstract Block getDefaultMeltBlock();
 
     @Nullable
     public Block getLastMelted() {
         return this.lastMelted;
-    }
-
-    @Override
-    public void setRemoved() {
-        this.itemHandler.invalidate();
-        this.fluidHandler.invalidate();
-        super.setRemoved();
     }
 
     private static void addMeltOverrides(HashMap<Item, Block> overrides) {
@@ -277,14 +249,15 @@ public abstract class AbstractCrucibleBlockEntity extends EBlockEntity {
         overrides.put(EItems.WARPED_NYLIUM_SPORES.get(), Blocks.WARPED_NYLIUM);
         overrides.put(EItems.CRIMSON_NYLIUM_SPORES.get(), Blocks.CRIMSON_NYLIUM);
 
-        for (var sapling : ForgeRegistries.BLOCKS.getEntries()) {
+        for (var sapling : BuiltInRegistries.BLOCK.entrySet()) {
             var item = sapling.getValue().asItem();
+
             if (!overrides.containsKey(item)) {
                 var key = sapling.getKey().location();
 
                 if (key.getPath().endsWith("sapling")) {
                     try {
-                        overrides.put(item, ForgeRegistries.BLOCKS.getValue(new ResourceLocation(key.getNamespace(), key.getPath().replace("sapling", "leaves"))));
+                        overrides.put(item, BuiltInRegistries.BLOCK.get(new ResourceLocation(key.getNamespace(), key.getPath().replace("sapling", "leaves"))));
                     } catch (Exception ignored) {
                     }
                 }

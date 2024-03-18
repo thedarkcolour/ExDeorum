@@ -20,7 +20,7 @@ package thedarkcolour.exdeorum.item;
 
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.Tags;
+import net.neoforged.neoforge.common.Tags;
 
 import java.util.function.Supplier;
 

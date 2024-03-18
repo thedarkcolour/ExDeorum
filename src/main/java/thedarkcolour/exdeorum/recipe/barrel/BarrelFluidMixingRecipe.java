@@ -18,11 +18,11 @@
 
 package thedarkcolour.exdeorum.recipe.barrel;
 
-import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -31,33 +31,30 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.registries.ForgeRegistries;
-import org.jetbrains.annotations.Nullable;
-import thedarkcolour.exdeorum.recipe.RecipeUtil;
+import thedarkcolour.exdeorum.recipe.CodecUtil;
 import thedarkcolour.exdeorum.registry.ERecipeSerializers;
 import thedarkcolour.exdeorum.registry.ERecipeTypes;
+
+import java.util.Objects;
 
 // A recipe where two fluids are mixed together, rather than a fluid and an item.
 // The additive must be 1000mB or a source block worth of liquid.
 // The additive is not consumed, however. Additives placed in the world are not consumed,
 // so it would be unfair to consume the handheld additive.
-public class BarrelFluidMixingRecipe implements Recipe<Container> {
-    private final ResourceLocation id;
-
-    public final Fluid baseFluid;
-    public final int baseFluidAmount;
-    public final Fluid additiveFluid;
-    public final Item result;
-    public final boolean consumesAdditive;
-
-    public BarrelFluidMixingRecipe(ResourceLocation id, Fluid baseFluid, int baseFluidAmount, Fluid additiveFluid, Item result, boolean consumesAdditive) {
-        this.id = id;
-        this.baseFluid = baseFluid;
-        this.baseFluidAmount = baseFluidAmount;
-        this.additiveFluid = additiveFluid;
-        this.result = result;
-        this.consumesAdditive = consumesAdditive;
-    }
+public record BarrelFluidMixingRecipe(
+        Fluid baseFluid,
+        int baseFluidAmount,
+        Fluid additiveFluid,
+        Item result,
+        boolean consumesAdditive
+) implements Recipe<Container> {
+    public static final Codec<BarrelFluidMixingRecipe> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            CodecUtil.fluidField("base_fluid", BarrelFluidMixingRecipe::baseFluid),
+            Codec.INT.fieldOf("base_fluid_amount").forGetter(BarrelFluidMixingRecipe::baseFluidAmount),
+            CodecUtil.fluidField("additive_fluid", BarrelFluidMixingRecipe::baseFluid),
+            CodecUtil.itemField("result", BarrelFluidMixingRecipe::result),
+            Codec.BOOL.optionalFieldOf("base_fluid", false).forGetter(BarrelFluidMixingRecipe::consumesAdditive)
+    ).apply(instance, BarrelFluidMixingRecipe::new));
 
     @Override
     public boolean matches(Container pContainer, Level pLevel) {
@@ -80,11 +77,6 @@ public class BarrelFluidMixingRecipe implements Recipe<Container> {
     }
 
     @Override
-    public ResourceLocation getId() {
-        return this.id;
-    }
-
-    @Override
     public RecipeSerializer<?> getSerializer() {
         return ERecipeSerializers.BARREL_FLUID_MIXING.get();
     }
@@ -96,34 +88,28 @@ public class BarrelFluidMixingRecipe implements Recipe<Container> {
 
     public static class Serializer implements RecipeSerializer<BarrelFluidMixingRecipe> {
         @Override
-        public BarrelFluidMixingRecipe fromJson(ResourceLocation id, JsonObject json) {
-            Fluid baseFluid = RecipeUtil.readFluid(json, "base_fluid");
-            int baseFluidAmount = GsonHelper.getAsInt(json, "base_fluid_amount");
-            Fluid additiveFluid = RecipeUtil.readFluid(json, "additive_fluid");
-            Item result = RecipeUtil.readItem(json, "result");
-            boolean consumesAdditive = GsonHelper.getAsBoolean(json, "consumes_additive");
-
-            return new BarrelFluidMixingRecipe(id, baseFluid, baseFluidAmount, additiveFluid, result, consumesAdditive);
+        public Codec<BarrelFluidMixingRecipe> codec() {
+            return CODEC;
         }
 
         @Override
         public void toNetwork(FriendlyByteBuf buffer, BarrelFluidMixingRecipe recipe) {
-            buffer.writeRegistryId(ForgeRegistries.FLUIDS, recipe.baseFluid);
+            buffer.writeId(BuiltInRegistries.FLUID, recipe.baseFluid);
             buffer.writeVarInt(recipe.baseFluidAmount);
-            buffer.writeRegistryId(ForgeRegistries.FLUIDS, recipe.additiveFluid);
-            buffer.writeRegistryId(ForgeRegistries.ITEMS, recipe.result);
+            buffer.writeId(BuiltInRegistries.FLUID, recipe.additiveFluid);
+            buffer.writeId(BuiltInRegistries.ITEM, recipe.result);
             buffer.writeBoolean(recipe.consumesAdditive);
         }
 
         @Override
-        public @Nullable BarrelFluidMixingRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buffer) {
-            Fluid baseFluid = buffer.readRegistryId();
+        public BarrelFluidMixingRecipe fromNetwork(FriendlyByteBuf buffer) {
+            Fluid baseFluid = Objects.requireNonNull(buffer.readById(BuiltInRegistries.FLUID));
             int baseFluidAmount = buffer.readVarInt();
-            Fluid additiveFluid = buffer.readRegistryId();
-            Item result = buffer.readRegistryId();
+            Fluid additiveFluid = Objects.requireNonNull(buffer.readById(BuiltInRegistries.FLUID));
+            Item result = Objects.requireNonNull(buffer.readById(BuiltInRegistries.ITEM));
             boolean consumesAdditive = buffer.readBoolean();
 
-            return new BarrelFluidMixingRecipe(id, baseFluid, baseFluidAmount, additiveFluid, result, consumesAdditive);
+            return new BarrelFluidMixingRecipe(baseFluid, baseFluidAmount, additiveFluid, result, consumesAdditive);
         }
     }
 }

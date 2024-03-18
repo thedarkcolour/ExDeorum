@@ -23,10 +23,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraftforge.data.loading.DatagenModLoader;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.neoforge.data.loading.DatagenModLoader;
+import net.neoforged.neoforge.registries.DeferredBlock;
+import net.neoforged.neoforge.registries.DeferredItem;
+import net.neoforged.neoforge.registries.DeferredRegister;
 import thedarkcolour.exdeorum.compat.ModIds;
 
 import java.util.HashMap;
@@ -35,13 +37,13 @@ import java.util.Map;
 // Mocks modded items so that data generation can reference modded items without needing those mods installed.
 public class ModCompatData {
     // Identity maps because keys are just constants from ModIds
-    private static final Map<String, DeferredRegister<Item>> itemRegistries = new HashMap<>();
-    private static final Map<String, DeferredRegister<Block>> blockRegistries = new HashMap<>();
+    private static final Map<String, DeferredRegister.Items> itemRegistries = new HashMap<>();
+    private static final Map<String, DeferredRegister.Blocks> blockRegistries = new HashMap<>();
 
     @SuppressWarnings("DataFlowIssue")
-    private static RegistryObject<Item> item(String modid, String name) {
+    private static DeferredItem<Item> item(String modid, String name) {
         if (DatagenModLoader.isRunningDataGen()) {
-            DeferredRegister<Item> registry = itemRegistries.computeIfAbsent(modid, key -> DeferredRegister.create(Registries.ITEM, key));
+            DeferredRegister.Items registry = itemRegistries.computeIfAbsent(modid, DeferredRegister::createItems);
             return registry.register(name, () -> new Item(new Item.Properties()));
         } else {
             return null;
@@ -49,9 +51,9 @@ public class ModCompatData {
     }
 
     @SuppressWarnings("DataFlowIssue")
-    private static RegistryObject<Block> block(String modid, String name) {
+    private static DeferredBlock<Block> block(String modid, String name) {
         if (DatagenModLoader.isRunningDataGen()) {
-            DeferredRegister<Block> registry = blockRegistries.computeIfAbsent(modid, key -> DeferredRegister.create(Registries.BLOCK, key));
+            DeferredRegister.Blocks registry = blockRegistries.computeIfAbsent(modid, DeferredRegister::createBlocks);
             return registry.register(name, () -> new Block(BlockBehaviour.Properties.of()));
         } else {
             return null;
@@ -59,13 +61,13 @@ public class ModCompatData {
     }
 
     // Ender IO
-    public static final RegistryObject<Item>
+    public static final DeferredItem<Item>
             GRAINS_OF_INFINITY = item(ModIds.ENDERIO, "grains_of_infinity");
     // Bigger reactors
-    public static final RegistryObject<Item>
+    public static final DeferredItem<Item>
             YELLORIUM_DUST = item(ModIds.BIGGER_REACTORS, "yellorium_dust");
     // Biomes O' Plenty
-    public static final RegistryObject<Block>
+    public static final DeferredBlock<Block>
             FIR_PLANKS = block(ModIds.BIOMES_O_PLENTY, "fir_planks"),
             REDWOOD_PLANKS = block(ModIds.BIOMES_O_PLENTY, "redwood_planks"),
             MAHOGANY_PLANKS = block(ModIds.BIOMES_O_PLENTY, "mahogany_planks"),
@@ -86,7 +88,7 @@ public class ModCompatData {
             MAGIC_LOG = block(ModIds.BIOMES_O_PLENTY, "magic_log"),
             UMBRAN_LOG = block(ModIds.BIOMES_O_PLENTY, "umbran_log"),
             HELLBARK_LOG = block(ModIds.BIOMES_O_PLENTY, "hellbark_log");
-    public static final RegistryObject<Item>
+    public static final DeferredItem<Item>
             FIR_PLANKS_ITEM = item(ModIds.BIOMES_O_PLENTY, "fir_planks"),
             REDWOOD_PLANKS_ITEM = item(ModIds.BIOMES_O_PLENTY, "redwood_planks"),
             MAHOGANY_PLANKS_ITEM = item(ModIds.BIOMES_O_PLENTY, "mahogany_planks"),
@@ -135,19 +137,19 @@ public class ModCompatData {
             UMBRAN_SAPLING = item(ModIds.BIOMES_O_PLENTY, "umbran_sapling"),
             HELLBARK_SAPLING = item(ModIds.BIOMES_O_PLENTY, "hellbark_sapling");
     // Applied Energistics 2
-    public static final RegistryObject<Item>
+    public static final DeferredItem<Item>
             CERTUS_QUARTZ_CRYSTAL = item(ModIds.APPLIED_ENERGISTICS_2, "certus_quartz_crystal"),
             CHARGED_CERTUS_QUARTZ_CRYSTAL = item(ModIds.APPLIED_ENERGISTICS_2, "charged_certus_quartz_crystal"),
             CERTUS_QUARTZ_DUST = item(ModIds.APPLIED_ENERGISTICS_2, "certus_quartz_dust"),
             SKY_STONE_DUST = item(ModIds.APPLIED_ENERGISTICS_2, "sky_dust");
     // Ars Nouveau
-    public static final RegistryObject<Block>
+    public static final DeferredBlock<Block>
             CASCADING_ARCHWOOD_LOG = block(ModIds.ARS_NOUVEAU, "blue_archwood_log"),
             BLAZING_ARCHWOOD_LOG = block(ModIds.ARS_NOUVEAU, "red_archwood_log"),
             VEXING_ARCHWOOD_LOG = block(ModIds.ARS_NOUVEAU, "purple_archwood_log"),
             FLOURISHING_ARCHWOOD_LOG = block(ModIds.ARS_NOUVEAU, "green_archwood_log"),
             ARCHWOOD_PLANKS = block(ModIds.ARS_NOUVEAU, "archwood_planks");
-    public static final RegistryObject<Item>
+    public static final DeferredItem<Item>
             BLUE_ARCHWOOD_SAPLING = item(ModIds.ARS_NOUVEAU, "blue_archwood_sapling"),
             RED_ARCHWOOD_SAPLING = item(ModIds.ARS_NOUVEAU, "red_archwood_sapling"),
             PURPLE_ARCHWOOD_SAPLING = item(ModIds.ARS_NOUVEAU, "purple_archwood_sapling"),
@@ -160,17 +162,17 @@ public class ModCompatData {
             ARCHWOOD_SLAB = item(ModIds.ARS_NOUVEAU, "archwood_slab"),
             ARCHWOOD_PLANKS_ITEM = item(ModIds.ARS_NOUVEAU, "archwood_planks");
     // Aether
-    public static final RegistryObject<Block>
+    public static final DeferredBlock<Block>
             SKYROOT_PLANKS = block(ModIds.AETHER, "skyroot_planks"),
             SKYROOT_LOG = block(ModIds.AETHER, "skyroot_log"),
             GOLDEN_OAK_LOG = block(ModIds.AETHER, "golden_oak_log");
-    public static final RegistryObject<Item>
+    public static final DeferredItem<Item>
             SKYROOT_SLAB = item(ModIds.AETHER, "skyroot_slab"),
             SKYROOT_PLANKS_ITEM = item(ModIds.AETHER, "skyroot_planks"),
             GOLDEN_OAK_LOG_ITEM = item(ModIds.AETHER, "golden_oak_log"),
             SKYROOT_LOG_ITEM = item(ModIds.AETHER, "skyroot_log");
     // Blue Skies
-    public static final RegistryObject<Block>
+    public static final DeferredBlock<Block>
             BLUEBRIGHT_PLANKS = block(ModIds.BLUE_SKIES, "bluebright_planks"),
             STARLIT_PLANKS = block(ModIds.BLUE_SKIES, "starlit_planks"),
             FROSTBRIGHT_PLANKS = block(ModIds.BLUE_SKIES, "frostbright_planks"),
@@ -187,7 +189,7 @@ public class ModCompatData {
             DUSK_LOG = block(ModIds.BLUE_SKIES, "dusk_log"),
             MAPLE_LOG = block(ModIds.BLUE_SKIES, "maple_log"),
             CRYSTALLIZED_LOG = block(ModIds.BLUE_SKIES, "crystallized_log");
-    public static final RegistryObject<Item>
+    public static final DeferredItem<Item>
             BLUEBRIGHT_PLANKS_ITEM = item(ModIds.BLUE_SKIES, "bluebright_planks"),
             STARLIT_PLANKS_ITEM = item(ModIds.BLUE_SKIES, "starlit_planks"),
             FROSTBRIGHT_PLANKS_ITEM = item(ModIds.BLUE_SKIES, "frostbright_planks"),
@@ -225,9 +227,7 @@ public class ModCompatData {
         }
     }
 
-    public static void registerModData() {
-        var modBus = FMLJavaModLoadingContext.get().getModEventBus();
-
+    public static void registerModData(IEventBus modBus) {
         for (var registry : itemRegistries.values()) {
             registry.register(modBus);
         }

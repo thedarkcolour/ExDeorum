@@ -18,12 +18,12 @@
 
 package thedarkcolour.exdeorum.data;
 
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.client.model.generators.BlockModelBuilder;
-import net.minecraftforge.client.model.generators.ConfiguredModel;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.client.model.generators.BlockModelBuilder;
+import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
 import thedarkcolour.exdeorum.material.DefaultMaterials;
 import thedarkcolour.exdeorum.registry.EBlocks;
 import thedarkcolour.modkit.data.MKBlockModelProvider;
@@ -196,7 +196,7 @@ class BlockModels {
     }
 
     private static ResourceLocation texture(Block block, String prefix, String suffix) {
-        var key = Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(block));
+        var key = Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(block));
         return new ResourceLocation(key.getNamespace(), "block/" + prefix + key.getPath() + suffix);
     }
 

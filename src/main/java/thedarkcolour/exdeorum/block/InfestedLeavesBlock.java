@@ -27,6 +27,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.LeavesBlock;
@@ -70,7 +71,7 @@ public class InfestedLeavesBlock extends LeavesBlock implements EntityBlock {
     public void setPlacedBy(Level level, BlockPos pos, BlockState pState, @Nullable LivingEntity player, ItemStack pStack) {
         if (player != null) {
             if (!level.isClientSide && level.getBlockEntity(pos) instanceof InfestedLeavesBlockEntity leaves) {
-                leaves.setProgress(1.0f);
+                leaves.setProgress(InfestedLeavesBlockEntity.MAX_PROGRESS);
             }
         }
     }
@@ -89,7 +90,7 @@ public class InfestedLeavesBlock extends LeavesBlock implements EntityBlock {
     }
 
     @Override
-    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player) {
+    public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos, Player player) {
         if (level.getBlockEntity(pos) instanceof InfestedLeavesBlockEntity leaves) {
             return leaves.getMimic().getCloneItemStack(target, level, pos, player);
         }

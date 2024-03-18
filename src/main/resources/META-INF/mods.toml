@@ -1,26 +1,29 @@
-modLoader="javafml"
-loaderVersion="${loader_version_range}"
-license="GNU GPLv3"
+modLoader = "javafml"
+loaderVersion = "${loader_version_range}"
+license = "GNU GPLv3"
 
 [[mods]]
-modId="exdeorum"
-version="${mod_version}"
-displayName="Ex Deorum"
-credits="Herobrine knows all. Thanks to Erasmus_Crowley for the original 1.7 mod"
-authors="TheDarkColour"
-description='''
+modId = "exdeorum"
+version = "${mod_version}"
+displayName = "Ex Deorum"
+credits = "Herobrine knows all. Thanks to Erasmus_Crowley for the original 1.7 mod"
+authors = "TheDarkColour"
+description = '''
 Bringing back the original Ex Nihilo.
 '''
 [[dependencies.exdeorum]]
-    modId="neoforge"
-    mandatory=true
-    versionRange="${neo_version_range}"
-    ordering="NONE"
-    side="BOTH"
+modId = "neoforge"
+type = "required"
+versionRange = "${neo_version_range}"
+ordering = "NONE"
+side = "BOTH"
 
 [[dependencies.exdeorum]]
-    modId="minecraft"
-    mandatory=true
-    versionRange="[${mc_version}]"
-    ordering="NONE"
-    side="BOTH"
+modId = "minecraft"
+type = "required"
+versionRange = "[${mc_version}]"
+ordering = "NONE"
+side = "BOTH"
+
+[[accessTransformers]]
+file = "META-INF/accesstransformer.cfg"

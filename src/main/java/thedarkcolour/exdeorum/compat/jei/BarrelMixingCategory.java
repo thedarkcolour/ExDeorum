@@ -108,12 +108,12 @@ public abstract class BarrelMixingCategory<T> implements IRecipeCategory<T> {
 
         @Override
         public void setRecipe(IRecipeLayoutBuilder builder, BarrelFluidMixingRecipe recipe, IFocusGroup focuses) {
-            builder.addSlot(RecipeIngredientRole.INPUT, 1, 1).addFluidStack(recipe.baseFluid, recipe.baseFluidAmount).setFluidRenderer(1000, false, 16, 16);
-            IRecipeSlotBuilder additiveSlot = builder.addSlot(RecipeIngredientRole.INPUT, 33, 1).addFluidStack(recipe.additiveFluid, 1000).setFluidRenderer(1000, false, 16, 16);
-            if (recipe.consumesAdditive) {
+            builder.addSlot(RecipeIngredientRole.INPUT, 1, 1).addFluidStack(recipe.baseFluid(), recipe.baseFluidAmount()).setFluidRenderer(1000, false, 16, 16);
+            IRecipeSlotBuilder additiveSlot = builder.addSlot(RecipeIngredientRole.INPUT, 33, 1).addFluidStack(recipe.additiveFluid(), 1000).setFluidRenderer(1000, false, 16, 16);
+            if (recipe.consumesAdditive()) {
                 additiveSlot.addTooltipCallback((view, tooltip) -> tooltip.add(CONTENTS_ARE_CONSUMED_TOOLTIP));
             }
-            builder.addSlot(RecipeIngredientRole.OUTPUT, 79, 1).addItemStack(new ItemStack(recipe.result));
+            builder.addSlot(RecipeIngredientRole.OUTPUT, 79, 1).addItemStack(new ItemStack(recipe.result()));
         }
 
         @Override
@@ -125,7 +125,7 @@ public abstract class BarrelMixingCategory<T> implements IRecipeCategory<T> {
         public void draw(BarrelFluidMixingRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
             super.draw(recipe, recipeSlotsView, graphics, mouseX, mouseY);
 
-            if (recipe.consumesAdditive) {
+            if (recipe.consumesAdditive()) {
                 ClientJeiUtil.renderAsterisk(graphics, 18 + 3 + 3 + 8, 0);
             }
         }

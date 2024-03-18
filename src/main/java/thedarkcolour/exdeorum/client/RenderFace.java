@@ -26,6 +26,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 
 import java.util.List;
 
+// todo consider getting rid of this interface
 public interface RenderFace {
     void renderFlatSpriteLerp(MultiBufferSource buffers, PoseStack stack, float percentage, int r, int g, int b, int light, float edge, float yStart, float yEnd);
 

@@ -21,6 +21,7 @@ package thedarkcolour.exdeorum.recipe.cache;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 import org.jetbrains.annotations.Nullable;
@@ -39,18 +40,10 @@ public class SingleIngredientRecipeCache<T extends SingleIngredientRecipe> {
     private Map<Item, T> simpleRecipes;
     @Nullable
     private List<T> complexRecipes;
-    @Nullable
-    private Collection<T> allRecipes;
-    private boolean trackAllRecipes;
 
     public SingleIngredientRecipeCache(RecipeManager recipeManager, Supplier<RecipeType<T>> recipeType) {
         this.recipeType = recipeType;
         this.recipeManager = recipeManager;
-    }
-
-    public SingleIngredientRecipeCache<T> trackAllRecipes() {
-        this.trackAllRecipes = true;
-        return this;
     }
 
     @Nullable
@@ -81,21 +74,12 @@ public class SingleIngredientRecipeCache<T extends SingleIngredientRecipe> {
         }
     }
 
-    public Collection<T> getAllRecipes() {
-        if (this.simpleRecipes == null) {
-            buildRecipes();
-        }
-        return this.allRecipes;
-    }
-
     /**
      * Called when this recipe cache is first queried. First, scans available recipes for recipes with "simple"
      * ingredients that do not check an item's NBT. All of these recipes are added to the {@link #simpleRecipes}
      * map, which is indexed by the item(s) the recipe's ingredient accepts. Recipes whose ingredients are "complex"
      * and consider an item's NBT are added to the separate {@link #complexRecipes} list. Unlike simpleRecipes,
-     * complexRecipes may be null after this method call if no complex recipes are found. The {@link #allRecipes}
-     * field contains all recipes, simple and complex, in one collection. If this recipe cache is not set to track
-     * all recipes by {@link #trackAllRecipes}, then this list is discarded afterward. Finally, after all recipes
+     * complexRecipes may be null after this method call if no complex recipes are found. Finally, after all recipes
      * have been scanned, the {@link #recipeManager} is set to null, since it is no longer needed.
      */
     private void buildRecipes() {
@@ -104,7 +88,8 @@ public class SingleIngredientRecipeCache<T extends SingleIngredientRecipe> {
 
         var allRecipes = this.recipeManager.byType(this.recipeType.get()).values();
 
-        for (var recipe : allRecipes) {
+        for (var holder : allRecipes) {
+            var recipe = holder.value();
             var ingredient = recipe.getIngredient();
 
             if (ingredient.isSimple()) {
@@ -119,10 +104,6 @@ public class SingleIngredientRecipeCache<T extends SingleIngredientRecipe> {
         this.complexRecipes = complexRecipes.build();
         if (this.complexRecipes.isEmpty()) {
             this.complexRecipes = null;
-        }
-        // Track list of simple and complex recipes (only used by hammer so far)
-        if (this.trackAllRecipes) {
-            this.allRecipes = allRecipes;
         }
 
         this.recipeManager = null;

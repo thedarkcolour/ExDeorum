@@ -59,7 +59,6 @@ public class SieveRenderer<T extends EBlockEntity & SieveLogic.Owner> implements
             if (MESH_TEXTURES.containsKey(meshItem)) {
                 meshSprite = MESH_TEXTURES.get(meshItem);
             } else {
-                @SuppressWarnings("deprecation")
                 ResourceLocation registryName = BuiltInRegistries.ITEM.getKey(meshItem);
                 ResourceLocation textureLoc = registryName.withPrefix("item/mesh/");
                 meshSprite = RenderUtil.blockAtlas.getSprite(textureLoc);

@@ -51,7 +51,8 @@ public class SieveRecipeCache {
     private void buildRecipes() {
         // Group recipes based on their mesh
         var tempMap = new HashMap<Item, List<SieveRecipe>>();
-        for (var recipe : this.recipeManager.byType(ERecipeTypes.SIEVE.get()).values()) {
+        for (var holder : this.recipeManager.byType(ERecipeTypes.SIEVE.get()).values()) {
+            var recipe = holder.value();
             tempMap.computeIfAbsent(recipe.mesh, k -> new ArrayList<>()).add(recipe);
         }
         this.meshCaches = new HashMap<>();

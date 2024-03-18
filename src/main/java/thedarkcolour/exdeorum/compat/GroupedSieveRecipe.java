@@ -21,23 +21,27 @@ package thedarkcolour.exdeorum.compat;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multimap;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.recipe.sieve.SieveRecipe;
 import thedarkcolour.exdeorum.registry.EItems;
+import thedarkcolour.exdeorum.registry.ERecipeSerializers;
 import thedarkcolour.exdeorum.registry.ERecipeTypes;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 
 // Since no JEI code is used here, this can be reused for REI
 public record GroupedSieveRecipe(Ingredient ingredient, ItemStack mesh, List<Result> results) {
@@ -46,8 +50,7 @@ public record GroupedSieveRecipe(Ingredient ingredient, ItemStack mesh, List<Res
     public static ImmutableList<GroupedSieveRecipe> getAllRecipesGrouped() {
         maxSieveRows = 1;
 
-        // copy the list so we can do removals
-        List<SieveRecipe> recipes = new ArrayList<>(Objects.requireNonNull(Minecraft.getInstance().level).getRecipeManager().getAllRecipesFor(ERecipeTypes.SIEVE.get()));
+        var recipes = CompatUtil.collectAllRecipes(ERecipeTypes.SIEVE.value(), Function.identity());
         Multimap<Ingredient, SieveRecipe> ingredientGrouper = ArrayListMultimap.create();
 
         for (int i = 0; i < recipes.size(); i++) {
@@ -91,7 +94,7 @@ public record GroupedSieveRecipe(Ingredient ingredient, ItemStack mesh, List<Res
                 var results = new ArrayList<Result>(meshRecipes.size());
 
                 for (var recipe : meshRecipes) {
-                    int resultCount = recipe.resultAmount instanceof ConstantValue constant ? Math.round(constant.value) : 1;
+                    int resultCount = recipe.resultAmount instanceof ConstantValue constant ? Math.round(constant.value()) : 1;
                     results.add(new Result(new ItemStack(recipe.result, resultCount), recipe.resultAmount, recipe.byHandOnly));
                 }
 
@@ -109,7 +112,6 @@ public record GroupedSieveRecipe(Ingredient ingredient, ItemStack mesh, List<Res
         return jeiRecipes.build();
     }
 
-    @SuppressWarnings("deprecation")
     private static int meshOrder(Item mesh) {
         if (mesh == EItems.STRING_MESH.get()) {
             return -5;

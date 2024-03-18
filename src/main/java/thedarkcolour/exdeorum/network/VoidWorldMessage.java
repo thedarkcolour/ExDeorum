@@ -19,25 +19,23 @@
 package thedarkcolour.exdeorum.network;
 
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.network.NetworkEvent;
-
-import java.util.function.Supplier;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
+import thedarkcolour.exdeorum.ExDeorum;
 
 // Server -> Client
 // used to tell the client to disable the cave darkness rendering in a void world
-public class VoidWorldMessage {
-    public static void encode(VoidWorldMessage msg, FriendlyByteBuf packet) {
+public enum VoidWorldMessage implements CustomPacketPayload {
+    INSTANCE;
+
+    public static final ResourceLocation ID = new ResourceLocation(ExDeorum.ID, "void_world_msg");
+
+    @Override
+    public void write(FriendlyByteBuf pBuffer) {
     }
 
-    public static VoidWorldMessage decode(FriendlyByteBuf packet) {
-        return new VoidWorldMessage();
-    }
-
-    public static void handle(VoidWorldMessage msg, Supplier<NetworkEvent.Context> ctxSupplier) {
-        NetworkHandler.handle(ctxSupplier, ctx -> {
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ClientMessageHandler::disableVoidFogRendering);
-        });
+    @Override
+    public ResourceLocation id() {
+        return ID;
     }
 }

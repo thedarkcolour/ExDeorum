@@ -18,16 +18,17 @@
 
 package thedarkcolour.exdeorum.data;
 
-import net.minecraft.advancements.Advancement;
-import net.minecraft.advancements.FrameType;
+import net.minecraft.advancements.AdvancementHolder;
+import net.minecraft.advancements.AdvancementType;
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.advancements.critereon.ImpossibleTrigger;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.common.data.ForgeAdvancementProvider;
+import net.neoforged.neoforge.common.data.AdvancementProvider;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.material.DefaultMaterials;
 import thedarkcolour.exdeorum.registry.EItems;
@@ -41,7 +42,7 @@ import static net.minecraft.advancements.Advancement.Builder.advancement;
 import static net.minecraft.advancements.critereon.InventoryChangeTrigger.TriggerInstance.hasItems;
 import static net.minecraft.advancements.critereon.ItemPredicate.Builder.item;
 
-class Advancements extends ForgeAdvancementProvider {
+class Advancements extends AdvancementProvider {
     public Advancements(PackOutput output, CompletableFuture<HolderLookup.Provider> registries, ExistingFileHelper existingFileHelper) {
         super(output, registries, existingFileHelper, List.of(new CoreAchievements()));
     }
@@ -52,20 +53,20 @@ class Advancements extends ForgeAdvancementProvider {
 
     public static class CoreAchievements implements AdvancementGenerator {
         @Override
-        public void generate(HolderLookup.Provider registries, Consumer<Advancement> saver, ExistingFileHelper helper) {
+        public void generate(HolderLookup.Provider registries, Consumer<AdvancementHolder> saver, ExistingFileHelper helper) {
             var root = advancement()
                     .display(
                             Blocks.OAK_SAPLING,
                             Component.translatable(TranslationKeys.ROOT_ADVANCEMENT_TITLE),
                             Component.translatable(TranslationKeys.ROOT_ADVANCEMENT_DESCRIPTION),
                             modLoc("textures/gui/advancements/backgrounds/void.png"),
-                            FrameType.TASK,
+                            AdvancementType.TASK,
                             true,
                             true,
                             false
                     )
                     // hardcoded to EventHandler
-                    .addCriterion("in_void_world", new ImpossibleTrigger.TriggerInstance())
+                    .addCriterion("in_void_world", CriteriaTriggers.IMPOSSIBLE.createCriterion(new ImpossibleTrigger.TriggerInstance()))
                     .save(saver, modLoc("core/root"), helper);
             var crook = advancement()
                     .parent(root)
@@ -74,7 +75,7 @@ class Advancements extends ForgeAdvancementProvider {
                             Component.translatable(TranslationKeys.CROOK_ADVANCEMENT_TITLE),
                             Component.translatable(TranslationKeys.CROOK_ADVANCEMENT_DESCRIPTION),
                             null,
-                            FrameType.TASK,
+                            AdvancementType.TASK,
                             true,
                             true,
                             true
@@ -88,7 +89,7 @@ class Advancements extends ForgeAdvancementProvider {
                             Component.translatable(TranslationKeys.BARREL_ADVANCEMENT_TITLE),
                             Component.translatable(TranslationKeys.BARREL_ADVANCEMENT_DESCRIPTION),
                             null,
-                            FrameType.TASK,
+                            AdvancementType.TASK,
                             true,
                             true,
                             true
@@ -102,7 +103,7 @@ class Advancements extends ForgeAdvancementProvider {
                             Component.translatable(TranslationKeys.SILK_WORM_ADVANCEMENT_TITLE),
                             Component.translatable(TranslationKeys.SILK_WORM_ADVANCEMENT_DESCRIPTION),
                             null,
-                            FrameType.TASK,
+                            AdvancementType.TASK,
                             true,
                             true,
                             false
@@ -116,7 +117,7 @@ class Advancements extends ForgeAdvancementProvider {
                             Component.translatable(TranslationKeys.STRING_MESH_ADVANCEMENT_TITLE),
                             Component.translatable(TranslationKeys.STRING_MESH_ADVANCEMENT_DESCRIPTION),
                             null,
-                            FrameType.TASK,
+                            AdvancementType.TASK,
                             true,
                             true,
                             false

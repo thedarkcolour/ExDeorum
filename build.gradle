@@ -4,7 +4,7 @@ plugins {
     id 'net.neoforged.gradle.userdev' version '7.0.80'
 }
 
-version = '1.26'
+version = '2.0'
 group = 'thedarkcolour.exdeorum'
 base {
     archivesName = 'exdeorum'
@@ -103,18 +103,18 @@ dependencies {
     // JEI OPTIONAL
     compileOnly("mezz.jei:jei-${mc_version}-common-api:${jei_version}")
     compileOnly("mezz.jei:jei-${mc_version}-neoforge-api:${jei_version}")
-    compileOnly("mezz.jei:jei-${mc_version}-neoforge:${jei_version}")
-    // REI OPTIONAL
-    implementation("me.shedaniel:RoughlyEnoughItems-forge:${rei_version}")
-    implementation("me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}")
-    implementation("curse.maven:reipc-521393:4837449")
+    runtimeOnly("mezz.jei:jei-${mc_version}-neoforge:${jei_version}")
+    // REI OPTIONAL todo add
+    compileOnly("me.shedaniel:RoughlyEnoughItems-forge:${rei_version}")
+    compileOnly("me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}")
+    //implementation("curse.maven:reipc-521393:4837449")
     // KubeJS OPTIONAL todo add when KubeJS updates
     //implementation("dev.architectury:architectury-neoforge:${architectury_version}")
     //implementation("dev.latvian.mods:rhino-neoforge:${rhino_version}")
     //implementation("dev.latvian.mods:kubejs-neoforge:${kubejs_version}")
 
     // ModKit DEV ONLY
-    implementation('com.github.thedarkcolour:Modkit:f4039e5b6b')
+    implementation('com.github.thedarkcolour:Modkit:e9334176e0')
 
     // Oculus + Embeddium OPTIONAL
     compileOnly('maven.modrinth:oculus:1.20.1-1.6.9')
