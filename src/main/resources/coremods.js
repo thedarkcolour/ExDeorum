@@ -9,7 +9,7 @@ var LdcInsnNode = Java.type('org.objectweb.asm.tree.LdcInsnNode');
 var TypeInsnNode = Java.type('org.objectweb.asm.tree.TypeInsnNode');
 var InsnNode = Java.type('org.objectweb.asm.tree.InsnNode');
 
-var ASMAPI = Java.type('net.minecraftforge.coremod.api.ASMAPI');
+var ASMAPI = Java.type('net.neoforged.coremod.api.ASMAPI');
 
 function initializeCoreMod() {
     return {

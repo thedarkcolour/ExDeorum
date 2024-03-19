@@ -24,7 +24,6 @@ import net.neoforged.fml.ModList;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
-import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.data.loading.DatagenModLoader;
@@ -36,7 +35,6 @@ import thedarkcolour.exdeorum.data.Data;
 import thedarkcolour.exdeorum.data.ModCompatData;
 import thedarkcolour.exdeorum.event.EventHandler;
 import thedarkcolour.exdeorum.material.DefaultMaterials;
-import thedarkcolour.exdeorum.network.NetworkHandler;
 import thedarkcolour.exdeorum.registry.*;
 
 import java.util.Calendar;
@@ -51,9 +49,10 @@ public class ExDeorum {
     public ExDeorum(IEventBus modBus) {
         createRegistries(modBus);
 
-        // Still enabled in Dev environment because KubeJS enables milk fluid
+        // Enable by default to avoid invisible milk in JEI
+        NeoForgeMod.enableMilkFluid();
+
         if (DatagenModLoader.isRunningDataGen()) {
-            NeoForgeMod.enableMilkFluid();
             ModCompatData.registerModData(modBus);
             modBus.addListener(Data::generateData);
         }

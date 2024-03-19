@@ -30,6 +30,5 @@
     "recipes": [
       "exdeorum:warped_barrel"
     ]
-  },
-  "sends_telemetry_event": true
+  }
 }

@@ -30,6 +30,5 @@
     "recipes": [
       "exdeorum:acacia_barrel"
     ]
-  },
-  "sends_telemetry_event": true
+  }
 }

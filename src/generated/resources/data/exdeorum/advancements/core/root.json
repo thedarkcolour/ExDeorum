@@ -5,17 +5,13 @@
     }
   },
   "display": {
-    "announce_to_chat": true,
     "background": "exdeorum:textures/gui/advancements/backgrounds/void.png",
     "description": {
       "translate": "advancements.exdeorum.core.root.description"
     },
-    "frame": "task",
-    "hidden": false,
     "icon": {
       "item": "minecraft:oak_sapling"
     },
-    "show_toast": true,
     "title": {
       "translate": "advancements.exdeorum.core.root.title"
     }

@@ -30,6 +30,5 @@
     "recipes": [
       "exdeorum:wooden_watering_can"
     ]
-  },
-  "sends_telemetry_event": true
+  }
 }

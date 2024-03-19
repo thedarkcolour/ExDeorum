@@ -30,6 +30,5 @@
     "recipes": [
       "exdeorum:sculk_core"
     ]
-  },
-  "sends_telemetry_event": true
+  }
 }

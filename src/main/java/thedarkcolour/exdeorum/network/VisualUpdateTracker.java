@@ -60,7 +60,7 @@ public class VisualUpdateTracker {
 
                 if (chunk.getBlockEntity(updatePos) instanceof EBlockEntity blockEntity) {
                     // packet uses strong reference
-                    PacketDistributor.TRACKING_CHUNK.with(chunk).send(new VisualUpdateMessage(updatePos, blockEntity, null));
+                    PacketDistributor.TRACKING_CHUNK.with(chunk).send(new VisualUpdateMessage(updatePos, blockEntity, blockEntity.getType(), null));
                 }
             }
 

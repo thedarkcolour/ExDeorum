@@ -28,32 +28,26 @@ import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.blockentity.EBlockEntity;
 
-// todo change this into two classes instead of having nullable fields
+// todo rewrite this to be less jank
 class VisualUpdateMessage implements CustomPacketPayload {
     public static final ResourceLocation ID = new ResourceLocation(ExDeorum.ID, "visual_update");
 
     final BlockEntityType<?> blockEntityType;
     final BlockPos pos;
-    // Null on the client side
+    // Null on the dedicated client side
     @Nullable
-    private final EBlockEntity blockEntity;
+    final EBlockEntity blockEntity;
     // Null on the server side
     @Nullable
     final FriendlyByteBuf payload;
 
-    @SuppressWarnings("DataFlowIssue")
-    public VisualUpdateMessage(BlockPos pos, @Nullable EBlockEntity blockEntity, @Nullable FriendlyByteBuf payload) {
+    public VisualUpdateMessage(BlockPos pos, @Nullable EBlockEntity blockEntity, @Nullable BlockEntityType<?> blockEntityType, @Nullable FriendlyByteBuf payload) {
         this.pos = pos;
         this.blockEntity = blockEntity;
         // payload is saved on the client until it can be handled properly
         this.payload = payload;
 
-        // If the payload is null, we're on the server. Hence, the block entity is nonnull.
-        if (payload == null) {
-            this.blockEntityType = blockEntity.getType();
-        } else {
-            this.blockEntityType = payload.readById(BuiltInRegistries.BLOCK_ENTITY_TYPE);
-        }
+        this.blockEntityType = blockEntityType;
     }
 
     @SuppressWarnings("DataFlowIssue")
@@ -61,8 +55,14 @@ class VisualUpdateMessage implements CustomPacketPayload {
     public void write(FriendlyByteBuf buffer) {
         buffer.writeBlockPos(this.pos);
         buffer.writeId(BuiltInRegistries.BLOCK_ENTITY_TYPE, this.blockEntityType);
-        // never null on the server side, where this packet is meant to be encoded
+        // write a placeholder value for the number of data bytes
+        var dataBytesIndex = buffer.writerIndex();
+        buffer.writeInt(0);
+        // write data bytes
         this.blockEntity.writeVisualData(buffer);
+        // set the correct number of data bytes
+        var numDataBytes = buffer.writerIndex() - dataBytesIndex - 4;
+        buffer.setInt(dataBytesIndex, numDataBytes);
     }
 
     @Override
@@ -71,6 +71,6 @@ class VisualUpdateMessage implements CustomPacketPayload {
     }
 
     public static VisualUpdateMessage decode(FriendlyByteBuf buffer) {
-        return new VisualUpdateMessage(buffer.readBlockPos(), null, buffer);
+        return new VisualUpdateMessage(buffer.readBlockPos(), null, buffer.readById(BuiltInRegistries.BLOCK_ENTITY_TYPE), new FriendlyByteBuf(buffer.readBytes(buffer.readInt())));
     }
 }

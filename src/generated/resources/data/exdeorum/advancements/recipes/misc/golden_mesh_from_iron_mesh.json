@@ -28,6 +28,5 @@
     "recipes": [
       "exdeorum:golden_mesh_from_iron_mesh"
     ]
-  },
-  "sends_telemetry_event": true
+  }
 }

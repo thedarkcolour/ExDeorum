@@ -1,0 +1,16 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:tag_empty",
+        "tag": "forge:ores/aluminum"
+      }
+    }
+  ],
+  "type": "exdeorum:ore_chunk",
+  "ore": "forge:ores/aluminum",
+  "ore_chunk": {
+    "item": "exdeorum:aluminum_ore_chunk"
+  }
+}

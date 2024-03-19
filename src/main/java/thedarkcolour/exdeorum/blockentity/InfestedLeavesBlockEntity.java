@@ -28,6 +28,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.model.data.ModelData;
@@ -65,6 +66,13 @@ public class InfestedLeavesBlockEntity extends EBlockEntity {
     @Override
     public void readVisualData(FriendlyByteBuf buffer) {
         buffer.readShort();
+    }
+
+    @Override
+    public void copyVisualData(BlockEntity fromIntegratedServer) {
+        if (fromIntegratedServer instanceof InfestedLeavesBlockEntity from) {
+            this.progress = from.progress;
+        }
     }
 
     // Attempt to convert a leaf block within 1 block radius around this block

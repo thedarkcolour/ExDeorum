@@ -81,7 +81,6 @@ public class MechanicalSieveScreen extends AbstractContainerScreen<MechanicalSie
 
     @Override
     public void render(GuiGraphics graphics, int mx, int my, float partialTicks) {
-        renderBackground(graphics, mx, my, partialTicks);
         super.render(graphics, mx, my, partialTicks);
         renderTooltip(graphics, mx, my);
 

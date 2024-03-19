@@ -1,4 +1,4 @@
-// 1.20.1	2024-02-12T09:38:22.3873783	Loot Tables
+// 1.20.4	2024-03-17T23:56:02.9160002	Loot Tables
 105d8a61ea7145d7798146d385d4aad24fd1588d data/exdeorum/loot_tables/blocks/acacia_barrel.json
 1e77127a82cbba0937bb02694f65cf1893aeffcb data/exdeorum/loot_tables/blocks/acacia_crucible.json
 fcc00910a8cc94bed6339d6833fcec53c501a0d7 data/exdeorum/loot_tables/blocks/acacia_sieve.json
@@ -107,4 +107,3 @@ c3db3b96077eba364cb012f49e25fa98b98a71ab data/exdeorum/loot_tables/blocks/warped
 67588965ad0bba9eede3fd3a2378d59fdd6b5fdf data/exdeorum/loot_tables/blocks/willow_barrel.json
 87f488263c98db70e1c4c4f608f028ed65a362e5 data/exdeorum/loot_tables/blocks/willow_crucible.json
 5fcc50ca6590bfb56587959d2611eb5d9052505d data/exdeorum/loot_tables/blocks/willow_sieve.json
-a51ad59e35021e2254b07f1fd437544b2e463534 data/exdeorum/loot_tables/blocks/witch_water.json

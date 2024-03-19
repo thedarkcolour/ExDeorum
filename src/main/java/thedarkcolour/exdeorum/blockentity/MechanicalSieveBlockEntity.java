@@ -28,6 +28,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 import thedarkcolour.exdeorum.blockentity.helper.ItemHelper;
@@ -93,9 +94,7 @@ public class MechanicalSieveBlockEntity extends AbstractMachineBlockEntity<Mecha
 
     @Override
     public void writeVisualData(FriendlyByteBuf buffer) {
-        buffer.writeItem(this.logic.getMesh());
-        buffer.writeFloat(this.logic.getProgress());
-        buffer.writeItem(this.logic.getContents());
+        this.logic.writeVisualData(buffer);
     }
 
     @Override
@@ -103,6 +102,11 @@ public class MechanicalSieveBlockEntity extends AbstractMachineBlockEntity<Mecha
         this.logic.setMesh(buffer.readItem(), false);
         this.logic.setProgress(buffer.readFloat());
         this.logic.setContents(buffer.readItem());
+    }
+
+    @Override
+    public void copyVisualData(BlockEntity fromIntegratedServer) {
+        this.logic.copyVisualData(fromIntegratedServer);
     }
 
     @Override

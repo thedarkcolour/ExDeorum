@@ -28,6 +28,5 @@
     "recipes": [
       "exdeorum:iron_mesh_from_flint_mesh"
     ]
-  },
-  "sends_telemetry_event": true
+  }
 }

@@ -1,26 +1,19 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
+  "neoforge:conditions": [
     {
-      "conditions": [
-        {
-          "type": "forge:mod_loaded",
-          "modid": "ae2"
-        }
-      ],
-      "recipe": {
-        "type": "exdeorum:sieve",
-        "ingredient": {
-          "item": "minecraft:sand"
-        },
-        "mesh": "exdeorum:string_mesh",
-        "result": "ae2:charged_certus_quartz_crystal",
-        "result_amount": {
-          "type": "minecraft:binomial",
-          "n": 1.0,
-          "p": 0.005
-        }
-      }
+      "type": "neoforge:mod_loaded",
+      "modid": "ae2"
     }
-  ]
+  ],
+  "type": "exdeorum:sieve",
+  "ingredient": {
+    "item": "minecraft:sand"
+  },
+  "mesh": "exdeorum:string_mesh",
+  "result": "ae2:charged_certus_quartz_crystal",
+  "result_amount": {
+    "type": "minecraft:binomial",
+    "n": 1.0,
+    "p": 0.005
+  }
 }

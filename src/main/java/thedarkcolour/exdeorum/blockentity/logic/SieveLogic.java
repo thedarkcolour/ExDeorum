@@ -20,12 +20,14 @@ package thedarkcolour.exdeorum.blockentity.logic;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.storage.loot.LootContext;
 import thedarkcolour.exdeorum.config.EConfig;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
@@ -183,6 +185,28 @@ public class SieveLogic {
             } else {
                 setMesh(ItemStack.EMPTY, false);
             }
+        }
+    }
+
+    public void writeVisualData(FriendlyByteBuf buffer) {
+        buffer.writeItem(this.mesh);
+        buffer.writeFloat(this.progress);
+        buffer.writeItem(this.contents);
+    }
+
+    public void readVisualData(FriendlyByteBuf buffer) {
+        this.setMesh(buffer.readItem().copy());
+        this.progress = buffer.readFloat();
+        this.contents = buffer.readItem();
+    }
+
+    public void copyVisualData(BlockEntity fromIntegratedServer) {
+        if (fromIntegratedServer instanceof Owner fromOwner) {
+            var from = fromOwner.getLogic();
+
+            this.setMesh(from.mesh.copy());
+            this.progress = from.progress;
+            this.contents = from.contents;
         }
     }
 

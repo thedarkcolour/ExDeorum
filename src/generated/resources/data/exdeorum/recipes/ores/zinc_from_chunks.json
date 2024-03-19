@@ -1,0 +1,16 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:tag_empty",
+        "tag": "forge:ores/zinc"
+      }
+    }
+  ],
+  "type": "exdeorum:ore_chunk",
+  "ore": "forge:ores/zinc",
+  "ore_chunk": {
+    "item": "exdeorum:zinc_ore_chunk"
+  }
+}

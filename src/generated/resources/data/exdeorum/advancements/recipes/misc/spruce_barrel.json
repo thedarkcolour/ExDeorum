@@ -30,6 +30,5 @@
     "recipes": [
       "exdeorum:spruce_barrel"
     ]
-  },
-  "sends_telemetry_event": true
+  }
 }

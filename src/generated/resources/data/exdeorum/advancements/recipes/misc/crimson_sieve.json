@@ -30,6 +30,5 @@
     "recipes": [
       "exdeorum:crimson_sieve"
     ]
-  },
-  "sends_telemetry_event": true
+  }
 }

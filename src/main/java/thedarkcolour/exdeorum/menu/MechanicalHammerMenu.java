@@ -62,7 +62,7 @@ public class MechanicalHammerMenu extends AbstractMachineMenu<MechanicalHammerBl
             var clickedStack = slot.getItem();
             stack = clickedStack.copy();
 
-            if (clickedSlot > 1 && clickedSlot <= NUM_SLOTS) { // moving out of output slots
+            if (clickedSlot > 1 && clickedSlot < NUM_SLOTS) { // moving out of output slots
                 if (!moveItemStackTo(clickedStack, NUM_SLOTS, PLAYER_SLOTS + NUM_SLOTS, true)) {
                     return ItemStack.EMPTY;
                 }

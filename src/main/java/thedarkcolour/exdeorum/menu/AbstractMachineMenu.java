@@ -42,6 +42,7 @@ public abstract class AbstractMachineMenu<M extends AbstractMachineBlockEntity<M
         super(pMenuType, pContainerId);
 
         this.machine = machine;
+        this.prevEnergy = machine.energy.getEnergyStored();
 
         if (playerInventory.player instanceof ServerPlayer serverPlayer) {
             this.player = serverPlayer;

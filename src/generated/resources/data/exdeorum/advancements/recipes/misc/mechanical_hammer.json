@@ -30,6 +30,5 @@
     "recipes": [
       "exdeorum:mechanical_hammer"
     ]
-  },
-  "sends_telemetry_event": true
+  }
 }

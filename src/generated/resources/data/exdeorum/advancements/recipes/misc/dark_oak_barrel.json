@@ -30,6 +30,5 @@
     "recipes": [
       "exdeorum:dark_oak_barrel"
     ]
-  },
-  "sends_telemetry_event": true
+  }
 }

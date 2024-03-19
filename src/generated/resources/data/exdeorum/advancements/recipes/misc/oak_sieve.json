@@ -30,6 +30,5 @@
     "recipes": [
       "exdeorum:oak_sieve"
     ]
-  },
-  "sends_telemetry_event": true
+  }
 }

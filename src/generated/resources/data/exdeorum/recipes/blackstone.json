@@ -1,6 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
+  "category": "building",
   "key": {
     "#": {
       "item": "exdeorum:blackstone_pebble"
@@ -12,6 +12,5 @@
   ],
   "result": {
     "item": "minecraft:blackstone"
-  },
-  "show_notification": true
+  }
 }

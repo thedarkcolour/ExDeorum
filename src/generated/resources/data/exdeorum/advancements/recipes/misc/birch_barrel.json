@@ -30,6 +30,5 @@
     "recipes": [
       "exdeorum:birch_barrel"
     ]
-  },
-  "sends_telemetry_event": true
+  }
 }

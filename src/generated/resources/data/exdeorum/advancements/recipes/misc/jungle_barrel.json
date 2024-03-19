@@ -30,6 +30,5 @@
     "recipes": [
       "exdeorum:jungle_barrel"
     ]
-  },
-  "sends_telemetry_event": true
+  }
 }

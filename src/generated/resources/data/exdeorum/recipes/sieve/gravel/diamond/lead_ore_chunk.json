@@ -1,29 +1,22 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
+  "neoforge:conditions": [
     {
-      "conditions": [
-        {
-          "type": "forge:not",
-          "value": {
-            "type": "forge:tag_empty",
-            "tag": "forge:ores/lead"
-          }
-        }
-      ],
-      "recipe": {
-        "type": "exdeorum:sieve",
-        "ingredient": {
-          "item": "minecraft:gravel"
-        },
-        "mesh": "exdeorum:diamond_mesh",
-        "result": "exdeorum:lead_ore_chunk",
-        "result_amount": {
-          "type": "minecraft:binomial",
-          "n": 1.0,
-          "p": 0.09
-        }
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:tag_empty",
+        "tag": "forge:ores/lead"
       }
     }
-  ]
+  ],
+  "type": "exdeorum:sieve",
+  "ingredient": {
+    "item": "minecraft:gravel"
+  },
+  "mesh": "exdeorum:diamond_mesh",
+  "result": "exdeorum:lead_ore_chunk",
+  "result_amount": {
+    "type": "minecraft:binomial",
+    "n": 1.0,
+    "p": 0.09
+  }
 }

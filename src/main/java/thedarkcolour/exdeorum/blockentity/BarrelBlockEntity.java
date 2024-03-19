@@ -38,6 +38,7 @@ import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BucketPickup;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FlowingFluid;
@@ -133,6 +134,19 @@ public class BarrelBlockEntity extends EBlockEntity {
         this.r = buffer.readShort();
         this.g = buffer.readShort();
         this.b = buffer.readShort();
+    }
+
+    @Override
+    public void copyVisualData(BlockEntity fromIntegratedServer) {
+        if (fromIntegratedServer instanceof BarrelBlockEntity from) {
+            this.item.setStackInSlot(0, from.item.getStackInSlot(0).copy());
+            this.tank.setFluid(from.tank.getFluid().copy());
+            this.compost = from.compost;
+            this.progress = from.progress;
+            this.r = from.r;
+            this.g = from.g;
+            this.b = from.b;
+        }
     }
 
     public boolean isBrewing() {

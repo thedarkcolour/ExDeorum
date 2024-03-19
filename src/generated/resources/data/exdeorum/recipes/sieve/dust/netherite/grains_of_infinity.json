@@ -1,26 +1,19 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
+  "neoforge:conditions": [
     {
-      "conditions": [
-        {
-          "type": "forge:mod_loaded",
-          "modid": "enderio"
-        }
-      ],
-      "recipe": {
-        "type": "exdeorum:sieve",
-        "ingredient": {
-          "item": "exdeorum:dust"
-        },
-        "mesh": "exdeorum:netherite_mesh",
-        "result": "enderio:grains_of_infinity",
-        "result_amount": {
-          "type": "minecraft:binomial",
-          "n": 1.0,
-          "p": 0.135
-        }
-      }
+      "type": "neoforge:mod_loaded",
+      "modid": "enderio"
     }
-  ]
+  ],
+  "type": "exdeorum:sieve",
+  "ingredient": {
+    "item": "exdeorum:dust"
+  },
+  "mesh": "exdeorum:netherite_mesh",
+  "result": "enderio:grains_of_infinity",
+  "result_amount": {
+    "type": "minecraft:binomial",
+    "n": 1.0,
+    "p": 0.135
+  }
 }

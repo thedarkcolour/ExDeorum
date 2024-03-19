@@ -20,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_item",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_item"
     ]
   ],
   "rewards": {
     "recipes": [
       "exdeorum:netherite_watering_can"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

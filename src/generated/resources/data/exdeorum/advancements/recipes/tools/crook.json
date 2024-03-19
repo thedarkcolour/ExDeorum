@@ -28,6 +28,5 @@
     "recipes": [
       "exdeorum:crook"
     ]
-  },
-  "sends_telemetry_event": true
+  }
 }

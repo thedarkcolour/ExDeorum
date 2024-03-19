@@ -1,29 +1,22 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
+  "neoforge:conditions": [
     {
-      "conditions": [
-        {
-          "type": "forge:not",
-          "value": {
-            "type": "forge:tag_empty",
-            "tag": "forge:ores/cobalt"
-          }
-        }
-      ],
-      "recipe": {
-        "type": "exdeorum:sieve",
-        "ingredient": {
-          "item": "exdeorum:crushed_netherrack"
-        },
-        "mesh": "exdeorum:golden_mesh",
-        "result": "exdeorum:cobalt_ore_chunk",
-        "result_amount": {
-          "type": "minecraft:binomial",
-          "n": 1.0,
-          "p": 0.07
-        }
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:tag_empty",
+        "tag": "forge:ores/cobalt"
       }
     }
-  ]
+  ],
+  "type": "exdeorum:sieve",
+  "ingredient": {
+    "item": "exdeorum:crushed_netherrack"
+  },
+  "mesh": "exdeorum:golden_mesh",
+  "result": "exdeorum:cobalt_ore_chunk",
+  "result_amount": {
+    "type": "minecraft:binomial",
+    "n": 1.0,
+    "p": 0.07
+  }
 }

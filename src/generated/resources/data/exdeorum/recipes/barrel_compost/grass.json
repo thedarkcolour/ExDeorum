@@ -2,7 +2,7 @@
   "type": "exdeorum:barrel_compost",
   "ingredient": [
     {
-      "item": "minecraft:grass"
+      "item": "minecraft:short_grass"
     },
     {
       "item": "minecraft:fern"

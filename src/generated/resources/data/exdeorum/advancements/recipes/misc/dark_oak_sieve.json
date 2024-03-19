@@ -30,6 +30,5 @@
     "recipes": [
       "exdeorum:dark_oak_sieve"
     ]
-  },
-  "sends_telemetry_event": true
+  }
 }

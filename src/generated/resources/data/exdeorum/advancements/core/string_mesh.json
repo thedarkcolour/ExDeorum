@@ -15,16 +15,12 @@
     }
   },
   "display": {
-    "announce_to_chat": true,
     "description": {
       "translate": "advancements.exdeorum.core.string_mesh.description"
     },
-    "frame": "task",
-    "hidden": false,
     "icon": {
       "item": "exdeorum:string_mesh"
     },
-    "show_toast": true,
     "title": {
       "translate": "advancements.exdeorum.core.string_mesh.title"
     }

@@ -3,6 +3,5 @@
   "additive_fluid": "minecraft:lava",
   "base_fluid": "minecraft:water",
   "base_fluid_amount": 1000,
-  "consumes_additive": false,
   "result": "minecraft:stone"
 }

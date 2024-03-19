@@ -1,0 +1,16 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:tag_empty",
+        "tag": "forge:ores/uranium"
+      }
+    }
+  ],
+  "type": "exdeorum:ore_chunk",
+  "ore": "forge:ores/uranium",
+  "ore_chunk": {
+    "item": "exdeorum:uranium_ore_chunk"
+  }
+}

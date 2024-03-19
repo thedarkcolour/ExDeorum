@@ -30,6 +30,5 @@
     "recipes": [
       "exdeorum:cherry_barrel"
     ]
-  },
-  "sends_telemetry_event": true
+  }
 }

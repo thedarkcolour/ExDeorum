@@ -30,6 +30,5 @@
     "recipes": [
       "exdeorum:stone_watering_can"
     ]
-  },
-  "sends_telemetry_event": true
+  }
 }

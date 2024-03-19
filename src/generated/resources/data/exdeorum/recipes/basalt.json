@@ -1,6 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
+  "category": "building",
   "key": {
     "#": {
       "item": "exdeorum:basalt_pebble"
@@ -12,6 +12,5 @@
   ],
   "result": {
     "item": "minecraft:basalt"
-  },
-  "show_notification": true
+  }
 }

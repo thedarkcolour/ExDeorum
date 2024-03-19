@@ -31,6 +31,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import thedarkcolour.exdeorum.network.VisualUpdateTracker;
+import thedarkcolour.exdeorum.registry.EBlockEntities;
 
 import javax.annotation.Nullable;
 
@@ -74,6 +75,11 @@ public abstract class EBlockEntity extends BlockEntity {
     }
 
     public void readVisualData(FriendlyByteBuf buffer) {
+
+    }
+
+    // Only called when data is sent by a local server
+    public void copyVisualData(BlockEntity fromIntegratedServer) {
 
     }
 }

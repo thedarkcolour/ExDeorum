@@ -1,6 +1,6 @@
 {
   "type": "exdeorum:barrel_fluid_transformation",
-  "base_fluid": "minecraft:lava",
+  "base_fluid": "minecraft:water",
   "byproducts": [
     {
       "value": "minecraft:red_mushroom",

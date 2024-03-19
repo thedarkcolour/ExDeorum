@@ -51,7 +51,7 @@ public abstract class CrucibleRecipe extends SingleIngredientRecipe {
     private static <R extends CrucibleRecipe> Codec<R> codec(BiFunction<Ingredient, FluidStack, R> factory) {
         return RecordCodecBuilder.create(instance -> instance.group(
                 CodecUtil.ingredientField(),
-                CodecUtil.FLUIDSTACK_CODEC.fieldOf("result").forGetter(CrucibleRecipe::getResult)
+                CodecUtil.FLUIDSTACK_CODEC.fieldOf("fluid").forGetter(CrucibleRecipe::getResult)
         ).apply(instance, factory));
     }
 

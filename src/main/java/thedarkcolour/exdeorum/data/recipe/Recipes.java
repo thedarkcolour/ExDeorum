@@ -332,7 +332,7 @@ public class Recipes {
     }
 
     private static void grid2x2TagResult(RecipeOutput writer, TagKey<Item> resultTag, Ingredient ingredient) {
-        writer.accept(new ResourceLocation(resultTag.location().getPath() + "_from_chunks"), new OreChunkRecipe(ingredient, resultTag), null, tagNotEmpty(resultTag));
+        writer.accept(modLoc(resultTag.location().getPath() + "_from_chunks"), new OreChunkRecipe(ingredient, resultTag), null, tagNotEmpty(resultTag));
     }
 
     private static void shapedCrook(MKRecipeProvider recipes, ItemLike crook, Ingredient stick) {
@@ -446,11 +446,11 @@ public class Recipes {
     }
 
     private static void lavaCrucible(RecipeOutput writer, String id, Ingredient ingredient, int volume) {
-        writer.accept(new ResourceLocation(ExDeorum.ID, "lava_crucible/" + id), new CrucibleRecipe.Lava(ingredient, new FluidStack(Fluids.LAVA, volume)), null);
+        writer.accept(modLoc("lava_crucible/" + id), new CrucibleRecipe.Lava(ingredient, new FluidStack(Fluids.LAVA, volume)), null);
     }
 
     private static void waterCrucible(RecipeOutput writer, String id, Ingredient ingredient, int volume) {
-        writer.accept(new ResourceLocation(ExDeorum.ID, "water_crucible/" + id), new CrucibleRecipe.Water(ingredient, new FluidStack(Fluids.WATER, volume)), null);
+        writer.accept(modLoc("water_crucible/" + id), new CrucibleRecipe.Water(ingredient, new FluidStack(Fluids.WATER, volume)), null);
     }
 
     private static void hammerRecipes(RecipeOutput writer) {
@@ -493,7 +493,7 @@ public class Recipes {
     }
 
     private static void hammerRecipe(RecipeOutput writer, String name, Ingredient block, ItemLike result, NumberProvider resultAmount) {
-        writer.accept(new ResourceLocation(ExDeorum.ID, "hammer/" + name), new HammerRecipe(block, result.asItem(), resultAmount), null);
+        writer.accept(modLoc("hammer/" + name), new HammerRecipe(block, result.asItem(), resultAmount), null);
     }
 
     private static void crookRecipes(RecipeOutput writer) {
@@ -506,7 +506,7 @@ public class Recipes {
     }
 
     private static void crookRecipe(RecipeOutput writer, String name, BlockPredicate blockPredicate, ItemLike result, float chance) {
-        writer.accept(new ResourceLocation(ExDeorum.ID, "crook/" + name), new CrookRecipe(blockPredicate, result.asItem(), chance), null);
+        writer.accept(modLoc("crook/" + name), new CrookRecipe(blockPredicate, result.asItem(), chance), null);
     }
 
     @SuppressWarnings("OptionalGetWithoutIsPresent")
@@ -530,7 +530,7 @@ public class Recipes {
     }
 
     private static void crucibleHeatSource(RecipeOutput writer, String name, BlockPredicate blockPredicate, int heatValue) {
-        writer.accept(new ResourceLocation(ExDeorum.ID, "crucible_heat_source/" + name), new CrucibleHeatRecipe(blockPredicate, heatValue), null);
+        writer.accept(modLoc("crucible_heat_source/" + name), new CrucibleHeatRecipe(blockPredicate, heatValue), null);
     }
 
     private static void barrelCompostRecipes(RecipeOutput writer) {
@@ -605,7 +605,7 @@ public class Recipes {
     }
 
     private static void barrelCompost(RecipeOutput writer, String id, Ingredient ingredient, int volume) {
-        writer.accept(new ResourceLocation(ExDeorum.ID, "barrel_compost/" + id), new BarrelCompostRecipe(ingredient, volume), null);
+        writer.accept(modLoc("barrel_compost/" + id), new BarrelCompostRecipe(ingredient, volume), null);
     }
 
     private static void barrelMixingRecipes(RecipeOutput writer) {

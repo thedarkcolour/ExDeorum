@@ -31,7 +31,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.Unit;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameRules;
@@ -40,14 +39,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.XoroshiroRandomSource;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
-import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.DistExecutor;
 import net.neoforged.fml.InterModComms;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.event.lifecycle.InterModEnqueueEvent;
-import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.client.event.ClientChatEvent;
@@ -62,9 +58,9 @@ import net.neoforged.neoforge.event.server.ServerStoppingEvent;
 import net.neoforged.neoforge.fluids.FluidInteractionRegistry;
 import net.neoforged.neoforge.fluids.capability.wrappers.FluidBucketWrapper;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
-import net.neoforged.neoforge.network.registration.IPayloadRegistrar;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.blockentity.helper.ItemHelper;
+import thedarkcolour.exdeorum.client.ClientHandler;
 import thedarkcolour.exdeorum.client.CompostColors;
 import thedarkcolour.exdeorum.compat.ModIds;
 import thedarkcolour.exdeorum.compat.top.ExDeorumTopCompat;
@@ -72,8 +68,6 @@ import thedarkcolour.exdeorum.config.EConfig;
 import thedarkcolour.exdeorum.item.PorcelainBucket;
 import thedarkcolour.exdeorum.item.WateringCanItem;
 import thedarkcolour.exdeorum.material.BarrelMaterial;
-import thedarkcolour.exdeorum.network.ClientMessageHandler;
-import thedarkcolour.exdeorum.network.MenuPropertyMessage;
 import thedarkcolour.exdeorum.network.NetworkHandler;
 import thedarkcolour.exdeorum.network.VisualUpdateTracker;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
@@ -83,17 +77,13 @@ import thedarkcolour.exdeorum.registry.EItems;
 import thedarkcolour.exdeorum.tag.EBiomeTags;
 import thedarkcolour.exdeorum.voidworld.VoidChunkGenerator;
 
-import java.util.HashSet;
 import java.util.Locale;
-import java.util.Set;
-import java.util.UUID;
 
 public final class EventHandler {
     public static void register(IEventBus modBus) {
         var fmlBus = NeoForge.EVENT_BUS;
 
         fmlBus.addListener(EventHandler::onPlayerLogin);
-        fmlBus.addListener(EventHandler::onDataSynced);
         fmlBus.addListener(EventHandler::addReloadListeners);
         fmlBus.addListener(EventHandler::createSpawnTree);
         modBus.addListener(EventHandler::interModEnqueue);
@@ -101,7 +91,8 @@ public final class EventHandler {
         modBus.addListener(EventHandler::registerPayloadHandler);
         fmlBus.addListener(EventHandler::serverShutdown);
         fmlBus.addListener(EventHandler::serverTick);
-        fmlBus.addListener(EventHandler::registerCapabilities);
+        modBus.addListener(EventHandler::registerCapabilities);
+        //fmlBus.addListener(EventHandler::onDatapackChanged);
 
         if (ExDeorum.DEBUG) {
             fmlBus.addListener(EventHandler::handleDebugCommands);
@@ -198,34 +189,6 @@ public final class EventHandler {
     private static void registerPayloadHandler(RegisterPayloadHandlerEvent event) {
         NetworkHandler.register(event.registrar(ExDeorum.ID));
     }
-
-    private static void onDataSynced(OnDatapackSyncEvent event) {
-        UUID excludedUUID = null;
-
-        if (FMLEnvironment.dist == Dist.CLIENT) {
-            // since event code is turned into ASM, we need this to prevent ASM trying to load the LocalPlayer class
-            // todo check if the IF statement can work here
-            Player player = DistExecutor.unsafeCallWhenOn(Dist.CLIENT, () -> ClientsideCode::getLocalPlayer);
-            if (player == null) {
-                return;
-            } else {
-                excludedUUID = player.getUUID();
-            }
-        }
-
-        // A player who is first connecting isn't yet included in the server's player list, so include them.
-        Set<ServerPlayer> players = new HashSet<>(event.getPlayerList().getPlayers());
-        if (event.getPlayer() != null) {
-            players.add(event.getPlayer());
-        }
-
-        for (var player : players) {
-            if (!player.getUUID().equals(excludedUUID)) {
-                NetworkHandler.sendRecipeCacheReset(player);
-            }
-        }
-    }
-
     private static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
             var generator = player.serverLevel().getChunkSource().getGenerator();
@@ -248,6 +211,11 @@ public final class EventHandler {
                 } else {
                     ExDeorum.LOGGER.error("Unable to grant player the Void World advancement. Ex Deorum advancements will not show");
                 }
+            }
+        } else {
+            if (ClientHandler.needsRecipeCacheRefresh && Minecraft.getInstance().getConnection() != null) {
+                RecipeUtil.reload(Minecraft.getInstance().getConnection().getRecipeManager());
+                ClientHandler.needsRecipeCacheRefresh = false;
             }
         }
     }
@@ -300,6 +268,12 @@ public final class EventHandler {
                 EItems.PORCELAIN_MILK_BUCKET,
                 EItems.PORCELAIN_WITCH_WATER_BUCKET);
         event.registerItem(Capabilities.FluidHandler.ITEM, (stack, ctx) -> new FluidBucketWrapper(stack), EItems.WITCH_WATER_BUCKET);
-        event.registerItem(Capabilities.FluidHandler.ITEM, (stack, ctx) -> new WateringCanItem.FluidHandler(stack));
+        event.registerItem(Capabilities.FluidHandler.ITEM, (stack, ctx) -> new WateringCanItem.FluidHandler(stack),
+                EItems.WOODEN_WATERING_CAN,
+                EItems.STONE_WATERING_CAN,
+                EItems.IRON_WATERING_CAN,
+                EItems.GOLDEN_WATERING_CAN,
+                EItems.DIAMOND_WATERING_CAN,
+                EItems.NETHERITE_WATERING_CAN);
     }
 }

@@ -28,6 +28,5 @@
     "recipes": [
       "exdeorum:diamond_mesh_from_golden_mesh"
     ]
-  },
-  "sends_telemetry_event": true
+  }
 }

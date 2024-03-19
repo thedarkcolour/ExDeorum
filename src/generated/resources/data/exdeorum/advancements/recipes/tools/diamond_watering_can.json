@@ -30,6 +30,5 @@
     "recipes": [
       "exdeorum:diamond_watering_can"
     ]
-  },
-  "sends_telemetry_event": true
+  }
 }

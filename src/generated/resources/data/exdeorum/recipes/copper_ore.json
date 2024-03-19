@@ -1,6 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
+  "category": "building",
   "key": {
     "#": {
       "item": "exdeorum:copper_ore_chunk"
@@ -12,6 +12,5 @@
   ],
   "result": {
     "item": "minecraft:copper_ore"
-  },
-  "show_notification": true
+  }
 }

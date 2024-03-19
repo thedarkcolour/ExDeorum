@@ -30,6 +30,5 @@
     "recipes": [
       "exdeorum:stone_barrel"
     ]
-  },
-  "sends_telemetry_event": true
+  }
 }

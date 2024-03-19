@@ -30,6 +30,5 @@
     "recipes": [
       "exdeorum:birch_sieve"
     ]
-  },
-  "sends_telemetry_event": true
+  }
 }

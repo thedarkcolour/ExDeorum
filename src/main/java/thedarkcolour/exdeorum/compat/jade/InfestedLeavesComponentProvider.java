@@ -33,7 +33,7 @@ enum InfestedLeavesComponentProvider implements IBlockComponentProvider {
     @Override
     public void appendTooltip(ITooltip tooltip, BlockAccessor blockAccessor, IPluginConfig config) {
         if (blockAccessor.getBlockEntity() instanceof InfestedLeavesBlockEntity leaves) {
-            int progress = (int) (leaves.getProgress() * 100.0f);
+            int progress = 100 * leaves.getProgress() / InfestedLeavesBlockEntity.MAX_PROGRESS;
             if (progress == 100) {
                 tooltip.add(Component.translatable(TranslationKeys.INFESTED_LEAVES_FULLY_INFESTED));
             } else {

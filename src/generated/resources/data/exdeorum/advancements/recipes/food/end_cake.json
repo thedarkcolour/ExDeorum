@@ -30,6 +30,5 @@
     "recipes": [
       "exdeorum:end_cake"
     ]
-  },
-  "sends_telemetry_event": true
+  }
 }

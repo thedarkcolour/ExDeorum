@@ -35,7 +35,6 @@ import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.TagsUpdatedEvent;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.client.screen.MechanicalHammerScreen;
 import thedarkcolour.exdeorum.client.screen.MechanicalSieveScreen;
@@ -72,17 +71,10 @@ public class ClientHandler {
         fmlBus.addListener(ClientHandler::onPlayerRespawn);
         fmlBus.addListener(ClientHandler::onPlayerLogout);
         fmlBus.addListener(ClientHandler::onScreenOpen);
-        fmlBus.addListener(ClientHandler::onTagsUpdated);
+        fmlBus.addListener(ClientHandler::onRecipesUpdated);
 
         if (ModList.get().isLoaded(ModIds.JEI)) {
             modBus.addListener(ClientHandler::registerAdditionalModels);
-        }
-    }
-
-    private static void onTagsUpdated(TagsUpdatedEvent event) {
-        if (needsRecipeCacheRefresh && Minecraft.getInstance().getConnection() != null) {
-            RecipeUtil.reload(Minecraft.getInstance().getConnection().getRecipeManager());
-            needsRecipeCacheRefresh = false;
         }
     }
 
@@ -160,5 +152,11 @@ public class ClientHandler {
     private static void registerAdditionalModels(ModelEvent.RegisterAdditional event) {
         event.register(new ResourceLocation(ExDeorum.ID, "block/oak_barrel_composting"));
         event.register(OAK_BARREL_COMPOSTING);
+    }
+
+    private static void onRecipesUpdated(RecipesUpdatedEvent event) {
+        if (!Minecraft.getInstance().isSingleplayer()) {
+            RecipeUtil.reload(event.getRecipeManager());
+        }
     }
 }

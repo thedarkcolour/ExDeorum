@@ -13,17 +13,14 @@
     }
   },
   "display": {
-    "announce_to_chat": true,
     "description": {
       "translate": "advancements.exdeorum.core.crook.description"
     },
-    "frame": "task",
     "hidden": true,
     "icon": {
       "item": "exdeorum:crook",
       "nbt": "{Damage:0}"
     },
-    "show_toast": true,
     "title": {
       "translate": "advancements.exdeorum.core.crook.title"
     }

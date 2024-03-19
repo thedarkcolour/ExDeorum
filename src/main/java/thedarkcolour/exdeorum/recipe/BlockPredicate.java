@@ -27,7 +27,6 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
@@ -47,7 +46,6 @@ public sealed interface BlockPredicate extends Predicate<BlockState> {
     // used for network
     byte SINGLE_BLOCK = 0, BLOCK_STATE = 1, BLOCK_TAG = 2;
 
-    // todo test this
     Codec<BlockPredicate> CODEC = new BlockPredicate.SpecialCodec();
 
     JsonObject toJson();
@@ -109,8 +107,6 @@ public sealed interface BlockPredicate extends Predicate<BlockState> {
     }
 
     record TagPredicate(TagKey<Block> tag) implements BlockPredicate {
-        private static final Codec<TagPredicate> CODEC = RecordCodecBuilder.create(instance -> instance.group(TagKey.codec(Registries.BLOCK).fieldOf("tag").forGetter(TagPredicate::tag)).apply(instance, TagPredicate::new));
-
         @Override
         public JsonObject toJson() {
             var json = new JsonObject();
@@ -138,10 +134,7 @@ public sealed interface BlockPredicate extends Predicate<BlockState> {
     }
 
     record BlockStatePredicate(Block block, StatePropertiesPredicate properties) implements BlockPredicate {
-        private static final Codec<BlockStatePredicate> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-                CodecUtil.blockField("block", BlockStatePredicate::block),
-                StatePropertiesPredicate.CODEC.fieldOf("properties").forGetter(BlockStatePredicate::properties)
-        ).apply(instance, BlockStatePredicate::new));
+
         @Override
         public JsonObject toJson() {
             var json = new JsonObject();
@@ -203,19 +196,30 @@ public sealed interface BlockPredicate extends Predicate<BlockState> {
     }
 
     class SpecialCodec implements Codec<BlockPredicate> {
+        private static final Codec<TagPredicate> TAG_CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                TagKey.codec(Registries.BLOCK).fieldOf("block_tag").forGetter(TagPredicate::tag)
+        ).apply(instance, TagPredicate::new));
+        private static final Codec<BlockStatePredicate> BLOCK_STATE_CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                CodecUtil.blockField("block", BlockStatePredicate::block),
+                StatePropertiesPredicate.CODEC.fieldOf("state").forGetter(BlockStatePredicate::properties)
+        ).apply(instance, BlockStatePredicate::new));
+        private static final Codec<SingleBlockPredicate> SINGLE_BLOCK_CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                CodecUtil.blockField("block", SingleBlockPredicate::block)
+        ).apply(instance, SingleBlockPredicate::new));
+
         @Override
         public <T> DataResult<Pair<BlockPredicate, T>> decode(DynamicOps<T> ops, T input) {
-            var tagResult = TagPredicate.CODEC.decode(ops, input);
+            var tagResult = TAG_CODEC.decode(ops, input);
 
             if (tagResult.error().isEmpty()) {
                 return CodecUtil.cast(tagResult);
             } else {
-                var stateResult = BlockStatePredicate.CODEC.decode(ops, input);
+                var stateResult = BLOCK_STATE_CODEC.decode(ops, input);
 
                 if (stateResult.error().isEmpty()) {
                     return CodecUtil.cast(stateResult);
                 } else {
-                    var blockResult = SingleBlockPredicate.CODEC.decode(ops, input);
+                    var blockResult = SINGLE_BLOCK_CODEC.decode(ops, input);
 
                     return blockResult.error().isEmpty() ? CodecUtil.cast(blockResult) : DataResult.error(() -> "Invalid block predicate");
                 }
@@ -226,11 +230,11 @@ public sealed interface BlockPredicate extends Predicate<BlockState> {
         public <T> DataResult<T> encode(BlockPredicate input, DynamicOps<T> ops, T prefix) {
             // in newer java, this should be replaced with pattern matching
             if (input instanceof SingleBlockPredicate block) {
-                return SingleBlockPredicate.CODEC.encode(block, ops, prefix);
+                return SINGLE_BLOCK_CODEC.encode(block, ops, prefix);
             } else if (input instanceof BlockStatePredicate state) {
-                return BlockStatePredicate.CODEC.encode(state, ops, prefix);
+                return BLOCK_STATE_CODEC.encode(state, ops, prefix);
             } else {
-                return TagPredicate.CODEC.encode((TagPredicate) input, ops, prefix);
+                return TAG_CODEC.encode((TagPredicate) input, ops, prefix);
             }
         }
     }

@@ -30,6 +30,5 @@
     "recipes": [
       "exdeorum:bamboo_crucible"
     ]
-  },
-  "sends_telemetry_event": true
+  }
 }

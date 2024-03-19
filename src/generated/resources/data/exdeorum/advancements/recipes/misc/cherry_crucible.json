@@ -30,6 +30,5 @@
     "recipes": [
       "exdeorum:cherry_crucible"
     ]
-  },
-  "sends_telemetry_event": true
+  }
 }

@@ -30,6 +30,5 @@
     "recipes": [
       "exdeorum:oak_barrel"
     ]
-  },
-  "sends_telemetry_event": true
+  }
 }

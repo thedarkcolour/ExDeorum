@@ -79,7 +79,6 @@ public class MechanicalHammerScreen extends AbstractContainerScreen<MechanicalHa
 
     @Override
     public void render(GuiGraphics graphics, int mx, int my, float pPartialTick) {
-        renderBackground(graphics, mx, my, pPartialTick);
         super.render(graphics, mx, my, pPartialTick);
         renderTooltip(graphics, mx, my);
 

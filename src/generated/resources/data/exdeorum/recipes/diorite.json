@@ -1,6 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
+  "category": "building",
   "key": {
     "#": {
       "item": "exdeorum:diorite_pebble"
@@ -12,6 +12,5 @@
   ],
   "result": {
     "item": "minecraft:diorite"
-  },
-  "show_notification": true
+  }
 }

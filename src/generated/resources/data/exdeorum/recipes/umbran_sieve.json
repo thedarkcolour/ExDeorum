@@ -1,37 +1,29 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
+  "neoforge:conditions": [
     {
-      "conditions": [
-        {
-          "type": "forge:mod_loaded",
-          "modid": "biomesoplenty"
-        }
-      ],
-      "recipe": {
-        "type": "minecraft:crafting_shaped",
-        "category": "misc",
-        "key": {
-          "I": {
-            "tag": "forge:rods/wooden"
-          },
-          "O": {
-            "item": "biomesoplenty:umbran_planks"
-          },
-          "_": {
-            "item": "biomesoplenty:umbran_slab"
-          }
-        },
-        "pattern": [
-          "O O",
-          "O_O",
-          "I I"
-        ],
-        "result": {
-          "item": "exdeorum:umbran_sieve"
-        },
-        "show_notification": true
-      }
+      "type": "neoforge:mod_loaded",
+      "modid": "biomesoplenty"
     }
-  ]
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "I": {
+      "tag": "forge:rods/wooden"
+    },
+    "O": {
+      "item": "biomesoplenty:umbran_planks"
+    },
+    "_": {
+      "item": "biomesoplenty:umbran_slab"
+    }
+  },
+  "pattern": [
+    "O O",
+    "O_O",
+    "I I"
+  ],
+  "result": {
+    "item": "exdeorum:umbran_sieve"
+  }
 }

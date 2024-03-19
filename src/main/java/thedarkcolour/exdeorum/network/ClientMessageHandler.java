@@ -21,6 +21,7 @@ package thedarkcolour.exdeorum.network;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.world.entity.player.Player;
+import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.blockentity.EBlockEntity;
 import thedarkcolour.exdeorum.client.ClientHandler;
 import thedarkcolour.exdeorum.menu.AbstractMachineMenu;
@@ -42,12 +43,18 @@ public class ClientMessageHandler {
         ClientHandler.needsRecipeCacheRefresh = true;
     }
 
-    @SuppressWarnings("DataFlowIssue")
     static void handleVisualUpdate(VisualUpdateMessage msg) {
         ClientLevel level = Minecraft.getInstance().level;
         if (level != null && level.getBlockEntity(msg.pos) instanceof EBlockEntity blockEntity) {
-            // payload should be nonnull on the client side
-            blockEntity.readVisualData(msg.payload);
+            if (msg.payload == null) {
+                if (blockEntity != msg.blockEntity && msg.blockEntity != null) {
+                    blockEntity.copyVisualData(msg.blockEntity);
+                } else {
+                    ExDeorum.LOGGER.warn("Failed syncing visual data from server for " + msg.pos.toShortString());
+                }
+            } else {
+                blockEntity.readVisualData(msg.payload);
+            }
         }
     }
 

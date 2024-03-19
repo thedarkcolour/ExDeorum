@@ -23,6 +23,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import thedarkcolour.exdeorum.blockentity.logic.SieveLogic;
@@ -70,15 +71,16 @@ public abstract class AbstractSieveBlockEntity extends EBlockEntity implements S
 
     @Override
     public void writeVisualData(FriendlyByteBuf buffer) {
-        buffer.writeItem(this.logic.getMesh());
-        buffer.writeFloat(this.logic.getProgress());
-        buffer.writeItem(this.logic.getContents());
+        this.logic.writeVisualData(buffer);
     }
 
     @Override
     public void readVisualData(FriendlyByteBuf buffer) {
-        this.logic.setMesh(buffer.readItem(), false);
-        this.logic.setProgress(buffer.readFloat());
-        this.logic.setContents(buffer.readItem());
+        this.logic.readVisualData(buffer);
+    }
+
+    @Override
+    public void copyVisualData(BlockEntity fromIntegratedServer) {
+        this.logic.copyVisualData(fromIntegratedServer);
     }
 }

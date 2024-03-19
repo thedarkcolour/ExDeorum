@@ -1,34 +1,26 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
+  "neoforge:conditions": [
     {
-      "conditions": [
-        {
-          "type": "forge:mod_loaded",
-          "modid": "aether"
-        }
-      ],
-      "recipe": {
-        "type": "minecraft:crafting_shaped",
-        "category": "misc",
-        "key": {
-          "m": {
-            "item": "aether:skyroot_slab"
-          },
-          "s": {
-            "item": "aether:golden_oak_log"
-          }
-        },
-        "pattern": [
-          "s s",
-          "s s",
-          "sms"
-        ],
-        "result": {
-          "item": "exdeorum:golden_oak_crucible"
-        },
-        "show_notification": true
-      }
+      "type": "neoforge:mod_loaded",
+      "modid": "aether"
     }
-  ]
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "m": {
+      "item": "aether:skyroot_slab"
+    },
+    "s": {
+      "item": "aether:golden_oak_log"
+    }
+  },
+  "pattern": [
+    "s s",
+    "s s",
+    "sms"
+  ],
+  "result": {
+    "item": "exdeorum:golden_oak_crucible"
+  }
 }

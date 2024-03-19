@@ -28,6 +28,5 @@
     "recipes": [
       "exdeorum:golden_hammer"
     ]
-  },
-  "sends_telemetry_event": true
+  }
 }

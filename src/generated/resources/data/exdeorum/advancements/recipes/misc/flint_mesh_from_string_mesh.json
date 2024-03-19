@@ -30,6 +30,5 @@
     "recipes": [
       "exdeorum:flint_mesh_from_string_mesh"
     ]
-  },
-  "sends_telemetry_event": true
+  }
 }

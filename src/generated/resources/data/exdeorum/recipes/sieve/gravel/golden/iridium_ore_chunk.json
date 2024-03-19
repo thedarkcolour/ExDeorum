@@ -1,29 +1,22 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
+  "neoforge:conditions": [
     {
-      "conditions": [
-        {
-          "type": "forge:not",
-          "value": {
-            "type": "forge:tag_empty",
-            "tag": "forge:ores/iridium"
-          }
-        }
-      ],
-      "recipe": {
-        "type": "exdeorum:sieve",
-        "ingredient": {
-          "item": "minecraft:gravel"
-        },
-        "mesh": "exdeorum:golden_mesh",
-        "result": "exdeorum:iridium_ore_chunk",
-        "result_amount": {
-          "type": "minecraft:binomial",
-          "n": 1.0,
-          "p": 0.05
-        }
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:tag_empty",
+        "tag": "forge:ores/iridium"
       }
     }
-  ]
+  ],
+  "type": "exdeorum:sieve",
+  "ingredient": {
+    "item": "minecraft:gravel"
+  },
+  "mesh": "exdeorum:golden_mesh",
+  "result": "exdeorum:iridium_ore_chunk",
+  "result_amount": {
+    "type": "minecraft:binomial",
+    "n": 1.0,
+    "p": 0.05
+  }
 }

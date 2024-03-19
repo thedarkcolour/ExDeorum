@@ -51,9 +51,9 @@ public record BarrelFluidMixingRecipe(
     public static final Codec<BarrelFluidMixingRecipe> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             CodecUtil.fluidField("base_fluid", BarrelFluidMixingRecipe::baseFluid),
             Codec.INT.fieldOf("base_fluid_amount").forGetter(BarrelFluidMixingRecipe::baseFluidAmount),
-            CodecUtil.fluidField("additive_fluid", BarrelFluidMixingRecipe::baseFluid),
+            CodecUtil.fluidField("additive_fluid", BarrelFluidMixingRecipe::additiveFluid),
             CodecUtil.itemField("result", BarrelFluidMixingRecipe::result),
-            Codec.BOOL.optionalFieldOf("base_fluid", false).forGetter(BarrelFluidMixingRecipe::consumesAdditive)
+            Codec.BOOL.optionalFieldOf("consumes_additive", false).forGetter(BarrelFluidMixingRecipe::consumesAdditive)
     ).apply(instance, BarrelFluidMixingRecipe::new));
 
     @Override

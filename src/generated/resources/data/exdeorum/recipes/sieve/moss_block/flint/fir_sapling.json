@@ -1,26 +1,19 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
+  "neoforge:conditions": [
     {
-      "conditions": [
-        {
-          "type": "forge:mod_loaded",
-          "modid": "biomesoplenty"
-        }
-      ],
-      "recipe": {
-        "type": "exdeorum:sieve",
-        "ingredient": {
-          "item": "minecraft:moss_block"
-        },
-        "mesh": "exdeorum:flint_mesh",
-        "result": "biomesoplenty:fir_sapling",
-        "result_amount": {
-          "type": "minecraft:binomial",
-          "n": 1.0,
-          "p": 0.04
-        }
-      }
+      "type": "neoforge:mod_loaded",
+      "modid": "biomesoplenty"
     }
-  ]
+  ],
+  "type": "exdeorum:sieve",
+  "ingredient": {
+    "item": "minecraft:moss_block"
+  },
+  "mesh": "exdeorum:flint_mesh",
+  "result": "biomesoplenty:fir_sapling",
+  "result_amount": {
+    "type": "minecraft:binomial",
+    "n": 1.0,
+    "p": 0.04
+  }
 }

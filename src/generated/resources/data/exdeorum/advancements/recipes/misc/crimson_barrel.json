@@ -30,6 +30,5 @@
     "recipes": [
       "exdeorum:crimson_barrel"
     ]
-  },
-  "sends_telemetry_event": true
+  }
 }

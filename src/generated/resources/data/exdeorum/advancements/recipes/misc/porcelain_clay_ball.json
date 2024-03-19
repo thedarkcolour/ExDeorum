@@ -30,6 +30,5 @@
     "recipes": [
       "exdeorum:porcelain_clay_ball"
     ]
-  },
-  "sends_telemetry_event": true
+  }
 }

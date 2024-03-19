@@ -25,9 +25,8 @@ import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.data.recipe.Recipes;
 import thedarkcolour.modkit.data.DataHelper;
 
-// these two annotations are equivalent to modEventBus.addListener(Data::generateData)
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class Data {
+    // todo ensure this does not crash without ModKit
     public static void generateData(GatherDataEvent event) {
         // Two things used by data generators
         var gen = event.getGenerator(); // writes to json
