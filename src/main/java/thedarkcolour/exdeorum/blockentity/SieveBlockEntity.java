@@ -112,7 +112,7 @@ public class SieveBlockEntity extends AbstractSieveBlockEntity {
                 var time = level.getGameTime();
                 var realPlayer = !(player instanceof FakePlayer);
 
-                if (realPlayer && EConfig.SERVER.simultaneousSieveUsage.get()) {
+                if ((realPlayer || !EConfig.SERVER.nerfAutomatedSieves.get()) && EConfig.SERVER.simultaneousSieveUsage.get()) {
                     int range = EConfig.SERVER.simultaneousSieveUsageRange.get();
                     var cursor = this.worldPosition.mutable().move(-range, 0, -range);
 

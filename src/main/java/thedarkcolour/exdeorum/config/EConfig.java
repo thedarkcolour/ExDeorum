@@ -124,6 +124,7 @@ public class EConfig {
         public final BooleanValue simultaneousSieveUsage;
         public final IntValue simultaneousSieveUsageRange;
         public final BooleanValue automatedSieves;
+        public final BooleanValue nerfAutomatedSieves;
         public final DoubleValue barrelProgressStep;
         public final BooleanValue witchWaterDirtGenerator;
         public final BooleanValue witchWaterNetherrackGenerator;
@@ -154,8 +155,11 @@ public class EConfig {
                     .comment("The range from which simultaneous sieve usage can reach. 1 means a maximum of 3x3 sieves at once, 2 means a maximum of 5x5, 3 means maximum of 7x7 simultaneous sieves, and so on.")
                     .defineInRange("simultaneous_sieve_range", 2, 0, 6);
             this.automatedSieves = builder
-                    .comment("Whether machines/fake players can interact with the Sieve.")
+                    .comment("Whether machines/fake players can interact with the Sieve. Keep in mind, the intended automation method is to use the Mechanical Sieve.")
                     .define("automated_sieves", false);
+            this.nerfAutomatedSieves = builder
+                    .comment("Whether machines/fake players that interact with the Sieve can sieve in a 3x3 or larger. This option does nothing if automated_sieves is set to false.")
+                    .define("nerf_automated_sieves", true);
             this.barrelProgressStep = builder
                     .comment("The progress to increment by each tick for barrel composting.")
                     .defineInRange("barrel_progress_step", 0.004, 0.0f, 1.0f);
