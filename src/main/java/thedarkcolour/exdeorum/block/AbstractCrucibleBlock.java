@@ -45,11 +45,10 @@ public abstract class AbstractCrucibleBlock extends EBlock {
 
     @Override
     public int getLightEmission(BlockState state, BlockGetter level, BlockPos pos) {
-        // todo look at auxiliary light manager
-        //if (level.getBlockEntity(pos) instanceof AbstractCrucibleBlockEntity crucible) {
-        //    return crucible.getTank().getFluid().getFluid().getFluidType().getLightLevel();
-        //}
-        //return pos == BlockPos.ZERO ? 1 : 0;
+        var lightManager = level.getAuxLightManager(pos);
+        if (lightManager != null) {
+            return lightManager.getLightAt(pos);
+        }
         return 0;
     }
 

@@ -55,7 +55,7 @@ class VisualUpdateMessage implements CustomPacketPayload {
     public void write(FriendlyByteBuf buffer) {
         buffer.writeBlockPos(this.pos);
         buffer.writeId(BuiltInRegistries.BLOCK_ENTITY_TYPE, this.blockEntityType);
-        // write a placeholder value for the number of data bytes
+        // write a placeholder value for the number of data bytes, keeping its index for updating later
         var dataBytesIndex = buffer.writerIndex();
         buffer.writeInt(0);
         // write data bytes

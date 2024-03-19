@@ -42,6 +42,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FlowingFluid;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.common.NeoForgeMod;
@@ -54,6 +55,7 @@ import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.Nullable;
+import thedarkcolour.exdeorum.block.AbstractCrucibleBlock;
 import thedarkcolour.exdeorum.block.BarrelBlock;
 import thedarkcolour.exdeorum.blockentity.helper.FluidHelper;
 import thedarkcolour.exdeorum.client.CompostColors;
@@ -112,6 +114,8 @@ public class BarrelBlockEntity extends EBlockEntity {
         this.r = nbt.getShort("r");
         this.g = nbt.getShort("g");
         this.b = nbt.getShort("b");
+
+        AbstractCrucibleBlockEntity.updateLight(this.level, this.worldPosition, this.tank.getFluid().getFluid());
     }
 
     @Override
@@ -639,6 +643,9 @@ public class BarrelBlockEntity extends EBlockEntity {
 
     // Inner class
     private class FluidHandler extends FluidHelper {
+        @Nullable
+        private Fluid lastFluid;
+
         public FluidHandler() {
             super(1000);
         }
@@ -655,6 +662,11 @@ public class BarrelBlockEntity extends EBlockEntity {
                 BarrelBlockEntity.this.markUpdated();
             }
             BarrelBlockEntity.this.updateFluidTransform();
+
+            if (this.lastFluid != this.fluid.getFluid()) {
+                this.lastFluid = this.fluid.getFluid();
+                AbstractCrucibleBlockEntity.updateLight(BarrelBlockEntity.this.level, BarrelBlockEntity.this.worldPosition, this.lastFluid);
+            }
         }
     }
 }

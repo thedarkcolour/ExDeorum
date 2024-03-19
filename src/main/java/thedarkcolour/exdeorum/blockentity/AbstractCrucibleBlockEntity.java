@@ -75,7 +75,6 @@ public abstract class AbstractCrucibleBlockEntity extends EBlockEntity {
     @Nullable
     private Fluid fluid = null;
     private short solids;
-    private boolean needsLightUpdate;
 
     public AbstractCrucibleBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
@@ -104,7 +103,18 @@ public abstract class AbstractCrucibleBlockEntity extends EBlockEntity {
         this.lastMelted = BuiltInRegistries.BLOCK.get(new ResourceLocation(nbt.getString("LastMelted")));
         this.fluid = BuiltInRegistries.FLUID.get(new ResourceLocation(nbt.getString("Fluid")));
         this.solids = nbt.getShort("Solids");
-        this.needsLightUpdate = true;
+
+        updateLight(this.level, this.worldPosition, this.fluid);
+    }
+
+    public static void updateLight(@Nullable Level level, BlockPos pos, Fluid fluid) {
+        if (level != null) {
+            var lightManager = level.getAuxLightManager(pos);
+
+            if (lightManager != null) {
+                lightManager.setLightAt(pos, fluid.getFluidType().getLightLevel());
+            }
+        }
     }
 
     @Override
@@ -127,6 +137,9 @@ public abstract class AbstractCrucibleBlockEntity extends EBlockEntity {
         var lastMelted = buffer.readById(BuiltInRegistries.BLOCK);
         this.lastMelted = lastMelted == Blocks.AIR ? null : lastMelted;
         this.solids = buffer.readShort();
+
+        // needed on client
+        updateLight(this.level, this.worldPosition, this.tank.getFluid().getFluid());
     }
 
     @Override
@@ -135,6 +148,8 @@ public abstract class AbstractCrucibleBlockEntity extends EBlockEntity {
             this.tank.setFluid(from.tank.getFluid().copy());
             this.lastMelted = from.lastMelted;
             this.solids = from.solids;
+            // needed on client
+            updateLight(this.level, this.worldPosition, this.tank.getFluid().getFluid());
         }
     }
 
@@ -187,7 +202,7 @@ public abstract class AbstractCrucibleBlockEntity extends EBlockEntity {
 
         if (contained.isEmpty()) {
             this.fluid = result.getFluid();
-            this.needsLightUpdate = true;
+            updateLight(this.level, this.worldPosition, this.fluid);
         }
 
         var melts = MELT_OVERRIDES.get();
@@ -312,10 +327,6 @@ public abstract class AbstractCrucibleBlockEntity extends EBlockEntity {
     public static class Ticker implements BlockEntityTicker<AbstractCrucibleBlockEntity> {
         @Override
         public void tick(Level level, BlockPos pos, BlockState state, AbstractCrucibleBlockEntity crucible) {
-            if (crucible.needsLightUpdate) {
-                level.getLightEngine().checkBlock(crucible.worldPosition);
-                crucible.needsLightUpdate = false;
-            }
             // Update twice per tick
             if (!level.isClientSide) {
                 if ((level.getGameTime() % 10L) == 0L) {
@@ -332,7 +343,7 @@ public abstract class AbstractCrucibleBlockEntity extends EBlockEntity {
                         if (crucible.tank.isEmpty()) {
                             if (crucible.fluid != null) {
                                 crucible.tank.setFluid(new FluidStack(crucible.fluid, delta));
-                                crucible.needsLightUpdate = true;
+                                updateLight(level, pos, crucible.fluid);
                             }
                         } else {
                             crucible.tank.getFluid().grow(delta);

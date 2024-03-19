@@ -87,4 +87,13 @@ public class BarrelBlock extends EBlock {
             }
         }
     }
+
+    @Override
+    public int getLightEmission(BlockState state, BlockGetter level, BlockPos pos) {
+        var lightManager = level.getAuxLightManager(pos);
+        if (lightManager != null) {
+            return lightManager.getLightAt(pos);
+        }
+        return 0;
+    }
 }
