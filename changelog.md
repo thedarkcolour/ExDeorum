@@ -1,3 +1,6 @@
+## Ex Deorum 1.29
+- Add a config option to disable the automated_sieve nerf (now you can enable machines to use multiple sieves simultaneously)
+
 ## Ex Deorum 1.28
 - Fix a bug from 1.26 that made Witch Water crafted from Lava instead of Water
 
