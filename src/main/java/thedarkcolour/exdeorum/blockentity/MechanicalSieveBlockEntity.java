@@ -99,9 +99,7 @@ public class MechanicalSieveBlockEntity extends AbstractMachineBlockEntity<Mecha
 
     @Override
     public void readVisualData(FriendlyByteBuf buffer) {
-        this.logic.setMesh(buffer.readItem(), false);
-        this.logic.setProgress(buffer.readFloat());
-        this.logic.setContents(buffer.readItem());
+        this.logic.readVisualData(buffer);
     }
 
     @Override

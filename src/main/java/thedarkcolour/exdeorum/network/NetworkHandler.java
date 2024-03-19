@@ -25,26 +25,19 @@ import net.neoforged.neoforge.network.registration.IPayloadRegistrar;
 public final class NetworkHandler {
     public static void register(IPayloadRegistrar registrar) {
         registrar.play(MenuPropertyMessage.ID, MenuPropertyMessage::decode, sidedHandler -> {
-            sidedHandler.client((msg, ctx) -> ClientMessageHandler.handleMenuProperty(msg));
+            sidedHandler.client(ClientMessageHandler::handleMenuProperty);
         });
         registrar.play(VisualUpdateMessage.ID, VisualUpdateMessage::decode, sidedHandler -> {
-            sidedHandler.client((msg, ctx) -> ClientMessageHandler.handleVisualUpdate(msg));
+            sidedHandler.client(ClientMessageHandler::handleVisualUpdate);
         });
         // not sure if these stop working if they're in the wrong phase, so I'll put them in both
         registrar.common(VoidWorldMessage.ID, buffer -> VoidWorldMessage.INSTANCE, sidedHandler -> {
-            sidedHandler.client((msg, ctx) -> ClientMessageHandler.disableVoidFogRendering());
-        });
-        registrar.common(RecipeCacheResetMessage.ID, buffer -> RecipeCacheResetMessage.INSTANCE, sidedHandler -> {
-            sidedHandler.client((msg, ctx) -> ClientMessageHandler.reloadClientRecipeCache());
+            sidedHandler.client(ClientMessageHandler::handleVoidWorldMessage);
         });
     }
 
     public static void sendVoidWorld(ServerPlayer player) {
         PacketDistributor.PLAYER.with(player).send(VoidWorldMessage.INSTANCE);
-    }
-
-    public static void sendRecipeCacheReset(ServerPlayer player) {
-        PacketDistributor.PLAYER.with(player).send(RecipeCacheResetMessage.INSTANCE);
     }
 
     public static void sendMenuProperty(ServerPlayer player, int containerId, int index, int prevSieveEnergy) {

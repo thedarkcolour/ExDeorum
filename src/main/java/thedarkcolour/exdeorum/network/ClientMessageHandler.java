@@ -21,48 +21,44 @@ package thedarkcolour.exdeorum.network;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.world.entity.player.Player;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+import net.neoforged.neoforge.network.handling.PlayPayloadContext;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.blockentity.EBlockEntity;
 import thedarkcolour.exdeorum.client.ClientHandler;
 import thedarkcolour.exdeorum.menu.AbstractMachineMenu;
 
 public class ClientMessageHandler {
-    public static boolean isInVoidWorld;
 
     // Removes the black sky/fog that appears when the player is below y=62
-    public static void disableVoidFogRendering() {
-        isInVoidWorld = true;
-
-        var level = Minecraft.getInstance().level;
-        if (level != null) {
-            level.clientLevelData.isFlat = true;
-        }
+    public static void handleVoidWorldMessage(VoidWorldMessage msg, IPayloadContext ctx) {
+        ctx.workHandler().execute(ClientHandler::disableVoidFogRendering);
     }
 
-    public static void reloadClientRecipeCache() {
-        ClientHandler.needsRecipeCacheRefresh = true;
-    }
-
-    static void handleVisualUpdate(VisualUpdateMessage msg) {
-        ClientLevel level = Minecraft.getInstance().level;
-        if (level != null && level.getBlockEntity(msg.pos) instanceof EBlockEntity blockEntity) {
-            if (msg.payload == null) {
-                if (blockEntity != msg.blockEntity && msg.blockEntity != null) {
-                    blockEntity.copyVisualData(msg.blockEntity);
+    static void handleVisualUpdate(VisualUpdateMessage msg, PlayPayloadContext ctx) {
+        ctx.workHandler().execute(() -> {
+            ClientLevel level = Minecraft.getInstance().level;
+            if (level != null && level.getBlockEntity(msg.pos) instanceof EBlockEntity blockEntity) {
+                if (msg.payload == null) {
+                    if (blockEntity != msg.blockEntity && msg.blockEntity != null) {
+                        blockEntity.copyVisualData(msg.blockEntity);
+                    } else {
+                        ExDeorum.LOGGER.warn("Failed syncing visual data from server for " + msg.pos.toShortString());
+                    }
                 } else {
-                    ExDeorum.LOGGER.warn("Failed syncing visual data from server for " + msg.pos.toShortString());
+                    blockEntity.readVisualData(msg.payload);
                 }
-            } else {
-                blockEntity.readVisualData(msg.payload);
             }
-        }
+        });
     }
 
-    public static void handleMenuProperty(MenuPropertyMessage msg) {
-        Player player = Minecraft.getInstance().player;
+    public static void handleMenuProperty(MenuPropertyMessage msg, PlayPayloadContext ctx) {
+        ctx.workHandler().execute(() -> {
+            Player player = Minecraft.getInstance().player;
 
-        if (player != null && player.containerMenu instanceof AbstractMachineMenu menu && menu.containerId == msg.containerId()) {
-            menu.setClientProperty(msg.index(), msg.value());
-        }
+            if (player != null && player.containerMenu instanceof AbstractMachineMenu<?> menu && menu.containerId == msg.containerId()) {
+                menu.setClientProperty(msg.index(), msg.value());
+            }
+        });
     }
 }

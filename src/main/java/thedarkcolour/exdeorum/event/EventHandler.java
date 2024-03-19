@@ -50,7 +50,6 @@ import net.neoforged.neoforge.client.event.ClientChatEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
-import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 import net.neoforged.neoforge.event.TickEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.level.LevelEvent;
@@ -60,7 +59,6 @@ import net.neoforged.neoforge.fluids.capability.wrappers.FluidBucketWrapper;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.blockentity.helper.ItemHelper;
-import thedarkcolour.exdeorum.client.ClientHandler;
 import thedarkcolour.exdeorum.client.CompostColors;
 import thedarkcolour.exdeorum.compat.ModIds;
 import thedarkcolour.exdeorum.compat.top.ExDeorumTopCompat;
@@ -213,9 +211,8 @@ public final class EventHandler {
                 }
             }
         } else {
-            if (ClientHandler.needsRecipeCacheRefresh && Minecraft.getInstance().getConnection() != null) {
+            if (Minecraft.getInstance().getConnection() != null) {
                 RecipeUtil.reload(Minecraft.getInstance().getConnection().getRecipeManager());
-                ClientHandler.needsRecipeCacheRefresh = false;
             }
         }
     }

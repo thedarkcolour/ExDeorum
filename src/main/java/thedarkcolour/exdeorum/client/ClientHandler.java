@@ -56,8 +56,7 @@ import java.io.IOException;
 public class ClientHandler {
     // Used for the composting recipe category in JEI
     public static final ResourceLocation OAK_BARREL_COMPOSTING = new ResourceLocation(ExDeorum.ID, "item/oak_barrel_composting");
-    // This is set to true whenever the server tells a client to do so, then set back to false after cache is refreshed.
-    public static boolean needsRecipeCacheRefresh;
+    public static boolean isInVoidWorld;
 
     public static void register(IEventBus modBus) {
         var fmlBus = NeoForge.EVENT_BUS;
@@ -100,14 +99,13 @@ public class ClientHandler {
     }
 
     private static void onPlayerRespawn(ClientPlayerNetworkEvent.Clone event) {
-        if (ClientMessageHandler.isInVoidWorld) {
-            ClientMessageHandler.disableVoidFogRendering();
+        if (isInVoidWorld) {
+            disableVoidFogRendering();
         }
     }
 
     private static void onPlayerLogout(ClientPlayerNetworkEvent.LoggingOut event) {
-        ClientMessageHandler.isInVoidWorld = false;
-        needsRecipeCacheRefresh = false;
+        isInVoidWorld = false;
     }
 
     private static void onConfigChanged(ModConfigEvent.Reloading event) {
@@ -157,6 +155,15 @@ public class ClientHandler {
     private static void onRecipesUpdated(RecipesUpdatedEvent event) {
         if (!Minecraft.getInstance().isSingleplayer()) {
             RecipeUtil.reload(event.getRecipeManager());
+        }
+    }
+
+    public static void disableVoidFogRendering() {
+        isInVoidWorld = true;
+
+        var level = Minecraft.getInstance().level;
+        if (level != null) {
+            level.clientLevelData.isFlat = true;
         }
     }
 }
