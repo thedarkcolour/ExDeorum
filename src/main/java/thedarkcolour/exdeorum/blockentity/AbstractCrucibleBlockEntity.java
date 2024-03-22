@@ -54,6 +54,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.blockentity.helper.FluidHelper;
 import thedarkcolour.exdeorum.config.EConfig;
+import thedarkcolour.exdeorum.material.AbstractCrucibleMaterial;
 import thedarkcolour.exdeorum.recipe.crucible.CrucibleRecipe;
 import thedarkcolour.exdeorum.registry.EBlockEntities;
 import thedarkcolour.exdeorum.registry.EItems;
@@ -83,9 +84,12 @@ public abstract class AbstractCrucibleBlockEntity extends EBlockEntity {
     private Fluid fluid = null;
     private short solids;
     private boolean needsLightUpdate;
+    public final boolean transparent;
 
     public AbstractCrucibleBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
+
+        this.transparent = AbstractCrucibleMaterial.TRANSPARENT_CRUCIBLES.contains(state.getBlock());
     }
 
     @NotNull

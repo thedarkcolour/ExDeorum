@@ -33,7 +33,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemDisplayContext;
-import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import thedarkcolour.exdeorum.ExDeorum;
@@ -99,7 +98,7 @@ public class BarrelRenderer implements BlockEntityRenderer<BarrelBlockEntity> {
                 }
 
                 if (barrel.transparent) {
-                    RenderUtil.renderFluidCube(buffers, stack, level, pos, 1 / 16f, y, 2.0f, light, r, g, b, fluid);
+                    RenderUtil.renderFluidCuboid(buffers, stack, level, pos, 1 / 16f, y, 2.0f, light, r, g, b, fluid);
                 } else {
                     RenderUtil.renderFlatFluidSprite(buffers, stack, level, pos, y, 2.0f, light, r, g, b, fluid);
                 }

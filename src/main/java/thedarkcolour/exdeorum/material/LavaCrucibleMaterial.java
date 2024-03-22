@@ -23,8 +23,8 @@ import net.minecraft.world.level.block.SoundType;
 import thedarkcolour.exdeorum.block.LavaCrucibleBlock;
 
 public class LavaCrucibleMaterial extends AbstractCrucibleMaterial {
-    protected LavaCrucibleMaterial(SoundType soundType, float strength, boolean needsCorrectTool, int mapColor, String requiredModId) {
-        super(soundType, strength, needsCorrectTool, mapColor, requiredModId);
+    protected LavaCrucibleMaterial(SoundType soundType, float strength, boolean needsCorrectTool, int mapColor, String requiredModId, boolean transparent) {
+        super(soundType, strength, needsCorrectTool, mapColor, requiredModId, transparent);
     }
 
     @Override

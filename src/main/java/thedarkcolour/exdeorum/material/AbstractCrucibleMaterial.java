@@ -18,12 +18,23 @@
 
 package thedarkcolour.exdeorum.material;
 
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public abstract class AbstractCrucibleMaterial extends AbstractMaterial {
-    public AbstractCrucibleMaterial(SoundType soundType, float strength, boolean needsCorrectTool, int mapColor, String requiredModId) {
+    public static final Set<Block> TRANSPARENT_CRUCIBLES = new HashSet<>();
+
+    // Whether fluids and solids should be rendered with sides instead of just the top
+    public final boolean transparent;
+
+    public AbstractCrucibleMaterial(SoundType soundType, float strength, boolean needsCorrectTool, int mapColor, String requiredModId, boolean transparent) {
         super(soundType, strength, needsCorrectTool, mapColor, requiredModId);
+
+        this.transparent = transparent;
     }
 
     @Nullable
@@ -33,15 +44,16 @@ public abstract class AbstractCrucibleMaterial extends AbstractMaterial {
         boolean needsCorrectTool = parser.getOptionalBoolean("needs_correct_tool");
         int mapColor = parser.getMapColor();
         String requiredModId = parser.getRequiredModId();
+        boolean transparent = parser.getOptionalBoolean("transparent");
 
         if (parser.error) {
             return null;
         } else {
-            return factory.create(soundType, strength, needsCorrectTool, mapColor, requiredModId);
+            return factory.create(soundType, strength, needsCorrectTool, mapColor, requiredModId, transparent);
         }
     }
 
     public interface Factory<T> {
-        T create(SoundType soundType, float strength, boolean needsCorrectTool, int mapColor, String requiredModId);
+        T create(SoundType soundType, float strength, boolean needsCorrectTool, int mapColor, String requiredModId, boolean transparent);
     }
 }

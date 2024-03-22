@@ -49,7 +49,6 @@ import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.client.model.CompositeModel;
 import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.client.ter.SieveRenderer;
@@ -173,7 +172,7 @@ public class RenderUtil {
     }
 
     @SuppressWarnings("DuplicatedCode")
-    public static void renderFluidCube(MultiBufferSource buffers, PoseStack stack, Level level, BlockPos pos, float minY, float maxY, float edge, int light, int r, int g, int b, Fluid fluid) {
+    public static void renderFluidCuboid(MultiBufferSource buffers, PoseStack stack, Level level, BlockPos pos, float minY, float maxY, float edge, int light, int r, int g, int b, Fluid fluid) {
         var extensions = IClientFluidTypeExtensions.of(fluid);
         var state = fluid.defaultFluidState();
         var builder = buffers.getBuffer(Sheets.translucentCullBlockSheet());

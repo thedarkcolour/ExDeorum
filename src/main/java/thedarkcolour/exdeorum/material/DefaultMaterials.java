@@ -106,13 +106,13 @@ public class DefaultMaterials {
     public static final SieveMaterial CRYSTALLIZED_SIEVE = addDefaultSieve("crystallized", SoundType.GLASS, true, ModIds.BLUE_SKIES);
 
     // Ex Deorum
-    public static final LavaCrucibleMaterial PORCELAIN_CRUCIBLE = addDefaultLavaCrucible("porcelain", SoundType.STONE, 2.0f, false, MapColor.TERRACOTTA_WHITE, ExDeorum.ID);
-    public static final LavaCrucibleMaterial WARPED_CRUCIBLE = addDefaultLavaCrucible("warped", SoundType.STEM, 1.5f, false, MapColor.CRIMSON_STEM, ExDeorum.ID);
-    public static final LavaCrucibleMaterial CRIMSON_CRUCIBLE = addDefaultLavaCrucible("crimson", SoundType.STEM, 1.5f, false, MapColor.WARPED_STEM, ExDeorum.ID);
+    public static final LavaCrucibleMaterial PORCELAIN_CRUCIBLE = addDefaultLavaCrucible("porcelain", SoundType.STONE, 2.0f, false, MapColor.TERRACOTTA_WHITE, ExDeorum.ID, false);
+    public static final LavaCrucibleMaterial WARPED_CRUCIBLE = addDefaultLavaCrucible("warped", SoundType.STEM, 1.5f, false, MapColor.CRIMSON_STEM, ExDeorum.ID, false);
+    public static final LavaCrucibleMaterial CRIMSON_CRUCIBLE = addDefaultLavaCrucible("crimson", SoundType.STEM, 1.5f, false, MapColor.WARPED_STEM, ExDeorum.ID, false);
     // Biomes O' Plenty
-    public static final LavaCrucibleMaterial HELLBARK_CRUCIBLE = addDefaultLavaCrucible("hellbark", SoundType.WOOD, 1.5f, false, MapColor.COLOR_LIGHT_GRAY, ModIds.BIOMES_O_PLENTY);
+    public static final LavaCrucibleMaterial HELLBARK_CRUCIBLE = addDefaultLavaCrucible("hellbark", SoundType.WOOD, 1.5f, false, MapColor.COLOR_LIGHT_GRAY, ModIds.BIOMES_O_PLENTY, false);
     // Blue Skies
-    public static final LavaCrucibleMaterial CRYSTALLIZED_CRUCIBLE = addDefaultLavaCrucible("crystallized", SoundType.GLASS, 2.0f, true, MapColor.TERRACOTTA_WHITE, ModIds.BLUE_SKIES);
+    public static final LavaCrucibleMaterial CRYSTALLIZED_CRUCIBLE = addDefaultLavaCrucible("crystallized", SoundType.GLASS, 2.0f, true, MapColor.TERRACOTTA_WHITE, ModIds.BLUE_SKIES, true);
 
     // Ex Deorum
     public static final WaterCrucibleMaterial OAK_CRUCIBLE = addDefaultWaterCrucible("oak", SoundType.WOOD, MapColor.WOOD, ExDeorum.ID);
@@ -171,14 +171,14 @@ public class DefaultMaterials {
         return material;
     }
 
-    private static LavaCrucibleMaterial addDefaultLavaCrucible(String name, SoundType soundType, float strength, boolean needsCorrectTool, MapColor color, String requiredModId) {
-        var material = new LavaCrucibleMaterial(soundType, strength, needsCorrectTool, color.id, requiredModId);
+    private static LavaCrucibleMaterial addDefaultLavaCrucible(String name, SoundType soundType, float strength, boolean needsCorrectTool, MapColor color, String requiredModId, boolean transparent) {
+        var material = new LavaCrucibleMaterial(soundType, strength, needsCorrectTool, color.id, requiredModId, transparent);
         LAVA_CRUCIBLES.register(name, material);
         return material;
     }
 
     private static WaterCrucibleMaterial addDefaultWaterCrucible(String name, SoundType soundType, MapColor color, String requiredModId) {
-        var material = new WaterCrucibleMaterial(soundType, 1.5f, false, color.id, requiredModId);
+        var material = new WaterCrucibleMaterial(soundType, 1.5f, false, color.id, requiredModId, false);
         WATER_CRUCIBLES.register(name, material);
         return material;
     }
