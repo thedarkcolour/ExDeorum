@@ -27,11 +27,12 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
-import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.recipe.ProbabilityRecipe;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.registry.ERecipeSerializers;
 import thedarkcolour.exdeorum.registry.ERecipeTypes;
+
+import java.util.Objects;
 
 public class HammerRecipe extends ProbabilityRecipe {
     public HammerRecipe(ResourceLocation id, Ingredient ingredient, Item result, NumberProvider resultAmount) {
@@ -48,28 +49,39 @@ public class HammerRecipe extends ProbabilityRecipe {
         return ERecipeTypes.HAMMER.get();
     }
 
-    public static class Serializer implements RecipeSerializer<HammerRecipe> {
+    public static abstract class AbstractSerializer implements RecipeSerializer<HammerRecipe> {
+        protected abstract HammerRecipe createHammerRecipe(ResourceLocation id, Ingredient ingredient, Item result, NumberProvider resultAmount);
+
         @Override
         public HammerRecipe fromJson(ResourceLocation name, JsonObject json) {
             Ingredient ingredient = RecipeUtil.readIngredient(json, "ingredient");
             Item result = RecipeUtil.readItem(json, "result");
             NumberProvider resultAmount = RecipeUtil.readNumberProvider(json, "result_amount");
-            return new HammerRecipe(name, ingredient, result, resultAmount);
+            return createHammerRecipe(name, ingredient, result, resultAmount);
         }
 
         @Override
-        public @Nullable HammerRecipe fromNetwork(ResourceLocation name, FriendlyByteBuf buffer) {
+        @SuppressWarnings("deprecation")
+        public HammerRecipe fromNetwork(ResourceLocation name, FriendlyByteBuf buffer) {
             Ingredient ingredient = Ingredient.fromNetwork(buffer);
-            Item result = buffer.readById(BuiltInRegistries.ITEM);
+            Item result = Objects.requireNonNull(buffer.readById(BuiltInRegistries.ITEM));
             NumberProvider resultAmount = RecipeUtil.fromNetworkNumberProvider(buffer);
-            return new HammerRecipe(name, ingredient, result, resultAmount);
+            return createHammerRecipe(name, ingredient, result, resultAmount);
         }
 
         @Override
+        @SuppressWarnings("deprecation")
         public void toNetwork(FriendlyByteBuf buffer, HammerRecipe recipe) {
             recipe.getIngredient().toNetwork(buffer);
             buffer.writeId(BuiltInRegistries.ITEM, recipe.result);
             RecipeUtil.toNetworkNumberProvider(buffer, recipe.resultAmount);
+        }
+    }
+
+    public static class Serializer extends AbstractSerializer {
+        @Override
+        protected HammerRecipe createHammerRecipe(ResourceLocation id, Ingredient ingredient, Item result, NumberProvider resultAmount) {
+            return new HammerRecipe(id, ingredient, result, resultAmount);
         }
     }
 }

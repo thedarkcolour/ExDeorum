@@ -192,7 +192,7 @@ public class ExDeorumJeiPlugin implements IModPlugin {
             crookRecipes.add(CrookJeiRecipe.create(recipe));
         }
         registration.addRecipes(CROOK, crookRecipes);
-        registration.addRecipes(SIEVE, GroupedSieveRecipe.getAllRecipesGrouped());
+        registration.addRecipes(SIEVE, GroupedSieveRecipe.getAllRecipesGrouped(ERecipeTypes.SIEVE.get()));
 
         addCrucibleHeatSources(registration);
     }

@@ -27,12 +27,12 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.recipe.sieve.SieveRecipe;
 import thedarkcolour.exdeorum.registry.EItems;
-import thedarkcolour.exdeorum.registry.ERecipeTypes;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -43,11 +43,11 @@ import java.util.Objects;
 public record GroupedSieveRecipe(Ingredient ingredient, ItemStack mesh, List<Result> results) {
     public static int maxSieveRows;
 
-    public static ImmutableList<GroupedSieveRecipe> getAllRecipesGrouped() {
+    public static ImmutableList<GroupedSieveRecipe> getAllRecipesGrouped(RecipeType<SieveRecipe> recipeType) {
         maxSieveRows = 1;
 
         // copy the list so we can do removals
-        List<SieveRecipe> recipes = new ArrayList<>(Objects.requireNonNull(Minecraft.getInstance().level).getRecipeManager().getAllRecipesFor(ERecipeTypes.SIEVE.get()));
+        List<SieveRecipe> recipes = new ArrayList<>(Objects.requireNonNull(Minecraft.getInstance().level).getRecipeManager().getAllRecipesFor(recipeType));
         Multimap<Ingredient, SieveRecipe> ingredientGrouper = ArrayListMultimap.create();
 
         for (int i = 0; i < recipes.size(); i++) {

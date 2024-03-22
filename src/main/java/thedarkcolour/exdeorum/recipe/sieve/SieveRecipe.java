@@ -19,6 +19,7 @@
 package thedarkcolour.exdeorum.recipe.sieve;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
@@ -38,6 +39,8 @@ import thedarkcolour.exdeorum.recipe.ProbabilityRecipe;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.registry.ERecipeSerializers;
 import thedarkcolour.exdeorum.registry.ERecipeTypes;
+
+import java.util.Objects;
 
 public class SieveRecipe extends ProbabilityRecipe {
     public final Item mesh;
@@ -60,7 +63,9 @@ public class SieveRecipe extends ProbabilityRecipe {
         return ERecipeTypes.SIEVE.get();
     }
 
-    public static class Serializer implements RecipeSerializer<SieveRecipe> {
+    public static abstract class AbstractSerializer implements RecipeSerializer<SieveRecipe> {
+        protected abstract SieveRecipe createSieveRecipe(ResourceLocation id, Ingredient ingredient, Item mesh, Item result, NumberProvider resultAmount, boolean byHandOnly);
+
         @Override
         public SieveRecipe fromJson(ResourceLocation id, JsonObject json) {
             Ingredient ingredient = RecipeUtil.readIngredient(json, "ingredient");
@@ -78,23 +83,22 @@ public class SieveRecipe extends ProbabilityRecipe {
                     return null;
                 }
             } else {
-                ExDeorum.LOGGER.error("Failed to load recipe {}, missing \"result\" item location or \"result_tag\" tag location", id);
-                return null;
+                throw new JsonSyntaxException("missing \"result\" item location or \"result_tag\" tag location");
             }
 
             NumberProvider resultAmount = RecipeUtil.readNumberProvider(json, "result_amount");
             boolean byHandOnly = json.has("by_hand_only") && json.get("by_hand_only").getAsBoolean();
-            return new SieveRecipe(id, ingredient, mesh, result, resultAmount, byHandOnly);
+            return createSieveRecipe(id, ingredient, mesh, result, resultAmount, byHandOnly);
         }
 
         @SuppressWarnings("deprecation")
         @Override
         public @Nullable SieveRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buffer) {
             Ingredient ingredient = Ingredient.fromNetwork(buffer);
-            Item mesh = buffer.readById(BuiltInRegistries.ITEM);
-            Item result = buffer.readById(BuiltInRegistries.ITEM);
+            Item mesh = Objects.requireNonNull(buffer.readById(BuiltInRegistries.ITEM));
+            Item result = Objects.requireNonNull(buffer.readById(BuiltInRegistries.ITEM));
             NumberProvider resultAmount = RecipeUtil.fromNetworkNumberProvider(buffer);
-            return new SieveRecipe(id, ingredient, mesh, result, resultAmount, buffer.readBoolean());
+            return createSieveRecipe(id, ingredient, mesh, result, resultAmount, buffer.readBoolean());
         }
 
         @SuppressWarnings("deprecation")
@@ -105,6 +109,13 @@ public class SieveRecipe extends ProbabilityRecipe {
             buffer.writeId(BuiltInRegistries.ITEM, recipe.result);
             RecipeUtil.toNetworkNumberProvider(buffer, recipe.resultAmount);
             buffer.writeBoolean(recipe.byHandOnly);
+        }
+    }
+
+    public static class Serializer extends AbstractSerializer {
+        @Override
+        protected SieveRecipe createSieveRecipe(ResourceLocation id, Ingredient ingredient, Item mesh, Item result, NumberProvider resultAmount, boolean byHandOnly) {
+            return new SieveRecipe(id, ingredient, mesh, result, resultAmount, byHandOnly);
         }
     }
 }
