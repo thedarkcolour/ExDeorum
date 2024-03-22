@@ -66,6 +66,7 @@ import thedarkcolour.exdeorum.compat.ModIds;
 import thedarkcolour.exdeorum.compat.top.ExDeorumTopCompat;
 import thedarkcolour.exdeorum.config.EConfig;
 import thedarkcolour.exdeorum.item.WateringCanItem;
+import thedarkcolour.exdeorum.material.AbstractCrucibleMaterial;
 import thedarkcolour.exdeorum.material.BarrelMaterial;
 import thedarkcolour.exdeorum.network.NetworkHandler;
 import thedarkcolour.exdeorum.network.VisualUpdateTracker;
@@ -183,6 +184,7 @@ public final class EventHandler {
             ));
 
             BarrelMaterial.loadTransparentBlocks();
+            AbstractCrucibleMaterial.loadTransparentBlocks();
         });
     }
 

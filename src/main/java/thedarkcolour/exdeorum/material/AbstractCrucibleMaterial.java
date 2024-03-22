@@ -18,6 +18,8 @@
 
 package thedarkcolour.exdeorum.material;
 
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Iterators;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import org.jetbrains.annotations.Nullable;
@@ -50,6 +52,12 @@ public abstract class AbstractCrucibleMaterial extends AbstractMaterial {
             return null;
         } else {
             return factory.create(soundType, strength, needsCorrectTool, mapColor, requiredModId, transparent);
+        }
+    }
+
+    public static void loadTransparentBlocks() {
+        for (var material : Iterables.concat(DefaultMaterials.WATER_CRUCIBLES, DefaultMaterials.LAVA_CRUCIBLES)) {
+            TRANSPARENT_CRUCIBLES.add(material.getBlock());
         }
     }
 
