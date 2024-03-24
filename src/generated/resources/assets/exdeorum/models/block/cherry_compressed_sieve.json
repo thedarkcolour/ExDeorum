@@ -1,0 +1,6 @@
+{
+  "parent": "exdeorum:block/template_compressed_sieve",
+  "textures": {
+    "texture": "minecraft:block/cherry_log"
+  }
+}

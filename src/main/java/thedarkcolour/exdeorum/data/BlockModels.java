@@ -52,6 +52,7 @@ class BlockModels {
         barrel(models, DefaultMaterials.WARPED_BARREL.getBlock(), Blocks.WARPED_PLANKS);
         barrel(models, DefaultMaterials.STONE_BARREL.getBlock(), Blocks.STONE);
 
+        // Sieves
         sieve(models, DefaultMaterials.OAK_SIEVE.getBlock(), Blocks.OAK_PLANKS);
         sieve(models, DefaultMaterials.SPRUCE_SIEVE.getBlock(), Blocks.SPRUCE_PLANKS);
         sieve(models, DefaultMaterials.BIRCH_SIEVE.getBlock(), Blocks.BIRCH_PLANKS);
@@ -63,6 +64,17 @@ class BlockModels {
         sieve(models, DefaultMaterials.BAMBOO_SIEVE.getBlock(), Blocks.BAMBOO_PLANKS);
         sieve(models, DefaultMaterials.CRIMSON_SIEVE.getBlock(), Blocks.CRIMSON_PLANKS);
         sieve(models, DefaultMaterials.WARPED_SIEVE.getBlock(), Blocks.WARPED_PLANKS);
+
+        // Compressed Sieves
+        compressedSieve(models, DefaultMaterials.OAK_COMPRESSED_SIEVE.getBlock(), Blocks.OAK_LOG);
+        compressedSieve(models, DefaultMaterials.SPRUCE_COMPRESSED_SIEVE.getBlock(), Blocks.SPRUCE_LOG);
+        compressedSieve(models, DefaultMaterials.BIRCH_COMPRESSED_SIEVE.getBlock(), Blocks.BIRCH_LOG);
+        compressedSieve(models, DefaultMaterials.JUNGLE_COMPRESSED_SIEVE.getBlock(), Blocks.JUNGLE_LOG);
+        compressedSieve(models, DefaultMaterials.ACACIA_COMPRESSED_SIEVE.getBlock(), Blocks.ACACIA_LOG);
+        compressedSieve(models, DefaultMaterials.DARK_OAK_COMPRESSED_SIEVE.getBlock(), Blocks.DARK_OAK_LOG);
+        compressedSieve(models, DefaultMaterials.MANGROVE_COMPRESSED_SIEVE.getBlock(), Blocks.MANGROVE_LOG);
+        compressedSieve(models, DefaultMaterials.CHERRY_COMPRESSED_SIEVE.getBlock(), Blocks.CHERRY_LOG);
+        compressedSieve(models, DefaultMaterials.BAMBOO_COMPRESSED_SIEVE.getBlock(), Blocks.BAMBOO_BLOCK);
 
         // Lava Crucible
         crucible(models, EBlocks.UNFIRED_PORCELAIN_CRUCIBLE.get());
@@ -218,6 +230,16 @@ class BlockModels {
         return singleModel(models, block)
                 .parent(models.modFile("template_sieve"))
                 .texture("texture", texture(appearance, pathPrefix, ""));
+    }
+
+    public static void compressedSieve(MKBlockModelProvider models, Block block, Block appearance) {
+        compressedSieve(models, block, appearance, "", "");
+    }
+
+    public static BlockModelBuilder compressedSieve(MKBlockModelProvider models, Block block, Block appearance, String pathPrefix, String pathSuffix) {
+        return singleModel(models, block)
+                .parent(models.modFile("template_compressed_sieve"))
+                .texture("texture", texture(appearance, pathPrefix, pathSuffix));
     }
 
     public static BlockModelBuilder singleModel(MKBlockModelProvider models, Block block) {
