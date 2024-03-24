@@ -1,0 +1,29 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:tag_empty",
+            "tag": "forge:ores/tin"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "exdeorum:compressed_sieve",
+        "ingredient": {
+          "tag": "exdeorum:compressed/crushed_deepslate"
+        },
+        "mesh": "exdeorum:netherite_mesh",
+        "result": "exdeorum:tin_ore_chunk",
+        "result_amount": {
+          "type": "minecraft:binomial",
+          "n": 7.0,
+          "p": 0.16
+        }
+      }
+    }
+  ]
+}

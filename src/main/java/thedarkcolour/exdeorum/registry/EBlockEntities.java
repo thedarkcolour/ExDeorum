@@ -34,6 +34,7 @@ public class EBlockEntities {
     public static final RegistryObject<BlockEntityType<WaterCrucibleBlockEntity>> WATER_CRUCIBLE = BLOCK_ENTITIES.register("water_crucible", () -> DefaultMaterials.WATER_CRUCIBLES.createBlockEntityType(WaterCrucibleBlockEntity::new));
     public static final RegistryObject<BlockEntityType<BarrelBlockEntity>> BARREL = BLOCK_ENTITIES.register("barrel", () -> DefaultMaterials.BARRELS.createBlockEntityType(BarrelBlockEntity::new));
     public static final RegistryObject<BlockEntityType<SieveBlockEntity>> SIEVE = BLOCK_ENTITIES.register("sieve", () -> DefaultMaterials.SIEVES.createBlockEntityType(SieveBlockEntity::new));
+    public static final RegistryObject<BlockEntityType<CompressedSieveBlockEntity>> COMPRESSED_SIEVE = BLOCK_ENTITIES.register("compressed_sieve", () -> DefaultMaterials.COMPRESSED_SIEVES.createBlockEntityType(CompressedSieveBlockEntity::new));
     public static final RegistryObject<BlockEntityType<MechanicalSieveBlockEntity>> MECHANICAL_SIEVE = BLOCK_ENTITIES.register("mechanical_sieve", () -> BlockEntityType.Builder.of(MechanicalSieveBlockEntity::new, EBlocks.MECHANICAL_SIEVE.get()).build(null));
     public static final RegistryObject<BlockEntityType<MechanicalHammerBlockEntity>> MECHANICAL_HAMMER = BLOCK_ENTITIES.register("mechanical_hammer", () -> BlockEntityType.Builder.of(MechanicalHammerBlockEntity::new, EBlocks.MECHANICAL_HAMMER.get()).build(null));
 }

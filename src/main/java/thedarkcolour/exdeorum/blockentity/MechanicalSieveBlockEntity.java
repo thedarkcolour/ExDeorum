@@ -49,7 +49,7 @@ public class MechanicalSieveBlockEntity extends AbstractMachineBlockEntity<Mecha
     public MechanicalSieveBlockEntity(BlockPos pos, BlockState state) {
         super(EBlockEntities.MECHANICAL_SIEVE.get(), pos, state, ItemHandler::new, EConfig.SERVER.mechanicalSieveEnergyStorage.get());
 
-        this.logic = new SieveLogic(this, false, true);
+        this.logic = new SieveLogic(this, true);
     }
 
     @Override

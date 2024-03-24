@@ -1,0 +1,13 @@
+{
+  "type": "exdeorum:compressed_sieve",
+  "ingredient": {
+    "tag": "exdeorum:compressed/moss_block"
+  },
+  "mesh": "exdeorum:string_mesh",
+  "result": "minecraft:dark_oak_sapling",
+  "result_amount": {
+    "type": "minecraft:binomial",
+    "n": 7.0,
+    "p": 0.11
+  }
+}

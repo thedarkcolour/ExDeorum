@@ -1,0 +1,6 @@
+{
+  "parent": "exdeorum:block/template_compressed_sieve",
+  "textures": {
+    "texture": "ars_nouveau:block/purple_archwood_log"
+  }
+}

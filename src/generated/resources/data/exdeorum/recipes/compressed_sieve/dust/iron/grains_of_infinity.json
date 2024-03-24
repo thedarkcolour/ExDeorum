@@ -1,0 +1,26 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "enderio"
+        }
+      ],
+      "recipe": {
+        "type": "exdeorum:compressed_sieve",
+        "ingredient": {
+          "tag": "exdeorum:compressed/dust"
+        },
+        "mesh": "exdeorum:iron_mesh",
+        "result": "enderio:grains_of_infinity",
+        "result_amount": {
+          "type": "minecraft:binomial",
+          "n": 7.0,
+          "p": 0.09
+        }
+      }
+    }
+  ]
+}

@@ -45,10 +45,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.client.screen.MechanicalHammerScreen;
 import thedarkcolour.exdeorum.client.screen.MechanicalSieveScreen;
-import thedarkcolour.exdeorum.client.ter.BarrelRenderer;
-import thedarkcolour.exdeorum.client.ter.CrucibleRenderer;
-import thedarkcolour.exdeorum.client.ter.InfestedLeavesRenderer;
-import thedarkcolour.exdeorum.client.ter.SieveRenderer;
+import thedarkcolour.exdeorum.client.ter.*;
 import thedarkcolour.exdeorum.compat.ModIds;
 import thedarkcolour.exdeorum.config.EConfig;
 import thedarkcolour.exdeorum.network.ClientMessageHandler;
@@ -136,8 +133,9 @@ public class ClientHandler {
         event.registerBlockEntityRenderer(EBlockEntities.BARREL.get(), BarrelRenderer::new);
         event.registerBlockEntityRenderer(EBlockEntities.LAVA_CRUCIBLE.get(), ctx -> new CrucibleRenderer());
         event.registerBlockEntityRenderer(EBlockEntities.WATER_CRUCIBLE.get(), ctx -> new CrucibleRenderer());
-        event.registerBlockEntityRenderer(EBlockEntities.SIEVE.get(), ctx -> new SieveRenderer<>());
-        event.registerBlockEntityRenderer(EBlockEntities.MECHANICAL_SIEVE.get(), ctx -> new SieveRenderer<>());
+        event.registerBlockEntityRenderer(EBlockEntities.SIEVE.get(), ctx -> new SieveRenderer<>(0.75f, 15f));
+        event.registerBlockEntityRenderer(EBlockEntities.MECHANICAL_SIEVE.get(), ctx -> new SieveRenderer<>(0.75f, 15f));
+        event.registerBlockEntityRenderer(EBlockEntities.COMPRESSED_SIEVE.get(), ctx -> new CompressedSieveRenderer<>(0.5625f, 16f));
     }
 
     private static void registerShaders(RegisterShadersEvent event) {

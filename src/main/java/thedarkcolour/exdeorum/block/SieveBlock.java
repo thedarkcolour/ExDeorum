@@ -21,13 +21,15 @@ package thedarkcolour.exdeorum.block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import thedarkcolour.exdeorum.blockentity.SieveBlockEntity;
+import thedarkcolour.exdeorum.blockentity.AbstractSieveBlockEntity;
 import thedarkcolour.exdeorum.registry.EBlockEntities;
+
+import java.util.function.Supplier;
 
 public class SieveBlock extends EBlock {
     public static final VoxelShape SHAPE = Shapes.or(
@@ -42,21 +44,20 @@ public class SieveBlock extends EBlock {
         super(properties, EBlockEntities.SIEVE);
     }
 
+    protected SieveBlock(Properties properties, Supplier<? extends BlockEntityType<?>> blockEntityType) {
+        super(properties, blockEntityType);
+    }
+
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return SHAPE;
     }
 
     @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new SieveBlockEntity(pos, state);
-    }
-
-    @Override
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean pIsMoving) {
         if (!level.isClientSide) {
             if (!state.is(newState.getBlock())) {
-                if (level.getBlockEntity(pos) instanceof SieveBlockEntity sieve) {
+                if (level.getBlockEntity(pos) instanceof AbstractSieveBlockEntity sieve) {
                     var mesh = sieve.getLogic().getMesh();
 
                     if (!mesh.isEmpty()) {

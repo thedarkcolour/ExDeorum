@@ -19,10 +19,8 @@
 package thedarkcolour.exdeorum.recipe.sieve;
 
 import com.google.gson.JsonObject;
-import com.mojang.datafixers.util.Either;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -34,10 +32,10 @@ import thedarkcolour.exdeorum.registry.ERecipeSerializers;
 public class FinishedSieveRecipe extends EFinishedRecipe {
     private final Ingredient ingredient;
     private final Item mesh;
-    private final Either<Item, TagKey<Item>> result;
+    private final Item result;
     private final NumberProvider resultAmount;
 
-    public FinishedSieveRecipe(ResourceLocation id, Item mesh, Ingredient ingredient, Either<Item, TagKey<Item>> result, NumberProvider resultAmount) {
+    public FinishedSieveRecipe(ResourceLocation id, Item mesh, Ingredient ingredient, Item result, NumberProvider resultAmount) {
         super(id);
         this.mesh = mesh;
         this.ingredient = ingredient;
@@ -45,15 +43,12 @@ public class FinishedSieveRecipe extends EFinishedRecipe {
         this.resultAmount = resultAmount;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void serializeRecipeData(JsonObject object) {
         object.add("ingredient", this.ingredient.toJson());
         object.addProperty("mesh", BuiltInRegistries.ITEM.getKey(this.mesh).toString());
-        this.result.ifLeft(item -> {
-            object.addProperty("result", BuiltInRegistries.ITEM.getKey(item).toString());
-        }).ifRight(tag -> {
-            object.addProperty("result_tag", tag.location().toString());
-        });
+        object.addProperty("result", BuiltInRegistries.ITEM.getKey(this.result).toString());
         object.add("result_amount", LootDataType.PREDICATE.parser().toJsonTree(this.resultAmount));
     }
 

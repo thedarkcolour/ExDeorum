@@ -4,6 +4,16 @@
     "exdeorum:crushed_netherrack",
     "exdeorum:crushed_end_stone",
     "exdeorum:crushed_deepslate",
-    "exdeorum:crushed_blackstone"
+    "exdeorum:crushed_blackstone",
+    "exdeorum:compressed_dirt",
+    "exdeorum:compressed_gravel",
+    "exdeorum:compressed_sand",
+    "exdeorum:compressed_dust",
+    "exdeorum:compressed_red_sand",
+    "exdeorum:compressed_crushed_deepslate",
+    "exdeorum:compressed_crushed_blackstone",
+    "exdeorum:compressed_crushed_netherrack",
+    "exdeorum:compressed_soul_sand",
+    "exdeorum:compressed_crushed_end_stone"
   ]
 }

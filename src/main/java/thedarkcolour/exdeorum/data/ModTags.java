@@ -32,11 +32,7 @@ import net.minecraft.world.level.levelgen.structure.BuiltinStructureSets;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.material.Fluid;
 import thedarkcolour.exdeorum.ExDeorum;
-import thedarkcolour.exdeorum.block.AbstractCrucibleBlock;
-import thedarkcolour.exdeorum.material.AbstractCrucibleMaterial;
-import thedarkcolour.exdeorum.material.BarrelMaterial;
-import thedarkcolour.exdeorum.material.DefaultMaterials;
-import thedarkcolour.exdeorum.material.SieveMaterial;
+import thedarkcolour.exdeorum.material.*;
 import thedarkcolour.exdeorum.registry.EBlocks;
 import thedarkcolour.exdeorum.registry.EFluids;
 import thedarkcolour.exdeorum.registry.EItems;
@@ -71,12 +67,13 @@ class ModTags {
                 .add(WOODEN_BARRELS.stream().map(BarrelMaterial::getBlock).toArray(Block[]::new))
                 .add(DefaultMaterials.SIEVES.stream().filter(material -> material != DefaultMaterials.CRYSTALLIZED_SIEVE).map(SieveMaterial::getBlock).toArray(Block[]::new))
                 .add(DefaultMaterials.WATER_CRUCIBLES.stream().map(AbstractCrucibleMaterial::getBlock).toArray(Block[]::new))
-                .add(DefaultMaterials.WARPED_CRUCIBLE.getBlock(), DefaultMaterials.CRIMSON_CRUCIBLE.getBlock(), DefaultMaterials.HELLBARK_CRUCIBLE.getBlock());
+                .add(DefaultMaterials.WARPED_CRUCIBLE.getBlock(), DefaultMaterials.CRIMSON_CRUCIBLE.getBlock(), DefaultMaterials.HELLBARK_CRUCIBLE.getBlock())
+                .add(DefaultMaterials.COMPRESSED_SIEVES.stream().filter(material -> material != DefaultMaterials.CRYSTALLIZED_COMPRESSED_SIEVE).map(CompressedSieveMaterial::getBlock).toArray(Block[]::new));
         tags.tag(BlockTags.MINEABLE_WITH_PICKAXE)
                 .add(EBlocks.UNFIRED_PORCELAIN_CRUCIBLE, EBlocks.MECHANICAL_SIEVE, EBlocks.MECHANICAL_HAMMER)
                 .add(DefaultMaterials.STONE_BARREL.getBlock(), DefaultMaterials.CRYSTALLIZED_BARREL.getBlock(), DefaultMaterials.CRYSTALLIZED_SIEVE.getBlock(), DefaultMaterials.PORCELAIN_CRUCIBLE.getBlock(), DefaultMaterials.CRYSTALLIZED_CRUCIBLE.getBlock());
-        tags.tag(BlockTags.MINEABLE_WITH_SHOVEL).add(EBlocks.DUST, EBlocks.CRUSHED_NETHERRACK, EBlocks.CRUSHED_END_STONE, EBlocks.CRUSHED_DEEPSLATE, EBlocks.CRUSHED_BLACKSTONE);
-        tags.tag(BlockTags.MINEABLE_WITH_HOE).add(EBlocks.INFESTED_LEAVES);
+        tags.tag(BlockTags.MINEABLE_WITH_SHOVEL).add(EBlocks.DUST, EBlocks.CRUSHED_NETHERRACK, EBlocks.CRUSHED_END_STONE, EBlocks.CRUSHED_DEEPSLATE, EBlocks.CRUSHED_BLACKSTONE, EBlocks.COMPRESSED_DIRT, EBlocks.COMPRESSED_GRAVEL, EBlocks.COMPRESSED_SAND, EBlocks.COMPRESSED_DUST, EBlocks.COMPRESSED_RED_SAND, EBlocks.COMPRESSED_CRUSHED_DEEPSLATE, EBlocks.COMPRESSED_CRUSHED_BLACKSTONE, EBlocks.COMPRESSED_CRUSHED_NETHERRACK, EBlocks.COMPRESSED_SOUL_SAND, EBlocks.COMPRESSED_CRUSHED_END_STONE);
+        tags.tag(BlockTags.MINEABLE_WITH_HOE).add(EBlocks.INFESTED_LEAVES, EBlocks.COMPRESSED_MOSS_BLOCK);
         tags.tag(BlockTags.LEAVES).add(EBlocks.INFESTED_LEAVES);
     }
 
@@ -89,6 +86,24 @@ class ModTags {
         tags.tag(EItemTags.WOODEN_BARRELS).add(WOODEN_BARRELS.stream().map(BarrelMaterial::getItem).toArray(Item[]::new));
         tags.tag(EItemTags.STONE_BARRELS).add(DefaultMaterials.STONE_BARREL.getItem(), DefaultMaterials.CRYSTALLIZED_BARREL.getItem());
         tags.tag(EItemTags.BARRELS).addTags(EItemTags.WOODEN_BARRELS, EItemTags.STONE_BARRELS);
+
+        tags.tag(EItemTags.COMPRESSED_DIRT).add(EItems.COMPRESSED_DIRT)
+                .addOptional(ModCompatData.COMPRESSED_DIRT_ATC.getId());
+        tags.tag(EItemTags.COMPRESSED_GRAVEL).add(EItems.COMPRESSED_GRAVEL)
+                .addOptional(ModCompatData.COMPRESSED_GRAVEL_ATC.getId());
+        tags.tag(EItemTags.COMPRESSED_SAND).add(EItems.COMPRESSED_SAND)
+                .addOptional(ModCompatData.COMPRESSED_SAND_ATC.getId());
+        tags.tag(EItemTags.COMPRESSED_DUST).add(EItems.COMPRESSED_DUST);
+        tags.tag(EItemTags.COMPRESSED_RED_SAND).add(EItems.COMPRESSED_RED_SAND)
+                .addOptional(ModCompatData.COMPRESSED_RED_SAND_ATC.getId());
+        tags.tag(EItemTags.COMPRESSED_CRUSHED_DEEPSLATE).add(EItems.COMPRESSED_CRUSHED_DEEPSLATE);
+        tags.tag(EItemTags.COMPRESSED_CRUSHED_BLACKSTONE).add(EItems.COMPRESSED_CRUSHED_BLACKSTONE);
+        tags.tag(EItemTags.COMPRESSED_CRUSHED_NETHERRACK).add(EItems.COMPRESSED_CRUSHED_NETHERRACK);
+        tags.tag(EItemTags.COMPRESSED_SOUL_SAND).add(EItems.COMPRESSED_SOUL_SAND)
+                .addOptional(ModCompatData.COMPRESSED_SOUL_SAND_ATC.getId());
+        tags.tag(EItemTags.COMPRESSED_CRUSHED_END_STONE).add(EItems.COMPRESSED_CRUSHED_END_STONE);
+        tags.tag(EItemTags.COMPRESSED_MOSS_BLOCK).add(EItems.COMPRESSED_MOSS_BLOCK)
+                .addOptional(ModCompatData.COMPRESSED_MOSS_BLOCK_ATC.getId());
     }
 
     public static void createStructureSetTags(MKTagsProvider<StructureSet> tags) {

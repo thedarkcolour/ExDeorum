@@ -177,7 +177,7 @@ dependencies {
     compileOnly fg.deobf('maven.modrinth:embeddium:0.2.12+mc1.20.1')
 
     // testing
-    //implementation fg.deobf("curse.maven:allthecompressed-514045:4938351")
+    implementation fg.deobf("curse.maven:allthecompressed-514045:4938351")
     //implementation fg.deobf("curse.maven:inventorysorter-240633:4655091")
     implementation fg.deobf("curse.maven:cyclic-239286:4994392")
     implementation fg.deobf("curse.maven:flib-661261:4724762")

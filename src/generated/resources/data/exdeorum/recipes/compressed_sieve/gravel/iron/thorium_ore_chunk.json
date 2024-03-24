@@ -1,0 +1,29 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:tag_empty",
+            "tag": "forge:ores/thorium"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "exdeorum:compressed_sieve",
+        "ingredient": {
+          "tag": "exdeorum:compressed/gravel"
+        },
+        "mesh": "exdeorum:iron_mesh",
+        "result": "exdeorum:thorium_ore_chunk",
+        "result_amount": {
+          "type": "minecraft:binomial",
+          "n": 7.0,
+          "p": 0.065
+        }
+      }
+    }
+  ]
+}

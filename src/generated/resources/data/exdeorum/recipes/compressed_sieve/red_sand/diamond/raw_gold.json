@@ -1,0 +1,13 @@
+{
+  "type": "exdeorum:compressed_sieve",
+  "ingredient": {
+    "tag": "exdeorum:compressed/red_sand"
+  },
+  "mesh": "exdeorum:diamond_mesh",
+  "result": "minecraft:raw_gold",
+  "result_amount": {
+    "type": "minecraft:binomial",
+    "n": 7.0,
+    "p": 0.08
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "values": [
+    "exdeorum:compressed_sand",
+    {
+      "id": "allthecompressed:sand_1x",
+      "required": false
+    }
+  ]
+}

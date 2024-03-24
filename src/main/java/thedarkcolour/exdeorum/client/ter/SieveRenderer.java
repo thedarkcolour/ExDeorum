@@ -25,6 +25,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import thedarkcolour.exdeorum.blockentity.EBlockEntity;
@@ -37,6 +38,16 @@ import java.util.Map;
 public class SieveRenderer<T extends EBlockEntity & SieveLogic.Owner> implements BlockEntityRenderer<T> {
     public static final Map<Item, TextureAtlasSprite> MESH_TEXTURES = new HashMap<>();
 
+    private final float meshHeight;
+    private final float contentsMinY;
+    private final float contentsMaxY;
+
+    public SieveRenderer(float meshHeight, float contentsMaxY) {
+        this.meshHeight = meshHeight;
+        this.contentsMinY = meshHeight * 16f + 1f;
+        this.contentsMaxY = contentsMaxY;
+    }
+
     @Override
     public void render(T sieve, float partialTicks, PoseStack stack, MultiBufferSource buffers, int light, int overlay) {
         var logic = sieve.getLogic();
@@ -46,7 +57,12 @@ public class SieveRenderer<T extends EBlockEntity & SieveLogic.Owner> implements
             var block = blockItem.getBlock();
             var percentage = logic.getProgress();
             var face = RenderUtil.getTopFace(block);
-            face.renderFlatSpriteLerp(buffers, stack, percentage, 0xff, 0xff, 0xff, light, 1.0f, 15f, 13f);
+
+            if (shouldContentsRender3d(sieve)) {
+                face.renderCuboid(buffers, stack, this.contentsMinY / 16f, Mth.lerp(percentage, this.contentsMaxY, this.contentsMinY) / 16f, 0xff, 0xff, 0xff, light, 1.0f);
+            } else {
+                face.renderFlatSpriteLerp(buffers, stack, percentage, 0xff, 0xff, 0xff, light, 1.0f, this.contentsMaxY, this.contentsMinY);
+            }
         }
 
         var mesh = logic.getMesh();
@@ -66,11 +82,16 @@ public class SieveRenderer<T extends EBlockEntity & SieveLogic.Owner> implements
                 MESH_TEXTURES.put(meshItem, meshSprite);
             }
 
-            RenderUtil.renderFlatSprite(builder, stack, 0.75f, 0xff, 0xff, 0xff, meshSprite, light, 1f);
+            RenderUtil.renderFlatSprite(builder, stack, this.meshHeight, 0xff, 0xff, 0xff, meshSprite, light, 1f);
 
             if (mesh.hasFoil()) {
-                RenderUtil.renderFlatSprite(buffers.getBuffer(RenderType.glint()), stack, 0.75f, 0xff, 0xff, 0xff, meshSprite, light, 1f);
+                RenderUtil.renderFlatSprite(buffers.getBuffer(RenderType.glint()), stack, this.meshHeight, 0xff, 0xff, 0xff, meshSprite, light, 1f);
             }
         }
+    }
+
+    // todo return true for transparent sieves
+    protected boolean shouldContentsRender3d(T sieve) {
+        return false;
     }
 }

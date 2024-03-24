@@ -32,6 +32,7 @@ import thedarkcolour.exdeorum.recipe.crook.CrookRecipe;
 import thedarkcolour.exdeorum.recipe.crucible.CrucibleHeatRecipe;
 import thedarkcolour.exdeorum.recipe.crucible.CrucibleRecipe;
 import thedarkcolour.exdeorum.recipe.hammer.HammerRecipe;
+import thedarkcolour.exdeorum.recipe.sieve.CompressedSieveRecipe;
 import thedarkcolour.exdeorum.recipe.sieve.SieveRecipe;
 
 public class ERecipeSerializers {
@@ -50,6 +51,7 @@ public class ERecipeSerializers {
     public static final RegistryObject<RecipeSerializer<CrucibleRecipe>> WATER_CRUCIBLE = RECIPE_SERIALIZERS.register("water_crucible", () -> new CrucibleRecipe.Serializer(ERecipeTypes.WATER_CRUCIBLE.get()));
 
     public static final RegistryObject<RecipeSerializer<SieveRecipe>> SIEVE = RECIPE_SERIALIZERS.register("sieve", SieveRecipe.Serializer::new);
+    public static final RegistryObject<RecipeSerializer<CompressedSieveRecipe>> COMPRESSED_SIEVE = RECIPE_SERIALIZERS.register("compressed_sieve", CompressedSieveRecipe.Serializer::new);
 
     public static final RegistryObject<RecipeSerializer<?>> TAG_RESULT = RECIPE_SERIALIZERS.register("tag_result", TagResultRecipe.Serializer::new);
 }

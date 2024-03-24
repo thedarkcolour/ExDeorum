@@ -1,0 +1,26 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "ae2"
+        }
+      ],
+      "recipe": {
+        "type": "exdeorum:compressed_sieve",
+        "ingredient": {
+          "tag": "exdeorum:compressed/sand"
+        },
+        "mesh": "exdeorum:string_mesh",
+        "result": "ae2:charged_certus_quartz_crystal",
+        "result_amount": {
+          "type": "minecraft:binomial",
+          "n": 7.0,
+          "p": 0.005
+        }
+      }
+    }
+  ]
+}

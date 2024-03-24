@@ -47,6 +47,9 @@ public class ExDeorumReiPlugin implements REIClientPlugin {
             for (var crucible : CompatHelper.getAvailableWaterCrucibles(false)) {
                 builder.add(EntryStack.of(VanillaEntryTypes.ITEM, new ItemStack(crucible)));
             }
+            for (var compressedSieve : CompatHelper.getAvailableCompressedSieves(false)) {
+                builder.add(EntryStack.of(VanillaEntryTypes.ITEM, new ItemStack(compressedSieve)));
+            }
             return builder.build();
         });
     }

@@ -1,0 +1,13 @@
+{
+  "type": "exdeorum:compressed_sieve",
+  "ingredient": {
+    "tag": "exdeorum:compressed/crushed_netherrack"
+  },
+  "mesh": "exdeorum:flint_mesh",
+  "result": "exdeorum:basalt_pebble",
+  "result_amount": {
+    "type": "minecraft:binomial",
+    "n": 28.0,
+    "p": 0.4
+  }
+}

@@ -78,6 +78,7 @@ public class ExDeorumJeiPlugin implements IModPlugin {
     static final RecipeType<CrucibleRecipe> WATER_CRUCIBLE = RecipeType.create(ExDeorum.ID, "water_crucible", CrucibleRecipe.class);
     static final RecipeType<CrucibleHeatSourceRecipe> CRUCIBLE_HEAT_SOURCES = RecipeType.create(ExDeorum.ID, "crucible_heat_sources", CrucibleHeatSourceRecipe.class);
     static final RecipeType<GroupedSieveRecipe> SIEVE = RecipeType.create(ExDeorum.ID, "sieve", GroupedSieveRecipe.class);
+    static final RecipeType<GroupedSieveRecipe> COMPRESSED_SIEVE = RecipeType.create(ExDeorum.ID, "compressed_sieve", GroupedSieveRecipe.class);
     static final RecipeType<HammerRecipe> HAMMER = RecipeType.create(ExDeorum.ID, "hammer", HammerRecipe.class);
     static final RecipeType<CrookJeiRecipe> CROOK = RecipeType.create(ExDeorum.ID, "crook", CrookJeiRecipe.class);
 
@@ -99,33 +100,32 @@ public class ExDeorumJeiPlugin implements IModPlugin {
         registration.addRecipeCategories(new CrucibleCategory.WaterCrucible(helper, arrow));
         registration.addRecipeCategories(new CrucibleHeatSourcesCategory(registration.getJeiHelpers()));
         registration.addRecipeCategories(new SieveCategory(helper));
+        registration.addRecipeCategories(new CompressedSieveCategory(helper));
         registration.addRecipeCategories(new HammerCategory(helper, arrow));
         registration.addRecipeCategories(new CrookCategory(registration.getJeiHelpers(), arrow));
     }
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        var barrels = CompatHelper.getAvailableBarrels(true);
-        var sieves = CompatHelper.getAvailableSieves(true, true);
-        var lavaCrucibles = CompatHelper.getAvailableLavaCrucibles(true);
-        var waterCrucibles = CompatHelper.getAvailableWaterCrucibles(true);
-
-        for (var barrel : barrels) {
+        for (var barrel : CompatHelper.getAvailableBarrels(true)) {
             var stack = new ItemStack(barrel);
             registration.addRecipeCatalyst(stack, BARREL_COMPOST);
             registration.addRecipeCatalyst(stack, BARREL_MIXING);
             registration.addRecipeCatalyst(stack, BARREL_FLUID_MIXING);
         }
-        for (var lavaCrucible : lavaCrucibles) {
+        for (var lavaCrucible : CompatHelper.getAvailableLavaCrucibles(true)) {
             var stack = new ItemStack(lavaCrucible);
             registration.addRecipeCatalyst(stack, LAVA_CRUCIBLE);
             registration.addRecipeCatalyst(stack, CRUCIBLE_HEAT_SOURCES);
         }
-        for (var waterCrucible : waterCrucibles) {
+        for (var waterCrucible : CompatHelper.getAvailableWaterCrucibles(true)) {
             registration.addRecipeCatalyst(new ItemStack(waterCrucible), WATER_CRUCIBLE);
         }
-        for (var sieve : sieves) {
+        for (var sieve : CompatHelper.getAvailableSieves(true, true)) {
             registration.addRecipeCatalyst(new ItemStack(sieve), SIEVE);
+        }
+        for (var compressedSieve : CompatHelper.getAvailableCompressedSieves(true)) {
+            registration.addRecipeCatalyst(new ItemStack(compressedSieve), COMPRESSED_SIEVE);
         }
 
         registration.addRecipeCatalyst(new ItemStack(EItems.WOODEN_HAMMER.get()), HAMMER);
@@ -159,13 +159,11 @@ public class ExDeorumJeiPlugin implements IModPlugin {
 
         var toRemove = new ArrayList<ItemStack>();
 
-        if (RecipeUtil.isTagEmpty(EItemTags.ORES_ALUMINUM))
-            toRemove.add(new ItemStack(EItems.ALUMINUM_ORE_CHUNK.get()));
+        if (RecipeUtil.isTagEmpty(EItemTags.ORES_ALUMINUM)) toRemove.add(new ItemStack(EItems.ALUMINUM_ORE_CHUNK.get()));
         if (RecipeUtil.isTagEmpty(EItemTags.ORES_COBALT)) toRemove.add(new ItemStack(EItems.COBALT_ORE_CHUNK.get()));
         if (RecipeUtil.isTagEmpty(EItemTags.ORES_SILVER)) toRemove.add(new ItemStack(EItems.SILVER_ORE_CHUNK.get()));
         if (RecipeUtil.isTagEmpty(EItemTags.ORES_LEAD)) toRemove.add(new ItemStack(EItems.LEAD_ORE_CHUNK.get()));
-        if (RecipeUtil.isTagEmpty(EItemTags.ORES_PLATINUM))
-            toRemove.add(new ItemStack(EItems.PLATINUM_ORE_CHUNK.get()));
+        if (RecipeUtil.isTagEmpty(EItemTags.ORES_PLATINUM)) toRemove.add(new ItemStack(EItems.PLATINUM_ORE_CHUNK.get()));
         if (RecipeUtil.isTagEmpty(EItemTags.ORES_NICKEL)) toRemove.add(new ItemStack(EItems.NICKEL_ORE_CHUNK.get()));
         if (RecipeUtil.isTagEmpty(EItemTags.ORES_URANIUM)) toRemove.add(new ItemStack(EItems.URANIUM_ORE_CHUNK.get()));
         if (RecipeUtil.isTagEmpty(EItemTags.ORES_OSMIUM)) toRemove.add(new ItemStack(EItems.OSMIUM_ORE_CHUNK.get()));
@@ -193,6 +191,7 @@ public class ExDeorumJeiPlugin implements IModPlugin {
         }
         registration.addRecipes(CROOK, crookRecipes);
         registration.addRecipes(SIEVE, GroupedSieveRecipe.getAllRecipesGrouped(ERecipeTypes.SIEVE.get()));
+        registration.addRecipes(COMPRESSED_SIEVE, GroupedSieveRecipe.getAllRecipesGrouped(ERecipeTypes.COMPRESSED_SIEVE.get()));
 
         addCrucibleHeatSources(registration);
     }

@@ -1,0 +1,24 @@
+{
+  "parent": "minecraft:block/block",
+  "children": {
+    "base": {
+      "parent": "exdeorum:block/crushed_deepslate",
+      "render_type": "minecraft:solid"
+    },
+    "overlay": {
+      "parent": "minecraft:block/cube_all",
+      "render_type": "minecraft:translucent",
+      "textures": {
+        "all": "exdeorum:block/compressed_overlay"
+      }
+    }
+  },
+  "item_render_order": [
+    "base",
+    "overlay"
+  ],
+  "loader": "forge:composite",
+  "textures": {
+    "particle": "exdeorum:block/crushed_deepslate"
+  }
+}

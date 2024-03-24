@@ -1,0 +1,26 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "bigreactors"
+        }
+      ],
+      "recipe": {
+        "type": "exdeorum:compressed_sieve",
+        "ingredient": {
+          "tag": "exdeorum:compressed/dust"
+        },
+        "mesh": "exdeorum:string_mesh",
+        "result": "biggerreactors:yellorium_dust",
+        "result_amount": {
+          "type": "minecraft:binomial",
+          "n": 7.0,
+          "p": 0.05
+        }
+      }
+    }
+  ]
+}

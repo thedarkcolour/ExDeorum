@@ -21,7 +21,6 @@ package thedarkcolour.exdeorum.data;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.client.screen.RedstoneControlWidget;
 import thedarkcolour.exdeorum.material.DefaultMaterials;
-import thedarkcolour.exdeorum.registry.EBlocks;
 import thedarkcolour.modkit.data.MKEnglishProvider;
 
 class English {
@@ -74,6 +73,7 @@ class English {
         english.add(TranslationKeys.CROOK_CATEGORY_TITLE, "Crook");
         english.add(TranslationKeys.CROOK_CATEGORY_REQUIRES_STATE, "Requires properties:");
         english.add(TranslationKeys.SIEVE_CATEGORY_TITLE, "Sieve");
+        english.add(TranslationKeys.COMPRESSED_SIEVE_CATEGORY_TITLE, "Compressed Sieve");
         english.add(TranslationKeys.SIEVE_RECIPE_CHANCE, "Chance: %s%%");
         english.add(TranslationKeys.SIEVE_RECIPE_AVERAGE_OUTPUT, "Avg. Output: %s");
         english.add(TranslationKeys.SIEVE_RECIPE_MIN_OUTPUT, "Min: %s");
@@ -92,6 +92,11 @@ class English {
         english.add(DefaultMaterials.CASCADING_ARCHWOOD_CRUCIBLE.getBlock(), "Cascading Archwood Crucible");
         english.add(DefaultMaterials.BLAZING_ARCHWOOD_CRUCIBLE.getBlock(), "Blazing Archwood Crucible");
         english.add(DefaultMaterials.FLOURISHING_ARCHWOOD_CRUCIBLE.getBlock(), "Flourishing Archwood Crucible");
+
+        english.add(DefaultMaterials.VEXING_ARCHWOOD_COMPRESSED_SIEVE.getBlock(), "Vexing Archwood Compressed Sieve");
+        english.add(DefaultMaterials.CASCADING_ARCHWOOD_COMPRESSED_SIEVE.getBlock(), "Cascading Archwood Compressed Sieve");
+        english.add(DefaultMaterials.BLAZING_ARCHWOOD_COMPRESSED_SIEVE.getBlock(), "Blazing Archwood Compressed Sieve");
+        english.add(DefaultMaterials.FLOURISHING_ARCHWOOD_COMPRESSED_SIEVE.getBlock(), "Flourishing Archwood Compressed Sieve");
 
         // Jade translation (what does this look like?)
         english.add("config.jade.plugin_exdeorum.infested_leaves", "Infested Leaves");
