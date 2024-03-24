@@ -18,18 +18,18 @@
 
 package thedarkcolour.exdeorum.registry;
 
+import com.google.common.collect.Iterables;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import thedarkcolour.exdeorum.ExDeorum;
+import thedarkcolour.exdeorum.compat.CompatHelper;
 import thedarkcolour.exdeorum.item.*;
-import thedarkcolour.exdeorum.material.DefaultMaterials;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.tag.EItemTags;
 
@@ -168,31 +168,16 @@ public class EItems {
 
 
     public static void addItemsToMainTab(CreativeModeTab.Output output) {
-        for (var material : DefaultMaterials.BARRELS) {
-            if (ModList.get().isLoaded(material.requiredModId)) {
-                output.accept(material.getItem());
-            }
-        }
-
-        for (var material : DefaultMaterials.SIEVES) {
-            if (ModList.get().isLoaded(material.requiredModId)) {
-                output.accept(material.getItem());
-            }
+        for (var material : Iterables.concat(CompatHelper.getAvailableBarrels(true), CompatHelper.getAvailableSieves(true, false), CompatHelper.getAvailableCompressedSieves(true))) {
+            output.accept(material);
         }
 
         output.accept(MECHANICAL_SIEVE.get());
         output.accept(MECHANICAL_HAMMER.get());
 
         output.accept(UNFIRED_PORCELAIN_CRUCIBLE.get());
-        for (var material : DefaultMaterials.LAVA_CRUCIBLES) {
-            if (ModList.get().isLoaded(material.requiredModId)) {
-                output.accept(material.getItem());
-            }
-        }
-        for (var material : DefaultMaterials.WATER_CRUCIBLES) {
-            if (ModList.get().isLoaded(material.requiredModId)) {
-                output.accept(material.getItem());
-            }
+        for (var material : Iterables.concat(CompatHelper.getAvailableLavaCrucibles(true), CompatHelper.getAvailableWaterCrucibles(true))) {
+            output.accept(material);
         }
 
         output.accept(DUST.get());
@@ -200,6 +185,19 @@ public class EItems {
         output.accept(CRUSHED_END_STONE.get());
         output.accept(CRUSHED_DEEPSLATE.get());
         output.accept(CRUSHED_BLACKSTONE.get());
+
+        output.accept(COMPRESSED_DIRT.get());
+        output.accept(COMPRESSED_GRAVEL.get());
+        output.accept(COMPRESSED_SAND.get());
+        output.accept(COMPRESSED_DUST.get());
+        output.accept(COMPRESSED_RED_SAND.get());
+        output.accept(COMPRESSED_CRUSHED_DEEPSLATE.get());
+        output.accept(COMPRESSED_CRUSHED_BLACKSTONE.get());
+        output.accept(COMPRESSED_CRUSHED_NETHERRACK.get());
+        output.accept(COMPRESSED_SOUL_SAND.get());
+        output.accept(COMPRESSED_CRUSHED_END_STONE.get());
+        output.accept(COMPRESSED_MOSS_BLOCK.get());
+
         output.accept(END_CAKE.get());
         output.accept(RANDOM_ARMOR_TRIM.get());
         output.accept(RANDOM_POTTERY_SHERD.get());

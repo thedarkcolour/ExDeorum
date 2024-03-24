@@ -1,0 +1,7 @@
+{
+  "parent": "exdeorum:block/template_compressed_sieve",
+  "render_type": "minecraft:translucent",
+  "textures": {
+    "texture": "blue_skies:block/wood/crystallized_log_side"
+  }
+}

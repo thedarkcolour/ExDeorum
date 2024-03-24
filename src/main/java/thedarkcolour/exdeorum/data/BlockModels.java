@@ -23,6 +23,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.client.model.generators.BlockModelBuilder;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
+import net.minecraftforge.client.model.generators.ModelFile;
+import net.minecraftforge.client.model.generators.loaders.CompositeModelBuilder;
 import net.minecraftforge.registries.ForgeRegistries;
 import thedarkcolour.exdeorum.material.DefaultMaterials;
 import thedarkcolour.exdeorum.registry.EBlocks;
@@ -37,6 +39,18 @@ class BlockModels {
         models.simpleBlock(EBlocks.CRUSHED_END_STONE.get());
         models.simpleBlock(EBlocks.CRUSHED_DEEPSLATE.get());
         models.simpleBlock(EBlocks.CRUSHED_BLACKSTONE.get());
+
+        compressedBlock(models, EBlocks.COMPRESSED_DIRT.get(), Blocks.DIRT);
+        compressedBlock(models, EBlocks.COMPRESSED_GRAVEL.get(), Blocks.GRAVEL);
+        compressedBlock(models, EBlocks.COMPRESSED_SAND.get(), Blocks.SAND);
+        compressedBlock(models, EBlocks.COMPRESSED_DUST.get(), EBlocks.DUST.get());
+        compressedBlock(models, EBlocks.COMPRESSED_RED_SAND.get(), Blocks.RED_SAND);
+        compressedBlock(models, EBlocks.COMPRESSED_CRUSHED_DEEPSLATE.get(), EBlocks.CRUSHED_DEEPSLATE.get());
+        compressedBlock(models, EBlocks.COMPRESSED_CRUSHED_BLACKSTONE.get(), EBlocks.CRUSHED_BLACKSTONE.get());
+        compressedBlock(models, EBlocks.COMPRESSED_CRUSHED_NETHERRACK.get(), EBlocks.CRUSHED_NETHERRACK.get());
+        compressedBlock(models, EBlocks.COMPRESSED_SOUL_SAND.get(), Blocks.SOUL_SAND);
+        compressedBlock(models, EBlocks.COMPRESSED_CRUSHED_END_STONE.get(), EBlocks.CRUSHED_END_STONE.get());
+        compressedBlock(models, EBlocks.COMPRESSED_MOSS_BLOCK.get(), Blocks.MOSS_BLOCK);
 
         // Barrels
         barrel(models, DefaultMaterials.OAK_BARREL.getBlock(), Blocks.OAK_PLANKS);
@@ -220,6 +234,27 @@ class BlockModels {
     // Only used in Ex Deorum
     public static void crucible(MKBlockModelProvider models, Block block) {
         crucible(models, block, block);
+    }
+
+    public static void compressedBlock(MKBlockModelProvider models, Block block, Block appearance) {
+        ModelFile original = models.file(models.blockTexture(appearance));
+
+        models.getVariantBuilder(block).partialState().addModels(new ConfiguredModel(
+                models.models().getBuilder(models.name(block)).customLoader(CompositeModelBuilder::begin)
+                        .child("base", models.models().nested()
+                                .parent(original)
+                                .renderType("solid")
+                        )
+                        .child("overlay", models.models().nested()
+                                .parent(models.mcFile("cube_all"))
+                                .texture("all", models.modLoc("block/compressed_overlay"))
+                                .renderType("translucent")
+                        )
+                        .itemRenderOrder("base", "overlay")
+                        .end()
+                        .parent(models.mcFile("block"))
+                        .texture("particle", models.blockTexture(appearance))
+        ));
     }
 
     public static void crucible(MKBlockModelProvider models, Block block, Block appearance) {

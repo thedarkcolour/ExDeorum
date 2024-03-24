@@ -1,0 +1,6 @@
+{
+  "parent": "exdeorum:block/template_compressed_sieve",
+  "textures": {
+    "texture": "blue_skies:block/wood/bluebright_log_side"
+  }
+}
