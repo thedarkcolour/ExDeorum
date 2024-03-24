@@ -27,6 +27,7 @@ import thedarkcolour.exdeorum.compat.ModIds;
 public class DefaultMaterials {
     public static final MaterialRegistry<BarrelMaterial> BARRELS = new MaterialRegistry<>("barrel");
     public static final MaterialRegistry<SieveMaterial> SIEVES = new MaterialRegistry<>("sieve");
+    public static final MaterialRegistry<CompressedSieveMaterial> COMPRESSED_SIEVES = new MaterialRegistry<>("compressed_sieve");
     public static final MaterialRegistry<AbstractCrucibleMaterial> LAVA_CRUCIBLES = new MaterialRegistry<>("lava_crucible", "crucible");
     public static final MaterialRegistry<AbstractCrucibleMaterial> WATER_CRUCIBLES = new MaterialRegistry<>("water_crucible", "crucible");
 
@@ -106,6 +107,17 @@ public class DefaultMaterials {
     public static final SieveMaterial CRYSTALLIZED_SIEVE = addDefaultSieve("crystallized", SoundType.GLASS, true, ModIds.BLUE_SKIES);
 
     // Ex Deorum
+    public static final CompressedSieveMaterial OAK_COMPRESSED_SIEVE = addDefaultCompressedSieve("oak", SoundType.WOOD, ExDeorum.ID);
+    public static final CompressedSieveMaterial SPRUCE_COMPRESSED_SIEVE = addDefaultCompressedSieve("spruce", SoundType.WOOD, ExDeorum.ID);
+    public static final CompressedSieveMaterial BIRCH_COMPRESSED_SIEVE = addDefaultCompressedSieve("birch", SoundType.WOOD, ExDeorum.ID);
+    public static final CompressedSieveMaterial JUNGLE_COMPRESSED_SIEVE = addDefaultCompressedSieve("jungle", SoundType.WOOD, ExDeorum.ID);
+    public static final CompressedSieveMaterial ACACIA_COMPRESSED_SIEVE = addDefaultCompressedSieve("acacia", SoundType.WOOD, ExDeorum.ID);
+    public static final CompressedSieveMaterial DARK_OAK_COMPRESSED_SIEVE = addDefaultCompressedSieve("dark_oak", SoundType.WOOD, ExDeorum.ID);
+    public static final CompressedSieveMaterial MANGROVE_COMPRESSED_SIEVE = addDefaultCompressedSieve("mangrove", SoundType.WOOD, ExDeorum.ID);
+    public static final CompressedSieveMaterial CHERRY_COMPRESSED_SIEVE = addDefaultCompressedSieve("cherry", SoundType.CHERRY_WOOD, ExDeorum.ID);
+    public static final CompressedSieveMaterial BAMBOO_COMPRESSED_SIEVE = addDefaultCompressedSieve("bamboo", SoundType.BAMBOO_WOOD, ExDeorum.ID);
+
+    // Ex Deorum
     public static final LavaCrucibleMaterial PORCELAIN_CRUCIBLE = addDefaultLavaCrucible("porcelain", SoundType.STONE, 2.0f, false, MapColor.TERRACOTTA_WHITE, ExDeorum.ID, false);
     public static final LavaCrucibleMaterial WARPED_CRUCIBLE = addDefaultLavaCrucible("warped", SoundType.STEM, 1.5f, false, MapColor.CRIMSON_STEM, ExDeorum.ID, false);
     public static final LavaCrucibleMaterial CRIMSON_CRUCIBLE = addDefaultLavaCrucible("crimson", SoundType.STEM, 1.5f, false, MapColor.WARPED_STEM, ExDeorum.ID, false);
@@ -168,6 +180,16 @@ public class DefaultMaterials {
     private static SieveMaterial addDefaultSieve(String name, SoundType soundType, boolean needsCorrectTool, String requiredModID) {
         var material = new SieveMaterial(soundType, 2.0f, needsCorrectTool, requiredModID);
         SIEVES.register(name, material);
+        return material;
+    }
+
+    private static CompressedSieveMaterial addDefaultCompressedSieve(String name, SoundType soundType, String requiredModID) {
+        return addDefaultCompressedSieve(name, soundType, 2.0f, false, requiredModID);
+    }
+
+    private static CompressedSieveMaterial addDefaultCompressedSieve(String name, SoundType soundType, float strength, boolean needsCorrectTool, String requiredModId) {
+        var material = new CompressedSieveMaterial(soundType, strength, needsCorrectTool, requiredModId);
+        COMPRESSED_SIEVES.register(name, material);
         return material;
     }
 

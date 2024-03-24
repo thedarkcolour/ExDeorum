@@ -20,19 +20,13 @@ package thedarkcolour.exdeorum.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
-import thedarkcolour.exdeorum.blockentity.logic.SieveLogic;
-import thedarkcolour.exdeorum.config.EConfig;
+import thedarkcolour.exdeorum.blockentity.logic.CompressedSieveLogic;
 import thedarkcolour.exdeorum.registry.EBlockEntities;
 
-public class SieveBlockEntity extends AbstractSieveBlockEntity {
-    public static final float SIEVE_INTERVAL = 0.1f;
+public class CompressedSieveBlockEntity extends AbstractSieveBlockEntity {
+    private static final float COMPRESSED_SIEVE_INTERVAL = 0.075f;
 
-    public SieveBlockEntity(BlockPos pos, BlockState state) {
-        super(EBlockEntities.SIEVE.get(), pos, state, SIEVE_INTERVAL, owner -> new SieveLogic(owner, false));
-    }
-
-    @Override
-    protected boolean canUseSimultaneously() {
-        return EConfig.SERVER.simultaneousSieveUsage.get();
+    public CompressedSieveBlockEntity(BlockPos pos, BlockState state) {
+        super(EBlockEntities.COMPRESSED_SIEVE.get(), pos, state, COMPRESSED_SIEVE_INTERVAL, owner -> new CompressedSieveLogic(owner, false));
     }
 }

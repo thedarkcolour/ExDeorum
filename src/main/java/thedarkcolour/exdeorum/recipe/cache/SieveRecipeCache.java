@@ -22,6 +22,7 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeType;
 import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.recipe.sieve.SieveRecipe;
 import thedarkcolour.exdeorum.registry.ERecipeTypes;
@@ -30,17 +31,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 
-public class SieveRecipeCache {
+public class SieveRecipeCache<T extends SieveRecipe> {
     private RecipeManager recipeManager;
+    private final Supplier<? extends RecipeType<T>> recipeType;
     @Nullable
-    private Map<Item, MeshRecipeCache> meshCaches;
+    private Map<Item, MeshRecipeCache<T>> meshCaches;
 
-    public SieveRecipeCache(RecipeManager recipeManager) {
+    public SieveRecipeCache(RecipeManager recipeManager, Supplier<? extends RecipeType<T>> recipeType) {
         this.recipeManager = recipeManager;
+        this.recipeType = recipeType;
     }
 
-    public List<SieveRecipe> getRecipe(Item mesh, ItemStack input) {
+    public List<T> getRecipe(Item mesh, ItemStack input) {
         if (this.meshCaches == null) {
             buildRecipes();
         }
@@ -50,13 +54,13 @@ public class SieveRecipeCache {
 
     private void buildRecipes() {
         // Group recipes based on their mesh
-        var tempMap = new HashMap<Item, List<SieveRecipe>>();
-        for (var recipe : this.recipeManager.byType(ERecipeTypes.SIEVE.get()).values()) {
+        var tempMap = new HashMap<Item, List<T>>();
+        for (var recipe : this.recipeManager.byType(this.recipeType.get()).values()) {
             tempMap.computeIfAbsent(recipe.mesh, k -> new ArrayList<>()).add(recipe);
         }
         this.meshCaches = new HashMap<>();
         for (var mesh : tempMap.entrySet()) {
-            this.meshCaches.put(mesh.getKey(), new MeshRecipeCache(mesh.getValue()));
+            this.meshCaches.put(mesh.getKey(), new MeshRecipeCache<>(mesh.getValue()));
         }
         this.recipeManager = null;
     }
@@ -66,12 +70,12 @@ public class SieveRecipeCache {
     // conveying this information in JEI would be difficult (ex. Bottle drops from Sand, but only if the Sand has a
     // certain enchantment). Thirdly, I do not see anybody needing this use case, and if they do, they should contact
     // me on GitHub or Discord so that I can get around to actually implementing it.
-    private static class MeshRecipeCache {
-        private final Map<Item, List<SieveRecipe>> simpleRecipes;
+    private static class MeshRecipeCache<T extends SieveRecipe> {
+        private final Map<Item, List<T>> simpleRecipes;
 
-        private MeshRecipeCache(List<SieveRecipe> recipes) {
+        private MeshRecipeCache(List<T> recipes) {
             this.simpleRecipes = new HashMap<>();
-            var temp = new HashMap<Item, ImmutableList.Builder<SieveRecipe>>();
+            var temp = new HashMap<Item, ImmutableList.Builder<T>>();
 
             for (var recipe : recipes) {
                 for (var item : recipe.ingredient.getItems()) {
@@ -84,7 +88,7 @@ public class SieveRecipeCache {
             }
         }
 
-        public List<SieveRecipe> getRecipes(ItemStack input) {
+        public List<T> getRecipes(ItemStack input) {
             var result = this.simpleRecipes.get(input.getItem());
             return result == null ? List.of() : result;
         }

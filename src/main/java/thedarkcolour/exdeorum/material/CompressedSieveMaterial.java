@@ -16,23 +16,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package thedarkcolour.exdeorum.blockentity;
+package thedarkcolour.exdeorum.material;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.block.state.BlockState;
-import thedarkcolour.exdeorum.blockentity.logic.SieveLogic;
-import thedarkcolour.exdeorum.config.EConfig;
-import thedarkcolour.exdeorum.registry.EBlockEntities;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
+import thedarkcolour.exdeorum.block.CompressedSieveBlock;
 
-public class SieveBlockEntity extends AbstractSieveBlockEntity {
-    public static final float SIEVE_INTERVAL = 0.1f;
-
-    public SieveBlockEntity(BlockPos pos, BlockState state) {
-        super(EBlockEntities.SIEVE.get(), pos, state, SIEVE_INTERVAL, owner -> new SieveLogic(owner, false));
+public class CompressedSieveMaterial extends SieveMaterial {
+    protected CompressedSieveMaterial(SoundType soundType, float strength, boolean needsCorrectTool, String requiredModId) {
+        super(soundType, strength, needsCorrectTool, requiredModId);
     }
 
     @Override
-    protected boolean canUseSimultaneously() {
-        return EConfig.SERVER.simultaneousSieveUsage.get();
+    protected Block createBlock() {
+        return new CompressedSieveBlock(props().noOcclusion());
     }
 }

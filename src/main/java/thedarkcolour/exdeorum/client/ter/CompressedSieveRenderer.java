@@ -16,23 +16,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package thedarkcolour.exdeorum.blockentity;
+package thedarkcolour.exdeorum.client.ter;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.block.state.BlockState;
+import thedarkcolour.exdeorum.blockentity.EBlockEntity;
 import thedarkcolour.exdeorum.blockentity.logic.SieveLogic;
-import thedarkcolour.exdeorum.config.EConfig;
-import thedarkcolour.exdeorum.registry.EBlockEntities;
 
-public class SieveBlockEntity extends AbstractSieveBlockEntity {
-    public static final float SIEVE_INTERVAL = 0.1f;
-
-    public SieveBlockEntity(BlockPos pos, BlockState state) {
-        super(EBlockEntities.SIEVE.get(), pos, state, SIEVE_INTERVAL, owner -> new SieveLogic(owner, false));
+// mesh y = 10 / 16
+public class CompressedSieveRenderer<T extends EBlockEntity & SieveLogic.Owner> extends SieveRenderer<T> {
+    public CompressedSieveRenderer(float meshHeight, float contentsMaxY) {
+        super(meshHeight, contentsMaxY);
     }
 
     @Override
-    protected boolean canUseSimultaneously() {
-        return EConfig.SERVER.simultaneousSieveUsage.get();
+    protected boolean shouldContentsRender3d(T sieve) {
+        return true;
     }
 }

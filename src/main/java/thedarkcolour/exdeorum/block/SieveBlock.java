@@ -22,12 +22,17 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.registries.RegistryObject;
+import thedarkcolour.exdeorum.blockentity.EBlockEntity;
 import thedarkcolour.exdeorum.blockentity.SieveBlockEntity;
 import thedarkcolour.exdeorum.registry.EBlockEntities;
+
+import java.util.function.Supplier;
 
 public class SieveBlock extends EBlock {
     public static final VoxelShape SHAPE = Shapes.or(
@@ -42,14 +47,13 @@ public class SieveBlock extends EBlock {
         super(properties, EBlockEntities.SIEVE);
     }
 
-    @Override
-    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return SHAPE;
+    protected SieveBlock(Properties properties, Supplier<? extends BlockEntityType<?>> blockEntityType) {
+        super(properties, blockEntityType);
     }
 
     @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new SieveBlockEntity(pos, state);
+    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        return SHAPE;
     }
 
     @Override

@@ -65,6 +65,7 @@ import thedarkcolour.exdeorum.recipe.cache.*;
 import thedarkcolour.exdeorum.recipe.crook.CrookRecipe;
 import thedarkcolour.exdeorum.recipe.crucible.CrucibleRecipe;
 import thedarkcolour.exdeorum.recipe.hammer.HammerRecipe;
+import thedarkcolour.exdeorum.recipe.sieve.CompressedSieveRecipe;
 import thedarkcolour.exdeorum.recipe.sieve.SieveRecipe;
 import thedarkcolour.exdeorum.registry.ENumberProviders;
 import thedarkcolour.exdeorum.registry.ERecipeTypes;
@@ -86,7 +87,8 @@ public final class RecipeUtil {
     private static SingleIngredientRecipeCache<CrucibleRecipe> lavaCrucibleRecipeCache;
     private static SingleIngredientRecipeCache<CrucibleRecipe> waterCrucibleRecipeCache;
     private static SingleIngredientRecipeCache<HammerRecipe> hammerRecipeCache;
-    private static SieveRecipeCache sieveRecipeCache;
+    private static SieveRecipeCache<SieveRecipe> sieveRecipeCache;
+    private static SieveRecipeCache<CompressedSieveRecipe> compressedSieveRecipeCache;
     private static BarrelFluidMixingRecipeCache barrelFluidMixingRecipeCache;
     private static FluidTransformationRecipeCache fluidTransformationRecipeCache;
     private static CrookRecipeCache crookRecipeCache;
@@ -97,7 +99,8 @@ public final class RecipeUtil {
         lavaCrucibleRecipeCache = new SingleIngredientRecipeCache<>(recipes, ERecipeTypes.LAVA_CRUCIBLE);
         waterCrucibleRecipeCache = new SingleIngredientRecipeCache<>(recipes, ERecipeTypes.WATER_CRUCIBLE);
         hammerRecipeCache = new SingleIngredientRecipeCache<>(recipes, ERecipeTypes.HAMMER).trackAllRecipes();
-        sieveRecipeCache = new SieveRecipeCache(recipes);
+        sieveRecipeCache = new SieveRecipeCache<>(recipes, ERecipeTypes.SIEVE);
+        compressedSieveRecipeCache = new SieveRecipeCache<>(recipes, ERecipeTypes.COMPRESSED_SIEVE);
         barrelFluidMixingRecipeCache = new BarrelFluidMixingRecipeCache(recipes);
         fluidTransformationRecipeCache = new FluidTransformationRecipeCache(recipes);
         crookRecipeCache = new CrookRecipeCache(recipes);
@@ -119,6 +122,10 @@ public final class RecipeUtil {
 
     public static List<SieveRecipe> getSieveRecipes(Item mesh, ItemStack item) {
         return sieveRecipeCache.getRecipe(mesh, item);
+    }
+
+    public static List<CompressedSieveRecipe> getCompressedSieveRecipes(Item mesh, ItemStack item) {
+        return compressedSieveRecipeCache.getRecipe(mesh, item);
     }
 
     @Nullable

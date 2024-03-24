@@ -16,23 +16,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package thedarkcolour.exdeorum.blockentity;
+package thedarkcolour.exdeorum.blockentity.logic;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.block.state.BlockState;
-import thedarkcolour.exdeorum.blockentity.logic.SieveLogic;
-import thedarkcolour.exdeorum.config.EConfig;
-import thedarkcolour.exdeorum.registry.EBlockEntities;
+import net.minecraft.world.item.ItemStack;
+import thedarkcolour.exdeorum.recipe.RecipeUtil;
+import thedarkcolour.exdeorum.recipe.sieve.SieveRecipe;
 
-public class SieveBlockEntity extends AbstractSieveBlockEntity {
-    public static final float SIEVE_INTERVAL = 0.1f;
+import java.util.List;
 
-    public SieveBlockEntity(BlockPos pos, BlockState state) {
-        super(EBlockEntities.SIEVE.get(), pos, state, SIEVE_INTERVAL, owner -> new SieveLogic(owner, false));
+public class CompressedSieveLogic extends SieveLogic {
+    public CompressedSieveLogic(Owner owner, boolean mechanical) {
+        super(owner, mechanical);
     }
 
     @Override
-    protected boolean canUseSimultaneously() {
-        return EConfig.SERVER.simultaneousSieveUsage.get();
+    protected List<? extends SieveRecipe> getDropsFor(ItemStack contents) {
+        return RecipeUtil.getCompressedSieveRecipes(this.mesh.getItem(), contents);
     }
 }

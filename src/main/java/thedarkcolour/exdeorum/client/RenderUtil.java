@@ -18,25 +18,20 @@
 
 package thedarkcolour.exdeorum.client;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexFormat;
-import it.unimi.dsi.fastutil.Pair;
 import net.irisshaders.iris.api.v0.IrisApi;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderStateShard;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.ShaderInstance;
-import net.minecraft.client.renderer.Sheets;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -48,7 +43,6 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.client.model.CompositeModel;
 import net.minecraftforge.client.model.data.ModelData;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.joml.Vector3f;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.client.ter.SieveRenderer;
@@ -117,14 +111,15 @@ public class RenderUtil {
             if (model instanceof CompositeModel.Baked composite) {
                 @SuppressWarnings("unchecked")
                 ImmutableMap<String, BakedModel> children = (ImmutableMap<String, BakedModel>) COMPOSITE_MODEL_CHILDREN.get(composite);
-                var builder = new ImmutableList.Builder<Pair<RenderType, TextureAtlasSprite>>();
+                RenderFace.CompositeLayer[] layers = new RenderFace.CompositeLayer[children.size()];
+                int i = 0;
 
                 for (var childModel : children.values()) {
                     var singleFace = getFaceFromModel(block, rand, childModel);
-                    builder.add(Pair.of(singleFace.renderType(), singleFace.sprite()));
+                    layers[i++] = new RenderFace.CompositeLayer(singleFace.renderType(), singleFace.sprite());
                 }
 
-                face = new RenderFace.Composite(builder.build());
+                face = new RenderFace.Composite(layers);
             } else {
                 face = getFaceFromModel(block, rand, model);
             }
@@ -147,7 +142,7 @@ public class RenderUtil {
     }
 
     private static TextureAtlasSprite getTopTexture(Block block, BakedModel model) {
-        var registryName = ForgeRegistries.BLOCKS.getKey(block);
+        var registryName = BuiltInRegistries.BLOCK.getKey(block);
         var sprite = blockAtlas.getSprite(registryName.withPrefix("block/"));
         // for stuff like azalea bush, retry to get the top texture
         if (isMissingTexture(sprite)) {
@@ -209,6 +204,10 @@ public class RenderUtil {
         //vMin = sprite.getV0();
         //vMax = sprite.getV(8);
 
+        // Adjust UV based on height of cuboid, rendering from the top down to the bottom of the texture
+        float f = sprite.getV1() - sprite.getV0();
+        vMax = sprite.getV0() + f * (maxY - minY);
+
         // South face
         normal = poseNormal.transform(new Vector3f(0, 0, 1));
         builder.vertex(pose, edgeMax, maxY, edgeMax).color(r, g, b, 255).uv(uMax, vMin).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
@@ -263,6 +262,68 @@ public class RenderUtil {
         builder.vertex(pose, edgeMin, y, edgeMax).color(r, g, b, 255).uv(uMin, vMax).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
         builder.vertex(pose, edgeMax, y, edgeMax).color(r, g, b, 255).uv(uMax, vMax).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
         builder.vertex(pose, edgeMax, y, edgeMin).color(r, g, b, 255).uv(uMax, vMin).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
+    }
+
+    // todo use ambient occlusion
+    // Renders a cuboid using the same side sprite on all six sides
+    @SuppressWarnings("DuplicatedCode")
+    public static void renderCuboid(VertexConsumer builder, PoseStack stack, float minY, float maxY, int r, int g, int b, TextureAtlasSprite sprite, int light, float edge) {
+        var pose = stack.last().pose();
+        var poseNormal = stack.last().normal();
+
+        Vector3f normal;
+        float uMin = sprite.getU0();
+        float uMax = sprite.getU1();
+        float vMin = sprite.getV0();
+        float vMax = sprite.getV1();
+
+        float edgeMin = edge / 16f;
+        float edgeMax = 1f - edge / 16f;
+
+        int lightU = light & '\uffff';
+        int lightV = light >> 16 & '\uffff';
+
+        // Top face
+        normal = poseNormal.transform(new Vector3f(0, 1, 0));
+        builder.vertex(pose, edgeMin, maxY, edgeMin).color(r, g, b, 255).uv(uMin, vMin).overlayCoords(0, 10).uv2(lightU, lightV).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.vertex(pose, edgeMin, maxY, edgeMax).color(r, g, b, 255).uv(uMin, vMax).overlayCoords(0, 10).uv2(lightU, lightV).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.vertex(pose, edgeMax, maxY, edgeMax).color(r, g, b, 255).uv(uMax, vMax).overlayCoords(0, 10).uv2(lightU, lightV).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.vertex(pose, edgeMax, maxY, edgeMin).color(r, g, b, 255).uv(uMax, vMin).overlayCoords(0, 10).uv2(lightU, lightV).normal(normal.x, normal.y, normal.z).endVertex();
+        // Bottom face
+        normal = poseNormal.transform(new Vector3f(0, -1, 0));
+        builder.vertex(pose, edgeMin, minY, edgeMin).color(r, g, b, 255).uv(uMin, vMin).overlayCoords(0, 10).uv2(lightU, lightV).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.vertex(pose, edgeMax, minY, edgeMin).color(r, g, b, 255).uv(uMax, vMin).overlayCoords(0, 10).uv2(lightU, lightV).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.vertex(pose, edgeMax, minY, edgeMax).color(r, g, b, 255).uv(uMax, vMax).overlayCoords(0, 10).uv2(lightU, lightV).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.vertex(pose, edgeMin, minY, edgeMax).color(r, g, b, 255).uv(uMin, vMax).overlayCoords(0, 10).uv2(lightU, lightV).normal(normal.x, normal.y, normal.z).endVertex();
+
+        // Adjust UV based on height of cuboid, rendering from the top down to the bottom of the texture
+        float f = sprite.getV1() - sprite.getV0();
+        vMax = sprite.getV0() + f * (maxY - minY);
+
+        // South face
+        normal = poseNormal.transform(new Vector3f(0, 0, -1));
+        builder.vertex(pose, edgeMax, maxY, edgeMax).color(r, g, b, 255).uv(uMax, vMin).overlayCoords(0, 10).uv2(lightU, lightV).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.vertex(pose, edgeMin, maxY, edgeMax).color(r, g, b, 255).uv(uMin, vMin).overlayCoords(0, 10).uv2(lightU, lightV).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.vertex(pose, edgeMin, minY, edgeMax).color(r, g, b, 255).uv(uMin, vMax).overlayCoords(0, 10).uv2(lightU, lightV).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.vertex(pose, edgeMax, minY, edgeMax).color(r, g, b, 255).uv(uMax, vMax).overlayCoords(0, 10).uv2(lightU, lightV).normal(normal.x, normal.y, normal.z).endVertex();
+        // North face
+        normal = poseNormal.transform(new Vector3f(0, 0, -1));
+        builder.vertex(pose, edgeMin, maxY, edgeMin).color(r, g, b, 255).uv(uMin, vMin).overlayCoords(0, 10).uv2(lightU, lightV).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.vertex(pose, edgeMax, maxY, edgeMin).color(r, g, b, 255).uv(uMax, vMin).overlayCoords(0, 10).uv2(lightU, lightV).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.vertex(pose, edgeMax, minY, edgeMin).color(r, g, b, 255).uv(uMax, vMax).overlayCoords(0, 10).uv2(lightU, lightV).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.vertex(pose, edgeMin, minY, edgeMin).color(r, g, b, 255).uv(uMin, vMax).overlayCoords(0, 10).uv2(lightU, lightV).normal(normal.x, normal.y, normal.z).endVertex();
+        // East face
+        normal = poseNormal.transform(new Vector3f(1, 0, 0));
+        builder.vertex(pose, edgeMax, maxY, edgeMin).color(r, g, b, 255).uv(uMin, vMin).overlayCoords(0, 10).uv2(lightU, lightV).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.vertex(pose, edgeMax, maxY, edgeMax).color(r, g, b, 255).uv(uMax, vMin).overlayCoords(0, 10).uv2(lightU, lightV).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.vertex(pose, edgeMax, minY, edgeMax).color(r, g, b, 255).uv(uMax, vMax).overlayCoords(0, 10).uv2(lightU, lightV).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.vertex(pose, edgeMax, minY, edgeMin).color(r, g, b, 255).uv(uMin, vMax).overlayCoords(0, 10).uv2(lightU, lightV).normal(normal.x, normal.y, normal.z).endVertex();
+        // West face
+        normal = poseNormal.transform(new Vector3f(-1, 0, 0));
+        builder.vertex(pose, edgeMin, maxY, edgeMax).color(r, g, b, 255).uv(uMax, vMin).overlayCoords(0, 10).uv2(lightU, lightV).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.vertex(pose, edgeMin, maxY, edgeMin).color(r, g, b, 255).uv(uMin, vMin).overlayCoords(0, 10).uv2(lightU, lightV).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.vertex(pose, edgeMin, minY, edgeMin).color(r, g, b, 255).uv(uMin, vMax).overlayCoords(0, 10).uv2(lightU, lightV).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.vertex(pose, edgeMin, minY, edgeMax).color(r, g, b, 255).uv(uMax, vMax).overlayCoords(0, 10).uv2(lightU, lightV).normal(normal.x, normal.y, normal.z).endVertex();
     }
 
     public static Color getRainbowColor(long time, float partialTicks) {

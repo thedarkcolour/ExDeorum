@@ -63,11 +63,11 @@ public class SieveRecipe extends ProbabilityRecipe {
         return ERecipeTypes.SIEVE.get();
     }
 
-    public static abstract class AbstractSerializer implements RecipeSerializer<SieveRecipe> {
-        protected abstract SieveRecipe createSieveRecipe(ResourceLocation id, Ingredient ingredient, Item mesh, Item result, NumberProvider resultAmount, boolean byHandOnly);
+    public static abstract class AbstractSerializer<T extends SieveRecipe> implements RecipeSerializer<T> {
+        protected abstract T createSieveRecipe(ResourceLocation id, Ingredient ingredient, Item mesh, Item result, NumberProvider resultAmount, boolean byHandOnly);
 
         @Override
-        public SieveRecipe fromJson(ResourceLocation id, JsonObject json) {
+        public T fromJson(ResourceLocation id, JsonObject json) {
             Ingredient ingredient = RecipeUtil.readIngredient(json, "ingredient");
             Item mesh = RecipeUtil.readItem(json, "mesh");
             Item result;
@@ -93,7 +93,7 @@ public class SieveRecipe extends ProbabilityRecipe {
 
         @SuppressWarnings("deprecation")
         @Override
-        public @Nullable SieveRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buffer) {
+        public @Nullable T fromNetwork(ResourceLocation id, FriendlyByteBuf buffer) {
             Ingredient ingredient = Ingredient.fromNetwork(buffer);
             Item mesh = Objects.requireNonNull(buffer.readById(BuiltInRegistries.ITEM));
             Item result = Objects.requireNonNull(buffer.readById(BuiltInRegistries.ITEM));
@@ -103,7 +103,7 @@ public class SieveRecipe extends ProbabilityRecipe {
 
         @SuppressWarnings("deprecation")
         @Override
-        public void toNetwork(FriendlyByteBuf buffer, SieveRecipe recipe) {
+        public void toNetwork(FriendlyByteBuf buffer, T recipe) {
             recipe.getIngredient().toNetwork(buffer);
             buffer.writeId(BuiltInRegistries.ITEM, recipe.mesh);
             buffer.writeId(BuiltInRegistries.ITEM, recipe.result);
@@ -112,7 +112,7 @@ public class SieveRecipe extends ProbabilityRecipe {
         }
     }
 
-    public static class Serializer extends AbstractSerializer {
+    public static class Serializer extends AbstractSerializer<SieveRecipe> {
         @Override
         protected SieveRecipe createSieveRecipe(ResourceLocation id, Ingredient ingredient, Item mesh, Item result, NumberProvider resultAmount, boolean byHandOnly) {
             return new SieveRecipe(id, ingredient, mesh, result, resultAmount, byHandOnly);
