@@ -1,0 +1,9 @@
+{
+  "values": [
+    "exdeorum:compressed_moss_block",
+    {
+      "id": "allthecompressed:moss_block_1x",
+      "required": false
+    }
+  ]
+}

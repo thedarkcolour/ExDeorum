@@ -1,0 +1,13 @@
+{
+  "type": "exdeorum:compressed_sieve",
+  "ingredient": {
+    "tag": "exdeorum:compressed/crushed_deepslate"
+  },
+  "mesh": "exdeorum:diamond_mesh",
+  "result": "exdeorum:gold_ore_chunk",
+  "result_amount": {
+    "type": "minecraft:binomial",
+    "n": 7.0,
+    "p": 0.13
+  }
+}

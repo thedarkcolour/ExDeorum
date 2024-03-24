@@ -1,0 +1,13 @@
+{
+  "type": "exdeorum:compressed_sieve",
+  "ingredient": {
+    "tag": "exdeorum:compressed/crushed_blackstone"
+  },
+  "mesh": "exdeorum:string_mesh",
+  "result": "minecraft:magma_cream",
+  "result_amount": {
+    "type": "minecraft:binomial",
+    "n": 7.0,
+    "p": 0.08
+  }
+}

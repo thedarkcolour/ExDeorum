@@ -1,5 +1,16 @@
-// 1.20.1	2024-02-21T14:53:30.9830737	Tags for minecraft:item mod id exdeorum
+// 1.20.1	2024-03-23T14:02:41.4025399	Tags for minecraft:item mod id exdeorum
 6c72957356b1d59a27be736fa1da54a5a9795ef7 data/exdeorum/tags/items/barrels.json
+cc7cee07f9fa87bf7fbc0fd5b4df7a3244bbf680 data/exdeorum/tags/items/compressed/crushed_blackstone.json
+e58dd8e5f1f5cb2c41668d4cb4ce1db72143c2b8 data/exdeorum/tags/items/compressed/crushed_deepslate.json
+ef7e37e3485ee372cd2694f600aaa9344d9fc367 data/exdeorum/tags/items/compressed/crushed_end_stone.json
+aa975842d0be23880ff7da7db82834399ec12f51 data/exdeorum/tags/items/compressed/crushed_netherrack.json
+ff59212998df057f20208252c9432dfe824c5b93 data/exdeorum/tags/items/compressed/dirt.json
+6ab1d13f60054975647d63ba73cfbaeffbac3277 data/exdeorum/tags/items/compressed/dust.json
+8f67a58aa43d6b80f47e94a6b56a8ab8434c9cf5 data/exdeorum/tags/items/compressed/gravel.json
+faaac47fa919125335614c875ffc220e737977bc data/exdeorum/tags/items/compressed/moss_block.json
+32749540e9055fb7f1153c84486747ba4ea3a6e4 data/exdeorum/tags/items/compressed/red_sand.json
+ec11bf0ea816e15a35082c5d935b0865c8260f9e data/exdeorum/tags/items/compressed/sand.json
+7a86fc912a7e9665d238b96b30f0fff96c905919 data/exdeorum/tags/items/compressed/soul_sand.json
 5feb54ce68fa657af5ce696f75b8c7a6d04cc7a7 data/exdeorum/tags/items/crooks.json
 74eefeb986d633d26ad42202c4a6b5e71463c425 data/exdeorum/tags/items/end_cake_materials.json
 be46bf2abe731d5ee5bd15ce72f222b2b9a49385 data/exdeorum/tags/items/hammers.json

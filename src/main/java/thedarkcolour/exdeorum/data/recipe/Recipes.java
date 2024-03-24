@@ -37,6 +37,7 @@ import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.storage.loot.providers.number.BinomialDistributionGenerator;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
@@ -72,6 +73,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import static net.minecraft.world.level.storage.loot.providers.number.BinomialDistributionGenerator.binomial;
 import static net.minecraft.world.level.storage.loot.providers.number.UniformGenerator.between;
 import static thedarkcolour.modkit.data.MKRecipeProvider.ingredient;
 import static thedarkcolour.modkit.data.MKRecipeProvider.path;
@@ -668,4 +670,12 @@ public class Recipes {
     static final ICondition AE2 = modInstalled(ModIds.APPLIED_ENERGISTICS_2);
     static final ICondition ENDERIO = modInstalled(ModIds.ENDERIO);
     static final ICondition EXTREME_REACTORS = modInstalled(ModIds.EXTREME_REACTORS);
+
+    static NumberProvider compressedMultiplier(NumberProvider resultAmount) {
+        if (resultAmount instanceof BinomialDistributionGenerator binomial) {
+            return binomial((int) ((ConstantValue) binomial.n).value * 7, ((ConstantValue) binomial.p).value);
+        } else {
+            throw new IllegalArgumentException("Unable to multiply type " + resultAmount.getClass());
+        }
+    }
 }

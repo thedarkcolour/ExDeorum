@@ -116,6 +116,8 @@ class BlockModels {
 
         sieve(models, DefaultMaterials.SKYROOT_SIEVE.getBlock(), ModCompatData.SKYROOT_PLANKS.get(), "construction/");
 
+        //compressedSieve(models, DefaultMaterials.COMPRESSED_SKYROOT_SIEVE.getBlock(), ModCompatData.SKYROOT_LOG.get(), "natural");
+
         crucible(models, DefaultMaterials.SKYROOT_CRUCIBLE.getBlock(), ModCompatData.SKYROOT_LOG.get(), "natural/", "");
         crucible(models, DefaultMaterials.GOLDEN_OAK_CRUCIBLE.getBlock(), ModCompatData.GOLDEN_OAK_LOG.get(), "natural/", "");
     }
