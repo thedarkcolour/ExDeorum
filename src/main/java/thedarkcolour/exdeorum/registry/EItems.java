@@ -145,6 +145,18 @@ public class EItems {
     public static final RegistryObject<BlockItem> CRUSHED_DEEPSLATE = registerItemBlock(EBlocks.CRUSHED_DEEPSLATE);
     public static final RegistryObject<BlockItem> CRUSHED_BLACKSTONE = registerItemBlock(EBlocks.CRUSHED_BLACKSTONE);
 
+    public static final RegistryObject<BlockItem> COMPRESSED_DIRT = registerItemBlock(EBlocks.COMPRESSED_DIRT);
+    public static final RegistryObject<BlockItem> COMPRESSED_GRAVEL = registerItemBlock(EBlocks.COMPRESSED_GRAVEL);
+    public static final RegistryObject<BlockItem> COMPRESSED_SAND = registerItemBlock(EBlocks.COMPRESSED_SAND);
+    public static final RegistryObject<BlockItem> COMPRESSED_DUST = registerItemBlock(EBlocks.COMPRESSED_DUST);
+    public static final RegistryObject<BlockItem> COMPRESSED_RED_SAND = registerItemBlock(EBlocks.COMPRESSED_RED_SAND);
+    public static final RegistryObject<BlockItem> COMPRESSED_CRUSHED_DEEPSLATE = registerItemBlock(EBlocks.COMPRESSED_CRUSHED_DEEPSLATE);
+    public static final RegistryObject<BlockItem> COMPRESSED_CRUSHED_BLACKSTONE = registerItemBlock(EBlocks.COMPRESSED_CRUSHED_BLACKSTONE);
+    public static final RegistryObject<BlockItem> COMPRESSED_CRUSHED_NETHERRACK = registerItemBlock(EBlocks.COMPRESSED_CRUSHED_NETHERRACK);
+    public static final RegistryObject<BlockItem> COMPRESSED_SOUL_SAND = registerItemBlock(EBlocks.COMPRESSED_SOUL_SAND);
+    public static final RegistryObject<BlockItem> COMPRESSED_CRUSHED_END_STONE = registerItemBlock(EBlocks.COMPRESSED_CRUSHED_END_STONE);
+    public static final RegistryObject<BlockItem> COMPRESSED_MOSS_BLOCK = registerItemBlock(EBlocks.COMPRESSED_MOSS_BLOCK);
+
     // Mechanical Sieves
     public static final RegistryObject<BlockItem> MECHANICAL_SIEVE = registerItemBlock(EBlocks.MECHANICAL_SIEVE);
     public static final RegistryObject<BlockItem> MECHANICAL_HAMMER = registerItemBlock(EBlocks.MECHANICAL_HAMMER);

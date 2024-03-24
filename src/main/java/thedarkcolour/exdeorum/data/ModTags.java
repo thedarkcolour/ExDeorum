@@ -89,6 +89,24 @@ class ModTags {
         tags.tag(EItemTags.WOODEN_BARRELS).add(WOODEN_BARRELS.stream().map(BarrelMaterial::getItem).toArray(Item[]::new));
         tags.tag(EItemTags.STONE_BARRELS).add(DefaultMaterials.STONE_BARREL.getItem(), DefaultMaterials.CRYSTALLIZED_BARREL.getItem());
         tags.tag(EItemTags.BARRELS).addTags(EItemTags.WOODEN_BARRELS, EItemTags.STONE_BARRELS);
+
+        tags.tag(EItemTags.COMPRESSED_DIRT).add(EItems.COMPRESSED_DIRT)
+                .addOptional(ModCompatData.COMPRESSED_DIRT_ATC.getId());
+        tags.tag(EItemTags.COMPRESSED_GRAVEL).add(EItems.COMPRESSED_GRAVEL)
+                .addOptional(ModCompatData.COMPRESSED_GRAVEL_ATC.getId());
+        tags.tag(EItemTags.COMPRESSED_SAND).add(EItems.COMPRESSED_SAND)
+                .addOptional(ModCompatData.COMPRESSED_SAND_ATC.getId());
+        tags.tag(EItemTags.COMPRESSED_DUST).add(EItems.COMPRESSED_DUST);
+        tags.tag(EItemTags.COMPRESSED_RED_SAND).add(EItems.COMPRESSED_RED_SAND)
+                .addOptional(ModCompatData.COMPRESSED_RED_SAND_ATC.getId());
+        tags.tag(EItemTags.COMPRESSED_CRUSHED_DEEPSLATE).add(EItems.COMPRESSED_CRUSHED_DEEPSLATE);
+        tags.tag(EItemTags.COMPRESSED_CRUSHED_BLACKSTONE).add(EItems.COMPRESSED_CRUSHED_BLACKSTONE);
+        tags.tag(EItemTags.COMPRESSED_CRUSHED_NETHERRACK).add(EItems.COMPRESSED_CRUSHED_NETHERRACK);
+        tags.tag(EItemTags.COMPRESSED_SOUL_SAND).add(EItems.COMPRESSED_SOUL_SAND)
+                .addOptional(ModCompatData.COMPRESSED_SOUL_SAND_ATC.getId());
+        tags.tag(EItemTags.COMPRESSED_CRUSHED_END_STONE).add(EItems.COMPRESSED_CRUSHED_END_STONE);
+        tags.tag(EItemTags.COMPRESSED_MOSS_BLOCK).add(EItems.COMPRESSED_MOSS_BLOCK)
+                .addOptional(ModCompatData.COMPRESSED_MOSS_BLOCK_ATC.getId());
     }
 
     public static void createStructureSetTags(MKTagsProvider<StructureSet> tags) {

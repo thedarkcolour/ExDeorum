@@ -212,12 +212,30 @@ public class ModCompatData {
             DUSK_LOG_ITEM = item(ModIds.BLUE_SKIES, "dusk_log"),
             MAPLE_LOG_ITEM = item(ModIds.BLUE_SKIES, "maple_log"),
             CRYSTALLIZED_LOG_ITEM = item(ModIds.BLUE_SKIES, "crystallized_log");
+    // Compressium
+    public static final RegistryObject<Item>
+            COMPRESSED_DIRT_COMPRESSIUM = item(ModIds.COMPRESSIUM, "dirt_1"),
+            COMPRESSED_COBBLESTONE_COMPRESSIUM = item(ModIds.COMPRESSIUM, "cobblestone_1"),
+            COMPRESSED_GRAVEL_COMPRESSIUM = item(ModIds.COMPRESSIUM, "gravel_1"),
+            COMPRESSED_SAND_COMPRESSIUM = item(ModIds.COMPRESSIUM, "sand_1"),
+            COMPRESSED_RED_SAND_COMPRESSIUM = item(ModIds.COMPRESSIUM, "redsand_1"),
+            COMPRESSED_SOUL_SAND_COMPRESSIUM = item(ModIds.COMPRESSIUM, "soulsand_1");
+    // AllTheCompressed
+    public static final RegistryObject<Item>
+            COMPRESSED_DIRT_ATC = item(ModIds.ALL_THE_COMPRESSED, "dirt_1x"),
+            COMPRESSED_COBBLESTONE_ATC = item(ModIds.ALL_THE_COMPRESSED, "cobblestone_1x"),
+            COMPRESSED_GRAVEL_ATC = item(ModIds.ALL_THE_COMPRESSED, "gravel_1x"),
+            COMPRESSED_SAND_ATC = item(ModIds.ALL_THE_COMPRESSED, "sand_1x"),
+            COMPRESSED_RED_SAND_ATC = item(ModIds.ALL_THE_COMPRESSED, "red_sand_1x"),
+            COMPRESSED_SOUL_SAND_ATC = item(ModIds.ALL_THE_COMPRESSED, "soul_sand_1x"),
+            COMPRESSED_MOSS_BLOCK_ATC = item(ModIds.ALL_THE_COMPRESSED, "moss_block_1x");
 
     public static final ResourceLocation[] PAMS_CROPS;
 
     static {
         // copy and pasted from the GitHub
-        String[] names = { "pamagavecrop", "pamamaranthcrop", "pamarrowrootcrop", "pamartichokecrop", "pamasparaguscrop", "pambarleycrop", "pambeancrop", "pambellpeppercrop", "pamblackberrycrop", "pamblueberrycrop", "pambroccolicrop", "pambrusselsproutcrop", "pamcabbagecrop", "pamcactusfruitcrop", "pamcandleberrycrop", "pamcantaloupecrop", "pamcassavacrop", "pamcauliflowercrop", "pamcelerycrop", "pamchickpeacrop", "pamchilipeppercrop", "pamcoffeebeancrop", "pamcorncrop", "pamcottoncrop", "pamcranberrycrop", "pamcucumbercrop", "pameggplantcrop", "pamelderberrycrop", "pamflaxcrop", "pamgarliccrop", "pamgingercrop", "pamgrapecrop", "pamgreengrapecrop", "pamhuckleberrycrop", "pamjicamacrop", "pamjuniperberrycrop", "pamjutecrop", "pamkalecrop", "pamkenafcrop", "pamkiwicrop", "pamkohlrabicrop", "pamleekcrop", "pamlentilcrop", "pamlettucecrop", "pammilletcrop", "pammulberrycrop", "pammustardseedscrop", "pamoatscrop", "pamokracrop", "pamonioncrop", "pamparsnipcrop", "pampeanutcrop", "pampeascrop", "pampineapplecrop", "pamquinoacrop", "pamradishcrop", "pamraspberrycrop", "pamrhubarbcrop", "pamricecrop", "pamrutabagacrop", "pamryecrop", "pamscallioncrop", "pamsesameseedscrop", "pamsisalcrop", "pamsoybeancrop", "pamspiceleafcrop", "pamspinachcrop", "pamstrawberrycrop", "pamsweetpotatocrop", "pamtarocrop", "pamtealeafcrop", "pamtomatillocrop", "pamtomatocrop", "pamturnipcrop", "pamwaterchestnutcrop", "pamwhitemushroomcrop", "pamwintersquashcrop", "pamzucchinicrop"};
+        @SuppressWarnings("SpellCheckingInspection")
+        String[] names = {"pamagavecrop", "pamamaranthcrop", "pamarrowrootcrop", "pamartichokecrop", "pamasparaguscrop", "pambarleycrop", "pambeancrop", "pambellpeppercrop", "pamblackberrycrop", "pamblueberrycrop", "pambroccolicrop", "pambrusselsproutcrop", "pamcabbagecrop", "pamcactusfruitcrop", "pamcandleberrycrop", "pamcantaloupecrop", "pamcassavacrop", "pamcauliflowercrop", "pamcelerycrop", "pamchickpeacrop", "pamchilipeppercrop", "pamcoffeebeancrop", "pamcorncrop", "pamcottoncrop", "pamcranberrycrop", "pamcucumbercrop", "pameggplantcrop", "pamelderberrycrop", "pamflaxcrop", "pamgarliccrop", "pamgingercrop", "pamgrapecrop", "pamgreengrapecrop", "pamhuckleberrycrop", "pamjicamacrop", "pamjuniperberrycrop", "pamjutecrop", "pamkalecrop", "pamkenafcrop", "pamkiwicrop", "pamkohlrabicrop", "pamleekcrop", "pamlentilcrop", "pamlettucecrop", "pammilletcrop", "pammulberrycrop", "pammustardseedscrop", "pamoatscrop", "pamokracrop", "pamonioncrop", "pamparsnipcrop", "pampeanutcrop", "pampeascrop", "pampineapplecrop", "pamquinoacrop", "pamradishcrop", "pamraspberrycrop", "pamrhubarbcrop", "pamricecrop", "pamrutabagacrop", "pamryecrop", "pamscallioncrop", "pamsesameseedscrop", "pamsisalcrop", "pamsoybeancrop", "pamspiceleafcrop", "pamspinachcrop", "pamstrawberrycrop", "pamsweetpotatocrop", "pamtarocrop", "pamtealeafcrop", "pamtomatillocrop", "pamtomatocrop", "pamturnipcrop", "pamwaterchestnutcrop", "pamwhitemushroomcrop", "pamwintersquashcrop", "pamzucchinicrop"};
         PAMS_CROPS = new ResourceLocation[names.length];
 
         for (int i = 0, namesLength = names.length; i < namesLength; i++) {

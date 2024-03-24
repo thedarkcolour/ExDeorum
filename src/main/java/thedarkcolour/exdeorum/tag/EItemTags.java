@@ -51,6 +51,19 @@ public class EItemTags {
     public static final TagKey<Item> ORES_LITHIUM = forgeTag("ores/lithium");
     public static final TagKey<Item> ORES_BORON = forgeTag("ores/boron");
 
+    // Compressed tags
+    public static final TagKey<Item> COMPRESSED_DIRT = tag("compressed/dirt");
+    public static final TagKey<Item> COMPRESSED_GRAVEL = tag("compressed/gravel");
+    public static final TagKey<Item> COMPRESSED_SAND = tag("compressed/sand");
+    public static final TagKey<Item> COMPRESSED_DUST = tag("compressed/dust");
+    public static final TagKey<Item> COMPRESSED_RED_SAND = tag("compressed/red_sand");
+    public static final TagKey<Item> COMPRESSED_CRUSHED_DEEPSLATE = tag("compressed/crushed_deepslate");
+    public static final TagKey<Item> COMPRESSED_CRUSHED_BLACKSTONE = tag("compressed/crushed_blackstone");
+    public static final TagKey<Item> COMPRESSED_CRUSHED_NETHERRACK = tag("compressed/crushed_netherrack");
+    public static final TagKey<Item> COMPRESSED_SOUL_SAND = tag("compressed/soul_sand");
+    public static final TagKey<Item> COMPRESSED_CRUSHED_END_STONE = tag("compressed/crushed_end_stone");
+    public static final TagKey<Item> COMPRESSED_MOSS_BLOCK = tag("compressed/moss_block");
+
     public static TagKey<Item> tag(String name) {
         return ItemTags.create(new ResourceLocation(ExDeorum.ID, name));
     }
