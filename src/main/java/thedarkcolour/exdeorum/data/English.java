@@ -21,7 +21,6 @@ package thedarkcolour.exdeorum.data;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.client.screen.RedstoneControlWidget;
 import thedarkcolour.exdeorum.material.DefaultMaterials;
-import thedarkcolour.exdeorum.registry.EBlocks;
 import thedarkcolour.modkit.data.MKEnglishProvider;
 
 class English {
@@ -74,6 +73,7 @@ class English {
         english.add(TranslationKeys.CROOK_CATEGORY_TITLE, "Crook");
         english.add(TranslationKeys.CROOK_CATEGORY_REQUIRES_STATE, "Requires properties:");
         english.add(TranslationKeys.SIEVE_CATEGORY_TITLE, "Sieve");
+        english.add(TranslationKeys.COMPRESSED_SIEVE_CATEGORY_TITLE, "Compressed Sieve");
         english.add(TranslationKeys.SIEVE_RECIPE_CHANCE, "Chance: %s%%");
         english.add(TranslationKeys.SIEVE_RECIPE_AVERAGE_OUTPUT, "Avg. Output: %s");
         english.add(TranslationKeys.SIEVE_RECIPE_MIN_OUTPUT, "Min: %s");

@@ -43,7 +43,7 @@ import java.util.Objects;
 public record GroupedSieveRecipe(Ingredient ingredient, ItemStack mesh, List<Result> results) {
     public static int maxSieveRows;
 
-    public static ImmutableList<GroupedSieveRecipe> getAllRecipesGrouped(RecipeType<SieveRecipe> recipeType) {
+    public static ImmutableList<GroupedSieveRecipe> getAllRecipesGrouped(RecipeType<? extends SieveRecipe> recipeType) {
         maxSieveRows = 1;
 
         // copy the list so we can do removals

@@ -20,12 +20,13 @@ package thedarkcolour.exdeorum.material;
 
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraftforge.registries.RegistryObject;
 
-public abstract class AbstractMaterial {
+public abstract class AbstractMaterial implements ItemLike {
     // The sound this block makes (a string corresponding to a field in SoundType or a JSON object with the five sound events used to create a sound type)
     public final SoundType soundType;
     // The hardness of the barrel when harvesting
@@ -62,5 +63,10 @@ public abstract class AbstractMaterial {
 
     public Block getBlock() {
         return this.block.get();
+    }
+
+    @Override
+    public Item asItem() {
+        return this.item.get();
     }
 }

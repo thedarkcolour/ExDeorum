@@ -33,6 +33,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.storage.loot.providers.number.BinomialDistributionGenerator;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
@@ -61,12 +62,16 @@ class SieveCategory implements IRecipeCategory<GroupedSieveRecipe> {
     private final IDrawable icon;
     private final Component title;
 
-    public SieveCategory(IGuiHelper helper) {
+    SieveCategory(IGuiHelper helper, ItemLike icon, Component title) {
         this.background = Lazy.of(() -> helper.createBlankDrawable(WIDTH, ROW_START + 18 * GroupedSieveRecipe.maxSieveRows));
         this.slot = helper.getSlotDrawable();
         this.row = helper.createDrawable(ExDeorumJeiPlugin.EX_DEORUM_JEI_TEXTURE, 0, 0, 162, 18);
-        this.icon = helper.createDrawableItemStack(new ItemStack(DefaultMaterials.OAK_SIEVE.getItem()));
-        this.title = Component.translatable(TranslationKeys.SIEVE_CATEGORY_TITLE);
+        this.icon = helper.createDrawableItemStack(new ItemStack(icon));
+        this.title = title;
+    }
+
+    SieveCategory(IGuiHelper helper) {
+        this(helper, DefaultMaterials.OAK_SIEVE, Component.translatable(TranslationKeys.SIEVE_CATEGORY_TITLE));
     }
 
     @Override
