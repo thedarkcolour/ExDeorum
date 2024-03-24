@@ -32,11 +32,7 @@ import net.minecraft.world.level.levelgen.structure.BuiltinStructureSets;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.material.Fluid;
 import thedarkcolour.exdeorum.ExDeorum;
-import thedarkcolour.exdeorum.block.AbstractCrucibleBlock;
-import thedarkcolour.exdeorum.material.AbstractCrucibleMaterial;
-import thedarkcolour.exdeorum.material.BarrelMaterial;
-import thedarkcolour.exdeorum.material.DefaultMaterials;
-import thedarkcolour.exdeorum.material.SieveMaterial;
+import thedarkcolour.exdeorum.material.*;
 import thedarkcolour.exdeorum.registry.EBlocks;
 import thedarkcolour.exdeorum.registry.EFluids;
 import thedarkcolour.exdeorum.registry.EItems;
@@ -71,12 +67,13 @@ class ModTags {
                 .add(WOODEN_BARRELS.stream().map(BarrelMaterial::getBlock).toArray(Block[]::new))
                 .add(DefaultMaterials.SIEVES.stream().filter(material -> material != DefaultMaterials.CRYSTALLIZED_SIEVE).map(SieveMaterial::getBlock).toArray(Block[]::new))
                 .add(DefaultMaterials.WATER_CRUCIBLES.stream().map(AbstractCrucibleMaterial::getBlock).toArray(Block[]::new))
-                .add(DefaultMaterials.WARPED_CRUCIBLE.getBlock(), DefaultMaterials.CRIMSON_CRUCIBLE.getBlock(), DefaultMaterials.HELLBARK_CRUCIBLE.getBlock());
+                .add(DefaultMaterials.WARPED_CRUCIBLE.getBlock(), DefaultMaterials.CRIMSON_CRUCIBLE.getBlock(), DefaultMaterials.HELLBARK_CRUCIBLE.getBlock())
+                .add(DefaultMaterials.COMPRESSED_SIEVES.stream().filter(material -> material != DefaultMaterials.CRYSTALLIZED_COMPRESSED_SIEVE).map(CompressedSieveMaterial::getBlock).toArray(Block[]::new));
         tags.tag(BlockTags.MINEABLE_WITH_PICKAXE)
                 .add(EBlocks.UNFIRED_PORCELAIN_CRUCIBLE, EBlocks.MECHANICAL_SIEVE, EBlocks.MECHANICAL_HAMMER)
                 .add(DefaultMaterials.STONE_BARREL.getBlock(), DefaultMaterials.CRYSTALLIZED_BARREL.getBlock(), DefaultMaterials.CRYSTALLIZED_SIEVE.getBlock(), DefaultMaterials.PORCELAIN_CRUCIBLE.getBlock(), DefaultMaterials.CRYSTALLIZED_CRUCIBLE.getBlock());
-        tags.tag(BlockTags.MINEABLE_WITH_SHOVEL).add(EBlocks.DUST, EBlocks.CRUSHED_NETHERRACK, EBlocks.CRUSHED_END_STONE, EBlocks.CRUSHED_DEEPSLATE, EBlocks.CRUSHED_BLACKSTONE);
-        tags.tag(BlockTags.MINEABLE_WITH_HOE).add(EBlocks.INFESTED_LEAVES);
+        tags.tag(BlockTags.MINEABLE_WITH_SHOVEL).add(EBlocks.DUST, EBlocks.CRUSHED_NETHERRACK, EBlocks.CRUSHED_END_STONE, EBlocks.CRUSHED_DEEPSLATE, EBlocks.CRUSHED_BLACKSTONE, EBlocks.COMPRESSED_DIRT, EBlocks.COMPRESSED_GRAVEL, EBlocks.COMPRESSED_SAND, EBlocks.COMPRESSED_DUST, EBlocks.COMPRESSED_RED_SAND, EBlocks.COMPRESSED_CRUSHED_DEEPSLATE, EBlocks.COMPRESSED_CRUSHED_BLACKSTONE, EBlocks.COMPRESSED_CRUSHED_NETHERRACK, EBlocks.COMPRESSED_SOUL_SAND, EBlocks.COMPRESSED_CRUSHED_END_STONE);
+        tags.tag(BlockTags.MINEABLE_WITH_HOE).add(EBlocks.INFESTED_LEAVES, EBlocks.COMPRESSED_MOSS_BLOCK);
         tags.tag(BlockTags.LEAVES).add(EBlocks.INFESTED_LEAVES);
     }
 

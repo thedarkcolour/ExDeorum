@@ -199,6 +199,57 @@ public class Recipes {
         recipes.grid2x2(Items.COPPER_ORE, ingredient(EItems.COPPER_ORE_CHUNK));
         recipes.grid2x2(Items.MOSS_BLOCK, ingredient(EItems.GRASS_SEEDS));
 
+        // Compressed blocks
+        recipes.storage3x3(EBlocks.COMPRESSED_DIRT.get(), Items.DIRT);
+        recipes.storage3x3(EBlocks.COMPRESSED_GRAVEL.get(), Items.GRAVEL);
+        recipes.storage3x3(EBlocks.COMPRESSED_SAND.get(), Items.SAND);
+        recipes.storage3x3(EBlocks.COMPRESSED_DUST.get(), EItems.DUST.get());
+        recipes.storage3x3(EBlocks.COMPRESSED_RED_SAND.get(), Items.RED_SAND);
+        recipes.storage3x3(EBlocks.COMPRESSED_CRUSHED_DEEPSLATE.get(), EItems.CRUSHED_DEEPSLATE.get());
+        recipes.storage3x3(EBlocks.COMPRESSED_CRUSHED_BLACKSTONE.get(), EItems.CRUSHED_BLACKSTONE.get());
+        recipes.storage3x3(EBlocks.COMPRESSED_CRUSHED_NETHERRACK.get(), EItems.CRUSHED_NETHERRACK.get());
+        recipes.storage3x3(EBlocks.COMPRESSED_SOUL_SAND.get(), Items.SOUL_SAND);
+        recipes.storage3x3(EBlocks.COMPRESSED_CRUSHED_END_STONE.get(), EItems.CRUSHED_END_STONE.get());
+        recipes.storage3x3(EBlocks.COMPRESSED_MOSS_BLOCK.get(), Items.MOSS_BLOCK);
+
+        // Compressed sieves
+        compressedSieve(recipes, DefaultMaterials.OAK_COMPRESSED_SIEVE, ingredient(Items.OAK_LOG));
+        compressedSieve(recipes, DefaultMaterials.SPRUCE_COMPRESSED_SIEVE, ingredient(Items.SPRUCE_LOG));
+        compressedSieve(recipes, DefaultMaterials.BIRCH_COMPRESSED_SIEVE, ingredient(Items.BIRCH_LOG));
+        compressedSieve(recipes, DefaultMaterials.JUNGLE_COMPRESSED_SIEVE, ingredient(Items.JUNGLE_LOG));
+        compressedSieve(recipes, DefaultMaterials.ACACIA_COMPRESSED_SIEVE, ingredient(Items.ACACIA_LOG));
+        compressedSieve(recipes, DefaultMaterials.DARK_OAK_COMPRESSED_SIEVE, ingredient(Items.DARK_OAK_LOG));
+        compressedSieve(recipes, DefaultMaterials.MANGROVE_COMPRESSED_SIEVE, ingredient(Items.MANGROVE_LOG));
+        compressedSieve(recipes, DefaultMaterials.CHERRY_COMPRESSED_SIEVE, ingredient(Items.CHERRY_LOG));
+        compressedSieve(recipes, DefaultMaterials.BAMBOO_COMPRESSED_SIEVE, ingredient(Items.BAMBOO_BLOCK));
+        compressedSieve(recipes, DefaultMaterials.WARPED_COMPRESSED_SIEVE, ingredient(Items.WARPED_STEM));
+        compressedSieve(recipes, DefaultMaterials.CRIMSON_COMPRESSED_SIEVE, ingredient(Items.CRIMSON_STEM));
+
+        modCompressedSieve(recipes, ModIds.BIOMES_O_PLENTY, DefaultMaterials.FIR_COMPRESSED_SIEVE, ingredient(ModCompatData.FIR_LOG_ITEM));
+        modCompressedSieve(recipes, ModIds.BIOMES_O_PLENTY, DefaultMaterials.REDWOOD_COMPRESSED_SIEVE, ingredient(ModCompatData.REDWOOD_LOG_ITEM));
+        modCompressedSieve(recipes, ModIds.BIOMES_O_PLENTY, DefaultMaterials.MAHOGANY_COMPRESSED_SIEVE, ingredient(ModCompatData.MAHOGANY_LOG_ITEM));
+        modCompressedSieve(recipes, ModIds.BIOMES_O_PLENTY, DefaultMaterials.JACARANDA_COMPRESSED_SIEVE, ingredient(ModCompatData.JACARANDA_LOG_ITEM));
+        modCompressedSieve(recipes, ModIds.BIOMES_O_PLENTY, DefaultMaterials.PALM_COMPRESSED_SIEVE, ingredient(ModCompatData.PALM_LOG_ITEM));
+        modCompressedSieve(recipes, ModIds.BIOMES_O_PLENTY, DefaultMaterials.WILLOW_COMPRESSED_SIEVE, ingredient(ModCompatData.WILLOW_LOG_ITEM));
+        modCompressedSieve(recipes, ModIds.BIOMES_O_PLENTY, DefaultMaterials.DEAD_COMPRESSED_SIEVE, ingredient(ModCompatData.DEAD_LOG_ITEM));
+        modCompressedSieve(recipes, ModIds.BIOMES_O_PLENTY, DefaultMaterials.MAGIC_COMPRESSED_SIEVE, ingredient(ModCompatData.MAGIC_LOG_ITEM));
+        modCompressedSieve(recipes, ModIds.BIOMES_O_PLENTY, DefaultMaterials.UMBRAN_COMPRESSED_SIEVE, ingredient(ModCompatData.UMBRAN_LOG_ITEM));
+        modCompressedSieve(recipes, ModIds.BIOMES_O_PLENTY, DefaultMaterials.HELLBARK_COMPRESSED_SIEVE, ingredient(ModCompatData.HELLBARK_LOG_ITEM));
+        modCompressedSieve(recipes, ModIds.ARS_NOUVEAU, DefaultMaterials.CASCADING_ARCHWOOD_COMPRESSED_SIEVE, ingredient(ModCompatData.CASCADING_ARCHWOOD_LOG_ITEM));
+        modCompressedSieve(recipes, ModIds.ARS_NOUVEAU, DefaultMaterials.BLAZING_ARCHWOOD_COMPRESSED_SIEVE, ingredient(ModCompatData.BLAZING_ARCHWOOD_LOG_ITEM));
+        modCompressedSieve(recipes, ModIds.ARS_NOUVEAU, DefaultMaterials.VEXING_ARCHWOOD_COMPRESSED_SIEVE, ingredient(ModCompatData.VEXING_ARCHWOOD_LOG_ITEM));
+        modCompressedSieve(recipes, ModIds.ARS_NOUVEAU, DefaultMaterials.FLOURISHING_ARCHWOOD_COMPRESSED_SIEVE, ingredient(ModCompatData.FLOURISHING_ARCHWOOD_LOG_ITEM));
+        modCompressedSieve(recipes, ModIds.AETHER, DefaultMaterials.SKYROOT_COMPRESSED_SIEVE, ingredient(ModCompatData.SKYROOT_LOG_ITEM));
+        modCompressedSieve(recipes, ModIds.AETHER, DefaultMaterials.GOLDEN_OAK_COMPRESSED_SIEVE, ingredient(ModCompatData.GOLDEN_OAK_LOG_ITEM));
+        modCompressedSieve(recipes, ModIds.BLUE_SKIES, DefaultMaterials.BLUEBRIGHT_COMPRESSED_SIEVE, ingredient(ModCompatData.BLUEBRIGHT_LOG_ITEM));
+        modCompressedSieve(recipes, ModIds.BLUE_SKIES, DefaultMaterials.STARLIT_COMPRESSED_SIEVE, ingredient(ModCompatData.STARLIT_LOG_ITEM));
+        modCompressedSieve(recipes, ModIds.BLUE_SKIES, DefaultMaterials.FROSTBRIGHT_COMPRESSED_SIEVE, ingredient(ModCompatData.FROSTBRIGHT_LOG_ITEM));
+        modCompressedSieve(recipes, ModIds.BLUE_SKIES, DefaultMaterials.COMET_COMPRESSED_SIEVE, ingredient(ModCompatData.COMET_LOG_ITEM));
+        modCompressedSieve(recipes, ModIds.BLUE_SKIES, DefaultMaterials.LUNAR_COMPRESSED_SIEVE, ingredient(ModCompatData.LUNAR_LOG_ITEM));
+        modCompressedSieve(recipes, ModIds.BLUE_SKIES, DefaultMaterials.DUSK_COMPRESSED_SIEVE, ingredient(ModCompatData.DUSK_LOG_ITEM));
+        modCompressedSieve(recipes, ModIds.BLUE_SKIES, DefaultMaterials.MAPLE_COMPRESSED_SIEVE, ingredient(ModCompatData.MAPLE_LOG_ITEM));
+        modCompressedSieve(recipes, ModIds.BLUE_SKIES, DefaultMaterials.CRYSTALLIZED_COMPRESSED_SIEVE, ingredient(ModCompatData.CRYSTALLIZED_LOG_ITEM));
+
         // Modded ores
         grid2x2TagResult(writer, recipes, EItemTags.ORES_ALUMINUM, ingredient(EItems.ALUMINUM_ORE_CHUNK));
         grid2x2TagResult(writer, recipes, EItemTags.ORES_COBALT, ingredient(EItems.COBALT_ORE_CHUNK));
@@ -389,6 +440,23 @@ public class Recipes {
         });
     }
 
+    private static void compressedSieve(MKRecipeProvider recipes, ItemLike result, Ingredient log) {
+        recipes.shapedCrafting(RecipeCategory.MISC, result.asItem(), recipe -> {
+            recipe.define('O', log);
+            recipe.define('I', Tags.Items.RODS_WOODEN);
+            recipe.define('_', Tags.Items.INGOTS_IRON);
+            recipe.pattern("O O");
+            recipe.pattern("O_O");
+            recipe.pattern("I I");
+        });
+    }
+
+    private static void modCompressedSieve(MKRecipeProvider recipes, String modid, ItemLike result, Ingredient log) {
+        recipes.conditional(path(result), List.of(modInstalled(modid)), writer1 -> {
+            compressedSieve(recipes, result, log);
+        });
+    }
+
     private static void mesh(MKRecipeProvider recipes, Supplier<? extends Item> result, Ingredient ingredient) {
         recipes.shapedCrafting(RecipeCategory.MISC, result.get(), recipe -> {
             recipe.define('#', ingredient);
@@ -460,11 +528,11 @@ public class Recipes {
     }
 
     private static void lavaCrucible(Consumer<FinishedRecipe> writer, String id, Ingredient ingredient, int volume) {
-        writer.accept(new FinishedCrucibleRecipe(new ResourceLocation(ExDeorum.ID, "lava_crucible/" + id), ERecipeSerializers.LAVA_CRUCIBLE.get(), ingredient, Fluids.LAVA, volume));
+        writer.accept(new FinishedCrucibleRecipe(modLoc("lava_crucible/" + id), ERecipeSerializers.LAVA_CRUCIBLE.get(), ingredient, Fluids.LAVA, volume));
     }
 
     private static void waterCrucible(Consumer<FinishedRecipe> writer, String id, Ingredient ingredient, int volume) {
-        writer.accept(new FinishedCrucibleRecipe(new ResourceLocation(ExDeorum.ID, "water_crucible/" + id), ERecipeSerializers.WATER_CRUCIBLE.get(), ingredient, Fluids.WATER, volume));
+        writer.accept(new FinishedCrucibleRecipe(modLoc("water_crucible/" + id), ERecipeSerializers.WATER_CRUCIBLE.get(), ingredient, Fluids.WATER, volume));
     }
 
     private static void hammerRecipes(Consumer<FinishedRecipe> writer) {
@@ -507,7 +575,7 @@ public class Recipes {
     }
 
     private static void hammerRecipe(Consumer<FinishedRecipe> writer, String name, Ingredient block, ItemLike result, NumberProvider resultAmount) {
-        writer.accept(new FinishedHammerRecipe(new ResourceLocation(ExDeorum.ID, "hammer/" + name), block, result.asItem(), resultAmount));
+        writer.accept(new FinishedHammerRecipe(modLoc("hammer/" + name), block, result.asItem(), resultAmount));
     }
 
     private static void crookRecipes(Consumer<FinishedRecipe> writer) {
@@ -519,7 +587,7 @@ public class Recipes {
     }
 
     private static void crookRecipe(Consumer<FinishedRecipe> writer, String name, BlockPredicate blockPredicate, ItemLike result, float chance) {
-        writer.accept(new FinishedCrookRecipe(new ResourceLocation(ExDeorum.ID, "crook/" + name), blockPredicate, result.asItem(), chance));
+        writer.accept(new FinishedCrookRecipe(modLoc("crook/" + name), blockPredicate, result.asItem(), chance));
     }
 
     private static void crucibleHeatSources(Consumer<FinishedRecipe> writer) {
@@ -537,12 +605,13 @@ public class Recipes {
         crucibleHeatSource(writer, "lit_soul_campfire", BlockPredicate.blockState(Blocks.SOUL_CAMPFIRE, StatePropertiesPredicate.Builder.properties().hasProperty(CampfireBlock.LIT, true).build()), 2);
     }
 
+    @SuppressWarnings("deprecation")
     private static void crucibleHeatSource(Consumer<FinishedRecipe> writer, Block block, int heatValue) {
         crucibleHeatSource(writer, BuiltInRegistries.BLOCK.getKey(block).getPath(), BlockPredicate.singleBlock(block), heatValue);
     }
 
     private static void crucibleHeatSource(Consumer<FinishedRecipe> writer, String name, BlockPredicate blockPredicate, int heatValue) {
-        writer.accept(new FinishedCrucibleHeatRecipe(new ResourceLocation(ExDeorum.ID, "crucible_heat_source/" + name), blockPredicate, heatValue));
+        writer.accept(new FinishedCrucibleHeatRecipe(modLoc("crucible_heat_source/" + name), blockPredicate, heatValue));
     }
 
     private static void barrelCompostRecipes(Consumer<FinishedRecipe> writer) {
@@ -617,7 +686,7 @@ public class Recipes {
     }
 
     private static void barrelCompost(Consumer<FinishedRecipe> writer, String id, Ingredient ingredient, int volume) {
-        writer.accept(new FinishedBarrelCompostRecipe(new ResourceLocation(ExDeorum.ID, "barrel_compost/" + id), ingredient, volume));
+        writer.accept(new FinishedBarrelCompostRecipe(modLoc("barrel_compost/" + id), ingredient, volume));
     }
 
     private static void barrelMixingRecipes(Consumer<FinishedRecipe> writer) {
@@ -644,11 +713,11 @@ public class Recipes {
     }
 
     private static void barrelMixing(Consumer<FinishedRecipe> writer, String suffix, Ingredient ingredient, Fluid fluidType, Item result) {
-        writer.accept(new FinishedBarrelMixingRecipe(new ResourceLocation(ExDeorum.ID, "barrel_mixing/" + path(result) + suffix), ingredient, fluidType, 1000, result));
+        writer.accept(new FinishedBarrelMixingRecipe(modLoc("barrel_mixing/" + path(result) + suffix), ingredient, fluidType, 1000, result));
     }
 
     private static void barrelFluidMixing(Consumer<FinishedRecipe> writer, Fluid base, Fluid additive, Item result, boolean consumesAdditive) {
-        writer.accept(new FinishedBarrelFluidMixingRecipe(new ResourceLocation(ExDeorum.ID, "barrel_fluid_mixing/" + path(result)), base, 1000, additive, result, consumesAdditive));
+        writer.accept(new FinishedBarrelFluidMixingRecipe(modLoc("barrel_fluid_mixing/" + path(result)), base, 1000, additive, result, consumesAdditive));
     }
 
     private static void fluidTransformationRecipes(Consumer<FinishedRecipe> writer) {

@@ -93,6 +93,11 @@ class English {
         english.add(DefaultMaterials.BLAZING_ARCHWOOD_CRUCIBLE.getBlock(), "Blazing Archwood Crucible");
         english.add(DefaultMaterials.FLOURISHING_ARCHWOOD_CRUCIBLE.getBlock(), "Flourishing Archwood Crucible");
 
+        english.add(DefaultMaterials.VEXING_ARCHWOOD_COMPRESSED_SIEVE.getBlock(), "Vexing Archwood Compressed Sieve");
+        english.add(DefaultMaterials.CASCADING_ARCHWOOD_COMPRESSED_SIEVE.getBlock(), "Cascading Archwood Compressed Sieve");
+        english.add(DefaultMaterials.BLAZING_ARCHWOOD_COMPRESSED_SIEVE.getBlock(), "Blazing Archwood Compressed Sieve");
+        english.add(DefaultMaterials.FLOURISHING_ARCHWOOD_COMPRESSED_SIEVE.getBlock(), "Flourishing Archwood Compressed Sieve");
+
         // Jade translation (what does this look like?)
         english.add("config.jade.plugin_exdeorum.infested_leaves", "Infested Leaves");
         english.add("config.jade.plugin_exdeorum.barrel", "Barrel");

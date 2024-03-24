@@ -75,6 +75,8 @@ class BlockModels {
         compressedSieve(models, DefaultMaterials.MANGROVE_COMPRESSED_SIEVE.getBlock(), Blocks.MANGROVE_LOG);
         compressedSieve(models, DefaultMaterials.CHERRY_COMPRESSED_SIEVE.getBlock(), Blocks.CHERRY_LOG);
         compressedSieve(models, DefaultMaterials.BAMBOO_COMPRESSED_SIEVE.getBlock(), Blocks.BAMBOO_BLOCK);
+        compressedSieve(models, DefaultMaterials.WARPED_COMPRESSED_SIEVE.getBlock(), Blocks.WARPED_STEM);
+        compressedSieve(models, DefaultMaterials.CRIMSON_COMPRESSED_SIEVE.getBlock(), Blocks.CRIMSON_STEM);
 
         // Lava Crucible
         crucible(models, EBlocks.UNFIRED_PORCELAIN_CRUCIBLE.get());
@@ -105,6 +107,11 @@ class BlockModels {
 
         sieve(models, DefaultMaterials.ARCHWOOD_SIEVE.getBlock(), ModCompatData.ARCHWOOD_PLANKS.get());
 
+        compressedSieve(models, DefaultMaterials.CASCADING_ARCHWOOD_COMPRESSED_SIEVE.getBlock(), ModCompatData.CASCADING_ARCHWOOD_LOG.get());
+        compressedSieve(models, DefaultMaterials.BLAZING_ARCHWOOD_COMPRESSED_SIEVE.getBlock(), ModCompatData.BLAZING_ARCHWOOD_LOG.get());
+        compressedSieve(models, DefaultMaterials.VEXING_ARCHWOOD_COMPRESSED_SIEVE.getBlock(), ModCompatData.VEXING_ARCHWOOD_LOG.get());
+        compressedSieve(models, DefaultMaterials.FLOURISHING_ARCHWOOD_COMPRESSED_SIEVE.getBlock(), ModCompatData.FLOURISHING_ARCHWOOD_LOG.get());
+
         crucible(models, DefaultMaterials.CASCADING_ARCHWOOD_CRUCIBLE.getBlock(), ModCompatData.CASCADING_ARCHWOOD_LOG.get());
         crucible(models, DefaultMaterials.BLAZING_ARCHWOOD_CRUCIBLE.getBlock(), ModCompatData.BLAZING_ARCHWOOD_LOG.get());
         crucible(models, DefaultMaterials.VEXING_ARCHWOOD_CRUCIBLE.getBlock(), ModCompatData.VEXING_ARCHWOOD_LOG.get());
@@ -116,7 +123,8 @@ class BlockModels {
 
         sieve(models, DefaultMaterials.SKYROOT_SIEVE.getBlock(), ModCompatData.SKYROOT_PLANKS.get(), "construction/");
 
-        //compressedSieve(models, DefaultMaterials.COMPRESSED_SKYROOT_SIEVE.getBlock(), ModCompatData.SKYROOT_LOG.get(), "natural");
+        compressedSieve(models, DefaultMaterials.SKYROOT_COMPRESSED_SIEVE.getBlock(), ModCompatData.SKYROOT_LOG.get(), "natural/", "");
+        compressedSieve(models, DefaultMaterials.GOLDEN_OAK_COMPRESSED_SIEVE.getBlock(), ModCompatData.GOLDEN_OAK_LOG.get(), "natural/", "");
 
         crucible(models, DefaultMaterials.SKYROOT_CRUCIBLE.getBlock(), ModCompatData.SKYROOT_LOG.get(), "natural/", "");
         crucible(models, DefaultMaterials.GOLDEN_OAK_CRUCIBLE.getBlock(), ModCompatData.GOLDEN_OAK_LOG.get(), "natural/", "");
@@ -143,6 +151,15 @@ class BlockModels {
         sieve(models, DefaultMaterials.DUSK_SIEVE.getBlock(), ModCompatData.DUSK_PLANKS.get(), woodPrefix);
         sieve(models, DefaultMaterials.MAPLE_SIEVE.getBlock(), ModCompatData.MAPLE_PLANKS.get(), woodPrefix);
         sieve(models, DefaultMaterials.CRYSTALLIZED_SIEVE.getBlock(), ModCompatData.CRYSTALLIZED_PLANKS.get(), woodPrefix).renderType("translucent");
+
+        compressedSieve(models, DefaultMaterials.BLUEBRIGHT_COMPRESSED_SIEVE.getBlock(), ModCompatData.BLUEBRIGHT_LOG.get(), woodPrefix, logSuffix);
+        compressedSieve(models, DefaultMaterials.STARLIT_COMPRESSED_SIEVE.getBlock(), ModCompatData.STARLIT_LOG.get(), woodPrefix, logSuffix);
+        compressedSieve(models, DefaultMaterials.FROSTBRIGHT_COMPRESSED_SIEVE.getBlock(), ModCompatData.FROSTBRIGHT_LOG.get(), woodPrefix, logSuffix);
+        compressedSieve(models, DefaultMaterials.COMET_COMPRESSED_SIEVE.getBlock(), ModCompatData.COMET_LOG.get(), woodPrefix, logSuffix);
+        compressedSieve(models, DefaultMaterials.LUNAR_COMPRESSED_SIEVE.getBlock(), ModCompatData.LUNAR_LOG.get(), woodPrefix, logSuffix);
+        compressedSieve(models, DefaultMaterials.DUSK_COMPRESSED_SIEVE.getBlock(), ModCompatData.DUSK_LOG.get(), woodPrefix, logSuffix);
+        compressedSieve(models, DefaultMaterials.MAPLE_COMPRESSED_SIEVE.getBlock(), ModCompatData.MAPLE_LOG.get(), woodPrefix, logSuffix);
+        compressedSieve(models, DefaultMaterials.CRYSTALLIZED_COMPRESSED_SIEVE.getBlock(), ModCompatData.CRYSTALLIZED_LOG.get(), woodPrefix, logSuffix).renderType("translucent");
 
         crucible(models, DefaultMaterials.BLUEBRIGHT_CRUCIBLE.getBlock(), ModCompatData.BLUEBRIGHT_LOG.get(), woodPrefix, logSuffix);
         crucible(models, DefaultMaterials.STARLIT_CRUCIBLE.getBlock(), ModCompatData.STARLIT_LOG.get(), woodPrefix, logSuffix);
@@ -176,6 +193,17 @@ class BlockModels {
         sieve(models, DefaultMaterials.MAGIC_SIEVE.getBlock(), ModCompatData.MAGIC_PLANKS.get());
         sieve(models, DefaultMaterials.UMBRAN_SIEVE.getBlock(), ModCompatData.UMBRAN_PLANKS.get());
         sieve(models, DefaultMaterials.HELLBARK_SIEVE.getBlock(), ModCompatData.HELLBARK_PLANKS.get());
+
+        compressedSieve(models, DefaultMaterials.FIR_COMPRESSED_SIEVE.getBlock(), ModCompatData.FIR_LOG.get());
+        compressedSieve(models, DefaultMaterials.REDWOOD_COMPRESSED_SIEVE.getBlock(), ModCompatData.REDWOOD_LOG.get());
+        compressedSieve(models, DefaultMaterials.MAHOGANY_COMPRESSED_SIEVE.getBlock(), ModCompatData.MAHOGANY_LOG.get());
+        compressedSieve(models, DefaultMaterials.JACARANDA_COMPRESSED_SIEVE.getBlock(), ModCompatData.JACARANDA_LOG.get());
+        compressedSieve(models, DefaultMaterials.PALM_COMPRESSED_SIEVE.getBlock(), ModCompatData.PALM_LOG.get());
+        compressedSieve(models, DefaultMaterials.WILLOW_COMPRESSED_SIEVE.getBlock(), ModCompatData.WILLOW_LOG.get());
+        compressedSieve(models, DefaultMaterials.DEAD_COMPRESSED_SIEVE.getBlock(), ModCompatData.DEAD_LOG.get());
+        compressedSieve(models, DefaultMaterials.MAGIC_COMPRESSED_SIEVE.getBlock(), ModCompatData.MAGIC_LOG.get());
+        compressedSieve(models, DefaultMaterials.UMBRAN_COMPRESSED_SIEVE.getBlock(), ModCompatData.UMBRAN_LOG.get());
+        compressedSieve(models, DefaultMaterials.HELLBARK_COMPRESSED_SIEVE.getBlock(), ModCompatData.HELLBARK_LOG.get());
 
         crucible(models, DefaultMaterials.FIR_CRUCIBLE.getBlock(), ModCompatData.FIR_LOG.get());
         crucible(models, DefaultMaterials.REDWOOD_CRUCIBLE.getBlock(), ModCompatData.REDWOOD_LOG.get());

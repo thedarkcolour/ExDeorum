@@ -21,15 +21,12 @@ package thedarkcolour.exdeorum.block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.registries.RegistryObject;
-import thedarkcolour.exdeorum.blockentity.EBlockEntity;
-import thedarkcolour.exdeorum.blockentity.SieveBlockEntity;
+import thedarkcolour.exdeorum.blockentity.AbstractSieveBlockEntity;
 import thedarkcolour.exdeorum.registry.EBlockEntities;
 
 import java.util.function.Supplier;
@@ -60,7 +57,7 @@ public class SieveBlock extends EBlock {
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean pIsMoving) {
         if (!level.isClientSide) {
             if (!state.is(newState.getBlock())) {
-                if (level.getBlockEntity(pos) instanceof SieveBlockEntity sieve) {
+                if (level.getBlockEntity(pos) instanceof AbstractSieveBlockEntity sieve) {
                     var mesh = sieve.getLogic().getMesh();
 
                     if (!mesh.isEmpty()) {
