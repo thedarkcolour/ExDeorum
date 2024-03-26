@@ -55,6 +55,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.compat.PreferredOres;
+import thedarkcolour.exdeorum.item.CompressedHammerItem;
 import thedarkcolour.exdeorum.item.HammerItem;
 import thedarkcolour.exdeorum.loot.SummationGenerator;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelCompostRecipe;
@@ -64,6 +65,7 @@ import thedarkcolour.exdeorum.recipe.barrel.BarrelMixingRecipe;
 import thedarkcolour.exdeorum.recipe.cache.*;
 import thedarkcolour.exdeorum.recipe.crook.CrookRecipe;
 import thedarkcolour.exdeorum.recipe.crucible.CrucibleRecipe;
+import thedarkcolour.exdeorum.recipe.hammer.CompressedHammerRecipe;
 import thedarkcolour.exdeorum.recipe.hammer.HammerRecipe;
 import thedarkcolour.exdeorum.recipe.sieve.CompressedSieveRecipe;
 import thedarkcolour.exdeorum.recipe.sieve.SieveRecipe;
@@ -87,6 +89,7 @@ public final class RecipeUtil {
     private static SingleIngredientRecipeCache<CrucibleRecipe> lavaCrucibleRecipeCache;
     private static SingleIngredientRecipeCache<CrucibleRecipe> waterCrucibleRecipeCache;
     private static SingleIngredientRecipeCache<HammerRecipe> hammerRecipeCache;
+    private static SingleIngredientRecipeCache<CompressedHammerRecipe> compressedHammerRecipeCache;
     private static SieveRecipeCache<SieveRecipe> sieveRecipeCache;
     private static SieveRecipeCache<CompressedSieveRecipe> compressedSieveRecipeCache;
     private static BarrelFluidMixingRecipeCache barrelFluidMixingRecipeCache;
@@ -99,6 +102,7 @@ public final class RecipeUtil {
         lavaCrucibleRecipeCache = new SingleIngredientRecipeCache<>(recipes, ERecipeTypes.LAVA_CRUCIBLE);
         waterCrucibleRecipeCache = new SingleIngredientRecipeCache<>(recipes, ERecipeTypes.WATER_CRUCIBLE);
         hammerRecipeCache = new SingleIngredientRecipeCache<>(recipes, ERecipeTypes.HAMMER).trackAllRecipes();
+        compressedHammerRecipeCache = new SingleIngredientRecipeCache<>(recipes, ERecipeTypes.COMPRESSED_HAMMER).trackAllRecipes();
         sieveRecipeCache = new SieveRecipeCache<>(recipes, ERecipeTypes.SIEVE);
         compressedSieveRecipeCache = new SieveRecipeCache<>(recipes, ERecipeTypes.COMPRESSED_SIEVE);
         barrelFluidMixingRecipeCache = new BarrelFluidMixingRecipeCache(recipes);
@@ -106,6 +110,7 @@ public final class RecipeUtil {
         crookRecipeCache = new CrookRecipeCache(recipes);
         crucibleHeatRecipeCache = new CrucibleHeatRecipeCache(recipes);
         HammerItem.refreshValidBlocks();
+        CompressedHammerItem.refreshValidBlocks();
     }
 
     public static void unload() {
@@ -113,6 +118,7 @@ public final class RecipeUtil {
         lavaCrucibleRecipeCache = null;
         waterCrucibleRecipeCache = null;
         hammerRecipeCache = null;
+        compressedHammerRecipeCache = null;
         sieveRecipeCache = null;
         barrelFluidMixingRecipeCache = null;
         fluidTransformationRecipeCache = null;
@@ -150,6 +156,10 @@ public final class RecipeUtil {
 
     public static Collection<HammerRecipe> getCachedHammerRecipes() {
         return hammerRecipeCache.getAllRecipes();
+    }
+
+    public static Collection<CompressedHammerRecipe> getCachedCompressedHammerRecipes() {
+        return compressedHammerRecipeCache.getAllRecipes();
     }
 
     public static <C extends Container, T extends Recipe<C>> Collection<T> byType(RecipeManager manager, RecipeType<T> type) {
@@ -315,7 +325,6 @@ public final class RecipeUtil {
         return barrelCompostRecipeCache != null && barrelCompostRecipeCache.getRecipe(stack) != null;
     }
 
-    // todo stop using the RecipeManager
     @Nullable
     public static BarrelMixingRecipe getBarrelMixingRecipe(RecipeManager recipes, ItemStack stack, FluidStack fluid) {
         for (var recipe : byType(recipes, ERecipeTypes.BARREL_MIXING.get())) {

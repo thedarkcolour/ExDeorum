@@ -49,11 +49,11 @@ public class HammerRecipe extends ProbabilityRecipe {
         return ERecipeTypes.HAMMER.get();
     }
 
-    public static abstract class AbstractSerializer implements RecipeSerializer<HammerRecipe> {
-        protected abstract HammerRecipe createHammerRecipe(ResourceLocation id, Ingredient ingredient, Item result, NumberProvider resultAmount);
+    public static abstract class AbstractSerializer<T extends HammerRecipe> implements RecipeSerializer<T> {
+        protected abstract T createHammerRecipe(ResourceLocation id, Ingredient ingredient, Item result, NumberProvider resultAmount);
 
         @Override
-        public HammerRecipe fromJson(ResourceLocation name, JsonObject json) {
+        public T fromJson(ResourceLocation name, JsonObject json) {
             Ingredient ingredient = RecipeUtil.readIngredient(json, "ingredient");
             Item result = RecipeUtil.readItem(json, "result");
             NumberProvider resultAmount = RecipeUtil.readNumberProvider(json, "result_amount");
@@ -62,7 +62,7 @@ public class HammerRecipe extends ProbabilityRecipe {
 
         @Override
         @SuppressWarnings("deprecation")
-        public HammerRecipe fromNetwork(ResourceLocation name, FriendlyByteBuf buffer) {
+        public T fromNetwork(ResourceLocation name, FriendlyByteBuf buffer) {
             Ingredient ingredient = Ingredient.fromNetwork(buffer);
             Item result = Objects.requireNonNull(buffer.readById(BuiltInRegistries.ITEM));
             NumberProvider resultAmount = RecipeUtil.fromNetworkNumberProvider(buffer);
@@ -71,14 +71,14 @@ public class HammerRecipe extends ProbabilityRecipe {
 
         @Override
         @SuppressWarnings("deprecation")
-        public void toNetwork(FriendlyByteBuf buffer, HammerRecipe recipe) {
+        public void toNetwork(FriendlyByteBuf buffer, T recipe) {
             recipe.getIngredient().toNetwork(buffer);
             buffer.writeId(BuiltInRegistries.ITEM, recipe.result);
             RecipeUtil.toNetworkNumberProvider(buffer, recipe.resultAmount);
         }
     }
 
-    public static class Serializer extends AbstractSerializer {
+    public static class Serializer extends AbstractSerializer<HammerRecipe> {
         @Override
         protected HammerRecipe createHammerRecipe(ResourceLocation id, Ingredient ingredient, Item result, NumberProvider resultAmount) {
             return new HammerRecipe(id, ingredient, result, resultAmount);

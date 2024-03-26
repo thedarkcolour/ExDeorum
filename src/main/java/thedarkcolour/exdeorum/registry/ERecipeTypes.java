@@ -30,6 +30,7 @@ import thedarkcolour.exdeorum.recipe.barrel.BarrelMixingRecipe;
 import thedarkcolour.exdeorum.recipe.crook.CrookRecipe;
 import thedarkcolour.exdeorum.recipe.crucible.CrucibleHeatRecipe;
 import thedarkcolour.exdeorum.recipe.crucible.CrucibleRecipe;
+import thedarkcolour.exdeorum.recipe.hammer.CompressedHammerRecipe;
 import thedarkcolour.exdeorum.recipe.hammer.HammerRecipe;
 import thedarkcolour.exdeorum.recipe.sieve.CompressedSieveRecipe;
 import thedarkcolour.exdeorum.recipe.sieve.SieveRecipe;
@@ -46,6 +47,7 @@ public class ERecipeTypes {
     public static final RegistryObject<RecipeType<CrucibleRecipe>> WATER_CRUCIBLE = RECIPE_TYPES.register("water_crucible", () -> RecipeType.simple(ERecipeTypes.WATER_CRUCIBLE.getId()));
 
     public static final RegistryObject<RecipeType<HammerRecipe>> HAMMER = RECIPE_TYPES.register("hammer", () -> RecipeType.simple(ERecipeTypes.HAMMER.getId()));
+    public static final RegistryObject<RecipeType<CompressedHammerRecipe>> COMPRESSED_HAMMER = RECIPE_TYPES.register("compressed_hammer", () -> RecipeType.simple(ERecipeTypes.COMPRESSED_SIEVE.getId()));
     public static final RegistryObject<RecipeType<CrookRecipe>> CROOK = RECIPE_TYPES.register("crook", () -> RecipeType.simple(ERecipeTypes.CROOK.getId()));
     public static final RegistryObject<RecipeType<CrucibleHeatRecipe>> CRUCIBLE_HEAT_SOURCE = RECIPE_TYPES.register("crucible_heat_source", () -> RecipeType.simple(ERecipeTypes.CRUCIBLE_HEAT_SOURCE.getId()));
 

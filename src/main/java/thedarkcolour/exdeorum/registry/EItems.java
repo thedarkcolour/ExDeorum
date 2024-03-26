@@ -70,6 +70,14 @@ public class EItems {
     public static final RegistryObject<Item> DIAMOND_HAMMER = ITEMS.register("diamond_hammer", () -> new HammerItem(Tiers.DIAMOND, props()));
     public static final RegistryObject<Item> NETHERITE_HAMMER = ITEMS.register("netherite_hammer", () -> new HammerItem(Tiers.NETHERITE, props()));
 
+    // Compressed Hammers
+    public static final RegistryObject<Item> WOODEN_COMPRESSED_HAMMER = ITEMS.register("wooden_compressed_hammer", () -> new CompressedHammerItem(Tiers.WOOD, props()));
+    public static final RegistryObject<Item> STONE_COMPRESSED_HAMMER = ITEMS.register("stone_compressed_hammer", () -> new CompressedHammerItem(Tiers.STONE, props()));
+    public static final RegistryObject<Item> GOLDEN_COMPRESSED_HAMMER = ITEMS.register("golden_compressed_hammer", () -> new CompressedHammerItem(Tiers.GOLD, props()));
+    public static final RegistryObject<Item> IRON_COMPRESSED_HAMMER = ITEMS.register("iron_compressed_hammer", () -> new CompressedHammerItem(Tiers.IRON, props()));
+    public static final RegistryObject<Item> DIAMOND_COMPRESSED_HAMMER = ITEMS.register("diamond_compressed_hammer", () -> new CompressedHammerItem(Tiers.DIAMOND, props()));
+    public static final RegistryObject<Item> NETHERITE_COMPRESSED_HAMMER = ITEMS.register("netherite_compressed_hammer", () -> new CompressedHammerItem(Tiers.NETHERITE, props()));
+
     // Ore Chunks
     public static final RegistryObject<Item> IRON_ORE_CHUNK = registerSimpleItem("iron_ore_chunk");
     public static final RegistryObject<Item> COPPER_ORE_CHUNK = registerSimpleItem("copper_ore_chunk");
@@ -224,6 +232,12 @@ public class EItems {
         output.accept(IRON_HAMMER.get());
         output.accept(DIAMOND_HAMMER.get());
         output.accept(NETHERITE_HAMMER.get());
+        output.accept(WOODEN_COMPRESSED_HAMMER.get());
+        output.accept(STONE_COMPRESSED_HAMMER.get());
+        output.accept(GOLDEN_COMPRESSED_HAMMER.get());
+        output.accept(IRON_COMPRESSED_HAMMER.get());
+        output.accept(DIAMOND_COMPRESSED_HAMMER.get());
+        output.accept(NETHERITE_COMPRESSED_HAMMER.get());
         output.accept(IRON_ORE_CHUNK.get());
         output.accept(COPPER_ORE_CHUNK.get());
         output.accept(GOLD_ORE_CHUNK.get());
