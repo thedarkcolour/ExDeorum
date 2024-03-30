@@ -1,3 +1,6 @@
+## Ex Deorum 2.2
+- Fixed hammers and crooks not working
+
 ## Ex Deorum 2.1
 - Add a config option to disable the automated_sieve nerf (now you can enable machines to use multiple sieves simultaneously)
 
