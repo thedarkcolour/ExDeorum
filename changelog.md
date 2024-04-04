@@ -1,3 +1,6 @@
+## Ex Deorum 2.3
+- Fixed infested leaves not dropping string with a Crook
+
 ## Ex Deorum 2.2
 - Fixed hammers and crooks not working
 

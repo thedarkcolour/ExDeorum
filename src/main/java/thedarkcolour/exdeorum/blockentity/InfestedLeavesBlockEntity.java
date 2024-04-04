@@ -41,6 +41,8 @@ import thedarkcolour.exdeorum.registry.EBlocks;
 public class InfestedLeavesBlockEntity extends EBlockEntity {
     // progress is a short between 0 and 16000 (why? because that's what the shader uses, also avoids float errors)
     public static final short MAX_PROGRESS = 16000;
+    // leaves only spread at 60% infestation and above
+    public static final short SPREAD_THRESHOLD = (MAX_PROGRESS * 3) / 5;
     // 0.005 * 16000 = 80
     public static final short PROGRESS_INTERVAL = 80;
     public static final int SPREAD_INTERVAL = 40;
@@ -121,7 +123,7 @@ public class InfestedLeavesBlockEntity extends EBlockEntity {
             this.mimic = Blocks.OAK_LEAVES.defaultBlockState();
         }
         nbt.put("mimic", NbtUtils.writeBlockState(this.mimic));
-        nbt.putFloat("progress", this.progress);
+        nbt.putShort("progress", this.progress);
     }
 
     public int getProgress() {
@@ -152,13 +154,13 @@ public class InfestedLeavesBlockEntity extends EBlockEntity {
             if (leaves.progress < MAX_PROGRESS) {
                 leaves.progress = (short) Math.min(MAX_PROGRESS, leaves.progress + PROGRESS_INTERVAL);
 
-                if (leaves.progress == 1.0f) {
+                if (leaves.progress == MAX_PROGRESS) {
                     level.setBlock(pos, state.setValue(InfestedLeavesBlock.FULLY_INFESTED, true), 1);
                 }
             }
 
             // If the leave is infested enough, advance the spread timer
-            if (!level.isClientSide && leaves.progress > 0.6f) {
+            if (!level.isClientSide && leaves.progress >= SPREAD_THRESHOLD) {
                 ++leaves.spreadTimer;
 
                 // Attempt to spread and reset the timer
