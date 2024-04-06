@@ -21,15 +21,14 @@ package thedarkcolour.exdeorum.compat;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.Container;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.ItemLike;
 import net.neoforged.fml.ModList;
 import thedarkcolour.exdeorum.material.DefaultMaterials;
-import thedarkcolour.exdeorum.recipe.sieve.SieveRecipe;
+import thedarkcolour.exdeorum.material.MaterialRegistry;
 import thedarkcolour.exdeorum.registry.EItems;
-import thedarkcolour.exdeorum.registry.ERecipeTypes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,52 +36,36 @@ import java.util.Objects;
 import java.util.function.Function;
 
 public class CompatUtil {
-    public static List<Item> getAvailableBarrels(boolean registered) {
-        List<Item> barrels = new ArrayList<>();
-        for (var material : DefaultMaterials.BARRELS) {
-            if (registered == ModList.get().isLoaded(material.requiredModId)) {
-                barrels.add(material.getItem());
-            }
-        }
-        return barrels;
+    public static List<ItemLike> getAvailableBarrels(boolean registered) {
+        return getAvailableMaterials(DefaultMaterials.BARRELS, registered);
     }
 
-    public static List<Item> getAvailableSieves(boolean registered, boolean includeMechanical) {
-        List<Item> sieves = new ArrayList<>();
-        for (var material : DefaultMaterials.SIEVES) {
-            if (registered == ModList.get().isLoaded(material.requiredModId)) {
-                sieves.add(material.getItem());
-            }
-        }
+    public static List<ItemLike> getAvailableSieves(boolean registered, boolean includeMechanical) {
+        List<ItemLike> sieves = getAvailableMaterials(DefaultMaterials.SIEVES, registered);
         if (includeMechanical) {
             sieves.add(EItems.MECHANICAL_SIEVE.get());
         }
-
         return sieves;
     }
 
-    public static List<Item> getAvailableLavaCrucibles(boolean registered) {
-        List<Item> lavaCrucibles = new ArrayList<>();
-
-        for (var material : DefaultMaterials.LAVA_CRUCIBLES) {
-            if (registered == ModList.get().isLoaded(material.requiredModId)) {
-                lavaCrucibles.add(material.getItem());
-            }
-        }
-
-        return lavaCrucibles;
+    public static List<ItemLike> getAvailableLavaCrucibles(boolean registered) {
+        return getAvailableMaterials(DefaultMaterials.LAVA_CRUCIBLES, registered);
     }
 
-    public static List<Item> getAvailableWaterCrucibles(boolean registered) {
-        List<Item> waterCrucibles = new ArrayList<>();
+    public static List<ItemLike> getAvailableWaterCrucibles(boolean registered) {
+        return getAvailableMaterials(DefaultMaterials.WATER_CRUCIBLES, registered);
+    }
 
-        for (var material : DefaultMaterials.WATER_CRUCIBLES) {
+    private static List<ItemLike> getAvailableMaterials(MaterialRegistry<?> registry, boolean registered) {
+        List<ItemLike> materials = new ArrayList<>();
+
+        for (var material : registry) {
             if (registered == ModList.get().isLoaded(material.requiredModId)) {
-                waterCrucibles.add(material.getItem());
+                materials.add(material);
             }
         }
 
-        return waterCrucibles;
+        return materials;
     }
 
     public static <C extends Container, R extends Recipe<C>, T> List<T> collectAllRecipes(RecipeType<R> recipeType, Function<R, T> mapper) {
