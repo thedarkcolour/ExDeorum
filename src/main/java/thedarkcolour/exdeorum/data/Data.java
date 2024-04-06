@@ -19,14 +19,12 @@
 package thedarkcolour.exdeorum.data;
 
 import net.minecraft.core.registries.Registries;
-import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.data.recipe.Recipes;
 import thedarkcolour.modkit.data.DataHelper;
 
 public class Data {
-    // todo ensure this does not crash without ModKit
     public static void generateData(GatherDataEvent event) {
         // Two things used by data generators
         var gen = event.getGenerator(); // writes to json

@@ -19,6 +19,8 @@ runs {
     configureEach {
         systemProperty 'forge.logging.console.level', 'debug'
 
+        jvmArgument '-XX:+AllowEnhancedClassRedefinition'
+
         modSource project.sourceSets.main
     }
 
@@ -77,6 +79,10 @@ repositories {
         content { includeGroup 'com.github.thedarkcolour' }
     }
     maven {
+        name = 'TerraformersMC'
+        url = 'https://maven.terraformersmc.com'
+    }
+    maven {
         name = "Modrinth"
         url = "https://api.modrinth.com/maven"
         content {
@@ -102,12 +108,14 @@ dependencies {
     // JADE OPTIONAL
     implementation("curse.maven:jade-324717:5109393")
     // JEI OPTIONAL
-    compileOnly("mezz.jei:jei-${mc_version}-common-api:${jei_version}")
     compileOnly("mezz.jei:jei-${mc_version}-neoforge-api:${jei_version}")
     runtimeOnly("mezz.jei:jei-${mc_version}-neoforge:${jei_version}")
     // REI OPTIONAL todo add
     compileOnly("me.shedaniel:RoughlyEnoughItems-forge:${rei_version}")
     compileOnly("me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}")
+    // EMI OPTIONAL
+    compileOnly("dev.emi:emi-neoforge:${emi_version}:api")
+    runtimeOnly("dev.emi:emi-neoforge:${emi_version}")
     //implementation("curse.maven:reipc-521393:4837449")
     // KubeJS OPTIONAL todo add when KubeJS updates
     //implementation("dev.architectury:architectury-neoforge:${architectury_version}")

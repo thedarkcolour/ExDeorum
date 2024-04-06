@@ -41,12 +41,14 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.WallTorchBlock;
+import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.fluids.FluidStack;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.client.screen.MechanicalHammerScreen;
 import thedarkcolour.exdeorum.client.screen.MechanicalSieveScreen;
 import thedarkcolour.exdeorum.compat.CompatUtil;
 import thedarkcolour.exdeorum.compat.GroupedSieveRecipe;
+import thedarkcolour.exdeorum.compat.ModIds;
 import thedarkcolour.exdeorum.data.TranslationKeys;
 import thedarkcolour.exdeorum.item.WateringCanItem;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
@@ -239,7 +241,7 @@ public class ExDeorumJeiPlugin implements IModPlugin {
             @Override
             public Collection<IGuiClickableArea> getGuiClickableAreas(MechanicalSieveScreen containerScreen, double mouseX, double mouseY) {
                 IGuiClickableArea clickableArea = IGuiClickableArea.createBasic(MechanicalSieveScreen.RECIPE_CLICK_AREA_POS_X, MechanicalSieveScreen.RECIPE_CLICK_AREA_POS_Y, MechanicalSieveScreen.RECIPE_CLICK_AREA_WIDTH, MechanicalSieveScreen.RECIPE_CLICK_AREA_HEIGHT, SIEVE);
-                return List.of(clickableArea);
+                return ModList.get().isLoaded(ModIds.EMI) ? List.of() : List.of(clickableArea);
             }
 
             @Override
@@ -255,7 +257,7 @@ public class ExDeorumJeiPlugin implements IModPlugin {
             @Override
             public Collection<IGuiClickableArea> getGuiClickableAreas(MechanicalHammerScreen containerScreen, double mouseX, double mouseY) {
                 IGuiClickableArea clickableArea = IGuiClickableArea.createBasic(MechanicalHammerScreen.RECIPE_CLICK_AREA_POS_X, MechanicalHammerScreen.RECIPE_CLICK_AREA_POS_Y, MechanicalHammerScreen.RECIPE_CLICK_AREA_WIDTH, MechanicalHammerScreen.RECIPE_CLICK_AREA_HEIGHT, HAMMER);
-                return List.of(clickableArea);
+                return ModList.get().isLoaded(ModIds.EMI) ? List.of() : List.of(clickableArea);
             }
 
             @Override

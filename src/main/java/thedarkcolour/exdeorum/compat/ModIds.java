@@ -42,6 +42,7 @@ public class ModIds {
     public static final String PAMS_HARVESTCRAFT_CROPS = "pamhc2crops";
     public static final String NUCLEARCRAFT_NEOTERIC = "nuclearcraft";
     public static final String JEI = "jei";
+    public static final String EMI = "emi";
     public static final String INVENTORY_SORTER = "inventorysorter";
     public static final String REI_PC = "rei_plugin_compatibilities";
 }

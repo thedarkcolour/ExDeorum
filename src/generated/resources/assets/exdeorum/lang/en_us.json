@@ -232,5 +232,13 @@
   "item.exdeorum.wooden_hammer": "Wooden Hammer",
   "item.exdeorum.wooden_watering_can": "Wooden Watering Can",
   "item.exdeorum.zinc_ore_chunk": "Zinc Ore Chunk",
-  "itemGroup.exdeorum.main": "Ex Deorum"
+  "itemGroup.exdeorum.main": "Ex Deorum",
+  "tag.item.exdeorum.barrels": "Barrels",
+  "tag.item.exdeorum.crooks": "Crooks",
+  "tag.item.exdeorum.end_cake_materials": "End Cake Materials",
+  "tag.item.exdeorum.hammers": "Hammers",
+  "tag.item.exdeorum.pebbles": "Pebbles",
+  "tag.item.exdeorum.sieve_meshes": "Sieve Meshes",
+  "tag.item.exdeorum.stone_barrels": "Stone Barrels",
+  "tag.item.exdeorum.wooden_barrels": "Wooden Barrels"
 }

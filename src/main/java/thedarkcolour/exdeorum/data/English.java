@@ -18,15 +18,29 @@
 
 package thedarkcolour.exdeorum.data;
 
+import net.minecraft.tags.TagKey;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.client.screen.RedstoneControlWidget;
 import thedarkcolour.exdeorum.material.DefaultMaterials;
 import thedarkcolour.exdeorum.registry.EBlocks;
+import thedarkcolour.exdeorum.registry.EFluids;
+import thedarkcolour.exdeorum.tag.EItemTags;
 import thedarkcolour.modkit.data.MKEnglishProvider;
 
 class English {
     static void addTranslations(MKEnglishProvider english) {
-        english.add("fluid_type." + ExDeorum.ID + ".witch_water", "Witch Water");
+        english.addTranslationHandler(TagKey.class, tag -> "tag.item." + tag.location().toString().replaceAll("[:/]", "."));
+
+        english.add(EItemTags.CROOKS, "Crooks");
+        english.add(EItemTags.HAMMERS, "Hammers");
+        english.add(EItemTags.SIEVE_MESHES, "Sieve Meshes");
+        english.add(EItemTags.PEBBLES, "Pebbles");
+        english.add(EItemTags.END_CAKE_MATERIAL, "End Cake Materials");
+        english.add(EItemTags.WOODEN_BARRELS, "Wooden Barrels");
+        english.add(EItemTags.STONE_BARRELS, "Stone Barrels");
+        english.add(EItemTags.BARRELS, "Barrels");
+
+        english.add(EFluids.WITCH_WATER_TYPE.get(), "Witch Water");
 
         english.add(TranslationKeys.MAIN_CREATIVE_TAB, "Ex Deorum");
         english.add(TranslationKeys.VOID_WORLD_TYPE, "Void World");
