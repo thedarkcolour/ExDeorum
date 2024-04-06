@@ -1,3 +1,6 @@
+## Ex Deorum 2.4
+- Added compatibility with EMI (only works when also using JEI)
+
 ## Ex Deorum 2.3
 - Fixed infested leaves not dropping string with a Crook
 
