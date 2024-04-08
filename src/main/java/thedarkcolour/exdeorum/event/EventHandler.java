@@ -21,6 +21,7 @@ package thedarkcolour.exdeorum.event;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.features.TreeFeatures;
@@ -35,7 +36,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameRules;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -45,7 +46,12 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ClientChatEvent;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AddReloadListenerEvent;
+import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.OnDatapackSyncEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -59,12 +65,15 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.blockentity.helper.ItemHelper;
 import thedarkcolour.exdeorum.client.CompostColors;
 import thedarkcolour.exdeorum.compat.ModIds;
 import thedarkcolour.exdeorum.compat.top.ExDeorumTopCompat;
 import thedarkcolour.exdeorum.config.EConfig;
+import thedarkcolour.exdeorum.island.SkyblockCapability;
 import thedarkcolour.exdeorum.item.WateringCanItem;
 import thedarkcolour.exdeorum.material.AbstractCrucibleMaterial;
 import thedarkcolour.exdeorum.material.BarrelMaterial;
@@ -94,6 +103,8 @@ public final class EventHandler {
         modBus.addListener(EventHandler::onCommonSetup);
         fmlBus.addListener(EventHandler::serverShutdown);
         fmlBus.addListener(EventHandler::serverTick);
+        modBus.addListener(EventHandler::registerCapabilities);
+        fmlBus.addGenericListener(Level.class, EventHandler::attachCapabilities);
 
         if (ExDeorum.DEBUG) {
             fmlBus.addListener(EventHandler::handleDebugCommands);
@@ -262,6 +273,18 @@ public final class EventHandler {
     private static void serverTick(TickEvent.ServerTickEvent event) {
         if (event.phase == TickEvent.Phase.END) {
             VisualUpdateTracker.syncVisualUpdates();
+        }
+    }
+
+    private static void registerCapabilities(RegisterCapabilitiesEvent event) {
+        event.register(SkyblockCapability.class);
+    }
+
+    private static void attachCapabilities(AttachCapabilitiesEvent<Level> event) {
+        Level level = event.getObject();
+
+        if (!level.isClientSide && level.dimension() == Level.OVERWORLD) {
+            event.addCapability(SkyblockCapability.ID, new SkyblockCapability());
         }
     }
 }
