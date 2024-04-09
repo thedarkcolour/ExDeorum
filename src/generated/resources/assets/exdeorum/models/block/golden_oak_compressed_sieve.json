@@ -1,0 +1,6 @@
+{
+  "parent": "exdeorum:block/template_compressed_sieve",
+  "textures": {
+    "texture": "aether:block/natural/golden_oak_log"
+  }
+}

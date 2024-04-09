@@ -7,6 +7,15 @@
     "exdeorum:crystallized_barrel",
     "exdeorum:crystallized_sieve",
     "exdeorum:porcelain_crucible",
-    "exdeorum:crystallized_crucible"
+    "exdeorum:crystallized_crucible",
+    "exdeorum:compressed_cobblestone",
+    "exdeorum:compressed_diorite",
+    "exdeorum:compressed_granite",
+    "exdeorum:compressed_andesite",
+    "exdeorum:compressed_deepslate",
+    "exdeorum:compressed_cobbled_deepslate",
+    "exdeorum:compressed_netherrack",
+    "exdeorum:compressed_blackstone",
+    "exdeorum:compressed_end_stone"
   ]
 }

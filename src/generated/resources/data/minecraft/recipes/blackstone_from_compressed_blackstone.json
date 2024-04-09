@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "exdeorum:compressed_blackstone"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "item": "minecraft:blackstone"
+  }
+}

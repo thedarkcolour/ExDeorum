@@ -1,0 +1,13 @@
+{
+  "type": "exdeorum:compressed_sieve",
+  "ingredient": {
+    "tag": "exdeorum:compressed/sand"
+  },
+  "mesh": "exdeorum:flint_mesh",
+  "result": "exdeorum:random_pottery_sherd",
+  "result_amount": {
+    "type": "minecraft:binomial",
+    "n": 7.0,
+    "p": 0.04
+  }
+}

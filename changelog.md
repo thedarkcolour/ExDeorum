@@ -1,3 +1,7 @@
+## Ex Deorum 2.5
+- Fixed compatibility with EMI
+- Add compressed hammers, sieves, and blocks from Ex Deorum 1.30
+
 ## Ex Deorum 2.4
 - Added compatibility with EMI (only works when also using JEI)
 

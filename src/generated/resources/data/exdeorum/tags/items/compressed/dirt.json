@@ -1,0 +1,13 @@
+{
+  "values": [
+    "exdeorum:compressed_dirt",
+    {
+      "id": "allthecompressed:dirt_1x",
+      "required": false
+    },
+    {
+      "id": "compressium:dirt_1",
+      "required": false
+    }
+  ]
+}

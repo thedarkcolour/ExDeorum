@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "exdeorum:item/compressed_golden_hammer"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "exdeorum:block/template_compressed_sieve",
+  "textures": {
+    "texture": "biomesoplenty:block/willow_log"
+  }
+}

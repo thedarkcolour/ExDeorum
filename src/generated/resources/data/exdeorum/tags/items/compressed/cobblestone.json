@@ -1,0 +1,17 @@
+{
+  "values": [
+    {
+      "id": "cyclic:compressed_cobblestone",
+      "required": false
+    },
+    "exdeorum:compressed_cobblestone",
+    {
+      "id": "allthecompressed:cobblestone_1x",
+      "required": false
+    },
+    {
+      "id": "compressium:cobblestone_1",
+      "required": false
+    }
+  ]
+}

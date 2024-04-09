@@ -31,7 +31,9 @@ runs {
     }
 
     data {
-        programArguments.addAll ('--mod', 'exdeorum', '--all', '--output', file('src/generated/resources/').absolutePath, '--existing', file('src/main/resources/').absolutePath)
+        // instead of using --all, skip file check validation
+        programArguments.addAll('--server', '--client', '--dev', '--reports')
+        programArguments.addAll ('--mod', 'exdeorum', '--output', file('src/generated/resources/').absolutePath, '--existing', file('src/main/resources/').absolutePath)
     }
 }
 

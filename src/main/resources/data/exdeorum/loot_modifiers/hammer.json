@@ -1,6 +1,5 @@
 {
   "type": "exdeorum:hammer",
-  "reward_recipe_type": "exdeorum:hammer",
   "conditions": [
     {
       "condition": "minecraft:match_tool",

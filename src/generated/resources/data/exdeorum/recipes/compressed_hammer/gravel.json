@@ -1,0 +1,19 @@
+{
+  "type": "exdeorum:compressed_hammer",
+  "ingredient": [
+    {
+      "tag": "exdeorum:compressed/cobblestone"
+    },
+    {
+      "tag": "exdeorum:compressed/diorite"
+    },
+    {
+      "tag": "exdeorum:compressed/granite"
+    },
+    {
+      "tag": "exdeorum:compressed/andesite"
+    }
+  ],
+  "result": "minecraft:gravel",
+  "result_amount": 9.0
+}

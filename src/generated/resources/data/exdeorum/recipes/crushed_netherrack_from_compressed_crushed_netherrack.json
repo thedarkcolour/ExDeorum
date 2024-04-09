@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "exdeorum:compressed_crushed_netherrack"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "item": "exdeorum:crushed_netherrack"
+  }
+}

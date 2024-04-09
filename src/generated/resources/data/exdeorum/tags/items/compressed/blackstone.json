@@ -1,0 +1,9 @@
+{
+  "values": [
+    "exdeorum:compressed_blackstone",
+    {
+      "id": "allthecompressed:blackstone_1x",
+      "required": false
+    }
+  ]
+}

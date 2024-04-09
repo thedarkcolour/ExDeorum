@@ -1,0 +1,13 @@
+{
+  "type": "exdeorum:compressed_sieve",
+  "ingredient": {
+    "tag": "exdeorum:compressed/dust"
+  },
+  "mesh": "exdeorum:golden_mesh",
+  "result": "minecraft:gold_nugget",
+  "result_amount": {
+    "type": "minecraft:binomial",
+    "n": 14.0,
+    "p": 0.18
+  }
+}

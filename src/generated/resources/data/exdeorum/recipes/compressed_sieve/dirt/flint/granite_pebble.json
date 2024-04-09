@@ -1,0 +1,13 @@
+{
+  "type": "exdeorum:compressed_sieve",
+  "ingredient": {
+    "tag": "exdeorum:compressed/dirt"
+  },
+  "mesh": "exdeorum:flint_mesh",
+  "result": "exdeorum:granite_pebble",
+  "result_amount": {
+    "type": "minecraft:binomial",
+    "n": 49.0,
+    "p": 0.4
+  }
+}

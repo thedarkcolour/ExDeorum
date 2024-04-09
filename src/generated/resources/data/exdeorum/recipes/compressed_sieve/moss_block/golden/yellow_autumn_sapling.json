@@ -1,0 +1,19 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "biomesoplenty"
+    }
+  ],
+  "type": "exdeorum:compressed_sieve",
+  "ingredient": {
+    "tag": "exdeorum:compressed/moss_block"
+  },
+  "mesh": "exdeorum:golden_mesh",
+  "result": "biomesoplenty:yellow_autumn_sapling",
+  "result_amount": {
+    "type": "minecraft:binomial",
+    "n": 7.0,
+    "p": 0.04
+  }
+}

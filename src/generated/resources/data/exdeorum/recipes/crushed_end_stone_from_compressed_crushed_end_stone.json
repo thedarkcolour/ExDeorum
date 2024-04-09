@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "exdeorum:compressed_crushed_end_stone"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "item": "exdeorum:crushed_end_stone"
+  }
+}

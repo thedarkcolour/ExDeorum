@@ -1,12 +1,11 @@
 {
-    "type": "exdeorum:hammer",
-    "reward_recipe_type": "exdeorum:compressed_hammer",
-    "conditions": [
-        {
-            "condition": "minecraft:match_tool",
-            "predicate": {
-                "tag": "exdeorum:compressed_hammers"
-            }
-        }
-    ]
+  "type": "exdeorum:compressed_hammer",
+  "conditions": [
+    {
+      "condition": "minecraft:match_tool",
+      "predicate": {
+        "tag": "exdeorum:compressed_hammers"
+      }
+    }
+  ]
 }

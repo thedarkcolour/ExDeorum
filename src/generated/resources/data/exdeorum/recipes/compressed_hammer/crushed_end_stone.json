@@ -1,0 +1,8 @@
+{
+  "type": "exdeorum:compressed_hammer",
+  "ingredient": {
+    "tag": "exdeorum:compressed/end_stone"
+  },
+  "result": "exdeorum:crushed_end_stone",
+  "result_amount": 9.0
+}

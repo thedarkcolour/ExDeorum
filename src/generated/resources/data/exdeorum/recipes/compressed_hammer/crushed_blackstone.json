@@ -1,0 +1,8 @@
+{
+  "type": "exdeorum:compressed_hammer",
+  "ingredient": {
+    "tag": "exdeorum:compressed/blackstone"
+  },
+  "result": "exdeorum:crushed_blackstone",
+  "result_amount": 9.0
+}

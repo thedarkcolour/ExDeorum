@@ -1,0 +1,29 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "ars_nouveau"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "I": {
+      "tag": "forge:rods/wooden"
+    },
+    "O": {
+      "item": "ars_nouveau:red_archwood_log"
+    },
+    "_": {
+      "tag": "forge:ingots/iron"
+    }
+  },
+  "pattern": [
+    "O O",
+    "O_O",
+    "I I"
+  ],
+  "result": {
+    "item": "exdeorum:red_archwood_compressed_sieve"
+  }
+}

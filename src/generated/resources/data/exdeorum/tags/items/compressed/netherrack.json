@@ -1,0 +1,13 @@
+{
+  "values": [
+    "exdeorum:compressed_netherrack",
+    {
+      "id": "allthecompressed:netherrack_1x",
+      "required": false
+    },
+    {
+      "id": "compressium:netherrack_1",
+      "required": false
+    }
+  ]
+}

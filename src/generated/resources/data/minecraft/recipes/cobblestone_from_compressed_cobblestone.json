@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "exdeorum:compressed_cobblestone"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "item": "minecraft:cobblestone"
+  }
+}

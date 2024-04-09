@@ -1,0 +1,13 @@
+{
+  "values": [
+    "exdeorum:compressed_diorite",
+    {
+      "id": "allthecompressed:diorite_1x",
+      "required": false
+    },
+    {
+      "id": "compressium:diorite_1",
+      "required": false
+    }
+  ]
+}
