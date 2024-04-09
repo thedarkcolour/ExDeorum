@@ -22,6 +22,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -30,7 +31,9 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
 import net.neoforged.neoforge.common.loot.LootModifier;
+import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
+import thedarkcolour.exdeorum.recipe.hammer.HammerRecipe;
 
 import javax.annotation.Nonnull;
 
@@ -49,7 +52,7 @@ public class HammerLootModifier extends LootModifier {
         if (state != null) {
             var itemForm = state.getBlock().asItem();
             if (itemForm != Items.AIR) {
-                var recipe = RecipeUtil.getHammerRecipe(itemForm);
+                var recipe = getRecipe(itemForm);
 
                 if (recipe != null) {
                     ObjectArrayList<ItemStack> newLoot = new ObjectArrayList<>();
@@ -70,6 +73,11 @@ public class HammerLootModifier extends LootModifier {
         }
 
         return generatedLoot;
+    }
+
+    @Nullable
+    protected HammerRecipe getRecipe(Item itemForm) {
+        return RecipeUtil.getHammerRecipe(itemForm);
     }
 
     @Override

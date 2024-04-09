@@ -27,6 +27,7 @@ import thedarkcolour.exdeorum.ExDeorum;
 public class EItemTags {
     public static final TagKey<Item> CROOKS = tag("crooks");
     public static final TagKey<Item> HAMMERS = tag("hammers");
+    public static final TagKey<Item> COMPRESSED_HAMMERS = tag("compressed_hammers");
     public static final TagKey<Item> SIEVE_MESHES = tag("sieve_meshes");
     public static final TagKey<Item> PEBBLES = tag("pebbles");
     public static final TagKey<Item> END_CAKE_MATERIAL = tag("end_cake_materials");
@@ -50,6 +51,8 @@ public class EItemTags {
     public static final TagKey<Item> ORES_MAGNESIUM = forgeTag("ores/magnesium");
     public static final TagKey<Item> ORES_LITHIUM = forgeTag("ores/lithium");
     public static final TagKey<Item> ORES_BORON = forgeTag("ores/boron");
+
+    public static final TagKey<Item> COMPRESSED_SANDS = tag("compressed/sands");
 
     public static TagKey<Item> tag(String name) {
         return ItemTags.create(new ResourceLocation(ExDeorum.ID, name));

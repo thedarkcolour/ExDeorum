@@ -24,6 +24,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import thedarkcolour.exdeorum.ExDeorum;
+import thedarkcolour.exdeorum.loot.CompressedHammerLootModifier;
 import thedarkcolour.exdeorum.loot.CrookLootModifier;
 import thedarkcolour.exdeorum.loot.HammerLootModifier;
 
@@ -32,4 +33,5 @@ public class EGlobalLootModifiers {
 
     public static final DeferredHolder<Codec<? extends IGlobalLootModifier>, Codec<CrookLootModifier>> CROOK = GLOBAL_LOOT_MODIFIERS.register("crook", () -> CrookLootModifier.CODEC);
     public static final DeferredHolder<Codec<? extends IGlobalLootModifier>, Codec<HammerLootModifier>> HAMMER = GLOBAL_LOOT_MODIFIERS.register("hammer", () -> HammerLootModifier.CODEC);
+    public static final DeferredHolder<Codec<? extends IGlobalLootModifier>, Codec<CompressedHammerLootModifier>> COMPRESSED_HAMMER = GLOBAL_LOOT_MODIFIERS.register("compressed_hammer", () -> CompressedHammerLootModifier.CODEC);
 }

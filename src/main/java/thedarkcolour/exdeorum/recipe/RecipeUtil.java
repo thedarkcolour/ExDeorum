@@ -33,6 +33,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
@@ -44,6 +45,7 @@ import net.minecraft.world.level.storage.loot.providers.number.*;
 import net.neoforged.neoforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.compat.PreferredOres;
+import thedarkcolour.exdeorum.item.CompressedHammerItem;
 import thedarkcolour.exdeorum.item.HammerItem;
 import thedarkcolour.exdeorum.loot.SummationGenerator;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelCompostRecipe;
@@ -53,7 +55,9 @@ import thedarkcolour.exdeorum.recipe.barrel.FluidTransformationRecipe;
 import thedarkcolour.exdeorum.recipe.cache.*;
 import thedarkcolour.exdeorum.recipe.crook.CrookRecipe;
 import thedarkcolour.exdeorum.recipe.crucible.CrucibleRecipe;
+import thedarkcolour.exdeorum.recipe.hammer.CompressedHammerRecipe;
 import thedarkcolour.exdeorum.recipe.hammer.HammerRecipe;
+import thedarkcolour.exdeorum.recipe.sieve.CompressedSieveRecipe;
 import thedarkcolour.exdeorum.recipe.sieve.SieveRecipe;
 import thedarkcolour.exdeorum.registry.ENumberProviders;
 import thedarkcolour.exdeorum.registry.ERecipeTypes;
@@ -71,7 +75,9 @@ public final class RecipeUtil {
     private static SingleIngredientRecipeCache<CrucibleRecipe> lavaCrucibleRecipeCache;
     private static SingleIngredientRecipeCache<CrucibleRecipe> waterCrucibleRecipeCache;
     private static SingleIngredientRecipeCache<HammerRecipe> hammerRecipeCache;
-    private static SieveRecipeCache sieveRecipeCache;
+    private static SingleIngredientRecipeCache<CompressedHammerRecipe> compressedHammerRecipeCache;
+    private static SieveRecipeCache<SieveRecipe> sieveRecipeCache;
+    private static SieveRecipeCache<CompressedSieveRecipe> compressedSieveRecipeCache;
     private static BarrelFluidMixingRecipeCache barrelFluidMixingRecipeCache;
     private static FluidTransformationRecipeCache fluidTransformationRecipeCache;
     private static CrookRecipeCache crookRecipeCache;
@@ -81,13 +87,16 @@ public final class RecipeUtil {
         barrelCompostRecipeCache = new SingleIngredientRecipeCache<>(recipes, ERecipeTypes.BARREL_COMPOST);
         lavaCrucibleRecipeCache = new SingleIngredientRecipeCache<>(recipes, ERecipeTypes.LAVA_CRUCIBLE);
         waterCrucibleRecipeCache = new SingleIngredientRecipeCache<>(recipes, ERecipeTypes.WATER_CRUCIBLE);
-        hammerRecipeCache = new SingleIngredientRecipeCache<>(recipes, ERecipeTypes.HAMMER);
-        sieveRecipeCache = new SieveRecipeCache(recipes);
+        hammerRecipeCache = new SingleIngredientRecipeCache<>(recipes, ERecipeTypes.HAMMER).trackAllRecipes();
+        compressedHammerRecipeCache = new SingleIngredientRecipeCache<>(recipes, ERecipeTypes.COMPRESSED_HAMMER).trackAllRecipes();
+        sieveRecipeCache = new SieveRecipeCache<>(recipes, ERecipeTypes.SIEVE);
+        compressedSieveRecipeCache = new SieveRecipeCache<>(recipes, ERecipeTypes.COMPRESSED_SIEVE);
         barrelFluidMixingRecipeCache = new BarrelFluidMixingRecipeCache(recipes);
         fluidTransformationRecipeCache = new FluidTransformationRecipeCache(recipes);
         crookRecipeCache = new CrookRecipeCache(recipes);
         crucibleHeatRecipeCache = new CrucibleHeatRecipeCache(recipes);
         HammerItem.refreshValidBlocks();
+        CompressedHammerItem.refreshValidBlocks();
     }
 
     public static void unload() {
@@ -95,7 +104,9 @@ public final class RecipeUtil {
         lavaCrucibleRecipeCache = null;
         waterCrucibleRecipeCache = null;
         hammerRecipeCache = null;
+        compressedHammerRecipeCache = null;
         sieveRecipeCache = null;
+        compressedSieveRecipeCache = null;
         barrelFluidMixingRecipeCache = null;
         fluidTransformationRecipeCache = null;
         crookRecipeCache = null;
@@ -104,6 +115,10 @@ public final class RecipeUtil {
 
     public static List<SieveRecipe> getSieveRecipes(Item mesh, ItemStack item) {
         return sieveRecipeCache.getRecipe(mesh, item);
+    }
+
+    public static List<CompressedSieveRecipe> getCompressedSieveRecipes(Item mesh, ItemStack item) {
+        return compressedSieveRecipeCache.getRecipe(mesh, item);
     }
 
     @Nullable
@@ -124,6 +139,19 @@ public final class RecipeUtil {
     @Nullable
     public static HammerRecipe getHammerRecipe(Item item) {
         return hammerRecipeCache.getRecipe(item);
+    }
+
+    public static Collection<RecipeHolder<HammerRecipe>> getCachedHammerRecipes() {
+        return hammerRecipeCache.getAllRecipes();
+    }
+
+    @Nullable
+    public static CompressedHammerRecipe getCompressedHammerRecipe(Item item) {
+        return compressedHammerRecipeCache.getRecipe(item);
+    }
+
+    public static Collection<RecipeHolder<CompressedHammerRecipe>> getCachedCompressedHammerRecipes() {
+        return compressedHammerRecipeCache.getAllRecipes();
     }
 
     public static void toNetworkNumberProvider(FriendlyByteBuf buffer, NumberProvider provider) {

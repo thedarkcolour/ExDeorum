@@ -31,7 +31,9 @@ import thedarkcolour.exdeorum.recipe.barrel.BarrelMixingRecipe;
 import thedarkcolour.exdeorum.recipe.crook.CrookRecipe;
 import thedarkcolour.exdeorum.recipe.crucible.CrucibleHeatRecipe;
 import thedarkcolour.exdeorum.recipe.crucible.CrucibleRecipe;
+import thedarkcolour.exdeorum.recipe.hammer.CompressedHammerRecipe;
 import thedarkcolour.exdeorum.recipe.hammer.HammerRecipe;
+import thedarkcolour.exdeorum.recipe.sieve.CompressedSieveRecipe;
 import thedarkcolour.exdeorum.recipe.sieve.SieveRecipe;
 
 public class ERecipeSerializers {
@@ -43,6 +45,7 @@ public class ERecipeSerializers {
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<FluidTransformationRecipe>> BARREL_FLUID_TRANSFORMATION = RECIPE_SERIALIZERS.register("barrel_fluid_transformation", FluidTransformationRecipe.Serializer::new);
 
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<HammerRecipe>> HAMMER = RECIPE_SERIALIZERS.register("hammer", HammerRecipe.Serializer::new);
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<CompressedHammerRecipe>> COMPRESSED_HAMMER = RECIPE_SERIALIZERS.register("compressed_hammer", CompressedHammerRecipe.Serializer::new);
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<CrookRecipe>> CROOK = RECIPE_SERIALIZERS.register("crook", CrookRecipe.Serializer::new);
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<CrucibleHeatRecipe>> CRUCIBLE_HEAT_SOURCE = RECIPE_SERIALIZERS.register("crucible_heat_source", CrucibleHeatRecipe.Serializer::new);
 
@@ -50,6 +53,7 @@ public class ERecipeSerializers {
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<CrucibleRecipe.Water>> WATER_CRUCIBLE = RECIPE_SERIALIZERS.register("water_crucible", () -> new CrucibleRecipe.Serializer<>(CrucibleRecipe.Water.CODEC, CrucibleRecipe.Water::new));
 
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<SieveRecipe>> SIEVE = RECIPE_SERIALIZERS.register("sieve", SieveRecipe.Serializer::new);
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<CompressedSieveRecipe>> COMPRESSED_SIEVE = RECIPE_SERIALIZERS.register("compressed_sieve", CompressedSieveRecipe.Serializer::new);
 
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<OreChunkRecipe>> ORE_CHUNK = RECIPE_SERIALIZERS.register("ore_chunk", OreChunkRecipe.Serializer::new);
 }

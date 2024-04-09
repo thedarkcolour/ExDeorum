@@ -40,10 +40,18 @@ public class SingleIngredientRecipeCache<T extends SingleIngredientRecipe> {
     private Map<Item, T> simpleRecipes;
     @Nullable
     private List<T> complexRecipes;
+    @Nullable
+    private Collection<RecipeHolder<T>> allRecipes;
+    private boolean trackAllRecipes;
 
     public SingleIngredientRecipeCache(RecipeManager recipeManager, Supplier<RecipeType<T>> recipeType) {
         this.recipeType = recipeType;
         this.recipeManager = recipeManager;
+    }
+
+    public SingleIngredientRecipeCache<T> trackAllRecipes() {
+        this.trackAllRecipes = true;
+        return this;
     }
 
     @Nullable
@@ -72,6 +80,13 @@ public class SingleIngredientRecipeCache<T extends SingleIngredientRecipe> {
         } else {
             return recipe;
         }
+    }
+
+    public Collection<RecipeHolder<T>> getAllRecipes() {
+        if (this.simpleRecipes == null) {
+            buildRecipes();
+        }
+        return this.allRecipes;
     }
 
     /**
@@ -104,6 +119,10 @@ public class SingleIngredientRecipeCache<T extends SingleIngredientRecipe> {
         this.complexRecipes = complexRecipes.build();
         if (this.complexRecipes.isEmpty()) {
             this.complexRecipes = null;
+        }
+        // Track list of simple and complex recipes (only used by hammer so far)
+        if (this.trackAllRecipes) {
+            this.allRecipes = allRecipes;
         }
 
         this.recipeManager = null;

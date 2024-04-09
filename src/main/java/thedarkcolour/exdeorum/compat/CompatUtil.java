@@ -56,6 +56,10 @@ public class CompatUtil {
         return getAvailableMaterials(DefaultMaterials.WATER_CRUCIBLES, registered);
     }
 
+    public static List<ItemLike> getAvailableCompressedSieves(boolean registered) {
+        return getAvailableMaterials(DefaultMaterials.COMPRESSED_SIEVES, registered);
+    }
+
     private static List<ItemLike> getAvailableMaterials(MaterialRegistry<?> registry, boolean registered) {
         List<ItemLike> materials = new ArrayList<>();
 

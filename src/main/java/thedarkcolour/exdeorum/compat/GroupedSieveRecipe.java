@@ -21,36 +21,31 @@ package thedarkcolour.exdeorum.compat;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multimap;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.recipe.sieve.SieveRecipe;
 import thedarkcolour.exdeorum.registry.EItems;
-import thedarkcolour.exdeorum.registry.ERecipeSerializers;
-import thedarkcolour.exdeorum.registry.ERecipeTypes;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Function;
 
 // Since no JEI code is used here, this can be reused for REI
 public record GroupedSieveRecipe(Ingredient ingredient, ItemStack mesh, List<Result> results) {
     public static int maxSieveRows;
 
-    public static ImmutableList<GroupedSieveRecipe> getAllRecipesGrouped() {
+    public static ImmutableList<GroupedSieveRecipe> getAllRecipesGrouped(RecipeType<? extends SieveRecipe> recipeType) {
         maxSieveRows = 1;
 
-        var recipes = CompatUtil.collectAllRecipes(ERecipeTypes.SIEVE.value(), Function.identity());
+        var recipes = CompatUtil.collectAllRecipes(recipeType, Function.identity());
         Multimap<Ingredient, SieveRecipe> ingredientGrouper = ArrayListMultimap.create();
 
         for (int i = 0; i < recipes.size(); i++) {

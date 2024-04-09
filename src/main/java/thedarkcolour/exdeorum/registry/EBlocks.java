@@ -30,7 +30,7 @@ import thedarkcolour.exdeorum.block.*;
 
 import static net.minecraft.world.level.block.state.BlockBehaviour.Properties.*;
 
-// READER'S NOTE: More blocks are found in DefaultMaterials.java
+// READER'S NOTE: More blocks are found in DefaultMaterials.java and ECompressedBlocks.java
 public class EBlocks {
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(ExDeorum.ID);
 

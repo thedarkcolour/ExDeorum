@@ -22,6 +22,7 @@ import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
+import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
@@ -37,6 +38,7 @@ import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.storage.loot.providers.number.BinomialDistributionGenerator;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
@@ -59,19 +61,24 @@ import thedarkcolour.exdeorum.recipe.BlockPredicate;
 import thedarkcolour.exdeorum.recipe.crook.CrookRecipe;
 import thedarkcolour.exdeorum.recipe.crucible.CrucibleHeatRecipe;
 import thedarkcolour.exdeorum.recipe.crucible.CrucibleRecipe;
+import thedarkcolour.exdeorum.recipe.hammer.CompressedHammerRecipe;
 import thedarkcolour.exdeorum.recipe.hammer.HammerRecipe;
 import thedarkcolour.exdeorum.registry.EBlocks;
+import thedarkcolour.exdeorum.registry.ECompressedBlocks;
 import thedarkcolour.exdeorum.registry.EFluids;
 import thedarkcolour.exdeorum.registry.EItems;
 import thedarkcolour.exdeorum.tag.EItemTags;
 import thedarkcolour.modkit.data.MKRecipeProvider;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
+import static net.minecraft.world.level.storage.loot.providers.number.BinomialDistributionGenerator.binomial;
+import static net.minecraft.world.level.storage.loot.providers.number.ConstantValue.exactly;
 import static net.minecraft.world.level.storage.loot.providers.number.UniformGenerator.between;
-import static thedarkcolour.modkit.data.MKRecipeProvider.ingredient;
-import static thedarkcolour.modkit.data.MKRecipeProvider.path;
+import static thedarkcolour.modkit.data.MKRecipeProvider.*;
+import static thedarkcolour.modkit.data.MKRecipeProvider.id;
 
 public class Recipes {
     private static final Ingredient SPORES_AND_SEEDS = ingredient(EItems.GRASS_SEEDS, EItems.MYCELIUM_SPORES, EItems.WARPED_NYLIUM_SPORES, EItems.CRIMSON_NYLIUM_SPORES);
@@ -82,6 +89,7 @@ public class Recipes {
         SieveRecipes.sieveRecipes(writer);
         crucibleRecipes(writer);
         hammerRecipes(writer);
+        compressedHammerRecipes(writer);
         crookRecipes(writer);
         crucibleHeatSources(writer);
         barrelCompostRecipes(writer);
@@ -193,6 +201,79 @@ public class Recipes {
         recipes.grid2x2(RecipeCategory.BUILDING_BLOCKS, Items.GOLD_ORE, ingredient(EItems.GOLD_ORE_CHUNK));
         recipes.grid2x2(RecipeCategory.BUILDING_BLOCKS, Items.COPPER_ORE, ingredient(EItems.COPPER_ORE_CHUNK));
         recipes.grid2x2(RecipeCategory.BUILDING_BLOCKS, Items.MOSS_BLOCK, ingredient(EItems.GRASS_SEEDS));
+
+        // Compressed hammers
+        recipes.grid3x3(RecipeCategory.TOOLS, EItems.COMPRESSED_WOODEN_HAMMER.get(), ingredient(EItems.WOODEN_HAMMER));
+        recipes.grid3x3(RecipeCategory.TOOLS, EItems.COMPRESSED_STONE_HAMMER.get(), ingredient(EItems.STONE_HAMMER));
+        recipes.grid3x3(RecipeCategory.TOOLS, EItems.COMPRESSED_GOLDEN_HAMMER.get(), ingredient(EItems.GOLDEN_HAMMER));
+        recipes.grid3x3(RecipeCategory.TOOLS, EItems.COMPRESSED_IRON_HAMMER.get(), ingredient(EItems.IRON_HAMMER));
+        recipes.grid3x3(RecipeCategory.TOOLS, EItems.COMPRESSED_DIAMOND_HAMMER.get(), ingredient(EItems.DIAMOND_HAMMER));
+        recipes.grid3x3(RecipeCategory.TOOLS, EItems.COMPRESSED_NETHERITE_HAMMER.get(), ingredient(EItems.NETHERITE_HAMMER));
+
+        // Compressed blocks
+        for (var variant : ECompressedBlocks.ALL_VARIANTS) {
+            var storage = variant.getBlock();
+            var material = variant.getBase();
+
+            // Auto disable my recipe when other "compressed" mods are present
+            if (variant.hasCompressium() || variant.hasAtc()) {
+                var conditions = new ArrayList<ICondition>();
+                if (variant.hasAtc()) {
+                    conditions.add(modNotInstalled(ModIds.ALL_THE_COMPRESSED));
+                }
+                if (variant.hasCompressium()) {
+                    conditions.add(modNotInstalled(ModIds.COMPRESSIUM));
+                }
+                recipes.conditional(path(storage), conditions, newWriter -> {
+                    recipes.grid3x3(RecipeCategory.BUILDING_BLOCKS, storage, Ingredient.of(material));
+                });
+            } else {
+                recipes.grid3x3(RecipeCategory.BUILDING_BLOCKS, storage, Ingredient.of(material));
+            }
+            // still allow uncrafting
+            ShapelessRecipeBuilder fromStorage = new ShapelessRecipeBuilder(RecipeCategory.MISC, material, 9);
+            unlockedByHaving(fromStorage, storage);
+            fromStorage.requires(storage);
+            fromStorage.save(writer, id(material).withSuffix("_from_" + id(storage).getPath()));
+        }
+
+        // Compressed sieves
+        compressedSieve(recipes, DefaultMaterials.OAK_COMPRESSED_SIEVE, ingredient(Items.OAK_LOG));
+        compressedSieve(recipes, DefaultMaterials.SPRUCE_COMPRESSED_SIEVE, ingredient(Items.SPRUCE_LOG));
+        compressedSieve(recipes, DefaultMaterials.BIRCH_COMPRESSED_SIEVE, ingredient(Items.BIRCH_LOG));
+        compressedSieve(recipes, DefaultMaterials.JUNGLE_COMPRESSED_SIEVE, ingredient(Items.JUNGLE_LOG));
+        compressedSieve(recipes, DefaultMaterials.ACACIA_COMPRESSED_SIEVE, ingredient(Items.ACACIA_LOG));
+        compressedSieve(recipes, DefaultMaterials.DARK_OAK_COMPRESSED_SIEVE, ingredient(Items.DARK_OAK_LOG));
+        compressedSieve(recipes, DefaultMaterials.MANGROVE_COMPRESSED_SIEVE, ingredient(Items.MANGROVE_LOG));
+        compressedSieve(recipes, DefaultMaterials.CHERRY_COMPRESSED_SIEVE, ingredient(Items.CHERRY_LOG));
+        compressedSieve(recipes, DefaultMaterials.BAMBOO_COMPRESSED_SIEVE, ingredient(Items.BAMBOO_BLOCK));
+        compressedSieve(recipes, DefaultMaterials.WARPED_COMPRESSED_SIEVE, ingredient(Items.WARPED_STEM));
+        compressedSieve(recipes, DefaultMaterials.CRIMSON_COMPRESSED_SIEVE, ingredient(Items.CRIMSON_STEM));
+
+        modCompressedSieve(recipes, ModIds.BIOMES_O_PLENTY, DefaultMaterials.FIR_COMPRESSED_SIEVE, ingredient(ModCompatData.FIR_LOG_ITEM));
+        modCompressedSieve(recipes, ModIds.BIOMES_O_PLENTY, DefaultMaterials.REDWOOD_COMPRESSED_SIEVE, ingredient(ModCompatData.REDWOOD_LOG_ITEM));
+        modCompressedSieve(recipes, ModIds.BIOMES_O_PLENTY, DefaultMaterials.MAHOGANY_COMPRESSED_SIEVE, ingredient(ModCompatData.MAHOGANY_LOG_ITEM));
+        modCompressedSieve(recipes, ModIds.BIOMES_O_PLENTY, DefaultMaterials.JACARANDA_COMPRESSED_SIEVE, ingredient(ModCompatData.JACARANDA_LOG_ITEM));
+        modCompressedSieve(recipes, ModIds.BIOMES_O_PLENTY, DefaultMaterials.PALM_COMPRESSED_SIEVE, ingredient(ModCompatData.PALM_LOG_ITEM));
+        modCompressedSieve(recipes, ModIds.BIOMES_O_PLENTY, DefaultMaterials.WILLOW_COMPRESSED_SIEVE, ingredient(ModCompatData.WILLOW_LOG_ITEM));
+        modCompressedSieve(recipes, ModIds.BIOMES_O_PLENTY, DefaultMaterials.DEAD_COMPRESSED_SIEVE, ingredient(ModCompatData.DEAD_LOG_ITEM));
+        modCompressedSieve(recipes, ModIds.BIOMES_O_PLENTY, DefaultMaterials.MAGIC_COMPRESSED_SIEVE, ingredient(ModCompatData.MAGIC_LOG_ITEM));
+        modCompressedSieve(recipes, ModIds.BIOMES_O_PLENTY, DefaultMaterials.UMBRAN_COMPRESSED_SIEVE, ingredient(ModCompatData.UMBRAN_LOG_ITEM));
+        modCompressedSieve(recipes, ModIds.BIOMES_O_PLENTY, DefaultMaterials.HELLBARK_COMPRESSED_SIEVE, ingredient(ModCompatData.HELLBARK_LOG_ITEM));
+        modCompressedSieve(recipes, ModIds.ARS_NOUVEAU, DefaultMaterials.CASCADING_ARCHWOOD_COMPRESSED_SIEVE, ingredient(ModCompatData.CASCADING_ARCHWOOD_LOG_ITEM));
+        modCompressedSieve(recipes, ModIds.ARS_NOUVEAU, DefaultMaterials.BLAZING_ARCHWOOD_COMPRESSED_SIEVE, ingredient(ModCompatData.BLAZING_ARCHWOOD_LOG_ITEM));
+        modCompressedSieve(recipes, ModIds.ARS_NOUVEAU, DefaultMaterials.VEXING_ARCHWOOD_COMPRESSED_SIEVE, ingredient(ModCompatData.VEXING_ARCHWOOD_LOG_ITEM));
+        modCompressedSieve(recipes, ModIds.ARS_NOUVEAU, DefaultMaterials.FLOURISHING_ARCHWOOD_COMPRESSED_SIEVE, ingredient(ModCompatData.FLOURISHING_ARCHWOOD_LOG_ITEM));
+        modCompressedSieve(recipes, ModIds.AETHER, DefaultMaterials.SKYROOT_COMPRESSED_SIEVE, ingredient(ModCompatData.SKYROOT_LOG_ITEM));
+        modCompressedSieve(recipes, ModIds.AETHER, DefaultMaterials.GOLDEN_OAK_COMPRESSED_SIEVE, ingredient(ModCompatData.GOLDEN_OAK_LOG_ITEM));
+        modCompressedSieve(recipes, ModIds.BLUE_SKIES, DefaultMaterials.BLUEBRIGHT_COMPRESSED_SIEVE, ingredient(ModCompatData.BLUEBRIGHT_LOG_ITEM));
+        modCompressedSieve(recipes, ModIds.BLUE_SKIES, DefaultMaterials.STARLIT_COMPRESSED_SIEVE, ingredient(ModCompatData.STARLIT_LOG_ITEM));
+        modCompressedSieve(recipes, ModIds.BLUE_SKIES, DefaultMaterials.FROSTBRIGHT_COMPRESSED_SIEVE, ingredient(ModCompatData.FROSTBRIGHT_LOG_ITEM));
+        modCompressedSieve(recipes, ModIds.BLUE_SKIES, DefaultMaterials.COMET_COMPRESSED_SIEVE, ingredient(ModCompatData.COMET_LOG_ITEM));
+        modCompressedSieve(recipes, ModIds.BLUE_SKIES, DefaultMaterials.LUNAR_COMPRESSED_SIEVE, ingredient(ModCompatData.LUNAR_LOG_ITEM));
+        modCompressedSieve(recipes, ModIds.BLUE_SKIES, DefaultMaterials.DUSK_COMPRESSED_SIEVE, ingredient(ModCompatData.DUSK_LOG_ITEM));
+        modCompressedSieve(recipes, ModIds.BLUE_SKIES, DefaultMaterials.MAPLE_COMPRESSED_SIEVE, ingredient(ModCompatData.MAPLE_LOG_ITEM));
+        modCompressedSieve(recipes, ModIds.BLUE_SKIES, DefaultMaterials.CRYSTALLIZED_COMPRESSED_SIEVE, ingredient(ModCompatData.CRYSTALLIZED_LOG_ITEM));
 
         // Modded ores
         grid2x2TagResult(writer, EItemTags.ORES_ALUMINUM, ingredient(EItems.ALUMINUM_ORE_CHUNK));
@@ -375,6 +456,23 @@ public class Recipes {
         });
     }
 
+    private static void compressedSieve(MKRecipeProvider recipes, ItemLike result, Ingredient log) {
+        recipes.shapedCrafting(RecipeCategory.MISC, result.asItem(), recipe -> {
+            recipe.define('O', log);
+            recipe.define('I', Tags.Items.RODS_WOODEN);
+            recipe.define('_', Tags.Items.INGOTS_IRON);
+            recipe.pattern("O O");
+            recipe.pattern("O_O");
+            recipe.pattern("I I");
+        });
+    }
+
+    private static void modCompressedSieve(MKRecipeProvider recipes, String modid, ItemLike result, Ingredient log) {
+        recipes.conditional(path(result), List.of(modInstalled(modid)), writer1 -> {
+            compressedSieve(recipes, result, log);
+        });
+    }
+
     private static void mesh(MKRecipeProvider recipes, Supplier<? extends Item> result, Ingredient ingredient) {
         recipes.shapedCrafting(RecipeCategory.MISC, result.get(), recipe -> {
             recipe.define('#', ingredient);
@@ -486,6 +584,22 @@ public class Recipes {
 
         hammerRecipe(writer, "prismarine", ingredient(Items.PRISMARINE, Items.PRISMARINE_BRICKS, Items.DARK_PRISMARINE), Items.PRISMARINE_SHARD, between(1, 4));
         hammerRecipe(writer, "pointed_dripstone", ingredient(Items.DRIPSTONE_BLOCK), Items.POINTED_DRIPSTONE, between(2, 4));
+    }
+
+    private static void compressedHammerRecipes(RecipeOutput writer) {
+        compressedHammerRecipe(writer, Items.GRAVEL, ingredient(ECompressedBlocks.COMPRESSED_COBBLESTONE.getTag(), ECompressedBlocks.COMPRESSED_DIORITE.getTag(), ECompressedBlocks.COMPRESSED_GRANITE.getTag(), ECompressedBlocks.COMPRESSED_ANDESITE.getTag()));
+        compressedHammerRecipe(writer, Items.SAND, ingredient(ECompressedBlocks.COMPRESSED_GRAVEL.getTag()));
+        compressedHammerRecipe(writer, EItems.DUST.get(), ingredient(EItemTags.COMPRESSED_SANDS));
+
+        compressedHammerRecipe(writer, EItems.CRUSHED_DEEPSLATE.get(), ingredient(ECompressedBlocks.COMPRESSED_DEEPSLATE.getTag(), ECompressedBlocks.COMPRESSED_COBBLED_DEEPSLATE.getTag()));
+        compressedHammerRecipe(writer, EItems.CRUSHED_NETHERRACK.get(), ingredient(ECompressedBlocks.COMPRESSED_NETHERRACK.getTag()));
+        compressedHammerRecipe(writer, EItems.CRUSHED_BLACKSTONE.get(), ingredient(ECompressedBlocks.COMPRESSED_BLACKSTONE.getTag()));
+        compressedHammerRecipe(writer, EItems.CRUSHED_END_STONE.get(), ingredient(ECompressedBlocks.COMPRESSED_END_STONE.getTag()));
+        compressedHammerRecipe(writer, Items.RED_SAND, ingredient(ECompressedBlocks.COMPRESSED_CRUSHED_NETHERRACK.getTag()));
+    }
+
+    private static void compressedHammerRecipe(RecipeOutput writer, ItemLike result, Ingredient block) {
+        writer.accept(modLoc("compressed_hammer/" + path(result)), new CompressedHammerRecipe(block, result.asItem(), exactly(9)), null);
     }
 
     private static void hammerRecipe(RecipeOutput writer, String name, Ingredient block, ItemLike result) {
@@ -655,7 +769,19 @@ public class Recipes {
         return new ModLoadedCondition(modid);
     }
 
+    static ICondition modNotInstalled(String modid) {
+        return new NotCondition(modInstalled(modid));
+    }
+
     static final ICondition AE2 = modInstalled(ModIds.APPLIED_ENERGISTICS_2);
     static final ICondition ENDERIO = modInstalled(ModIds.ENDERIO);
     static final ICondition EXTREME_REACTORS = modInstalled(ModIds.EXTREME_REACTORS);
+
+    static NumberProvider compressedMultiplier(NumberProvider resultAmount) {
+        if (resultAmount instanceof BinomialDistributionGenerator binomial) {
+            return binomial((int) ((ConstantValue) binomial.n()).value() * 7, ((ConstantValue) binomial.p()).value());
+        } else {
+            throw new IllegalArgumentException("Unable to multiply type " + resultAmount.getClass());
+        }
+    }
 }

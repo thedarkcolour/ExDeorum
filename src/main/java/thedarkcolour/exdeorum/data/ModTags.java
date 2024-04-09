@@ -33,11 +33,10 @@ import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.material.Fluid;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.block.AbstractCrucibleBlock;
-import thedarkcolour.exdeorum.material.AbstractCrucibleMaterial;
-import thedarkcolour.exdeorum.material.BarrelMaterial;
-import thedarkcolour.exdeorum.material.DefaultMaterials;
-import thedarkcolour.exdeorum.material.SieveMaterial;
+import thedarkcolour.exdeorum.compat.ModIds;
+import thedarkcolour.exdeorum.material.*;
 import thedarkcolour.exdeorum.registry.EBlocks;
+import thedarkcolour.exdeorum.registry.ECompressedBlocks;
 import thedarkcolour.exdeorum.registry.EFluids;
 import thedarkcolour.exdeorum.registry.EItems;
 import thedarkcolour.exdeorum.tag.EBlockTags;
@@ -71,17 +70,24 @@ class ModTags {
                 .add(WOODEN_BARRELS.stream().map(BarrelMaterial::getBlock).toArray(Block[]::new))
                 .add(DefaultMaterials.SIEVES.stream().filter(material -> material != DefaultMaterials.CRYSTALLIZED_SIEVE).map(SieveMaterial::getBlock).toArray(Block[]::new))
                 .add(DefaultMaterials.WATER_CRUCIBLES.stream().map(AbstractCrucibleMaterial::getBlock).toArray(Block[]::new))
-                .add(DefaultMaterials.WARPED_CRUCIBLE.getBlock(), DefaultMaterials.CRIMSON_CRUCIBLE.getBlock(), DefaultMaterials.HELLBARK_CRUCIBLE.getBlock());
+                .add(DefaultMaterials.WARPED_CRUCIBLE.getBlock(), DefaultMaterials.CRIMSON_CRUCIBLE.getBlock(), DefaultMaterials.HELLBARK_CRUCIBLE.getBlock())
+                .add(DefaultMaterials.COMPRESSED_SIEVES.stream().filter(material -> material != DefaultMaterials.CRYSTALLIZED_COMPRESSED_SIEVE).map(CompressedSieveMaterial::getBlock).toArray(Block[]::new));
         tags.tag(BlockTags.MINEABLE_WITH_PICKAXE)
                 .add(EBlocks.UNFIRED_PORCELAIN_CRUCIBLE, EBlocks.MECHANICAL_SIEVE, EBlocks.MECHANICAL_HAMMER)
-                .add(DefaultMaterials.STONE_BARREL.getBlock(), DefaultMaterials.CRYSTALLIZED_BARREL.getBlock(), DefaultMaterials.CRYSTALLIZED_SIEVE.getBlock(), DefaultMaterials.PORCELAIN_CRUCIBLE.getBlock(), DefaultMaterials.CRYSTALLIZED_CRUCIBLE.getBlock());
-        tags.tag(BlockTags.MINEABLE_WITH_SHOVEL).add(EBlocks.DUST, EBlocks.CRUSHED_NETHERRACK, EBlocks.CRUSHED_END_STONE, EBlocks.CRUSHED_DEEPSLATE, EBlocks.CRUSHED_BLACKSTONE);
-        tags.tag(BlockTags.MINEABLE_WITH_HOE).add(EBlocks.INFESTED_LEAVES);
+                .add(DefaultMaterials.STONE_BARREL.getBlock(), DefaultMaterials.CRYSTALLIZED_BARREL.getBlock(), DefaultMaterials.CRYSTALLIZED_SIEVE.getBlock(), DefaultMaterials.PORCELAIN_CRUCIBLE.getBlock(), DefaultMaterials.CRYSTALLIZED_CRUCIBLE.getBlock())
+                .add(ECompressedBlocks.COMPRESSED_COBBLESTONE.getBlock(), ECompressedBlocks.COMPRESSED_DIORITE.getBlock(), ECompressedBlocks.COMPRESSED_GRANITE.getBlock(), ECompressedBlocks.COMPRESSED_ANDESITE.getBlock(), ECompressedBlocks.COMPRESSED_DEEPSLATE.getBlock(), ECompressedBlocks.COMPRESSED_COBBLED_DEEPSLATE.getBlock(), ECompressedBlocks.COMPRESSED_NETHERRACK.getBlock(), ECompressedBlocks.COMPRESSED_BLACKSTONE.getBlock(), ECompressedBlocks.COMPRESSED_END_STONE.getBlock());
+        tags.tag(BlockTags.MINEABLE_WITH_SHOVEL)
+                .add(EBlocks.DUST, EBlocks.CRUSHED_NETHERRACK, EBlocks.CRUSHED_END_STONE, EBlocks.CRUSHED_DEEPSLATE, EBlocks.CRUSHED_BLACKSTONE)
+                .add(ECompressedBlocks.COMPRESSED_DIRT.getBlock(), ECompressedBlocks.COMPRESSED_GRAVEL.getBlock(), ECompressedBlocks.COMPRESSED_SAND.getBlock(), ECompressedBlocks.COMPRESSED_DUST.getBlock(), ECompressedBlocks.COMPRESSED_RED_SAND.getBlock(), ECompressedBlocks.COMPRESSED_CRUSHED_DEEPSLATE.getBlock(), ECompressedBlocks.COMPRESSED_CRUSHED_BLACKSTONE.getBlock(), ECompressedBlocks.COMPRESSED_CRUSHED_NETHERRACK.getBlock(), ECompressedBlocks.COMPRESSED_SOUL_SAND.getBlock(), ECompressedBlocks.COMPRESSED_CRUSHED_END_STONE.getBlock());
+        tags.tag(BlockTags.MINEABLE_WITH_HOE)
+                .add(EBlocks.INFESTED_LEAVES)
+                .add(ECompressedBlocks.COMPRESSED_MOSS_BLOCK.getBlock());
         tags.tag(BlockTags.LEAVES).add(EBlocks.INFESTED_LEAVES);
     }
 
     public static void createItemTags(MKTagsProvider<Item> tags) {
         tags.tag(EItemTags.HAMMERS).add(EItems.WOODEN_HAMMER, EItems.STONE_HAMMER, EItems.GOLDEN_HAMMER, EItems.IRON_HAMMER, EItems.DIAMOND_HAMMER, EItems.NETHERITE_HAMMER);
+        tags.tag(EItemTags.COMPRESSED_HAMMERS).add(EItems.COMPRESSED_WOODEN_HAMMER, EItems.COMPRESSED_STONE_HAMMER, EItems.COMPRESSED_GOLDEN_HAMMER, EItems.COMPRESSED_IRON_HAMMER, EItems.COMPRESSED_DIAMOND_HAMMER, EItems.COMPRESSED_NETHERITE_HAMMER);
         tags.tag(EItemTags.CROOKS).add(EItems.CROOK, EItems.BONE_CROOK);
         tags.tag(EItemTags.SIEVE_MESHES).add(EItems.STRING_MESH, EItems.FLINT_MESH, EItems.IRON_MESH, EItems.GOLDEN_MESH, EItems.DIAMOND_MESH, EItems.NETHERITE_MESH);
         tags.tag(EItemTags.PEBBLES).add(EItems.STONE_PEBBLE, EItems.DIORITE_PEBBLE, EItems.GRANITE_PEBBLE, EItems.ANDESITE_PEBBLE, EItems.DEEPSLATE_PEBBLE, EItems.TUFF_PEBBLE, EItems.CALCITE_PEBBLE, EItems.BLACKSTONE_PEBBLE, EItems.BASALT_PEBBLE);
@@ -89,6 +95,21 @@ class ModTags {
         tags.tag(EItemTags.WOODEN_BARRELS).add(WOODEN_BARRELS.stream().map(BarrelMaterial::getItem).toArray(Item[]::new));
         tags.tag(EItemTags.STONE_BARRELS).add(DefaultMaterials.STONE_BARREL.getItem(), DefaultMaterials.CRYSTALLIZED_BARREL.getItem());
         tags.tag(EItemTags.BARRELS).addTags(EItemTags.WOODEN_BARRELS, EItemTags.STONE_BARRELS);
+
+        // Cyclic adds ONE compressed block :)
+        tags.tag(ECompressedBlocks.COMPRESSED_COBBLESTONE.getTag()).addOptional(new ResourceLocation(ModIds.CYCLIC, "compressed_cobblestone"));
+
+        for (var variant : ECompressedBlocks.ALL_VARIANTS) {
+            var builder = tags.tag(variant.getTag()).add(variant.getItem());
+            if (variant.hasAtc()) {
+                builder.addOptional(variant.getAtc());
+            }
+            if (variant.hasCompressium()) {
+                builder.addOptional(variant.getCompressium());
+            }
+        }
+
+        tags.tag(EItemTags.COMPRESSED_SANDS).addTags(ECompressedBlocks.COMPRESSED_SAND.getTag(), ECompressedBlocks.COMPRESSED_RED_SAND.getTag());
     }
 
     public static void createStructureSetTags(MKTagsProvider<StructureSet> tags) {

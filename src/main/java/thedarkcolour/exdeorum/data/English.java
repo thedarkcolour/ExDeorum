@@ -19,10 +19,12 @@
 package thedarkcolour.exdeorum.data;
 
 import net.minecraft.tags.TagKey;
+import org.apache.commons.lang3.text.WordUtils;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.client.screen.RedstoneControlWidget;
 import thedarkcolour.exdeorum.material.DefaultMaterials;
 import thedarkcolour.exdeorum.registry.EBlocks;
+import thedarkcolour.exdeorum.registry.ECompressedBlocks;
 import thedarkcolour.exdeorum.registry.EFluids;
 import thedarkcolour.exdeorum.tag.EItemTags;
 import thedarkcolour.modkit.data.MKEnglishProvider;
@@ -33,12 +35,20 @@ class English {
 
         english.add(EItemTags.CROOKS, "Crooks");
         english.add(EItemTags.HAMMERS, "Hammers");
+        english.add(EItemTags.COMPRESSED_HAMMERS, "Compressed Hammers");
         english.add(EItemTags.SIEVE_MESHES, "Sieve Meshes");
         english.add(EItemTags.PEBBLES, "Pebbles");
         english.add(EItemTags.END_CAKE_MATERIAL, "End Cake Materials");
         english.add(EItemTags.WOODEN_BARRELS, "Wooden Barrels");
         english.add(EItemTags.STONE_BARRELS, "Stone Barrels");
         english.add(EItemTags.BARRELS, "Barrels");
+
+        for (var variant : ECompressedBlocks.ALL_VARIANTS) {
+            // todo add a "capitalize ID" method to ModKit so I don't have to keep track of this code
+            //noinspection deprecation
+            english.add(variant.getTag(), WordUtils.capitalize(variant.getId().getPath().replace('_', ' ')));
+        }
+        english.add(EItemTags.COMPRESSED_SANDS, "Compressed Sands");
 
         english.add(EFluids.WITCH_WATER_TYPE.get(), "Witch Water");
 
@@ -85,9 +95,11 @@ class English {
         english.add(TranslationKeys.CRUCIBLE_HEAT_SOURCE_CATEGORY_TITLE, "Crucible Heat Sources");
         english.add(TranslationKeys.CRUCIBLE_HEAT_SOURCE_CATEGORY_MULTIPLIER, "Melt Rate: %sx");
         english.add(TranslationKeys.HAMMER_CATEGORY_TITLE, "Hammer");
+        english.add(TranslationKeys.COMPRESSED_HAMMER_CATEGORY_TITLE, "Compressed Hammer");
         english.add(TranslationKeys.CROOK_CATEGORY_TITLE, "Crook");
         english.add(TranslationKeys.CROOK_CATEGORY_REQUIRES_STATE, "Requires properties:");
         english.add(TranslationKeys.SIEVE_CATEGORY_TITLE, "Sieve");
+        english.add(TranslationKeys.COMPRESSED_SIEVE_CATEGORY_TITLE, "Compressed Sieve");
         english.add(TranslationKeys.SIEVE_RECIPE_CHANCE, "Chance: %s%%");
         english.add(TranslationKeys.SIEVE_RECIPE_AVERAGE_OUTPUT, "Avg. Output: %s");
         english.add(TranslationKeys.SIEVE_RECIPE_MIN_OUTPUT, "Min: %s");

@@ -43,6 +43,7 @@ import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.WallTorchBlock;
 import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.client.screen.MechanicalHammerScreen;
 import thedarkcolour.exdeorum.client.screen.MechanicalSieveScreen;
@@ -56,6 +57,7 @@ import thedarkcolour.exdeorum.recipe.barrel.BarrelCompostRecipe;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelFluidMixingRecipe;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelMixingRecipe;
 import thedarkcolour.exdeorum.recipe.crucible.CrucibleRecipe;
+import thedarkcolour.exdeorum.recipe.hammer.CompressedHammerRecipe;
 import thedarkcolour.exdeorum.recipe.hammer.HammerRecipe;
 import thedarkcolour.exdeorum.registry.EFluids;
 import thedarkcolour.exdeorum.registry.EItems;
@@ -79,7 +81,9 @@ public class ExDeorumJeiPlugin implements IModPlugin {
     static final RecipeType<CrucibleRecipe> WATER_CRUCIBLE = recipeType("water_crucible", CrucibleRecipe.class);
     static final RecipeType<CrucibleHeatSourceRecipe> CRUCIBLE_HEAT_SOURCES = recipeType("crucible_heat_sources", CrucibleHeatSourceRecipe.class);
     static final RecipeType<GroupedSieveRecipe> SIEVE = recipeType("sieve", GroupedSieveRecipe.class);
+    static final RecipeType<GroupedSieveRecipe> COMPRESSED_SIEVE = recipeType("compressed_sieve", GroupedSieveRecipe.class);
     static final RecipeType<HammerRecipe> HAMMER = recipeType("hammer", HammerRecipe.class);
+    static final RecipeType<HammerRecipe> COMPRESSED_HAMMER = recipeType("compressed_hammer", CompressedHammerRecipe.class);
     static final RecipeType<CrookJeiRecipe> CROOK = recipeType("crook", CrookJeiRecipe.class);
 
     private static <T> RecipeType<T> recipeType(String path, Class<? extends T> type) {
@@ -106,7 +110,9 @@ public class ExDeorumJeiPlugin implements IModPlugin {
         registration.addRecipeCategories(new CrucibleCategory.WaterCrucible(helper, arrow));
         registration.addRecipeCategories(new CrucibleHeatSourcesCategory(registration.getJeiHelpers()));
         registration.addRecipeCategories(new SieveCategory(helper));
-        registration.addRecipeCategories(new HammerCategory(helper, arrow));
+        registration.addRecipeCategories(new CompressedSieveCategory(helper));
+        registration.addRecipeCategories(new HammerCategory(helper, arrow, EItems.DIAMOND_HAMMER, Component.translatable(TranslationKeys.HAMMER_CATEGORY_TITLE), HAMMER));
+        registration.addRecipeCategories(new HammerCategory(helper, arrow, EItems.COMPRESSED_DIAMOND_HAMMER, Component.translatable(TranslationKeys.COMPRESSED_HAMMER_CATEGORY_TITLE), COMPRESSED_HAMMER));
         registration.addRecipeCategories(new CrookCategory(registration.getJeiHelpers(), arrow));
     }
 
@@ -116,6 +122,7 @@ public class ExDeorumJeiPlugin implements IModPlugin {
         var sieves = CompatUtil.getAvailableSieves(true, true);
         var lavaCrucibles = CompatUtil.getAvailableLavaCrucibles(true);
         var waterCrucibles = CompatUtil.getAvailableWaterCrucibles(true);
+        var compressedSieves = CompatUtil.getAvailableCompressedSieves(true);
 
         for (var barrel : barrels) {
             var stack = new ItemStack(barrel);
@@ -134,6 +141,9 @@ public class ExDeorumJeiPlugin implements IModPlugin {
         for (var sieve : sieves) {
             registration.addRecipeCatalyst(new ItemStack(sieve), SIEVE);
         }
+        for (var compressedSieve : compressedSieves) {
+            registration.addRecipeCatalyst(new ItemStack(compressedSieve), COMPRESSED_SIEVE);
+        }
 
         registration.addRecipeCatalyst(new ItemStack(EItems.WOODEN_HAMMER.get()), HAMMER);
         registration.addRecipeCatalyst(new ItemStack(EItems.STONE_HAMMER.get()), HAMMER);
@@ -142,6 +152,13 @@ public class ExDeorumJeiPlugin implements IModPlugin {
         registration.addRecipeCatalyst(new ItemStack(EItems.DIAMOND_HAMMER.get()), HAMMER);
         registration.addRecipeCatalyst(new ItemStack(EItems.NETHERITE_HAMMER.get()), HAMMER);
         registration.addRecipeCatalyst(new ItemStack(EItems.MECHANICAL_HAMMER.get()), HAMMER);
+
+        registration.addRecipeCatalyst(new ItemStack(EItems.COMPRESSED_WOODEN_HAMMER.get()), COMPRESSED_HAMMER);
+        registration.addRecipeCatalyst(new ItemStack(EItems.COMPRESSED_STONE_HAMMER.get()), COMPRESSED_HAMMER);
+        registration.addRecipeCatalyst(new ItemStack(EItems.COMPRESSED_GOLDEN_HAMMER.get()), COMPRESSED_HAMMER);
+        registration.addRecipeCatalyst(new ItemStack(EItems.COMPRESSED_IRON_HAMMER.get()), COMPRESSED_HAMMER);
+        registration.addRecipeCatalyst(new ItemStack(EItems.COMPRESSED_DIAMOND_HAMMER.get()), COMPRESSED_HAMMER);
+        registration.addRecipeCatalyst(new ItemStack(EItems.COMPRESSED_NETHERITE_HAMMER.get()), COMPRESSED_HAMMER);
 
         registration.addRecipeCatalyst(new ItemStack(EItems.CROOK.get()), CROOK);
         registration.addRecipeCatalyst(new ItemStack(EItems.BONE_CROOK.get()), CROOK);
@@ -194,8 +211,11 @@ public class ExDeorumJeiPlugin implements IModPlugin {
         addRecipes(registration, LAVA_CRUCIBLE, ERecipeTypes.LAVA_CRUCIBLE);
         addRecipes(registration, WATER_CRUCIBLE, ERecipeTypes.WATER_CRUCIBLE);
         addRecipes(registration, HAMMER, ERecipeTypes.HAMMER);
+        //noinspection rawtypes,unchecked
+        addRecipes(registration, COMPRESSED_HAMMER, ((DeferredHolder) ERecipeTypes.COMPRESSED_HAMMER));
         registration.addRecipes(CROOK, CompatUtil.collectAllRecipes(ERecipeTypes.CROOK.get(), CrookJeiRecipe::create));
-        registration.addRecipes(SIEVE, GroupedSieveRecipe.getAllRecipesGrouped());
+        registration.addRecipes(SIEVE, GroupedSieveRecipe.getAllRecipesGrouped(ERecipeTypes.SIEVE.get()));
+        registration.addRecipes(COMPRESSED_SIEVE, GroupedSieveRecipe.getAllRecipesGrouped(ERecipeTypes.COMPRESSED_SIEVE.get()));
 
         addCrucibleHeatSources(registration);
     }

@@ -24,6 +24,8 @@ public class ModIds {
     public static final String THE_ONE_PROBE = "theoneprobe";
     public static final String TINKERS_CONSTRUCT = "tconstruct";
     public static final String ALL_THE_ORES = "alltheores";
+    public static final String ALL_THE_COMPRESSED = "allthecompressed";
+    public static final String COMPRESSIUM = "compressium";
     public static final String THERMAL = "thermal";
     public static final String OCCULTISM = "occultism";
     public static final String RAILCRAFT = "railcraft";
@@ -45,4 +47,5 @@ public class ModIds {
     public static final String EMI = "emi";
     public static final String INVENTORY_SORTER = "inventorysorter";
     public static final String REI_PC = "rei_plugin_compatibilities";
+    public static final String CYCLIC = "cyclic";
 }

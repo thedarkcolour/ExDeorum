@@ -19,7 +19,6 @@
 package thedarkcolour.exdeorum.item;
 
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
-import net.minecraft.client.Minecraft;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.DiggerItem;
@@ -29,35 +28,24 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.TierSortingRegistry;
 import net.neoforged.neoforge.common.util.Lazy;
-import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import org.jetbrains.annotations.Nullable;
+import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.recipe.hammer.HammerRecipe;
 import thedarkcolour.exdeorum.registry.EItems;
-import thedarkcolour.exdeorum.registry.ERecipeTypes;
 
 import java.util.Collection;
-import java.util.Objects;
 import java.util.Set;
 
 public class HammerItem extends DiggerItem {
-    public static Lazy<Set<Block>> validBlocks = Lazy.of(HammerItem::computeValidBlocks);
+    private static Lazy<Set<Block>> validBlocks = Lazy.of(() -> computeValidBlocks(RecipeUtil.getCachedHammerRecipes()));
 
     public HammerItem(Tier tier, Properties properties) {
         super(1.0f, -2.8f, tier, null, properties);
     }
 
-    public static Set<Block> computeValidBlocks() {
-        Collection<RecipeHolder<HammerRecipe>> hammerRecipes;
-        // todo test that this works properly
-        if (FMLEnvironment.dist == Dist.CLIENT) {
-            hammerRecipes = Objects.requireNonNull(Minecraft.getInstance().level).getRecipeManager().byType(ERecipeTypes.HAMMER.get()).values();
-        } else {
-            hammerRecipes = ServerLifecycleHooks.getCurrentServer().getRecipeManager().byType(ERecipeTypes.HAMMER.get()).values();
-        }
+    protected static Set<Block> computeValidBlocks(Collection<? extends RecipeHolder<? extends HammerRecipe>> hammerRecipes) {
         var validBlocks = new ObjectOpenHashSet<Block>(hammerRecipes.size());
 
         for (var recipe : hammerRecipes) {
@@ -72,7 +60,7 @@ public class HammerItem extends DiggerItem {
     }
 
     public static void refreshValidBlocks() {
-        validBlocks = Lazy.of(HammerItem::computeValidBlocks);
+        validBlocks = Lazy.of(() -> computeValidBlocks(RecipeUtil.getCachedHammerRecipes()));
     }
 
     protected Set<Block> getValidBlocks() {

@@ -18,8 +18,9 @@
 
 package thedarkcolour.exdeorum.data.recipe;
 
+import com.google.common.collect.ImmutableMap;
 import net.minecraft.data.recipes.RecipeOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
@@ -27,26 +28,57 @@ import net.minecraft.world.level.storage.loot.providers.number.BinomialDistribut
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.neoforged.neoforge.common.conditions.ICondition;
 import net.neoforged.neoforge.registries.DeferredItem;
-import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.compat.ModIds;
 import thedarkcolour.exdeorum.data.ModCompatData;
+import thedarkcolour.exdeorum.recipe.sieve.CompressedSieveRecipe;
 import thedarkcolour.exdeorum.recipe.sieve.SieveRecipe;
+import thedarkcolour.exdeorum.registry.ECompressedBlocks;
 import thedarkcolour.exdeorum.registry.EItems;
 import thedarkcolour.exdeorum.tag.EItemTags;
 
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 import static net.minecraft.world.level.storage.loot.providers.number.BinomialDistributionGenerator.binomial;
+import static thedarkcolour.exdeorum.data.recipe.Recipes.modLoc;
 import static thedarkcolour.modkit.data.MKRecipeProvider.ingredient;
 import static thedarkcolour.modkit.data.MKRecipeProvider.path;
 
 class SieveRecipes {
+    // Ingredients do not implement .equals, so we need constants in order to map them to compressed variants
+    private static final Ingredient
+            DIRT = ingredient(Items.DIRT),
+            GRAVEL = ingredient(Items.GRAVEL),
+            SAND = ingredient(Items.SAND),
+            DUST = ingredient(EItems.DUST.get()),
+            RED_SAND = ingredient(Items.RED_SAND),
+            CRUSHED_DEEPSLATE = ingredient(EItems.CRUSHED_DEEPSLATE.get()),
+            CRUSHED_BLACKSTONE = ingredient(EItems.CRUSHED_BLACKSTONE.get()),
+            CRUSHED_NETHERRACK = ingredient(EItems.CRUSHED_NETHERRACK.get()),
+            SOUL_SAND = ingredient(Items.SOUL_SAND),
+            CRUSHED_END_STONE = ingredient(EItems.CRUSHED_END_STONE),
+            MOSS_BLOCK = ingredient(Items.MOSS_BLOCK);
+    // mod condition is null for ex deorum blocks (ex deorum is always last priority)
+    private static final Map<Ingredient, Ingredient> COMPRESSED_VARIANTS = ImmutableMap.<Ingredient, Ingredient>builder()
+            .put(DIRT, ingredient(ECompressedBlocks.COMPRESSED_DIRT.getTag()))
+            .put(GRAVEL, ingredient(ECompressedBlocks.COMPRESSED_GRAVEL.getTag()))
+            .put(SAND, ingredient(ECompressedBlocks.COMPRESSED_SAND.getTag()))
+            .put(DUST, ingredient(ECompressedBlocks.COMPRESSED_DUST.getTag()))
+            .put(RED_SAND, ingredient(ECompressedBlocks.COMPRESSED_RED_SAND.getTag()))
+            .put(CRUSHED_DEEPSLATE, ingredient(ECompressedBlocks.COMPRESSED_CRUSHED_DEEPSLATE.getTag()))
+            .put(CRUSHED_BLACKSTONE, ingredient(ECompressedBlocks.COMPRESSED_CRUSHED_BLACKSTONE.getTag()))
+            .put(CRUSHED_NETHERRACK, ingredient(ECompressedBlocks.COMPRESSED_CRUSHED_NETHERRACK.getTag()))
+            .put(SOUL_SAND, ingredient(ECompressedBlocks.COMPRESSED_SOUL_SAND.getTag()))
+            .put(CRUSHED_END_STONE, ingredient(ECompressedBlocks.COMPRESSED_CRUSHED_END_STONE.getTag()))
+            .put(MOSS_BLOCK, ingredient(ECompressedBlocks.COMPRESSED_MOSS_BLOCK.getTag()))
+            .build();
+
     static void sieveRecipes(RecipeOutput writer) {
         var allMeshes = List.of(EItems.STRING_MESH, EItems.FLINT_MESH, EItems.IRON_MESH, EItems.GOLDEN_MESH, EItems.DIAMOND_MESH, EItems.NETHERITE_MESH);
 
         // Dirt -> String mesh
-        forMesh(writer, ingredient(Items.DIRT), EItems.STRING_MESH, drops -> {
+        forMesh(writer, DIRT, EItems.STRING_MESH, drops -> {
             drops.add(EItems.STONE_PEBBLE.get(), binomial(7, 0.6f));
             drops.add(Items.FLINT, chance(0.25f));
             drops.add(Items.WHEAT_SEEDS, chance(0.125f));
@@ -64,7 +96,7 @@ class SieveRecipes {
         // Flint mesh will be used to get a larger variety of outputs from dirt, just so people don't always
         // have the inventory spam that are the -ite pebbles.
         // Dirt -> Flint mesh
-        forMesh(writer, ingredient(Items.DIRT), EItems.FLINT_MESH, drops -> {
+        forMesh(writer, DIRT, EItems.FLINT_MESH, drops -> {
             drops.add(EItems.STONE_PEBBLE.get(), binomial(7, 0.6f));
             drops.add(Items.FLINT, chance(0.3f));
             drops.add(EItems.ANDESITE_PEBBLE.get(), binomial(7, 0.4f));
@@ -85,7 +117,7 @@ class SieveRecipes {
             drops.addConditional(ModCompatData.SOURCEBERRY.get(), chance(0.03f), Recipes.modInstalled(ModIds.ARS_NOUVEAU));
         });
         // Dirt -> Iron mesh
-        forMesh(writer, ingredient(Items.DIRT), EItems.IRON_MESH, drops -> {
+        forMesh(writer, DIRT, EItems.IRON_MESH, drops -> {
             drops.add(EItems.STONE_PEBBLE.get(), binomial(8, 0.65f));
             drops.add(EItems.DEEPSLATE_PEBBLE.get(), binomial(3, 0.45f));
             drops.add(Items.FLINT, chance(0.3f));
@@ -102,7 +134,7 @@ class SieveRecipes {
         });
         // Gold tends to spread its luster to whatever passes through it...
         // Dirt -> Gold mesh
-        forMesh(writer, ingredient(Items.DIRT), EItems.GOLDEN_MESH, drops -> {
+        forMesh(writer, DIRT, EItems.GOLDEN_MESH, drops -> {
             drops.add(EItems.STONE_PEBBLE.get(), binomial(8, 0.7f));
             drops.add(EItems.DEEPSLATE_PEBBLE.get(), binomial(3, 0.55f));
             drops.add(Items.FLINT, chance(0.2f));
@@ -120,7 +152,7 @@ class SieveRecipes {
         });
         // Diamond tables have less junk items in them. Maybe you want those items? Use other meshes!
         // Dirt -> Diamond mesh
-        forMesh(writer, ingredient(Items.DIRT), EItems.DIAMOND_MESH, drops -> {
+        forMesh(writer, DIRT, EItems.DIAMOND_MESH, drops -> {
             drops.add(EItems.STONE_PEBBLE.get(), binomial(8, 0.7f));
             drops.add(EItems.DEEPSLATE_PEBBLE.get(), binomial(3, 0.60f));
             drops.add(Items.FLINT, binomial(3, 0.3f));
@@ -132,7 +164,7 @@ class SieveRecipes {
         });
         // Netherite should be the best for all drops (except pebbles)
         // Dirt -> Netherite mesh
-        forMesh(writer, ingredient(Items.DIRT), EItems.NETHERITE_MESH, drops -> {
+        forMesh(writer, DIRT, EItems.NETHERITE_MESH, drops -> {
             drops.add(EItems.STONE_PEBBLE.get(), binomial(5, 0.4f));
             drops.add(EItems.DEEPSLATE_PEBBLE.get(), binomial(4, 0.65f));
             drops.add(Items.FLINT, binomial(3, 0.4f));
@@ -146,7 +178,7 @@ class SieveRecipes {
         });
 
         // Gravel -> String mesh
-        forMesh(writer, ingredient(Items.GRAVEL), EItems.STRING_MESH, drops -> {
+        forMesh(writer, GRAVEL, EItems.STRING_MESH, drops -> {
             drops.add(EItems.STONE_PEBBLE.get(), binomial(4, 0.4f));
             drops.add(Items.FLINT, chance(0.2f));
             drops.add(Items.COAL, chance(0.1f));
@@ -171,7 +203,7 @@ class SieveRecipes {
             drops.addConditional(EItems.BORON_ORE_CHUNK.get(), chance(0.03f), Recipes.tagNotEmpty(EItemTags.ORES_BORON));
         });
         // Gravel -> Flint mesh
-        forMesh(writer, ingredient(Items.GRAVEL), EItems.FLINT_MESH, drops -> {
+        forMesh(writer, GRAVEL, EItems.FLINT_MESH, drops -> {
             drops.add(EItems.STONE_PEBBLE.get(), binomial(4, 0.5f));
             drops.add(EItems.ANDESITE_PEBBLE.get(), binomial(4, 0.4f));
             drops.add(EItems.GRANITE_PEBBLE.get(), binomial(4, 0.4f));
@@ -200,7 +232,7 @@ class SieveRecipes {
             drops.addConditional(EItems.BORON_ORE_CHUNK.get(), chance(0.0325f), Recipes.tagNotEmpty(EItemTags.ORES_BORON));
         });
         // Gravel -> Iron mesh
-        forMesh(writer, ingredient(Items.GRAVEL), EItems.IRON_MESH, drops -> {
+        forMesh(writer, GRAVEL, EItems.IRON_MESH, drops -> {
             drops.add(EItems.STONE_PEBBLE.get(), binomial(4, 0.5f));
             drops.add(EItems.DEEPSLATE_PEBBLE.get(), binomial(3, 0.55f));
             drops.add(Items.FLINT, chance(0.15f));
@@ -227,7 +259,7 @@ class SieveRecipes {
         });
         // Golden mesh has much higher drops for gold and gems
         // Gravel -> Golden mesh
-        forMesh(writer, ingredient(Items.GRAVEL), EItems.GOLDEN_MESH, drops -> {
+        forMesh(writer, GRAVEL, EItems.GOLDEN_MESH, drops -> {
             drops.add(EItems.STONE_PEBBLE.get(), binomial(4, 0.5f));
             drops.add(EItems.DEEPSLATE_PEBBLE.get(), binomial(3, 0.55f));
             drops.add(Items.FLINT, chance(0.13f));
@@ -255,7 +287,7 @@ class SieveRecipes {
             drops.addConditional(EItems.BORON_ORE_CHUNK.get(), chance(0.04f), Recipes.tagNotEmpty(EItemTags.ORES_BORON));
         });
         // Gravel -> Diamond mesh
-        forMesh(writer, ingredient(Items.GRAVEL), EItems.DIAMOND_MESH, drops -> {
+        forMesh(writer, GRAVEL, EItems.DIAMOND_MESH, drops -> {
             drops.add(EItems.DEEPSLATE_PEBBLE.get(), binomial(5, 0.6f));
             drops.add(Items.FLINT, chance(0.05f));
             drops.add(Items.COAL, chance(0.06f));
@@ -280,7 +312,7 @@ class SieveRecipes {
             drops.addConditional(EItems.BORON_ORE_CHUNK.get(), chance(0.06f), Recipes.tagNotEmpty(EItemTags.ORES_BORON));
         });
         // Gravel -> Netherite mesh
-        forMesh(writer, ingredient(Items.GRAVEL), EItems.NETHERITE_MESH, drops -> {
+        forMesh(writer, GRAVEL, EItems.NETHERITE_MESH, drops -> {
             drops.add(EItems.DEEPSLATE_PEBBLE.get(), binomial(6, 0.625f));
             drops.add(Items.COAL, chance(0.06f));
             drops.add(Items.LAPIS_LAZULI, chance(0.11f));
@@ -307,7 +339,7 @@ class SieveRecipes {
         });
 
         // Sand -> String mesh
-        forMesh(writer, ingredient(Items.SAND), EItems.STRING_MESH, drops -> {
+        forMesh(writer, SAND, EItems.STRING_MESH, drops -> {
             drops.add(Items.CACTUS, chance(0.13f));
             drops.add(Items.FLINT, chance(0.2f));
             drops.add(Items.DEAD_BUSH, chance(0.08f));
@@ -319,7 +351,7 @@ class SieveRecipes {
             drops.addConditional(ModCompatData.CERTUS_QUARTZ_CRYSTAL.get(), chance(0.03f), Recipes.modInstalled(ModIds.APPLIED_ENERGISTICS_2));
             drops.addConditional(ModCompatData.CHARGED_CERTUS_QUARTZ_CRYSTAL.get(), chance(0.005f), Recipes.modInstalled(ModIds.APPLIED_ENERGISTICS_2));
         });
-        forMesh(writer, ingredient(Items.SAND), EItems.FLINT_MESH, drops -> {
+        forMesh(writer, SAND, EItems.FLINT_MESH, drops -> {
             drops.add(Items.FLINT, binomial(2, 0.2f));
             drops.add(Items.DEAD_BUSH, chance(0.03f));
             drops.add(Items.GOLD_NUGGET, chance(0.16f));
@@ -329,7 +361,7 @@ class SieveRecipes {
             drops.addConditional(ModCompatData.CERTUS_QUARTZ_CRYSTAL.get(), chance(0.04f), Recipes.modInstalled(ModIds.APPLIED_ENERGISTICS_2));
             drops.addConditional(ModCompatData.CHARGED_CERTUS_QUARTZ_CRYSTAL.get(), chance(0.005f), Recipes.modInstalled(ModIds.APPLIED_ENERGISTICS_2));
         });
-        forMesh(writer, ingredient(Items.SAND), EItems.IRON_MESH, drops -> {
+        forMesh(writer, SAND, EItems.IRON_MESH, drops -> {
             drops.add(Items.CACTUS, chance(0.13f));
             drops.add(Items.FLINT, chance(0.23f));
             drops.add(Items.DEAD_BUSH, chance(0.08f));
@@ -343,7 +375,7 @@ class SieveRecipes {
             drops.addConditional(ModCompatData.CERTUS_QUARTZ_CRYSTAL.get(), chance(0.06f), Recipes.modInstalled(ModIds.APPLIED_ENERGISTICS_2));
             drops.addConditional(ModCompatData.CHARGED_CERTUS_QUARTZ_CRYSTAL.get(), chance(0.0125f), Recipes.modInstalled(ModIds.APPLIED_ENERGISTICS_2));
         });
-        forMesh(writer, ingredient(Items.SAND), EItems.GOLDEN_MESH, drops -> {
+        forMesh(writer, SAND, EItems.GOLDEN_MESH, drops -> {
             drops.add(Items.CACTUS, chance(0.10f));
             drops.add(Items.FLINT, chance(0.18f));
             drops.add(Items.DEAD_BUSH, chance(0.06f));
@@ -359,7 +391,7 @@ class SieveRecipes {
             drops.addConditional(ModCompatData.CERTUS_QUARTZ_CRYSTAL.get(), chance(0.07f), Recipes.modInstalled(ModIds.APPLIED_ENERGISTICS_2));
             drops.addConditional(ModCompatData.CHARGED_CERTUS_QUARTZ_CRYSTAL.get(), chance(0.015f), Recipes.modInstalled(ModIds.APPLIED_ENERGISTICS_2));
         });
-        forMesh(writer, ingredient(Items.SAND), EItems.DIAMOND_MESH, drops -> {
+        forMesh(writer, SAND, EItems.DIAMOND_MESH, drops -> {
             drops.add(Items.FLINT, chance(0.23f));
             drops.add(Items.GOLD_NUGGET, chance(0.22f));
             drops.add(Items.IRON_NUGGET, chance(0.22f));
@@ -369,7 +401,7 @@ class SieveRecipes {
             drops.addConditional(ModCompatData.CERTUS_QUARTZ_CRYSTAL.get(), chance(0.09f), Recipes.modInstalled(ModIds.APPLIED_ENERGISTICS_2));
             drops.addConditional(ModCompatData.CHARGED_CERTUS_QUARTZ_CRYSTAL.get(), chance(0.02f), Recipes.modInstalled(ModIds.APPLIED_ENERGISTICS_2));
         });
-        forMesh(writer, ingredient(Items.SAND), EItems.NETHERITE_MESH, drops -> {
+        forMesh(writer, SAND, EItems.NETHERITE_MESH, drops -> {
             drops.add(Items.CACTUS, chance(0.15f));
             drops.add(Items.FLINT, binomial(2, 0.23f));
             drops.add(Items.GOLD_NUGGET, chance(0.23f));
@@ -384,49 +416,49 @@ class SieveRecipes {
         });
 
         // Red Sand -> String mesh
-        forMesh(writer, ingredient(Items.RED_SAND), EItems.STRING_MESH, drops -> {
+        forMesh(writer, RED_SAND, EItems.STRING_MESH, drops -> {
             drops.add(Items.CACTUS, chance(0.12f));
             drops.add(Items.DEAD_BUSH, chance(0.07f));
             drops.add(Items.GOLD_NUGGET, chance(0.09f));
             drops.add(Items.REDSTONE, chance(0.08f));
             drops.add(Items.RAW_GOLD, chance(0.03f));
         });
-        forMesh(writer, ingredient(Items.RED_SAND), EItems.FLINT_MESH, drops -> {
+        forMesh(writer, RED_SAND, EItems.FLINT_MESH, drops -> {
             drops.add(Items.CACTUS, chance(0.12f));
             drops.add(Items.DEAD_BUSH, chance(0.07f));
             drops.add(Items.GOLD_NUGGET, chance(0.12f));
             drops.add(Items.REDSTONE, chance(0.09f));
             drops.add(Items.RAW_GOLD, chance(0.04f));
         });
-        forMesh(writer, ingredient(Items.RED_SAND), EItems.IRON_MESH, drops -> {
+        forMesh(writer, RED_SAND, EItems.IRON_MESH, drops -> {
             drops.add(Items.CACTUS, chance(0.12f));
             drops.add(Items.DEAD_BUSH, chance(0.07f));
             drops.add(Items.GOLD_NUGGET, chance(0.09f));
             drops.add(Items.REDSTONE, chance(0.11f));
             drops.add(Items.RAW_GOLD, chance(0.06f));
         });
-        forMesh(writer, ingredient(Items.RED_SAND), EItems.GOLDEN_MESH, drops -> {
+        forMesh(writer, RED_SAND, EItems.GOLDEN_MESH, drops -> {
             drops.add(Items.CACTUS, chance(0.12f));
             drops.add(Items.DEAD_BUSH, chance(0.07f));
             drops.add(Items.GOLD_NUGGET, chance(0.19f));
             drops.add(Items.REDSTONE, chance(0.07f));
             drops.add(Items.RAW_GOLD, chance(0.11f));
         });
-        forMesh(writer, ingredient(Items.RED_SAND), EItems.DIAMOND_MESH, drops -> {
+        forMesh(writer, RED_SAND, EItems.DIAMOND_MESH, drops -> {
             drops.add(Items.CACTUS, chance(0.10f));
             drops.add(Items.DEAD_BUSH, chance(0.03f));
             drops.add(Items.GOLD_NUGGET, chance(0.14f));
             drops.add(Items.REDSTONE, chance(0.14f));
             drops.add(Items.RAW_GOLD, chance(0.08f));
         });
-        forMesh(writer, ingredient(Items.RED_SAND), EItems.NETHERITE_MESH, drops -> {
+        forMesh(writer, RED_SAND, EItems.NETHERITE_MESH, drops -> {
             drops.add(Items.CACTUS, chance(0.12f));
             drops.add(Items.GOLD_NUGGET, chance(0.15f));
             drops.add(Items.REDSTONE, chance(0.17f));
             drops.add(Items.RAW_GOLD, chance(0.10f));
         });
 
-        forMesh(writer, ingredient(EItems.DUST.get()), EItems.STRING_MESH, drops -> {
+        forMesh(writer, DUST, EItems.STRING_MESH, drops -> {
             drops.add(Items.GUNPOWDER, chance(0.1f));
             drops.add(Items.BONE_MEAL, chance(0.1f));
             drops.add(Items.REDSTONE, chance(0.06f));
@@ -438,7 +470,7 @@ class SieveRecipes {
             drops.addConditional(ModCompatData.SKY_STONE_DUST.get(), chance(0.06f), Recipes.AE2);
             drops.addConditional(ModCompatData.CERTUS_QUARTZ_DUST.get(), chance(0.06f), Recipes.AE2);
         });
-        forMesh(writer, ingredient(EItems.DUST.get()), EItems.FLINT_MESH, drops -> {
+        forMesh(writer, DUST, EItems.FLINT_MESH, drops -> {
             drops.add(Items.GUNPOWDER, chance(0.11f));
             drops.add(Items.BONE_MEAL, chance(0.11f));
             drops.add(Items.REDSTONE, chance(0.09f));
@@ -450,7 +482,7 @@ class SieveRecipes {
             drops.addConditional(ModCompatData.SKY_STONE_DUST.get(), chance(0.07f), Recipes.AE2);
             drops.addConditional(ModCompatData.CERTUS_QUARTZ_DUST.get(), chance(0.07f), Recipes.AE2);
         });
-        forMesh(writer, ingredient(EItems.DUST.get()), EItems.IRON_MESH, drops -> {
+        forMesh(writer, DUST, EItems.IRON_MESH, drops -> {
             drops.add(Items.GUNPOWDER, chance(0.13f));
             drops.add(Items.BONE_MEAL, chance(0.12f));
             drops.add(Items.REDSTONE, chance(0.1f));
@@ -463,7 +495,7 @@ class SieveRecipes {
             drops.addConditional(ModCompatData.SKY_STONE_DUST.get(), chance(0.075f), Recipes.AE2);
             drops.addConditional(ModCompatData.CERTUS_QUARTZ_DUST.get(), chance(0.075f), Recipes.AE2);
         });
-        forMesh(writer, ingredient(EItems.DUST.get()), EItems.GOLDEN_MESH, drops -> {
+        forMesh(writer, DUST, EItems.GOLDEN_MESH, drops -> {
             drops.add(Items.GUNPOWDER, chance(0.13f));
             drops.add(Items.BONE_MEAL, chance(0.11f));
             drops.add(Items.REDSTONE, chance(0.12f));
@@ -477,7 +509,7 @@ class SieveRecipes {
             drops.addConditional(ModCompatData.SKY_STONE_DUST.get(), chance(0.08f), Recipes.AE2);
             drops.addConditional(ModCompatData.CERTUS_QUARTZ_DUST.get(), chance(0.08f), Recipes.AE2);
         });
-        forMesh(writer, ingredient(EItems.DUST.get()), EItems.DIAMOND_MESH, drops -> {
+        forMesh(writer, DUST, EItems.DIAMOND_MESH, drops -> {
             drops.add(Items.GUNPOWDER, chance(0.14f));
             drops.add(Items.BONE_MEAL, chance(0.10f));
             drops.add(Items.REDSTONE, chance(0.12f));
@@ -490,7 +522,7 @@ class SieveRecipes {
             drops.addConditional(ModCompatData.SKY_STONE_DUST.get(), chance(0.10f), Recipes.AE2);
             drops.addConditional(ModCompatData.CERTUS_QUARTZ_DUST.get(), chance(0.10f), Recipes.AE2);
         });
-        forMesh(writer, ingredient(EItems.DUST.get()), EItems.NETHERITE_MESH, drops -> {
+        forMesh(writer, DUST, EItems.NETHERITE_MESH, drops -> {
             drops.add(Items.GUNPOWDER, chance(0.14f));
             drops.add(Items.BONE_MEAL, chance(0.13f));
             drops.add(Items.REDSTONE, chance(0.14f));
@@ -506,7 +538,7 @@ class SieveRecipes {
         });
 
         // Crushed Deepslate -> String mesh
-        forMesh(writer, ingredient(EItems.CRUSHED_DEEPSLATE.get()), EItems.STRING_MESH, drops -> {
+        forMesh(writer, CRUSHED_DEEPSLATE, EItems.STRING_MESH, drops -> {
             drops.add(EItems.DEEPSLATE_PEBBLE.get(), binomial(4, 0.5f));
             drops.add(EItems.COPPER_ORE_CHUNK.get(), chance(0.12f));
             drops.add(EItems.IRON_ORE_CHUNK.get(), chance(0.12f));
@@ -529,7 +561,7 @@ class SieveRecipes {
             drops.addConditional(EItems.BORON_ORE_CHUNK.get(), chance(0.05f), Recipes.tagNotEmpty(EItemTags.ORES_BORON));
             drops.addConditional(EItems.LITHIUM_ORE_CHUNK.get(), chance(0.045f), Recipes.tagNotEmpty(EItemTags.ORES_LITHIUM));
         });
-        forMesh(writer, ingredient(EItems.CRUSHED_DEEPSLATE.get()), EItems.FLINT_MESH, drops -> {
+        forMesh(writer, CRUSHED_DEEPSLATE, EItems.FLINT_MESH, drops -> {
             drops.add(EItems.DEEPSLATE_PEBBLE.get(), binomial(4, 0.5f));
             drops.add(EItems.TUFF_PEBBLE.get(), binomial(4, 0.4f));
             drops.add(EItems.CALCITE_PEBBLE.get(), binomial(4, 0.4f));
@@ -555,7 +587,7 @@ class SieveRecipes {
             drops.addConditional(EItems.BORON_ORE_CHUNK.get(), chance(0.06f), Recipes.tagNotEmpty(EItemTags.ORES_BORON));
             drops.addConditional(EItems.LITHIUM_ORE_CHUNK.get(), chance(0.05f), Recipes.tagNotEmpty(EItemTags.ORES_LITHIUM));
         });
-        forMesh(writer, ingredient(EItems.CRUSHED_DEEPSLATE.get()), EItems.IRON_MESH, drops -> {
+        forMesh(writer, CRUSHED_DEEPSLATE, EItems.IRON_MESH, drops -> {
             drops.add(EItems.DEEPSLATE_PEBBLE.get(), binomial(4, 0.6f));
             drops.add(EItems.COPPER_ORE_CHUNK.get(), chance(0.10f));
             drops.add(EItems.IRON_ORE_CHUNK.get(), chance(0.15f));
@@ -578,7 +610,7 @@ class SieveRecipes {
             drops.addConditional(EItems.BORON_ORE_CHUNK.get(), chance(0.06f), Recipes.tagNotEmpty(EItemTags.ORES_BORON));
             drops.addConditional(EItems.LITHIUM_ORE_CHUNK.get(), chance(0.06f), Recipes.tagNotEmpty(EItemTags.ORES_LITHIUM));
         });
-        forMesh(writer, ingredient(EItems.CRUSHED_DEEPSLATE.get()), EItems.GOLDEN_MESH, drops -> {
+        forMesh(writer, CRUSHED_DEEPSLATE, EItems.GOLDEN_MESH, drops -> {
             drops.add(EItems.DEEPSLATE_PEBBLE.get(), binomial(4, 0.65f));
             drops.add(EItems.COPPER_ORE_CHUNK.get(), chance(0.09f));
             drops.add(EItems.IRON_ORE_CHUNK.get(), chance(0.15f));
@@ -603,7 +635,7 @@ class SieveRecipes {
             drops.addConditional(EItems.BORON_ORE_CHUNK.get(), chance(0.065f), Recipes.tagNotEmpty(EItemTags.ORES_BORON));
             drops.addConditional(EItems.LITHIUM_ORE_CHUNK.get(), chance(0.065f), Recipes.tagNotEmpty(EItemTags.ORES_LITHIUM));
         });
-        forMesh(writer, ingredient(EItems.CRUSHED_DEEPSLATE.get()), EItems.DIAMOND_MESH, drops -> {
+        forMesh(writer, CRUSHED_DEEPSLATE, EItems.DIAMOND_MESH, drops -> {
             drops.add(EItems.DEEPSLATE_PEBBLE.get(), binomial(4, 0.65f));
             drops.add(EItems.COPPER_ORE_CHUNK.get(), chance(0.09f));
             drops.add(EItems.IRON_ORE_CHUNK.get(), chance(0.18f));
@@ -626,7 +658,7 @@ class SieveRecipes {
             drops.addConditional(EItems.BORON_ORE_CHUNK.get(), chance(0.08f), Recipes.tagNotEmpty(EItemTags.ORES_BORON));
             drops.addConditional(EItems.LITHIUM_ORE_CHUNK.get(), chance(0.08f), Recipes.tagNotEmpty(EItemTags.ORES_LITHIUM));
         });
-        forMesh(writer, ingredient(EItems.CRUSHED_DEEPSLATE.get()), EItems.NETHERITE_MESH, drops -> {
+        forMesh(writer, CRUSHED_DEEPSLATE, EItems.NETHERITE_MESH, drops -> {
             drops.add(EItems.DEEPSLATE_PEBBLE.get(), binomial(4, 0.7f));
             drops.add(EItems.COPPER_ORE_CHUNK.get(), chance(0.10f));
             drops.add(EItems.IRON_ORE_CHUNK.get(), chance(0.20f));
@@ -650,7 +682,7 @@ class SieveRecipes {
             drops.addConditional(EItems.LITHIUM_ORE_CHUNK.get(), chance(0.085f), Recipes.tagNotEmpty(EItemTags.ORES_LITHIUM));
         });
 
-        forMesh(writer, ingredient(EItems.CRUSHED_BLACKSTONE.get()), EItems.STRING_MESH, drops -> {
+        forMesh(writer, CRUSHED_BLACKSTONE, EItems.STRING_MESH, drops -> {
             drops.add(EItems.BLACKSTONE_PEBBLE.get(), binomial(4, 0.6f));
             drops.add(EItems.BASALT_PEBBLE.get(), binomial(3, 0.5f));
             drops.add(Items.ANCIENT_DEBRIS, chance(0.02f));
@@ -659,7 +691,7 @@ class SieveRecipes {
             drops.add(Items.GUNPOWDER, chance(0.07f));
             drops.add(Items.BLACK_DYE, chance(0.07f));
         });
-        forMesh(writer, ingredient(EItems.CRUSHED_BLACKSTONE.get()), EItems.FLINT_MESH, drops -> {
+        forMesh(writer, CRUSHED_BLACKSTONE, EItems.FLINT_MESH, drops -> {
             drops.add(EItems.BLACKSTONE_PEBBLE.get(), binomial(4, 0.65f));
             drops.add(EItems.BASALT_PEBBLE.get(), binomial(3, 0.55f));
             drops.add(Items.ANCIENT_DEBRIS, chance(0.03f));
@@ -668,7 +700,7 @@ class SieveRecipes {
             drops.add(Items.GUNPOWDER, chance(0.09f));
             drops.add(Items.BLACK_DYE, chance(0.08f));
         });
-        forMesh(writer, ingredient(EItems.CRUSHED_BLACKSTONE.get()), EItems.IRON_MESH, drops -> {
+        forMesh(writer, CRUSHED_BLACKSTONE, EItems.IRON_MESH, drops -> {
             drops.add(EItems.BLACKSTONE_PEBBLE.get(), binomial(5, 0.65f));
             drops.add(EItems.BASALT_PEBBLE.get(), binomial(4, 0.55f));
             drops.add(Items.ANCIENT_DEBRIS, chance(0.04f));
@@ -677,7 +709,7 @@ class SieveRecipes {
             drops.add(Items.GUNPOWDER, chance(0.09f));
             drops.add(Items.BLACK_DYE, chance(0.08f));
         });
-        forMesh(writer, ingredient(EItems.CRUSHED_BLACKSTONE.get()), EItems.GOLDEN_MESH, drops -> {
+        forMesh(writer, CRUSHED_BLACKSTONE, EItems.GOLDEN_MESH, drops -> {
             drops.add(EItems.BLACKSTONE_PEBBLE.get(), binomial(5, 0.7f));
             drops.add(EItems.BASALT_PEBBLE.get(), binomial(4, 0.5f));
             drops.add(Items.ANCIENT_DEBRIS, chance(0.05f));
@@ -686,14 +718,14 @@ class SieveRecipes {
             drops.add(Items.GUNPOWDER, chance(0.1f));
             drops.add(Items.BLACK_DYE, chance(0.06f));
         });
-        forMesh(writer, ingredient(EItems.CRUSHED_BLACKSTONE.get()), EItems.DIAMOND_MESH, drops -> {
+        forMesh(writer, CRUSHED_BLACKSTONE, EItems.DIAMOND_MESH, drops -> {
             drops.add(EItems.BLACKSTONE_PEBBLE.get(), binomial(5, 0.7f));
             drops.add(Items.ANCIENT_DEBRIS, chance(0.06f));
             drops.add(Items.GOLD_NUGGET, binomial(4, 0.275f));
             drops.add(Items.MAGMA_CREAM, chance(0.11f));
             drops.add(Items.GUNPOWDER, chance(0.11f));
         });
-        forMesh(writer, ingredient(EItems.CRUSHED_BLACKSTONE.get()), EItems.NETHERITE_MESH, drops -> {
+        forMesh(writer, CRUSHED_BLACKSTONE, EItems.NETHERITE_MESH, drops -> {
             drops.add(EItems.BLACKSTONE_PEBBLE.get(), binomial(5, 0.75f));
             drops.add(Items.ANCIENT_DEBRIS, chance(0.1f));
             drops.add(Items.GOLD_NUGGET, binomial(4, 0.325f));
@@ -701,7 +733,7 @@ class SieveRecipes {
             drops.add(Items.GUNPOWDER, chance(0.11f));
         });
 
-        forMesh(writer, ingredient(EItems.CRUSHED_NETHERRACK.get()), EItems.STRING_MESH, drops -> {
+        forMesh(writer, CRUSHED_NETHERRACK, EItems.STRING_MESH, drops -> {
             drops.add(EItems.BLACKSTONE_PEBBLE.get(), binomial(3, 0.4f));
             drops.add(EItems.BASALT_PEBBLE.get(), binomial(3, 0.3f));
             drops.add(Items.BLAZE_POWDER, chance(0.08f));
@@ -714,7 +746,7 @@ class SieveRecipes {
 
             drops.addConditional(EItems.COBALT_ORE_CHUNK.get(), chance(0.04f), Recipes.tagNotEmpty(EItemTags.ORES_COBALT));
         });
-        forMesh(writer, ingredient(EItems.CRUSHED_NETHERRACK.get()), EItems.FLINT_MESH, drops -> {
+        forMesh(writer, CRUSHED_NETHERRACK, EItems.FLINT_MESH, drops -> {
             drops.add(EItems.BLACKSTONE_PEBBLE.get(), binomial(4, 0.5f));
             drops.add(EItems.BASALT_PEBBLE.get(), binomial(4, 0.4f));
             drops.add(Items.BLAZE_POWDER, chance(0.09f));
@@ -727,7 +759,7 @@ class SieveRecipes {
 
             drops.addConditional(EItems.COBALT_ORE_CHUNK.get(), chance(0.05f), Recipes.tagNotEmpty(EItemTags.ORES_COBALT));
         });
-        forMesh(writer, ingredient(EItems.CRUSHED_NETHERRACK.get()), EItems.IRON_MESH, drops -> {
+        forMesh(writer, CRUSHED_NETHERRACK, EItems.IRON_MESH, drops -> {
             drops.add(EItems.BLACKSTONE_PEBBLE.get(), binomial(4, 0.6f));
             drops.add(EItems.BASALT_PEBBLE.get(), binomial(4, 0.45f));
             drops.add(Items.BLAZE_POWDER, chance(0.1f));
@@ -740,7 +772,7 @@ class SieveRecipes {
 
             drops.addConditional(EItems.COBALT_ORE_CHUNK.get(), chance(0.065f), Recipes.tagNotEmpty(EItemTags.ORES_COBALT));
         });
-        forMesh(writer, ingredient(EItems.CRUSHED_NETHERRACK.get()), EItems.GOLDEN_MESH, drops -> {
+        forMesh(writer, CRUSHED_NETHERRACK, EItems.GOLDEN_MESH, drops -> {
             drops.add(EItems.BLACKSTONE_PEBBLE.get(), binomial(4, 0.6f));
             drops.add(EItems.BASALT_PEBBLE.get(), binomial(4, 0.45f));
             drops.add(Items.BLAZE_POWDER, chance(0.11f));
@@ -754,7 +786,7 @@ class SieveRecipes {
 
             drops.addConditional(EItems.COBALT_ORE_CHUNK.get(), chance(0.07f), Recipes.tagNotEmpty(EItemTags.ORES_COBALT));
         });
-        forMesh(writer, ingredient(EItems.CRUSHED_NETHERRACK.get()), EItems.DIAMOND_MESH, drops -> {
+        forMesh(writer, CRUSHED_NETHERRACK, EItems.DIAMOND_MESH, drops -> {
             drops.add(EItems.BLACKSTONE_PEBBLE.get(), binomial(4, 0.6f));
             drops.add(Items.BLAZE_POWDER, chance(0.14f));
             drops.add(Items.QUARTZ, chance(0.13f));
@@ -764,7 +796,7 @@ class SieveRecipes {
 
             drops.addConditional(EItems.COBALT_ORE_CHUNK.get(), chance(0.09f), Recipes.tagNotEmpty(EItemTags.ORES_COBALT));
         });
-        forMesh(writer, ingredient(EItems.CRUSHED_NETHERRACK.get()), EItems.NETHERITE_MESH, drops -> {
+        forMesh(writer, CRUSHED_NETHERRACK, EItems.NETHERITE_MESH, drops -> {
             drops.add(EItems.BLACKSTONE_PEBBLE.get(), binomial(5, 0.65f));
             drops.add(Items.BLAZE_POWDER, chance(0.15f));
             drops.add(Items.QUARTZ, chance(0.15f));
@@ -775,7 +807,7 @@ class SieveRecipes {
             drops.addConditional(EItems.COBALT_ORE_CHUNK.get(), chance(0.11f), Recipes.tagNotEmpty(EItemTags.ORES_COBALT));
         });
 
-        forMesh(writer, ingredient(Items.SOUL_SAND), EItems.STRING_MESH, drops -> {
+        forMesh(writer, SOUL_SAND, EItems.STRING_MESH, drops -> {
             drops.add(Items.QUARTZ, chance(0.12f));
             drops.add(Items.GUNPOWDER, chance(0.07f));
             drops.add(Items.BONE, chance(0.08f));
@@ -783,7 +815,7 @@ class SieveRecipes {
             drops.add(Items.NETHER_WART, chance(0.06f));
             drops.add(Items.GLOWSTONE_DUST, chance(0.06f));
         });
-        forMesh(writer, ingredient(Items.SOUL_SAND), EItems.FLINT_MESH, drops -> {
+        forMesh(writer, SOUL_SAND, EItems.FLINT_MESH, drops -> {
             drops.add(Items.QUARTZ, chance(0.14f));
             drops.add(Items.GUNPOWDER, chance(0.08f));
             drops.add(Items.BONE, chance(0.1f));
@@ -793,7 +825,7 @@ class SieveRecipes {
             drops.add(EItems.WARPED_NYLIUM_SPORES.get(), chance(0.03f));
             drops.add(EItems.CRIMSON_NYLIUM_SPORES.get(), chance(0.03f));
         });
-        forMesh(writer, ingredient(Items.SOUL_SAND), EItems.IRON_MESH, drops -> {
+        forMesh(writer, SOUL_SAND, EItems.IRON_MESH, drops -> {
             drops.add(Items.QUARTZ, chance(0.15f));
             drops.add(Items.GUNPOWDER, chance(0.07f));
             drops.add(Items.BONE, chance(0.08f));
@@ -801,7 +833,7 @@ class SieveRecipes {
             drops.add(Items.GLOWSTONE_DUST, chance(0.06f));
             drops.add(Items.NETHER_WART, chance(0.05f));
         });
-        forMesh(writer, ingredient(Items.SOUL_SAND), EItems.GOLDEN_MESH, drops -> {
+        forMesh(writer, SOUL_SAND, EItems.GOLDEN_MESH, drops -> {
             drops.add(Items.QUARTZ, chance(0.17f));
             drops.add(Items.GUNPOWDER, chance(0.1f));
             drops.add(Items.BONE, chance(0.11f));
@@ -810,14 +842,14 @@ class SieveRecipes {
             drops.add(Items.NETHER_WART, chance(0.08f));
             drops.add(Items.GOLD_NUGGET, chance(0.15f));
         });
-        forMesh(writer, ingredient(Items.SOUL_SAND), EItems.DIAMOND_MESH, drops -> {
+        forMesh(writer, SOUL_SAND, EItems.DIAMOND_MESH, drops -> {
             drops.add(Items.QUARTZ, chance(0.19f));
             drops.add(Items.GUNPOWDER, chance(0.11f));
             drops.add(Items.GHAST_TEAR, chance(0.09f));
             drops.add(Items.GLOWSTONE_DUST, chance(0.11f));
             drops.add(Items.NETHER_WART, chance(0.1f));
         });
-        forMesh(writer, ingredient(Items.SOUL_SAND), EItems.NETHERITE_MESH, drops -> {
+        forMesh(writer, SOUL_SAND, EItems.NETHERITE_MESH, drops -> {
             drops.add(Items.QUARTZ, chance(0.21f));
             drops.add(Items.GUNPOWDER, chance(0.14f));
             drops.add(Items.GHAST_TEAR, chance(0.11f));
@@ -825,37 +857,37 @@ class SieveRecipes {
             drops.add(Items.NETHER_WART, chance(0.12f));
         });
 
-        forMesh(writer, ingredient(EItems.CRUSHED_END_STONE), EItems.STRING_MESH, drops -> {
+        forMesh(writer, CRUSHED_END_STONE, EItems.STRING_MESH, drops -> {
             drops.add(Items.ENDER_PEARL, chance(0.07f));
             drops.add(Items.CHORUS_FRUIT, chance(0.09f));
             drops.add(Items.CHORUS_FLOWER, chance(0.04f));
             drops.add(Items.ENDER_EYE, chance(0.02f));
         });
-        forMesh(writer, ingredient(EItems.CRUSHED_END_STONE), EItems.FLINT_MESH, drops -> {
+        forMesh(writer, CRUSHED_END_STONE, EItems.FLINT_MESH, drops -> {
             drops.add(Items.ENDER_PEARL, chance(0.08f));
             drops.add(Items.CHORUS_FRUIT, chance(0.11f));
             drops.add(Items.CHORUS_FLOWER, chance(0.06f));
             drops.add(Items.ENDER_EYE, chance(0.03f));
         });
-        forMesh(writer, ingredient(EItems.CRUSHED_END_STONE), EItems.IRON_MESH, drops -> {
+        forMesh(writer, CRUSHED_END_STONE, EItems.IRON_MESH, drops -> {
             drops.add(Items.ENDER_PEARL, chance(0.10f));
             drops.add(Items.CHORUS_FRUIT, chance(0.13f));
             drops.add(Items.CHORUS_FLOWER, chance(0.07f));
             drops.add(Items.ENDER_EYE, chance(0.04f));
         });
-        forMesh(writer, ingredient(EItems.CRUSHED_END_STONE), EItems.GOLDEN_MESH, drops -> {
+        forMesh(writer, CRUSHED_END_STONE, EItems.GOLDEN_MESH, drops -> {
             drops.add(Items.ENDER_PEARL, chance(0.12f));
             drops.add(Items.CHORUS_FRUIT, chance(0.12f));
             drops.add(Items.CHORUS_FLOWER, chance(0.06f));
             drops.add(Items.ENDER_EYE, chance(0.07f));
         });
-        forMesh(writer, ingredient(EItems.CRUSHED_END_STONE), EItems.DIAMOND_MESH, drops -> {
+        forMesh(writer, CRUSHED_END_STONE, EItems.DIAMOND_MESH, drops -> {
             drops.add(Items.ENDER_PEARL, chance(0.15f));
             drops.add(Items.CHORUS_FRUIT, chance(0.10f));
             drops.add(Items.CHORUS_FLOWER, chance(0.04f));
             drops.add(Items.ENDER_EYE, chance(0.09f));
         });
-        forMesh(writer, ingredient(EItems.CRUSHED_END_STONE), EItems.NETHERITE_MESH, drops -> {
+        forMesh(writer, CRUSHED_END_STONE, EItems.NETHERITE_MESH, drops -> {
             drops.add(Items.ENDER_PEARL, chance(0.17f));
             drops.add(Items.CHORUS_FRUIT, chance(0.10f));
             drops.add(Items.CHORUS_FLOWER, chance(0.04f));
@@ -867,7 +899,7 @@ class SieveRecipes {
         for (int i = 0; i < allMeshes.size(); i++) {
             var mesh = allMeshes.get(i);
             final int j = i;
-            forMesh(writer, ingredient(Items.MOSS_BLOCK), mesh, drops -> {
+            forMesh(writer, MOSS_BLOCK, mesh, drops -> {
                 drops.add(Items.OAK_SAPLING, chance(0.13f));
                 drops.add(Items.SPRUCE_SAPLING, chance(0.11f));
                 drops.add(Items.BIRCH_SAPLING, chance(0.11f));
@@ -911,7 +943,7 @@ class SieveRecipes {
                 drops.addConditional(ModCompatData.SOURCEBERRY.get(), chance(0.01f), ars);
             });
         }
-        forMesh(writer, ingredient(Items.MOSS_BLOCK), EItems.FLINT_MESH, drops -> {
+        forMesh(writer, MOSS_BLOCK, EItems.FLINT_MESH, drops -> {
             drops.add(Items.SWEET_BERRIES, chance(0.03f));
             drops.add(Items.FLOWERING_AZALEA, chance(0.03f));
             drops.add(Items.GLOW_LICHEN, chance(0.04f));
@@ -923,20 +955,35 @@ class SieveRecipes {
         return binomial(1, p);
     }
 
-    private static void forMesh(RecipeOutput output, Ingredient block, DeferredItem<?> mesh, Consumer<MeshDrops> addDrops) {
+    private static void forMesh(RecipeOutput output, Ingredient block, DeferredItem<? extends Item> mesh, Consumer<MeshDrops> addDrops) {
         var folder = mesh.getId().getPath().replace("_mesh", "/");
         var basePath = path(block.getItems()[0].getItem()) + "/" + folder;
 
-        addDrops.accept(new MeshDrops(output, "sieve/" + basePath, block, mesh));
+        addDrops.accept(new MeshDrops(output, "sieve/" + basePath, "compressed_sieve/" + basePath, block, mesh.get()));
     }
 
-    private record MeshDrops(RecipeOutput output, String basePath, Ingredient block, ItemLike mesh) {
-        private void add(ItemLike result, NumberProvider resultAmount) {
-            this.output.accept(new ResourceLocation(ExDeorum.ID, this.basePath + path(result)), new SieveRecipe(this.block, result.asItem(), resultAmount, this.mesh.asItem(), false), null);
+    private record MeshDrops(RecipeOutput output, String basePath, String baseCompressedPath, Ingredient block, Item mesh) {
+        private void add(Item result, NumberProvider resultAmount) {
+            this.output.accept(modLoc(this.basePath + path(result)), new SieveRecipe(this.block, result, resultAmount, this.mesh, false), null);
+
+            if (COMPRESSED_VARIANTS.containsKey(this.block)) {
+                var compressedLoc = modLoc(this.baseCompressedPath + path(result));
+                var multiplied = Recipes.compressedMultiplier(resultAmount);
+
+                this.output.accept(compressedLoc, new CompressedSieveRecipe(COMPRESSED_VARIANTS.get(this.block), result, multiplied, this.mesh, false), null);
+            }
         }
 
         private void addConditional(ItemLike result, NumberProvider resultAmount, ICondition condition) {
-            this.output.accept(new ResourceLocation(ExDeorum.ID, this.basePath + path(result)), new SieveRecipe(this.block, result.asItem(), resultAmount, this.mesh.asItem(), false), null, condition);
+            var path = modLoc(this.basePath + path(result));
+            this.output.accept(path, new SieveRecipe(this.block, result.asItem(), resultAmount, this.mesh.asItem(), false), null, condition);
+
+            if (COMPRESSED_VARIANTS.containsKey(this.block)) {
+                var compressedLoc = modLoc(this.baseCompressedPath + path(result));
+                var multiplied = Recipes.compressedMultiplier(resultAmount);
+
+                this.output.accept(compressedLoc, new CompressedSieveRecipe(COMPRESSED_VARIANTS.get(this.block), result.asItem(), multiplied, this.mesh.asItem(), false), null, condition);
+            }
         }
     }
 }

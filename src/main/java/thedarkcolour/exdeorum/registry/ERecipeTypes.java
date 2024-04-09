@@ -30,7 +30,9 @@ import thedarkcolour.exdeorum.recipe.barrel.BarrelMixingRecipe;
 import thedarkcolour.exdeorum.recipe.crook.CrookRecipe;
 import thedarkcolour.exdeorum.recipe.crucible.CrucibleHeatRecipe;
 import thedarkcolour.exdeorum.recipe.crucible.CrucibleRecipe;
+import thedarkcolour.exdeorum.recipe.hammer.CompressedHammerRecipe;
 import thedarkcolour.exdeorum.recipe.hammer.HammerRecipe;
+import thedarkcolour.exdeorum.recipe.sieve.CompressedSieveRecipe;
 import thedarkcolour.exdeorum.recipe.sieve.SieveRecipe;
 
 public class ERecipeTypes {
@@ -45,8 +47,10 @@ public class ERecipeTypes {
     public static final DeferredHolder<RecipeType<?>, RecipeType<CrucibleRecipe>> WATER_CRUCIBLE = RECIPE_TYPES.register("water_crucible", () -> RecipeType.simple(ERecipeTypes.WATER_CRUCIBLE.getId()));
 
     public static final DeferredHolder<RecipeType<?>, RecipeType<HammerRecipe>> HAMMER = RECIPE_TYPES.register("hammer", () -> RecipeType.simple(ERecipeTypes.HAMMER.getId()));
+    public static final DeferredHolder<RecipeType<?>, RecipeType<CompressedHammerRecipe>> COMPRESSED_HAMMER = RECIPE_TYPES.register("compressed_hammer", () -> RecipeType.simple(ERecipeTypes.COMPRESSED_HAMMER.getId()));
     public static final DeferredHolder<RecipeType<?>, RecipeType<CrookRecipe>> CROOK = RECIPE_TYPES.register("crook", () -> RecipeType.simple(ERecipeTypes.CROOK.getId()));
     public static final DeferredHolder<RecipeType<?>, RecipeType<CrucibleHeatRecipe>> CRUCIBLE_HEAT_SOURCE = RECIPE_TYPES.register("crucible_heat_source", () -> RecipeType.simple(ERecipeTypes.CRUCIBLE_HEAT_SOURCE.getId()));
 
     public static final DeferredHolder<RecipeType<?>, RecipeType<SieveRecipe>> SIEVE = RECIPE_TYPES.register("sieve", () -> RecipeType.simple(ERecipeTypes.SIEVE.getId()));
+    public static final DeferredHolder<RecipeType<?>, RecipeType<CompressedSieveRecipe>> COMPRESSED_SIEVE = RECIPE_TYPES.register("compressed_sieve", () -> RecipeType.simple(ERecipeTypes.COMPRESSED_SIEVE.getId()));
 }

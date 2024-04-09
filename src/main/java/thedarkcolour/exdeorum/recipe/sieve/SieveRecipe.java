@@ -18,7 +18,7 @@
 
 package thedarkcolour.exdeorum.recipe.sieve;
 
-import com.google.common.base.Preconditions;
+import com.mojang.datafixers.Products;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -37,11 +37,15 @@ import thedarkcolour.exdeorum.registry.ERecipeTypes;
 import java.util.Objects;
 
 public class SieveRecipe extends ProbabilityRecipe {
-    public static final Codec<SieveRecipe> CODEC = RecordCodecBuilder.create(instance -> commonFields(instance).and(
-            instance.group(
-                    CodecUtil.itemField("mesh", SieveRecipe::getMesh),
-                    Codec.BOOL.optionalFieldOf("by_hand_only", false).forGetter(SieveRecipe::isByHandOnly)
-            )).apply(instance, SieveRecipe::new));
+    private static final Codec<SieveRecipe> CODEC = RecordCodecBuilder.create(instance -> commonSieveFields(instance).apply(instance, SieveRecipe::new));
+
+    protected static <T extends SieveRecipe> Products.P5<RecordCodecBuilder.Mu<T>, Ingredient, Item, NumberProvider, Item, Boolean> commonSieveFields(RecordCodecBuilder.Instance<T> instance) {
+        return commonFields(instance).and(
+                instance.group(
+                        CodecUtil.itemField("mesh", SieveRecipe::getMesh),
+                        Codec.BOOL.optionalFieldOf("by_hand_only", false).forGetter(SieveRecipe::isByHandOnly)
+                ));
+    }
 
     public final Item mesh;
     public final boolean byHandOnly;
@@ -71,20 +75,17 @@ public class SieveRecipe extends ProbabilityRecipe {
         return ERecipeTypes.SIEVE.get();
     }
 
-    public static class Serializer implements RecipeSerializer<SieveRecipe> {
+    public static abstract class AbstractSerializer<T extends SieveRecipe> implements RecipeSerializer<T> {
         @Override
-        public Codec<SieveRecipe> codec() {
-            return CODEC;
-        }
-
-        @Override
-        public SieveRecipe fromNetwork(FriendlyByteBuf buffer) {
+        public T fromNetwork(FriendlyByteBuf buffer) {
             Ingredient ingredient = Ingredient.fromNetwork(buffer);
             Item mesh = Objects.requireNonNull(buffer.readById(BuiltInRegistries.ITEM));
             Item result = Objects.requireNonNull(buffer.readById(BuiltInRegistries.ITEM));
             NumberProvider resultAmount = RecipeUtil.fromNetworkNumberProvider(buffer);
-            return new SieveRecipe(ingredient, result, resultAmount, mesh, buffer.readBoolean());
+            return createSieveRecipe(ingredient, result, resultAmount, mesh, buffer.readBoolean());
         }
+
+        protected abstract T createSieveRecipe(Ingredient ingredient, Item result, NumberProvider resultAmount, Item mesh, boolean byHandOnly);
 
         @Override
         public void toNetwork(FriendlyByteBuf buffer, SieveRecipe recipe) {
@@ -93,6 +94,18 @@ public class SieveRecipe extends ProbabilityRecipe {
             buffer.writeId(BuiltInRegistries.ITEM, recipe.result);
             RecipeUtil.toNetworkNumberProvider(buffer, recipe.resultAmount);
             buffer.writeBoolean(recipe.byHandOnly);
+        }
+    }
+
+    public static class Serializer extends AbstractSerializer<SieveRecipe> {
+        @Override
+        protected SieveRecipe createSieveRecipe(Ingredient ingredient, Item result, NumberProvider resultAmount, Item mesh, boolean byHandOnly) {
+            return new SieveRecipe(ingredient, result, resultAmount, mesh, byHandOnly);
+        }
+
+        @Override
+        public Codec<SieveRecipe> codec() {
+            return CODEC;
         }
     }
 }

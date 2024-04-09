@@ -34,15 +34,16 @@ import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.recipe.sieve.SieveRecipe;
 import thedarkcolour.exdeorum.tag.EItemTags;
 
+import java.util.List;
+
 public class SieveLogic {
     private final Owner owner;
-    private final boolean saveMesh;
     private final boolean mechanical;
 
     // block currently being sifted
     private ItemStack contents = ItemStack.EMPTY;
     // mesh
-    private ItemStack mesh = ItemStack.EMPTY;
+    protected ItemStack mesh = ItemStack.EMPTY;
     // from 0.0 to 1.0
     private float progress;
     private float efficiency;
@@ -50,9 +51,8 @@ public class SieveLogic {
     private long lastTime = 0;
     private final long minInterval;
 
-    public SieveLogic(Owner owner, boolean saveMesh, boolean mechanical) {
+    public SieveLogic(Owner owner, boolean mechanical) {
         this.owner = owner;
-        this.saveMesh = saveMesh;
         this.mechanical = mechanical;
         this.minInterval = EConfig.SERVER.sieveIntervalTicks.get();
     }
@@ -62,7 +62,7 @@ public class SieveLogic {
     }
 
     public boolean isValidInput(ItemStack stack) {
-        return !RecipeUtil.getSieveRecipes(this.mesh.getItem(), stack).isEmpty();
+        return !getDropsFor(stack).isEmpty();
     }
 
     public boolean isValidMesh(ItemStack stack) {
@@ -93,7 +93,7 @@ public class SieveLogic {
             var handledAnyDrops = false;
             var hasDrops = false;
 
-            for (SieveRecipe recipe : RecipeUtil.getSieveRecipes(this.mesh.getItem(), this.contents)) {
+            for (SieveRecipe recipe : getDropsFor(this.contents)) {
                 var amount = getResultAmount(recipe, context, rand);
 
                 // Split overflowing stacks (64+) into multiple stacks
@@ -124,6 +124,10 @@ public class SieveLogic {
         }
 
         this.owner.markUpdated();
+    }
+
+    protected List<? extends SieveRecipe> getDropsFor(ItemStack contents) {
+        return RecipeUtil.getSieveRecipes(this.mesh.getItem(), contents);
     }
 
     protected int getResultAmount(SieveRecipe recipe, LootContext context, RandomSource rand) {
@@ -162,7 +166,7 @@ public class SieveLogic {
         if (!this.contents.isEmpty()) {
             nbt.put("contents", this.contents.save(new CompoundTag()));
         }
-        if (this.saveMesh && !this.mesh.isEmpty()) {
+        if (!this.mechanical && !this.mesh.isEmpty()) {
             nbt.put("mesh", this.mesh.save(new CompoundTag()));
         }
         nbt.putFloat("progress", this.progress);
@@ -179,7 +183,7 @@ public class SieveLogic {
         } else {
             this.progress = nbt.getFloat("progress");
         }
-        if (this.saveMesh) {
+        if (!this.mechanical) {
             if (nbt.contains("mesh")) {
                 setMesh(ItemStack.of(nbt.getCompound("mesh")), false);
             } else {

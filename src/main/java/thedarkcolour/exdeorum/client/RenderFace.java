@@ -32,6 +32,8 @@ public interface RenderFace {
 
     boolean isMissingTexture();
 
+    void renderCuboid(MultiBufferSource buffers, PoseStack stack, float minY, float maxY, int r, int g, int b, int light, float edge);
+
     record Single(RenderType renderType, TextureAtlasSprite sprite, boolean isMissingTexture) implements RenderFace {
         public Single(RenderType renderType, TextureAtlasSprite sprite) {
             this(renderType, sprite, RenderUtil.isMissingTexture(sprite));
@@ -41,23 +43,35 @@ public interface RenderFace {
         public void renderFlatSpriteLerp(MultiBufferSource buffers, PoseStack stack, float percentage, int r, int g, int b, int light, float edge, float yStart, float yEnd) {
             RenderUtil.renderFlatSpriteLerp(buffers.getBuffer(this.renderType), stack, percentage, r, g, b, this.sprite, light, edge, yStart, yEnd);
         }
+
+        @Override
+        public void renderCuboid(MultiBufferSource buffers, PoseStack stack, float minY, float maxY, int r, int g, int b, int light, float edge) {
+            RenderUtil.renderCuboid(buffers.getBuffer(this.renderType), stack, minY, maxY, r, g, b, this.sprite, light, edge);
+        }
     }
 
-    record Composite(List<Pair<RenderType, TextureAtlasSprite>> layers, boolean isMissingTexture) implements RenderFace {
-        public Composite(List<Pair<RenderType, TextureAtlasSprite>> layers) {
+    record Composite(CompositeLayer[] layers, boolean isMissingTexture) implements RenderFace {
+        public Composite(CompositeLayer[] layers) {
             this(layers, areAnyMissing(layers));
         }
 
         @Override
         public void renderFlatSpriteLerp(MultiBufferSource buffers, PoseStack stack, float percentage, int r, int g, int b, int light, float edge, float yStart, float yEnd) {
             for (var layer : this.layers) {
-                RenderUtil.renderFlatSpriteLerp(buffers.getBuffer(layer.first()), stack, percentage, r, g, b, layer.second(), light, edge, yStart, yEnd);
+                RenderUtil.renderFlatSpriteLerp(buffers.getBuffer(layer.renderType), stack, percentage, r, g, b, layer.sprite, light, edge, yStart, yEnd);
             }
         }
 
-        private static boolean areAnyMissing(List<Pair<RenderType, TextureAtlasSprite>> layers) {
+        @Override
+        public void renderCuboid(MultiBufferSource buffers, PoseStack stack, float minY, float maxY, int r, int g, int b, int light, float edge) {
+            for (var layer : this.layers) {
+                RenderUtil.renderCuboid(buffers.getBuffer(layer.renderType), stack, minY, maxY, r, g, b, layer.sprite, light, edge);
+            }
+        }
+
+        private static boolean areAnyMissing(CompositeLayer[] layers) {
             for (var layer : layers) {
-                if (RenderUtil.isMissingTexture(layer.second())) {
+                if (RenderUtil.isMissingTexture(layer.sprite)) {
                     return true;
                 }
             }
@@ -65,4 +79,5 @@ public interface RenderFace {
             return false;
         }
     }
+    record CompositeLayer(RenderType renderType, TextureAtlasSprite sprite) {}
 }

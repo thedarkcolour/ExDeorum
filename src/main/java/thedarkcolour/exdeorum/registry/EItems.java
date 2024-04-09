@@ -18,6 +18,7 @@
 
 package thedarkcolour.exdeorum.registry;
 
+import com.google.common.collect.Iterables;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
@@ -28,6 +29,7 @@ import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thedarkcolour.exdeorum.ExDeorum;
+import thedarkcolour.exdeorum.compat.CompatUtil;
 import thedarkcolour.exdeorum.item.*;
 import thedarkcolour.exdeorum.material.DefaultMaterials;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
@@ -69,6 +71,14 @@ public class EItems {
     public static final DeferredItem<Item> IRON_HAMMER = ITEMS.register("iron_hammer", () -> new HammerItem(Tiers.IRON, props()));
     public static final DeferredItem<Item> DIAMOND_HAMMER = ITEMS.register("diamond_hammer", () -> new HammerItem(Tiers.DIAMOND, props()));
     public static final DeferredItem<Item> NETHERITE_HAMMER = ITEMS.register("netherite_hammer", () -> new HammerItem(Tiers.NETHERITE, props()));
+
+    // Compressed Hammers
+    public static final DeferredItem<Item> COMPRESSED_WOODEN_HAMMER = ITEMS.register("compressed_wooden_hammer", () -> new CompressedHammerItem(Tiers.WOOD, props()));
+    public static final DeferredItem<Item> COMPRESSED_STONE_HAMMER = ITEMS.register("compressed_stone_hammer", () -> new CompressedHammerItem(Tiers.STONE, props()));
+    public static final DeferredItem<Item> COMPRESSED_GOLDEN_HAMMER = ITEMS.register("compressed_golden_hammer", () -> new CompressedHammerItem(Tiers.GOLD, props()));
+    public static final DeferredItem<Item> COMPRESSED_IRON_HAMMER = ITEMS.register("compressed_iron_hammer", () -> new CompressedHammerItem(Tiers.IRON, props()));
+    public static final DeferredItem<Item> COMPRESSED_DIAMOND_HAMMER = ITEMS.register("compressed_diamond_hammer", () -> new CompressedHammerItem(Tiers.DIAMOND, props()));
+    public static final DeferredItem<Item> COMPRESSED_NETHERITE_HAMMER = ITEMS.register("compressed_netherite_hammer", () -> new CompressedHammerItem(Tiers.NETHERITE, props()));
 
     // Ore Chunks
     public static final DeferredItem<Item> IRON_ORE_CHUNK = registerSimpleItem("iron_ore_chunk");
@@ -156,31 +166,16 @@ public class EItems {
 
 
     public static void addItemsToMainTab(CreativeModeTab.Output output) {
-        for (var material : DefaultMaterials.BARRELS) {
-            if (ModList.get().isLoaded(material.requiredModId)) {
-                output.accept(material.getItem());
-            }
-        }
-
-        for (var material : DefaultMaterials.SIEVES) {
-            if (ModList.get().isLoaded(material.requiredModId)) {
-                output.accept(material.getItem());
-            }
+        for (var material : Iterables.concat(CompatUtil.getAvailableBarrels(true), CompatUtil.getAvailableSieves(true, false), CompatUtil.getAvailableCompressedSieves(true))) {
+            output.accept(material);
         }
 
         output.accept(MECHANICAL_SIEVE.get());
         output.accept(MECHANICAL_HAMMER.get());
 
         output.accept(UNFIRED_PORCELAIN_CRUCIBLE.get());
-        for (var material : DefaultMaterials.LAVA_CRUCIBLES) {
-            if (ModList.get().isLoaded(material.requiredModId)) {
-                output.accept(material.getItem());
-            }
-        }
-        for (var material : DefaultMaterials.WATER_CRUCIBLES) {
-            if (ModList.get().isLoaded(material.requiredModId)) {
-                output.accept(material.getItem());
-            }
+        for (var material : Iterables.concat(CompatUtil.getAvailableLavaCrucibles(true), CompatUtil.getAvailableWaterCrucibles(true))) {
+            output.accept(material);
         }
 
         output.accept(DUST.get());
@@ -188,6 +183,28 @@ public class EItems {
         output.accept(CRUSHED_END_STONE.get());
         output.accept(CRUSHED_DEEPSLATE.get());
         output.accept(CRUSHED_BLACKSTONE.get());
+
+        output.accept(ECompressedBlocks.COMPRESSED_DIRT.getItem());
+        output.accept(ECompressedBlocks.COMPRESSED_COBBLESTONE.getItem());
+        output.accept(ECompressedBlocks.COMPRESSED_DIORITE.getItem());
+        output.accept(ECompressedBlocks.COMPRESSED_GRANITE.getItem());
+        output.accept(ECompressedBlocks.COMPRESSED_ANDESITE.getItem());
+        output.accept(ECompressedBlocks.COMPRESSED_GRAVEL.getItem());
+        output.accept(ECompressedBlocks.COMPRESSED_SAND.getItem());
+        output.accept(ECompressedBlocks.COMPRESSED_DUST.getItem());
+        output.accept(ECompressedBlocks.COMPRESSED_RED_SAND.getItem());
+        output.accept(ECompressedBlocks.COMPRESSED_DEEPSLATE.getItem());
+        output.accept(ECompressedBlocks.COMPRESSED_COBBLED_DEEPSLATE.getItem());
+        output.accept(ECompressedBlocks.COMPRESSED_NETHERRACK.getItem());
+        output.accept(ECompressedBlocks.COMPRESSED_BLACKSTONE.getItem());
+        output.accept(ECompressedBlocks.COMPRESSED_END_STONE.getItem());
+        output.accept(ECompressedBlocks.COMPRESSED_CRUSHED_DEEPSLATE.getItem());
+        output.accept(ECompressedBlocks.COMPRESSED_CRUSHED_BLACKSTONE.getItem());
+        output.accept(ECompressedBlocks.COMPRESSED_CRUSHED_NETHERRACK.getItem());
+        output.accept(ECompressedBlocks.COMPRESSED_SOUL_SAND.getItem());
+        output.accept(ECompressedBlocks.COMPRESSED_CRUSHED_END_STONE.getItem());
+        output.accept(ECompressedBlocks.COMPRESSED_MOSS_BLOCK.getItem());
+
         output.accept(END_CAKE.get());
         output.accept(RANDOM_ARMOR_TRIM.get());
         output.accept(RANDOM_POTTERY_SHERD.get());
@@ -214,6 +231,12 @@ public class EItems {
         output.accept(IRON_HAMMER.get());
         output.accept(DIAMOND_HAMMER.get());
         output.accept(NETHERITE_HAMMER.get());
+        output.accept(COMPRESSED_WOODEN_HAMMER.get());
+        output.accept(COMPRESSED_STONE_HAMMER.get());
+        output.accept(COMPRESSED_GOLDEN_HAMMER.get());
+        output.accept(COMPRESSED_IRON_HAMMER.get());
+        output.accept(COMPRESSED_DIAMOND_HAMMER.get());
+        output.accept(COMPRESSED_NETHERITE_HAMMER.get());
         output.accept(IRON_ORE_CHUNK.get());
         output.accept(COPPER_ORE_CHUNK.get());
         output.accept(GOLD_ORE_CHUNK.get());

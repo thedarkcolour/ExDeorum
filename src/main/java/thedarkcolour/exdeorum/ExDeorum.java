@@ -84,5 +84,6 @@ public class ExDeorum {
         ERecipeTypes.RECIPE_TYPES.register(modBus);
         ENumberProviders.NUMBER_PROVIDERS.register(modBus);
         DefaultMaterials.registerMaterials();
+        ECompressedBlocks.register();
     }
 }
