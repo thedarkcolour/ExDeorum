@@ -72,15 +72,21 @@ import java.util.function.Supplier;
 public class ExDeorumJeiPlugin implements IModPlugin {
     public static final ResourceLocation EX_DEORUM_JEI_TEXTURE = new ResourceLocation(ExDeorum.ID, "textures/gui/jei/enr_jei.png");
 
-    static final RecipeType<BarrelCompostRecipe> BARREL_COMPOST = RecipeType.create(ExDeorum.ID, "barrel_compost", BarrelCompostRecipe.class);
-    static final RecipeType<BarrelMixingRecipe> BARREL_MIXING = RecipeType.create(ExDeorum.ID, "barrel_mixing", BarrelMixingRecipe.class);
-    static final RecipeType<BarrelFluidMixingRecipe> BARREL_FLUID_MIXING = RecipeType.create(ExDeorum.ID, "barrel_fluid_mixing", BarrelFluidMixingRecipe.class);
-    static final RecipeType<CrucibleRecipe> LAVA_CRUCIBLE = RecipeType.create(ExDeorum.ID, "lava_crucible", CrucibleRecipe.class);
-    static final RecipeType<CrucibleRecipe> WATER_CRUCIBLE = RecipeType.create(ExDeorum.ID, "water_crucible", CrucibleRecipe.class);
-    static final RecipeType<CrucibleHeatSourceRecipe> CRUCIBLE_HEAT_SOURCES = RecipeType.create(ExDeorum.ID, "crucible_heat_sources", CrucibleHeatSourceRecipe.class);
-    static final RecipeType<GroupedSieveRecipe> SIEVE = RecipeType.create(ExDeorum.ID, "sieve", GroupedSieveRecipe.class);
-    static final RecipeType<HammerRecipe> HAMMER = RecipeType.create(ExDeorum.ID, "hammer", HammerRecipe.class);
-    static final RecipeType<CrookJeiRecipe> CROOK = RecipeType.create(ExDeorum.ID, "crook", CrookJeiRecipe.class);
+    static final RecipeType<BarrelCompostRecipe> BARREL_COMPOST = recipeType("barrel_compost", BarrelCompostRecipe.class);
+    static final RecipeType<BarrelMixingRecipe> BARREL_MIXING = recipeType("barrel_mixing", BarrelMixingRecipe.class);
+    static final RecipeType<BarrelFluidMixingRecipe> BARREL_FLUID_MIXING = recipeType("barrel_fluid_mixing", BarrelFluidMixingRecipe.class);
+    static final RecipeType<CrucibleRecipe> LAVA_CRUCIBLE = recipeType("lava_crucible", CrucibleRecipe.class);
+    static final RecipeType<CrucibleRecipe> WATER_CRUCIBLE = recipeType("water_crucible", CrucibleRecipe.class);
+    static final RecipeType<CrucibleHeatSourceRecipe> CRUCIBLE_HEAT_SOURCES = recipeType("crucible_heat_sources", CrucibleHeatSourceRecipe.class);
+    static final RecipeType<GroupedSieveRecipe> SIEVE = recipeType("sieve", GroupedSieveRecipe.class);
+    static final RecipeType<HammerRecipe> HAMMER = recipeType("hammer", HammerRecipe.class);
+    static final RecipeType<CrookJeiRecipe> CROOK = recipeType("crook", CrookJeiRecipe.class);
+
+    private static <T> RecipeType<T> recipeType(String path, Class<? extends T> type) {
+        // use alternative namespace so that EMI doesn't skip JEI compatibility
+        String namespace = ModList.get().isLoaded(ModIds.EMI) ? ExDeorum.ID + "_" + ModIds.EMI : ExDeorum.ID;
+        return RecipeType.create(namespace, path, type);
+    }
 
     @Override
     public ResourceLocation getPluginUid() {
