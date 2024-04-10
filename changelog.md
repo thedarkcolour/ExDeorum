@@ -1,3 +1,6 @@
+## Ex Deorum 2.6
+- Fixed crash on server load
+
 ## Ex Deorum 2.5
 - Fixed compatibility with EMI
 - Add compressed hammers, sieves, and blocks from Ex Deorum 1.30
