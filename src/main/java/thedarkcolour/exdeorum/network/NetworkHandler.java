@@ -23,16 +23,18 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.registration.IPayloadRegistrar;
 
 public final class NetworkHandler {
+    // DO NOT CONVERT the lambdas to method reference. The server will crash loading client code otherwise.
+    @SuppressWarnings("Convert2MethodRef")
     public static void register(IPayloadRegistrar registrar) {
         registrar.play(MenuPropertyMessage.ID, MenuPropertyMessage::decode, sidedHandler -> {
-            sidedHandler.client(ClientMessageHandler::handleMenuProperty);
+            sidedHandler.client((msg, ctx) -> ClientMessageHandler.handleMenuProperty(msg, ctx));
         });
         registrar.play(VisualUpdateMessage.ID, VisualUpdateMessage::decode, sidedHandler -> {
-            sidedHandler.client(ClientMessageHandler::handleVisualUpdate);
+            sidedHandler.client((msg, ctx) -> ClientMessageHandler.handleVisualUpdate(msg, ctx));
         });
         // not sure if these stop working if they're in the wrong phase, so I'll put them in both
         registrar.common(VoidWorldMessage.ID, buffer -> VoidWorldMessage.INSTANCE, sidedHandler -> {
-            sidedHandler.client(ClientMessageHandler::handleVoidWorldMessage);
+            sidedHandler.client((msg, ctx) -> ClientMessageHandler.handleVoidWorldMessage(msg, ctx));
         });
     }
 
