@@ -66,12 +66,14 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
     private final Holder<NoiseGeneratorSettings> settings;
     private final TagKey<StructureSet> allowedStructureSets;
     private final boolean generateNormal;
+    private final boolean allowBiomeDecoration;
 
     public VoidChunkGenerator(BiomeSource biomeSource, Holder<NoiseGeneratorSettings> settings, TagKey<StructureSet> allowedStructureSets) {
         super(biomeSource, settings);
         this.settings = settings;
         this.allowedStructureSets = allowedStructureSets;
         this.generateNormal = (settings.is(new ResourceLocation("minecraft:end")) && !EConfig.COMMON.voidEndGeneration.get()) || (settings.is(new ResourceLocation("minecraft:nether")) && !EConfig.COMMON.voidNetherGeneration.get());
+        this.allowBiomeDecoration = !settings.is(new ResourceLocation("minecraft:overworld"));
     }
 
     @Override
@@ -142,7 +144,7 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 
     @Override
     public void applyBiomeDecoration(WorldGenLevel pLevel, ChunkAccess pChunk, StructureManager pStructureManager) {
-        if (this.generateNormal) {
+        if (this.generateNormal || this.allowBiomeDecoration) {
             super.applyBiomeDecoration(pLevel, pChunk, pStructureManager);
         }
     }
