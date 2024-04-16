@@ -1,3 +1,7 @@
+## Ex Deorum 2.7
+- Fixed End Portal not spawning and End Cities not generating
+- Fixed an issue with void worlds not generating bastion remnants, nether fortresses, or obsidian pillars in the End
+
 ## Ex Deorum 2.6
 - Fixed crash on server load
 
