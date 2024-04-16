@@ -18,7 +18,7 @@ function initializeCoreMod() {
             'target': {
                 'type': 'METHOD',
                 'class': 'net.minecraft.world.level.levelgen.structure.structures.EndCityStructure',
-                'methodName': 'm_214086_',
+                'methodName': 'findGenerationPoint',
                 'methodDesc': '(Lnet/minecraft/world/level/levelgen/structure/Structure$GenerationContext;)Ljava/util/Optional;'
             },
             'transformer': function (method) {
@@ -75,7 +75,7 @@ function initializeCoreMod() {
             'target': {
                 'type': 'METHOD',
                 'class': 'net.minecraft.world.level.dimension.end.EndDragonFight',
-                'methodName': 'm_64093_', // spawnExitPortal
+                'methodName': 'spawnExitPortal', // spawnExitPortal
                 'methodDesc': '(Z)V'
             },
             'transformer': function(method) {
@@ -87,29 +87,19 @@ function initializeCoreMod() {
                 for (var i = 2; i < insnList.size(); ++i) {
                     var insn = insnList.get(i);
 
-                    // we want insn to be the GETFIELD portalLocation instruction after RandomSource.create
-                    var previous = insnList.get(i - 2);
-                    if (previous.getOpcode() === Opcodes.INVOKESTATIC && previous.name.equals(randomSourceCreate)) {
-                        // labels and frame nodes use -1 as their opcode
-                        if (insn.getNext().getOpcode() === -1) {
-                            insn = insn.getNext();
-                        }
-
-                        // ALOAD 0 (there are two in a row)
-                        insnList.insertBefore(insn, new VarInsnNode(Opcodes.ALOAD, 0));
-
-                        // INVOKESTATIC to my hook
-                        // DUP_X1
-                        // PUTFIELD
-                        insnList.insert(insn, ASMAPI.listOf(
-                            new MethodInsnNode(Opcodes.INVOKESTATIC, 'thedarkcolour/exdeorum/asm/ASMHooks', 'prePlaceEndPodium', '(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/core/BlockPos;', false),
-                            new InsnNode(Opcodes.DUP_X1),
-                            new FieldInsnNode(Opcodes.PUTFIELD, insn.owner, insn.name, insn.desc)
-                        ));
-
+					if (insn.getOpcode() == Opcodes.ALOAD && insn.var == 2) {
+						// this.portalLocation = ASMHooks.prePlaceEndPodium(this.portalLocation)
+						// f_64072_ maps to portalLocation
+						insnList.insertBefore(insn, ASMAPI.listOf(
+							new VarInsnNode(Opcodes.ALOAD, 0),
+							new VarInsnNode(Opcodes.ALOAD, 0),
+							new FieldInsnNode(Opcodes.GETFIELD, 'net/minecraft/world/level/dimension/end/EndDragonFight', 'portalLocation', 'Lnet/minecraft/core/BlockPos;'),
+							new MethodInsnNode(Opcodes.INVOKESTATIC, 'thedarkcolour/exdeorum/asm/ASMHooks', 'prePlaceEndPodium', '(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/core/BlockPos;', false),
+							new FieldInsnNode(Opcodes.PUTFIELD, 'net/minecraft/world/level/dimension/end/EndDragonFight', 'portalLocation', 'Lnet/minecraft/core/BlockPos;')
+						));
                         ASMAPI.log('INFO', 'Successfully patched end portal.');
-                        return method;
-                    }
+						return method;
+					}
                 }
 
                 ASMAPI.log('ERROR', 'Unable to patch End Portal, it will not spawn properly and you will be unable to return to the overworld without cheats.');
