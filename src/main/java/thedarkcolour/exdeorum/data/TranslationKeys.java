@@ -74,7 +74,7 @@ public class TranslationKeys {
     public static final String CROOK_CATEGORY_TITLE = "gui." + ExDeorum.ID + ".category.crook";
     public static final String CROOK_CATEGORY_REQUIRES_STATE = "gui." + ExDeorum.ID + ".category.crook.requires_state";
     public static final String SIEVE_CATEGORY_TITLE = "gui." + ExDeorum.ID + ".category.sieve";
-    public static final String COMPRESSED_SIEVE_CATEGORY_TITLE = "gui." + ExDeorum.ID + ".category.sieve";
+    public static final String COMPRESSED_SIEVE_CATEGORY_TITLE = "gui." + ExDeorum.ID + ".category.compressed_sieve";
     public static final String SIEVE_RECIPE_CHANCE = "gui." + ExDeorum.ID + ".category.sieve.chance";
     public static final String SIEVE_RECIPE_AVERAGE_OUTPUT = "gui." + ExDeorum.ID + ".category.sieve.average_output";
     public static final String SIEVE_RECIPE_MIN_OUTPUT = "gui." + ExDeorum.ID + ".category.sieve.min_output";
