@@ -41,7 +41,6 @@ public class PreferredOres {
     private static final Map<TagKey<Item>, Item> PREFERRED_ORE_ITEMS = new Object2ObjectOpenHashMap<>(11, Hash.DEFAULT_LOAD_FACTOR);
 
     static {
-        // todo these should update whenever data is reloaded
         putPreferredOre(EItemTags.ORES_ALUMINUM, EConfig.COMMON.preferredAluminumOre, getDefaultAluminumOre());
         putPreferredOre(EItemTags.ORES_COBALT, EConfig.COMMON.preferredCobaltOre, getDefaultCobaltOre());
         putPreferredOre(EItemTags.ORES_SILVER, EConfig.COMMON.preferredSilverOre, getDefaultSilverOre());
@@ -102,7 +101,7 @@ public class PreferredOres {
     }
 
     public static Item getDefaultAluminumOre() {
-        return defaultItem("aluminum_ore", ModIds.ALL_THE_ORES);
+        return defaultItem("aluminum_ore", ModIds.ALL_THE_ORES, ModIds.IMMERSIVE_ENGINEERING);
     }
 
     public static Item getDefaultCobaltOre() {
@@ -110,11 +109,11 @@ public class PreferredOres {
     }
 
     public static Item getDefaultSilverOre() {
-        return defaultItem("silver_ore", ModIds.ALL_THE_ORES, ModIds.OCCULTISM, ModIds.RAILCRAFT, ModIds.FACTORIUM, ModIds.NUCLEARCRAFT_NEOTERIC);
+        return defaultItem("silver_ore", ModIds.ALL_THE_ORES, ModIds.OCCULTISM, ModIds.RAILCRAFT, ModIds.FACTORIUM, ModIds.NUCLEARCRAFT_NEOTERIC, ModIds.IMMERSIVE_ENGINEERING);
     }
 
     public static Item getDefaultLeadOre() {
-        return defaultItem("lead_ore", ModIds.ALL_THE_ORES, ModIds.GREG, ModIds.MEKANISM, ModIds.RAILCRAFT, ModIds.FACTORIUM, ModIds.NUCLEARCRAFT_NEOTERIC);
+        return defaultItem("lead_ore", ModIds.ALL_THE_ORES, ModIds.GREG, ModIds.MEKANISM, ModIds.RAILCRAFT, ModIds.FACTORIUM, ModIds.NUCLEARCRAFT_NEOTERIC, ModIds.IMMERSIVE_ENGINEERING);
     }
 
     public static Item getDefaultPlatinumOre() {
@@ -122,11 +121,11 @@ public class PreferredOres {
     }
 
     public static Item getDefaultNickelOre() {
-        return defaultItem("nickel_ore", ModIds.ALL_THE_ORES, ModIds.GREG, ModIds.THERMAL, ModIds.RAILCRAFT, ModIds.FACTORIUM);
+        return defaultItem("nickel_ore", ModIds.ALL_THE_ORES, ModIds.GREG, ModIds.THERMAL, ModIds.RAILCRAFT, ModIds.FACTORIUM, ModIds.IMMERSIVE_ENGINEERING);
     }
 
     public static Item getDefaultUraniumOre() {
-        var item = defaultItem("uranium_ore", ModIds.ALL_THE_ORES, ModIds.MEKANISM, ModIds.BIGGER_REACTORS, ModIds.NUCLEARCRAFT_NEOTERIC);
+        var item = defaultItem("uranium_ore", ModIds.ALL_THE_ORES, ModIds.MEKANISM, ModIds.BIGGER_REACTORS, ModIds.NUCLEARCRAFT_NEOTERIC, ModIds.IMMERSIVE_ENGINEERING);
 
         if (item == Items.AIR && ModList.get().isLoaded(ModIds.EXTREME_REACTORS)) {
             item = defaultItem("yellorite_ore", ModIds.EXTREME_REACTORS);
@@ -173,6 +172,8 @@ public class PreferredOres {
         if (modId != null) {
             if (modId.equals(ModIds.FACTORIUM)) {
                 return BuiltInRegistries.ITEM.get(new ResourceLocation(modId, "mat_" + path));
+            } else if (modId.equals(ModIds.IMMERSIVE_ENGINEERING)) {
+                return BuiltInRegistries.ITEM.get(new ResourceLocation(modId, "ore_" + path.substring(0, path.length() - 4)));
             } else {
                 return BuiltInRegistries.ITEM.get(new ResourceLocation(modId, path));
             }

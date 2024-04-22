@@ -49,4 +49,5 @@ public class ModIds {
     public static final String REI_PC = "rei_plugin_compatibilities";
     public static final String CYCLIC = "cyclic";
     public static final String SKYBLOCK_BUILDER = "skyblockbuilder";
+    public static final String IMMERSIVE_ENGINEERING = "immersiveengineering";
 }
