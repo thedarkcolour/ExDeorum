@@ -1,3 +1,10 @@
+## Ex Deorum 2.8
+- Fixed bug where compressed sieves would not drop their sieves upon being broken.
+- Fix typo in JEI integration where both sieve categories were "Compressed Sieve".
+- Add integration for SkyBlock Builder. Now, if that mod is installed, SkyBlock builder's preset is chosen by default instead of Ex Deorum's. This goes for the server.properties file too.
+- Added config option for using compressed sieves simultaneously.
+- Added Immersive Engineering integration for Ex Deorum's ore chunks.
+
 ## Ex Deorum 2.7
 - Fixed End Portal not spawning and End Cities not generating
 - Fixed an issue with void worlds not generating bastion remnants, nether fortresses, or obsidian pillars in the End

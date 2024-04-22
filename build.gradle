@@ -4,7 +4,7 @@ plugins {
     id 'net.neoforged.gradle.userdev' version '7.0.105'
 }
 
-version = '2.7'
+version = '2.8'
 group = 'thedarkcolour.exdeorum'
 base {
     archivesName = 'exdeorum'
