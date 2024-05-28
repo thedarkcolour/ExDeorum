@@ -356,7 +356,7 @@ public abstract class AbstractCrucibleBlockEntity extends EBlockEntity {
                         crucible.markUpdated();
                     }
                 }
-                if (tank.getFluidAmount() < MAX_FLUID_CAPACITY && crucible instanceof WaterCrucibleBlockEntity && level.isRainingAt(pos.above())) {
+                if (EConfig.SERVER.cruciblesCollectRainWater.get() && tank.getFluidAmount() < MAX_FLUID_CAPACITY && crucible instanceof WaterCrucibleBlockEntity && level.isRainingAt(pos.above())) {
                     BarrelBlockEntity.fillRainWater(crucible, tank);
                 }
             }

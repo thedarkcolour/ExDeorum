@@ -533,7 +533,7 @@ public class BarrelBlockEntity extends EBlockEntity {
                         }
                         barrel.markUpdated();
                     }
-                } else if (tank.getFluidAmount() < MAX_CAPACITY && level.isRainingAt(pos.above()) && barrel.item.getStackInSlot(0).isEmpty() && barrel.compost == 0) {
+                } else if (EConfig.SERVER.barrelsCollectRainWater.get() && tank.getFluidAmount() < MAX_CAPACITY && level.isRainingAt(pos.above()) && barrel.item.getStackInSlot(0).isEmpty() && barrel.compost == 0) {
                     fillRainWater(barrel, tank);
 
                     // avoid checking fluid transform until full

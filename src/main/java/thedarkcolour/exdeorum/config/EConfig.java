@@ -139,6 +139,8 @@ public class EConfig {
         public final IntValue mechanicalHammerEnergyStorage;
         public final IntValue mechanicalHammerEnergyConsumption;
         public final IntValue sieveIntervalTicks;
+        public final BooleanValue barrelsCollectRainWater;
+        public final BooleanValue cruciblesCollectRainWater;
 
         public Server(ModConfigSpec.Builder builder) {
             builder.comment("Server configuration for Ex Deorum").push("server");
@@ -203,6 +205,12 @@ public class EConfig {
             this.sieveIntervalTicks = builder
                     .comment("The minimum number of ticks a player must wait between two sifting operations. Only affects sifting by hand. 0 means no limit.")
                     .defineInRange("sieve_interval", 1, 0, Integer.MAX_VALUE);
+            this.barrelsCollectRainWater = builder
+                    .comment("Whether barrels fill up with rain water while it is raining and the barrel is exposed to the sky.")
+                    .define("barrels_collect_rain_water", true);
+            this.cruciblesCollectRainWater = builder
+                    .comment("Whether wooden crucibles fill up with rain water while it is raining and the barrel is exposed to the sky.")
+                    .define("crucibles_collect_rain_water", true);
             builder.pop();
         }
     }
