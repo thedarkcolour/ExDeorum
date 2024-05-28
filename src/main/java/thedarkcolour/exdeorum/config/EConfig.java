@@ -40,7 +40,6 @@ public class EConfig {
 
     public static class Client {
         public final BooleanValue useFastInfestedLeaves;
-        public final BooleanValue setVoidWorldAsDefault;
 
         public Client(ModConfigSpec.Builder builder) {
             builder.comment("Client configuration for Ex Deorum").push("client");
@@ -48,9 +47,6 @@ public class EConfig {
             this.useFastInfestedLeaves = builder
                     .comment("Whether to use a simplified renderer for infested leaves (reduces FPS lag with lots of infested trees)")
                     .define("use_fast_infested_leaves", false);
-            this.setVoidWorldAsDefault = builder
-                    .comment("Whether the Void World type is set as the default world preset. (DEPRECATED - USE THE OPTION IN THE COMMON CONFIG INSTEAD)")
-                    .define("set_void_world_as_default", true);
 
             builder.pop();
         }

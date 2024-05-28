@@ -135,11 +135,9 @@ public class ClientHandler {
 
     // Sets Ex Deorum world type as default
     private static void onScreenOpen(ScreenEvent.Opening event) {
-        if (EConfig.CLIENT.setVoidWorldAsDefault.get() && EConfig.COMMON.setVoidWorldAsDefault.get()) {
-            if (event.getNewScreen() instanceof CreateWorldScreen screen) {
-                var ctx = screen.getUiState().getSettings();
-                screen.getUiState().setWorldType(new WorldCreationUiState.WorldTypeEntry(ctx.worldgenLoadContext().registryOrThrow(Registries.WORLD_PRESET).getHolder(ASMHooks.overrideDefaultWorldPreset()).orElse(null)));
-            }
+        if (event.getNewScreen() instanceof CreateWorldScreen screen && EConfig.COMMON.setVoidWorldAsDefault.get()) {
+            var ctx = screen.getUiState().getSettings();
+            screen.getUiState().setWorldType(new WorldCreationUiState.WorldTypeEntry(ctx.worldgenLoadContext().registryOrThrow(Registries.WORLD_PRESET).getHolder(ASMHooks.overrideDefaultWorldPreset()).orElse(null)));
         }
     }
 
