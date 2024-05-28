@@ -525,12 +525,13 @@ public class BarrelBlockEntity extends EBlockEntity {
                         barrel.currentTransformRecipe = null;
                     } else {
                         barrel.progress += catalysts * (1.0f / barrel.currentTransformRecipe.duration());
+
                         if (barrel.progress >= 1.0f - Mth.EPSILON) {
                             // Reset progress
                             barrel.progress = 0.0f;
                             level.playSound(null, pos, SoundEvents.BREWING_STAND_BREW, SoundSource.BLOCKS, 1.0f, 0.6f);
                             barrel.tank.setFluid(FluidStack.EMPTY);
-                            barrel.tank.fill(new FluidStack(EFluids.WITCH_WATER.get(), 1000), IFluidHandler.FluidAction.EXECUTE);
+                            barrel.tank.fill(new FluidStack(recipe.resultFluid(), 1000), IFluidHandler.FluidAction.EXECUTE);
                         }
                         barrel.markUpdated();
                     }
