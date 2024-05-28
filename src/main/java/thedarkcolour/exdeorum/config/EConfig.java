@@ -40,6 +40,7 @@ public class EConfig {
 
     public static class Client {
         public final BooleanValue useFastInfestedLeaves;
+        public final BooleanValue rainbowCompostDuringJune;
 
         public Client(ModConfigSpec.Builder builder) {
             builder.comment("Client configuration for Ex Deorum").push("client");
@@ -47,6 +48,9 @@ public class EConfig {
             this.useFastInfestedLeaves = builder
                     .comment("Whether to use a simplified renderer for infested leaves (reduces FPS lag with lots of infested trees)")
                     .define("use_fast_infested_leaves", false);
+            this.rainbowCompostDuringJune = builder
+                    .comment("Whether compost in barrels appears as rainbow colored during the month of June")
+                    .define("rainbow_compost_during_june", true);
 
             builder.pop();
         }
@@ -174,7 +178,7 @@ public class EConfig {
                     .define("default_spawn_tree_feature", ModIds.MINECRAFT + ":oak_tree_bees_005");
             this.useBiomeAppropriateTree = builder
                     .comment("Whether the Spawn Tree in the void world changes based on the biome it's in. If false, Oak Tree is always used.")
-                        .define("use_biome_appropriate_tree", false);
+                    .define("use_biome_appropriate_tree", false);
             this.limitMossSieveDrops = builder
                     .comment("Whether to restrict Moss Block sieve drops to 1-2 items when sieving. May be useful when lots of mods add saplings and the sieve drops become spammy.")
                     .define("limit_moss_sieve_drops", true);

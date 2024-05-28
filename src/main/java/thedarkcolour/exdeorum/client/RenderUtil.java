@@ -265,7 +265,7 @@ public class RenderUtil {
     }
 
     public static Color getRainbowColor(long time, float partialTicks) {
-        return Color.getHSBColor((180 * Mth.sin((time + partialTicks) / 16.0f) - 180) / 360.0f, 0.7f, 0.8f);
+        return Color.getHSBColor((180 * Mth.sin((time + partialTicks) / 30.0f) - 180) / 360.0f, 0.5f, 0.8f);
     }
 
     public static ShaderInstance getRenderTypeTintedCutoutMippedShader() {
