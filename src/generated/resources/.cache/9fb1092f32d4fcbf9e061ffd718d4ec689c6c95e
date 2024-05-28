@@ -1,4 +1,4 @@
-// 1.20.4	2024-04-08T17:34:59.9013458	Recipes
+// 1.20.4	2024-05-27T20:08:38.6124612	Recipes
 9a5b15ec870e853a635f4d2f463f901c2dbf915e data/exdeorum/advancements/recipes/building_blocks/andesite.json
 be98cad6ad3d2510f6c1061738939a6f58ff832a data/exdeorum/advancements/recipes/building_blocks/basalt.json
 e97d904da323faee305dc4ca91593912b20bd8c3 data/exdeorum/advancements/recipes/building_blocks/blackstone.json
@@ -244,6 +244,7 @@ f6ee5b900f693e7839961e26fa690b1df4eaa893 data/exdeorum/recipes/barrel_compost/de
 fea2a11e64ae425b6dcc29480e9793fad877792b data/exdeorum/recipes/barrel_compost/egg.json
 09f8e54e4112aa8f163967130087c9a24f9d03a0 data/exdeorum/recipes/barrel_compost/fermented_spider_eye.json
 79bbe21466b4700c57cdcaeb15ebc5af741eafd4 data/exdeorum/recipes/barrel_compost/golden_apples.json
+586b6dbbd6285fcc2696dd98676c1b73d1d8e590 data/exdeorum/recipes/barrel_compost/golden_carrot.json
 ca2144035a37c41d1a764f1640b4125710525349 data/exdeorum/recipes/barrel_compost/grass.json
 48e6e1cb9f5a9208a6f6110328c592a087a0c04d data/exdeorum/recipes/barrel_compost/kelp.json
 dbc452bd95428da7c2c44fe0f2f55c04a0939e25 data/exdeorum/recipes/barrel_compost/leaves.json

@@ -716,6 +716,7 @@ public class Recipes {
 
         // lol
         barrelCompost(writer, "golden_apples", ingredient(Items.GOLDEN_APPLE, Items.ENCHANTED_GOLDEN_APPLE), 1000);
+        barrelCompost(writer, "golden_carrot", ingredient(Items.GOLDEN_CARROT, Items.GOLDEN_CARROT), 500);
     }
 
     private static void barrelCompost(RecipeOutput writer, String id, Ingredient ingredient, int volume) {
