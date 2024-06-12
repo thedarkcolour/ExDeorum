@@ -29,6 +29,12 @@ class ItemModels {
         models.handheld(EItems.IRON_HAMMER);
         models.handheld(EItems.DIAMOND_HAMMER);
         models.handheld(EItems.NETHERITE_HAMMER);
+        models.handheld(EItems.COMPRESSED_WOODEN_HAMMER);
+        models.handheld(EItems.COMPRESSED_STONE_HAMMER);
+        models.handheld(EItems.COMPRESSED_GOLDEN_HAMMER);
+        models.handheld(EItems.COMPRESSED_IRON_HAMMER);
+        models.handheld(EItems.COMPRESSED_DIAMOND_HAMMER);
+        models.handheld(EItems.COMPRESSED_NETHERITE_HAMMER);
 
         models.handheld(EItems.CROOK);
         models.handheld(EItems.BONE_CROOK);
