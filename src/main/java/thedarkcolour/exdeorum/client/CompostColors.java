@@ -64,7 +64,7 @@ public class CompostColors {
     public static final String VANILLA_COMPOST_COLORS_FILE = "vanilla_compost_colors.txt";
     public static final Path COMPOST_COLORS_CONFIGS = Paths.get("config/exdeorum/compost_colors");
 
-    public static final Object2ObjectMap<Item, Vector3i> COLORS = new Object2ObjectOpenHashMap<>();
+    public static final Object2ObjectOpenHashMap<Item, Vector3i> COLORS = new Object2ObjectOpenHashMap<>();
     public static final Vector3i DEFAULT_COLOR = new Vector3i(53, 168, 42);
 
     public static void loadColors() {
