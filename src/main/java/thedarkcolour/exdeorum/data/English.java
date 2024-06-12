@@ -61,6 +61,8 @@ class English {
 
         english.add(TranslationKeys.INFESTED_LEAVES_FULLY_INFESTED, "Fully Infested");
 
+        english.add(TranslationKeys.RANDOM_TRIM_DOES_NOT_CONTAIN_UPGRADE, "Does not drop Netherite Upgrade");
+
         english.add(TranslationKeys.ROOT_ADVANCEMENT_TITLE, "Don't Look Down...");
         english.add(TranslationKeys.ROOT_ADVANCEMENT_DESCRIPTION, "Spawn into a SkyBlock void world");
         english.add(TranslationKeys.CROOK_ADVANCEMENT_TITLE, "Give Him The Hook");

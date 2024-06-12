@@ -275,6 +275,7 @@
   "item.exdeorum.porcelain_water_bucket": "Porcelain Water Bucket",
   "item.exdeorum.porcelain_witch_water_bucket": "Porcelain Witch Water Bucket",
   "item.exdeorum.random_armor_trim": "Random Armor Trim",
+  "item.exdeorum.random_armor_trim.no_upgrade": "Does not drop Netherite Upgrade",
   "item.exdeorum.random_pottery_sherd": "Random Pottery Sherd",
   "item.exdeorum.sculk_core": "Sculk Core",
   "item.exdeorum.silk_worm": "Silk Worm",

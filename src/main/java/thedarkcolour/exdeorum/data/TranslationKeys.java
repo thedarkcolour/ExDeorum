@@ -32,6 +32,9 @@ public class TranslationKeys {
 
     // Blocks
     public static final String INFESTED_LEAVES_FULLY_INFESTED = "block." + ExDeorum.ID + ".infested_leaves.fully_infested";
+    
+    // Items
+    public static final String RANDOM_TRIM_DOES_NOT_CONTAIN_UPGRADE = "item." + ExDeorum.ID + ".random_armor_trim.no_upgrade";
 
     // Advancements
     public static final String ROOT_ADVANCEMENT_TITLE = "advancements." + ExDeorum.ID + ".core.root.title";

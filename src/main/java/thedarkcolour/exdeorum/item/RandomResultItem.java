@@ -19,8 +19,10 @@
 package thedarkcolour.exdeorum.item;
 
 import com.google.common.collect.Lists;
+import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -28,7 +30,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.Nullable;
+import thedarkcolour.exdeorum.data.TranslationKeys;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,7 +78,7 @@ public abstract class RandomResultItem extends Item {
         }
     }
 
-    public static class RandomSandyArmorTrim extends RandomResultItem {
+    public static class RandomArmorTrim extends RandomResultItem {
         public static final List<Item> POSSIBLE_TRIMS = Lists.newArrayList(
                 Items.WAYFINDER_ARMOR_TRIM_SMITHING_TEMPLATE,
                 Items.SHAPER_ARMOR_TRIM_SMITHING_TEMPLATE,
@@ -89,13 +94,18 @@ public abstract class RandomResultItem extends Item {
                 Items.WILD_ARMOR_TRIM_SMITHING_TEMPLATE
         );
 
-        public RandomSandyArmorTrim(Properties properties) {
+        public RandomArmorTrim(Properties properties) {
             super(properties);
         }
 
         @Override
         protected List<Item> getPossibilities() {
             return POSSIBLE_TRIMS;
+        }
+
+        @Override
+        public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> tooltip, TooltipFlag pIsAdvanced) {
+            tooltip.add(Component.translatable(TranslationKeys.RANDOM_TRIM_DOES_NOT_CONTAIN_UPGRADE).withStyle(ChatFormatting.DARK_GRAY));
         }
     }
 }

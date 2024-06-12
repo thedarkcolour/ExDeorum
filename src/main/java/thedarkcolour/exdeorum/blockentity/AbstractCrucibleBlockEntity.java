@@ -328,7 +328,7 @@ public abstract class AbstractCrucibleBlockEntity extends EBlockEntity {
     public static class Ticker implements BlockEntityTicker<AbstractCrucibleBlockEntity> {
         @Override
         public void tick(Level level, BlockPos pos, BlockState state, AbstractCrucibleBlockEntity crucible) {
-            // Update twice per tick
+            // Update twice per second
             if (!level.isClientSide) {
                 var tank = crucible.tank;
 
