@@ -1,3 +1,28 @@
+## Ex Deorum 2.10
+- Fix issue with Inventory Tweaks item restocking for sieves
+- Fix sieving not using more than 64 sieves at a time when high sieve ranges were enabled
+- Fix desync bug with barrels that sometimes happens when emptying/filling with a bucket
+- Fix overriding Superflat world type
+- Fix lag spike when inserting compost into the Barrel for the first time
+- Fix June barrel config
+- Fluids in barrels and crucibles now affect mobs standing inside them
+- Add `exdeorum:ore_chunks` tag for use in Tag Filters from item transport mods
+- Add distinct sound events for Ex Deorum sounds so they can be easily detected by Sound Muffler mods. Here are the sound IDs:
+    - `exdeorum:barrel_add_compost`: Played when compost is added to the barrel
+    - `exdeorum:barrel_compost`: Played when the barrel finished composting dirt
+    - `exdeorum:barrel_mixing`: Played when a block is mixed in the barrel (ex. clay)
+    - `exdeorum:barrel_fluid_transform`: Played when a fluid finishes transforming in a barrel (ex. witch water)
+    - `exdeorum:silk_worm_drop`: Played when a silk worm is dropped from leaves harvested by a crook
+    - `exdeorum:silk_worm_infest`: Played when a silk worm is used on a leaves block
+    - `exdeorum:silk_worm_eat`: Played when a player eats a cooked silk worm
+    - `exdeorum:grass_seeds_place`: Played when grass seeds or nylium spores are used on grass or netherrack
+    - `exdeorum:sculk_core_activate`: Played when a sculk core is used on a sculk shrieker to spawn Wardens
+    - `exdeorum:watering_can_use`: Played when a watering can is watering something
+    - `exdeorum:watering_can_stop`: Played when a player stops using the watering can
+- Fixed fluid mixing sounds playing at the same volume regardless of distance from the barrel
+- Add note to Random Armor Trim indicating it does not drop Netherite Upgrade template
+- Changed default value of server config `simultaneous_compressed_sieve_usage` to true so compressed sieves aren't terrible anymore
+
 ## Ex Deorum 2.9
 - Fix overriding default world type in Create World screen when common config option set_void_world_as_default is false.
 - Removed set_void_world_as_default option from client config, you must now only use the option from the common config.
