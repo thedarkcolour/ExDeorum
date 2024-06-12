@@ -37,6 +37,7 @@ import net.neoforged.neoforge.client.model.data.ModelData;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.blockentity.BarrelBlockEntity;
 import thedarkcolour.exdeorum.client.RenderUtil;
+import thedarkcolour.exdeorum.config.EConfig;
 
 import java.util.Objects;
 
@@ -114,7 +115,7 @@ public class BarrelRenderer implements BlockEntityRenderer<BarrelBlockEntity> {
             float compostProgress = barrel.progress;
             int r, g, b;
 
-            if (ExDeorum.IS_JUNE && barrel.getLevel() != null) {
+            if (ExDeorum.IS_JUNE && EConfig.CLIENT.rainbowCompostDuringJune.get() && barrel.getLevel() != null) {
                 var rainbow = RenderUtil.getRainbowColor(barrel.getLevel().getGameTime(), partialTicks);
                 r = rainbow.getRed();
                 g = rainbow.getGreen();
