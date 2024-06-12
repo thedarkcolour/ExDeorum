@@ -19,6 +19,8 @@
 package thedarkcolour.exdeorum.block;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -33,7 +35,10 @@ import thedarkcolour.exdeorum.registry.EBlockEntities;
 
 import java.util.function.Supplier;
 
-public abstract class AbstractCrucibleBlock extends EBlock {
+public abstract class AbstractCrucibleBlock extends ETankBlock {
+    public static final float CRUCIBLE_FLUID_BOTTOM = 4.0f / 16f;
+    public static final float CRUCIBLE_FLUID_TOP = 14.0f / 16f;
+
     public AbstractCrucibleBlock(Properties properties, Supplier<? extends BlockEntityType<?>> blockEntityType) {
         super(properties, blockEntityType);
     }
@@ -57,5 +62,11 @@ public abstract class AbstractCrucibleBlock extends EBlock {
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState pState, BlockEntityType<T> type) {
         return (type == EBlockEntities.WATER_CRUCIBLE.get() || type == EBlockEntities.LAVA_CRUCIBLE.get()) ? (BlockEntityTicker<T>) new AbstractCrucibleBlockEntity.Ticker() : null;
+    }
+
+    @Override
+    protected boolean isEntityInFluid(Level level, BlockPos pos, Entity entity, float fillRatio) {
+        var fluidTop = Mth.lerp(fillRatio, CRUCIBLE_FLUID_BOTTOM, CRUCIBLE_FLUID_TOP);
+        return entity.getY() < pos.getY() + fluidTop && entity.getBoundingBox().maxY > pos.getY() + CRUCIBLE_FLUID_BOTTOM;
     }
 }

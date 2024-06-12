@@ -23,6 +23,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.util.Mth;
+import thedarkcolour.exdeorum.block.AbstractCrucibleBlock;
 import thedarkcolour.exdeorum.blockentity.AbstractCrucibleBlockEntity;
 import thedarkcolour.exdeorum.client.RenderUtil;
 
@@ -45,7 +46,7 @@ public class CrucibleRenderer implements BlockEntityRenderer<AbstractCrucibleBlo
             if (liquid != 0) {
                 var fluid = fluidStack.getFluid();
                 var color = RenderUtil.getFluidColor(fluid, level, pos);
-                float y = Mth.lerp(liquid, 4.0f, 14.0f) / 16f;
+                var y = Mth.lerp(liquid, AbstractCrucibleBlock.CRUCIBLE_FLUID_BOTTOM, AbstractCrucibleBlock.CRUCIBLE_FLUID_TOP);
 
                 RenderUtil.renderFlatFluidSprite(buffers, stack, level, pos, y, 2.0f, light, (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff, fluid);
             }
@@ -62,7 +63,7 @@ public class CrucibleRenderer implements BlockEntityRenderer<AbstractCrucibleBlo
 
                 if (color == -1) color = 0xffffff;
 
-                face.renderFlatSpriteLerp(buffers, stack, solids, (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff, light, 2.0f, 4.0f, 14.0f);
+                face.renderFlatSpriteLerp(buffers, stack, solids, (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff, light, 2.0f, AbstractCrucibleBlock.CRUCIBLE_FLUID_BOTTOM * 16f, AbstractCrucibleBlock.CRUCIBLE_FLUID_TOP * 16f);
 
             }
         }

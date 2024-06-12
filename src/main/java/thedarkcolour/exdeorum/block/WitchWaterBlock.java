@@ -49,7 +49,14 @@ public class WitchWaterBlock extends LiquidBlock {
 
     @Override
     public void entityInside(BlockState pState, Level level, BlockPos pPos, Entity entity) {
-        if (!level.isClientSide && entity.isAlive()) {
+        if (!level.isClientSide) {
+            witchWaterEntityEffects(level, entity);
+        }
+    }
+
+    // Only call on server
+    public static void witchWaterEntityEffects(Level level, Entity entity) {
+        if (entity.isAlive()) {
             var entityType = entity.getType();
 
             if (EConfig.SERVER.allowWitchWaterEntityConversion.get()) {
