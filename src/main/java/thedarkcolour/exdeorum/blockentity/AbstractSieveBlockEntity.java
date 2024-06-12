@@ -22,11 +22,13 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.stats.Stats;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -104,7 +106,6 @@ public abstract class AbstractSieveBlockEntity extends EBlockEntity implements S
         this.logic.copyVisualData(fromIntegratedServer);
     }
 
-
     @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack playerItem = player.getItemInHand(hand);
@@ -136,9 +137,11 @@ public abstract class AbstractSieveBlockEntity extends EBlockEntity implements S
             if (this.logic.getContents().isEmpty()) {
                 // If the input has any sieve drops, insert it into the mesh
                 if (this.logic.isValidInput(playerItem)) {
-                    playerItem = insertContents(player, hand, this.logic);
+                    var usedItem = playerItem.getItem();
+                    var realPlayer = !(player instanceof FakePlayer);
+                    insertContents(player, playerItem, this.logic);
 
-                    if (canUseSimultaneously()) {
+                    if ((realPlayer || !EConfig.SERVER.nerfAutomatedSieves.get()) && canUseSimultaneously()) {
                         int range = EConfig.SERVER.simultaneousSieveUsageRange.get();
                         var cursor = this.worldPosition.mutable().move(-range, 0, -range);
 
@@ -147,14 +150,20 @@ public abstract class AbstractSieveBlockEntity extends EBlockEntity implements S
                         for (int x = -range; x <= range; x++) {
                             for (int z = -range; z <= range; z++) {
                                 if (playerItem.isEmpty()) {
-                                    break otherSieves;
+                                    playerItem = restockSieveMaterial(player, hand, usedItem);
+
+                                    if (playerItem.isEmpty()) {
+                                        break otherSieves;
+                                    }
                                 }
 
                                 if ((x | z) != 0) {
                                     if (level.getBlockEntity(cursor) instanceof SieveBlockEntity other) {
-                                        if (other.logic.getContents().isEmpty()) {
-                                            if (this.logic.getMesh().getItem() == other.logic.getMesh().getItem()) {
-                                                playerItem = insertContents(player, hand, other.logic);
+                                        var otherLogic = other.logic;
+
+                                        if (otherLogic.getContents().isEmpty()) {
+                                            if (this.logic.getMesh().getItem() == otherLogic.getMesh().getItem()) {
+                                                insertContents(player, playerItem, otherLogic);
                                             }
                                         }
                                     }
@@ -199,25 +208,35 @@ public abstract class AbstractSieveBlockEntity extends EBlockEntity implements S
         return InteractionResult.sidedSuccess(isClientSide);
     }
 
-    // Fills the sieve (assumes contents is EMPTY) and returns the remaining item, putting it in the player's hand
-    public static ItemStack insertContents(Player player, InteractionHand hand, SieveLogic logic) {
-        var consume = !player.getAbilities().instabuild;
-        var playerItem = player.getItemInHand(hand);
+    // search for another stack in inventory and restock held item
+    private static ItemStack restockSieveMaterial(Player player, InteractionHand hand, Item usedItem) {
+        var inventory = player.getInventory();
+        var inventorySize = inventory.getContainerSize();
 
-        if (consume) {
-            if (playerItem.getCount() == 1) {
-                logic.startSifting(playerItem);
-                player.setItemInHand(hand, ItemStack.EMPTY);
-                playerItem = ItemStack.EMPTY;
-            } else {
-                logic.startSifting(singleCopy(playerItem));
-                playerItem.shrink(1);
+        for (int i = 0; i < inventorySize; i++) {
+            var stack = inventory.getItem(i);
+
+            if (stack.is(usedItem)) {
+                stack = stack.copy();
+                player.setItemInHand(hand, stack);
+                inventory.setItem(i, ItemStack.EMPTY);
+                return stack;
             }
-        } else {
-            logic.startSifting(singleCopy(playerItem));
         }
 
-        return playerItem;
+        return ItemStack.EMPTY;
+    }
+
+    // Fills the sieve (assumes contents is EMPTY) and returns the remaining item, putting it in the player's hand
+    public static void insertContents(Player player, ItemStack playerItem, SieveLogic logic) {
+        var consume = !player.getAbilities().instabuild;
+
+        logic.startSifting(singleCopy(playerItem));
+        player.awardStat(Stats.ITEM_USED.get(playerItem.getItem()));
+
+        if (consume) {
+            playerItem.shrink(1);
+        }
     }
 
     // Do not call on client side
