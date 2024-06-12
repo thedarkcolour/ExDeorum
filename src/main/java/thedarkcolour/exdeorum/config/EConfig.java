@@ -165,7 +165,7 @@ public class EConfig {
                     .define("nerf_automated_sieves", true);
             this.simultaneousCompressedSieveUsage = builder
                     .comment("Whether players can use multiple compressed sieves in a 3x3 or larger area at once.")
-                    .define("simultaneous_compressed_sieve_usage", false);
+                    .define("simultaneous_compressed_sieve_usage", true);
             this.barrelProgressStep = builder
                     .comment("The progress to increment by each tick for barrel composting.")
                     .defineInRange("barrel_progress_step", 0.004, 0.0f, 1.0f);
