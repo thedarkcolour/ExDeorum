@@ -19,8 +19,8 @@
 package thedarkcolour.exdeorum.item;
 
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.Item;
+import thedarkcolour.exdeorum.registry.ESounds;
 
 public class CookedSilkWormItem extends Item {
     public CookedSilkWormItem(Properties properties) {
@@ -30,6 +30,6 @@ public class CookedSilkWormItem extends Item {
     // Yummy silk worms :)
     @Override
     public SoundEvent getEatingSound() {
-        return SoundEvents.WEEPING_VINES_PLACE;
+        return ESounds.SILK_WORM_EAT.get();
     }
 }

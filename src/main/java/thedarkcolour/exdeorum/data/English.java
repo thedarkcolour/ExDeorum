@@ -116,6 +116,18 @@ class English {
         english.add(TranslationKeys.REDSTONE_CONTROL_MODE, "Mode: ");
         english.add(TranslationKeys.MECHANICAL_HAMMER_SCREEN_TITLE, "Mechanical Hammer");
 
+        english.add(TranslationKeys.BARREL_ADD_COMPOST_SUBTITLE, "Added barrel compost");
+        english.add(TranslationKeys.BARREL_COMPOST_SUBTITLE, "Barrel compost finished");
+        english.add(TranslationKeys.BARREL_MIXING_SUBTITLE, "Barrel mixing finished");
+        english.add(TranslationKeys.BARREL_FLUID_TRANSFORM_SUBTITLE, "Mechanical Hammer");
+        english.add(TranslationKeys.SILK_WORM_DROP_SUBTITLE, "Mechanical Hammer");
+        english.add(TranslationKeys.SILK_WORM_INFEST_SUBTITLE, "Mechanical Hammer");
+        english.add(TranslationKeys.SILK_WORM_EAT_SUBTITLE, "Mechanical Hammer");
+        english.add(TranslationKeys.GRASS_SEEDS_PLACE_SUBTITLE, "Mechanical Hammer");
+        english.add(TranslationKeys.SCULK_CORE_ACTIVATE_SUBTITLE, "Mechanical Hammer");
+        english.add(TranslationKeys.WATERING_CAN_USE_SUBTITLE, "Mechanical Hammer");
+        english.add(TranslationKeys.WATERING_CAN_STOP_SUBTITLE, "Mechanical Hammer");
+
         english.add(DefaultMaterials.VEXING_ARCHWOOD_CRUCIBLE.getBlock(), "Vexing Archwood Crucible");
         english.add(DefaultMaterials.CASCADING_ARCHWOOD_CRUCIBLE.getBlock(), "Cascading Archwood Crucible");
         english.add(DefaultMaterials.BLAZING_ARCHWOOD_CRUCIBLE.getBlock(), "Blazing Archwood Crucible");

@@ -79,6 +79,7 @@ public class ExDeorum {
         EGlobalLootModifiers.GLOBAL_LOOT_MODIFIERS.register(modBus);
         EItems.ITEMS.register(modBus);
         ELootFunctions.LOOT_FUNCTIONS.register(modBus);
+        ESounds.SOUNDS.register(modBus);
         EMenus.MENUS.register(modBus);
         ERecipeSerializers.RECIPE_SERIALIZERS.register(modBus);
         ERecipeTypes.RECIPE_TYPES.register(modBus);

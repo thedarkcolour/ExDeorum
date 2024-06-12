@@ -34,6 +34,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.state.BlockState;
 import thedarkcolour.exdeorum.registry.EItems;
+import thedarkcolour.exdeorum.registry.ESounds;
 
 import java.util.function.Supplier;
 
@@ -56,7 +57,7 @@ public class GrassSpreaderItem extends Item {
         if (canSpread(state) && grass != state) {
             if (!level.isClientSide) {
                 level.setBlock(pos, grass, 3);
-                level.playSound(null, pos, SoundEvents.ROOTED_DIRT_PLACE, SoundSource.BLOCKS);
+                level.playSound(null, pos, ESounds.GRASS_SEEDS_PLACE.get(), SoundSource.BLOCKS);
 
                 if (player == null || !player.getAbilities().instabuild) {
                     ctx.getItemInHand().shrink(1);
@@ -97,8 +98,9 @@ public class GrassSpreaderItem extends Item {
                 mushroomCow.setInvulnerable(cow.isInvulnerable());
                 cow.level().addFreshEntity(mushroomCow);
 
-                if (!cow.level().isClientSide)
+                if (!cow.level().isClientSide) {
                     ((ServerLevel)cow.level()).sendParticles(ParticleTypes.EXPLOSION, cow.getX(), cow.getY(0.5D), cow.getZ(), 1, 0.0D, 0.0D, 0.0D, 0.0D);
+                }
                 cow.playSound(SoundEvents.MOOSHROOM_CONVERT, 2.0F, 1.0F);
             }
 

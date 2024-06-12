@@ -38,7 +38,7 @@ import java.util.List;
 public class EItems {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(ExDeorum.ID);
 
-    // Silk Worm
+    // Silk Worm (todo rename to "silkworm" in 1.21)
     public static final DeferredItem<SilkWormItem> SILK_WORM = ITEMS.register("silk_worm", () -> new SilkWormItem(props()));
     public static final DeferredItem<Item> COOKED_SILK_WORM = ITEMS.register("cooked_silk_worm", () -> new CookedSilkWormItem(props().food(new FoodProperties.Builder().nutrition(2).saturationMod(0.6f).build())));
 

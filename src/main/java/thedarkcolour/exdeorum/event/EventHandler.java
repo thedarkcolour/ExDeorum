@@ -90,7 +90,6 @@ public final class EventHandler {
         fmlBus.addListener(EventHandler::serverShutdown);
         fmlBus.addListener(EventHandler::serverTick);
         modBus.addListener(EventHandler::registerCapabilities);
-        //fmlBus.addListener(EventHandler::onDatapackChanged);
 
         if (ExDeorum.DEBUG) {
             fmlBus.addListener(EventHandler::handleDebugCommands);

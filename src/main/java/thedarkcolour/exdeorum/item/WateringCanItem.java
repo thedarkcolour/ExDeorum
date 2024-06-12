@@ -27,7 +27,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -60,6 +59,7 @@ import net.neoforged.neoforge.fluids.capability.templates.FluidHandlerItemStack;
 import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.blockentity.BarrelBlockEntity;
 import thedarkcolour.exdeorum.data.TranslationKeys;
+import thedarkcolour.exdeorum.registry.ESounds;
 import thedarkcolour.exdeorum.tag.EBlockTags;
 
 import java.util.List;
@@ -214,7 +214,7 @@ public class WateringCanItem extends Item {
                                 waterParticles(level, pos, state);
                             }
                             if ((useTicks - STARTUP_TIME) % 20 == 0) {
-                                level.playSound(null, pos, SoundEvents.WEATHER_RAIN, living.getSoundSource(), this.getClass() == WideWateringCanItem.class ? 0.6f : 0.3f, 1.5f);
+                                level.playSound(null, pos, ESounds.WATERING_CAN_USE.get(), living.getSoundSource(), this.getClass() == WideWateringCanItem.class ? 0.6f : 0.3f, 1.5f);
                             }
                         } else {
                             isWatering = true;
@@ -233,7 +233,7 @@ public class WateringCanItem extends Item {
     @Override
     public void releaseUsing(ItemStack stack, Level level, LivingEntity living, int timeCharged) {
         if (timeCharged > STARTUP_TIME) {
-            level.playLocalSound(living.getX(), living.getY(), living.getZ(), SoundEvents.BUCKET_FILL, living.getSoundSource(), 0.6f, 0.7f, false);
+            level.playLocalSound(living.getX(), living.getY(), living.getZ(), ESounds.WATERING_CAN_STOP.get(), living.getSoundSource(), 0.6f, 0.7f, false);
         }
     }
 

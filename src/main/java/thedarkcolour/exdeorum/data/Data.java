@@ -47,5 +47,6 @@ public class Data {
 
         gen.addProvider(true, new LootTables(output));
         gen.addProvider(true, new Advancements(output, lookup, helper));
+        gen.addProvider(true, new Sounds(output, helper));
     }
 }

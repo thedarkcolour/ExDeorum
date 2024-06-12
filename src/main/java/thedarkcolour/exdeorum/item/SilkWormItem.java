@@ -18,7 +18,6 @@
 
 package thedarkcolour.exdeorum.item;
 
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionResult;
@@ -29,6 +28,7 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.LeavesBlock;
 import thedarkcolour.exdeorum.blockentity.InfestedLeavesBlockEntity;
 import thedarkcolour.exdeorum.registry.EBlocks;
+import thedarkcolour.exdeorum.registry.ESounds;
 
 public class SilkWormItem extends Item {
     public SilkWormItem(Item.Properties properties) {
@@ -49,7 +49,7 @@ public class SilkWormItem extends Item {
                             .setValue(LeavesBlock.DISTANCE, state.getValue(LeavesBlock.DISTANCE))
                             .setValue(LeavesBlock.PERSISTENT, state.getValue(LeavesBlock.PERSISTENT)), 2);
 
-                    level.playSound(null, pos, SoundEvents.HONEY_BLOCK_HIT, SoundSource.BLOCKS);
+                    level.playSound(null, pos, ESounds.SILK_WORM_INFEST.get(), SoundSource.BLOCKS);
 
                     // Set mimic
                     if (level.getBlockEntity(pos) instanceof InfestedLeavesBlockEntity leaves) {
@@ -69,7 +69,7 @@ public class SilkWormItem extends Item {
     public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
         // play a gross noise when you discover a silk worm
         if (entity.tickCount == 1 && entity.getOwner() == null) {
-            entity.level().playSound(null, entity, SoundEvents.HONEY_BLOCK_PLACE, SoundSource.BLOCKS, 1.0f, 1.0f);
+            entity.level().playSound(null, entity, ESounds.SILK_WORM_DROP.get(), SoundSource.BLOCKS, 1.0f, 1.0f);
         }
         return false;
     }

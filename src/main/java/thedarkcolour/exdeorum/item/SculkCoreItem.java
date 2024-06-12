@@ -19,7 +19,6 @@
 package thedarkcolour.exdeorum.item;
 
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.Item;
@@ -27,6 +26,7 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SculkShriekerBlock;
 import org.joml.Math;
+import thedarkcolour.exdeorum.registry.ESounds;
 
 public class SculkCoreItem extends Item {
     public SculkCoreItem(Properties properties) {
@@ -59,7 +59,7 @@ public class SculkCoreItem extends Item {
                     }
                 }
             }
-            level.playSound(null, pos, SoundEvents.SCULK_SHRIEKER_SHRIEK, SoundSource.BLOCKS, 1.0f, 1.0f);
+            level.playSound(null, pos, ESounds.SCULK_CORE_ACTIVATE.get(), SoundSource.BLOCKS, 1.0f, 1.0f);
 
             return InteractionResult.sidedSuccess(level.isClientSide);
         }

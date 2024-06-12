@@ -64,6 +64,7 @@ import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelFluidMixingRecipe;
 import thedarkcolour.exdeorum.recipe.barrel.FluidTransformationRecipe;
 import thedarkcolour.exdeorum.registry.EBlockEntities;
+import thedarkcolour.exdeorum.registry.ESounds;
 
 public class BarrelBlockEntity extends EBlockEntity {
     private static final int MOSS_SPREAD_RANGE = 2;
@@ -372,7 +373,7 @@ public class BarrelBlockEntity extends EBlockEntity {
                 this.tank.drain(recipe.fluidAmount, IFluidHandler.FluidAction.EXECUTE);
                 // Replace fluid with result
                 setItem(new ItemStack(recipe.result));
-                this.level.playSound(null, this.worldPosition, SoundEvents.AMBIENT_UNDERWATER_EXIT, SoundSource.BLOCKS, 0.8f, 0.8f);
+                this.level.playSound(null, this.worldPosition, ESounds.BARREL_MIXING.get(), SoundSource.BLOCKS, 0.8f, 1.0f);
             }
             // Mixing was successful, so return true
             return true;
@@ -413,7 +414,7 @@ public class BarrelBlockEntity extends EBlockEntity {
             this.b = (short) (weightNew * color.z + weightOld * this.b);
         }
 
-        this.level.playSound(null, this.worldPosition, SoundEvents.COMPOSTER_FILL, SoundSource.BLOCKS);
+        this.level.playSound(null, this.worldPosition, ESounds.BARREL_ADD_COMPOST.get(), SoundSource.BLOCKS);
     }
 
     /**
@@ -527,7 +528,7 @@ public class BarrelBlockEntity extends EBlockEntity {
                         if (barrel.progress >= 1.0f - Mth.EPSILON) {
                             // Reset progress
                             barrel.progress = 0.0f;
-                            level.playSound(null, pos, SoundEvents.BREWING_STAND_BREW, SoundSource.BLOCKS, 1.0f, 0.6f);
+                            level.playSound(null, pos, ESounds.BARREL_FLUID_TRANSFORM.get(), SoundSource.BLOCKS, 1.0f, 0.6f);
                             tank.setFluid(FluidStack.EMPTY);
                             tank.fill(new FluidStack(recipe.resultFluid(), 1000), IFluidHandler.FluidAction.EXECUTE);
                         }
@@ -584,7 +585,7 @@ public class BarrelBlockEntity extends EBlockEntity {
             this.progress = 0.0f;
             this.compost = 0;
             setItem(new ItemStack(Items.DIRT));
-            this.level.playSound(null, this.worldPosition, SoundEvents.COMPOSTER_READY, SoundSource.BLOCKS);
+            this.level.playSound(null, this.worldPosition, ESounds.BARREL_COMPOST.get(), SoundSource.BLOCKS);
         }
     }
 
