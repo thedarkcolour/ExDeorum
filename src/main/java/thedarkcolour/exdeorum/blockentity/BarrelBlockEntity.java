@@ -224,6 +224,7 @@ public class BarrelBlockEntity extends ETankBlockEntity {
             if (FluidUtil.interactWithFluidHandler(player, hand, this.tank)) {
                 this.isBeingFilledByPlayer = false;
                 tryInWorldFluidMixing();
+                markUpdated();
 
                 // If the item is a fluid handler, try to transfer fluids
                 if (wasBurning && !isHotFluid(this.tank.getFluid().getFluid().getFluidType())) {
