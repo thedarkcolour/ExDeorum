@@ -1,4 +1,4 @@
-// 1.20.4	2024-04-08T16:37:05.5942391	Tags for minecraft:item mod id exdeorum
+// 1.20.4	2024-06-12T10:02:21.4190209	Tags for minecraft:item mod id exdeorum
 6c72957356b1d59a27be736fa1da54a5a9795ef7 data/exdeorum/tags/items/barrels.json
 6afa16b45f76c0defa1675d07586e2c6e6b0be69 data/exdeorum/tags/items/compressed/andesite.json
 31b46613766e4cdc53196850495ab1019f61cb48 data/exdeorum/tags/items/compressed/blackstone.json
@@ -25,6 +25,7 @@ dad00c75d1a0b74a2f843bead336ee278e9cecba data/exdeorum/tags/items/compressed_ham
 5feb54ce68fa657af5ce696f75b8c7a6d04cc7a7 data/exdeorum/tags/items/crooks.json
 74eefeb986d633d26ad42202c4a6b5e71463c425 data/exdeorum/tags/items/end_cake_materials.json
 be46bf2abe731d5ee5bd15ce72f222b2b9a49385 data/exdeorum/tags/items/hammers.json
+008b4a382f07b9c0f9a07c78bedb949b4400e011 data/exdeorum/tags/items/ore_chunks.json
 b90bd3c642e69b9e800c58a9f8f53e369652e6ba data/exdeorum/tags/items/pebbles.json
 8e1b5ab26037123d3948e9ac9f50da1b7cd0a129 data/exdeorum/tags/items/sieve_meshes.json
 0152da758e7665bf282f17f466599c7a009d9a15 data/exdeorum/tags/items/stone_barrels.json

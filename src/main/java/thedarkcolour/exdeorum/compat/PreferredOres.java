@@ -109,7 +109,7 @@ public class PreferredOres {
     }
 
     public static Item getDefaultSilverOre() {
-        return defaultItem("silver_ore", ModIds.ALL_THE_ORES, ModIds.OCCULTISM, ModIds.RAILCRAFT, ModIds.FACTORIUM, ModIds.NUCLEARCRAFT_NEOTERIC, ModIds.IMMERSIVE_ENGINEERING);
+        return defaultItem("silver_ore", ModIds.ALL_THE_ORES, ModIds.THERMAL, ModIds.OCCULTISM, ModIds.RAILCRAFT, ModIds.FACTORIUM, ModIds.NUCLEARCRAFT_NEOTERIC, ModIds.IMMERSIVE_ENGINEERING);
     }
 
     public static Item getDefaultLeadOre() {

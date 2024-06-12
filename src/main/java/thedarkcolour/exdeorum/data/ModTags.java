@@ -91,6 +91,7 @@ class ModTags {
         tags.tag(EItemTags.CROOKS).add(EItems.CROOK, EItems.BONE_CROOK);
         tags.tag(EItemTags.SIEVE_MESHES).add(EItems.STRING_MESH, EItems.FLINT_MESH, EItems.IRON_MESH, EItems.GOLDEN_MESH, EItems.DIAMOND_MESH, EItems.NETHERITE_MESH);
         tags.tag(EItemTags.PEBBLES).add(EItems.STONE_PEBBLE, EItems.DIORITE_PEBBLE, EItems.GRANITE_PEBBLE, EItems.ANDESITE_PEBBLE, EItems.DEEPSLATE_PEBBLE, EItems.TUFF_PEBBLE, EItems.CALCITE_PEBBLE, EItems.BLACKSTONE_PEBBLE, EItems.BASALT_PEBBLE);
+        tags.tag(EItemTags.ORE_CHUNKS).add(EItems.IRON_ORE_CHUNK.get(), EItems.COPPER_ORE_CHUNK.get(), EItems.GOLD_ORE_CHUNK.get(), EItems.ALUMINUM_ORE_CHUNK.get(), EItems.COBALT_ORE_CHUNK.get(), EItems.SILVER_ORE_CHUNK.get(), EItems.LEAD_ORE_CHUNK.get(), EItems.PLATINUM_ORE_CHUNK.get(), EItems.NICKEL_ORE_CHUNK.get(), EItems.URANIUM_ORE_CHUNK.get(), EItems.OSMIUM_ORE_CHUNK.get(), EItems.TIN_ORE_CHUNK.get(), EItems.ZINC_ORE_CHUNK.get(), EItems.IRIDIUM_ORE_CHUNK.get(), EItems.THORIUM_ORE_CHUNK.get(), EItems.MAGNESIUM_ORE_CHUNK.get(), EItems.LITHIUM_ORE_CHUNK.get(), EItems.BORON_ORE_CHUNK.get());
         tags.tag(EItemTags.END_CAKE_MATERIAL).add(Items.ENDER_EYE);
         tags.tag(EItemTags.WOODEN_BARRELS).add(WOODEN_BARRELS.stream().map(BarrelMaterial::getItem).toArray(Item[]::new));
         tags.tag(EItemTags.STONE_BARRELS).add(DefaultMaterials.STONE_BARREL.getItem(), DefaultMaterials.CRYSTALLIZED_BARREL.getItem());

@@ -30,6 +30,7 @@ public class EItemTags {
     public static final TagKey<Item> COMPRESSED_HAMMERS = tag("compressed_hammers");
     public static final TagKey<Item> SIEVE_MESHES = tag("sieve_meshes");
     public static final TagKey<Item> PEBBLES = tag("pebbles");
+    public static final TagKey<Item> ORE_CHUNKS = tag("ore_chunks");
     public static final TagKey<Item> END_CAKE_MATERIAL = tag("end_cake_materials");
 
     public static final TagKey<Item> WOODEN_BARRELS = tag("wooden_barrels");
