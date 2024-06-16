@@ -1,6 +1,6 @@
 package thedarkcolour.exdeorum.loot;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
@@ -11,14 +11,14 @@ import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.recipe.hammer.HammerRecipe;
 
 public class CompressedHammerLootModifier extends HammerLootModifier {
-    public static final Codec<CompressedHammerLootModifier> CODEC = RecordCodecBuilder.create(inst -> LootModifier.codecStart(inst).apply(inst, CompressedHammerLootModifier::new));
+    public static final MapCodec<CompressedHammerLootModifier> CODEC = RecordCodecBuilder.mapCodec(inst -> LootModifier.codecStart(inst).apply(inst, CompressedHammerLootModifier::new));
 
     public CompressedHammerLootModifier(LootItemCondition[] conditionsIn) {
         super(conditionsIn);
     }
 
     @Override
-    public Codec<? extends IGlobalLootModifier> codec() {
+    public MapCodec<? extends IGlobalLootModifier> codec() {
         return CODEC;
     }
 

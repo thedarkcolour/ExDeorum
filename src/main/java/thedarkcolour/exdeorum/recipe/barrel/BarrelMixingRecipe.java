@@ -20,13 +20,13 @@ package thedarkcolour.exdeorum.recipe.barrel;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.Container;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
@@ -73,7 +73,7 @@ public class BarrelMixingRecipe extends SingleIngredientRecipe {
     // Do not use
     @Override
     @Deprecated
-    public boolean matches(Container inventory, Level level) {
+    public boolean matches(RecipeInput inventory, Level level) {
         return false;
     }
 
@@ -82,7 +82,7 @@ public class BarrelMixingRecipe extends SingleIngredientRecipe {
     }
 
     @Override
-    public ItemStack getResultItem(RegistryAccess access) {
+    public ItemStack getResultItem(HolderLookup.Provider access) {
         return new ItemStack(this.result);
     }
 

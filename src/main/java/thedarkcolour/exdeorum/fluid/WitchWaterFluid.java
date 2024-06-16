@@ -36,9 +36,9 @@ import thedarkcolour.exdeorum.registry.EItems;
 import java.util.function.Consumer;
 
 public class WitchWaterFluid extends FluidType {
-    private static final ResourceLocation STILL_TEXTURE = new ResourceLocation(ExDeorum.ID, "block/witch_water_still");
-    private static final ResourceLocation FLOWING_TEXTURE = new ResourceLocation(ExDeorum.ID, "block/witch_water_flowing");
-    private static final ResourceLocation OVERLAY_TEXTURE = new ResourceLocation("block/water_overlay");
+    private static final ResourceLocation STILL_TEXTURE = ExDeorum.loc("block/witch_water_still");
+    private static final ResourceLocation FLOWING_TEXTURE = ExDeorum.loc("block/witch_water_flowing");
+    private static final ResourceLocation OVERLAY_TEXTURE = ResourceLocation.withDefaultNamespace("block/water_overlay");
 
     public static BaseFlowingFluid.Properties properties() {
         return new BaseFlowingFluid.Properties(EFluids.WITCH_WATER_TYPE, EFluids.WITCH_WATER, EFluids.WITCH_WATER_FLOWING).block(EBlocks.WITCH_WATER).bucket(EItems.WITCH_WATER_BUCKET);

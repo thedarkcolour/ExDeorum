@@ -20,7 +20,7 @@ package thedarkcolour.exdeorum.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.RandomSource;
@@ -92,12 +92,12 @@ public abstract class AbstractSieveBlockEntity extends EBlockEntity implements S
     }
 
     @Override
-    public void writeVisualData(FriendlyByteBuf buffer) {
+    public void writeVisualData(RegistryFriendlyByteBuf buffer) {
         this.logic.writeVisualData(buffer);
     }
 
     @Override
-    public void readVisualData(FriendlyByteBuf buffer) {
+    public void readVisualData(RegistryFriendlyByteBuf buffer) {
         this.logic.readVisualData(buffer);
     }
 

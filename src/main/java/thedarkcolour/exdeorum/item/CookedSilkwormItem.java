@@ -22,8 +22,8 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.Item;
 import thedarkcolour.exdeorum.registry.ESounds;
 
-public class CookedSilkWormItem extends Item {
-    public CookedSilkWormItem(Properties properties) {
+public class CookedSilkwormItem extends Item {
+    public CookedSilkwormItem(Properties properties) {
         super(properties);
     }
 

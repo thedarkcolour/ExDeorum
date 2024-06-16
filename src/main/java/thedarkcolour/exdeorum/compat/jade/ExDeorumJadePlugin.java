@@ -30,10 +30,10 @@ import thedarkcolour.exdeorum.block.SieveBlock;
 
 @WailaPlugin
 public class ExDeorumJadePlugin implements IWailaPlugin {
-    static final ResourceLocation INFESTED_LEAVES = new ResourceLocation(ExDeorum.ID, "infested_leaves");
-    static final ResourceLocation BARREL = new ResourceLocation(ExDeorum.ID, "barrel");
-    static final ResourceLocation SIEVE = new ResourceLocation(ExDeorum.ID, "sieve");
-    static final ResourceLocation CRUCIBLE = new ResourceLocation(ExDeorum.ID, "crucible");
+    static final ResourceLocation INFESTED_LEAVES = ExDeorum.loc("infested_leaves");
+    static final ResourceLocation BARREL = ExDeorum.loc("barrel");
+    static final ResourceLocation SIEVE = ExDeorum.loc("sieve");
+    static final ResourceLocation CRUCIBLE = ExDeorum.loc("crucible");
 
     @Override
     public void registerClient(IWailaClientRegistration registration) {

@@ -45,7 +45,7 @@ public class Data {
         dataHelper.createTags(Registries.STRUCTURE_SET, ModTags::createStructureSetTags);
         dataHelper.createTags(Registries.WORLD_PRESET, ModTags::createWorldPresetTags);
 
-        gen.addProvider(true, new LootTables(output));
+        gen.addProvider(true, new LootTables(output, lookup));
         gen.addProvider(true, new Advancements(output, lookup, helper));
         gen.addProvider(true, new Sounds(output, helper));
     }

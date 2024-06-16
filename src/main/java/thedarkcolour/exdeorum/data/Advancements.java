@@ -48,7 +48,7 @@ class Advancements extends AdvancementProvider {
     }
 
     private static ResourceLocation modLoc(String path) {
-        return new ResourceLocation(ExDeorum.ID, path);
+        return ResourceLocation.fromNamespaceAndPath(ExDeorum.ID, path);
     }
 
     public static class CoreAchievements implements AdvancementGenerator {
@@ -99,7 +99,7 @@ class Advancements extends AdvancementProvider {
             var silkWorm = advancement()
                     .parent(crook)
                     .display(
-                            EItems.SILK_WORM.get(),
+                            EItems.SILKWORM.get(),
                             Component.translatable(TranslationKeys.SILK_WORM_ADVANCEMENT_TITLE),
                             Component.translatable(TranslationKeys.SILK_WORM_ADVANCEMENT_DESCRIPTION),
                             null,
@@ -108,7 +108,7 @@ class Advancements extends AdvancementProvider {
                             true,
                             false
                     )
-                    .addCriterion("has_silk_worm", hasItems(item().of(EItems.SILK_WORM.get()).build()))
+                    .addCriterion("has_silk_worm", hasItems(item().of(EItems.SILKWORM.get()).build()))
                     .save(saver, modLoc("core/silk_worm"), helper);
             var stringMesh = advancement()
                     .parent(silkWorm)

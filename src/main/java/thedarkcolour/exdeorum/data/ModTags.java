@@ -98,7 +98,7 @@ class ModTags {
         tags.tag(EItemTags.BARRELS).addTags(EItemTags.WOODEN_BARRELS, EItemTags.STONE_BARRELS);
 
         // Cyclic adds ONE compressed block :)
-        tags.tag(ECompressedBlocks.COMPRESSED_COBBLESTONE.getTag()).addOptional(new ResourceLocation(ModIds.CYCLIC, "compressed_cobblestone"));
+        tags.tag(ECompressedBlocks.COMPRESSED_COBBLESTONE.getTag()).addOptional(ResourceLocation.fromNamespaceAndPath(ModIds.CYCLIC, "compressed_cobblestone"));
 
         for (var variant : ECompressedBlocks.ALL_VARIANTS) {
             var builder = tags.tag(variant.getTag()).add(variant.getItem());
@@ -120,7 +120,7 @@ class ModTags {
     }
 
     public static void createWorldPresetTags(MKTagsProvider<WorldPreset> tags) {
-        tags.tag(net.minecraft.tags.WorldPresetTags.NORMAL).add(ResourceKey.create(Registries.WORLD_PRESET, new ResourceLocation(ExDeorum.ID, "void_world")));
+        tags.tag(net.minecraft.tags.WorldPresetTags.NORMAL).add(ResourceKey.create(Registries.WORLD_PRESET, ResourceLocation.fromNamespaceAndPath(ExDeorum.ID, "void_world")));
     }
 
     public static void createFluidTags(MKTagsProvider<Fluid> tags) {

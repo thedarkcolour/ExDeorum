@@ -166,7 +166,7 @@ public class ExDeorumJeiPlugin implements IModPlugin {
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
-        registration.addItemStackInfo(List.of(new ItemStack(EItems.INFESTED_LEAVES.get()), new ItemStack(EItems.SILK_WORM.get())), Component.translatable(TranslationKeys.SILK_WORM_JEI_INFO));
+        registration.addItemStackInfo(List.of(new ItemStack(EItems.INFESTED_LEAVES.get()), new ItemStack(EItems.SILKWORM.get())), Component.translatable(TranslationKeys.SILK_WORM_JEI_INFO));
         registration.addItemStackInfo(CompatUtil.getAvailableSieves(true, false).stream().map(ItemStack::new).toList(), Component.translatable(TranslationKeys.SIEVE_JEI_INFO));
         registration.addItemStackInfo(List.of(new ItemStack(EItems.STRING_MESH.get()), new ItemStack(EItems.STRING_MESH.get()), new ItemStack(EItems.FLINT_MESH.get()), new ItemStack(EItems.IRON_MESH.get()), new ItemStack(EItems.GOLDEN_MESH.get()), new ItemStack(EItems.DIAMOND_MESH.get()), new ItemStack(EItems.NETHERITE_MESH.get())), Component.translatable(TranslationKeys.SIEVE_MESH_JEI_INFO));
         registration.addItemStackInfo(List.of(WateringCanItem.getFull(EItems.WOODEN_WATERING_CAN), WateringCanItem.getFull(EItems.STONE_WATERING_CAN), WateringCanItem.getFull(EItems.IRON_WATERING_CAN), WateringCanItem.getFull(EItems.GOLDEN_WATERING_CAN), WateringCanItem.getFull(EItems.DIAMOND_WATERING_CAN), WateringCanItem.getFull(EItems.NETHERITE_WATERING_CAN)), Component.translatable(TranslationKeys.WATERING_CAN_JEI_INFO));

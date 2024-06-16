@@ -21,27 +21,28 @@ package thedarkcolour.exdeorum.network;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.blockentity.EBlockEntity;
 
-// todo rewrite this to be less jank
-class VisualUpdateMessage implements CustomPacketPayload {
-    public static final ResourceLocation ID = new ResourceLocation(ExDeorum.ID, "visual_update");
+/**
+ * @param blockEntity Null on the dedicated client side
+ * @param payload     Null on the server side
+ */
+record VisualUpdateMessage(
+        BlockPos pos,
+        @Nullable EBlockEntity blockEntity,
+        BlockEntityType<?> blockEntityType,
+        @Nullable FriendlyByteBuf payload
+) implements CustomPacketPayload {
+    public static final Type<VisualUpdateMessage> TYPE = new Type<>(ExDeorum.loc("visual_update"));
+    public static final StreamCodec<RegistryFriendlyByteBuf, VisualUpdateMessage> STREAM_CODEC = StreamCodec.of(VisualUpdateMessage::write, VisualUpdateMessage::decode);
 
-    final BlockEntityType<?> blockEntityType;
-    final BlockPos pos;
-    // Null on the dedicated client side
-    @Nullable
-    final EBlockEntity blockEntity;
-    // Null on the server side
-    @Nullable
-    final FriendlyByteBuf payload;
-
-    public VisualUpdateMessage(BlockPos pos, @Nullable EBlockEntity blockEntity, @Nullable BlockEntityType<?> blockEntityType, @Nullable FriendlyByteBuf payload) {
+    VisualUpdateMessage(BlockPos pos, @Nullable EBlockEntity blockEntity, @Nullable BlockEntityType<?> blockEntityType, @Nullable FriendlyByteBuf payload) {
         this.pos = pos;
         this.blockEntity = blockEntity;
         // payload is saved on the client until it can be handled properly
@@ -51,26 +52,25 @@ class VisualUpdateMessage implements CustomPacketPayload {
     }
 
     @SuppressWarnings("DataFlowIssue")
-    @Override
-    public void write(FriendlyByteBuf buffer) {
-        buffer.writeBlockPos(this.pos);
-        buffer.writeId(BuiltInRegistries.BLOCK_ENTITY_TYPE, this.blockEntityType);
+    public static void write(FriendlyByteBuf buffer, VisualUpdateMessage msg) {
+        buffer.writeBlockPos(msg.pos);
+        buffer.writeById(BuiltInRegistries.BLOCK_ENTITY_TYPE::getId, msg.blockEntityType);
         // write a placeholder value for the number of data bytes, keeping its index for updating later
         var dataBytesIndex = buffer.writerIndex();
         buffer.writeInt(0);
         // write data bytes
-        this.blockEntity.writeVisualData(buffer);
+        msg.blockEntity.writeVisualData(buffer);
         // set the correct number of data bytes
         var numDataBytes = buffer.writerIndex() - dataBytesIndex - 4;
         buffer.setInt(dataBytesIndex, numDataBytes);
     }
 
     @Override
-    public ResourceLocation id() {
-        return ID;
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 
     public static VisualUpdateMessage decode(FriendlyByteBuf buffer) {
-        return new VisualUpdateMessage(buffer.readBlockPos(), null, buffer.readById(BuiltInRegistries.BLOCK_ENTITY_TYPE), new FriendlyByteBuf(buffer.readBytes(buffer.readInt())));
+        return new VisualUpdateMessage(buffer.readBlockPos(), null, buffer.readById(BuiltInRegistries.BLOCK_ENTITY_TYPE::byId), new FriendlyByteBuf(buffer.readBytes(buffer.readInt())));
     }
 }

@@ -18,6 +18,7 @@
 
 package thedarkcolour.exdeorum.blockentity.helper;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
@@ -40,7 +41,7 @@ public class FluidHelper extends FluidTank {
             if (this.fluid.isEmpty()) {
                 return Math.min(this.capacity, resource.getAmount());
             }
-            if (!this.fluid.isFluidEqual(resource)) {
+            if (!FluidStack.isSameFluidSameComponents(this.fluid, resource)) {
                 return 0;
             }
             return Math.min(this.capacity - this.fluid.getAmount(), resource.getAmount());
@@ -48,12 +49,11 @@ public class FluidHelper extends FluidTank {
         if (this.fluid.isEmpty()) {
             // fix forge's implementation to avoid dupes
             int amount = Math.min(this.capacity, resource.getAmount());
-            this.fluid = new FluidStack(resource, Math.min(this.capacity, amount));
+            this.fluid = new FluidStack(resource.getFluid(), Math.min(this.capacity, amount));
             onContentsChanged();
             return amount;
         }
-        if (!this.fluid.isFluidEqual(resource))
-        {
+        if (!FluidStack.isSameFluidSameComponents(this.fluid, resource)) {
             return 0;
         }
         int filled = this.capacity - this.fluid.getAmount();
@@ -71,8 +71,8 @@ public class FluidHelper extends FluidTank {
     }
 
     @Override
-    public FluidTank readFromNBT(CompoundTag nbt) {
-        super.readFromNBT(nbt);
+    public FluidTank readFromNBT(HolderLookup.Provider provider, CompoundTag nbt) {
+        super.readFromNBT(provider, nbt);
         if (!this.fluid.isEmpty()) {
             this.fluid.setAmount(Math.min(this.capacity, this.fluid.getAmount()));
         }

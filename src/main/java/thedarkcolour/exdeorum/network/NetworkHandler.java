@@ -20,29 +20,23 @@ package thedarkcolour.exdeorum.network;
 
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.network.PacketDistributor;
-import net.neoforged.neoforge.network.registration.IPayloadRegistrar;
+import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 public final class NetworkHandler {
     // DO NOT CONVERT the lambdas to method reference. The server will crash loading client code otherwise.
     @SuppressWarnings("Convert2MethodRef")
-    public static void register(IPayloadRegistrar registrar) {
-        registrar.play(MenuPropertyMessage.ID, MenuPropertyMessage::decode, sidedHandler -> {
-            sidedHandler.client((msg, ctx) -> ClientMessageHandler.handleMenuProperty(msg, ctx));
-        });
-        registrar.play(VisualUpdateMessage.ID, VisualUpdateMessage::decode, sidedHandler -> {
-            sidedHandler.client((msg, ctx) -> ClientMessageHandler.handleVisualUpdate(msg, ctx));
-        });
-        // not sure if these stop working if they're in the wrong phase, so I'll put them in both
-        registrar.common(VoidWorldMessage.ID, buffer -> VoidWorldMessage.INSTANCE, sidedHandler -> {
-            sidedHandler.client((msg, ctx) -> ClientMessageHandler.handleVoidWorldMessage(msg, ctx));
-        });
+    public static void register(PayloadRegistrar registrar) {
+        registrar.playToClient(MenuPropertyMessage.TYPE, MenuPropertyMessage.STREAM_CODEC, (msg, ctx) -> ClientMessageHandler.handleMenuProperty(msg, ctx));
+        registrar.playToClient(VisualUpdateMessage.TYPE, VisualUpdateMessage.STREAM_CODEC, (msg, ctx) -> ClientMessageHandler.handleVisualUpdate(msg, ctx));
+        // not sure if this stops working if they're in the wrong phase, so I'll put it in both
+        registrar.commonToClient(VoidWorldMessage.TYPE, VoidWorldMessage.STREAM_CODEC, (msg, ctx) -> ClientMessageHandler.handleVoidWorldMessage(msg, ctx));
     }
 
     public static void sendVoidWorld(ServerPlayer player) {
-        PacketDistributor.PLAYER.with(player).send(VoidWorldMessage.INSTANCE);
+        PacketDistributor.sendToPlayer(player, VoidWorldMessage.INSTANCE);
     }
 
     public static void sendMenuProperty(ServerPlayer player, int containerId, int index, int prevSieveEnergy) {
-        PacketDistributor.PLAYER.with(player).send(new MenuPropertyMessage(containerId, index, prevSieveEnergy));
+        PacketDistributor.sendToPlayer(player, new MenuPropertyMessage(containerId, index, prevSieveEnergy));
     }
 }

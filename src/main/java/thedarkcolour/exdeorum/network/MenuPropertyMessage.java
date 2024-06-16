@@ -18,28 +18,28 @@
 
 package thedarkcolour.exdeorum.network;
 
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
 import thedarkcolour.exdeorum.ExDeorum;
 
 // Like ClientboundContainerSetDataPacket except that the value is 32 bits instead of 16 bits
 public record MenuPropertyMessage(int containerId, int index, int value) implements CustomPacketPayload {
-    public static final ResourceLocation ID = new ResourceLocation(ExDeorum.ID, "menu_property");
+    public static final Type<MenuPropertyMessage> TYPE = new Type<>(ExDeorum.loc("menu_property"));
+    public static final StreamCodec<RegistryFriendlyByteBuf, MenuPropertyMessage> STREAM_CODEC = StreamCodec.of(MenuPropertyMessage::write, MenuPropertyMessage::decode);
 
-    @Override
-    public void write(FriendlyByteBuf buffer) {
-        buffer.writeByte(this.containerId);
-        buffer.writeShort(this.index);
-        buffer.writeVarInt(this.value);
+    public static void write(RegistryFriendlyByteBuf buffer, MenuPropertyMessage msg) {
+        buffer.writeByte(msg.containerId);
+        buffer.writeShort(msg.index);
+        buffer.writeVarInt(msg.value);
     }
 
-    @Override
-    public ResourceLocation id() {
-        return ID;
-    }
-
-    public static MenuPropertyMessage decode(FriendlyByteBuf buffer) {
+    public static MenuPropertyMessage decode(RegistryFriendlyByteBuf buffer) {
         return new MenuPropertyMessage(buffer.readByte(), buffer.readShort(), buffer.readVarInt());
+    }
+
+    @Override
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 }

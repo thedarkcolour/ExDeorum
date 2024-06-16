@@ -221,7 +221,7 @@ public class ModCompatData {
         PAMS_CROPS = new ResourceLocation[names.length];
 
         for (int i = 0, namesLength = names.length; i < namesLength; i++) {
-            PAMS_CROPS[i] = new ResourceLocation(ModIds.PAMS_HARVESTCRAFT_CROPS, names[i]);
+            PAMS_CROPS[i] = ResourceLocation.fromNamespaceAndPath(ModIds.PAMS_HARVESTCRAFT_CROPS, names[i]);
         }
     }
 

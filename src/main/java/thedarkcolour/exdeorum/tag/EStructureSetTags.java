@@ -30,6 +30,6 @@ public class EStructureSetTags {
     public static final TagKey<StructureSet> THE_END_VOID_STRUCTURES = tag("the_end_void_structure_sets");
 
     public static TagKey<StructureSet> tag(String name) {
-        return TagKey.create(Registries.STRUCTURE_SET, new ResourceLocation(ExDeorum.ID, name));
+        return TagKey.create(Registries.STRUCTURE_SET, ExDeorum.loc(name));
     }
 }

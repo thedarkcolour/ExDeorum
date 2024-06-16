@@ -50,18 +50,16 @@ import net.neoforged.neoforge.client.event.ClientChatEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
-import net.neoforged.neoforge.event.TickEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.level.LevelEvent;
 import net.neoforged.neoforge.event.server.ServerStoppingEvent;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.neoforged.neoforge.fluids.FluidInteractionRegistry;
-import net.neoforged.neoforge.fluids.capability.wrappers.FluidBucketWrapper;
-import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.blockentity.helper.ItemHelper;
 import thedarkcolour.exdeorum.client.CompostColors;
 import thedarkcolour.exdeorum.compat.ModIds;
-import thedarkcolour.exdeorum.compat.top.ExDeorumTopCompat;
 import thedarkcolour.exdeorum.config.EConfig;
 import thedarkcolour.exdeorum.item.PorcelainBucket;
 import thedarkcolour.exdeorum.item.WateringCanItem;
@@ -185,9 +183,10 @@ public final class EventHandler {
         });
     }
 
-    private static void registerPayloadHandler(RegisterPayloadHandlerEvent event) {
+    private static void registerPayloadHandler(RegisterPayloadHandlersEvent event) {
         NetworkHandler.register(event.registrar(ExDeorum.ID));
     }
+
     private static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
             var generator = player.serverLevel().getChunkSource().getGenerator();
@@ -195,7 +194,7 @@ public final class EventHandler {
             // tries to account for other SkyBlock generator mods like SkyBlockBuilder
             if (generator instanceof VoidChunkGenerator || generator.getClass().getName().toLowerCase(Locale.ROOT).contains("skyblock")) {
                 NetworkHandler.sendVoidWorld(player);
-                var advancement = player.server.getAdvancements().get(new ResourceLocation(ExDeorum.ID, "core/root"));
+                var advancement = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(ExDeorum.ID, "core/root"));
 
                 if (advancement != null) {
                     if (!player.getAdvancements().getOrStartProgress(advancement).isDone()) {
@@ -221,7 +220,8 @@ public final class EventHandler {
     // Send messages to other mods
     private static void interModEnqueue(InterModEnqueueEvent event) {
         if (ModList.get().isLoaded(ModIds.THE_ONE_PROBE)) {
-            InterModComms.sendTo(ModIds.THE_ONE_PROBE, "getTheOneProbe", ExDeorumTopCompat::new);
+            // todo The One Probe
+            //InterModComms.sendTo(ModIds.THE_ONE_PROBE, "getTheOneProbe", ExDeorumTopCompat::new);
         }
         if (ModList.get().isLoaded(ModIds.INVENTORY_SORTER)) {
             InterModComms.sendTo(ModIds.INVENTORY_SORTER, "slotblacklist", ItemHelper.Slot.class::getName);
@@ -237,10 +237,8 @@ public final class EventHandler {
         });
     }
 
-    private static void serverTick(TickEvent.ServerTickEvent event) {
-        if (event.phase == TickEvent.Phase.END) {
-            VisualUpdateTracker.syncVisualUpdates();
-        }
+    private static void serverTick(ServerTickEvent.Post event) {
+        VisualUpdateTracker.syncVisualUpdates(event.getServer());
     }
 
     private static void registerCapabilities(RegisterCapabilitiesEvent event) {
@@ -265,7 +263,6 @@ public final class EventHandler {
                 EItems.PORCELAIN_LAVA_BUCKET,
                 EItems.PORCELAIN_MILK_BUCKET,
                 EItems.PORCELAIN_WITCH_WATER_BUCKET);
-        event.registerItem(Capabilities.FluidHandler.ITEM, (stack, ctx) -> new FluidBucketWrapper(stack), EItems.WITCH_WATER_BUCKET);
         event.registerItem(Capabilities.FluidHandler.ITEM, (stack, ctx) -> new WateringCanItem.FluidHandler(stack),
                 EItems.WOODEN_WATERING_CAN,
                 EItems.STONE_WATERING_CAN,

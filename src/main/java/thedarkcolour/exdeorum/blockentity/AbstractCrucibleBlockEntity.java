@@ -21,7 +21,7 @@ package thedarkcolour.exdeorum.blockentity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -119,7 +119,7 @@ public abstract class AbstractCrucibleBlockEntity extends ETankBlockEntity {
     }
 
     @Override
-    public void writeVisualData(FriendlyByteBuf buffer) {
+    public void writeVisualData(RegistryFriendlyByteBuf buffer) {
         buffer.writeId(BuiltInRegistries.FLUID, this.tank.getFluid().getFluid());
         buffer.writeVarInt(this.tank.getFluidAmount());
         buffer.writeId(BuiltInRegistries.BLOCK, this.lastMelted != null ? this.lastMelted : Blocks.AIR);
@@ -127,7 +127,7 @@ public abstract class AbstractCrucibleBlockEntity extends ETankBlockEntity {
     }
 
     @Override
-    public void readVisualData(FriendlyByteBuf buffer) {
+    public void readVisualData(RegistryFriendlyByteBuf buffer) {
         Fluid fluid = buffer.readById(BuiltInRegistries.FLUID);
         if (fluid == null) {
             this.tank.setFluid(FluidStack.EMPTY);

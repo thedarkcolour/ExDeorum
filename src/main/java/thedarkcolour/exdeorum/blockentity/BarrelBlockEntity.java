@@ -19,9 +19,11 @@
 package thedarkcolour.exdeorum.blockentity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
@@ -30,10 +32,9 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BowlFoodItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
@@ -66,6 +67,8 @@ import thedarkcolour.exdeorum.recipe.barrel.FluidTransformationRecipe;
 import thedarkcolour.exdeorum.registry.EBlockEntities;
 import thedarkcolour.exdeorum.registry.ESounds;
 
+import java.util.Objects;
+
 public class BarrelBlockEntity extends ETankBlockEntity {
     private static final int MOSS_SPREAD_RANGE = 2;
     private static final int MAX_CAPACITY = 1000;
@@ -91,11 +94,11 @@ public class BarrelBlockEntity extends ETankBlockEntity {
     }
 
     @Override
-    public void saveAdditional(CompoundTag nbt) {
-        super.saveAdditional(nbt);
+    public void saveAdditional(CompoundTag nbt, HolderLookup.Provider lookup) {
+        super.saveAdditional(nbt, lookup);
 
-        nbt.put("item", this.item.serializeNBT());
-        nbt.put("tank", this.tank.writeToNBT(new CompoundTag()));
+        nbt.put("item", this.item.serializeNBT(lookup));
+        nbt.put("tank", this.tank.writeToNBT(lookup, new CompoundTag()));
         nbt.putShort("compost", this.compost);
         nbt.putFloat("progress", this.progress);
         nbt.putShort("r", this.r);
@@ -104,11 +107,11 @@ public class BarrelBlockEntity extends ETankBlockEntity {
     }
 
     @Override
-    public void load(CompoundTag nbt) {
-        super.load(nbt);
+    public void loadAdditional(CompoundTag nbt, HolderLookup.Provider lookup) {
+        super.loadAdditional(nbt, lookup);
 
-        this.item.deserializeNBT(nbt.getCompound("item"));
-        this.tank.readFromNBT(nbt.getCompound("tank"));
+        this.item.deserializeNBT(lookup, nbt.getCompound("item"));
+        this.tank.readFromNBT(lookup, nbt.getCompound("tank"));
         this.compost = nbt.getShort("compost");
         this.progress = nbt.getFloat("progress");
         this.r = nbt.getShort("r");
@@ -119,9 +122,9 @@ public class BarrelBlockEntity extends ETankBlockEntity {
     }
 
     @Override
-    public void writeVisualData(FriendlyByteBuf buffer) {
-        buffer.writeItem(this.item.getStackInSlot(0));
-        buffer.writeFluidStack(this.tank.getFluid());
+    public void writeVisualData(RegistryFriendlyByteBuf buffer) {
+        ItemStack.STREAM_CODEC.encode(buffer, this.item.getStackInSlot(0));
+        FluidStack.STREAM_CODEC.encode(buffer, this.tank.getFluid());
         buffer.writeShort(this.compost);
         buffer.writeFloat(this.progress);
         buffer.writeShort(this.r);
@@ -130,9 +133,9 @@ public class BarrelBlockEntity extends ETankBlockEntity {
     }
 
     @Override
-    public void readVisualData(FriendlyByteBuf buffer) {
-        this.item.setStackInSlot(0, buffer.readItem());
-        this.tank.setFluid(buffer.readFluidStack());
+    public void readVisualData(RegistryFriendlyByteBuf buffer) {
+        this.item.setStackInSlot(0, ItemStack.STREAM_CODEC.decode(buffer));
+        this.tank.setFluid(FluidStack.STREAM_CODEC.decode(buffer));
         this.compost = buffer.readShort();
         this.progress = buffer.readFloat();
         this.r = buffer.readShort();
@@ -239,7 +242,7 @@ public class BarrelBlockEntity extends ETankBlockEntity {
                 if (EConfig.SERVER.allowWaterBottleTransfer.get()) {
                     var fluid = new FluidStack(Fluids.WATER, 250);
 
-                    if (playerItem.getItem() == Items.POTION && PotionUtils.getPotion(playerItem) == Potions.WATER) {
+                    if (playerItem.getItem() == Items.POTION && playerItem.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY).is(Potions.WATER)) {
                         if (this.tank.fill(fluid, IFluidHandler.FluidAction.SIMULATE) > 0) {
                             if (!player.getAbilities().instabuild) {
                                 player.setItemInHand(hand, new ItemStack(Items.GLASS_BOTTLE));
@@ -304,7 +307,8 @@ public class BarrelBlockEntity extends ETankBlockEntity {
         if (!player.getAbilities().instabuild) {
             playerItem.shrink(1);
         }
-        var bottle = PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER);
+        var bottle = new ItemStack(Items.POTION);
+        bottle.set(DataComponents.POTION_CONTENTS, new PotionContents(Potions.WATER));
         if (!player.addItem(bottle)) {
             player.drop(bottle, false);
         }
@@ -592,7 +596,8 @@ public class BarrelBlockEntity extends ETankBlockEntity {
     }
 
     private static ItemStack getRemainderItem(ItemStack stack) {
-        return (stack.getItem() instanceof BowlFoodItem || stack.getItem() == Items.SUSPICIOUS_STEW) ? new ItemStack(Items.BOWL) : stack.getCraftingRemainingItem();
+        var foodRemainder = Objects.requireNonNull(stack.get(DataComponents.FOOD)).usingConvertsTo();
+        return foodRemainder.map(ItemStack::copy).orElseGet(stack::getCraftingRemainingItem);
     }
 
     @Override

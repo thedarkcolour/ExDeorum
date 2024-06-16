@@ -19,8 +19,10 @@
 package thedarkcolour.exdeorum.loot;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
@@ -40,7 +42,7 @@ import thedarkcolour.exdeorum.recipe.crook.CrookRecipe;
 import java.util.List;
 
 public class CrookLootModifier extends LootModifier {
-    public static final Codec<CrookLootModifier> CODEC = RecordCodecBuilder.create(inst -> LootModifier.codecStart(inst).apply(inst, CrookLootModifier::new));
+    public static final MapCodec<CrookLootModifier> CODEC = RecordCodecBuilder.mapCodec(inst -> LootModifier.codecStart(inst).apply(inst, CrookLootModifier::new));
 
     protected CrookLootModifier(LootItemCondition[] conditions) {
         super(conditions);
@@ -54,8 +56,8 @@ public class CrookLootModifier extends LootModifier {
         if (state != null && stack != null) {
             var rand = context.getRandom();
 
-            if (stack.getEnchantmentLevel(Enchantments.SILK_TOUCH) == 0) {
-                var fortune = stack.getEnchantmentLevel(Enchantments.BLOCK_FORTUNE);
+            if (stack.getEnchantmentLevel(context.getLevel().holderLookup(Registries.ENCHANTMENT).getOrThrow(Enchantments.SILK_TOUCH)) == 0) {
+                var fortune = stack.getEnchantmentLevel(context.getLevel().holderLookup(Registries.ENCHANTMENT).getOrThrow(Enchantments.FORTUNE));
                 var rolls = Math.max(1, Mth.ceil(fortune / 3f));
 
                 for (CrookRecipe recipe : RecipeUtil.getCrookRecipes(state)) {
@@ -71,6 +73,7 @@ public class CrookLootModifier extends LootModifier {
                     // this must not be a crook in order to avoid recursively triggering CrookLootModifier from the re roll method
                     // copying the tag is required so that enchantments like fortune are preserved
                     var nonCrook = new ItemStack(Items.BARRIER);
+                    // todo data components
                     nonCrook.setTag(stack.getTag());
 
                     for (int i = 0; i < rolls; i++) {
@@ -98,7 +101,7 @@ public class CrookLootModifier extends LootModifier {
     }
 
     @Override
-    public Codec<? extends IGlobalLootModifier> codec() {
+    public MapCodec<? extends IGlobalLootModifier> codec() {
         return CODEC;
     }
 }

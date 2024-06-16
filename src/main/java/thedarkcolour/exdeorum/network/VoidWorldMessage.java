@@ -19,6 +19,7 @@
 package thedarkcolour.exdeorum.network;
 
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import thedarkcolour.exdeorum.ExDeorum;
@@ -28,14 +29,11 @@ import thedarkcolour.exdeorum.ExDeorum;
 public enum VoidWorldMessage implements CustomPacketPayload {
     INSTANCE;
 
-    public static final ResourceLocation ID = new ResourceLocation(ExDeorum.ID, "void_world_msg");
+    public static final StreamCodec<FriendlyByteBuf, VoidWorldMessage> STREAM_CODEC = StreamCodec.unit(INSTANCE);
+    public static final Type<VoidWorldMessage> TYPE = new Type<>(ExDeorum.loc("void_world_msg"));
 
     @Override
-    public void write(FriendlyByteBuf pBuffer) {
-    }
-
-    @Override
-    public ResourceLocation id() {
-        return ID;
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 }

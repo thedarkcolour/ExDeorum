@@ -18,12 +18,11 @@
 
 package thedarkcolour.exdeorum.recipe;
 
-import net.minecraft.core.NonNullList;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.world.Container;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.level.Level;
 
 /**
@@ -32,7 +31,7 @@ import net.minecraft.world.level.Level;
  * Has one ingredient by default and just tests off of that. Only the 1st slot
  * of any container will be checked, so only one slot should be present.
  */
-public abstract class SingleIngredientRecipe implements Recipe<Container> {
+public abstract class SingleIngredientRecipe implements Recipe<RecipeInput> {
     public final Ingredient ingredient;
     public final boolean dependsOnNbt;
 
@@ -46,12 +45,12 @@ public abstract class SingleIngredientRecipe implements Recipe<Container> {
     }
 
     @Override
-    public boolean matches(Container inventory, Level level) {
+    public boolean matches(RecipeInput inventory, Level level) {
         return this.ingredient.test(inventory.getItem(0));
     }
 
     @Override
-    public ItemStack assemble(Container pContainer, RegistryAccess pRegistryAccess) {
+    public ItemStack assemble(RecipeInput pContainer, HolderLookup.Provider pRegistryAccess) {
         return ItemStack.EMPTY;
     }
 
@@ -61,16 +60,7 @@ public abstract class SingleIngredientRecipe implements Recipe<Container> {
     }
 
     @Override
-    public ItemStack getResultItem(RegistryAccess access) {
+    public ItemStack getResultItem(HolderLookup.Provider access) {
         return ItemStack.EMPTY;
-    }
-
-    /**
-     * @deprecated Only used in Vanilla recipe books, and my blocks do not use the recipe book!
-     */
-    @Deprecated
-    @Override
-    public NonNullList<Ingredient> getIngredients() {
-        return NonNullList.create();
     }
 }

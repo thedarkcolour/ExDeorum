@@ -19,6 +19,7 @@
 package thedarkcolour.exdeorum.item;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.InteractionHand;
@@ -54,17 +55,15 @@ public class CrookItem extends Item {
     @Override
     public boolean mineBlock(ItemStack stack, Level level, BlockState state, BlockPos pos, LivingEntity living) {
         if (!level.isClientSide && state.getDestroySpeed(level, pos) != 0.0F) {
-            stack.hurtAndBreak(1, living, (p_40992_) -> {
-                p_40992_.broadcastBreakEvent(EquipmentSlot.MAINHAND);
-            });
+            stack.hurtAndBreak(1, living, EquipmentSlot.MAINHAND);
         }
 
         return true;
     }
 
     @Override
-    public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-        return enchantment == Enchantments.BLOCK_FORTUNE || enchantment == Enchantments.UNBREAKING || enchantment == Enchantments.BLOCK_EFFICIENCY;
+    public boolean canApplyAtEnchantingTable(ItemStack stack, ResourceKey<Enchantment> enchantment) {
+        return enchantment == Enchantments.FORTUNE || enchantment == Enchantments.UNBREAKING || enchantment == Enchantments.BLOCK_EFFICIENCY;
     }
 
     @Override

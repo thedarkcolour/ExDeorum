@@ -21,7 +21,7 @@ package thedarkcolour.exdeorum.blockentity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -31,7 +31,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import thedarkcolour.exdeorum.network.VisualUpdateTracker;
-import thedarkcolour.exdeorum.registry.EBlockEntities;
 
 import javax.annotation.Nullable;
 
@@ -70,11 +69,11 @@ public abstract class EBlockEntity extends BlockEntity {
         return InteractionResult.PASS;
     }
 
-    public void writeVisualData(FriendlyByteBuf buffer) {
+    public void writeVisualData(RegistryFriendlyByteBuf buffer) {
 
     }
 
-    public void readVisualData(FriendlyByteBuf buffer) {
+    public void readVisualData(RegistryFriendlyByteBuf buffer) {
 
     }
 

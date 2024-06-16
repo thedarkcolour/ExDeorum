@@ -18,10 +18,12 @@
 
 package thedarkcolour.exdeorum.compat.jade;
 
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.phys.Vec2;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IBlockComponentProvider;
@@ -29,6 +31,7 @@ import snownee.jade.api.ITooltip;
 import snownee.jade.api.config.IPluginConfig;
 import snownee.jade.api.ui.IElementHelper;
 import thedarkcolour.exdeorum.blockentity.logic.SieveLogic;
+import thedarkcolour.exdeorum.compat.CompatUtil;
 
 enum SieveComponentProvider implements IBlockComponentProvider {
     INSTANCE;
@@ -46,14 +49,8 @@ enum SieveComponentProvider implements IBlockComponentProvider {
                 var element = IElementHelper.get().item(mesh);
                 tooltip.add(element);
                 tooltip.append(IElementHelper.get().text(Component.translatable(mesh.getDescriptionId())).translate(new Vec2(2f, 6f)));
-                if (mesh.isEnchanted()) {
-                    var list = new ObjectArrayList<Component>();
-                    ItemStack.appendEnchantmentNames(list, mesh.getEnchantmentTags());
 
-                    for (var component : list) {
-                        tooltip.add(component);
-                    }
-                }
+                CompatUtil.addEnchantmentsTooltip(mesh, accessor.getLevel(), tooltip::add);
             }
         }
     }

@@ -38,9 +38,9 @@ import java.util.List;
 public class EItems {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(ExDeorum.ID);
 
-    // Silk Worm (todo rename to "silkworm" in 1.21)
-    public static final DeferredItem<SilkWormItem> SILK_WORM = ITEMS.register("silk_worm", () -> new SilkWormItem(props()));
-    public static final DeferredItem<Item> COOKED_SILK_WORM = ITEMS.register("cooked_silk_worm", () -> new CookedSilkWormItem(props().food(new FoodProperties.Builder().nutrition(2).saturationMod(0.6f).build())));
+    // Silk Worm
+    public static final DeferredItem<SilkwormItem> SILKWORM = ITEMS.register("silkworm", () -> new SilkwormItem(props()));
+    public static final DeferredItem<Item> COOKED_SILKWORM = ITEMS.register("cooked_silkworm", () -> new CookedSilkwormItem(props().food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.6f).build())));
 
     // Crooks
     public static final DeferredItem<Item> CROOK = ITEMS.register("crook", () -> new CrookItem(props().durability(128), 2.0f));
@@ -130,7 +130,7 @@ public class EItems {
     public static final DeferredItem<Item> PORCELAIN_WITCH_WATER_BUCKET = ITEMS.register("porcelain_witch_water_bucket", () -> new PorcelainBucket(EFluids.WITCH_WATER, props().craftRemainder(PORCELAIN_BUCKET.get()).stacksTo(1)));
 
     // Fluids
-    public static final DeferredItem<Item> WITCH_WATER_BUCKET = ITEMS.register("witch_water_bucket", () -> new WitchWaterBucketItem(props().craftRemainder(Items.BUCKET).stacksTo(1)));
+    public static final DeferredItem<Item> WITCH_WATER_BUCKET = ITEMS.register("witch_water_bucket", () -> new BucketItem(EFluids.WITCH_WATER.get(), props().craftRemainder(Items.BUCKET).stacksTo(1)));
 
     public static DeferredItem<Item> registerSimpleItem(String name) {
         return ITEMS.register(name, () -> new Item(props()));
@@ -207,8 +207,8 @@ public class EItems {
         output.accept(RANDOM_ARMOR_TRIM.get());
         output.accept(RANDOM_POTTERY_SHERD.get());
 
-        output.accept(SILK_WORM.get());
-        output.accept(COOKED_SILK_WORM.get());
+        output.accept(SILKWORM.get());
+        output.accept(COOKED_SILKWORM.get());
         output.accept(CROOK.get());
         output.accept(BONE_CROOK.get());
         var wateringCans = List.of(WOODEN_WATERING_CAN, STONE_WATERING_CAN, IRON_WATERING_CAN, GOLDEN_WATERING_CAN, DIAMOND_WATERING_CAN, NETHERITE_WATERING_CAN);

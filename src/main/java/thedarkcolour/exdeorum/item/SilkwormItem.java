@@ -30,8 +30,8 @@ import thedarkcolour.exdeorum.blockentity.InfestedLeavesBlockEntity;
 import thedarkcolour.exdeorum.registry.EBlocks;
 import thedarkcolour.exdeorum.registry.ESounds;
 
-public class SilkWormItem extends Item {
-    public SilkWormItem(Item.Properties properties) {
+public class SilkwormItem extends Item {
+    public SilkwormItem(Item.Properties properties) {
         super(properties);
     }
 

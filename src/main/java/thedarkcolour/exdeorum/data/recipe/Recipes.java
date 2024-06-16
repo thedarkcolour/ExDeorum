@@ -507,7 +507,7 @@ public class Recipes {
         recipes.smelting(ingredient(EItems.UNFIRED_PORCELAIN_CRUCIBLE), DefaultMaterials.PORCELAIN_CRUCIBLE.getItem(), 0.1f);
         recipes.smelting(ingredient(EItems.UNFIRED_PORCELAIN_BUCKET), EItems.PORCELAIN_BUCKET.get(), 0.1f);
 
-        recipes.foodCooking(EItems.SILK_WORM.get(), EItems.COOKED_SILK_WORM.get(), 0.1f);
+        recipes.foodCooking(EItems.SILKWORM.get(), EItems.COOKED_SILKWORM.get(), 0.1f);
     }
     private static void crucibleRecipes(RecipeOutput writer) {
         lavaCrucible(writer, "cobblestone", ingredient(Tags.Items.COBBLESTONE), 250);
@@ -611,10 +611,10 @@ public class Recipes {
     }
 
     private static void crookRecipes(RecipeOutput writer) {
-        crookRecipe(writer, "silkworm", BlockPredicate.blockTag(BlockTags.LEAVES), EItems.SILK_WORM.get(), 0.01f);
+        crookRecipe(writer, "silkworm", BlockPredicate.blockTag(BlockTags.LEAVES), EItems.SILKWORM.get(), 0.01f);
         @SuppressWarnings("OptionalGetWithoutIsPresent")
         var fullyInfestedLeaves = BlockPredicate.blockState(EBlocks.INFESTED_LEAVES.get(), StatePropertiesPredicate.Builder.properties().hasProperty(InfestedLeavesBlock.FULLY_INFESTED, true).build().get());
-        crookRecipe(writer, "silkworm_bonus", fullyInfestedLeaves, EItems.SILK_WORM.get(), 0.01f);
+        crookRecipe(writer, "silkworm_bonus", fullyInfestedLeaves, EItems.SILKWORM.get(), 0.01f);
         crookRecipe(writer, "string_roll_1", fullyInfestedLeaves, Items.STRING, 0.4f);
         crookRecipe(writer, "string_roll_2", fullyInfestedLeaves, Items.STRING, 0.1f);
     }
@@ -704,7 +704,7 @@ public class Recipes {
         barrelCompost(writer, "egg", ingredient(Items.EGG), 100);
         // foods
         barrelCompost(writer, "melon_slice", ingredient(Items.MELON_SLICE), 40);
-        barrelCompost(writer, "silk_worms", ingredient(EItems.SILK_WORM.get(), EItems.COOKED_SILK_WORM.get()), 40);
+        barrelCompost(writer, "silk_worms", ingredient(EItems.SILKWORM.get(), EItems.COOKED_SILKWORM.get()), 40);
         barrelCompost(writer, "apple", ingredient(Items.APPLE), 100);
         barrelCompost(writer, "cookie", ingredient(Items.COOKIE), 100);
         barrelCompost(writer, "pumpkin_pie", ingredient(Items.PUMPKIN_PIE), 150);

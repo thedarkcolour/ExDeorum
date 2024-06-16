@@ -18,6 +18,7 @@
 
 package thedarkcolour.exdeorum.data;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
@@ -39,8 +40,8 @@ import java.util.Set;
 class BlockLoot extends BlockLootSubProvider {
     private final List<Block> added = new ArrayList<>();
 
-    protected BlockLoot() {
-        super(Set.of(), FeatureFlags.DEFAULT_FLAGS);
+    protected BlockLoot(HolderLookup.Provider provider) {
+        super(Set.of(), FeatureFlags.DEFAULT_FLAGS, provider);
     }
 
     @Override

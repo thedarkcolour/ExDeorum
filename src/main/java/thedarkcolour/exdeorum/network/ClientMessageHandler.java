@@ -35,7 +35,7 @@ public class ClientMessageHandler {
         ctx.workHandler().execute(ClientHandler::disableVoidFogRendering);
     }
 
-    static void handleVisualUpdate(VisualUpdateMessage msg, PlayPayloadContext ctx) {
+    static void handleVisualUpdate(VisualUpdateMessage msg, IPayloadContext ctx) {
         ctx.workHandler().execute(() -> {
             ClientLevel level = Minecraft.getInstance().level;
             if (level != null && level.getBlockEntity(msg.pos) instanceof EBlockEntity blockEntity) {
@@ -52,7 +52,7 @@ public class ClientMessageHandler {
         });
     }
 
-    public static void handleMenuProperty(MenuPropertyMessage msg, PlayPayloadContext ctx) {
+    public static void handleMenuProperty(MenuPropertyMessage msg, IPayloadContext ctx) {
         ctx.workHandler().execute(() -> {
             Player player = Minecraft.getInstance().player;
 

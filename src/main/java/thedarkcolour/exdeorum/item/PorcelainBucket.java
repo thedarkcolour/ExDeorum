@@ -91,8 +91,6 @@ public class PorcelainBucket extends Item {
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand pHand) {
         var stack = player.getItemInHand(pHand);
         var hitResult = getPlayerPOVHitResult(level, player, this.fluid.get() == Fluids.EMPTY ? ClipContext.Fluid.SOURCE_ONLY : ClipContext.Fluid.NONE);
-        var ret = EventHooks.onBucketUse(player, level, stack, hitResult);
-        if (ret != null) return ret;
         if (hitResult.getType() == HitResult.Type.MISS) {
             return InteractionResultHolder.pass(stack);
         } else if (hitResult.getType() != HitResult.Type.BLOCK) {

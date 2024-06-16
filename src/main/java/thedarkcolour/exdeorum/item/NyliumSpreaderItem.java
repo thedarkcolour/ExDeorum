@@ -31,6 +31,6 @@ public class NyliumSpreaderItem extends GrassSpreaderItem {
 
     @Override
     public boolean canSpread(BlockState state) {
-        return state.is(Tags.Blocks.NETHERRACK) || state.is(BlockTags.NYLIUM);
+        return state.is(Tags.Blocks.NETHERRACKS) || state.is(BlockTags.NYLIUM);
     }
 }

@@ -19,52 +19,51 @@
 package thedarkcolour.exdeorum.network;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.PacketDistributor;
 import thedarkcolour.exdeorum.blockentity.EBlockEntity;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.WeakHashMap;
 
 // Syncs certain block entity data to the client for visual purposes
 // Since some block entities might change their data multiple times a tick, this class keeps track of
 // whether a block entity has updated and then pushes out the changes once at the end of each tick.
 public class VisualUpdateTracker {
-    // WeakHashMap is faster than Guava mapmaker because it isn't thread safe
     // Use sets to avoid duplicate updates
-    private static final Map<LevelChunk, Set<BlockPos>> UPDATES = new WeakHashMap<>();
+    private static final Map<ResourceKey<Level>, Map<ChunkPos, Set<BlockPos>>> UPDATES = new HashMap<>();
 
     public static void sendVisualUpdate(EBlockEntity blockEntity) {
         var level = blockEntity.getLevel();
 
         if (level != null && !level.isClientSide) {
-            var dimension = level.getChunkAt(blockEntity.getBlockPos());
-            Set<BlockPos> updatesList;
-            if (!UPDATES.containsKey(dimension)) {
-                UPDATES.put(dimension, updatesList = new HashSet<>());
-            } else {
-                updatesList = UPDATES.get(dimension);
-            }
-            updatesList.add(blockEntity.getBlockPos());
+            Map<ChunkPos, Set<BlockPos>> chunkUpdates = UPDATES.computeIfAbsent(level.dimension(), key -> new HashMap<>());
+            chunkUpdates.computeIfAbsent(new ChunkPos(blockEntity.getBlockPos()), key -> new HashSet<>()).add(blockEntity.getBlockPos());
         }
     }
 
-    public static void syncVisualUpdates() {
-        for (var entry : UPDATES.entrySet()) {
-            var pendingUpdates = entry.getValue();
+    public static void syncVisualUpdates(MinecraftServer server) {
+        for (var levelUpdates : UPDATES.entrySet()) {
+            var level = server.getLevel(levelUpdates.getKey());
 
-            for (var updatePos : pendingUpdates) {
-                var chunk = entry.getKey();
+            if (level != null) {
+                var pendingUpdates = levelUpdates.getValue();
 
-                if (chunk.getBlockEntity(updatePos) instanceof EBlockEntity blockEntity) {
-                    // packet uses strong reference
-                    PacketDistributor.TRACKING_CHUNK.with(chunk).send(new VisualUpdateMessage(updatePos, blockEntity, blockEntity.getType(), null));
+                for (var chunkUpdates : pendingUpdates.entrySet()) {
+                    var chunkPos = chunkUpdates.getKey();
+
+                    for (var updatePos : chunkUpdates.getValue()) {
+                        if (level.getBlockEntity(updatePos) instanceof EBlockEntity blockEntity) {
+                            PacketDistributor.sendToPlayersTrackingChunk(level, chunkPos, new VisualUpdateMessage(updatePos, blockEntity, blockEntity.getType(), null));
+                        }
+                    }
                 }
             }
-
-            pendingUpdates.clear();
         }
     }
 }

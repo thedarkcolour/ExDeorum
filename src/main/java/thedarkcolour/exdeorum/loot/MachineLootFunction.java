@@ -18,7 +18,7 @@
 
 package thedarkcolour.exdeorum.loot;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -32,7 +32,7 @@ import thedarkcolour.exdeorum.registry.ELootFunctions;
 import java.util.List;
 
 public class MachineLootFunction extends LootItemConditionalFunction {
-    public static final Codec<MachineLootFunction> CODEC = RecordCodecBuilder.create(instance -> commonFields(instance).apply(instance, MachineLootFunction::new));
+    public static final MapCodec<MachineLootFunction> CODEC = RecordCodecBuilder.mapCodec(instance -> commonFields(instance).apply(instance, MachineLootFunction::new));
 
     protected MachineLootFunction(List<LootItemCondition> conditions) {
         super(conditions);
@@ -42,7 +42,7 @@ public class MachineLootFunction extends LootItemConditionalFunction {
     protected ItemStack run(ItemStack stack, LootContext ctx) {
         BlockEntity blockEntity = ctx.getParamOrNull(LootContextParams.BLOCK_ENTITY);
         if (blockEntity != null) {
-            blockEntity.saveToItem(stack);
+            blockEntity.saveToItem(stack, ctx.getLevel().registryAccess());
         }
 
         return stack;

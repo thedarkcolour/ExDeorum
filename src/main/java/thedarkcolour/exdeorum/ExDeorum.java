@@ -18,10 +18,10 @@
 
 package thedarkcolour.exdeorum;
 
+import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModList;
-import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.loading.FMLEnvironment;
@@ -64,9 +64,10 @@ public class ExDeorum {
             ClientHandler.register(modBus);
         }
         // Config init
-        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, EConfig.SERVER_SPEC);
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, EConfig.COMMON_SPEC);
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, EConfig.CLIENT_SPEC);
+        var container = ModList.get().getModContainerById(ID).get();
+        container.registerConfig(ModConfig.Type.SERVER, EConfig.SERVER_SPEC);
+        container.registerConfig(ModConfig.Type.COMMON, EConfig.COMMON_SPEC);
+        container.registerConfig(ModConfig.Type.CLIENT, EConfig.CLIENT_SPEC);
     }
 
     private static void createRegistries(IEventBus modBus) {
@@ -86,5 +87,9 @@ public class ExDeorum {
         ENumberProviders.NUMBER_PROVIDERS.register(modBus);
         DefaultMaterials.registerMaterials();
         ECompressedBlocks.register();
+    }
+
+    public static ResourceLocation loc(String menuProperty) {
+        return ResourceLocation.fromNamespaceAndPath(ID, menuProperty);
     }
 }

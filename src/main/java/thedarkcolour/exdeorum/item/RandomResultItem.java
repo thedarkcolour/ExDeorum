@@ -104,7 +104,7 @@ public abstract class RandomResultItem extends Item {
         }
 
         @Override
-        public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> tooltip, TooltipFlag pIsAdvanced) {
+        public void appendHoverText(ItemStack pStack, TooltipContext pLevel, List<Component> tooltip, TooltipFlag pIsAdvanced) {
             tooltip.add(Component.translatable(TranslationKeys.RANDOM_TRIM_DOES_NOT_CONTAIN_UPGRADE).withStyle(ChatFormatting.DARK_GRAY));
         }
     }

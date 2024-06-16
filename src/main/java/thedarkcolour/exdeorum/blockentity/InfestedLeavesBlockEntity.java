@@ -23,7 +23,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
@@ -61,12 +61,12 @@ public class InfestedLeavesBlockEntity extends EBlockEntity {
     }
 
     @Override
-    public void writeVisualData(FriendlyByteBuf buffer) {
+    public void writeVisualData(RegistryFriendlyByteBuf buffer) {
         buffer.writeShort(this.progress);
     }
 
     @Override
-    public void readVisualData(FriendlyByteBuf buffer) {
+    public void readVisualData(RegistryFriendlyByteBuf buffer) {
         buffer.readShort();
     }
 

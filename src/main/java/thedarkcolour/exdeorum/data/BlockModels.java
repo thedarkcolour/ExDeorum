@@ -265,7 +265,7 @@ class BlockModels {
 
     private static ResourceLocation texture(Block block, String prefix, String suffix) {
         var key = Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(block));
-        return new ResourceLocation(key.getNamespace(), "block/" + prefix + key.getPath() + suffix);
+        return ResourceLocation.fromNamespaceAndPath(key.getNamespace(), "block/" + prefix + key.getPath() + suffix);
     }
 
     public static void barrel(MKBlockModelProvider models, Block block, Block appearance) {
