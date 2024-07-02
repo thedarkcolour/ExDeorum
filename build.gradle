@@ -135,6 +135,9 @@ dependencies {
     // ModKit DEV ONLY
     implementation('com.github.thedarkcolour:Modkit:e7c1881681')
 
+    // Core mod
+    jarJar(project(':coremod'))
+
     // Oculus + Embeddium OPTIONAL
     compileOnly('maven.modrinth:oculus:1.20.1-1.6.9')
     compileOnly('maven.modrinth:embeddium:0.3.9+mc1.20.4')
