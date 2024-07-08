@@ -19,18 +19,12 @@
 package thedarkcolour.exdeorum.recipe;
 
 import com.google.common.base.Preconditions;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectImmutableList;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.util.RandomSource;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -105,40 +99,6 @@ public class WeightedList<T> {
             totalWeight += weights[i] = buffer.readVarInt();
         }
         return new WeightedList<>(totalWeight, values, weights);
-    }
-
-    public JsonArray toJson(Function<T, JsonElement> serializer) {
-        JsonArray array = new JsonArray();
-        for (int i = 0; i < this.values.length; i++) {
-            @SuppressWarnings("unchecked")
-            var value = serializer.apply((T) this.values[i]);
-            var weight = this.weights[i];
-            var json = new JsonObject();
-            json.add("value", value);
-            json.addProperty("weight", weight);
-            array.add(json);
-        }
-        return array;
-    }
-
-    @Nullable
-    public static <T> WeightedList<T> fromJson(JsonArray array, Function<JsonElement, @Nullable T> deserializer) {
-        WeightedList.Builder<T> list = WeightedList.builder();
-
-        for (var element : array) {
-            if (element instanceof JsonObject obj) {
-                int weight = GsonHelper.getAsInt(obj, "weight");
-                var value = deserializer.apply(obj.get("value"));
-                if (value == null) {
-                    return null;
-                } else {
-                    list.add(weight, value);
-                }
-            } else {
-                throw new JsonSyntaxException("Invalid weighted list entry");
-            }
-        }
-        return list.build();
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})

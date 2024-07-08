@@ -40,7 +40,7 @@ public abstract class SingleIngredientRecipe implements Recipe<RecipeInput> {
         this.dependsOnNbt = !ingredient.isSimple();
     }
 
-    public Ingredient getIngredient() {
+    public Ingredient ingredient() {
         return this.ingredient;
     }
 

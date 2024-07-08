@@ -45,14 +45,14 @@ public class EBiomeTags {
         addTreeTag("dark_oak_tree_biomes", TreeFeatures.DARK_OAK.location());
         addTreeTag("mangrove_tree_biomes", TreeFeatures.MANGROVE.location());
         // Bop tags
-        addTreeTag("flowering_oak_tree_biomes", new ResourceLocation(ModIds.BIOMES_O_PLENTY, "flowering_oak_tree_bees"));
-        addTreeTag("mahogany_tree_biomes", new ResourceLocation(ModIds.BIOMES_O_PLENTY, "mahogany_tree"));
-        addTreeTag("jacaranda_tree_biomes", new ResourceLocation(ModIds.BIOMES_O_PLENTY, "jacaranda_tree_bees"));
-        addTreeTag("palm_tree_biomes", new ResourceLocation(ModIds.BIOMES_O_PLENTY, "palm_tree"));
-        addTreeTag("willow_tree_biomes", new ResourceLocation(ModIds.BIOMES_O_PLENTY, "willow_tree"));
-        addTreeTag("dead_tree_biomes", new ResourceLocation(ModIds.BIOMES_O_PLENTY, "dead_tree_wasteland"));
-        addTreeTag("magic_tree_biomes", new ResourceLocation(ModIds.BIOMES_O_PLENTY, "magic_tree"));
-        addTreeTag("umbran_tree_biomes", new ResourceLocation(ModIds.BIOMES_O_PLENTY, "umbran_tree"));
+        addTreeTag("flowering_oak_tree_biomes", ResourceLocation.fromNamespaceAndPath(ModIds.BIOMES_O_PLENTY, "flowering_oak_tree_bees"));
+        addTreeTag("mahogany_tree_biomes", ResourceLocation.fromNamespaceAndPath(ModIds.BIOMES_O_PLENTY, "mahogany_tree"));
+        addTreeTag("jacaranda_tree_biomes", ResourceLocation.fromNamespaceAndPath(ModIds.BIOMES_O_PLENTY, "jacaranda_tree_bees"));
+        addTreeTag("palm_tree_biomes", ResourceLocation.fromNamespaceAndPath(ModIds.BIOMES_O_PLENTY, "palm_tree"));
+        addTreeTag("willow_tree_biomes", ResourceLocation.fromNamespaceAndPath(ModIds.BIOMES_O_PLENTY, "willow_tree"));
+        addTreeTag("dead_tree_biomes", ResourceLocation.fromNamespaceAndPath(ModIds.BIOMES_O_PLENTY, "dead_tree_wasteland"));
+        addTreeTag("magic_tree_biomes", ResourceLocation.fromNamespaceAndPath(ModIds.BIOMES_O_PLENTY, "magic_tree"));
+        addTreeTag("umbran_tree_biomes", ResourceLocation.fromNamespaceAndPath(ModIds.BIOMES_O_PLENTY, "umbran_tree"));
     }
 
     private static void addTreeTag(String tagName, ResourceLocation id) {
@@ -63,6 +63,6 @@ public class EBiomeTags {
     }
 
     private static TagKey<Biome> tag(String name) {
-        return TagKey.create(Registries.BIOME, new ResourceLocation(ExDeorum.ID, name));
+        return TagKey.create(Registries.BIOME, ExDeorum.loc(name));
     }
 }

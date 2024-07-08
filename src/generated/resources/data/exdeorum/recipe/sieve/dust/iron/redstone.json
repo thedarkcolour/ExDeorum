@@ -1,0 +1,18 @@
+{
+  "type": "exdeorum:sieve",
+  "ingredient": {
+    "item": "exdeorum:dust"
+  },
+  "mesh": {
+    "item": "exdeorum:iron_mesh"
+  },
+  "result": {
+    "count": 1,
+    "id": "minecraft:redstone"
+  },
+  "result_amount": {
+    "type": "minecraft:binomial",
+    "n": 1.0,
+    "p": 0.1
+  }
+}

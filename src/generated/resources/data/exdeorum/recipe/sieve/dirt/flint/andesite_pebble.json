@@ -1,0 +1,18 @@
+{
+  "type": "exdeorum:sieve",
+  "ingredient": {
+    "item": "minecraft:dirt"
+  },
+  "mesh": {
+    "item": "exdeorum:flint_mesh"
+  },
+  "result": {
+    "count": 1,
+    "id": "exdeorum:andesite_pebble"
+  },
+  "result_amount": {
+    "type": "minecraft:binomial",
+    "n": 7.0,
+    "p": 0.4
+  }
+}

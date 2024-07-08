@@ -57,6 +57,7 @@ public class BarrelBlock extends ETankBlock {
         return type == EBlockEntities.BARREL.get() ? (BlockEntityTicker<T>) new BarrelBlockEntity.Ticker() : null;
     }
 
+    // todo fix annoying behaviour when placing blocks on inner sides of barrel
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return SHAPE;

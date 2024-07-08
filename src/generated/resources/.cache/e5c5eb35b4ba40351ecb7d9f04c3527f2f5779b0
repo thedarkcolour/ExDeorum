@@ -1,6 +1,6 @@
-// 1.20.4	2024-03-17T23:56:02.9520966	Advancements
-bab412c67f5eadfe8c4b8f52e582fa7b5be4e873 data/exdeorum/advancements/core/barrel.json
-ec0375c4b5f5c62e68b643d55f232d9b53ae77c4 data/exdeorum/advancements/core/crook.json
-120a9ed6a2f8f910c61b8143e78519bcee6f8d9b data/exdeorum/advancements/core/root.json
-62623cb748e4fdfc71539b78f1b885ea8796d857 data/exdeorum/advancements/core/silk_worm.json
-bbaf4db35002943012933386ca2b1bc6ff2e2e37 data/exdeorum/advancements/core/string_mesh.json
+// 1.21	2024-07-07T13:35:07.2115571	Advancements
+dd4ecee3e84646521f1b79795d467d69cf9fd5ec data/exdeorum/advancement/core/barrel.json
+33171a87fed6c1d520a8d3addf1799451d6ee882 data/exdeorum/advancement/core/crook.json
+82e6fb7ca651de853a24ce4e7b896460490872bd data/exdeorum/advancement/core/root.json
+1ddfa568c55783cb4c8fdd5966d5f0ae4f519a8f data/exdeorum/advancement/core/silk_worm.json
+65c806cf5394693366c592d2a06dfd6a1f2a2c27 data/exdeorum/advancement/core/string_mesh.json

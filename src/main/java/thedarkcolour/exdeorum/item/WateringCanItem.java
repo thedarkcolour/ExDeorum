@@ -33,6 +33,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -51,14 +52,13 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
-import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidHandlerItemStack;
-import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.blockentity.BarrelBlockEntity;
 import thedarkcolour.exdeorum.data.TranslationKeys;
+import thedarkcolour.exdeorum.registry.EDataComponents;
 import thedarkcolour.exdeorum.registry.ESounds;
 import thedarkcolour.exdeorum.tag.EBlockTags;
 
@@ -107,7 +107,7 @@ public class WateringCanItem extends Item {
             var fluidHandler = stack.getCapability(Capabilities.FluidHandler.ITEM);
             return fluidHandler == null || fluidHandler.getFluidInTank(0).getAmount() < this.capacity;
         } else {
-            return false;
+            return true;
         }
     }
 
@@ -127,7 +127,7 @@ public class WateringCanItem extends Item {
     }
 
     @Override
-    public int getUseDuration(ItemStack stack) {
+    public int getUseDuration(ItemStack stack, LivingEntity entity) {
         return 72000;
     }
 
@@ -137,7 +137,7 @@ public class WateringCanItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level pLevel, List<Component> tooltip, TooltipFlag pIsAdvanced) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag pIsAdvanced) {
         var fluidHandler = stack.getCapability(Capabilities.FluidHandler.ITEM);
         if (fluidHandler != null) {
             // use the block name which is guaranteed to have a vanilla translation
@@ -193,7 +193,7 @@ public class WateringCanItem extends Item {
             if (fluidHandler != null) {
                 if (!fluidHandler.getFluidInTank(0).isEmpty()) {
                     // do watering can
-                    var reachDist = living instanceof Player player ? player.getBlockReach() : living.getAttributeValue(NeoForgeMod.BLOCK_REACH.value());
+                    var reachDist = living.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE);
                     var hit = living.pick(reachDist, 0, true);
 
                     if (hit instanceof BlockHitResult blockHit && blockHit.getType() == HitResult.Type.BLOCK) {
@@ -312,7 +312,7 @@ public class WateringCanItem extends Item {
 
     public static class FluidHandler extends FluidHandlerItemStack {
         public FluidHandler(ItemStack container) {
-            super(container, determineCapacityFromItem(container.getItem()));
+            super(EDataComponents.WATERING_CAN, container, determineCapacityFromItem(container.getItem()));
         }
 
         private static int determineCapacityFromItem(Item item) {
@@ -365,7 +365,6 @@ public class WateringCanItem extends Item {
                 if (startProgress == 1.0f && isWatering) {
                     var sin = Mth.sin(0.35f * (step - 10f));
                     poseStack.rotateAround(Axis.XP.rotationDegrees(10 * sin), 0f, 0f, -0.2f);
-                    //poseStack.translate(0, 0.2 * sin, 0);
                 }
 
                 var rotate = Mth.lerp(startProgress, 0, Mth.DEG_TO_RAD);

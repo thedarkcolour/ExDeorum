@@ -1,0 +1,16 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:tag_empty",
+        "tag": "c:ores/platinum"
+      }
+    }
+  ],
+  "type": "exdeorum:ore_chunk",
+  "ore": "c:ores/platinum",
+  "ore_chunk": {
+    "item": "exdeorum:platinum_ore_chunk"
+  }
+}

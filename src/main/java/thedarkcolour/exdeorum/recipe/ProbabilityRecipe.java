@@ -21,40 +21,39 @@ package thedarkcolour.exdeorum.recipe;
 import com.mojang.datafixers.Products;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 
 public abstract class ProbabilityRecipe extends SingleIngredientRecipe {
-    public final Item result;
+    public final ItemStack result;
     public final NumberProvider resultAmount;
 
-    public ProbabilityRecipe(Ingredient ingredient, Item result, NumberProvider resultAmount) {
+    public ProbabilityRecipe(Ingredient ingredient, ItemStack result, NumberProvider resultAmount) {
         super(ingredient);
         this.result = result;
         this.resultAmount = resultAmount;
     }
 
-    protected static <T extends ProbabilityRecipe> Products.P3<RecordCodecBuilder.Mu<T>, Ingredient, Item, NumberProvider> commonFields(RecordCodecBuilder.Instance<T> instance) {
+    protected static <T extends ProbabilityRecipe> Products.P3<RecordCodecBuilder.Mu<T>, Ingredient, ItemStack, NumberProvider> commonFields(RecordCodecBuilder.Instance<T> instance) {
         return instance.group(
                 CodecUtil.ingredientField(),
-                CodecUtil.itemField("result", ProbabilityRecipe::getResult),
-                NumberProviders.CODEC.fieldOf("result_amount").forGetter(ProbabilityRecipe::getResultAmount)
+                ItemStack.CODEC.fieldOf("result").forGetter(ProbabilityRecipe::result),
+                NumberProviders.CODEC.fieldOf("result_amount").forGetter(ProbabilityRecipe::resultAmount)
         );
     }
 
     @Override
     public ItemStack getResultItem(HolderLookup.Provider access) {
-        return new ItemStack(this.result);
-    }
-
-    public Item getResult() {
         return this.result;
     }
 
-    public NumberProvider getResultAmount() {
+    public ItemStack result() {
+        return this.result;
+    }
+
+    public NumberProvider resultAmount() {
         return this.resultAmount;
     }
 }

@@ -19,43 +19,45 @@
 package thedarkcolour.exdeorum.recipe.crucible;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.Container;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import thedarkcolour.exdeorum.recipe.BlockPredicate;
-import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.registry.ERecipeSerializers;
 import thedarkcolour.exdeorum.registry.ERecipeTypes;
 
-public record CrucibleHeatRecipe(BlockPredicate blockPredicate, int heatValue) implements Recipe<Container> {
-    public static final Codec<CrucibleHeatRecipe> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+public record CrucibleHeatRecipe(BlockPredicate blockPredicate, int heatValue) implements Recipe<RecipeInput> {
+    public static final MapCodec<CrucibleHeatRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             BlockPredicate.CODEC.fieldOf("block_predicate").forGetter(CrucibleHeatRecipe::blockPredicate),
             Codec.INT.fieldOf("heat_value").forGetter(CrucibleHeatRecipe::heatValue)
     ).apply(instance, CrucibleHeatRecipe::new));
+    public static final StreamCodec<RegistryFriendlyByteBuf, CrucibleHeatRecipe> STREAM_CODEC = StreamCodec.of(CrucibleHeatRecipe::toNetwork, CrucibleHeatRecipe::fromNetwork);
 
     @Override
-    public boolean matches(Container pContainer, Level pLevel) {
+    public boolean matches(RecipeInput input, Level level) {
         return false;
     }
 
     @Override
-    public ItemStack assemble(Container pContainer, RegistryAccess pRegistryAccess) {
+    public ItemStack assemble(RecipeInput input, HolderLookup.Provider registries) {
         return ItemStack.EMPTY;
     }
 
     @Override
-    public boolean canCraftInDimensions(int pWidth, int pHeight) {
+    public boolean canCraftInDimensions(int width, int height) {
         return false;
     }
 
     @Override
-    public ItemStack getResultItem(RegistryAccess pRegistryAccess) {
+    public ItemStack getResultItem(HolderLookup.Provider registries) {
         return ItemStack.EMPTY;
     }
 
@@ -69,23 +71,26 @@ public record CrucibleHeatRecipe(BlockPredicate blockPredicate, int heatValue) i
         return ERecipeTypes.CRUCIBLE_HEAT_SOURCE.get();
     }
 
+    public static void toNetwork(RegistryFriendlyByteBuf buffer, CrucibleHeatRecipe recipe) {
+        BlockPredicate.STREAM_CODEC.encode(buffer, recipe.blockPredicate);
+        buffer.writeVarInt(recipe.heatValue);
+    }
+
+    public static CrucibleHeatRecipe fromNetwork(RegistryFriendlyByteBuf buffer) {
+        BlockPredicate blockPredicate = BlockPredicate.STREAM_CODEC.decode(buffer);
+        int heatValue = buffer.readVarInt();
+        return new CrucibleHeatRecipe(blockPredicate, heatValue);
+    }
+
     public static class Serializer implements RecipeSerializer<CrucibleHeatRecipe> {
         @Override
-        public Codec<CrucibleHeatRecipe> codec() {
+        public MapCodec<CrucibleHeatRecipe> codec() {
             return CODEC;
         }
 
         @Override
-        public CrucibleHeatRecipe fromNetwork(FriendlyByteBuf buffer) {
-            BlockPredicate blockPredicate = RecipeUtil.readBlockPredicateNetwork(buffer);
-            int heatValue = buffer.readVarInt();
-            return new CrucibleHeatRecipe(blockPredicate, heatValue);
-        }
-
-        @Override
-        public void toNetwork(FriendlyByteBuf buffer, CrucibleHeatRecipe recipe) {
-            recipe.blockPredicate.toNetwork(buffer);
-            buffer.writeVarInt(recipe.heatValue);
+        public StreamCodec<RegistryFriendlyByteBuf, CrucibleHeatRecipe> streamCodec() {
+            return STREAM_CODEC;
         }
     }
 }

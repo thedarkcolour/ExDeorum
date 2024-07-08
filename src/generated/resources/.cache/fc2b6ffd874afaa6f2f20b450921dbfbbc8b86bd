@@ -1,4 +1,4 @@
-// 1.20.4	2024-06-12T15:10:55.3874064	ModKit Item Models for mod 'exdeorum'
+// 1.21	2024-07-07T13:35:07.1915587	ModKit Item Models for mod 'exdeorum'
 4ba3bb2c6174ac3728a4b85e34681f118ec8eb34 assets/exdeorum/models/item/acacia_barrel.json
 8ddbf3f507fc1ee45e3aa4db98d7f7d2e53adff1 assets/exdeorum/models/item/acacia_compressed_sieve.json
 c03ce41f7c071498fcbd5f5225e91dcb2f365fbb assets/exdeorum/models/item/acacia_crucible.json
@@ -61,7 +61,7 @@ a5b47bdd741d27b523a20278e5540c1ed0bbfb89 assets/exdeorum/models/item/compressed_
 1a8815784b5be8bef9fdc83a47f44fbc21e6c642 assets/exdeorum/models/item/compressed_soul_sand.json
 2cbe5baf3f3153a8397192bc03047ccf3ae38c72 assets/exdeorum/models/item/compressed_stone_hammer.json
 02d58c71a6060aeb9c632fc52b2b31ea1d1db6d1 assets/exdeorum/models/item/compressed_wooden_hammer.json
-e0a5c7f6e6ec0cd9aa99175d3bca27b88ac299d4 assets/exdeorum/models/item/cooked_silk_worm.json
+dd1bb054962e619ca695ff353b8f45d1e16bf6e3 assets/exdeorum/models/item/cooked_silkworm.json
 a24ee1ee422f8460afec77474608b988d52ea42d assets/exdeorum/models/item/copper_ore_chunk.json
 d6109df4904776aca591e7dfc8ee8da50664e1df assets/exdeorum/models/item/crimson_barrel.json
 b240f3070b3c93e54ddbf02bf2c3f6876a28a4bc assets/exdeorum/models/item/crimson_compressed_sieve.json
@@ -191,7 +191,7 @@ db1a7251bc49b8433b1e8183ce146a8c1d147165 assets/exdeorum/models/item/redwood_sie
 bef88ccb242b7c27a9c2d484344e5e3da1a52d1f assets/exdeorum/models/item/red_archwood_compressed_sieve.json
 fd049e432cadca3fc329cc94d2671731c07846d2 assets/exdeorum/models/item/red_archwood_crucible.json
 3818c896e463945cc5081644bc1ed52edbde6ebb assets/exdeorum/models/item/sculk_core.json
-52d8514e585524122e32cae1c18a838da5eb6f09 assets/exdeorum/models/item/silk_worm.json
+662da088d9eab794b455458eca8e496e08679a62 assets/exdeorum/models/item/silkworm.json
 f7ca92f0d009a188c037bf129356b6f493564853 assets/exdeorum/models/item/silver_ore_chunk.json
 356d6b050ec773e581baf325d40be4c1e8e7664c assets/exdeorum/models/item/skyroot_barrel.json
 bef1e0021a860c9b37164433b8a1d054cea26f13 assets/exdeorum/models/item/skyroot_compressed_sieve.json

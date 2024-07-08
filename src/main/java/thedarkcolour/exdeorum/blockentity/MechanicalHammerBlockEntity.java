@@ -19,6 +19,9 @@
 package thedarkcolour.exdeorum.blockentity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -26,7 +29,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.state.BlockState;
@@ -67,18 +69,18 @@ public class MechanicalHammerBlockEntity extends AbstractMachineBlockEntity<Mech
     }
 
     @Override
-    protected void saveAdditional(CompoundTag nbt) {
-        super.saveAdditional(nbt);
+    protected void saveAdditional(CompoundTag nbt, HolderLookup.Provider registries) {
+        super.saveAdditional(nbt, registries);
 
         nbt.putInt("progress", this.progress);
     }
 
     @Override
-    public void load(CompoundTag nbt) {
-        super.load(nbt);
+    public void loadAdditional(CompoundTag nbt, HolderLookup.Provider registries) {
+        super.loadAdditional(nbt, registries);
 
         this.progress = nbt.getInt("progress");
-        onHammerChanged();
+        onHammerChanged(registries);
     }
 
     @Override
@@ -128,16 +130,12 @@ public class MechanicalHammerBlockEntity extends AbstractMachineBlockEntity<Mech
         if (output.isEmpty() || output.getCount() < output.getMaxStackSize()) {
             var recipe = RecipeUtil.getHammerRecipe(input.getItem());
 
-            if (recipe != null && (output.isEmpty() || matchesStack(recipe.result, output))) {
+            if (recipe != null && (output.isEmpty() || ItemStack.isSameItemSameComponents(recipe.result, output))) {
                 return recipe;
             }
         }
 
         return null;
-    }
-
-    private static boolean matchesStack(Item item, ItemStack stack) {
-        return !stack.hasTag() && item == stack.getItem();
     }
 
     @Override
@@ -154,15 +152,15 @@ public class MechanicalHammerBlockEntity extends AbstractMachineBlockEntity<Mech
                     @SuppressWarnings("DataFlowIssue")
                     LootContext ctx = RecipeUtil.emptyLootContext((ServerLevel) this.level);
                     var resultCount = recipe.resultAmount.getInt(ctx);
-                    resultCount += HammerLootModifier.calculateFortuneBonus(this.inventory.getStackInSlot(HAMMER_SLOT), ctx.getRandom(), resultCount == 0);
+                    resultCount += HammerLootModifier.calculateFortuneBonus(this.level.registryAccess(), this.inventory.getStackInSlot(HAMMER_SLOT), ctx.getRandom(), resultCount == 0);
                     var output = this.inventory.getStackInSlot(OUTPUT_SLOT);
                     if (output.isEmpty()) {
-                        this.inventory.setStackInSlot(OUTPUT_SLOT, new ItemStack(recipe.result, resultCount));
+                        this.inventory.setStackInSlot(OUTPUT_SLOT, recipe.result.copyWithCount(resultCount));
                     } else {
                         output.setCount(Math.min(output.getMaxStackSize(), resultCount + output.getCount()));
                     }
                     input.shrink(1);
-                    damageHammer(ctx.getRandom());
+                    damageHammer();
 
                     setChanged();
                 }
@@ -174,22 +172,19 @@ public class MechanicalHammerBlockEntity extends AbstractMachineBlockEntity<Mech
         }
     }
 
-    private void damageHammer(RandomSource rand) {
+    private void damageHammer() {
         var hammer = this.inventory.getStackInSlot(HAMMER_SLOT);
 
         if (hammer.isDamageableItem()) {
-
-            if (hammer.hurt(1, rand, null)) {
-                hammer.shrink(1);
-
+            hammer.hurtAndBreak(1, (ServerLevel) this.level, null, item -> {
                 if (hammer.isEmpty()) {
                     this.inventory.setStackInSlot(HAMMER_SLOT, ItemStack.EMPTY);
                 }
-            }
+            });
         }
     }
 
-    private void onHammerChanged() {
+    private void onHammerChanged(HolderLookup.Provider registries) {
         var hammer = this.inventory.getStackInSlot(HAMMER_SLOT);
         if (hammer.isEmpty()) {
             this.efficiency = 1f;
@@ -197,7 +192,7 @@ public class MechanicalHammerBlockEntity extends AbstractMachineBlockEntity<Mech
             // This timing allows full efficiency hammer to match full efficiency sieve (55 ticks/craft
             // Rewards player for using hammer by doubling speed right off the bat, before efficiency
             // although not as fast as Mekanism's crusher, still pretty fast and much cheaper
-            this.efficiency = 2f + hammer.getEnchantmentLevel(Enchantments.BLOCK_EFFICIENCY) * 0.33f;
+            this.efficiency = 2f + hammer.getEnchantmentLevel(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.EFFICIENCY)) * 0.33f;
         }
     }
 
@@ -255,7 +250,7 @@ public class MechanicalHammerBlockEntity extends AbstractMachineBlockEntity<Mech
         @Override
         protected void onContentsChanged(int slot) {
             if (slot == HAMMER_SLOT) {
-                this.hammer.onHammerChanged();
+                this.hammer.onHammerChanged(this.hammer.level.registryAccess());
             } else if (slot == INPUT_SLOT) {
                 if (getStackInSlot(INPUT_SLOT).isEmpty()) {
                     this.hammer.progress = NOT_RUNNING;

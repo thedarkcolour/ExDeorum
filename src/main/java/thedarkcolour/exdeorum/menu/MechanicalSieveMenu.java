@@ -29,7 +29,7 @@ import thedarkcolour.exdeorum.blockentity.MechanicalSieveBlockEntity;
 import thedarkcolour.exdeorum.registry.EMenus;
 
 public class MechanicalSieveMenu extends AbstractMachineMenu<MechanicalSieveBlockEntity> {
-    private static final ResourceLocation EMPTY_SLOT_MESH = new ResourceLocation(ExDeorum.ID, "item/empty_slot_mesh");
+    private static final ResourceLocation EMPTY_SLOT_MESH = ExDeorum.loc("item/empty_slot_mesh");
     private static final int NUM_SLOTS = 22; // input + mesh, 20 output slots
 
     public MechanicalSieveMenu(int containerId, Inventory playerInventory, FriendlyByteBuf data) {

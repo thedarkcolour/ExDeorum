@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "m": {
+      "item": "minecraft:acacia_slab"
+    },
+    "s": {
+      "item": "minecraft:acacia_log"
+    }
+  },
+  "pattern": [
+    "s s",
+    "s s",
+    "sms"
+  ],
+  "result": {
+    "count": 1,
+    "id": "exdeorum:acacia_crucible"
+  }
+}

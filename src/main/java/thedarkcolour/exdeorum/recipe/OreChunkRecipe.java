@@ -18,19 +18,18 @@
 
 package thedarkcolour.exdeorum.recipe;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.common.crafting.IShapedRecipe;
 import net.neoforged.neoforge.common.util.Lazy;
 import thedarkcolour.exdeorum.compat.PreferredOres;
 import thedarkcolour.exdeorum.registry.ERecipeSerializers;
@@ -38,11 +37,12 @@ import thedarkcolour.exdeorum.registry.ERecipeSerializers;
 import java.util.List;
 import java.util.Map;
 
-public class OreChunkRecipe implements CraftingRecipe, IShapedRecipe<CraftingContainer> {
-    public static final Codec<OreChunkRecipe> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+public class OreChunkRecipe implements CraftingRecipe {
+    public static final MapCodec<OreChunkRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Ingredient.CODEC_NONEMPTY.fieldOf("ore_chunk").forGetter(OreChunkRecipe::getOreChunk),
             TagKey.codec(Registries.ITEM).fieldOf("ore").forGetter(OreChunkRecipe::getOre)
     ).apply(instance, OreChunkRecipe::new));
+    public static final StreamCodec<RegistryFriendlyByteBuf, OreChunkRecipe> STREAM_CODEC = StreamCodec.of(OreChunkRecipe::toNetwork, OreChunkRecipe::fromNetwork);
 
     private static final List<String> GRID_2X2 = List.of("CC", "CC");
 
@@ -55,9 +55,7 @@ public class OreChunkRecipe implements CraftingRecipe, IShapedRecipe<CraftingCon
         this.oreChunk = oreChunk;
         this.ore = ore;
         this.pattern = ShapedRecipePattern.of(Map.of('C', oreChunk), GRID_2X2);
-        this.resultItem = Lazy.of(() -> {
-            return new ItemStack(PreferredOres.getPreferredOre(this.ore));
-        });
+        this.resultItem = Lazy.of(() -> new ItemStack(PreferredOres.getPreferredOre(this.ore)));
     }
 
     public Ingredient getOreChunk() {
@@ -74,33 +72,23 @@ public class OreChunkRecipe implements CraftingRecipe, IShapedRecipe<CraftingCon
     }
 
     @Override
-    public ItemStack getResultItem(RegistryAccess pRegistryAccess) {
+    public ItemStack getResultItem(HolderLookup.Provider registries) {
         return this.resultItem.get();
     }
 
     @Override
-    public ItemStack assemble(CraftingContainer pContainer, RegistryAccess pRegistryAccess) {
+    public ItemStack assemble(CraftingInput input, HolderLookup.Provider lookup) {
         return this.resultItem.get().copy();
     }
 
     @Override
-    public boolean matches(CraftingContainer container, Level pLevel) {
+    public boolean matches(CraftingInput container, Level level) {
         return this.pattern.matches(container);
     }
 
     @Override
     public boolean canCraftInDimensions(int width, int height) {
         return width >= 2 && height >= 2;
-    }
-
-    @Override
-    public int getRecipeWidth() {
-        return 2;
-    }
-
-    @Override
-    public int getRecipeHeight() {
-        return 2;
     }
 
     @Override
@@ -113,21 +101,24 @@ public class OreChunkRecipe implements CraftingRecipe, IShapedRecipe<CraftingCon
         return ERecipeSerializers.ORE_CHUNK.get();
     }
 
+    public static OreChunkRecipe fromNetwork(RegistryFriendlyByteBuf buffer) {
+        return new OreChunkRecipe(Ingredient.CONTENTS_STREAM_CODEC.decode(buffer), RecipeUtil.readTag(buffer, Registries.ITEM));
+    }
+
+    public static void toNetwork(RegistryFriendlyByteBuf buffer, OreChunkRecipe recipe) {
+        Ingredient.CONTENTS_STREAM_CODEC.encode(buffer, recipe.oreChunk);
+        RecipeUtil.writeTag(buffer, recipe.ore);
+    }
+
     public static class Serializer implements RecipeSerializer<OreChunkRecipe> {
         @Override
-        public Codec<OreChunkRecipe> codec() {
+        public MapCodec<OreChunkRecipe> codec() {
             return CODEC;
         }
 
         @Override
-        public OreChunkRecipe fromNetwork(FriendlyByteBuf buffer) {
-            return new OreChunkRecipe(Ingredient.fromNetwork(buffer), RecipeUtil.readTag(buffer, Registries.ITEM));
-        }
-
-        @Override
-        public void toNetwork(FriendlyByteBuf buffer, OreChunkRecipe recipe) {
-            recipe.oreChunk.toNetwork(buffer);
-            RecipeUtil.writeTag(buffer, recipe.ore);
+        public StreamCodec<RegistryFriendlyByteBuf, OreChunkRecipe> streamCodec() {
+            return STREAM_CODEC;
         }
     }
 }

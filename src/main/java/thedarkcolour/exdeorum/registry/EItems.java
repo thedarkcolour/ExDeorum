@@ -71,12 +71,12 @@ public class EItems {
     public static final DeferredItem<Item> NETHERITE_HAMMER = ITEMS.register("netherite_hammer", () -> new HammerItem(Tiers.NETHERITE, props()));
 
     // Compressed Hammers
-    public static final DeferredItem<Item> COMPRESSED_WOODEN_HAMMER = ITEMS.register("compressed_wooden_hammer", () -> new CompressedHammerItem(Tiers.WOOD, props()));
-    public static final DeferredItem<Item> COMPRESSED_STONE_HAMMER = ITEMS.register("compressed_stone_hammer", () -> new CompressedHammerItem(Tiers.STONE, props()));
-    public static final DeferredItem<Item> COMPRESSED_GOLDEN_HAMMER = ITEMS.register("compressed_golden_hammer", () -> new CompressedHammerItem(Tiers.GOLD, props()));
-    public static final DeferredItem<Item> COMPRESSED_IRON_HAMMER = ITEMS.register("compressed_iron_hammer", () -> new CompressedHammerItem(Tiers.IRON, props()));
-    public static final DeferredItem<Item> COMPRESSED_DIAMOND_HAMMER = ITEMS.register("compressed_diamond_hammer", () -> new CompressedHammerItem(Tiers.DIAMOND, props()));
-    public static final DeferredItem<Item> COMPRESSED_NETHERITE_HAMMER = ITEMS.register("compressed_netherite_hammer", () -> new CompressedHammerItem(Tiers.NETHERITE, props()));
+    public static final DeferredItem<Item> COMPRESSED_WOODEN_HAMMER = ITEMS.register("compressed_wooden_hammer", () -> new HammerItem(Tiers.WOOD, props()));
+    public static final DeferredItem<Item> COMPRESSED_STONE_HAMMER = ITEMS.register("compressed_stone_hammer", () -> new HammerItem(Tiers.STONE, props()));
+    public static final DeferredItem<Item> COMPRESSED_GOLDEN_HAMMER = ITEMS.register("compressed_golden_hammer", () -> new HammerItem(Tiers.GOLD, props()));
+    public static final DeferredItem<Item> COMPRESSED_IRON_HAMMER = ITEMS.register("compressed_iron_hammer", () -> new HammerItem(Tiers.IRON, props()));
+    public static final DeferredItem<Item> COMPRESSED_DIAMOND_HAMMER = ITEMS.register("compressed_diamond_hammer", () -> new HammerItem(Tiers.DIAMOND, props()));
+    public static final DeferredItem<Item> COMPRESSED_NETHERITE_HAMMER = ITEMS.register("compressed_netherite_hammer", () -> new HammerItem(Tiers.NETHERITE, props()));
 
     // Ore Chunks
     public static final DeferredItem<Item> IRON_ORE_CHUNK = registerSimpleItem("iron_ore_chunk");

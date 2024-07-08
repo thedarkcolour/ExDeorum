@@ -32,7 +32,7 @@ import thedarkcolour.exdeorum.data.TranslationKeys;
 import thedarkcolour.exdeorum.menu.MechanicalSieveMenu;
 
 public class MechanicalSieveScreen extends AbstractContainerScreen<MechanicalSieveMenu> {
-    private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(ExDeorum.ID, "textures/gui/container/mechanical_sieve.png");
+    private static final ResourceLocation BACKGROUND_TEXTURE = ExDeorum.loc("textures/gui/container/mechanical_sieve.png");
 
     // Used by JEI and REI, these are bounds of the little grains texture between the mesh/input and the output slots
     public static final int RECIPE_CLICK_AREA_POS_X = 51;

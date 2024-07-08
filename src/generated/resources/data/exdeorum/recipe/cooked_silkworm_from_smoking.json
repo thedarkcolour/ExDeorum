@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:smelting",
+  "category": "food",
+  "cookingtime": 100,
+  "experience": 0.1,
+  "ingredient": {
+    "item": "exdeorum:silkworm"
+  },
+  "result": {
+    "count": 1,
+    "id": "exdeorum:cooked_silkworm"
+  }
+}

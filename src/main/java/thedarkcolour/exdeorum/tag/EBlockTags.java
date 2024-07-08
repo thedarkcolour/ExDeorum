@@ -18,7 +18,6 @@
 
 package thedarkcolour.exdeorum.tag;
 
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
@@ -26,8 +25,9 @@ import thedarkcolour.exdeorum.ExDeorum;
 
 public class EBlockTags {
     public static final TagKey<Block> WATERING_CAN_TICKABLE = tag("watering_can_tickable");
+    public static final TagKey<Block> MINEABLE_WITH_HAMMER = tag("mineable/hammer");
 
     public static TagKey<Block> tag(String name) {
-        return BlockTags.create(new ResourceLocation(ExDeorum.ID, name));
+        return BlockTags.create(ExDeorum.loc(name));
     }
 }

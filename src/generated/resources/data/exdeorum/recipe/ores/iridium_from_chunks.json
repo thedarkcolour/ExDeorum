@@ -1,0 +1,16 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:tag_empty",
+        "tag": "c:ores/iridium"
+      }
+    }
+  ],
+  "type": "exdeorum:ore_chunk",
+  "ore": "c:ores/iridium",
+  "ore_chunk": {
+    "item": "exdeorum:iridium_ore_chunk"
+  }
+}

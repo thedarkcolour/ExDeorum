@@ -19,6 +19,7 @@
 package thedarkcolour.exdeorum.blockentity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
@@ -54,19 +55,19 @@ public abstract class AbstractMachineBlockEntity<M extends AbstractMachineBlockE
     }
 
     @Override
-    protected void saveAdditional(CompoundTag nbt) {
-        super.saveAdditional(nbt);
+    protected void saveAdditional(CompoundTag nbt, HolderLookup.Provider registries) {
+        super.saveAdditional(nbt, registries);
 
-        nbt.put("inventory", this.inventory.serializeNBT());
+        nbt.put("inventory", this.inventory.serializeNBT(registries));
         nbt.putInt("energy", this.energy.getEnergyStored());
         nbt.putInt("redstoneMode", this.redstoneMode);
     }
 
     @Override
-    public void load(CompoundTag nbt) {
-        super.load(nbt);
+    public void loadAdditional(CompoundTag nbt, HolderLookup.Provider registries) {
+        super.loadAdditional(nbt, registries);
 
-        this.inventory.deserializeNBT(nbt.getCompound("inventory"));
+        this.inventory.deserializeNBT(registries, nbt.getCompound("inventory"));
         this.energy.setStoredEnergy(nbt.getInt("energy"));
         this.redstoneMode = Mth.clamp(nbt.getInt("redstoneMode"), 0, 2);
     }
@@ -89,7 +90,7 @@ public abstract class AbstractMachineBlockEntity<M extends AbstractMachineBlockE
     }
 
     @Override
-    public InteractionResult use(Level level, Player player, InteractionHand hand) {
+    public InteractionResult useWithoutItem(Level level, Player player) {
         if (player instanceof ServerPlayer serverPlayer) {
             serverPlayer.openMenu(this, buffer -> {
                 buffer.writeBlockPos(getBlockPos());
@@ -127,6 +128,7 @@ public abstract class AbstractMachineBlockEntity<M extends AbstractMachineBlockE
         return this.energy;
     }
 
+    // Used by both sieve and hammer
     public static class ServerTicker<M extends AbstractMachineBlockEntity<M>> implements BlockEntityTicker<M> {
         @Override
         public void tick(Level level, BlockPos pos, BlockState state, M machine) {

@@ -19,6 +19,7 @@
 package thedarkcolour.exdeorum.blockentity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.server.level.ServerLevel;
@@ -26,6 +27,7 @@ import net.minecraft.stats.Stats;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -73,17 +75,17 @@ public abstract class AbstractSieveBlockEntity extends EBlockEntity implements S
     }
 
     @Override
-    protected void saveAdditional(CompoundTag nbt) {
-        super.saveAdditional(nbt);
+    protected void saveAdditional(CompoundTag nbt, HolderLookup.Provider registries) {
+        super.saveAdditional(nbt, registries);
 
-        this.logic.saveNbt(nbt);
+        this.logic.saveNbt(nbt, registries);
     }
 
     @Override
-    public void load(CompoundTag nbt) {
-        super.load(nbt);
+    public void loadAdditional(CompoundTag nbt, HolderLookup.Provider registries) {
+        super.loadAdditional(nbt, registries);
 
-        this.logic.loadNbt(nbt);
+        this.logic.loadNbt(nbt, registries);
     }
 
     @Override
@@ -107,7 +109,7 @@ public abstract class AbstractSieveBlockEntity extends EBlockEntity implements S
     }
 
     @Override
-    public InteractionResult use(Level level, Player player, InteractionHand hand) {
+    public ItemInteractionResult useItemOn(Level level, Player player, ItemStack stack, InteractionHand hand) {
         ItemStack playerItem = player.getItemInHand(hand);
         boolean isClientSide = level.isClientSide;
 
@@ -115,14 +117,14 @@ public abstract class AbstractSieveBlockEntity extends EBlockEntity implements S
         if (this.logic.getMesh().isEmpty()) {
             if (this.logic.isValidMesh(playerItem)) {
                 if (!isClientSide) {
-                    this.logic.setMesh(singleCopy(playerItem));
+                    this.logic.setMesh(level.registryAccess(), singleCopy(playerItem));
 
                     if (!player.getAbilities().instabuild) {
                         playerItem.shrink(1);
                     }
-                    return InteractionResult.CONSUME;
+                    return ItemInteractionResult.CONSUME;
                 } else {
-                    return InteractionResult.SUCCESS;
+                    return ItemInteractionResult.SUCCESS;
                 }
             }
         } else if (this.logic.getContents().isEmpty()) {
@@ -205,7 +207,7 @@ public abstract class AbstractSieveBlockEntity extends EBlockEntity implements S
             }
         }
 
-        return InteractionResult.sidedSuccess(isClientSide);
+        return ItemInteractionResult.sidedSuccess(isClientSide);
     }
 
     // search for another stack in inventory and restock held item
@@ -249,7 +251,7 @@ public abstract class AbstractSieveBlockEntity extends EBlockEntity implements S
             level.addFreshEntity(itemEntity);
 
             // Empty contents
-            logic.setMesh(ItemStack.EMPTY);
+            logic.setMesh(level.registryAccess(), ItemStack.EMPTY);
         }
     }
 

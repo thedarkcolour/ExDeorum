@@ -1,0 +1,26 @@
+{
+  "criteria": {
+    "in_void_world": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "background": "exdeorum:textures/gui/advancements/backgrounds/void.png",
+    "description": {
+      "translate": "advancements.exdeorum.core.root.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "minecraft:oak_sapling"
+    },
+    "title": {
+      "translate": "advancements.exdeorum.core.root.title"
+    }
+  },
+  "requirements": [
+    [
+      "in_void_world"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,0 +1,22 @@
+{
+  "type": "exdeorum:hammer",
+  "ingredient": [
+    {
+      "item": "minecraft:red_sandstone"
+    },
+    {
+      "item": "minecraft:cut_red_sandstone"
+    },
+    {
+      "item": "minecraft:chiseled_red_sandstone"
+    },
+    {
+      "item": "minecraft:smooth_red_sandstone"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "minecraft:red_sand"
+  },
+  "result_amount": 1.0
+}

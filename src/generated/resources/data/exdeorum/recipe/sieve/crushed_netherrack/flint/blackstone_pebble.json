@@ -1,0 +1,18 @@
+{
+  "type": "exdeorum:sieve",
+  "ingredient": {
+    "item": "exdeorum:crushed_netherrack"
+  },
+  "mesh": {
+    "item": "exdeorum:flint_mesh"
+  },
+  "result": {
+    "count": 1,
+    "id": "exdeorum:blackstone_pebble"
+  },
+  "result_amount": {
+    "type": "minecraft:binomial",
+    "n": 4.0,
+    "p": 0.5
+  }
+}

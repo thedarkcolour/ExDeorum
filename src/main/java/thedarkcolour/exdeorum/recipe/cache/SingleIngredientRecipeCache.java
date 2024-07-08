@@ -70,7 +70,7 @@ public class SingleIngredientRecipeCache<T extends SingleIngredientRecipe> {
         // if there are complex recipes, test each one
         if (recipe == null && this.complexRecipes != null) {
             for (var complexRecipe : this.complexRecipes) {
-                if (complexRecipe.getIngredient().test(item)) {
+                if (complexRecipe.ingredient().test(item)) {
                     return complexRecipe;
                 }
             }
@@ -101,11 +101,11 @@ public class SingleIngredientRecipeCache<T extends SingleIngredientRecipe> {
         this.simpleRecipes = new HashMap<>();
         var complexRecipes = ImmutableList.<T>builder();
 
-        var allRecipes = this.recipeManager.byType(this.recipeType.get()).values();
+        var allRecipes = this.recipeManager.byType(this.recipeType.get());
 
         for (var holder : allRecipes) {
             var recipe = holder.value();
-            var ingredient = recipe.getIngredient();
+            var ingredient = recipe.ingredient();
 
             if (ingredient.isSimple()) {
                 for (var item : ingredient.getItems()) {

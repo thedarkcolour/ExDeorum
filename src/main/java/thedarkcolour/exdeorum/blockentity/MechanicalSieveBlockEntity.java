@@ -19,6 +19,7 @@
 package thedarkcolour.exdeorum.blockentity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -30,7 +31,6 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.items.ItemHandlerHelper;
 import thedarkcolour.exdeorum.blockentity.helper.ItemHelper;
 import thedarkcolour.exdeorum.blockentity.logic.SieveLogic;
 import thedarkcolour.exdeorum.config.EConfig;
@@ -54,17 +54,17 @@ public class MechanicalSieveBlockEntity extends AbstractMachineBlockEntity<Mecha
     }
 
     @Override
-    protected void saveAdditional(CompoundTag nbt) {
-        super.saveAdditional(nbt);
+    protected void saveAdditional(CompoundTag nbt, HolderLookup.Provider registries) {
+        super.saveAdditional(nbt, registries);
 
-        this.logic.saveNbt(nbt);
+        this.logic.saveNbt(nbt, registries);
     }
 
     @Override
-    public void load(CompoundTag nbt) {
-        super.load(nbt);
+    public void loadAdditional(CompoundTag nbt, HolderLookup.Provider registries) {
+        super.loadAdditional(nbt, registries);
 
-        this.logic.loadNbt(nbt);
+        this.logic.loadNbt(nbt, registries);
     }
 
     @Override
@@ -119,7 +119,7 @@ public class MechanicalSieveBlockEntity extends AbstractMachineBlockEntity<Mecha
             var limit = this.inventory.getSlotLimit(i);
 
             if (!existing.isEmpty()) {
-                if (!ItemHandlerHelper.canItemStacksStack(remainder, existing)) {
+                if (!ItemStack.isSameItemSameComponents(remainder, existing)) {
                     continue;
                 }
                 limit -= existing.getCount();
@@ -134,12 +134,12 @@ public class MechanicalSieveBlockEntity extends AbstractMachineBlockEntity<Mecha
             var splitRemainder = remainder.getCount() > limit;
 
             if (existing.isEmpty()) {
-                this.inventory.setStackInSlot(i, splitRemainder ? ItemHandlerHelper.copyStackWithSize(remainder, limit) : remainder);
+                this.inventory.setStackInSlot(i, splitRemainder ? remainder.copyWithCount(limit) : remainder);
             } else {
                 existing.grow(splitRemainder ? limit : remainder.getCount());
             }
             if (splitRemainder) {
-                remainder = ItemHandlerHelper.copyStackWithSize(remainder, remainder.getCount() - limit);
+                remainder = remainder.copyWithCount(remainder.getCount() - limit);
             } else {
                 return true;
             }
@@ -202,13 +202,16 @@ public class MechanicalSieveBlockEntity extends AbstractMachineBlockEntity<Mecha
         @Override
         protected void onContentsChanged(int slot) {
             if (slot == MESH_SLOT) {
-                this.sieve.logic.setMesh(this.sieve.inventory.getStackInSlot(MESH_SLOT));
+                this.sieve.logic.setMesh(this.sieve.level.registryAccess(), this.sieve.inventory.getStackInSlot(MESH_SLOT));
             }
         }
 
+        // Used instead of onLoad because missing parameter
         @Override
-        protected void onLoad() {
-            this.sieve.logic.setMesh(this.sieve.inventory.getStackInSlot(MESH_SLOT), false);
+        public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
+            super.deserializeNBT(provider, nbt);
+
+            this.sieve.logic.setMesh(provider, this.sieve.inventory.getStackInSlot(MESH_SLOT), false);
         }
     }
 }

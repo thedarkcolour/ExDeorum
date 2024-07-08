@@ -1,0 +1,18 @@
+{
+  "type": "exdeorum:sieve",
+  "ingredient": {
+    "item": "exdeorum:crushed_deepslate"
+  },
+  "mesh": {
+    "item": "exdeorum:golden_mesh"
+  },
+  "result": {
+    "count": 1,
+    "id": "minecraft:diamond"
+  },
+  "result_amount": {
+    "type": "minecraft:binomial",
+    "n": 1.0,
+    "p": 0.08
+  }
+}

@@ -18,7 +18,6 @@
 
 package thedarkcolour.exdeorum.loot;
 
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
@@ -53,7 +52,7 @@ public class CrookLootModifier extends LootModifier {
         var state = context.getParamOrNull(LootContextParams.BLOCK_STATE);
         var stack = context.getParamOrNull(LootContextParams.TOOL);
 
-        if (state != null && stack != null) {
+        if (state != null && stack != null && stack.getItem() != Items.BARRIER) {
             var rand = context.getRandom();
 
             if (stack.getEnchantmentLevel(context.getLevel().holderLookup(Registries.ENCHANTMENT).getOrThrow(Enchantments.SILK_TOUCH)) == 0) {
@@ -63,7 +62,7 @@ public class CrookLootModifier extends LootModifier {
                 for (CrookRecipe recipe : RecipeUtil.getCrookRecipes(state)) {
                     for (int i = 0; i < rolls; i++) {
                         if (rand.nextFloat() < recipe.chance()) {
-                            generatedLoot.add(new ItemStack(recipe.result()));
+                            generatedLoot.add(recipe.result().copy());
                         }
                     }
                 }
@@ -72,9 +71,7 @@ public class CrookLootModifier extends LootModifier {
                 if (state.is(BlockTags.LEAVES)) {
                     // this must not be a crook in order to avoid recursively triggering CrookLootModifier from the re roll method
                     // copying the tag is required so that enchantments like fortune are preserved
-                    var nonCrook = new ItemStack(Items.BARRIER);
-                    // todo data components
-                    nonCrook.setTag(stack.getTag());
+                    var nonCrook = stack.transmuteCopy(Items.BARRIER, 1);
 
                     for (int i = 0; i < rolls; i++) {
                         generatedLoot.addAll(reRollDrops(context, nonCrook, state));

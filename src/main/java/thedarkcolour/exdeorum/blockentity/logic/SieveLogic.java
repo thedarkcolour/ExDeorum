@@ -18,9 +18,11 @@
 
 package thedarkcolour.exdeorum.blockentity.logic;
 
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -100,9 +102,9 @@ public class SieveLogic {
                 while (amount > 0) {
                     hasDrops = true;
                     // make a single item copy of recipe result
-                    var result = new ItemStack(recipe.result, 1);
+                    var result = recipe.result.copyWithCount(1);
                     // the size of the stack respecting stack limits (ex. ender pearl limits to 16)
-                    var stackAmount = Math.min(amount, recipe.result.getMaxStackSize(result));
+                    var stackAmount = Math.min(amount, recipe.result.getMaxStackSize());
                     result.setCount(stackAmount);
                     amount -= stackAmount;
                     var handleDrop = this.owner.handleResultItem(result, level, rand);
@@ -145,14 +147,15 @@ public class SieveLogic {
         return amount;
     }
 
-    public void setMesh(ItemStack mesh) {
-        this.setMesh(mesh, true);
+    public void setMesh(HolderLookup.Provider registries, ItemStack mesh) {
+        setMesh(registries, mesh, true);
     }
 
-    public void setMesh(ItemStack mesh, boolean needsUpdate) {
+    public void setMesh(HolderLookup.Provider registries, ItemStack mesh, boolean needsUpdate) {
+        var registry = registries.lookupOrThrow(Registries.ENCHANTMENT);
         this.mesh = mesh;
-        this.efficiency = 1f + mesh.getEnchantmentLevel(Enchantments.BLOCK_EFFICIENCY) * 0.17f;
-        this.fortune = mesh.getEnchantmentLevel(Enchantments.BLOCK_FORTUNE);
+        this.efficiency = 1f + mesh.getEnchantmentLevel(registry.getOrThrow(Enchantments.EFFICIENCY)) * 0.17f;
+        this.fortune = mesh.getEnchantmentLevel(registry.getOrThrow(Enchantments.FORTUNE));
         if (mesh.isEmpty()) {
             this.progress = 0.0f;
             this.contents = ItemStack.EMPTY;
@@ -162,19 +165,19 @@ public class SieveLogic {
         }
     }
 
-    public void saveNbt(CompoundTag nbt) {
+    public void saveNbt(CompoundTag nbt, HolderLookup.Provider registries) {
         if (!this.contents.isEmpty()) {
-            nbt.put("contents", this.contents.save(new CompoundTag()));
+            nbt.put("contents", this.contents.save(registries));
         }
         if (!this.mechanical && !this.mesh.isEmpty()) {
-            nbt.put("mesh", this.mesh.save(new CompoundTag()));
+            nbt.put("mesh", this.mesh.save(registries));
         }
         nbt.putFloat("progress", this.progress);
     }
 
-    public void loadNbt(CompoundTag nbt) {
+    public void loadNbt(CompoundTag nbt, HolderLookup.Provider registries) {
         if (nbt.contains("contents")) {
-            this.contents = ItemStack.of(nbt.getCompound("contents"));
+            this.contents = ItemStack.parseOptional(registries, nbt.getCompound("contents"));
         } else {
             this.contents = ItemStack.EMPTY;
         }
@@ -185,30 +188,30 @@ public class SieveLogic {
         }
         if (!this.mechanical) {
             if (nbt.contains("mesh")) {
-                setMesh(ItemStack.of(nbt.getCompound("mesh")), false);
+                setMesh(registries, ItemStack.parseOptional(registries, nbt.getCompound("mesh")), false);
             } else {
-                setMesh(ItemStack.EMPTY, false);
+                setMesh(registries, ItemStack.EMPTY, false);
             }
         }
     }
 
-    public void writeVisualData(FriendlyByteBuf buffer) {
-        buffer.writeItem(this.mesh);
+    public void writeVisualData(RegistryFriendlyByteBuf buffer) {
+        ItemStack.OPTIONAL_STREAM_CODEC.encode(buffer, this.mesh);
         buffer.writeFloat(this.progress);
-        buffer.writeItem(this.contents);
+        ItemStack.OPTIONAL_STREAM_CODEC.encode(buffer, this.contents);
     }
 
-    public void readVisualData(FriendlyByteBuf buffer) {
-        this.setMesh(buffer.readItem().copy());
+    public void readVisualData(RegistryFriendlyByteBuf buffer) {
+        setMesh(buffer.registryAccess(), ItemStack.OPTIONAL_STREAM_CODEC.decode(buffer));
         this.progress = buffer.readFloat();
-        this.contents = buffer.readItem();
+        this.contents = ItemStack.OPTIONAL_STREAM_CODEC.decode(buffer);
     }
 
     public void copyVisualData(BlockEntity fromIntegratedServer) {
         if (fromIntegratedServer instanceof Owner fromOwner) {
             var from = fromOwner.getLogic();
 
-            this.setMesh(from.mesh.copy());
+            this.setMesh(fromIntegratedServer.getLevel().registryAccess(), from.mesh.copy());
             this.progress = from.progress;
             this.contents = from.contents;
         }

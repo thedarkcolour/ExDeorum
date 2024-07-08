@@ -1,0 +1,18 @@
+{
+  "type": "exdeorum:sieve",
+  "ingredient": {
+    "item": "exdeorum:dust"
+  },
+  "mesh": {
+    "item": "exdeorum:golden_mesh"
+  },
+  "result": {
+    "count": 1,
+    "id": "minecraft:bone_meal"
+  },
+  "result_amount": {
+    "type": "minecraft:binomial",
+    "n": 1.0,
+    "p": 0.11
+  }
+}

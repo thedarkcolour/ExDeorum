@@ -1,0 +1,11 @@
+{
+  "type": "exdeorum:hammer",
+  "ingredient": {
+    "item": "minecraft:netherrack"
+  },
+  "result": {
+    "count": 1,
+    "id": "exdeorum:crushed_netherrack"
+  },
+  "result_amount": 1.0
+}

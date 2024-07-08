@@ -1,0 +1,18 @@
+{
+  "type": "exdeorum:sieve",
+  "ingredient": {
+    "item": "minecraft:gravel"
+  },
+  "mesh": {
+    "item": "exdeorum:flint_mesh"
+  },
+  "result": {
+    "count": 1,
+    "id": "exdeorum:diorite_pebble"
+  },
+  "result_amount": {
+    "type": "minecraft:binomial",
+    "n": 4.0,
+    "p": 0.4
+  }
+}

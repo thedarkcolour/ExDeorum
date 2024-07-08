@@ -20,11 +20,8 @@ package thedarkcolour.exdeorum.compat.jei;
 
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
-import me.shedaniel.rei.api.client.view.ViewSearchBuilder;
 import mezz.jei.api.ingredients.IIngredientRenderer;
 import mezz.jei.api.ingredients.IIngredientType;
 import mezz.jei.api.ingredients.ITypedIngredient;
@@ -47,8 +44,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -65,12 +62,12 @@ import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
+import org.joml.Matrix4fStack;
 import org.joml.Vector3f;
 import thedarkcolour.exdeorum.compat.ModIds;
 import thedarkcolour.exdeorum.data.TranslationKeys;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -110,15 +107,14 @@ class ClientJeiUtil {
             buffers.endBatch();
         } else {
             RenderType renderType = ItemBlockRenderTypes.getRenderLayer(fluidState);
-            PoseStack modelView = RenderSystem.getModelViewStack();
+            Matrix4fStack modelView = RenderSystem.getModelViewStack();
             Tesselator tesselator = Tesselator.getInstance();
-            BufferBuilder builder = tesselator.getBuilder();
             renderType.setupRenderState();
-            modelView.pushPose();
-            modelView.mulPoseMatrix(poseStack.last().pose());
+            modelView.pushMatrix();
+            modelView.mul(poseStack.last().pose());
             RenderSystem.applyModelViewMatrix();
 
-            builder.begin(renderType.mode(), renderType.format());
+            BufferBuilder builder = tesselator.begin(renderType.mode(), renderType.format());
 
             Dummy.tempState = block;
             Dummy.tempFluid = fluidState;
@@ -126,12 +122,13 @@ class ClientJeiUtil {
             Dummy.tempFluid = EMPTY;
             Dummy.tempState = AIR;
 
-            if (builder.building()) {
-                tesselator.end();
+            MeshData build = builder.build();
+            if (build != null) {
+                BufferUploader.drawWithShader(build);
             }
 
             renderType.clearRenderState();
-            modelView.popPose();
+            modelView.popMatrix();
             RenderSystem.applyModelViewMatrix();
         }
 
@@ -164,7 +161,7 @@ class ClientJeiUtil {
         pose.translate(8 + xOffset, 8 + yOffset, 150);
 
         try {
-            pose.mulPoseMatrix((new Matrix4f()).scaling(1.0F, -1.0F, 1.0F));
+            pose.mulPose(new Matrix4f().scaling(1.0F, -1.0F, 1.0F));
             pose.scale(16f, 16f, 16f);
             boolean flag = !model.usesBlockLight();
             if (flag) {
@@ -203,7 +200,7 @@ class ClientJeiUtil {
         if (Minecraft.getInstance().screen instanceof IRecipesGui recipesGui) {
             recipesGui.show(focusFactory.createFocus(RecipeIngredientRole.OUTPUT, ingredient));
         } else if (ModList.get().isLoaded(ModIds.REI_PC)) {
-            // todo fix when REIPC is on 1.20.4
+            // todo fix when REIPC is on 1.21
             //ViewSearchBuilder.builder().addRecipesFor(JEIPluginDetector.unwrapStack(ingredient)).open();
         }
     }
@@ -213,7 +210,7 @@ class ClientJeiUtil {
             // input + catalyst
             recipesGui.show(List.of(focusFactory.createFocus(RecipeIngredientRole.INPUT, ingredient), focusFactory.createFocus(RecipeIngredientRole.CATALYST, ingredient)));
         } else if (ModList.get().isLoaded(ModIds.REI_PC)) {
-            // todo fix when REIPC is on 1.20.4
+            // todo fix when REIPC is on 1.21
             //ViewSearchBuilder.builder().addUsagesFor(JEIPluginDetector.unwrapStack(ingredient)).open();
         }
     }
@@ -292,12 +289,14 @@ class ClientJeiUtil {
         INSTANCE;
 
         @Override
-        public void render(GuiGraphics graphics, ItemStack ingredient) {
-            // From mezz.jei.library.render.ItemStackRenderer
-            RenderSystem.enableDepthTest();
-            ClientJeiUtil.renderItemWithAsterisk(graphics, ingredient);
-            // From end of DrawableIngredient
-            RenderSystem.disableDepthTest();
+        public void render(GuiGraphics graphics, @Nullable ItemStack ingredient) {
+            if (ingredient != null) {
+                // From mezz.jei.library.render.ItemStackRenderer
+                RenderSystem.enableDepthTest();
+                ClientJeiUtil.renderItemWithAsterisk(graphics, ingredient);
+                // From end of DrawableIngredient
+                RenderSystem.disableDepthTest();
+            }
         }
 
         @Override
@@ -305,14 +304,7 @@ class ClientJeiUtil {
             // Copied from ItemStackRenderer
             Minecraft minecraft = Minecraft.getInstance();
             Player player = minecraft.player;
-            try {
-                return ingredient.getTooltipLines(player, tooltipFlag);
-            } catch (RuntimeException | LinkageError e) {
-                List<Component> list = new ArrayList<>();
-                MutableComponent crash = Component.translatable("jei.tooltip.error.crash");
-                list.add(crash.withStyle(ChatFormatting.RED));
-                return list;
-            }
+            return ingredient.getTooltipLines(Item.TooltipContext.EMPTY, player, tooltipFlag);
         }
     }
 }

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "item": "minecraft:flint"
+    },
+    "S": {
+      "tag": "c:strings"
+    }
+  },
+  "pattern": [
+    "S#S",
+    "#S#",
+    "S#S"
+  ],
+  "result": {
+    "count": 1,
+    "id": "exdeorum:flint_mesh"
+  }
+}

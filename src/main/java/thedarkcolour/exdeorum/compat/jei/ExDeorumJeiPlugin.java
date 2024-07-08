@@ -31,12 +31,13 @@ import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.client.renderer.Rect2i;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LiquidBlock;
@@ -72,7 +73,7 @@ import java.util.function.Supplier;
 
 @JeiPlugin
 public class ExDeorumJeiPlugin implements IModPlugin {
-    public static final ResourceLocation EX_DEORUM_JEI_TEXTURE = new ResourceLocation(ExDeorum.ID, "textures/gui/jei/enr_jei.png");
+    public static final ResourceLocation EX_DEORUM_JEI_TEXTURE = ExDeorum.loc("textures/gui/jei/enr_jei.png");
 
     static final RecipeType<BarrelCompostRecipe> BARREL_COMPOST = recipeType("barrel_compost", BarrelCompostRecipe.class);
     static final RecipeType<BarrelMixingRecipe> BARREL_MIXING = recipeType("barrel_mixing", BarrelMixingRecipe.class);
@@ -94,7 +95,7 @@ public class ExDeorumJeiPlugin implements IModPlugin {
 
     @Override
     public ResourceLocation getPluginUid() {
-        return new ResourceLocation(ExDeorum.ID, "jei_plugin");
+        return ExDeorum.loc("jei_plugin");
     }
 
     @Override
@@ -246,7 +247,7 @@ public class ExDeorumJeiPlugin implements IModPlugin {
 
         for (var entry : values.object2IntEntrySet()) {
             if (entry.getKey() instanceof LiquidBlock liquid) {
-                recipes.add(new CrucibleHeatSourceRecipe(entry.getIntValue(), entry.getKey().defaultBlockState(), fluidIngredientType, fluidHelper.create(liquid.getFluid(), 1000)));
+                recipes.add(new CrucibleHeatSourceRecipe(entry.getIntValue(), entry.getKey().defaultBlockState(), fluidIngredientType, fluidHelper.create(Holder.direct(liquid.fluid), 1000)));
             } else {
                 var itemForm = entry.getKey().asItem();
 
@@ -297,7 +298,7 @@ public class ExDeorumJeiPlugin implements IModPlugin {
         });
     }
 
-    private static <C extends Container, T extends Recipe<C>> void addRecipes(IRecipeRegistration registration, RecipeType<T> category, Supplier<net.minecraft.world.item.crafting.RecipeType<T>> type) {
+    private static <C extends RecipeInput, T extends Recipe<C>> void addRecipes(IRecipeRegistration registration, RecipeType<T> category, Supplier<net.minecraft.world.item.crafting.RecipeType<T>> type) {
         registration.addRecipes(category, CompatUtil.collectAllRecipes(type.get(), Function.identity()));
     }
 }

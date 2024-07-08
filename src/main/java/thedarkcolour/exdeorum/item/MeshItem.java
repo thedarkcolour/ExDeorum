@@ -18,6 +18,7 @@
 
 package thedarkcolour.exdeorum.item;
 
+import net.minecraft.core.Holder;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -29,12 +30,13 @@ public class MeshItem extends Item {
     }
 
     @Override
-    public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-        return enchantment == Enchantments.BLOCK_EFFICIENCY || enchantment == Enchantments.BLOCK_FORTUNE;
+    public boolean isPrimaryItemFor(ItemStack stack, Holder<Enchantment> enchantment) {
+        var key = enchantment.getKey();
+        return key == Enchantments.EFFICIENCY || key == Enchantments.FORTUNE;
     }
 
     @Override
-    public boolean isEnchantable(ItemStack pStack) {
+    public boolean isEnchantable(ItemStack stack) {
         return true;
     }
 

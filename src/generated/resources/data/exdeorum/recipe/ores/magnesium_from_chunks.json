@@ -1,0 +1,16 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:tag_empty",
+        "tag": "c:ores/magnesium"
+      }
+    }
+  ],
+  "type": "exdeorum:ore_chunk",
+  "ore": "c:ores/magnesium",
+  "ore_chunk": {
+    "item": "exdeorum:magnesium_ore_chunk"
+  }
+}

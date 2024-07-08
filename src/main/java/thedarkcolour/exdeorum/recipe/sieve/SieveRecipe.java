@@ -19,49 +19,61 @@
 package thedarkcolour.exdeorum.recipe.sieve;
 
 import com.mojang.datafixers.Products;
+import com.mojang.datafixers.util.Function5;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.item.Item;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import thedarkcolour.exdeorum.recipe.CodecUtil;
 import thedarkcolour.exdeorum.recipe.ProbabilityRecipe;
-import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.registry.ERecipeSerializers;
 import thedarkcolour.exdeorum.registry.ERecipeTypes;
 
-import java.util.Objects;
-
 public class SieveRecipe extends ProbabilityRecipe {
-    private static final Codec<SieveRecipe> CODEC = RecordCodecBuilder.create(instance -> commonSieveFields(instance).apply(instance, SieveRecipe::new));
+    private static final MapCodec<SieveRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> commonSieveFields(instance).apply(instance, SieveRecipe::new));
+    private static final StreamCodec<RegistryFriendlyByteBuf, SieveRecipe> STREAM_CODEC = sieveStreamCodec(SieveRecipe::new);
 
-    protected static <T extends SieveRecipe> Products.P5<RecordCodecBuilder.Mu<T>, Ingredient, Item, NumberProvider, Item, Boolean> commonSieveFields(RecordCodecBuilder.Instance<T> instance) {
+    static <T extends SieveRecipe> StreamCodec<RegistryFriendlyByteBuf, T> sieveStreamCodec(Function5<Ingredient, ItemStack, NumberProvider, Ingredient, Boolean, T> factory) {
+        return StreamCodec.composite(
+                Ingredient.CONTENTS_STREAM_CODEC, T::ingredient,
+                ItemStack.STREAM_CODEC, T::result,
+                CodecUtil.NUMBER_PROVIDER_CODEC, T::resultAmount,
+                Ingredient.CONTENTS_STREAM_CODEC, T::mesh,
+                ByteBufCodecs.BOOL, T::byHandOnly,
+                factory
+        );
+    }
+
+    protected static <T extends SieveRecipe> Products.P5<RecordCodecBuilder.Mu<T>, Ingredient, ItemStack, NumberProvider, Ingredient, Boolean> commonSieveFields(RecordCodecBuilder.Instance<T> instance) {
         return commonFields(instance).and(
                 instance.group(
-                        CodecUtil.itemField("mesh", SieveRecipe::getMesh),
-                        Codec.BOOL.optionalFieldOf("by_hand_only", false).forGetter(SieveRecipe::isByHandOnly)
+                        Ingredient.CODEC_NONEMPTY.fieldOf("mesh").forGetter(SieveRecipe::mesh),
+                        Codec.BOOL.optionalFieldOf("by_hand_only", false).forGetter(SieveRecipe::byHandOnly)
                 ));
     }
 
-    public final Item mesh;
+    public final Ingredient mesh;
     public final boolean byHandOnly;
 
-    public SieveRecipe(Ingredient ingredient, Item result, NumberProvider resultAmount, Item mesh, boolean byHandOnly) {
+    public SieveRecipe(Ingredient ingredient, ItemStack result, NumberProvider resultAmount, Ingredient mesh, boolean byHandOnly) {
         super(ingredient, result, resultAmount);
 
         this.mesh = mesh;
         this.byHandOnly = byHandOnly;
     }
 
-    public Item getMesh() {
+    public Ingredient mesh() {
         return this.mesh;
     }
 
-    public boolean isByHandOnly() {
+    public boolean byHandOnly() {
         return this.byHandOnly;
     }
 
@@ -75,37 +87,15 @@ public class SieveRecipe extends ProbabilityRecipe {
         return ERecipeTypes.SIEVE.get();
     }
 
-    public static abstract class AbstractSerializer<T extends SieveRecipe> implements RecipeSerializer<T> {
+    public static class Serializer implements RecipeSerializer<SieveRecipe> {
         @Override
-        public T fromNetwork(FriendlyByteBuf buffer) {
-            Ingredient ingredient = Ingredient.fromNetwork(buffer);
-            Item mesh = Objects.requireNonNull(buffer.readById(BuiltInRegistries.ITEM));
-            Item result = Objects.requireNonNull(buffer.readById(BuiltInRegistries.ITEM));
-            NumberProvider resultAmount = RecipeUtil.fromNetworkNumberProvider(buffer);
-            return createSieveRecipe(ingredient, result, resultAmount, mesh, buffer.readBoolean());
-        }
-
-        protected abstract T createSieveRecipe(Ingredient ingredient, Item result, NumberProvider resultAmount, Item mesh, boolean byHandOnly);
-
-        @Override
-        public void toNetwork(FriendlyByteBuf buffer, SieveRecipe recipe) {
-            recipe.getIngredient().toNetwork(buffer);
-            buffer.writeId(BuiltInRegistries.ITEM, recipe.mesh);
-            buffer.writeId(BuiltInRegistries.ITEM, recipe.result);
-            RecipeUtil.toNetworkNumberProvider(buffer, recipe.resultAmount);
-            buffer.writeBoolean(recipe.byHandOnly);
-        }
-    }
-
-    public static class Serializer extends AbstractSerializer<SieveRecipe> {
-        @Override
-        protected SieveRecipe createSieveRecipe(Ingredient ingredient, Item result, NumberProvider resultAmount, Item mesh, boolean byHandOnly) {
-            return new SieveRecipe(ingredient, result, resultAmount, mesh, byHandOnly);
-        }
-
-        @Override
-        public Codec<SieveRecipe> codec() {
+        public MapCodec<SieveRecipe> codec() {
             return CODEC;
+        }
+
+        @Override
+        public StreamCodec<RegistryFriendlyByteBuf, SieveRecipe> streamCodec() {
+            return STREAM_CODEC;
         }
     }
 }

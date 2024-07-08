@@ -18,7 +18,7 @@
 
 package thedarkcolour.exdeorum.config;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.gui.screens.inventory.JigsawBlockEditScreen;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.common.ModConfigSpec.BooleanValue;
 import net.neoforged.neoforge.common.ModConfigSpec.ConfigValue;
@@ -27,6 +27,7 @@ import net.neoforged.neoforge.common.ModConfigSpec.DoubleValue;
 import org.apache.commons.lang3.text.WordUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import thedarkcolour.exdeorum.compat.ModIds;
+import thedarkcolour.exdeorum.recipe.RecipeUtil;
 
 import java.util.List;
 
@@ -219,7 +220,7 @@ public class EConfig {
     private static ConfigValue<String> preferredOreConfig(ModConfigSpec.Builder builder, String name, String defaultId) {
         return builder
                 .comment("The ID of the item to use for Ex Deorum recipes that craft into " + WordUtils.capitalize(name.replace('_', ' ')) + ". Leave as air for default preference, which chooses alphabetically by mod name.")
-                .define(List.of("preferred_" + name), defaultId, o -> o != null && o.getClass() == String.class && ResourceLocation.isValidResourceLocation((String) o));
+                .define(List.of("preferred_" + name), defaultId, o -> o != null && o.getClass() == String.class && RecipeUtil.isValidResourceLocation((String) o));
     }
 
     static {

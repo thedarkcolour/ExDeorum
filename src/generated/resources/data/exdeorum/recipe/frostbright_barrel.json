@@ -1,0 +1,27 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "blue_skies"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "m": {
+      "item": "blue_skies:frostbright_slab"
+    },
+    "s": {
+      "item": "blue_skies:frostbright_planks"
+    }
+  },
+  "pattern": [
+    "s s",
+    "s s",
+    "sms"
+  ],
+  "result": {
+    "count": 1,
+    "id": "exdeorum:frostbright_barrel"
+  }
+}

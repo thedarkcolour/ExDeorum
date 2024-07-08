@@ -49,6 +49,8 @@ import net.neoforged.neoforge.common.conditions.ModLoadedCondition;
 import net.neoforged.neoforge.common.conditions.NotCondition;
 import net.neoforged.neoforge.common.conditions.TagEmptyCondition;
 import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.crafting.FluidIngredient;
+import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.block.InfestedLeavesBlock;
 import thedarkcolour.exdeorum.compat.ModIds;
@@ -224,9 +226,7 @@ public class Recipes {
                 if (variant.hasCompressium()) {
                     conditions.add(modNotInstalled(ModIds.COMPRESSIUM));
                 }
-                recipes.conditional(path(storage), conditions, newWriter -> {
-                    recipes.grid3x3(RecipeCategory.BUILDING_BLOCKS, storage, Ingredient.of(material));
-                });
+                recipes.conditional(path(storage), conditions, newWriter -> recipes.grid3x3(RecipeCategory.BUILDING_BLOCKS, storage, Ingredient.of(material)));
             } else {
                 recipes.grid3x3(RecipeCategory.BUILDING_BLOCKS, storage, Ingredient.of(material));
             }
@@ -327,7 +327,7 @@ public class Recipes {
         modSieve(recipes, ModIds.BLUE_SKIES, ModCompatData.CRYSTALLIZED_PLANKS_ITEM, ModCompatData.CRYSTALLIZED_SLAB, DefaultMaterials.CRYSTALLIZED_SIEVE.getItem());
 
         // Meshes
-        recipes.grid3x3(EItems.STRING_MESH.get(), ingredient(Tags.Items.STRING));
+        recipes.grid3x3(EItems.STRING_MESH.get(), ingredient(Tags.Items.STRINGS));
         mesh(recipes, EItems.FLINT_MESH, ingredient(Items.FLINT));
         mesh(recipes, EItems.IRON_MESH, ingredient(Tags.Items.INGOTS_IRON));
         mesh(recipes, EItems.GOLDEN_MESH, ingredient(Tags.Items.INGOTS_GOLD));
@@ -401,15 +401,11 @@ public class Recipes {
     }
 
     private static void modUShaped(MKRecipeProvider recipes, String modid, ItemLike sides, ItemLike middle, Item result) {
-        recipes.conditional(path(result), List.of(modInstalled(modid)), writer1 -> {
-            uShaped(recipes, result, ingredient(sides), ingredient(middle));
-        });
+        recipes.conditional(path(result), List.of(modInstalled(modid)), writer1 -> uShaped(recipes, result, ingredient(sides), ingredient(middle)));
     }
 
     private static void modSieve(MKRecipeProvider recipes, String modid, ItemLike planks, ItemLike slab, Item result) {
-        recipes.conditional(path(result), List.of(modInstalled(modid)), writer1 -> {
-            sieve(recipes, result, planks, slab);
-        });
+        recipes.conditional(path(result), List.of(modInstalled(modid)), writer1 -> sieve(recipes, result, planks, slab));
     }
 
     private static void grid2x2TagResult(RecipeOutput writer, TagKey<Item> resultTag, Ingredient ingredient) {
@@ -468,15 +464,13 @@ public class Recipes {
     }
 
     private static void modCompressedSieve(MKRecipeProvider recipes, String modid, ItemLike result, Ingredient log) {
-        recipes.conditional(path(result), List.of(modInstalled(modid)), writer1 -> {
-            compressedSieve(recipes, result, log);
-        });
+        recipes.conditional(path(result), List.of(modInstalled(modid)), writer1 -> compressedSieve(recipes, result, log));
     }
 
     private static void mesh(MKRecipeProvider recipes, Supplier<? extends Item> result, Ingredient ingredient) {
         recipes.shapedCrafting(RecipeCategory.MISC, result.get(), recipe -> {
             recipe.define('#', ingredient);
-            recipe.define('S', ingredient(Tags.Items.STRING));
+            recipe.define('S', ingredient(Tags.Items.STRINGS));
             recipe.pattern("S#S");
             recipe.pattern("#S#");
             recipe.pattern("S#S");
@@ -510,10 +504,10 @@ public class Recipes {
         recipes.foodCooking(EItems.SILKWORM.get(), EItems.COOKED_SILKWORM.get(), 0.1f);
     }
     private static void crucibleRecipes(RecipeOutput writer) {
-        lavaCrucible(writer, "cobblestone", ingredient(Tags.Items.COBBLESTONE), 250);
-        lavaCrucible(writer, "stone", ingredient(Tags.Items.STONE), 250);
-        lavaCrucible(writer, "gravel", ingredient(Tags.Items.GRAVEL), 250);
-        lavaCrucible(writer, "netherrack", ingredient(Tags.Items.NETHERRACK), 500);
+        lavaCrucible(writer, "cobblestone", ingredient(Tags.Items.COBBLESTONES), 250);
+        lavaCrucible(writer, "stone", ingredient(Tags.Items.STONES), 250);
+        lavaCrucible(writer, "gravel", ingredient(Tags.Items.GRAVELS), 250);
+        lavaCrucible(writer, "netherrack", ingredient(Tags.Items.NETHERRACKS), 500);
 
         waterCrucible(writer, "saplings", ingredient(ItemTags.SAPLINGS), 100);
         waterCrucible(writer, "leaves", ingredient(ItemTags.LEAVES), 250);
@@ -599,7 +593,7 @@ public class Recipes {
     }
 
     private static void compressedHammerRecipe(RecipeOutput writer, ItemLike result, Ingredient block) {
-        writer.accept(modLoc("compressed_hammer/" + path(result)), new CompressedHammerRecipe(block, result.asItem(), exactly(9)), null);
+        writer.accept(modLoc("compressed_hammer/" + path(result)), new CompressedHammerRecipe(block, new ItemStack(result.asItem()), exactly(9)), null);
     }
 
     private static void hammerRecipe(RecipeOutput writer, String name, Ingredient block, ItemLike result) {
@@ -607,7 +601,7 @@ public class Recipes {
     }
 
     private static void hammerRecipe(RecipeOutput writer, String name, Ingredient block, ItemLike result, NumberProvider resultAmount) {
-        writer.accept(modLoc("hammer/" + name), new HammerRecipe(block, result.asItem(), resultAmount), null);
+        writer.accept(modLoc("hammer/" + name), new HammerRecipe(block, new ItemStack(result.asItem()), resultAmount), null);
     }
 
     private static void crookRecipes(RecipeOutput writer) {
@@ -620,7 +614,7 @@ public class Recipes {
     }
 
     private static void crookRecipe(RecipeOutput writer, String name, BlockPredicate blockPredicate, ItemLike result, float chance) {
-        writer.accept(modLoc("crook/" + name), new CrookRecipe(blockPredicate, result.asItem(), chance), null);
+        writer.accept(modLoc("crook/" + name), new CrookRecipe(blockPredicate, new ItemStack(result), chance), null);
     }
 
     @SuppressWarnings("OptionalGetWithoutIsPresent")
@@ -747,19 +741,19 @@ public class Recipes {
     }
 
     private static void barrelMixing(RecipeOutput writer, String suffix, Ingredient ingredient, Fluid fluidType, Item result) {
-        writer.accept(modLoc("barrel_mixing/" + path(result) + suffix), new BarrelMixingRecipe(ingredient, fluidType, 1000, result), null);
+        writer.accept(modLoc("barrel_mixing/" + path(result) + suffix), new BarrelMixingRecipe(ingredient, SizedFluidIngredient.of(fluidType, 1000), new ItemStack(result)), null);
     }
 
     private static void barrelFluidMixing(RecipeOutput writer, Fluid base, Fluid additive, Item result, boolean consumesAdditive) {
-        writer.accept(modLoc("barrel_fluid_mixing/" + path(result)), new BarrelFluidMixingRecipe(base, 1000, additive, result, consumesAdditive), null);
+        writer.accept(modLoc("barrel_fluid_mixing/" + path(result)), new BarrelFluidMixingRecipe(SizedFluidIngredient.of(base, 1000), FluidIngredient.of(additive), new ItemStack(result), consumesAdditive), null);
     }
 
     private static void fluidTransformationRecipes(RecipeOutput writer) {
-        writer.accept(modLoc("barrel_fluid_transformation/witch_water"), new FluidTransformationRecipe(Fluids.WATER, EFluids.WITCH_WATER.get(), 0x2B1057, BlockPredicate.singleBlock(Blocks.MYCELIUM), WeightedList.<BlockState>builder().add(50, Blocks.RED_MUSHROOM.defaultBlockState()).add(50, Blocks.BROWN_MUSHROOM.defaultBlockState()).build(), 1700), null);
+        writer.accept(modLoc("barrel_fluid_transformation/witch_water"), new FluidTransformationRecipe(FluidIngredient.of(Fluids.WATER), EFluids.WITCH_WATER.get(), 0x2B1057, BlockPredicate.singleBlock(Blocks.MYCELIUM), WeightedList.<BlockState>builder().add(50, Blocks.RED_MUSHROOM.defaultBlockState()).add(50, Blocks.BROWN_MUSHROOM.defaultBlockState()).build(), 1700), null);
     }
 
     static ResourceLocation modLoc(String path) {
-        return new ResourceLocation(ExDeorum.ID, path);
+        return ExDeorum.loc(path);
     }
 
     static ICondition tagNotEmpty(TagKey<Item> tag) {

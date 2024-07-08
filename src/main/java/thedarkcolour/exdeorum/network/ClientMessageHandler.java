@@ -22,38 +22,36 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
-import net.neoforged.neoforge.network.handling.PlayPayloadContext;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.blockentity.EBlockEntity;
 import thedarkcolour.exdeorum.client.ClientHandler;
 import thedarkcolour.exdeorum.menu.AbstractMachineMenu;
 
 public class ClientMessageHandler {
-
     // Removes the black sky/fog that appears when the player is below y=62
-    public static void handleVoidWorldMessage(VoidWorldMessage msg, IPayloadContext ctx) {
-        ctx.workHandler().execute(ClientHandler::disableVoidFogRendering);
+    public static void handleVoidWorldMessage(IPayloadContext ctx) {
+        ctx.enqueueWork(ClientHandler::disableVoidFogRendering);
     }
 
     static void handleVisualUpdate(VisualUpdateMessage msg, IPayloadContext ctx) {
-        ctx.workHandler().execute(() -> {
+        ctx.enqueueWork(() -> {
             ClientLevel level = Minecraft.getInstance().level;
-            if (level != null && level.getBlockEntity(msg.pos) instanceof EBlockEntity blockEntity) {
-                if (msg.payload == null) {
-                    if (blockEntity != msg.blockEntity && msg.blockEntity != null) {
-                        blockEntity.copyVisualData(msg.blockEntity);
+            if (level != null && level.getBlockEntity(msg.pos()) instanceof EBlockEntity blockEntity) {
+                if (msg.payload() == null) {
+                    if (blockEntity != msg.blockEntity() && msg.blockEntity() != null) {
+                        blockEntity.copyVisualData(msg.blockEntity());
                     } else {
-                        ExDeorum.LOGGER.warn("Failed syncing visual data from server for " + msg.pos.toShortString());
+                        ExDeorum.LOGGER.warn("Failed syncing visual data from server for " + msg.pos().toShortString());
                     }
                 } else {
-                    blockEntity.readVisualData(msg.payload);
+                    blockEntity.readVisualData(msg.payload());
                 }
             }
         });
     }
 
     public static void handleMenuProperty(MenuPropertyMessage msg, IPayloadContext ctx) {
-        ctx.workHandler().execute(() -> {
+        ctx.enqueueWork(() -> {
             Player player = Minecraft.getInstance().player;
 
             if (player != null && player.containerMenu instanceof AbstractMachineMenu<?> menu && menu.containerId == msg.containerId()) {

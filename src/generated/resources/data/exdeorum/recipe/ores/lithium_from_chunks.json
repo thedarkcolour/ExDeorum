@@ -1,0 +1,16 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:tag_empty",
+        "tag": "c:ores/lithium"
+      }
+    }
+  ],
+  "type": "exdeorum:ore_chunk",
+  "ore": "c:ores/lithium",
+  "ore_chunk": {
+    "item": "exdeorum:lithium_ore_chunk"
+  }
+}

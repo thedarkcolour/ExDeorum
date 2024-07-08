@@ -19,7 +19,6 @@
 package thedarkcolour.exdeorum.compat.jei;
 
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
-import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
@@ -88,9 +87,9 @@ public abstract class BarrelMixingCategory<T> implements IRecipeCategory<T> {
 
         @Override
         public void setRecipe(IRecipeLayoutBuilder builder, BarrelMixingRecipe recipe, IFocusGroup focuses) {
-            builder.addSlot(RecipeIngredientRole.INPUT, 1, 1).addFluidStack(recipe.fluid, recipe.fluidAmount).setFluidRenderer(1000, false, 16, 16);
-            builder.addSlot(RecipeIngredientRole.INPUT, 33, 1).addIngredients(recipe.getIngredient());
-            builder.addSlot(RecipeIngredientRole.OUTPUT, 79, 1).addItemStack(new ItemStack(recipe.result));
+            JeiUtil.addFluidIngredient(builder.addSlot(RecipeIngredientRole.INPUT, 1, 1), recipe.fluid).setFluidRenderer(1000, false, 16, 16);
+            builder.addSlot(RecipeIngredientRole.INPUT, 33, 1).addIngredients(recipe.ingredient());
+            builder.addSlot(RecipeIngredientRole.OUTPUT, 79, 1).addItemStack(recipe.result);
         }
 
         @Override
@@ -108,12 +107,14 @@ public abstract class BarrelMixingCategory<T> implements IRecipeCategory<T> {
 
         @Override
         public void setRecipe(IRecipeLayoutBuilder builder, BarrelFluidMixingRecipe recipe, IFocusGroup focuses) {
-            builder.addSlot(RecipeIngredientRole.INPUT, 1, 1).addFluidStack(recipe.baseFluid(), recipe.baseFluidAmount()).setFluidRenderer(1000, false, 16, 16);
-            IRecipeSlotBuilder additiveSlot = builder.addSlot(RecipeIngredientRole.INPUT, 33, 1).addFluidStack(recipe.additiveFluid(), 1000).setFluidRenderer(1000, false, 16, 16);
+            JeiUtil.addFluidIngredient(builder.addSlot(RecipeIngredientRole.INPUT, 1, 1), recipe.baseFluid())
+                    .setFluidRenderer(1000, false, 16, 16);
+            var additiveSlot = JeiUtil.addFluidIngredient(builder.addSlot(RecipeIngredientRole.INPUT, 33, 1), recipe.additiveFluid(), 1000)
+                    .setFluidRenderer(1000, false, 16, 16);
             if (recipe.consumesAdditive()) {
                 additiveSlot.addTooltipCallback((view, tooltip) -> tooltip.add(CONTENTS_ARE_CONSUMED_TOOLTIP));
             }
-            builder.addSlot(RecipeIngredientRole.OUTPUT, 79, 1).addItemStack(new ItemStack(recipe.result()));
+            builder.addSlot(RecipeIngredientRole.OUTPUT, 79, 1).addItemStack(recipe.result().copy());
         }
 
         @Override

@@ -18,10 +18,11 @@
 
 package thedarkcolour.exdeorum.loot;
 
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -36,16 +37,13 @@ import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.recipe.hammer.HammerRecipe;
 
-import javax.annotation.Nonnull;
-
 public class HammerLootModifier extends LootModifier {
-    public static final Codec<HammerLootModifier> CODEC = RecordCodecBuilder.create(inst -> LootModifier.codecStart(inst).apply(inst, HammerLootModifier::new));
+    public static final MapCodec<HammerLootModifier> CODEC = RecordCodecBuilder.mapCodec(inst -> LootModifier.codecStart(inst).apply(inst, HammerLootModifier::new));
 
     protected HammerLootModifier(LootItemCondition[] conditionsIn) {
         super(conditionsIn);
     }
 
-    @Nonnull
     @Override
     protected ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
         var state = context.getParamOrNull(LootContextParams.BLOCK_STATE);
@@ -62,11 +60,11 @@ public class HammerLootModifier extends LootModifier {
                     // fortune handling; more likely to boost drops if there are none to begin with
                     if (context.hasParam(LootContextParams.TOOL)) {
                         var hammer = context.getParam(LootContextParams.TOOL);
-                        resultAmount += calculateFortuneBonus(hammer, context.getRandom(), resultAmount == 0);
+                        resultAmount += calculateFortuneBonus(context.getLevel().registryAccess(), hammer, context.getRandom(), resultAmount == 0);
                     }
 
                     if (resultAmount > 0) {
-                        newLoot.add(new ItemStack(recipe.result, resultAmount));
+                        newLoot.add(recipe.result.copyWithCount(resultAmount));
                     }
                     return newLoot;
                 }
@@ -88,13 +86,15 @@ public class HammerLootModifier extends LootModifier {
 
     /**
      * Calculates the bonus number of drops for a hammer enchanted with fortune.
-     * @param hammer The hammer in question
-     * @param rand RNG
-     * @param zeroBaseDrops Whether there were no drops to begin with
+     *
+     * @param registryAccess The registry access used for looking up enchantments
+     * @param hammer         The hammer in question
+     * @param rand           RNG
+     * @param zeroBaseDrops  Whether there were no drops to begin with
      * @return The additional number of drops, to be added to the number of base drops
      */
-    public static int calculateFortuneBonus(ItemStack hammer, RandomSource rand, boolean zeroBaseDrops) {
-        var fortune = hammer.getEnchantmentLevel(Enchantments.BLOCK_FORTUNE);
+    public static int calculateFortuneBonus(RegistryAccess registryAccess, ItemStack hammer, RandomSource rand, boolean zeroBaseDrops) {
+        var fortune = hammer.getEnchantmentLevel(registryAccess.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FORTUNE));
 
         if (fortune != 0) {
             var chance = rand.nextFloat();

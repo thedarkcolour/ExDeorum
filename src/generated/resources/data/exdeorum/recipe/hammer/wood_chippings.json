@@ -1,0 +1,15 @@
+{
+  "type": "exdeorum:hammer",
+  "ingredient": {
+    "tag": "minecraft:logs"
+  },
+  "result": {
+    "count": 1,
+    "id": "exdeorum:wood_chippings"
+  },
+  "result_amount": {
+    "type": "minecraft:uniform",
+    "max": 8.0,
+    "min": 3.0
+  }
+}

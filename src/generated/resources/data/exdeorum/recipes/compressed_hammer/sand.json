@@ -1,8 +1,0 @@
-{
-  "type": "exdeorum:compressed_hammer",
-  "ingredient": {
-    "tag": "exdeorum:compressed/gravel"
-  },
-  "result": "minecraft:sand",
-  "result_amount": 9.0
-}

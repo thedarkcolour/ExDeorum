@@ -46,15 +46,15 @@ class HammerCategory extends OneToOneCategory<HammerRecipe> {
 
     @Override
     protected void addInput(IRecipeSlotBuilder slot, HammerRecipe recipe) {
-        slot.addIngredients(recipe.getIngredient());
+        slot.addIngredients(recipe.ingredient());
     }
 
     @Override
     protected void addOutput(IRecipeSlotBuilder slot, HammerRecipe recipe) {
         if (recipe.resultAmount instanceof ConstantValue constant) {
-            slot.addItemStack(new ItemStack(recipe.result, (int) constant.value()));
+            slot.addItemStack(recipe.result.getCount() == 1 ? recipe.result : recipe.result.copyWithCount((int) constant.value()));
         } else {
-            slot.addItemStack(new ItemStack(recipe.result));
+            slot.addItemStack(recipe.result);
             SieveCategory.addTooltips(slot, false, recipe.resultAmount);
         }
     }

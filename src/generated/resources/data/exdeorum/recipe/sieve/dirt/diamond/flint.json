@@ -1,0 +1,18 @@
+{
+  "type": "exdeorum:sieve",
+  "ingredient": {
+    "item": "minecraft:dirt"
+  },
+  "mesh": {
+    "item": "exdeorum:diamond_mesh"
+  },
+  "result": {
+    "count": 1,
+    "id": "minecraft:flint"
+  },
+  "result_amount": {
+    "type": "minecraft:binomial",
+    "n": 3.0,
+    "p": 0.3
+  }
+}

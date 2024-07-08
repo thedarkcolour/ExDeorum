@@ -23,7 +23,6 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.NativeImage;
-import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import it.unimi.dsi.fastutil.objects.ObjectSet;
@@ -43,6 +42,7 @@ import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3i;
 import thedarkcolour.exdeorum.ExDeorum;
+import thedarkcolour.exdeorum.compat.ModIds;
 
 import javax.imageio.ImageIO;
 import java.awt.Color;
@@ -82,19 +82,15 @@ public class CompostColors {
         var vanillaColors = ModList.get().getModFileById(ExDeorum.ID).getFile().findResource(CompostColors.VANILLA_COMPOST_COLORS_FILE);
 
         if (!Files.exists(vanillaColors)) {
-            if (ExDeorum.DEBUG) {
-                debugCompute();
-                export("minecraft");
-            } else {
-                ExDeorum.LOGGER.error("Failed to load vanilla colors!");
-            }
+            ExDeorum.LOGGER.error("Failed to load vanilla colors!");
         } else {
-            readColorFile("minecraft", vanillaColors);
+            readColorFile(ModIds.MINECRAFT, vanillaColors);
         }
     }
 
-    // Instead of reading from files, this method pulls colors directly from the texture atlas.
-    private static void debugCompute() {
+    // Used to generate the list of vanilla colors shipped with the Ex Deorum jar
+    public static void debugCompute() {
+        // Instead of reading from files, this method pulls colors directly from the texture atlas.
         var atlas = Minecraft.getInstance().getModelManager().getAtlas(InventoryMenu.BLOCK_ATLAS);
         int atlasWidth = atlas.width;
         int atlasHeight = atlas.height;
@@ -220,7 +216,7 @@ public class CompostColors {
     @Nullable
     private static String findFirstTexture(JsonObject textureMap) {
         if (textureMap.get("layer0") instanceof JsonPrimitive primitive) {
-            return new ResourceLocation(primitive.getAsString()).getPath();
+            return ResourceLocation.parse(primitive.getAsString()).getPath();
         }
 
         return null;
@@ -314,7 +310,7 @@ public class CompostColors {
 
                         var tokenizer = new StringTokenizer(line, ", #");
                         try {
-                            var id = new ResourceLocation(modid, tokenizer.nextToken());
+                            var id = ResourceLocation.fromNamespaceAndPath(modid, tokenizer.nextToken());
                             var item = BuiltInRegistries.ITEM.get(id);
                             String token = tokenizer.nextToken();
                             var color = Integer.parseInt(token, 16);

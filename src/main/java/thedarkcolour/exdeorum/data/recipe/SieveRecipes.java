@@ -21,6 +21,7 @@ package thedarkcolour.exdeorum.data.recipe;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
@@ -959,30 +960,30 @@ class SieveRecipes {
         var folder = mesh.getId().getPath().replace("_mesh", "/");
         var basePath = path(block.getItems()[0].getItem()) + "/" + folder;
 
-        addDrops.accept(new MeshDrops(output, "sieve/" + basePath, "compressed_sieve/" + basePath, block, mesh.get()));
+        addDrops.accept(new MeshDrops(output, "sieve/" + basePath, "compressed_sieve/" + basePath, block, Ingredient.of(mesh.get())));
     }
 
-    private record MeshDrops(RecipeOutput output, String basePath, String baseCompressedPath, Ingredient block, Item mesh) {
+    private record MeshDrops(RecipeOutput output, String basePath, String baseCompressedPath, Ingredient block, Ingredient mesh) {
         private void add(Item result, NumberProvider resultAmount) {
-            this.output.accept(modLoc(this.basePath + path(result)), new SieveRecipe(this.block, result, resultAmount, this.mesh, false), null);
+            this.output.accept(modLoc(this.basePath + path(result)), new SieveRecipe(this.block, new ItemStack(result), resultAmount, this.mesh, false), null);
 
             if (COMPRESSED_VARIANTS.containsKey(this.block)) {
                 var compressedLoc = modLoc(this.baseCompressedPath + path(result));
                 var multiplied = Recipes.compressedMultiplier(resultAmount);
 
-                this.output.accept(compressedLoc, new CompressedSieveRecipe(COMPRESSED_VARIANTS.get(this.block), result, multiplied, this.mesh, false), null);
+                this.output.accept(compressedLoc, new CompressedSieveRecipe(COMPRESSED_VARIANTS.get(this.block), new ItemStack(result), multiplied, this.mesh, false), null);
             }
         }
 
         private void addConditional(ItemLike result, NumberProvider resultAmount, ICondition condition) {
             var path = modLoc(this.basePath + path(result));
-            this.output.accept(path, new SieveRecipe(this.block, result.asItem(), resultAmount, this.mesh.asItem(), false), null, condition);
+            this.output.accept(path, new SieveRecipe(this.block, new ItemStack(result), resultAmount, this.mesh, false), null, condition);
 
             if (COMPRESSED_VARIANTS.containsKey(this.block)) {
                 var compressedLoc = modLoc(this.baseCompressedPath + path(result));
                 var multiplied = Recipes.compressedMultiplier(resultAmount);
 
-                this.output.accept(compressedLoc, new CompressedSieveRecipe(COMPRESSED_VARIANTS.get(this.block), result.asItem(), multiplied, this.mesh.asItem(), false), null, condition);
+                this.output.accept(compressedLoc, new CompressedSieveRecipe(COMPRESSED_VARIANTS.get(this.block), new ItemStack(result), multiplied, this.mesh, false), null, condition);
             }
         }
     }

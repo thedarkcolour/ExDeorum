@@ -1,0 +1,10 @@
+{
+  "type": "exdeorum:water_crucible",
+  "fluid": {
+    "amount": 150,
+    "id": "minecraft:water"
+  },
+  "ingredient": {
+    "item": "minecraft:spore_blossom"
+  }
+}

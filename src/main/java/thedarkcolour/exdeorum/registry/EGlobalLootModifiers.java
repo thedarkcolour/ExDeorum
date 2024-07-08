@@ -19,6 +19,7 @@
 package thedarkcolour.exdeorum.registry;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -29,9 +30,9 @@ import thedarkcolour.exdeorum.loot.CrookLootModifier;
 import thedarkcolour.exdeorum.loot.HammerLootModifier;
 
 public class EGlobalLootModifiers {
-    public static final DeferredRegister<Codec<? extends IGlobalLootModifier>> GLOBAL_LOOT_MODIFIERS = DeferredRegister.create(NeoForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, ExDeorum.ID);
+    public static final DeferredRegister<MapCodec<? extends IGlobalLootModifier>> GLOBAL_LOOT_MODIFIERS = DeferredRegister.create(NeoForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, ExDeorum.ID);
 
-    public static final DeferredHolder<Codec<? extends IGlobalLootModifier>, Codec<CrookLootModifier>> CROOK = GLOBAL_LOOT_MODIFIERS.register("crook", () -> CrookLootModifier.CODEC);
-    public static final DeferredHolder<Codec<? extends IGlobalLootModifier>, Codec<HammerLootModifier>> HAMMER = GLOBAL_LOOT_MODIFIERS.register("hammer", () -> HammerLootModifier.CODEC);
-    public static final DeferredHolder<Codec<? extends IGlobalLootModifier>, Codec<CompressedHammerLootModifier>> COMPRESSED_HAMMER = GLOBAL_LOOT_MODIFIERS.register("compressed_hammer", () -> CompressedHammerLootModifier.CODEC);
+    public static final DeferredHolder<MapCodec<? extends IGlobalLootModifier>, MapCodec<CrookLootModifier>> CROOK = GLOBAL_LOOT_MODIFIERS.register("crook", () -> CrookLootModifier.CODEC);
+    public static final DeferredHolder<MapCodec<? extends IGlobalLootModifier>, MapCodec<HammerLootModifier>> HAMMER = GLOBAL_LOOT_MODIFIERS.register("hammer", () -> HammerLootModifier.CODEC);
+    public static final DeferredHolder<MapCodec<? extends IGlobalLootModifier>, MapCodec<CompressedHammerLootModifier>> COMPRESSED_HAMMER = GLOBAL_LOOT_MODIFIERS.register("compressed_hammer", () -> CompressedHammerLootModifier.CODEC);
 }

@@ -23,39 +23,28 @@ import com.mojang.datafixers.kinds.App;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
-import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.neoforged.neoforge.fluids.FluidStack;
 
-import java.util.Optional;
 import java.util.function.Function;
 
 @SuppressWarnings("OptionalGetWithoutIsPresent")
 public class CodecUtil {
-    public static final Codec<FluidStack> FLUIDSTACK_CODEC = new FluidStackCodec();
-    private static final Codec<FluidStack> ALTERNATIVE_FLUIDSTACK_CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            fluidField("fluid", FluidStack::getFluid),
-            Codec.INT.fieldOf("amount").forGetter(FluidStack::getAmount),
-            CompoundTag.CODEC.optionalFieldOf("tag").forGetter(stack -> Optional.ofNullable(stack.getTag()))
-    ).apply(instance, (fluid, amount, optionalTag) -> {
-        var stack = new FluidStack(fluid, amount);
-        optionalTag.ifPresent(stack::setTag);
-        return stack;
-    }));
+    public static final Codec<FluidStack> FLUIDSTACK_CODEC = FluidStack.CODEC;
+    public static final StreamCodec<RegistryFriendlyByteBuf, NumberProvider> NUMBER_PROVIDER_CODEC = StreamCodec.of(RecipeUtil::toNetworkNumberProvider, RecipeUtil::fromNetworkNumberProvider);
 
     public static <T extends SingleIngredientRecipe> App<RecordCodecBuilder.Mu<T>, Ingredient> ingredientField() {
-        return Ingredient.CODEC_NONEMPTY.fieldOf("ingredient").forGetter(SingleIngredientRecipe::getIngredient);
-    }
-
-    public static <T> App<RecordCodecBuilder.Mu<T>, Item> itemField(String name, Function<T, Item> getter) {
-        return BuiltInRegistries.ITEM.byNameCodec().fieldOf(name).forGetter(getter);
+        return Ingredient.CODEC_NONEMPTY.fieldOf("ingredient").forGetter(SingleIngredientRecipe::ingredient);
     }
 
     public static <T> App<RecordCodecBuilder.Mu<T>, Block> blockField(String name, Function<T, Block> getter) {
@@ -76,25 +65,5 @@ public class CodecUtil {
 
     public static <T, U extends T, I> DataResult<Pair<T, I>> cast(DataResult<Pair<U, I>> result) {
         return result.map(pair -> pair.mapFirst(Function.identity()));
-    }
-
-    private static class FluidStackCodec implements Codec<FluidStack> {
-        @Override
-        public <T> DataResult<Pair<FluidStack, T>> decode(DynamicOps<T> ops, T input) {
-            var r1 = ALTERNATIVE_FLUIDSTACK_CODEC.decode(ops, input);
-            if (r1.error().isEmpty()) {
-                return r1;
-            }
-            var r2 = FluidStack.CODEC.decode(ops, input);
-            if (r2.error().isEmpty()) {
-                return r2;
-            }
-            return r1;
-        }
-
-        @Override
-        public <T> DataResult<T> encode(FluidStack input, DynamicOps<T> ops, T prefix) {
-            return ALTERNATIVE_FLUIDSTACK_CODEC.encode(input, ops, prefix);
-        }
     }
 }

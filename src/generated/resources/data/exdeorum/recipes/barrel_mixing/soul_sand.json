@@ -1,9 +1,0 @@
-{
-  "type": "exdeorum:barrel_mixing",
-  "fluid": "exdeorum:witch_water",
-  "fluid_amount": 1000,
-  "ingredient": {
-    "item": "minecraft:sand"
-  },
-  "result": "minecraft:soul_sand"
-}

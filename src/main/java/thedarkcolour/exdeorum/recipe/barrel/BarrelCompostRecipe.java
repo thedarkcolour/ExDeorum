@@ -19,8 +19,10 @@
 package thedarkcolour.exdeorum.recipe.barrel;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -30,10 +32,11 @@ import thedarkcolour.exdeorum.registry.ERecipeSerializers;
 import thedarkcolour.exdeorum.registry.ERecipeTypes;
 
 public class BarrelCompostRecipe extends SingleIngredientRecipe {
-    public static final Codec<BarrelCompostRecipe> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final MapCodec<BarrelCompostRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             CodecUtil.ingredientField(),
             Codec.INT.fieldOf("volume").forGetter(BarrelCompostRecipe::getVolume)
     ).apply(instance, BarrelCompostRecipe::new));
+    public static final StreamCodec<RegistryFriendlyByteBuf, BarrelCompostRecipe> STREAM_CODEC = StreamCodec.of(BarrelCompostRecipe::toNetwork, BarrelCompostRecipe::fromNetwork);
 
     private final int volume;
 
@@ -57,24 +60,27 @@ public class BarrelCompostRecipe extends SingleIngredientRecipe {
         return ERecipeTypes.BARREL_COMPOST.get();
     }
 
+    public static void toNetwork(RegistryFriendlyByteBuf buffer, BarrelCompostRecipe recipe) {
+        Ingredient.CONTENTS_STREAM_CODEC.encode(buffer, recipe.ingredient);
+        buffer.writeVarInt(recipe.getVolume());
+    }
+
+    public static BarrelCompostRecipe fromNetwork(RegistryFriendlyByteBuf buffer) {
+        Ingredient ingredient = Ingredient.CONTENTS_STREAM_CODEC.decode(buffer);
+        int volume = buffer.readVarInt();
+
+        return new BarrelCompostRecipe(ingredient, volume);
+    }
+
     public static class Serializer implements RecipeSerializer<BarrelCompostRecipe> {
         @Override
-        public Codec<BarrelCompostRecipe> codec() {
+        public MapCodec<BarrelCompostRecipe> codec() {
             return CODEC;
         }
 
         @Override
-        public void toNetwork(FriendlyByteBuf buffer, BarrelCompostRecipe recipe) {
-            recipe.ingredient.toNetwork(buffer);
-            buffer.writeVarInt(recipe.getVolume());
-        }
-
-        @Override
-        public BarrelCompostRecipe fromNetwork(FriendlyByteBuf buffer) {
-            Ingredient ingredient = Ingredient.fromNetwork(buffer);
-            int volume = buffer.readVarInt();
-
-            return new BarrelCompostRecipe(ingredient, volume);
+        public StreamCodec<RegistryFriendlyByteBuf, BarrelCompostRecipe> streamCodec() {
+            return STREAM_CODEC;
         }
     }
 }

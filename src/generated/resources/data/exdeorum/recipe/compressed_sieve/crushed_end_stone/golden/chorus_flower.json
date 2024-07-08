@@ -1,0 +1,18 @@
+{
+  "type": "exdeorum:compressed_sieve",
+  "ingredient": {
+    "tag": "exdeorum:compressed/crushed_end_stone"
+  },
+  "mesh": {
+    "item": "exdeorum:golden_mesh"
+  },
+  "result": {
+    "count": 1,
+    "id": "minecraft:chorus_flower"
+  },
+  "result_amount": {
+    "type": "minecraft:binomial",
+    "n": 7.0,
+    "p": 0.06
+  }
+}

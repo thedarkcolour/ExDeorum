@@ -1,0 +1,9 @@
+{
+  "values": [
+    "exdeorum:compressed_dust",
+    {
+      "id": "allthecompressed:dust_1x",
+      "required": false
+    }
+  ]
+}

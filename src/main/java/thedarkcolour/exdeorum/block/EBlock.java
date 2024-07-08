@@ -22,6 +22,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -36,7 +37,7 @@ import thedarkcolour.exdeorum.blockentity.EBlockEntity;
 import java.util.function.Supplier;
 
 public abstract class EBlock extends Block implements EntityBlock {
-    private final Supplier<? extends BlockEntityType<?>> blockEntityType;
+    protected final Supplier<? extends BlockEntityType<?>> blockEntityType;
 
     public EBlock(Properties properties, Supplier<? extends BlockEntityType<?>> blockEntityType) {
         super(properties);
@@ -49,14 +50,25 @@ public abstract class EBlock extends Block implements EntityBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
         var blockEntity = level.getBlockEntity(pos);
 
         if (blockEntity instanceof EBlockEntity entity) {
-            return entity.use(level, player, hand);
+            return entity.useWithoutItem(level, player);
         }
 
         return InteractionResult.PASS;
+    }
+
+    @Override
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+        var blockEntity = level.getBlockEntity(pos);
+
+        if (blockEntity instanceof EBlockEntity entity) {
+            return entity.useItemOn(level, player, stack, hand);
+        }
+
+        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
 
     public static void dropItem(Level level, BlockPos pos, ItemStack stack) {

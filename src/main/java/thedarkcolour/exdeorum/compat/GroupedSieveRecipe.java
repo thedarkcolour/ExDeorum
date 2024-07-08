@@ -51,13 +51,13 @@ public record GroupedSieveRecipe(Ingredient ingredient, ItemStack mesh, List<Res
         for (int i = 0; i < recipes.size(); i++) {
             var recipe = recipes.get(i);
 
-            ingredientGrouper.put(recipe.getIngredient(), recipe);
+            ingredientGrouper.put(recipe.ingredient(), recipe);
 
             for (int j = i + 1; j < recipes.size(); j++) {
                 var other = recipes.get(j);
 
-                if (RecipeUtil.areIngredientsEqual(recipe.getIngredient(), other.getIngredient())) {
-                    ingredientGrouper.put(recipe.getIngredient(), other);
+                if (RecipeUtil.areIngredientsEqual(recipe.ingredient(), other.ingredient())) {
+                    ingredientGrouper.put(recipe.ingredient(), other);
                     recipes.remove(other);
                     j--;
                 }
@@ -77,7 +77,9 @@ public record GroupedSieveRecipe(Ingredient ingredient, ItemStack mesh, List<Res
 
             // these lists are grouped into sub lists based on their meshes (ex. dirt with string mesh)
             for (var recipe : values) {
-                meshGrouper.put(recipe.mesh, recipe);
+                for (var stack : recipe.mesh.getItems()) {
+                    meshGrouper.put(stack.getItem(), recipe);
+                }
             }
 
             // the sub lists have their results combined for displaying in JEI
@@ -90,7 +92,7 @@ public record GroupedSieveRecipe(Ingredient ingredient, ItemStack mesh, List<Res
 
                 for (var recipe : meshRecipes) {
                     int resultCount = recipe.resultAmount instanceof ConstantValue constant ? Math.round(constant.value()) : 1;
-                    results.add(new Result(new ItemStack(recipe.result, resultCount), recipe.resultAmount, recipe.byHandOnly));
+                    results.add(new Result(recipe.result.copyWithCount(resultCount), recipe.resultAmount, recipe.byHandOnly));
                 }
 
                 results.sort(resultSorter);

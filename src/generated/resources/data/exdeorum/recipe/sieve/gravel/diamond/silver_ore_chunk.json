@@ -1,0 +1,27 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:tag_empty",
+        "tag": "c:ores/silver"
+      }
+    }
+  ],
+  "type": "exdeorum:sieve",
+  "ingredient": {
+    "item": "minecraft:gravel"
+  },
+  "mesh": {
+    "item": "exdeorum:diamond_mesh"
+  },
+  "result": {
+    "count": 1,
+    "id": "exdeorum:silver_ore_chunk"
+  },
+  "result_amount": {
+    "type": "minecraft:binomial",
+    "n": 1.0,
+    "p": 0.08
+  }
+}

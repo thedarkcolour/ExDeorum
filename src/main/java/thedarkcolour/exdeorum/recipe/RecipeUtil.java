@@ -27,6 +27,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -45,8 +46,6 @@ import net.minecraft.world.level.storage.loot.providers.number.*;
 import net.neoforged.neoforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.compat.PreferredOres;
-import thedarkcolour.exdeorum.item.CompressedHammerItem;
-import thedarkcolour.exdeorum.item.HammerItem;
 import thedarkcolour.exdeorum.loot.SummationGenerator;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelCompostRecipe;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelFluidMixingRecipe;
@@ -95,8 +94,6 @@ public final class RecipeUtil {
         fluidTransformationRecipeCache = new FluidTransformationRecipeCache(recipes);
         crookRecipeCache = new CrookRecipeCache(recipes);
         crucibleHeatRecipeCache = new CrucibleHeatRecipeCache(recipes);
-        HammerItem.refreshValidBlocks();
-        CompressedHammerItem.refreshValidBlocks();
     }
 
     public static void unload() {
@@ -206,9 +203,9 @@ public final class RecipeUtil {
         // although unlikely, we should check this anyway
         if (first == second) return true;
 
-        if (first.getClass() == Ingredient.class && second.getClass() == Ingredient.class) {
-            var firstValues = new ObjectArrayList<>(first.values);
-            var secondValues = new ObjectArrayList<>(second.values);
+        if (!first.isCustom() && !second.isCustom()) {
+            var firstValues = new ObjectArrayList<>(first.getValues());
+            var secondValues = new ObjectArrayList<>(second.getValues());
 
             // if arrays are same size, check if their contents are equal (order does not matter)
             if (firstValues.size() == secondValues.size()) {
@@ -286,7 +283,7 @@ public final class RecipeUtil {
     // todo stop using the RecipeManager
     @Nullable
     public static BarrelMixingRecipe getBarrelMixingRecipe(RecipeManager recipes, ItemStack stack, FluidStack fluid) {
-        for (var recipe : recipes.byType(ERecipeTypes.BARREL_MIXING.get()).values()) {
+        for (var recipe : recipes.byType(ERecipeTypes.BARREL_MIXING.get())) {
             if (recipe.value().matches(stack, fluid)) {
                 return recipe.value();
             }
@@ -298,7 +295,7 @@ public final class RecipeUtil {
     @Nullable
     public static BarrelFluidMixingRecipe getFluidMixingRecipe(FluidStack base, Fluid additive) {
         var recipe = barrelFluidMixingRecipeCache.getRecipe(base.getFluid(), additive);
-        if (recipe != null && base.getAmount() >= recipe.baseFluidAmount()) {
+        if (recipe != null && base.getAmount() >= recipe.baseFluid().amount()) {
             return recipe;
         } else {
             return null;
@@ -314,6 +311,7 @@ public final class RecipeUtil {
         }
     }
 
+    @SuppressWarnings("IfCanBeSwitch")
     public static double getExpectedValue(NumberProvider provider) {
         if (provider instanceof ConstantValue constant) {
             return constant.value();
@@ -339,15 +337,6 @@ public final class RecipeUtil {
             // no way of knowing beforehand so just put them last
             return -1.0;
         }
-    }
-
-    public static BlockPredicate readBlockPredicateNetwork(FriendlyByteBuf buffer) {
-        BlockPredicate blockPredicate = BlockPredicate.fromNetwork(buffer);
-
-        if (blockPredicate == null) {
-            throw new IllegalStateException("Failed to read block predicate from network");
-        }
-        return blockPredicate;
     }
 
     public static boolean isTagEmpty(TagKey<Item> tag) {
@@ -410,5 +399,9 @@ public final class RecipeUtil {
 
     public static <T> TagKey<T> readTag(FriendlyByteBuf buffer, ResourceKey<Registry<T>> registry) {
         return TagKey.create(registry, buffer.readResourceLocation());
+    }
+
+    public static boolean isValidResourceLocation(String string) {
+        return ResourceLocation.tryParse(string) != null;
     }
 }

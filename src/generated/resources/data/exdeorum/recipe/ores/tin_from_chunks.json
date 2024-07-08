@@ -1,0 +1,16 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:tag_empty",
+        "tag": "c:ores/tin"
+      }
+    }
+  ],
+  "type": "exdeorum:ore_chunk",
+  "ore": "c:ores/tin",
+  "ore_chunk": {
+    "item": "exdeorum:tin_ore_chunk"
+  }
+}

@@ -108,7 +108,7 @@ public class ASMTransformer implements ICoreMod {
             for (var i = 0; i < insnList.size(); ++i) {
                 var insn = insnList.get(i);
 
-                if (insn.getOpcode() == Opcodes.GETSTATIC && (((MethodInsnNode) insn).name.equals("f_226437_") || ((MethodInsnNode) insn).name.equals("NORMAL"))) {
+                if (insn.getOpcode() == Opcodes.GETSTATIC && (((FieldInsnNode) insn).name.equals("f_226437_") || ((FieldInsnNode) insn).name.equals("NORMAL"))) {
                     var newInsn = new MethodInsnNode(Opcodes.INVOKESTATIC, "thedarkcolour/exdeorum/asm/ASMHooks", "overrideDefaultWorldPreset", "()Lnet/minecraft/resources/ResourceKey;", false);
                     insnList.set(insn, newInsn);
 

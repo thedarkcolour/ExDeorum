@@ -20,7 +20,6 @@ package thedarkcolour.exdeorum.network;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -37,12 +36,12 @@ record VisualUpdateMessage(
         BlockPos pos,
         @Nullable EBlockEntity blockEntity,
         BlockEntityType<?> blockEntityType,
-        @Nullable FriendlyByteBuf payload
+        @Nullable RegistryFriendlyByteBuf payload
 ) implements CustomPacketPayload {
     public static final Type<VisualUpdateMessage> TYPE = new Type<>(ExDeorum.loc("visual_update"));
     public static final StreamCodec<RegistryFriendlyByteBuf, VisualUpdateMessage> STREAM_CODEC = StreamCodec.of(VisualUpdateMessage::write, VisualUpdateMessage::decode);
 
-    VisualUpdateMessage(BlockPos pos, @Nullable EBlockEntity blockEntity, @Nullable BlockEntityType<?> blockEntityType, @Nullable FriendlyByteBuf payload) {
+    VisualUpdateMessage(BlockPos pos, @Nullable EBlockEntity blockEntity, @Nullable BlockEntityType<?> blockEntityType, @Nullable RegistryFriendlyByteBuf payload) {
         this.pos = pos;
         this.blockEntity = blockEntity;
         // payload is saved on the client until it can be handled properly
@@ -52,17 +51,22 @@ record VisualUpdateMessage(
     }
 
     @SuppressWarnings("DataFlowIssue")
-    public static void write(FriendlyByteBuf buffer, VisualUpdateMessage msg) {
-        buffer.writeBlockPos(msg.pos);
-        buffer.writeById(BuiltInRegistries.BLOCK_ENTITY_TYPE::getId, msg.blockEntityType);
-        // write a placeholder value for the number of data bytes, keeping its index for updating later
-        var dataBytesIndex = buffer.writerIndex();
-        buffer.writeInt(0);
-        // write data bytes
-        msg.blockEntity.writeVisualData(buffer);
-        // set the correct number of data bytes
-        var numDataBytes = buffer.writerIndex() - dataBytesIndex - 4;
-        buffer.setInt(dataBytesIndex, numDataBytes);
+    public static void write(RegistryFriendlyByteBuf buffer, VisualUpdateMessage msg) {
+        try {
+            buffer.writeBlockPos(msg.pos);
+            buffer.writeById(BuiltInRegistries.BLOCK_ENTITY_TYPE::getId, msg.blockEntityType);
+            // write a placeholder value for the number of data bytes, keeping its index for updating later
+            var dataBytesIndex = buffer.writerIndex();
+            buffer.writeInt(0);
+            // write data bytes
+            msg.blockEntity.writeVisualData(buffer);
+            // set the correct number of data bytes
+            var numDataBytes = buffer.writerIndex() - dataBytesIndex - 4;
+            buffer.setInt(dataBytesIndex, numDataBytes);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     @Override
@@ -70,7 +74,7 @@ record VisualUpdateMessage(
         return TYPE;
     }
 
-    public static VisualUpdateMessage decode(FriendlyByteBuf buffer) {
-        return new VisualUpdateMessage(buffer.readBlockPos(), null, buffer.readById(BuiltInRegistries.BLOCK_ENTITY_TYPE::byId), new FriendlyByteBuf(buffer.readBytes(buffer.readInt())));
+    public static VisualUpdateMessage decode(RegistryFriendlyByteBuf buffer) {
+        return new VisualUpdateMessage(buffer.readBlockPos(), null, buffer.readById(BuiltInRegistries.BLOCK_ENTITY_TYPE::byId), new RegistryFriendlyByteBuf(buffer.readBytes(buffer.readInt()), buffer.registryAccess()));
     }
 }

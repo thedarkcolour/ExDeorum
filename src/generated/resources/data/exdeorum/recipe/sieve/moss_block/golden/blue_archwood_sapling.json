@@ -1,0 +1,24 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "ars_nouveau"
+    }
+  ],
+  "type": "exdeorum:sieve",
+  "ingredient": {
+    "item": "minecraft:moss_block"
+  },
+  "mesh": {
+    "item": "exdeorum:golden_mesh"
+  },
+  "result": {
+    "count": 1,
+    "id": "ars_nouveau:blue_archwood_sapling"
+  },
+  "result_amount": {
+    "type": "minecraft:binomial",
+    "n": 1.0,
+    "p": 0.005
+  }
+}

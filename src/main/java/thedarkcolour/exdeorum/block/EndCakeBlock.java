@@ -23,9 +23,13 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CakeBlock;
+import net.minecraft.world.level.block.EndPortalBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
@@ -39,14 +43,12 @@ public class EndCakeBlock extends CakeBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        var stack = player.getItemInHand(hand);
-
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         if (stack.is(EItemTags.END_CAKE_MATERIAL)) {
             int bites = state.getValue(BITES);
 
             if (bites == 0) {
-                return InteractionResult.FAIL;
+                return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
             } else {
                 if (!level.isClientSide) {
                     if (!player.getAbilities().instabuild) {
@@ -55,9 +57,15 @@ public class EndCakeBlock extends CakeBlock {
                     level.setBlock(pos, state.setValue(BITES, bites - 1), 3);
                 }
 
-                return InteractionResult.sidedSuccess(level.isClientSide);
+                return ItemInteractionResult.sidedSuccess(level.isClientSide);
             }
-        } else if (!player.isShiftKeyDown()) {
+        }
+        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+    }
+
+    @Override
+    public InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
+        if (!player.isShiftKeyDown()) {
             int bites = state.getValue(BITES);
 
             if (!level.isClientSide) {
@@ -81,13 +89,14 @@ public class EndCakeBlock extends CakeBlock {
         return InteractionResult.PASS;
     }
 
+    // todo test
     private static boolean tryTeleport(ServerLevel level, Player player) {
         if (level.dimension() != Level.END) {
-            if (player.canChangeDimensions()) {
-                var endLevel = level.getServer().getLevel(Level.END);
+            var endLevel = level.getServer().getLevel(Level.END);
 
-                if (endLevel != null) {
-                    player.changeDimension(endLevel);
+            if (endLevel != null) {
+                if (player.canChangeDimensions(level, endLevel)) {
+                    player.changeDimension(((EndPortalBlock) Blocks.END_PORTAL).getPortalDestination(level, player, player.getOnPos()));
                     return true;
                 }
             }

@@ -66,7 +66,7 @@ public class PreferredOres {
      * @param defaultOre The default ore choice, picked by Ex Deorum based on which mod is the "best" choice according to thedarkcolour.
      */
     private static void putPreferredOre(TagKey<Item> tag, ModConfigSpec.ConfigValue<String> config, Item defaultOre) {
-        var item = BuiltInRegistries.ITEM.get(new ResourceLocation(config.get()));
+        var item = BuiltInRegistries.ITEM.get(ResourceLocation.parse(config.get()));
 
         if (item == Items.AIR) {
             item = defaultOre;
@@ -95,7 +95,7 @@ public class PreferredOres {
                 collection.sort(Comparator.comparing(holder -> BuiltInRegistries.ITEM.getKey(holder.value())));
 
                 // todo should the PREFERRED_ORE map be updated with this value?
-                return collection.get(0).value();
+                return collection.getFirst().value();
             }
         }
     }
@@ -171,11 +171,11 @@ public class PreferredOres {
 
         if (modId != null) {
             if (modId.equals(ModIds.FACTORIUM)) {
-                return BuiltInRegistries.ITEM.get(new ResourceLocation(modId, "mat_" + path));
+                return BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(modId, "mat_" + path));
             } else if (modId.equals(ModIds.IMMERSIVE_ENGINEERING)) {
-                return BuiltInRegistries.ITEM.get(new ResourceLocation(modId, "ore_" + path.substring(0, path.length() - 4)));
+                return BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(modId, "ore_" + path.substring(0, path.length() - 4)));
             } else {
-                return BuiltInRegistries.ITEM.get(new ResourceLocation(modId, path));
+                return BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(modId, path));
             }
         } else {
             return Items.AIR;

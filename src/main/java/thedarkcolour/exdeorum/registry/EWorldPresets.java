@@ -20,10 +20,9 @@ package thedarkcolour.exdeorum.registry;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.presets.WorldPreset;
 import thedarkcolour.exdeorum.ExDeorum;
 
 public class EWorldPresets {
-    public static final ResourceKey<WorldPreset> VOID_WORLD = ResourceKey.create(Registries.WORLD_PRESET, new ResourceLocation(ExDeorum.ID, "void_world"));
+    public static final ResourceKey<WorldPreset> VOID_WORLD = ResourceKey.create(Registries.WORLD_PRESET, ExDeorum.loc("void_world"));
 }

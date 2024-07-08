@@ -18,55 +18,48 @@
 
 package thedarkcolour.exdeorum.recipe.barrel;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.item.Item;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 import thedarkcolour.exdeorum.recipe.CodecUtil;
 import thedarkcolour.exdeorum.recipe.SingleIngredientRecipe;
 import thedarkcolour.exdeorum.registry.ERecipeSerializers;
 import thedarkcolour.exdeorum.registry.ERecipeTypes;
 
-import java.util.Objects;
-
 public class BarrelMixingRecipe extends SingleIngredientRecipe {
-    public static final Codec<BarrelMixingRecipe> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final MapCodec<BarrelMixingRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             CodecUtil.ingredientField(),
-            CodecUtil.fluidField("fluid", BarrelMixingRecipe::getFluid),
-            Codec.INT.fieldOf("fluid_amount").forGetter(BarrelMixingRecipe::getFluidAmount),
-            CodecUtil.itemField("result", BarrelMixingRecipe::getResult)
+            SizedFluidIngredient.FLAT_CODEC.fieldOf("fluid").forGetter(BarrelMixingRecipe::getFluid),
+            ItemStack.CODEC.fieldOf("result").forGetter(BarrelMixingRecipe::getResult)
     ).apply(instance, BarrelMixingRecipe::new));
+    public static final StreamCodec<RegistryFriendlyByteBuf, BarrelMixingRecipe> STREAM_CODEC = StreamCodec.of(BarrelMixingRecipe::toNetwork, BarrelMixingRecipe::fromNetwork);
 
-    public final Fluid fluid;
+    public final SizedFluidIngredient fluid;
     public final int fluidAmount;
-    public final Item result;
+    public final ItemStack result;
 
-    public BarrelMixingRecipe(Ingredient ingredient, Fluid fluid, int fluidAmount, Item result) {
+    public BarrelMixingRecipe(Ingredient ingredient, SizedFluidIngredient fluid, ItemStack result) {
         super(ingredient);
         this.fluid = fluid;
-        this.fluidAmount = fluidAmount;
+        this.fluidAmount = fluid.amount();
         this.result = result;
     }
 
-    public Fluid getFluid() {
+    public SizedFluidIngredient getFluid() {
         return this.fluid;
     }
 
-    public int getFluidAmount() {
-        return this.fluidAmount;
-    }
-
-    public Item getResult() {
+    public ItemStack getResult() {
         return this.result;
     }
 
@@ -78,12 +71,12 @@ public class BarrelMixingRecipe extends SingleIngredientRecipe {
     }
 
     public boolean matches(ItemStack item, FluidStack fluid) {
-        return this.ingredient.test(item) && fluid.getFluid() == this.fluid && fluid.getAmount() >= this.fluidAmount;
+        return this.ingredient.test(item) && this.fluid.test(fluid) && fluid.getAmount() >= this.fluidAmount;
     }
 
     @Override
     public ItemStack getResultItem(HolderLookup.Provider access) {
-        return new ItemStack(this.result);
+        return this.result;
     }
 
     @Override
@@ -96,28 +89,29 @@ public class BarrelMixingRecipe extends SingleIngredientRecipe {
         return ERecipeTypes.BARREL_MIXING.get();
     }
 
+    public static void toNetwork(RegistryFriendlyByteBuf buffer, BarrelMixingRecipe recipe) {
+        Ingredient.CONTENTS_STREAM_CODEC.encode(buffer, recipe.ingredient);
+        SizedFluidIngredient.STREAM_CODEC.encode(buffer, recipe.fluid);
+        ItemStack.STREAM_CODEC.encode(buffer, recipe.result);
+    }
+
+    public static BarrelMixingRecipe fromNetwork(RegistryFriendlyByteBuf buffer) {
+        Ingredient ingredient = Ingredient.CONTENTS_STREAM_CODEC.decode(buffer);
+        SizedFluidIngredient fluid = SizedFluidIngredient.STREAM_CODEC.decode(buffer);
+        ItemStack result = ItemStack.STREAM_CODEC.decode(buffer);
+
+        return new BarrelMixingRecipe(ingredient, fluid, result);
+    }
+
     public static class Serializer implements RecipeSerializer<BarrelMixingRecipe> {
         @Override
-        public Codec<BarrelMixingRecipe> codec() {
+        public MapCodec<BarrelMixingRecipe> codec() {
             return CODEC;
         }
 
         @Override
-        public void toNetwork(FriendlyByteBuf buffer, BarrelMixingRecipe recipe) {
-            recipe.ingredient.toNetwork(buffer);
-            buffer.writeId(BuiltInRegistries.FLUID, recipe.fluid);
-            buffer.writeVarInt(recipe.fluidAmount);
-            buffer.writeId(BuiltInRegistries.ITEM, recipe.result);
-        }
-
-        @Override
-        public BarrelMixingRecipe fromNetwork(FriendlyByteBuf buffer) {
-            Ingredient ingredient = Ingredient.fromNetwork(buffer);
-            Fluid fluid = Objects.requireNonNull(buffer.readById(BuiltInRegistries.FLUID));
-            int fluidAmount = buffer.readVarInt();
-            Item result = Objects.requireNonNull(buffer.readById(BuiltInRegistries.ITEM));
-
-            return new BarrelMixingRecipe(ingredient, fluid, fluidAmount, result);
+        public StreamCodec<RegistryFriendlyByteBuf, BarrelMixingRecipe> streamCodec() {
+            return STREAM_CODEC;
         }
     }
 }

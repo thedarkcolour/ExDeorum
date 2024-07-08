@@ -1,0 +1,30 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "blue_skies"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "I": {
+      "tag": "c:rods/wooden"
+    },
+    "O": {
+      "item": "blue_skies:starlit_planks"
+    },
+    "_": {
+      "item": "blue_skies:starlit_slab"
+    }
+  },
+  "pattern": [
+    "O O",
+    "O_O",
+    "I I"
+  ],
+  "result": {
+    "count": 1,
+    "id": "exdeorum:starlit_sieve"
+  }
+}

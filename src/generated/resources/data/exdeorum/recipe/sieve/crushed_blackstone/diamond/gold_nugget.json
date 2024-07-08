@@ -1,0 +1,18 @@
+{
+  "type": "exdeorum:sieve",
+  "ingredient": {
+    "item": "exdeorum:crushed_blackstone"
+  },
+  "mesh": {
+    "item": "exdeorum:diamond_mesh"
+  },
+  "result": {
+    "count": 1,
+    "id": "minecraft:gold_nugget"
+  },
+  "result_amount": {
+    "type": "minecraft:binomial",
+    "n": 4.0,
+    "p": 0.275
+  }
+}

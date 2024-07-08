@@ -26,9 +26,9 @@ import net.minecraft.client.gui.screens.worldselection.WorldCreationUiState;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.ShaderInstance;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Unit;
 import net.minecraft.world.level.levelgen.presets.WorldPreset;
 import net.neoforged.bus.api.IEventBus;
@@ -53,7 +53,7 @@ import java.io.IOException;
 
 public class ClientHandler {
     // Used for the composting recipe category in JEI
-    public static final ResourceLocation OAK_BARREL_COMPOSTING = new ResourceLocation(ExDeorum.ID, "item/oak_barrel_composting");
+    public static final ModelResourceLocation OAK_BARREL_COMPOSTING = new ModelResourceLocation(ExDeorum.loc("item/oak_barrel_composting"), ModelResourceLocation.STANDALONE_VARIANT);
     public static boolean isInVoidWorld;
     // This is used to prevent Ex Deorum from resetting world type when trying to configure Superflat, Single Biome, etc.
     public static Holder<WorldPreset> originalDefaultWorldPreset;
@@ -110,9 +110,7 @@ public class ClientHandler {
 
     private static void onConfigChanged(ModConfigEvent.Reloading event) {
         if (event.getConfig().getSpec() == EConfig.CLIENT_SPEC) {
-            RenderSystem.recordRenderCall(() -> {
-                Minecraft.getInstance().levelRenderer.allChanged();
-            });
+            RenderSystem.recordRenderCall(() -> Minecraft.getInstance().levelRenderer.allChanged());
         }
     }
 
@@ -129,7 +127,7 @@ public class ClientHandler {
     private static void registerShaders(RegisterShadersEvent event) {
         try {
             // NEW_ENTITY is BLOCK except it also uses UV1 (overlay coordinates)
-            event.registerShader(new ShaderInstance(event.getResourceProvider(), new ResourceLocation(ExDeorum.ID, "rendertype_tinted_cutout_mipped"), DefaultVertexFormat.NEW_ENTITY), (instance) -> {
+            event.registerShader(new ShaderInstance(event.getResourceProvider(), ExDeorum.loc("rendertype_tinted_cutout_mipped"), DefaultVertexFormat.NEW_ENTITY), instance -> {
                 RenderUtil.renderTypeTintedCutoutMippedShader = instance;
             });
         } catch (IOException e) {
@@ -157,7 +155,7 @@ public class ClientHandler {
 
     // Only called when JEI is loaded, because this registers the recipe category icon models.
     private static void registerAdditionalModels(ModelEvent.RegisterAdditional event) {
-        event.register(new ResourceLocation(ExDeorum.ID, "block/oak_barrel_composting"));
+        event.register(new ModelResourceLocation(ExDeorum.loc("block/oak_barrel_composting"), ModelResourceLocation.STANDALONE_VARIANT));
         event.register(OAK_BARREL_COMPOSTING);
     }
 

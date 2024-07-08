@@ -44,7 +44,7 @@ import java.util.function.Supplier;
 
 public class WitchWaterBlock extends LiquidBlock {
     public WitchWaterBlock(Supplier<? extends FlowingFluid> pFluid, Properties pProperties) {
-        super(pFluid, pProperties);
+        super(pFluid.get(), pProperties);
     }
 
     @Override
@@ -71,10 +71,10 @@ public class WitchWaterBlock extends LiquidBlock {
                         } else {
                             var zombieVillager = villager.convertTo(EntityType.ZOMBIE_VILLAGER, false);
                             if (zombieVillager != null) {
-                                zombieVillager.finalizeSpawn((ServerLevelAccessor) level, level.getCurrentDifficultyAt(zombieVillager.blockPosition()), MobSpawnType.CONVERSION, new Zombie.ZombieGroupData(false, true), null);
+                                EventHooks.finalizeMobSpawn(zombieVillager, (ServerLevelAccessor) level, level.getCurrentDifficultyAt(zombieVillager.blockPosition()), MobSpawnType.CONVERSION, new Zombie.ZombieGroupData(false, true));
                                 zombieVillager.setVillagerData(villager.getVillagerData());
                                 zombieVillager.setGossips(villager.getGossips().store(NbtOps.INSTANCE));
-                                zombieVillager.setTradeOffers(villager.getOffers().createTag());
+                                zombieVillager.setTradeOffers(villager.getOffers().copy());
                                 zombieVillager.setVillagerXp(villager.getVillagerXp());
 
                                 EventHooks.onLivingConvert(villager, zombieVillager);
@@ -130,7 +130,7 @@ public class WitchWaterBlock extends LiquidBlock {
             if (newEntity != null) {
                 var serverLevel = (ServerLevelAccessor) level;
                 newEntity.copyPosition(entity);
-                EventHooks.onFinalizeSpawn(newEntity, serverLevel, level.getCurrentDifficultyAt(entity.blockPosition()), MobSpawnType.CONVERSION, null, null);
+                EventHooks.finalizeMobSpawn(newEntity, serverLevel, level.getCurrentDifficultyAt(entity.blockPosition()), MobSpawnType.CONVERSION, null);
                 newEntity.setNoAi(newEntity.isNoAi());
 
                 if (entity.hasCustomName()) {

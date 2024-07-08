@@ -150,7 +150,7 @@ public class RenderUtil {
         var sprite = blockAtlas.getSprite(registryName.withPrefix("block/"));
         // for stuff like azalea bush, retry to get the top texture
         if (isMissingTexture(sprite)) {
-            sprite = blockAtlas.getSprite(new ResourceLocation(registryName.getNamespace(), "block/" + registryName.getPath() + "_top"));
+            sprite = blockAtlas.getSprite(ResourceLocation.fromNamespaceAndPath(registryName.getNamespace(), "block/" + registryName.getPath() + "_top"));
         }
         if (isMissingTexture(sprite)) {
             sprite = model.getParticleIcon(ModelData.EMPTY);
@@ -190,16 +190,16 @@ public class RenderUtil {
 
         // Top face
         normal = poseNormal.transform(new Vector3f(0, 1, 0));
-        builder.vertex(pose, edgeMin, maxY, edgeMin).color(r, g, b, 255).uv(uMin, vMin).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
-        builder.vertex(pose, edgeMin, maxY, edgeMax).color(r, g, b, 255).uv(uMin, vMax).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
-        builder.vertex(pose, edgeMax, maxY, edgeMax).color(r, g, b, 255).uv(uMax, vMax).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
-        builder.vertex(pose, edgeMax, maxY, edgeMin).color(r, g, b, 255).uv(uMax, vMin).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.addVertex(pose, edgeMin, maxY, edgeMin).setColor(r, g, b, 255).setUv(uMin, vMin).setUv1(0, 10).setLight(light).setNormal(normal.x, normal.y, normal.z);
+        builder.addVertex(pose, edgeMin, maxY, edgeMax).setColor(r, g, b, 255).setUv(uMin, vMax).setUv1(0, 10).setLight(light).setNormal(normal.x, normal.y, normal.z);
+        builder.addVertex(pose, edgeMax, maxY, edgeMax).setColor(r, g, b, 255).setUv(uMax, vMax).setUv1(0, 10).setLight(light).setNormal(normal.x, normal.y, normal.z);
+        builder.addVertex(pose, edgeMax, maxY, edgeMin).setColor(r, g, b, 255).setUv(uMax, vMin).setUv1(0, 10).setLight(light).setNormal(normal.x, normal.y, normal.z);
         // Bottom face
         normal = poseNormal.transform(new Vector3f(0, -1, 0));
-        builder.vertex(pose, edgeMin, minY, edgeMin).color(r, g, b, 255).uv(uMin, vMin).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
-        builder.vertex(pose, edgeMax, minY, edgeMin).color(r, g, b, 255).uv(uMax, vMin).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
-        builder.vertex(pose, edgeMax, minY, edgeMax).color(r, g, b, 255).uv(uMax, vMax).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
-        builder.vertex(pose, edgeMin, minY, edgeMax).color(r, g, b, 255).uv(uMin, vMax).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.addVertex(pose, edgeMin, minY, edgeMin).setColor(r, g, b, 255).setUv(uMin, vMin).setUv1(0, 10).setLight(light).setNormal(normal.x, normal.y, normal.z);
+        builder.addVertex(pose, edgeMax, minY, edgeMin).setColor(r, g, b, 255).setUv(uMax, vMin).setUv1(0, 10).setLight(light).setNormal(normal.x, normal.y, normal.z);
+        builder.addVertex(pose, edgeMax, minY, edgeMax).setColor(r, g, b, 255).setUv(uMax, vMax).setUv1(0, 10).setLight(light).setNormal(normal.x, normal.y, normal.z);
+        builder.addVertex(pose, edgeMin, minY, edgeMax).setColor(r, g, b, 255).setUv(uMin, vMax).setUv1(0, 10).setLight(light).setNormal(normal.x, normal.y, normal.z);
 
         // Flowing texture coordinates
         //sprite = RenderUtil.blockAtlas.getSprite(extensions.getFlowingTexture(state, level, pos));
@@ -210,28 +210,28 @@ public class RenderUtil {
 
         // South face
         normal = poseNormal.transform(new Vector3f(0, 0, 1));
-        builder.vertex(pose, edgeMax, maxY, edgeMax).color(r, g, b, 255).uv(uMax, vMin).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
-        builder.vertex(pose, edgeMin, maxY, edgeMax).color(r, g, b, 255).uv(uMin, vMin).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
-        builder.vertex(pose, edgeMin, minY, edgeMax).color(r, g, b, 255).uv(uMin, vMax).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
-        builder.vertex(pose, edgeMax, minY, edgeMax).color(r, g, b, 255).uv(uMax, vMax).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.addVertex(pose, edgeMax, maxY, edgeMax).setColor(r, g, b, 255).setUv(uMax, vMin).setUv1(0, 10).setLight(light).setNormal(normal.x, normal.y, normal.z);
+        builder.addVertex(pose, edgeMin, maxY, edgeMax).setColor(r, g, b, 255).setUv(uMin, vMin).setUv1(0, 10).setLight(light).setNormal(normal.x, normal.y, normal.z);
+        builder.addVertex(pose, edgeMin, minY, edgeMax).setColor(r, g, b, 255).setUv(uMin, vMax).setUv1(0, 10).setLight(light).setNormal(normal.x, normal.y, normal.z);
+        builder.addVertex(pose, edgeMax, minY, edgeMax).setColor(r, g, b, 255).setUv(uMax, vMax).setUv1(0, 10).setLight(light).setNormal(normal.x, normal.y, normal.z);
         // North face
         normal = poseNormal.transform(new Vector3f(0, 0, -1));
-        builder.vertex(pose, edgeMin, maxY, edgeMin).color(r, g, b, 255).uv(uMin, vMin).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
-        builder.vertex(pose, edgeMax, maxY, edgeMin).color(r, g, b, 255).uv(uMax, vMin).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
-        builder.vertex(pose, edgeMax, minY, edgeMin).color(r, g, b, 255).uv(uMax, vMax).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
-        builder.vertex(pose, edgeMin, minY, edgeMin).color(r, g, b, 255).uv(uMin, vMax).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.addVertex(pose, edgeMin, maxY, edgeMin).setColor(r, g, b, 255).setUv(uMin, vMin).setUv1(0, 10).setLight(light).setNormal(normal.x, normal.y, normal.z);
+        builder.addVertex(pose, edgeMax, maxY, edgeMin).setColor(r, g, b, 255).setUv(uMax, vMin).setUv1(0, 10).setLight(light).setNormal(normal.x, normal.y, normal.z);
+        builder.addVertex(pose, edgeMax, minY, edgeMin).setColor(r, g, b, 255).setUv(uMax, vMax).setUv1(0, 10).setLight(light).setNormal(normal.x, normal.y, normal.z);
+        builder.addVertex(pose, edgeMin, minY, edgeMin).setColor(r, g, b, 255).setUv(uMin, vMax).setUv1(0, 10).setLight(light).setNormal(normal.x, normal.y, normal.z);
         // East face
         normal = poseNormal.transform(new Vector3f(1, 0, 0));
-        builder.vertex(pose, edgeMax, maxY, edgeMin).color(r, g, b, 255).uv(uMin, vMin).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
-        builder.vertex(pose, edgeMax, maxY, edgeMax).color(r, g, b, 255).uv(uMax, vMin).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
-        builder.vertex(pose, edgeMax, minY, edgeMax).color(r, g, b, 255).uv(uMax, vMax).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
-        builder.vertex(pose, edgeMax, minY, edgeMin).color(r, g, b, 255).uv(uMin, vMax).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.addVertex(pose, edgeMax, maxY, edgeMin).setColor(r, g, b, 255).setUv(uMin, vMin).setUv1(0, 10).setLight(light).setNormal(normal.x, normal.y, normal.z);
+        builder.addVertex(pose, edgeMax, maxY, edgeMax).setColor(r, g, b, 255).setUv(uMax, vMin).setUv1(0, 10).setLight(light).setNormal(normal.x, normal.y, normal.z);
+        builder.addVertex(pose, edgeMax, minY, edgeMax).setColor(r, g, b, 255).setUv(uMax, vMax).setUv1(0, 10).setLight(light).setNormal(normal.x, normal.y, normal.z);
+        builder.addVertex(pose, edgeMax, minY, edgeMin).setColor(r, g, b, 255).setUv(uMin, vMax).setUv1(0, 10).setLight(light).setNormal(normal.x, normal.y, normal.z);
         // West face
         normal = poseNormal.transform(new Vector3f(-1, 0, 0));
-        builder.vertex(pose, edgeMin, maxY, edgeMax).color(r, g, b, 255).uv(uMax, vMin).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
-        builder.vertex(pose, edgeMin, maxY, edgeMin).color(r, g, b, 255).uv(uMin, vMin).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
-        builder.vertex(pose, edgeMin, minY, edgeMin).color(r, g, b, 255).uv(uMin, vMax).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
-        builder.vertex(pose, edgeMin, minY, edgeMax).color(r, g, b, 255).uv(uMax, vMax).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.addVertex(pose, edgeMin, maxY, edgeMax).setColor(r, g, b, 255).setUv(uMax, vMin).setUv1(0, 10).setLight(light).setNormal(normal.x, normal.y, normal.z);
+        builder.addVertex(pose, edgeMin, maxY, edgeMin).setColor(r, g, b, 255).setUv(uMin, vMin).setUv1(0, 10).setLight(light).setNormal(normal.x, normal.y, normal.z);
+        builder.addVertex(pose, edgeMin, minY, edgeMin).setColor(r, g, b, 255).setUv(uMin, vMax).setUv1(0, 10).setLight(light).setNormal(normal.x, normal.y, normal.z);
+        builder.addVertex(pose, edgeMin, minY, edgeMax).setColor(r, g, b, 255).setUv(uMax, vMax).setUv1(0, 10).setLight(light).setNormal(normal.x, normal.y, normal.z);
     }
 
     // Renders a sprite inside the barrel with the height determined by how full the barrel is.
@@ -258,10 +258,10 @@ public class RenderUtil {
         float vMax = sprite.getV1();
 
         // overlayCoords(0, 10) is NO_OVERLAY (0xA0000)
-        builder.vertex(pose, edgeMin, y, edgeMin).color(r, g, b, 255).uv(uMin, vMin).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
-        builder.vertex(pose, edgeMin, y, edgeMax).color(r, g, b, 255).uv(uMin, vMax).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
-        builder.vertex(pose, edgeMax, y, edgeMax).color(r, g, b, 255).uv(uMax, vMax).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
-        builder.vertex(pose, edgeMax, y, edgeMin).color(r, g, b, 255).uv(uMax, vMin).overlayCoords(0, 10).uv2(light).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.addVertex(pose, edgeMin, y, edgeMin).setColor(r, g, b, 255).setUv(uMin, vMin).setUv1(0, 10).setLight(light).setNormal(normal.x, normal.y, normal.z);
+        builder.addVertex(pose, edgeMin, y, edgeMax).setColor(r, g, b, 255).setUv(uMin, vMax).setUv1(0, 10).setLight(light).setNormal(normal.x, normal.y, normal.z);
+        builder.addVertex(pose, edgeMax, y, edgeMax).setColor(r, g, b, 255).setUv(uMax, vMax).setUv1(0, 10).setLight(light).setNormal(normal.x, normal.y, normal.z);
+        builder.addVertex(pose, edgeMax, y, edgeMin).setColor(r, g, b, 255).setUv(uMax, vMin).setUv1(0, 10).setLight(light).setNormal(normal.x, normal.y, normal.z);
     }
 
     public static Color getRainbowColor(long time, float partialTicks) {
@@ -296,16 +296,16 @@ public class RenderUtil {
 
         // Top face
         normal = poseNormal.transform(new Vector3f(0, 1, 0));
-        builder.vertex(pose, edgeMin, maxY, edgeMin).color(r, g, b, 255).uv(uMin, vMin).overlayCoords(0, 10).uv2(lightU, lightV).normal(normal.x, normal.y, normal.z).endVertex();
-        builder.vertex(pose, edgeMin, maxY, edgeMax).color(r, g, b, 255).uv(uMin, vMax).overlayCoords(0, 10).uv2(lightU, lightV).normal(normal.x, normal.y, normal.z).endVertex();
-        builder.vertex(pose, edgeMax, maxY, edgeMax).color(r, g, b, 255).uv(uMax, vMax).overlayCoords(0, 10).uv2(lightU, lightV).normal(normal.x, normal.y, normal.z).endVertex();
-        builder.vertex(pose, edgeMax, maxY, edgeMin).color(r, g, b, 255).uv(uMax, vMin).overlayCoords(0, 10).uv2(lightU, lightV).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.addVertex(pose, edgeMin, maxY, edgeMin).setColor(r, g, b, 255).setUv(uMin, vMin).setUv1(0, 10).setUv2(lightU, lightV).setNormal(normal.x, normal.y, normal.z);
+        builder.addVertex(pose, edgeMin, maxY, edgeMax).setColor(r, g, b, 255).setUv(uMin, vMax).setUv1(0, 10).setUv2(lightU, lightV).setNormal(normal.x, normal.y, normal.z);
+        builder.addVertex(pose, edgeMax, maxY, edgeMax).setColor(r, g, b, 255).setUv(uMax, vMax).setUv1(0, 10).setUv2(lightU, lightV).setNormal(normal.x, normal.y, normal.z);
+        builder.addVertex(pose, edgeMax, maxY, edgeMin).setColor(r, g, b, 255).setUv(uMax, vMin).setUv1(0, 10).setUv2(lightU, lightV).setNormal(normal.x, normal.y, normal.z);
         // Bottom face
         normal = poseNormal.transform(new Vector3f(0, -1, 0));
-        builder.vertex(pose, edgeMin, minY, edgeMin).color(r, g, b, 255).uv(uMin, vMin).overlayCoords(0, 10).uv2(lightU, lightV).normal(normal.x, normal.y, normal.z).endVertex();
-        builder.vertex(pose, edgeMax, minY, edgeMin).color(r, g, b, 255).uv(uMax, vMin).overlayCoords(0, 10).uv2(lightU, lightV).normal(normal.x, normal.y, normal.z).endVertex();
-        builder.vertex(pose, edgeMax, minY, edgeMax).color(r, g, b, 255).uv(uMax, vMax).overlayCoords(0, 10).uv2(lightU, lightV).normal(normal.x, normal.y, normal.z).endVertex();
-        builder.vertex(pose, edgeMin, minY, edgeMax).color(r, g, b, 255).uv(uMin, vMax).overlayCoords(0, 10).uv2(lightU, lightV).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.addVertex(pose, edgeMin, minY, edgeMin).setColor(r, g, b, 255).setUv(uMin, vMin).setUv1(0, 10).setUv2(lightU, lightV).setNormal(normal.x, normal.y, normal.z);
+        builder.addVertex(pose, edgeMax, minY, edgeMin).setColor(r, g, b, 255).setUv(uMax, vMin).setUv1(0, 10).setUv2(lightU, lightV).setNormal(normal.x, normal.y, normal.z);
+        builder.addVertex(pose, edgeMax, minY, edgeMax).setColor(r, g, b, 255).setUv(uMax, vMax).setUv1(0, 10).setUv2(lightU, lightV).setNormal(normal.x, normal.y, normal.z);
+        builder.addVertex(pose, edgeMin, minY, edgeMax).setColor(r, g, b, 255).setUv(uMin, vMax).setUv1(0, 10).setUv2(lightU, lightV).setNormal(normal.x, normal.y, normal.z);
 
         // Adjust UV based on height of cuboid, rendering from the top down to the bottom of the texture
         float f = sprite.getV1() - sprite.getV0();
@@ -313,28 +313,28 @@ public class RenderUtil {
 
         // South face
         normal = poseNormal.transform(new Vector3f(0, 0, -1));
-        builder.vertex(pose, edgeMax, maxY, edgeMax).color(r, g, b, 255).uv(uMax, vMin).overlayCoords(0, 10).uv2(lightU, lightV).normal(normal.x, normal.y, normal.z).endVertex();
-        builder.vertex(pose, edgeMin, maxY, edgeMax).color(r, g, b, 255).uv(uMin, vMin).overlayCoords(0, 10).uv2(lightU, lightV).normal(normal.x, normal.y, normal.z).endVertex();
-        builder.vertex(pose, edgeMin, minY, edgeMax).color(r, g, b, 255).uv(uMin, vMax).overlayCoords(0, 10).uv2(lightU, lightV).normal(normal.x, normal.y, normal.z).endVertex();
-        builder.vertex(pose, edgeMax, minY, edgeMax).color(r, g, b, 255).uv(uMax, vMax).overlayCoords(0, 10).uv2(lightU, lightV).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.addVertex(pose, edgeMax, maxY, edgeMax).setColor(r, g, b, 255).setUv(uMax, vMin).setUv1(0, 10).setUv2(lightU, lightV).setNormal(normal.x, normal.y, normal.z);
+        builder.addVertex(pose, edgeMin, maxY, edgeMax).setColor(r, g, b, 255).setUv(uMin, vMin).setUv1(0, 10).setUv2(lightU, lightV).setNormal(normal.x, normal.y, normal.z);
+        builder.addVertex(pose, edgeMin, minY, edgeMax).setColor(r, g, b, 255).setUv(uMin, vMax).setUv1(0, 10).setUv2(lightU, lightV).setNormal(normal.x, normal.y, normal.z);
+        builder.addVertex(pose, edgeMax, minY, edgeMax).setColor(r, g, b, 255).setUv(uMax, vMax).setUv1(0, 10).setUv2(lightU, lightV).setNormal(normal.x, normal.y, normal.z);
         // North face
         normal = poseNormal.transform(new Vector3f(0, 0, -1));
-        builder.vertex(pose, edgeMin, maxY, edgeMin).color(r, g, b, 255).uv(uMin, vMin).overlayCoords(0, 10).uv2(lightU, lightV).normal(normal.x, normal.y, normal.z).endVertex();
-        builder.vertex(pose, edgeMax, maxY, edgeMin).color(r, g, b, 255).uv(uMax, vMin).overlayCoords(0, 10).uv2(lightU, lightV).normal(normal.x, normal.y, normal.z).endVertex();
-        builder.vertex(pose, edgeMax, minY, edgeMin).color(r, g, b, 255).uv(uMax, vMax).overlayCoords(0, 10).uv2(lightU, lightV).normal(normal.x, normal.y, normal.z).endVertex();
-        builder.vertex(pose, edgeMin, minY, edgeMin).color(r, g, b, 255).uv(uMin, vMax).overlayCoords(0, 10).uv2(lightU, lightV).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.addVertex(pose, edgeMin, maxY, edgeMin).setColor(r, g, b, 255).setUv(uMin, vMin).setUv1(0, 10).setUv2(lightU, lightV).setNormal(normal.x, normal.y, normal.z);
+        builder.addVertex(pose, edgeMax, maxY, edgeMin).setColor(r, g, b, 255).setUv(uMax, vMin).setUv1(0, 10).setUv2(lightU, lightV).setNormal(normal.x, normal.y, normal.z);
+        builder.addVertex(pose, edgeMax, minY, edgeMin).setColor(r, g, b, 255).setUv(uMax, vMax).setUv1(0, 10).setUv2(lightU, lightV).setNormal(normal.x, normal.y, normal.z);
+        builder.addVertex(pose, edgeMin, minY, edgeMin).setColor(r, g, b, 255).setUv(uMin, vMax).setUv1(0, 10).setUv2(lightU, lightV).setNormal(normal.x, normal.y, normal.z);
         // East face
         normal = poseNormal.transform(new Vector3f(1, 0, 0));
-        builder.vertex(pose, edgeMax, maxY, edgeMin).color(r, g, b, 255).uv(uMin, vMin).overlayCoords(0, 10).uv2(lightU, lightV).normal(normal.x, normal.y, normal.z).endVertex();
-        builder.vertex(pose, edgeMax, maxY, edgeMax).color(r, g, b, 255).uv(uMax, vMin).overlayCoords(0, 10).uv2(lightU, lightV).normal(normal.x, normal.y, normal.z).endVertex();
-        builder.vertex(pose, edgeMax, minY, edgeMax).color(r, g, b, 255).uv(uMax, vMax).overlayCoords(0, 10).uv2(lightU, lightV).normal(normal.x, normal.y, normal.z).endVertex();
-        builder.vertex(pose, edgeMax, minY, edgeMin).color(r, g, b, 255).uv(uMin, vMax).overlayCoords(0, 10).uv2(lightU, lightV).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.addVertex(pose, edgeMax, maxY, edgeMin).setColor(r, g, b, 255).setUv(uMin, vMin).setUv1(0, 10).setUv2(lightU, lightV).setNormal(normal.x, normal.y, normal.z);
+        builder.addVertex(pose, edgeMax, maxY, edgeMax).setColor(r, g, b, 255).setUv(uMax, vMin).setUv1(0, 10).setUv2(lightU, lightV).setNormal(normal.x, normal.y, normal.z);
+        builder.addVertex(pose, edgeMax, minY, edgeMax).setColor(r, g, b, 255).setUv(uMax, vMax).setUv1(0, 10).setUv2(lightU, lightV).setNormal(normal.x, normal.y, normal.z);
+        builder.addVertex(pose, edgeMax, minY, edgeMin).setColor(r, g, b, 255).setUv(uMin, vMax).setUv1(0, 10).setUv2(lightU, lightV).setNormal(normal.x, normal.y, normal.z);
         // West face
         normal = poseNormal.transform(new Vector3f(-1, 0, 0));
-        builder.vertex(pose, edgeMin, maxY, edgeMax).color(r, g, b, 255).uv(uMax, vMin).overlayCoords(0, 10).uv2(lightU, lightV).normal(normal.x, normal.y, normal.z).endVertex();
-        builder.vertex(pose, edgeMin, maxY, edgeMin).color(r, g, b, 255).uv(uMin, vMin).overlayCoords(0, 10).uv2(lightU, lightV).normal(normal.x, normal.y, normal.z).endVertex();
-        builder.vertex(pose, edgeMin, minY, edgeMin).color(r, g, b, 255).uv(uMin, vMax).overlayCoords(0, 10).uv2(lightU, lightV).normal(normal.x, normal.y, normal.z).endVertex();
-        builder.vertex(pose, edgeMin, minY, edgeMax).color(r, g, b, 255).uv(uMax, vMax).overlayCoords(0, 10).uv2(lightU, lightV).normal(normal.x, normal.y, normal.z).endVertex();
+        builder.addVertex(pose, edgeMin, maxY, edgeMax).setColor(r, g, b, 255).setUv(uMax, vMin).setUv1(0, 10).setUv2(lightU, lightV).setNormal(normal.x, normal.y, normal.z);
+        builder.addVertex(pose, edgeMin, maxY, edgeMin).setColor(r, g, b, 255).setUv(uMin, vMin).setUv1(0, 10).setUv2(lightU, lightV).setNormal(normal.x, normal.y, normal.z);
+        builder.addVertex(pose, edgeMin, minY, edgeMin).setColor(r, g, b, 255).setUv(uMin, vMax).setUv1(0, 10).setUv2(lightU, lightV).setNormal(normal.x, normal.y, normal.z);
+        builder.addVertex(pose, edgeMin, minY, edgeMax).setColor(r, g, b, 255).setUv(uMax, vMax).setUv1(0, 10).setUv2(lightU, lightV).setNormal(normal.x, normal.y, normal.z);
     }
 
     public interface IrisAccess {

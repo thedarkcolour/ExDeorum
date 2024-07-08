@@ -1,0 +1,9 @@
+{
+  "values": [
+    "exdeorum:compressed_crushed_deepslate",
+    {
+      "id": "allthecompressed:crushed_deepslate_1x",
+      "required": false
+    }
+  ]
+}

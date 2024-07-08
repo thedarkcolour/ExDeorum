@@ -102,14 +102,13 @@ public final class EventHandler {
         if (event.getMessage().equals(".compost_colors")) {
             event.setCanceled(true);
 
-            try {
-                CompostColors.loadColors();
-                var player = Minecraft.getInstance().player;
-                if (player != null) {
-                    player.displayClientMessage(Component.literal("Reloaded " + CompostColors.COLORS.size() + " compost colors!"), false);
-                }
-            } catch (Exception e) {
-                ExDeorum.LOGGER.error("Failed to load vanilla compost colors", e);
+            CompostColors.debugCompute();
+            CompostColors.export(ModIds.MINECRAFT);
+
+            CompostColors.loadColors();
+            var player = Minecraft.getInstance().player;
+            if (player != null) {
+                player.displayClientMessage(Component.literal("Reloaded " + CompostColors.COLORS.size() + " compost colors!"), false);
             }
         } else if (event.getMessage().equals(".breakpoint")) {
             event.setCanceled(true);

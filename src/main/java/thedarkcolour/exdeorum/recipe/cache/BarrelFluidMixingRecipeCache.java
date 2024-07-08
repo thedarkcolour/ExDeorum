@@ -52,9 +52,15 @@ public class BarrelFluidMixingRecipeCache {
     private void buildRecipes() {
         this.recipes = new HashMap<>();
 
-        for (var holder : this.recipeManager.byType(ERecipeTypes.BARREL_FLUID_MIXING.get()).values()) {
+        for (var holder : this.recipeManager.byType(ERecipeTypes.BARREL_FLUID_MIXING.get())) {
             var recipe = holder.value();
-            this.recipes.computeIfAbsent(recipe.baseFluid(), key -> new HashMap<>()).put(recipe.additiveFluid(), recipe);
+            for (var baseStack : recipe.baseFluid().ingredient().getStacks()) {
+                var map = this.recipes.computeIfAbsent(baseStack.getFluid(), key -> new HashMap<>());
+
+                for (var additiveStack : recipe.additiveFluid().getStacks()) {
+                    map.put(additiveStack.getFluid(), recipe);
+                }
+            }
         }
 
         this.recipeManager = null;

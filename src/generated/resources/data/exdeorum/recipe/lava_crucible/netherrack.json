@@ -1,0 +1,10 @@
+{
+  "type": "exdeorum:lava_crucible",
+  "fluid": {
+    "amount": 500,
+    "id": "minecraft:lava"
+  },
+  "ingredient": {
+    "tag": "c:netherracks"
+  }
+}

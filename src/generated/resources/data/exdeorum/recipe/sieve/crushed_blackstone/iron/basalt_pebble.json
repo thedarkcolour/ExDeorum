@@ -1,0 +1,18 @@
+{
+  "type": "exdeorum:sieve",
+  "ingredient": {
+    "item": "exdeorum:crushed_blackstone"
+  },
+  "mesh": {
+    "item": "exdeorum:iron_mesh"
+  },
+  "result": {
+    "count": 1,
+    "id": "exdeorum:basalt_pebble"
+  },
+  "result_amount": {
+    "type": "minecraft:binomial",
+    "n": 4.0,
+    "p": 0.55
+  }
+}

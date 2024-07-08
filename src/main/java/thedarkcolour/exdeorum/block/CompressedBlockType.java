@@ -23,7 +23,7 @@ public class CompressedBlockType implements ItemLike {
     private final TagKey<Item> itemTag;
     private final Supplier<Block> base;
 
-    private boolean hasAtc, hasCompressium;
+    private boolean hasCompressium;
 
     public CompressedBlockType(String name, Supplier<Block> base) {
         this.block = EBlocks.BLOCKS.register("compressed_" + name, this::createBlock);
@@ -53,18 +53,14 @@ public class CompressedBlockType implements ItemLike {
         return this.itemTag;
     }
 
-    public CompressedBlockType withAtc() {
-        this.hasAtc = true;
-        return this;
-    }
-
     public CompressedBlockType withCompressium() {
         this.hasCompressium = true;
         return this;
     }
 
+    // AllTheCompressed has every vanilla block that Ex Deorum uses so far
     public boolean hasAtc() {
-        return this.hasAtc;
+        return true;
     }
 
     public boolean hasCompressium() {
@@ -72,11 +68,11 @@ public class CompressedBlockType implements ItemLike {
     }
 
     public ResourceLocation getAtc() {
-        return new ResourceLocation(ModIds.ALL_THE_COMPRESSED, BuiltInRegistries.BLOCK.getKey(this.base.get()).getPath() + "_1x");
+        return ResourceLocation.fromNamespaceAndPath(ModIds.ALL_THE_COMPRESSED, BuiltInRegistries.BLOCK.getKey(this.base.get()).getPath() + "_1x");
     }
 
     public ResourceLocation getCompressium() {
-        return new ResourceLocation(ModIds.COMPRESSIUM, BuiltInRegistries.BLOCK.getKey(this.base.get()).getPath() + "_1");
+        return ResourceLocation.fromNamespaceAndPath(ModIds.COMPRESSIUM, BuiltInRegistries.BLOCK.getKey(this.base.get()).getPath() + "_1");
     }
 
     public Block getBase() {

@@ -18,26 +18,29 @@
 
 package thedarkcolour.exdeorum.recipe.hammer;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.item.Item;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import thedarkcolour.exdeorum.recipe.CodecUtil;
 import thedarkcolour.exdeorum.recipe.ProbabilityRecipe;
-import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.registry.ERecipeSerializers;
 import thedarkcolour.exdeorum.registry.ERecipeTypes;
 
-import java.util.Objects;
-
 public class HammerRecipe extends ProbabilityRecipe {
-    private static final Codec<HammerRecipe> CODEC = RecordCodecBuilder.create(instance -> ProbabilityRecipe.commonFields(instance).apply(instance, HammerRecipe::new));
+    private static final MapCodec<HammerRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> ProbabilityRecipe.commonFields(instance).apply(instance, HammerRecipe::new));
+    private static final StreamCodec<RegistryFriendlyByteBuf, HammerRecipe> STREAM_CODEC = StreamCodec.composite(
+            Ingredient.CONTENTS_STREAM_CODEC, HammerRecipe::ingredient,
+            ItemStack.STREAM_CODEC, HammerRecipe::result,
+            CodecUtil.NUMBER_PROVIDER_CODEC, HammerRecipe::resultAmount,
+            HammerRecipe::new);
 
-    public HammerRecipe(Ingredient ingredient, Item result, NumberProvider resultAmount) {
+    public HammerRecipe(Ingredient ingredient, ItemStack result, NumberProvider resultAmount) {
         super(ingredient, result, resultAmount);
     }
 
@@ -51,34 +54,15 @@ public class HammerRecipe extends ProbabilityRecipe {
         return ERecipeTypes.HAMMER.get();
     }
 
-    public static abstract class AbstractSerializer<T extends HammerRecipe> implements RecipeSerializer<T> {
-        protected abstract T createHammerRecipe(Ingredient ingredient, Item result, NumberProvider resultAmount);
-
+    public static class Serializer implements RecipeSerializer<HammerRecipe> {
         @Override
-        public T fromNetwork(FriendlyByteBuf buffer) {
-            Ingredient ingredient = Ingredient.fromNetwork(buffer);
-            Item result = Objects.requireNonNull(buffer.readById(BuiltInRegistries.ITEM));
-            NumberProvider resultAmount = RecipeUtil.fromNetworkNumberProvider(buffer);
-            return createHammerRecipe(ingredient, result, resultAmount);
-        }
-
-        @Override
-        public void toNetwork(FriendlyByteBuf buffer, T recipe) {
-            recipe.getIngredient().toNetwork(buffer);
-            buffer.writeId(BuiltInRegistries.ITEM, recipe.result);
-            RecipeUtil.toNetworkNumberProvider(buffer, recipe.resultAmount);
-        }
-    }
-
-    public static class Serializer extends HammerRecipe.AbstractSerializer<HammerRecipe> {
-        @Override
-        public Codec<HammerRecipe> codec() {
+        public MapCodec<HammerRecipe> codec() {
             return CODEC;
         }
 
         @Override
-        protected HammerRecipe createHammerRecipe(Ingredient ingredient, Item result, NumberProvider resultAmount) {
-            return new HammerRecipe(ingredient, result, resultAmount);
+        public StreamCodec<RegistryFriendlyByteBuf, HammerRecipe> streamCodec() {
+            return STREAM_CODEC;
         }
     }
 }

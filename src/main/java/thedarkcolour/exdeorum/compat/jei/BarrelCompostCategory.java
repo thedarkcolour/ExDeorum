@@ -74,7 +74,7 @@ class BarrelCompostCategory implements IRecipeCategory<BarrelCompostRecipe> {
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, BarrelCompostRecipe recipe, IFocusGroup focuses) {
-        builder.addSlot(RecipeIngredientRole.INPUT, 1, 1).addIngredients(recipe.getIngredient());
+        builder.addSlot(RecipeIngredientRole.INPUT, 1, 1).addIngredients(recipe.ingredient());
     }
 
     @Override

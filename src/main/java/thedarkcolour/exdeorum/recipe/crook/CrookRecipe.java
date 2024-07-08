@@ -19,39 +19,36 @@
 package thedarkcolour.exdeorum.recipe.crook;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.Container;
-import net.minecraft.world.item.Item;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import thedarkcolour.exdeorum.recipe.BlockPredicate;
-import thedarkcolour.exdeorum.recipe.CodecUtil;
-import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.registry.ERecipeSerializers;
 import thedarkcolour.exdeorum.registry.ERecipeTypes;
 
-import java.util.Objects;
-
-public record CrookRecipe(BlockPredicate blockPredicate, Item result, float chance) implements Recipe<Container> {
-    public static final Codec<CrookRecipe> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+public record CrookRecipe(BlockPredicate blockPredicate, ItemStack result, float chance) implements Recipe<RecipeInput> {
+    public static final MapCodec<CrookRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             BlockPredicate.CODEC.fieldOf("block_predicate").forGetter(CrookRecipe::blockPredicate),
-            CodecUtil.itemField("result", CrookRecipe::result),
+            ItemStack.CODEC.fieldOf("result").forGetter(CrookRecipe::result),
             Codec.FLOAT.fieldOf("chance").forGetter(CrookRecipe::chance)
     ).apply(instance, CrookRecipe::new));
+    public static final StreamCodec<RegistryFriendlyByteBuf, CrookRecipe> STREAM_CODEC = StreamCodec.of(CrookRecipe::toNetwork, CrookRecipe::fromNetwork);
 
     @Override
-    public boolean matches(Container pContainer, Level pLevel) {
+    public boolean matches(RecipeInput input, Level pLevel) {
         return false;
     }
 
     @Override
-    public ItemStack assemble(Container pContainer, RegistryAccess pRegistryAccess) {
+    public ItemStack assemble(RecipeInput input, HolderLookup.Provider registries) {
         return ItemStack.EMPTY;
     }
 
@@ -61,8 +58,8 @@ public record CrookRecipe(BlockPredicate blockPredicate, Item result, float chan
     }
 
     @Override
-    public ItemStack getResultItem(RegistryAccess pRegistryAccess) {
-        return new ItemStack(this.result);
+    public ItemStack getResultItem(HolderLookup.Provider registries) {
+        return this.result;
     }
 
     @Override
@@ -75,26 +72,29 @@ public record CrookRecipe(BlockPredicate blockPredicate, Item result, float chan
         return ERecipeTypes.CROOK.get();
     }
 
+    public static void toNetwork(RegistryFriendlyByteBuf buffer, CrookRecipe recipe) {
+        recipe.blockPredicate.toNetwork(buffer);
+        ItemStack.STREAM_CODEC.encode(buffer, recipe.result);
+        buffer.writeFloat(recipe.chance);
+    }
+
+    public static CrookRecipe fromNetwork(RegistryFriendlyByteBuf buffer) {
+        BlockPredicate blockPredicate = BlockPredicate.STREAM_CODEC.decode(buffer);
+        ItemStack result = ItemStack.STREAM_CODEC.decode(buffer);
+        float chance = buffer.readFloat();
+
+        return new CrookRecipe(blockPredicate, result, chance);
+    }
+
     public static class Serializer implements RecipeSerializer<CrookRecipe> {
         @Override
-        public Codec<CrookRecipe> codec() {
+        public MapCodec<CrookRecipe> codec() {
             return CODEC;
         }
 
         @Override
-        public CrookRecipe fromNetwork(FriendlyByteBuf buffer) {
-            BlockPredicate blockPredicate = RecipeUtil.readBlockPredicateNetwork(buffer);
-            Item result = Objects.requireNonNull(buffer.readById(BuiltInRegistries.ITEM));
-            float chance = buffer.readFloat();
-
-            return new CrookRecipe(blockPredicate, result, chance);
-        }
-
-        @Override
-        public void toNetwork(FriendlyByteBuf buffer, CrookRecipe recipe) {
-            recipe.blockPredicate.toNetwork(buffer);
-            buffer.writeId(BuiltInRegistries.ITEM, recipe.result);
-            buffer.writeFloat(recipe.chance);
+        public StreamCodec<RegistryFriendlyByteBuf, CrookRecipe> streamCodec() {
+            return STREAM_CODEC;
         }
     }
 }

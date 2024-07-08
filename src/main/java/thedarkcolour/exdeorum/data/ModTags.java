@@ -23,6 +23,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
@@ -32,7 +33,6 @@ import net.minecraft.world.level.levelgen.structure.BuiltinStructureSets;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.material.Fluid;
 import thedarkcolour.exdeorum.ExDeorum;
-import thedarkcolour.exdeorum.block.AbstractCrucibleBlock;
 import thedarkcolour.exdeorum.compat.ModIds;
 import thedarkcolour.exdeorum.material.*;
 import thedarkcolour.exdeorum.registry.EBlocks;
@@ -65,6 +65,8 @@ class ModTags {
         for (ResourceLocation path : ModCompatData.PAMS_CROPS) {
             wateringCanTickable.addOptional(path);
         }
+        tags.tag(EBlockTags.MINEABLE_WITH_HAMMER)
+                .addTags(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.MINEABLE_WITH_SHOVEL);
 
         tags.tag(BlockTags.MINEABLE_WITH_AXE)
                 .add(WOODEN_BARRELS.stream().map(BarrelMaterial::getBlock).toArray(Block[]::new))
@@ -111,6 +113,10 @@ class ModTags {
         }
 
         tags.tag(EItemTags.COMPRESSED_SANDS).addTags(ECompressedBlocks.COMPRESSED_SAND.getTag(), ECompressedBlocks.COMPRESSED_RED_SAND.getTag());
+
+        tags.tag(ItemTags.MINING_ENCHANTABLE).addTags(EItemTags.HAMMERS, EItemTags.COMPRESSED_HAMMERS, EItemTags.CROOKS, EItemTags.SIEVE_MESHES);
+        tags.tag(ItemTags.MINING_LOOT_ENCHANTABLE).addTags(EItemTags.HAMMERS, EItemTags.COMPRESSED_HAMMERS, EItemTags.CROOKS, EItemTags.SIEVE_MESHES);
+        tags.tag(ItemTags.DURABILITY_ENCHANTABLE).addTags(EItemTags.HAMMERS, EItemTags.COMPRESSED_HAMMERS, EItemTags.CROOKS);
     }
 
     public static void createStructureSetTags(MKTagsProvider<StructureSet> tags) {

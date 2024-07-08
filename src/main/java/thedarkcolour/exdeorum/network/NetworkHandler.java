@@ -29,7 +29,7 @@ public final class NetworkHandler {
         registrar.playToClient(MenuPropertyMessage.TYPE, MenuPropertyMessage.STREAM_CODEC, (msg, ctx) -> ClientMessageHandler.handleMenuProperty(msg, ctx));
         registrar.playToClient(VisualUpdateMessage.TYPE, VisualUpdateMessage.STREAM_CODEC, (msg, ctx) -> ClientMessageHandler.handleVisualUpdate(msg, ctx));
         // not sure if this stops working if they're in the wrong phase, so I'll put it in both
-        registrar.commonToClient(VoidWorldMessage.TYPE, VoidWorldMessage.STREAM_CODEC, (msg, ctx) -> ClientMessageHandler.handleVoidWorldMessage(msg, ctx));
+        registrar.commonToClient(VoidWorldMessage.TYPE, VoidWorldMessage.STREAM_CODEC, (msg, ctx) -> ClientMessageHandler.handleVoidWorldMessage(ctx));
     }
 
     public static void sendVoidWorld(ServerPlayer player) {

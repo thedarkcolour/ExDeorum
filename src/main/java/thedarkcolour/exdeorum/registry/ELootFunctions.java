@@ -26,7 +26,7 @@ import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.loot.MachineLootFunction;
 
 public class ELootFunctions {
-    public static final DeferredRegister<LootItemFunctionType> LOOT_FUNCTIONS = DeferredRegister.create(Registries.LOOT_FUNCTION_TYPE, ExDeorum.ID);
+    public static final DeferredRegister<LootItemFunctionType<?>> LOOT_FUNCTIONS = DeferredRegister.create(Registries.LOOT_FUNCTION_TYPE, ExDeorum.ID);
 
-    public static final DeferredHolder<LootItemFunctionType, LootItemFunctionType> MACHINE = LOOT_FUNCTIONS.register("machine", () -> new LootItemFunctionType(MachineLootFunction.CODEC));
+    public static final DeferredHolder<LootItemFunctionType<?>, LootItemFunctionType<MachineLootFunction>> MACHINE = LOOT_FUNCTIONS.register("machine", () -> new LootItemFunctionType<>(MachineLootFunction.CODEC));
 }

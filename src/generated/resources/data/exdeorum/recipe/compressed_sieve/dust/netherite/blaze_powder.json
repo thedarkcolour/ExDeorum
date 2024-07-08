@@ -1,0 +1,18 @@
+{
+  "type": "exdeorum:compressed_sieve",
+  "ingredient": {
+    "tag": "exdeorum:compressed/dust"
+  },
+  "mesh": {
+    "item": "exdeorum:netherite_mesh"
+  },
+  "result": {
+    "count": 1,
+    "id": "minecraft:blaze_powder"
+  },
+  "result_amount": {
+    "type": "minecraft:binomial",
+    "n": 7.0,
+    "p": 0.1
+  }
+}

@@ -36,7 +36,7 @@ abstract class CrucibleCategory extends OneToOneCategory<CrucibleRecipe> {
 
     @Override
     protected void addInput(IRecipeSlotBuilder slot, CrucibleRecipe recipe) {
-        slot.addIngredients(recipe.getIngredient());
+        slot.addIngredients(recipe.ingredient());
     }
 
     @Override

@@ -19,12 +19,13 @@
 package thedarkcolour.exdeorum.blockentity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -59,7 +60,8 @@ import java.util.HashMap;
 import java.util.function.Consumer;
 
 public abstract class AbstractCrucibleBlockEntity extends ETankBlockEntity {
-    public static final Lazy<HashMap<Item, Block>> MELT_OVERRIDES = Lazy.concurrentOf(() -> {
+    // todo replace
+    public static final Lazy<HashMap<Item, Block>> MELT_OVERRIDES = Lazy.of(() -> {
         var map = new HashMap<Item, Block>();
         addMeltOverrides(map);
         return map;
@@ -83,10 +85,10 @@ public abstract class AbstractCrucibleBlockEntity extends ETankBlockEntity {
 
     // NBT
     @Override
-    public void saveAdditional(CompoundTag nbt) {
-        super.saveAdditional(nbt);
+    public void saveAdditional(CompoundTag nbt, HolderLookup.Provider registries) {
+        super.saveAdditional(nbt, registries);
 
-        nbt.put("Tank", this.tank.writeToNBT(new CompoundTag()));
+        nbt.put("Tank", this.tank.writeToNBT(registries, new CompoundTag()));
         if (this.lastMelted != null) {
             nbt.putString("LastMelted", BuiltInRegistries.BLOCK.getKey(this.lastMelted).toString());
         }
@@ -97,12 +99,12 @@ public abstract class AbstractCrucibleBlockEntity extends ETankBlockEntity {
     }
 
     @Override
-    public void load(CompoundTag nbt) {
-        super.load(nbt);
+    public void loadAdditional(CompoundTag nbt, HolderLookup.Provider registries) {
+        super.loadAdditional(nbt, registries);
 
-        this.tank.readFromNBT(nbt.getCompound("Tank"));
-        this.lastMelted = BuiltInRegistries.BLOCK.get(new ResourceLocation(nbt.getString("LastMelted")));
-        this.fluid = BuiltInRegistries.FLUID.get(new ResourceLocation(nbt.getString("Fluid")));
+        this.tank.readFromNBT(registries, nbt.getCompound("Tank"));
+        this.lastMelted = BuiltInRegistries.BLOCK.get(ResourceLocation.parse(nbt.getString("LastMelted")));
+        this.fluid = BuiltInRegistries.FLUID.get(ResourceLocation.parse(nbt.getString("Fluid")));
         this.solids = nbt.getShort("Solids");
 
         updateLight(this.level, this.worldPosition, this.fluid);
@@ -120,22 +122,17 @@ public abstract class AbstractCrucibleBlockEntity extends ETankBlockEntity {
 
     @Override
     public void writeVisualData(RegistryFriendlyByteBuf buffer) {
-        buffer.writeId(BuiltInRegistries.FLUID, this.tank.getFluid().getFluid());
+        buffer.writeById(BuiltInRegistries.FLUID::getId, this.tank.getFluid().getFluid());
         buffer.writeVarInt(this.tank.getFluidAmount());
-        buffer.writeId(BuiltInRegistries.BLOCK, this.lastMelted != null ? this.lastMelted : Blocks.AIR);
+        buffer.writeById(BuiltInRegistries.BLOCK::getId, this.lastMelted != null ? this.lastMelted : Blocks.AIR);
         buffer.writeShort(this.solids);
     }
 
     @Override
     public void readVisualData(RegistryFriendlyByteBuf buffer) {
-        Fluid fluid = buffer.readById(BuiltInRegistries.FLUID);
-        if (fluid == null) {
-            this.tank.setFluid(FluidStack.EMPTY);
-            buffer.readVarInt();
-        } else {
-            this.tank.setFluid(new FluidStack(fluid, buffer.readVarInt()));
-        }
-        var lastMelted = buffer.readById(BuiltInRegistries.BLOCK);
+        var fluid = buffer.readById(BuiltInRegistries.FLUID::byId);
+        this.tank.setFluid(new FluidStack(fluid, buffer.readVarInt()));
+        var lastMelted = buffer.readById(BuiltInRegistries.BLOCK::byId);
         this.lastMelted = lastMelted == Blocks.AIR ? null : lastMelted;
         this.solids = buffer.readShort();
 
@@ -154,27 +151,37 @@ public abstract class AbstractCrucibleBlockEntity extends ETankBlockEntity {
         }
     }
 
-    public InteractionResult use(Level level, Player player, InteractionHand hand) {
+    @Override
+    public ItemInteractionResult useItemOn(Level level, Player player, ItemStack stack, InteractionHand hand) {
         var playerItem = player.getItemInHand(hand);
 
         if (playerItem.getCapability(Capabilities.FluidHandler.ITEM) != null) {
-            return FluidUtil.interactWithFluidHandler(player, hand, this.tank) ? InteractionResult.sidedSuccess(level.isClientSide) : InteractionResult.PASS;
+            return FluidUtil.interactWithFluidHandler(player, hand, this.tank) ? ItemInteractionResult.sidedSuccess(level.isClientSide) : ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         }
 
-        if (!level.isClientSide) {
-            if (playerItem.getItem() == Items.GLASS_BOTTLE && this.getType() == EBlockEntities.WATER_CRUCIBLE.get() && EConfig.SERVER.allowWaterBottleTransfer.get()) {
-                var fluid = new FluidStack(Fluids.WATER, 250);
+        if (playerItem.getItem() == Items.GLASS_BOTTLE && this.getType() == EBlockEntities.WATER_CRUCIBLE.get() && EConfig.SERVER.allowWaterBottleTransfer.get()) {
+            var fluid = new FluidStack(Fluids.WATER, 250);
 
-                if (this.tank.drain(fluid, IFluidHandler.FluidAction.SIMULATE).getAmount() == 250) {
+            if (this.tank.drain(fluid, IFluidHandler.FluidAction.SIMULATE).getAmount() == 250) {
+                if (!level.isClientSide) {
                     BarrelBlockEntity.extractWaterBottle(this.tank, level, player, playerItem, fluid);
                     markUpdated();
                 }
-            } else if (canInsertItem(playerItem)) {
-                tryMelt(playerItem, player.getAbilities().instabuild ? stack -> {} : stack -> stack.shrink(1));
+                return ItemInteractionResult.sidedSuccess(level.isClientSide);
+            }
+        } else {
+            var result = canInsertItem(playerItem);
+
+            if (result == InsertionResult.YES) {
+                if (tryMelt(playerItem, player.getAbilities().instabuild ? playerStack -> {} : playerStack -> playerStack.shrink(1))) {
+                    return ItemInteractionResult.sidedSuccess(level.isClientSide);
+                }
+            } else if (result == InsertionResult.FULL) {
+                return ItemInteractionResult.sidedSuccess(level.isClientSide);
             }
         }
 
-        return InteractionResult.sidedSuccess(level.isClientSide);
+        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
 
     // Gets a crucible recipe, using the cache if possible
@@ -187,14 +194,17 @@ public abstract class AbstractCrucibleBlockEntity extends ETankBlockEntity {
      * @param item         Item to melt
      * @param shrinkAction What to do when item is melted
      */
-    private void tryMelt(ItemStack item, Consumer<ItemStack> shrinkAction) {
-        if (item.isEmpty()) return;
+    private boolean tryMelt(ItemStack item, Consumer<ItemStack> shrinkAction) {
+        if (item.isEmpty()) return false;
 
         var meltItem = item.getItem();
         var recipe = getRecipe(item);
         if (recipe == null) {
             this.item.setStackInSlot(0, ItemStack.EMPTY);
-            return;
+            return false;
+        }
+        if (this.level != null && this.level.isClientSide) {
+            return true;
         }
         var result = recipe.getResult();
         var contained = this.tank.getFluid();
@@ -219,10 +229,12 @@ public abstract class AbstractCrucibleBlockEntity extends ETankBlockEntity {
         }
 
         markUpdated();
+
+        return true;
     }
 
-    private boolean canInsertItem(ItemStack item) {
-        if (item.isEmpty()) return false;
+    private InsertionResult canInsertItem(ItemStack item) {
+        if (item.isEmpty()) return InsertionResult.NO;
 
         var recipe = getRecipe(item);
 
@@ -230,10 +242,12 @@ public abstract class AbstractCrucibleBlockEntity extends ETankBlockEntity {
             var result = recipe.getResult();
             var contained = this.tank.getFluid();
 
-            return (result.isFluidEqual(contained) || contained.isEmpty()) && result.getAmount() + this.solids <= MAX_SOLIDS;
+            if (FluidStack.isSameFluidSameComponents(result, contained) || contained.isEmpty()) {
+                return result.getAmount() + this.solids <= MAX_SOLIDS ? InsertionResult.YES : InsertionResult.FULL;
+            }
         }
 
-        return false;
+        return InsertionResult.NO;
     }
 
     public int getMeltingRate() {
@@ -284,7 +298,7 @@ public abstract class AbstractCrucibleBlockEntity extends ETankBlockEntity {
 
                 if (key.getPath().endsWith("sapling")) {
                     try {
-                        overrides.put(item, BuiltInRegistries.BLOCK.get(new ResourceLocation(key.getNamespace(), key.getPath().replace("sapling", "leaves"))));
+                        overrides.put(item, BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(key.getNamespace(), key.getPath().replace("sapling", "leaves"))));
                     } catch (Exception ignored) {
                     }
                 }
@@ -317,11 +331,11 @@ public abstract class AbstractCrucibleBlockEntity extends ETankBlockEntity {
 
         @Override
         public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-            return canInsertItem(stack);
+            return canInsertItem(stack) == InsertionResult.YES;
         }
 
         public ItemStack getItem() {
-            return this.stacks.get(0);
+            return this.stacks.getFirst();
         }
     }
 
@@ -362,5 +376,9 @@ public abstract class AbstractCrucibleBlockEntity extends ETankBlockEntity {
                 }
             }
         }
+    }
+
+    private enum InsertionResult {
+        NO, YES, FULL
     }
 }

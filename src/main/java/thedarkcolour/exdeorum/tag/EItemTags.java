@@ -37,29 +37,29 @@ public class EItemTags {
     public static final TagKey<Item> STONE_BARRELS = tag("stone_barrels");
     public static final TagKey<Item> BARRELS = tag("barrels");
 
-    public static final TagKey<Item> ORES_ALUMINUM = forgeTag("ores/aluminum");
-    public static final TagKey<Item> ORES_COBALT = forgeTag("ores/cobalt");
-    public static final TagKey<Item> ORES_SILVER = forgeTag("ores/silver");
-    public static final TagKey<Item> ORES_LEAD = forgeTag("ores/lead");
-    public static final TagKey<Item> ORES_PLATINUM = forgeTag("ores/platinum");
-    public static final TagKey<Item> ORES_NICKEL = forgeTag("ores/nickel");
-    public static final TagKey<Item> ORES_URANIUM = forgeTag("ores/uranium");
-    public static final TagKey<Item> ORES_OSMIUM = forgeTag("ores/osmium");
-    public static final TagKey<Item> ORES_TIN = forgeTag("ores/tin");
-    public static final TagKey<Item> ORES_ZINC = forgeTag("ores/zinc");
-    public static final TagKey<Item> ORES_IRIDIUM = forgeTag("ores/iridium");
-    public static final TagKey<Item> ORES_THORIUM = forgeTag("ores/thorium");
-    public static final TagKey<Item> ORES_MAGNESIUM = forgeTag("ores/magnesium");
-    public static final TagKey<Item> ORES_LITHIUM = forgeTag("ores/lithium");
-    public static final TagKey<Item> ORES_BORON = forgeTag("ores/boron");
+    public static final TagKey<Item> ORES_ALUMINUM = commonTag("ores/aluminum");
+    public static final TagKey<Item> ORES_COBALT = commonTag("ores/cobalt");
+    public static final TagKey<Item> ORES_SILVER = commonTag("ores/silver");
+    public static final TagKey<Item> ORES_LEAD = commonTag("ores/lead");
+    public static final TagKey<Item> ORES_PLATINUM = commonTag("ores/platinum");
+    public static final TagKey<Item> ORES_NICKEL = commonTag("ores/nickel");
+    public static final TagKey<Item> ORES_URANIUM = commonTag("ores/uranium");
+    public static final TagKey<Item> ORES_OSMIUM = commonTag("ores/osmium");
+    public static final TagKey<Item> ORES_TIN = commonTag("ores/tin");
+    public static final TagKey<Item> ORES_ZINC = commonTag("ores/zinc");
+    public static final TagKey<Item> ORES_IRIDIUM = commonTag("ores/iridium");
+    public static final TagKey<Item> ORES_THORIUM = commonTag("ores/thorium");
+    public static final TagKey<Item> ORES_MAGNESIUM = commonTag("ores/magnesium");
+    public static final TagKey<Item> ORES_LITHIUM = commonTag("ores/lithium");
+    public static final TagKey<Item> ORES_BORON = commonTag("ores/boron");
 
     public static final TagKey<Item> COMPRESSED_SANDS = tag("compressed/sands");
 
     public static TagKey<Item> tag(String name) {
-        return ItemTags.create(new ResourceLocation(ExDeorum.ID, name));
+        return ItemTags.create(ExDeorum.loc(name));
     }
 
-    public static TagKey<Item> forgeTag(String name) {
-        return ItemTags.create(new ResourceLocation("forge", name));
+    public static TagKey<Item> commonTag(String name) {
+        return ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", name));
     }
 }

@@ -19,7 +19,7 @@
 package thedarkcolour.exdeorum.item;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.Holder;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.InteractionHand;
@@ -62,8 +62,14 @@ public class CrookItem extends Item {
     }
 
     @Override
-    public boolean canApplyAtEnchantingTable(ItemStack stack, ResourceKey<Enchantment> enchantment) {
-        return enchantment == Enchantments.FORTUNE || enchantment == Enchantments.UNBREAKING || enchantment == Enchantments.BLOCK_EFFICIENCY;
+    public boolean isPrimaryItemFor(ItemStack stack, Holder<Enchantment> enchantment) {
+        var key = enchantment.getKey();
+        return key == Enchantments.FORTUNE || key == Enchantments.UNBREAKING || key == Enchantments.EFFICIENCY;
+    }
+
+    @Override
+    public int getEnchantmentValue() {
+        return 1;
     }
 
     @Override

@@ -49,7 +49,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.common.SoundActions;
-import net.neoforged.neoforge.event.EventHooks;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidUtil;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
@@ -122,7 +121,7 @@ public class PorcelainBucket extends Item {
                                 level.gameEvent(player, GameEvent.FLUID_PICKUP, pos);
                                 var filled = ItemUtils.createFilledResult(stack, player, result);
                                 if (!level.isClientSide) {
-                                    CriteriaTriggers.FILLED_BUCKET.trigger((ServerPlayer)player, result);
+                                    CriteriaTriggers.FILLED_BUCKET.trigger((ServerPlayer) player, result);
                                 }
 
                                 return InteractionResultHolder.sidedSuccess(filled, level.isClientSide());
@@ -185,13 +184,13 @@ public class PorcelainBucket extends Item {
                 var k = pos.getZ();
                 level.playSound(player, pos, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 0.5F, 2.6F + (level.random.nextFloat() - level.random.nextFloat()) * 0.8F);
 
-                for(int l = 0; l < 8; ++l) {
+                for (int l = 0; l < 8; ++l) {
                     level.addParticle(ParticleTypes.LARGE_SMOKE, i + Math.random(), j + Math.random(), k + Math.random(), 0, 0, 0);
                 }
 
                 return true;
             } else if (block instanceof LiquidBlockContainer liquidContainer && liquidContainer.canPlaceLiquid(player, level, pos, state, this.fluid.get())) {
-                liquidContainer.placeLiquid(level, pos, state, ((FlowingFluid)this.fluid.get()).getSource(false));
+                liquidContainer.placeLiquid(level, pos, state, ((FlowingFluid) this.fluid.get()).getSource(false));
                 playEmptySound(player, level, pos);
                 return true;
             } else {
@@ -274,7 +273,7 @@ public class PorcelainBucket extends Item {
                 return FluidStack.EMPTY;
             }
             var stack = getFluid();
-            if (!stack.isEmpty() && stack.isFluidEqual(resource)) {
+            if (!stack.isEmpty() && FluidStack.isSameFluidSameComponents(stack, resource)) {
                 if (action.execute()) {
                     setFluid(FluidStack.EMPTY);
                 }

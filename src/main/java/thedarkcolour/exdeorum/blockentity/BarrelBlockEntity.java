@@ -29,7 +29,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -53,7 +53,6 @@ import net.neoforged.neoforge.fluids.FluidUtil;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.ItemHandlerHelper;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.block.BarrelBlock;
@@ -68,6 +67,7 @@ import thedarkcolour.exdeorum.registry.EBlockEntities;
 import thedarkcolour.exdeorum.registry.ESounds;
 
 import java.util.Objects;
+import java.util.Optional;
 
 public class BarrelBlockEntity extends ETankBlockEntity {
     private static final int MOSS_SPREAD_RANGE = 2;
@@ -123,8 +123,8 @@ public class BarrelBlockEntity extends ETankBlockEntity {
 
     @Override
     public void writeVisualData(RegistryFriendlyByteBuf buffer) {
-        ItemStack.STREAM_CODEC.encode(buffer, this.item.getStackInSlot(0));
-        FluidStack.STREAM_CODEC.encode(buffer, this.tank.getFluid());
+        ItemStack.OPTIONAL_STREAM_CODEC.encode(buffer, this.item.getStackInSlot(0));
+        FluidStack.OPTIONAL_STREAM_CODEC.encode(buffer, this.tank.getFluid());
         buffer.writeShort(this.compost);
         buffer.writeFloat(this.progress);
         buffer.writeShort(this.r);
@@ -134,8 +134,8 @@ public class BarrelBlockEntity extends ETankBlockEntity {
 
     @Override
     public void readVisualData(RegistryFriendlyByteBuf buffer) {
-        this.item.setStackInSlot(0, ItemStack.STREAM_CODEC.decode(buffer));
-        this.tank.setFluid(FluidStack.STREAM_CODEC.decode(buffer));
+        this.item.setStackInSlot(0, ItemStack.OPTIONAL_STREAM_CODEC.decode(buffer));
+        this.tank.setFluid(FluidStack.OPTIONAL_STREAM_CODEC.decode(buffer));
         this.compost = buffer.readShort();
         this.progress = buffer.readFloat();
         this.r = buffer.readShort();
@@ -212,7 +212,7 @@ public class BarrelBlockEntity extends ETankBlockEntity {
     }
 
     @Override
-    public InteractionResult use(Level level, Player player, InteractionHand hand) {
+    public ItemInteractionResult useItemOn(Level level, Player player, ItemStack stack, InteractionHand hand) {
         // Collect an item
         if (!getItem().isEmpty()) {
             return giveResultItem(level);
@@ -234,7 +234,7 @@ public class BarrelBlockEntity extends ETankBlockEntity {
                     this.progress = 0.0f;
                 }
 
-                return InteractionResult.sidedSuccess(level.isClientSide);
+                return ItemInteractionResult.sidedSuccess(level.isClientSide);
             } else {
                 this.isBeingFilledByPlayer = false;
                 // try one more time to transfer fluids between item and barrel
@@ -251,14 +251,14 @@ public class BarrelBlockEntity extends ETankBlockEntity {
                             level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.BOTTLE_FILL, SoundSource.NEUTRAL, 1.0F, 1.0F);
 
                             markUpdated();
-                            return InteractionResult.sidedSuccess(level.isClientSide);
+                            return ItemInteractionResult.sidedSuccess(level.isClientSide);
                         }
                     } else if (playerItem.getItem() == Items.GLASS_BOTTLE) {
                         if (this.tank.drain(fluid, IFluidHandler.FluidAction.SIMULATE).getAmount() == 250) {
                             extractWaterBottle(this.tank, level, player, playerItem, fluid);
 
                             markUpdated();
-                            return InteractionResult.sidedSuccess(level.isClientSide);
+                            return ItemInteractionResult.sidedSuccess(level.isClientSide);
                         }
                     }
                 }
@@ -270,10 +270,10 @@ public class BarrelBlockEntity extends ETankBlockEntity {
                     BarrelFluidMixingRecipe recipe = RecipeUtil.getFluidMixingRecipe(this.tank.getFluid(), itemFluid.getFluid());
 
                     // If draining item fluid was possible and tank has enough fluid to mix...
-                    if (recipe != null && this.tank.getFluidAmount() >= recipe.baseFluidAmount() && itemFluid.getAmount() == 1000) {
+                    if (recipe != null && this.tank.getFluidAmount() >= recipe.baseFluid().amount() && itemFluid.getAmount() == 1000) {
                         if (!level.isClientSide) {
-                            this.tank.drain(recipe.baseFluidAmount(), IFluidHandler.FluidAction.EXECUTE);
-                            setItem(new ItemStack(recipe.result()));
+                            this.tank.drain(recipe.baseFluid().amount(), IFluidHandler.FluidAction.EXECUTE);
+                            setItem(recipe.result().copy());
 
                             if (recipe.consumesAdditive()) {
                                 itemFluidCap.drain(1000, IFluidHandler.FluidAction.EXECUTE);
@@ -281,7 +281,7 @@ public class BarrelBlockEntity extends ETankBlockEntity {
                             }
                         }
                         // If a mix was successful, skip rest of logic
-                        return InteractionResult.sidedSuccess(level.isClientSide);
+                        return ItemInteractionResult.sidedSuccess(level.isClientSide);
                     }
                 }
             }
@@ -299,7 +299,7 @@ public class BarrelBlockEntity extends ETankBlockEntity {
             }
         }
 
-        return InteractionResult.sidedSuccess(level.isClientSide);
+        return ItemInteractionResult.sidedSuccess(level.isClientSide);
     }
 
     // Also used by Water Crucibles
@@ -317,7 +317,7 @@ public class BarrelBlockEntity extends ETankBlockEntity {
     }
 
     // Pops the item out of the barrel (ex. dirt that has finished composting)
-    private InteractionResult giveResultItem(Level level) {
+    private ItemInteractionResult giveResultItem(Level level) {
         if (!level.isClientSide) {
             popOutItem(level, this.worldPosition, this.item.extract(false));
 
@@ -326,7 +326,7 @@ public class BarrelBlockEntity extends ETankBlockEntity {
             markUpdated();
         }
 
-        return InteractionResult.sidedSuccess(level.isClientSide);
+        return ItemInteractionResult.sidedSuccess(level.isClientSide);
     }
 
     private static void popOutItem(Level level, BlockPos pos, ItemStack stack) {
@@ -378,7 +378,7 @@ public class BarrelBlockEntity extends ETankBlockEntity {
                 // Empty barrel
                 this.tank.drain(recipe.fluidAmount, IFluidHandler.FluidAction.EXECUTE);
                 // Replace fluid with result
-                setItem(new ItemStack(recipe.result));
+                setItem(recipe.result.copy());
                 this.level.playSound(null, this.worldPosition, ESounds.BARREL_MIXING.get(), SoundSource.BLOCKS, 0.8f, 1.0f);
             }
             // Mixing was successful, so return true
@@ -444,13 +444,13 @@ public class BarrelBlockEntity extends ETankBlockEntity {
                         // If additive is not consumed, just craft
                         // If additive is consumed, check that the additive can be consumed before crafting
                         if (!recipe.consumesAdditive()) {
-                            this.tank.drain(recipe.baseFluidAmount(), IFluidHandler.FluidAction.EXECUTE);
-                            setItem(new ItemStack(recipe.result()));
+                            this.tank.drain(recipe.baseFluid().amount(), IFluidHandler.FluidAction.EXECUTE);
+                            setItem(recipe.result().copy());
                         } else if (aboveBlockState.getBlock() instanceof BucketPickup pickup) {
                             // If something was picked up, we can craft
                             if (!pickup.pickupBlock(null, this.level, abovePos, aboveBlockState).isEmpty()) {
-                                this.tank.drain(recipe.baseFluidAmount(), IFluidHandler.FluidAction.EXECUTE);
-                                setItem(new ItemStack(recipe.result()));
+                                this.tank.drain(recipe.baseFluid().amount(), IFluidHandler.FluidAction.EXECUTE);
+                                setItem(recipe.result().copy());
                             }
                         }
                     }
@@ -596,7 +596,8 @@ public class BarrelBlockEntity extends ETankBlockEntity {
     }
 
     private static ItemStack getRemainderItem(ItemStack stack) {
-        var foodRemainder = Objects.requireNonNull(stack.get(DataComponents.FOOD)).usingConvertsTo();
+        var food = stack.get(DataComponents.FOOD);
+        Optional<ItemStack> foodRemainder = food == null ? Optional.empty() : food.usingConvertsTo();
         return foodRemainder.map(ItemStack::copy).orElseGet(stack::getCraftingRemainingItem);
     }
 
@@ -631,7 +632,7 @@ public class BarrelBlockEntity extends ETankBlockEntity {
                     return getRemainderItem(stack);
                 } else {
                     popOutItem(BarrelBlockEntity.this.level, BarrelBlockEntity.this.worldPosition, getRemainderItem(stack));
-                    return ItemHandlerHelper.copyStackWithSize(stack, stack.getCount() - 1);
+                    return stack.copyWithCount(stack.getCount() - 1);
                 }
             } else {
                 return stack;

@@ -59,7 +59,7 @@ public class ExDeorum {
 
         // Game Events
         EventHandler.register(modBus);
-        // Client init (todo test that this doesn't crash servers)
+        // Client init
         if (FMLEnvironment.dist == Dist.CLIENT) {
             ClientHandler.register(modBus);
         }
@@ -85,6 +85,7 @@ public class ExDeorum {
         ERecipeSerializers.RECIPE_SERIALIZERS.register(modBus);
         ERecipeTypes.RECIPE_TYPES.register(modBus);
         ENumberProviders.NUMBER_PROVIDERS.register(modBus);
+        EDataComponents.DATA_COMPONENTS.register(modBus);
         DefaultMaterials.registerMaterials();
         ECompressedBlocks.register();
     }

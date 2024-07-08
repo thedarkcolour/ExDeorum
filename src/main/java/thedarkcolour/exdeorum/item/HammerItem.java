@@ -18,83 +18,21 @@
 
 package thedarkcolour.exdeorum.item;
 
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.DiggerItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
-import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.common.util.Lazy;
 import org.jetbrains.annotations.Nullable;
-import thedarkcolour.exdeorum.recipe.RecipeUtil;
-import thedarkcolour.exdeorum.recipe.hammer.HammerRecipe;
 import thedarkcolour.exdeorum.registry.EItems;
-
-import java.util.Collection;
-import java.util.Set;
+import thedarkcolour.exdeorum.tag.EBlockTags;
 
 public class HammerItem extends DiggerItem {
-    private static Lazy<Set<Block>> validBlocks = Lazy.of(() -> computeValidBlocks(RecipeUtil.getCachedHammerRecipes()));
-
     public HammerItem(Tier tier, Properties properties) {
-        super(1.0f, -2.8f, tier, null, properties);
-    }
-
-    protected static Set<Block> computeValidBlocks(Collection<? extends RecipeHolder<? extends HammerRecipe>> hammerRecipes) {
-        var validBlocks = new ObjectOpenHashSet<Block>(hammerRecipes.size());
-
-        for (var recipe : hammerRecipes) {
-            for (var item : recipe.value().getIngredient().getItems()) {
-                if (item.getItem() instanceof BlockItem blockItem) {
-                    validBlocks.add(blockItem.getBlock());
-                }
-            }
-        }
-
-        return validBlocks;
-    }
-
-    public static void refreshValidBlocks() {
-        validBlocks = Lazy.of(() -> computeValidBlocks(RecipeUtil.getCachedHammerRecipes()));
-    }
-
-    protected Set<Block> getValidBlocks() {
-        return validBlocks.get();
-    }
-
-    @Override
-    public float getDestroySpeed(ItemStack stack, BlockState state) {
-        return getValidBlocks().contains(state.getBlock()) ? this.speed : 1.0f;
-    }
-
-    @Override
-    public boolean isCorrectToolForDrops(BlockState state) {
-        var tier = getTier();
-        if (TierSortingRegistry.isTierSorted(tier)) {
-            return TierSortingRegistry.isCorrectTierForDrops(tier, state) && getValidBlocks().contains(state.getBlock());
-        }
-        int i = tier.getLevel();
-        if (i < 3 && state.is(BlockTags.NEEDS_DIAMOND_TOOL)) {
-            return false;
-        } else if (i < 2 && state.is(BlockTags.NEEDS_IRON_TOOL)) {
-            return false;
-        } else {
-            return (i >= 1 || !state.is(BlockTags.NEEDS_STONE_TOOL)) && getValidBlocks().contains(state.getBlock());
-        }
-    }
-
-    // FORGE START
-    @Override
-    public boolean isCorrectToolForDrops(ItemStack stack, BlockState state) {
-        return getValidBlocks().contains(state.getBlock()) && TierSortingRegistry.isCorrectTierForDrops(getTier(), state);
+        super(tier, EBlockTags.MINEABLE_WITH_HAMMER, properties);
     }
 
     @Override
     public int getBurnTime(ItemStack stack, @Nullable RecipeType<?> recipeType) {
-        return this == EItems.WOODEN_HAMMER.get() ? 200 : 0;
+        return (this == EItems.WOODEN_HAMMER.get() || this == EItems.COMPRESSED_WOODEN_HAMMER.get()) ? 200 : 0;
     }
 }

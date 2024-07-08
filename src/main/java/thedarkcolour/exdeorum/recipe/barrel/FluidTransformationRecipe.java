@@ -19,19 +19,22 @@
 package thedarkcolour.exdeorum.recipe.barrel;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.Container;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
+import net.neoforged.neoforge.fluids.crafting.FluidIngredient;
 import thedarkcolour.exdeorum.recipe.BlockPredicate;
 import thedarkcolour.exdeorum.recipe.CodecUtil;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
@@ -41,31 +44,31 @@ import thedarkcolour.exdeorum.registry.ERecipeTypes;
 
 import java.util.Objects;
 
-// todo consider NBT tag of input fluid?
 public record FluidTransformationRecipe(
-        Fluid baseFluid,
+        FluidIngredient baseFluid,
         Fluid resultFluid,
         int resultColor,
         BlockPredicate catalyst,
         WeightedList<BlockState> byproducts,
         int duration
-) implements Recipe<Container> {
-    public static final Codec<FluidTransformationRecipe> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            CodecUtil.fluidField("base_fluid", FluidTransformationRecipe::baseFluid),
+) implements Recipe<RecipeInput> {
+    public static final MapCodec<FluidTransformationRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            FluidIngredient.CODEC.fieldOf("base_fluid").forGetter(FluidTransformationRecipe::baseFluid),
             CodecUtil.fluidField("result_fluid", FluidTransformationRecipe::resultFluid),
             Codec.INT.fieldOf("result_color").forGetter(FluidTransformationRecipe::resultColor),
             BlockPredicate.CODEC.fieldOf("catalyst").forGetter(FluidTransformationRecipe::catalyst),
             WeightedList.codec(Codec.STRING.xmap(RecipeUtil::parseBlockState, RecipeUtil::writeBlockState)).fieldOf("byproducts").forGetter(FluidTransformationRecipe::byproducts),
             Codec.INT.fieldOf("duration").forGetter(FluidTransformationRecipe::duration)
     ).apply(instance, FluidTransformationRecipe::new));
+    public static final StreamCodec<RegistryFriendlyByteBuf, FluidTransformationRecipe> STREAM_CODEC = StreamCodec.of(FluidTransformationRecipe::toNetwork, FluidTransformationRecipe::fromNetwork);
 
     @Override
-    public boolean matches(Container pContainer, Level pLevel) {
+    public boolean matches(RecipeInput pContainer, Level pLevel) {
         return false;
     }
 
     @Override
-    public ItemStack assemble(Container pContainer, RegistryAccess pRegistryAccess) {
+    public ItemStack assemble(RecipeInput input, HolderLookup.Provider lookup) {
         return ItemStack.EMPTY;
     }
 
@@ -75,7 +78,7 @@ public record FluidTransformationRecipe(
     }
 
     @Override
-    public ItemStack getResultItem(RegistryAccess pRegistryAccess) {
+    public ItemStack getResultItem(HolderLookup.Provider lookup) {
         return ItemStack.EMPTY;
     }
 
@@ -89,32 +92,34 @@ public record FluidTransformationRecipe(
         return ERecipeTypes.BARREL_FLUID_TRANSFORMATION.get();
     }
 
+    public static void toNetwork(RegistryFriendlyByteBuf buffer, FluidTransformationRecipe recipe) {
+        FluidIngredient.STREAM_CODEC.encode(buffer, recipe.baseFluid);
+        buffer.writeById(BuiltInRegistries.FLUID::getId, recipe.resultFluid);
+        buffer.writeInt(recipe.resultColor);
+        recipe.catalyst.toNetwork(buffer);
+        recipe.byproducts.toNetwork(buffer, (buf, state) -> buf.writeById(Block.BLOCK_STATE_REGISTRY::getId, state));
+        buffer.writeVarInt(recipe.duration);
+    }
+
+    public static FluidTransformationRecipe fromNetwork(RegistryFriendlyByteBuf buffer) {
+        FluidIngredient baseFluid = FluidIngredient.STREAM_CODEC.decode(buffer);
+        Fluid resultFluid = Objects.requireNonNull(buffer.readById(BuiltInRegistries.FLUID::byId));
+        int resultColor = buffer.readInt();
+        BlockPredicate catalyst = BlockPredicate.STREAM_CODEC.decode(buffer);
+        WeightedList<BlockState> byproducts = WeightedList.fromNetwork(buffer, buf -> buf.readById(Block.BLOCK_STATE_REGISTRY::byId));
+        int duration = buffer.readVarInt();
+        return new FluidTransformationRecipe(baseFluid, resultFluid, resultColor, catalyst, byproducts, duration);
+    }
+
     public static class Serializer implements RecipeSerializer<FluidTransformationRecipe> {
         @Override
-        public Codec<FluidTransformationRecipe> codec() {
+        public MapCodec<FluidTransformationRecipe> codec() {
             return CODEC;
         }
 
         @Override
-        public void toNetwork(FriendlyByteBuf buffer, FluidTransformationRecipe recipe) {
-            buffer.writeId(BuiltInRegistries.FLUID, recipe.baseFluid);
-            buffer.writeId(BuiltInRegistries.FLUID, recipe.resultFluid);
-            buffer.writeInt(recipe.resultColor);
-            recipe.catalyst.toNetwork(buffer);
-            recipe.byproducts.toNetwork(buffer, (buf, state) -> buf.writeId(Block.BLOCK_STATE_REGISTRY, state));
-            buffer.writeVarInt(recipe.duration);
-        }
-
-        @Override
-        public FluidTransformationRecipe fromNetwork(FriendlyByteBuf buffer) {
-            Fluid baseFluid = Objects.requireNonNull(buffer.readById(BuiltInRegistries.FLUID));
-            Fluid resultFluid = Objects.requireNonNull(buffer.readById(BuiltInRegistries.FLUID));
-            int resultColor = buffer.readInt();
-            BlockPredicate catalyst = RecipeUtil.readBlockPredicateNetwork(buffer);
-            WeightedList<BlockState> byproducts = WeightedList.fromNetwork(buffer, buf -> buf.readById(Block.BLOCK_STATE_REGISTRY));
-            int duration = buffer.readVarInt();
-            return new FluidTransformationRecipe(baseFluid, resultFluid, resultColor, catalyst, byproducts, duration);
+        public StreamCodec<RegistryFriendlyByteBuf, FluidTransformationRecipe> streamCodec() {
+            return STREAM_CODEC;
         }
     }
-
 }

@@ -49,7 +49,7 @@ public class MachineLootFunction extends LootItemConditionalFunction {
     }
 
     @Override
-    public LootItemFunctionType getType() {
+    public LootItemFunctionType<? extends LootItemConditionalFunction> getType() {
         return ELootFunctions.MACHINE.get();
     }
 

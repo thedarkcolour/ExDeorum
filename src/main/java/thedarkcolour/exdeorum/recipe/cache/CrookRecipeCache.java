@@ -48,7 +48,7 @@ public class CrookRecipeCache {
         // state -> set of possible recipes
         var tempRecipes = new HashMap<BlockState, HashSet<CrookRecipe>>();
 
-        for (var recipe : this.recipeManager.byType(ERecipeTypes.CROOK.get()).values()) {
+        for (var recipe : this.recipeManager.byType(ERecipeTypes.CROOK.get())) {
             recipe.value().blockPredicate().possibleStates().forEach(state -> {
                 tempRecipes.computeIfAbsent(state, key -> new HashSet<>()).add(recipe.value());
             });

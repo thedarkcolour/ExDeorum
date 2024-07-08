@@ -35,8 +35,6 @@ public class ECompressedBlocks {
 
     private static CompressedBlockType register(Block vanillaBase) {
         CompressedBlockType type = new CompressedBlockType(BuiltInRegistries.BLOCK.getKey(vanillaBase).getPath(), () -> vanillaBase);
-        // AllTheCompressed has every vanilla block that Ex Deorum uses so far
-        type.withAtc();
         ALL_VARIANTS.add(type);
         return type;
     }

@@ -18,7 +18,7 @@
 
 package thedarkcolour.exdeorum.registry;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -27,7 +27,7 @@ import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.voidworld.VoidChunkGenerator;
 
 public class EChunkGenerators {
-    public static final DeferredRegister<Codec<? extends ChunkGenerator>> CHUNK_GENERATORS = DeferredRegister.create(Registries.CHUNK_GENERATOR, ExDeorum.ID);
+    public static final DeferredRegister<MapCodec<? extends ChunkGenerator>> CHUNK_GENERATORS = DeferredRegister.create(Registries.CHUNK_GENERATOR, ExDeorum.ID);
 
-    public static final DeferredHolder<Codec<? extends ChunkGenerator>, Codec<VoidChunkGenerator>> VOID = CHUNK_GENERATORS.register("void", () -> VoidChunkGenerator.CODEC);
+    public static final DeferredHolder<MapCodec<? extends ChunkGenerator>, MapCodec<VoidChunkGenerator>> VOID = CHUNK_GENERATORS.register("void", () -> VoidChunkGenerator.CODEC);
 }

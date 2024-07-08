@@ -67,7 +67,7 @@ public final class ASMHooks {
      */
     public static ResourceKey<WorldPreset> overrideDefaultWorldPreset() {
         if (ModList.get().isLoaded(ModIds.SKYBLOCK_BUILDER)) {
-            return ResourceKey.create(Registries.WORLD_PRESET, new ResourceLocation(ModIds.SKYBLOCK_BUILDER, "skyblock"));
+            return ResourceKey.create(Registries.WORLD_PRESET, ResourceLocation.fromNamespaceAndPath(ModIds.SKYBLOCK_BUILDER, "skyblock"));
         }
         return EConfig.COMMON.setVoidWorldAsDefault.get() ? EWorldPresets.VOID_WORLD : WorldPresets.NORMAL;
     }

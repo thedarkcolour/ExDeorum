@@ -43,7 +43,7 @@ import thedarkcolour.exdeorum.config.EConfig;
 import java.util.Objects;
 
 public class BarrelRenderer implements BlockEntityRenderer<BarrelBlockEntity> {
-    public static final ResourceLocation COMPOST_DIRT_TEXTURE = new ResourceLocation(ExDeorum.ID, "block/compost_dirt");
+    public static final ResourceLocation COMPOST_DIRT_TEXTURE = ExDeorum.loc("block/compost_dirt");
     private final BlockRenderDispatcher blockRenderer;
     private final ItemRenderer itemRenderer;
 

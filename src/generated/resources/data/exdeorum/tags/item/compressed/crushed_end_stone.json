@@ -1,0 +1,9 @@
+{
+  "values": [
+    "exdeorum:compressed_crushed_end_stone",
+    {
+      "id": "allthecompressed:crushed_end_stone_1x",
+      "required": false
+    }
+  ]
+}

@@ -32,7 +32,7 @@ import thedarkcolour.exdeorum.config.EConfig;
 import thedarkcolour.exdeorum.data.TranslationKeys;
 
 public class MechanicalHammerScreen extends AbstractContainerScreen<MechanicalHammerMenu> {
-    private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(ExDeorum.ID, "textures/gui/container/mechanical_hammer.png");
+    private static final ResourceLocation BACKGROUND_TEXTURE = ExDeorum.loc("textures/gui/container/mechanical_hammer.png");
 
     public static final int RECIPE_CLICK_AREA_POS_X = 80;
     public static final int RECIPE_CLICK_AREA_POS_Y = 34;

@@ -19,7 +19,6 @@
 package thedarkcolour.exdeorum.recipe;
 
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
@@ -29,11 +28,10 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
@@ -47,10 +45,22 @@ public sealed interface BlockPredicate extends Predicate<BlockState> {
     byte SINGLE_BLOCK = 0, BLOCK_STATE = 1, BLOCK_TAG = 2;
 
     Codec<BlockPredicate> CODEC = new BlockPredicate.SpecialCodec();
+    StreamCodec<RegistryFriendlyByteBuf, BlockPredicate> STREAM_CODEC = StreamCodec.of(BlockPredicate::writeBlockPredicateNetwork, BlockPredicate::readBlockPredicateNetwork);
 
-    JsonObject toJson();
+    private static void writeBlockPredicateNetwork(RegistryFriendlyByteBuf buffer, BlockPredicate predicate) {
+        predicate.toNetwork(buffer);
+    }
 
-    void toNetwork(FriendlyByteBuf buffer);
+    private static BlockPredicate readBlockPredicateNetwork(RegistryFriendlyByteBuf buffer) {
+        BlockPredicate blockPredicate = fromNetwork(buffer);
+
+        if (blockPredicate == null) {
+            throw new IllegalStateException("Failed to read block predicate from network");
+        }
+        return blockPredicate;
+    }
+
+    void toNetwork(RegistryFriendlyByteBuf buffer);
 
     Stream<BlockState> possibleStates();
 
@@ -67,32 +77,10 @@ public sealed interface BlockPredicate extends Predicate<BlockState> {
     }
 
     @Nullable
-    static BlockPredicate fromJson(@Nullable JsonObject json) {
-        if (json == null) {
-            return null;
-        }
-        if (json.has("block")) {
-            var block = BuiltInRegistries.BLOCK.get(new ResourceLocation(json.get("block").getAsString()));
-
-            if (block == Blocks.AIR) return null;
-
-            if (json.has("state")) {
-                return new BlockStatePredicate(block, CodecUtil.decode(StatePropertiesPredicate.CODEC, json.get("state")));
-            } else {
-                return new SingleBlockPredicate(block);
-            }
-        } else if (json.has("block_tag")) {
-            return new TagPredicate(TagKey.create(Registries.BLOCK, new ResourceLocation(json.get("block_tag").getAsString())));
-        } else {
-            return null;
-        }
-    }
-
-    @Nullable
-    static BlockPredicate fromNetwork(FriendlyByteBuf buffer) {
+    static BlockPredicate fromNetwork(RegistryFriendlyByteBuf buffer) {
         return switch (buffer.readByte()) {
-            case SINGLE_BLOCK -> new SingleBlockPredicate(Objects.requireNonNull(buffer.readById(BuiltInRegistries.BLOCK)));
-            case BLOCK_STATE -> new BlockStatePredicate(Objects.requireNonNull(buffer.readById(BuiltInRegistries.BLOCK)), decodeStatePredicate(JsonParser.parseString(buffer.readUtf())));
+            case SINGLE_BLOCK -> new SingleBlockPredicate(Objects.requireNonNull(buffer.readById(BuiltInRegistries.BLOCK::byId)));
+            case BLOCK_STATE -> new BlockStatePredicate(Objects.requireNonNull(buffer.readById(BuiltInRegistries.BLOCK::byId)), decodeStatePredicate(JsonParser.parseString(buffer.readUtf())));
             case BLOCK_TAG -> new TagPredicate(RecipeUtil.readTag(buffer, Registries.BLOCK));
             default -> null;
         };
@@ -108,14 +96,7 @@ public sealed interface BlockPredicate extends Predicate<BlockState> {
 
     record TagPredicate(TagKey<Block> tag) implements BlockPredicate {
         @Override
-        public JsonObject toJson() {
-            var json = new JsonObject();
-            json.addProperty("block_tag", this.tag.location().toString());
-            return json;
-        }
-
-        @Override
-        public void toNetwork(FriendlyByteBuf buffer) {
+        public void toNetwork(RegistryFriendlyByteBuf buffer) {
             buffer.writeByte(BLOCK_TAG);
             RecipeUtil.writeTag(buffer, this.tag);
         }
@@ -134,19 +115,10 @@ public sealed interface BlockPredicate extends Predicate<BlockState> {
     }
 
     record BlockStatePredicate(Block block, StatePropertiesPredicate properties) implements BlockPredicate {
-
         @Override
-        public JsonObject toJson() {
-            var json = new JsonObject();
-            json.addProperty("block", BuiltInRegistries.BLOCK.getKey(this.block).toString());
-            json.add("state", encodeStatePredicate(this.properties));
-            return json;
-        }
-
-        @Override
-        public void toNetwork(FriendlyByteBuf buffer) {
+        public void toNetwork(RegistryFriendlyByteBuf buffer) {
             buffer.writeByte(BLOCK_STATE);
-            buffer.writeId(BuiltInRegistries.BLOCK, this.block);
+            buffer.writeById(BuiltInRegistries.BLOCK::getId, this.block);
             buffer.writeUtf(encodeStatePredicate(this.properties).toString());
         }
 
@@ -172,16 +144,9 @@ public sealed interface BlockPredicate extends Predicate<BlockState> {
 
     record SingleBlockPredicate(Block block) implements BlockPredicate {
         @Override
-        public JsonObject toJson() {
-            var json = new JsonObject();
-            json.addProperty("block", BuiltInRegistries.BLOCK.getKey(this.block).toString());
-            return json;
-        }
-
-        @Override
-        public void toNetwork(FriendlyByteBuf buffer) {
+        public void toNetwork(RegistryFriendlyByteBuf buffer) {
             buffer.writeByte(SINGLE_BLOCK);
-            buffer.writeId(BuiltInRegistries.BLOCK, this.block);
+            buffer.writeById(BuiltInRegistries.BLOCK::getId, this.block);
         }
 
         @Override

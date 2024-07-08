@@ -1,0 +1,18 @@
+{
+  "type": "exdeorum:sieve",
+  "ingredient": {
+    "item": "minecraft:dirt"
+  },
+  "mesh": {
+    "item": "exdeorum:netherite_mesh"
+  },
+  "result": {
+    "count": 1,
+    "id": "exdeorum:deepslate_pebble"
+  },
+  "result_amount": {
+    "type": "minecraft:binomial",
+    "n": 4.0,
+    "p": 0.65
+  }
+}

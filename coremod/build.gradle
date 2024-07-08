@@ -23,6 +23,6 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'net.neoforged.fancymodloader:loader:4.0.6'
+    compileOnly 'net.neoforged.fancymodloader:loader:4.0.15'
     compileOnly 'org.jetbrains:annotations:24.1.0'
 }

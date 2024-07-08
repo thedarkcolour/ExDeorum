@@ -18,7 +18,7 @@
 
 package thedarkcolour.exdeorum.loot;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;
@@ -29,7 +29,7 @@ import thedarkcolour.exdeorum.registry.ENumberProviders;
 import java.util.List;
 
 public record SummationGenerator(List<NumberProvider> providers) implements NumberProvider {
-    public static final Codec<SummationGenerator> CODEC = RecordCodecBuilder.create(instance -> instance.group(NumberProviders.CODEC.listOf().fieldOf("values").forGetter(SummationGenerator::providers)).apply(instance, SummationGenerator::new));
+    public static final MapCodec<SummationGenerator> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(NumberProviders.CODEC.listOf().fieldOf("values").forGetter(SummationGenerator::providers)).apply(instance, SummationGenerator::new));
 
     @Override
     public float getFloat(LootContext context) {
