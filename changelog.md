@@ -1,3 +1,6 @@
+## Ex Deorum 3.1
+- Fix bug where logs drop sawdust.
+
 ## Ex Deorum 3.0
 - Update to NeoForge 1.21
 - MODPACK MAKERS: Check the Ex Deorum Documentation soon, there have been several changes to Ex Deorum recipes.
