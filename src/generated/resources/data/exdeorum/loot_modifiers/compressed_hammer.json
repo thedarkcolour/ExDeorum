@@ -4,7 +4,7 @@
     {
       "condition": "minecraft:match_tool",
       "predicate": {
-        "tag": "exdeorum:compressed_hammers"
+        "items": "#exdeorum:compressed_hammers"
       }
     }
   ]

@@ -43,7 +43,7 @@ import java.util.List;
 public class CrookLootModifier extends LootModifier {
     public static final MapCodec<CrookLootModifier> CODEC = RecordCodecBuilder.mapCodec(inst -> LootModifier.codecStart(inst).apply(inst, CrookLootModifier::new));
 
-    protected CrookLootModifier(LootItemCondition[] conditions) {
+    public CrookLootModifier(LootItemCondition[] conditions) {
         super(conditions);
     }
 
@@ -52,7 +52,7 @@ public class CrookLootModifier extends LootModifier {
         var state = context.getParamOrNull(LootContextParams.BLOCK_STATE);
         var stack = context.getParamOrNull(LootContextParams.TOOL);
 
-        if (state != null && stack != null && stack.getItem() != Items.BARRIER) {
+        if (state != null && stack != null) {
             var rand = context.getRandom();
 
             if (stack.getEnchantmentLevel(context.getLevel().holderLookup(Registries.ENCHANTMENT).getOrThrow(Enchantments.SILK_TOUCH)) == 0) {

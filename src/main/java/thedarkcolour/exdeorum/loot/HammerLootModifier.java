@@ -40,7 +40,7 @@ import thedarkcolour.exdeorum.recipe.hammer.HammerRecipe;
 public class HammerLootModifier extends LootModifier {
     public static final MapCodec<HammerLootModifier> CODEC = RecordCodecBuilder.mapCodec(inst -> LootModifier.codecStart(inst).apply(inst, HammerLootModifier::new));
 
-    protected HammerLootModifier(LootItemCondition[] conditionsIn) {
+    public HammerLootModifier(LootItemCondition[] conditionsIn) {
         super(conditionsIn);
     }
 

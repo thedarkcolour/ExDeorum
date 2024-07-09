@@ -29,7 +29,7 @@ public class Data {
         // Two things used by data generators
         var gen = event.getGenerator(); // writes to json
         var output = gen.getPackOutput();
-        var lookup = event.getLookupProvider();
+        var registries = event.getLookupProvider();
         // reads existing files like pngs and parent models
         var helper = event.getExistingFileHelper();
 
@@ -45,8 +45,9 @@ public class Data {
         dataHelper.createTags(Registries.STRUCTURE_SET, ModTags::createStructureSetTags);
         dataHelper.createTags(Registries.WORLD_PRESET, ModTags::createWorldPresetTags);
 
-        gen.addProvider(true, new LootTables(output, lookup));
-        gen.addProvider(true, new Advancements(output, lookup, helper));
+        gen.addProvider(true, new LootTables(output, registries));
+        gen.addProvider(true, new Advancements(output, registries, helper));
         gen.addProvider(true, new Sounds(output, helper));
+        gen.addProvider(true, new LootModifiers(output, registries));
     }
 }

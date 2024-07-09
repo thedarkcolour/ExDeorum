@@ -4,7 +4,7 @@
     {
       "condition": "minecraft:match_tool",
       "predicate": {
-        "tag": "exdeorum:crooks"
+        "items": "#exdeorum:crooks"
       }
     }
   ]
