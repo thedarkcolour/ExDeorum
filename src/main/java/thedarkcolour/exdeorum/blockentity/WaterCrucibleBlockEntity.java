@@ -43,4 +43,9 @@ public class WaterCrucibleBlockEntity extends AbstractCrucibleBlockEntity {
     public Block getDefaultMeltBlock() {
         return Blocks.OAK_LEAVES;
     }
+
+    @Override
+    public int getMeltingRate() {
+        return 4;
+    }
 }
