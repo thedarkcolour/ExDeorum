@@ -20,6 +20,7 @@ package thedarkcolour.exdeorum.material;
 
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
+import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.block.CompressedSieveBlock;
 
 public class CompressedSieveMaterial extends SieveMaterial {
@@ -30,5 +31,19 @@ public class CompressedSieveMaterial extends SieveMaterial {
     @Override
     protected Block createBlock() {
         return new CompressedSieveBlock(props().noOcclusion());
+    }
+
+    @Nullable
+    public static CompressedSieveMaterial readFromJson(MaterialParser parser) {
+        SoundType soundType = parser.getSoundType();
+        float strength = parser.getStrength();
+        boolean needsCorrectTool = parser.getOptionalBoolean("needs_correct_tool");
+        String requiredModId = parser.getRequiredModId();
+
+        if (parser.error) {
+            return null;
+        } else {
+            return new CompressedSieveMaterial(soundType, strength, needsCorrectTool, requiredModId);
+        }
     }
 }
