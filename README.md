@@ -11,3 +11,5 @@ and the sieve drops are generous enough that this mod should be playable without
 *Ex Nihilo* is licensed under the GNU General Public License Version 3.0, so *Ex Deorum*
 uses the same license. A copy of the license is provided in this repository.
 
+[Discord Server](https://discord.gg/FWrzBRThHu)
+

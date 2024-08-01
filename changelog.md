@@ -1,3 +1,7 @@
+## Ex Deorum 3.2
+- Fix KubeJS plugin.
+- Buff wooden crucibles to 4x like in old Ex Nihilo
+
 ## Ex Deorum 3.1
 - Fix bug where logs drop sawdust.
 
