@@ -18,75 +18,17 @@
 
 package thedarkcolour.exdeorum.compat.kubejs;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonPrimitive;
-import dev.latvian.mods.kubejs.item.InputItem;
-import dev.latvian.mods.kubejs.item.OutputItem;
-import dev.latvian.mods.kubejs.recipe.ItemMatch;
-import dev.latvian.mods.kubejs.recipe.RecipeJS;
 import dev.latvian.mods.kubejs.recipe.RecipeKey;
-import dev.latvian.mods.kubejs.recipe.ReplacementMatch;
 import dev.latvian.mods.kubejs.recipe.component.ComponentRole;
-import dev.latvian.mods.kubejs.recipe.component.ItemComponents;
-import dev.latvian.mods.kubejs.recipe.component.RecipeComponent;
+import dev.latvian.mods.kubejs.recipe.component.IngredientComponent;
+import dev.latvian.mods.kubejs.recipe.component.ItemStackComponent;
 import dev.latvian.mods.kubejs.recipe.schema.RecipeSchema;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.world.item.crafting.Ingredient;
 
 public interface SieveRecipeSchema {
-    RecipeComponent<OutputItem> OUTPUT_ITEM_ONLY = new RecipeComponent<>() {
-        @Override
-        public String componentType() {
-            return "output_item_only";
-        }
+    RecipeKey<ItemStack> RESULT = ItemStackComponent.ITEM_STACK.key("result", ComponentRole.OUTPUT);
+    RecipeKey<Ingredient> INGREDIENT = IngredientComponent.INGREDIENT.key("ingredient", ComponentRole.INPUT);
 
-        @Override
-        public ComponentRole role() {
-            return ComponentRole.OUTPUT;
-        }
-
-        @Override
-        public Class<?> componentClass() {
-            return OutputItem.class;
-        }
-
-        @Override
-        public boolean hasPriority(RecipeJS recipe, Object from) {
-            return recipe.outputItemHasPriority(from);
-        }
-
-        @Override
-        public JsonElement write(RecipeJS recipe, OutputItem value) {
-            return new JsonPrimitive(ForgeRegistries.ITEMS.getKey(value.item.getItem()).toString());
-        }
-
-        @Override
-        public OutputItem read(RecipeJS recipe, Object from) {
-            if (from instanceof JsonPrimitive primitive && primitive.isString()) {
-                return OutputItem.of(new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation(primitive.getAsString()))));
-            } else {
-                return OutputItem.of(from);
-            }
-        }
-
-        @Override
-        public boolean isOutput(RecipeJS recipe, OutputItem value, ReplacementMatch match) {
-            return match instanceof ItemMatch m && !value.isEmpty() && m.contains(value.item);
-        }
-
-        @Override
-        public String checkEmpty(RecipeKey<OutputItem> key, OutputItem value) {
-            if (value.isEmpty()) {
-                return "ItemStack '" + key.name + "' can't be empty";
-            }
-
-            return "";
-        }
-    };
-    
-    RecipeKey<OutputItem> RESULT = OUTPUT_ITEM_ONLY.key("result");
-    RecipeKey<InputItem> INGREDIENT = ItemComponents.INPUT.key("ingredient");
-    
-    RecipeSchema SCHEMA = new RecipeSchema(RESULT, INGREDIENT).uniqueOutputId(RESULT);
+    RecipeSchema SCHEMA = new RecipeSchema(RESULT, INGREDIENT).uniqueId(RESULT);
 }

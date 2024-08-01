@@ -18,16 +18,17 @@
 
 package thedarkcolour.exdeorum.compat.kubejs;
 
-import dev.latvian.mods.kubejs.core.RecipeKJS;
-import dev.latvian.mods.kubejs.recipe.ItemMatch;
-import dev.latvian.mods.kubejs.recipe.RecipeJS;
-import dev.latvian.mods.kubejs.recipe.ReplacementMatch;
+import dev.latvian.mods.kubejs.core.RecipeLikeKJS;
+import dev.latvian.mods.kubejs.recipe.KubeRecipe;
 import dev.latvian.mods.kubejs.recipe.filter.RecipeFilter;
+import dev.latvian.mods.kubejs.recipe.match.ItemMatch;
+import dev.latvian.mods.kubejs.recipe.match.ReplacementMatchInfo;
+import dev.latvian.mods.rhino.Context;
 import thedarkcolour.exdeorum.recipe.sieve.SieveRecipe;
 
-public record SieveMeshFilter(ReplacementMatch match) implements RecipeFilter {
+public record SieveMeshFilter(ReplacementMatchInfo info) implements RecipeFilter {
     @Override
-    public boolean test(RecipeKJS recipe) {
-        return this.match instanceof ItemMatch itemMatch && recipe instanceof RecipeJS recipeJs && recipeJs.getOriginalRecipe() instanceof SieveRecipe sieveRecipe && itemMatch.contains(sieveRecipe.mesh);
+    public boolean test(Context cx, RecipeLikeKJS r) {
+        return r instanceof KubeRecipe recipeJs && recipeJs.getOriginalRecipe() instanceof SieveRecipe sieveRecipe && this.info.match() instanceof ItemMatch match && match.matches(cx, sieveRecipe.mesh, false);
     }
 }

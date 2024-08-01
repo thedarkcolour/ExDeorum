@@ -18,27 +18,25 @@
 
 package thedarkcolour.exdeorum.compat.kubejs;
 
-import dev.latvian.mods.kubejs.KubeJSPlugin;
-import dev.latvian.mods.kubejs.recipe.schema.RegisterRecipeSchemasEvent;
-import dev.latvian.mods.kubejs.script.BindingsEvent;
-import dev.latvian.mods.kubejs.script.ScriptType;
-import dev.latvian.mods.kubejs.util.ClassFilter;
+import dev.latvian.mods.kubejs.plugin.KubeJSPlugin;
+import dev.latvian.mods.kubejs.recipe.schema.RecipeSchemaRegistry;
+import dev.latvian.mods.kubejs.script.BindingRegistry;
+import net.neoforged.neoforge.common.NeoForge;
 import thedarkcolour.exdeorum.ExDeorum;
 
-public class ExDeorumKubeJsPlugin extends KubeJSPlugin {
-    @Override
-    public void registerBindings(BindingsEvent event) {
-        event.add(ExDeorum.ID, new ExDeorumKubeJsBindings());
+public class ExDeorumKubeJsPlugin implements KubeJSPlugin {
+    static {
+        NeoForge.EVENT_BUS.addListener(ExDeorumKubeJsBindings::onRecipeFilterParse);
     }
 
     @Override
-    public void registerRecipeSchemas(RegisterRecipeSchemasEvent event) {
-        event.namespace("exdeorum")
+    public void registerBindings(BindingRegistry bindings) {
+        bindings.add(ExDeorum.ID, new ExDeorumKubeJsBindings());
+    }
+
+    @Override
+    public void registerRecipeSchemas(RecipeSchemaRegistry registry) {
+        registry.namespace(ExDeorum.ID)
                 .register("sieve", SieveRecipeSchema.SCHEMA);
-    }
-
-    @Override
-    public void registerClasses(ScriptType type, ClassFilter filter) {
-        super.registerClasses(type, filter);
     }
 }

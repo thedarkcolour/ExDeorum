@@ -50,4 +50,5 @@ public class ModIds {
     public static final String CYCLIC = "cyclic";
     public static final String SKYBLOCK_BUILDER = "skyblockbuilder";
     public static final String IMMERSIVE_ENGINEERING = "immersiveengineering";
+    public static final String KUBEJS = "kubejs";
 }

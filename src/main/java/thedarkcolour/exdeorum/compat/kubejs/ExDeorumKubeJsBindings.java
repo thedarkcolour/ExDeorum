@@ -18,37 +18,31 @@
 
 package thedarkcolour.exdeorum.compat.kubejs;
 
+import com.google.gson.JsonObject;
+import com.mojang.serialization.JsonOps;
 import dev.latvian.mods.kubejs.bindings.event.ServerEvents;
-import dev.latvian.mods.kubejs.recipe.RecipesEventJS;
-import dev.latvian.mods.kubejs.recipe.ReplacementMatch;
-import dev.latvian.mods.kubejs.recipe.filter.RecipeFilter;
+import dev.latvian.mods.kubejs.recipe.RecipesKubeEvent;
+import dev.latvian.mods.kubejs.recipe.filter.RecipeFilterParseEvent;
+import dev.latvian.mods.kubejs.recipe.match.ReplacementMatchInfo;
 import dev.latvian.mods.kubejs.script.ScriptType;
+import dev.latvian.mods.rhino.Context;
 import dev.latvian.mods.rhino.util.HideFromJS;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.recipe.BlockPredicate;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
-import thedarkcolour.exdeorum.recipe.crucible.FinishedCrucibleHeatRecipe;
+import thedarkcolour.exdeorum.recipe.crucible.CrucibleHeatRecipe;
 import thedarkcolour.exdeorum.registry.ERecipeTypes;
 
 import java.util.function.Consumer;
 
 @SuppressWarnings("unused")
 class ExDeorumKubeJsBindings {
-    static {
-        RecipeFilter.PARSE.register((ctx, filters, map) -> {
-            var sieveMesh = map.get("sieve_mesh");
-            if (sieveMesh != null) {
-                filters.add(new SieveMeshFilter(ReplacementMatch.of(sieveMesh)));
-            }
-        });
-    }
-
     public void setCrucibleHeatValue(Block block, int value) {
         setCrucibleHeatValueForBlock(block, value);
     }
@@ -62,7 +56,7 @@ class ExDeorumKubeJsBindings {
             for (Property prop : state.getProperties()) {
                 bypassTypeChecking(properties, prop, state);
             }
-            event.custom(new FinishedCrucibleHeatRecipe(null, BlockPredicate.blockState(state.getBlock(), properties.build()), value).serializeRecipe());
+            event.custom(null, (JsonObject) CrucibleHeatRecipe.CODEC.encoder().encodeStart(JsonOps.INSTANCE, new CrucibleHeatRecipe(BlockPredicate.blockState(state.getBlock(), properties.build().get()), value)).result().get());
         });
     }
 
@@ -71,14 +65,13 @@ class ExDeorumKubeJsBindings {
         properties.hasProperty(prop, prop.getName(state.getValue(prop)));
     }
 
-    @SuppressWarnings("DataFlowIssue")
     public void setCrucibleHeatValueForBlock(Block block, int value) {
         onRecipesEvent(event -> {
-            event.custom(new FinishedCrucibleHeatRecipe(null, BlockPredicate.singleBlock(block), value).serializeRecipe());
+            event.custom(null, (JsonObject) CrucibleHeatRecipe.CODEC.encoder().encodeStart(JsonOps.INSTANCE, new CrucibleHeatRecipe(BlockPredicate.singleBlock(block), value)).result().get());
         });
     }
 
-    public void removeDefaultSieveRecipes(RecipesEventJS recipesEvent) {
+    public void removeDefaultSieveRecipes(RecipesKubeEvent recipesEvent) {
         removeDefaultRecipes(recipesEvent, ERecipeTypes.SIEVE);
     }
 
@@ -87,15 +80,26 @@ class ExDeorumKubeJsBindings {
     }
 
     @HideFromJS
-    private static void removeDefaultRecipes(RecipesEventJS event, RegistryObject<? extends RecipeType<?>> recipeType) {
-        event.remove(r -> r.kjs$getType().equals(recipeType.getId()) && r.kjs$getOrCreateId().getNamespace().equals(ExDeorum.ID));
+    private static void removeDefaultRecipes(RecipesKubeEvent event, DeferredHolder<? extends RecipeType<?>, ? extends RecipeType<?>> recipeType) {
+        event.remove(null, (ctx, r) -> r.kjs$getType().equals(recipeType.getId()) && r.kjs$getOrCreateId().getNamespace().equals(ExDeorum.ID));
     }
 
     @HideFromJS
-    private static void onRecipesEvent(Consumer<RecipesEventJS> action) {
+    private static void onRecipesEvent(Consumer<RecipesKubeEvent> action) {
         ServerEvents.RECIPES.listenJava(ScriptType.SERVER, null, jsEvent -> {
-            action.accept((RecipesEventJS) jsEvent);
+            action.accept((RecipesKubeEvent) jsEvent);
             return null;
         });
+    }
+
+    public static void onRecipeFilterParse(RecipeFilterParseEvent event) {
+        var sieveMesh = event.map.get("sieve_mesh");
+        if (sieveMesh != null) {
+            ReplacementMatchInfo m = ReplacementMatchInfo.wrap(event.cx, sieveMesh, ReplacementMatchInfo.TYPE_INFO);
+            if (m == ReplacementMatchInfo.NONE) {
+                throw Context.reportRuntimeError("Unable to parse recipe output filter `" + sieveMesh + "`", event.cx);
+            }
+            event.filters.add(new SieveMeshFilter(m));
+        }
     }
 }
