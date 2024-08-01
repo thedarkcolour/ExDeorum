@@ -250,9 +250,7 @@ public abstract class AbstractCrucibleBlockEntity extends ETankBlockEntity {
         return InsertionResult.NO;
     }
 
-    public int getMeltingRate() {
-        return 1;
-    }
+    public abstract int getMeltingRate();
 
     public int getSolids() {
         return this.solids;
