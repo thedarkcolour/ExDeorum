@@ -131,15 +131,15 @@ dependencies {
     // JADE OPTIONAL
     implementation(fg.deobf("curse.maven:jade-324717:4986594"))
     // JEI OPTIONAL
-    compileOnly(fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}"))
-    runtimeOnly(fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}"))
+    //compileOnly(fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}"))
+    implementation(fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}"))
     // REI OPTIONAL
     compileOnly(fg.deobf("me.shedaniel:RoughlyEnoughItems-forge:${rei_version}"))
     compileOnly(fg.deobf("me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}"))
     compileOnly(fg.deobf("curse.maven:reipc-521393:4837449"))
     // EMI OPTIONAL
     compileOnly(fg.deobf("dev.emi:emi-forge:${emi_version}:api"))
-    runtimeOnly(fg.deobf("dev.emi:emi-forge:${emi_version}"))
+    //runtimeOnly(fg.deobf("dev.emi:emi-forge:${emi_version}"))
     // KubeJS OPTIONAL
     implementation fg.deobf("dev.architectury:architectury-forge:${architectury_version}")
     implementation fg.deobf("dev.latvian.mods:rhino-forge:${rhino_version}")
