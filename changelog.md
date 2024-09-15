@@ -1,3 +1,6 @@
+## Ex Deorum 3.3
+- Now built against Minecraft 1.21.1
+
 ## Ex Deorum 3.2
 - Fix KubeJS plugin.
 - Buff wooden crucibles to 4x like in old Ex Nihilo
