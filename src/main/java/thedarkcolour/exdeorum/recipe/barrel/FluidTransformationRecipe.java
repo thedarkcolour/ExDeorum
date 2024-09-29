@@ -18,7 +18,6 @@
 
 package thedarkcolour.exdeorum.recipe.barrel;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import net.minecraft.core.RegistryAccess;
@@ -36,7 +35,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
-import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.recipe.BlockPredicate;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.recipe.WeightedList;

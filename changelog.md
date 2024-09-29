@@ -1,6 +1,7 @@
 ## Ex Deorum 1.41
 - Add native EMI support.
 - Fix bug where removing all Compressed Sieve recipes would break regular Sieve recipe display in JEI.
+- Hack fix for random crashes with fluid transformation recipe cache
 
 ## Ex Deorum 1.40
 - Buffed melt rate of water crucible. Should now be comparable to what it was in older versions.

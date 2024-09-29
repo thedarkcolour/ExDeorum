@@ -31,6 +31,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.GsonHelper;
@@ -50,9 +51,12 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootDataType;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.providers.number.*;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.server.ServerLifecycleHooks;
 import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.client.ClientsideCode;
@@ -62,8 +66,8 @@ import thedarkcolour.exdeorum.item.HammerItem;
 import thedarkcolour.exdeorum.loot.SummationGenerator;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelCompostRecipe;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelFluidMixingRecipe;
-import thedarkcolour.exdeorum.recipe.barrel.FluidTransformationRecipe;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelMixingRecipe;
+import thedarkcolour.exdeorum.recipe.barrel.FluidTransformationRecipe;
 import thedarkcolour.exdeorum.recipe.cache.*;
 import thedarkcolour.exdeorum.recipe.crook.CrookRecipe;
 import thedarkcolour.exdeorum.recipe.crucible.CrucibleRecipe;
@@ -74,11 +78,7 @@ import thedarkcolour.exdeorum.recipe.sieve.SieveRecipe;
 import thedarkcolour.exdeorum.registry.ENumberProviders;
 import thedarkcolour.exdeorum.registry.ERecipeTypes;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public final class RecipeUtil {
     private static final int CONSTANT_TYPE = 1;
@@ -171,6 +171,16 @@ public final class RecipeUtil {
 
     public static <C extends Container, T extends Recipe<C>> Collection<T> byType(RecipeManager manager, RecipeType<T> type) {
         return manager.byType(type).values();
+    }
+
+    /**
+     * From Forestry: Community Edition
+     * @return The global registry manager. {@code null} on server when there is no server, or when there is no world (on client).
+     */
+    @Nullable
+    public static RecipeManager getRecipeManager() {
+        MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+        return server == null ? (FMLEnvironment.dist == Dist.CLIENT ? ClientsideCode.getRecipeManager() : null) : server.getRecipeManager();
     }
 
     public static Ingredient readIngredient(JsonObject json, String key) {
@@ -356,6 +366,10 @@ public final class RecipeUtil {
     @Nullable
     public static FluidTransformationRecipe getFluidTransformationRecipe(Fluid baseFluid, BlockState catalystState) {
         if (baseFluid != Fluids.EMPTY) {
+            // Hack fix
+            if (fluidTransformationRecipeCache == null) {
+                fluidTransformationRecipeCache = new FluidTransformationRecipeCache(Objects.requireNonNull(getRecipeManager(), "Error: Please report to ExDeorum GitHub page with your debug.log file!"));
+            }
             return fluidTransformationRecipeCache.getRecipe(baseFluid, catalystState);
         } else {
             return null;
@@ -466,7 +480,7 @@ public final class RecipeUtil {
     public static JsonPrimitive writeBlockState(BlockState state) {
         var registryKey = BuiltInRegistries.BLOCK.getKey(state.getBlock());
 
-        Collection<Property> properties = (Collection<Property>) ((Collection)state.getProperties());
+        Collection<Property> properties = (Collection<Property>) ((Collection) state.getProperties());
 
         if (properties.isEmpty()) {
             return new JsonPrimitive(registryKey.toString());
