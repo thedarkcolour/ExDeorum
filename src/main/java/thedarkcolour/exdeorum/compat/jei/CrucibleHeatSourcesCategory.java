@@ -33,20 +33,17 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.runtime.IIngredientManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraftforge.registries.ForgeRegistries;
+import thedarkcolour.exdeorum.compat.ClientXeiUtil;
 import thedarkcolour.exdeorum.data.TranslationKeys;
 import thedarkcolour.exdeorum.material.DefaultMaterials;
 
 import java.util.List;
 
 class CrucibleHeatSourcesCategory implements IRecipeCategory<CrucibleHeatSourceRecipe> {
-    public static final int WIDTH = 120;
-    public static final int HEIGHT = 48;
-
     private final IDrawable background;
     private final IDrawable icon;
     private final Component title;
@@ -57,7 +54,7 @@ class CrucibleHeatSourcesCategory implements IRecipeCategory<CrucibleHeatSourceR
 
     public CrucibleHeatSourcesCategory(IJeiHelpers helpers) {
         var helper = helpers.getGuiHelper();
-        this.background = helper.createBlankDrawable(WIDTH, HEIGHT);
+        this.background = helper.createBlankDrawable(120, 48);
         this.title = Component.translatable(TranslationKeys.CRUCIBLE_HEAT_SOURCE_CATEGORY_TITLE);
         this.icon = helper.createDrawableItemStack(new ItemStack(DefaultMaterials.PORCELAIN_CRUCIBLE.getItem()));
 
@@ -103,9 +100,7 @@ class CrucibleHeatSourcesCategory implements IRecipeCategory<CrucibleHeatSourceR
 
         graphics.drawString(font, volumeLabel, 60 - font.width(volumeLabel) / 2, 5, 0xff808080, false);
 
-        ClientJeiUtil.renderBlock(graphics, recipe.blockState(), 60, 24, 10, 20F, (block, poseStack, buffers) -> {
-            Minecraft.getInstance().getBlockRenderer().renderSingleBlock(block, poseStack, buffers, 15728880, OverlayTexture.NO_OVERLAY);
-        });
+        ClientXeiUtil.renderBlock(graphics, recipe.blockState(), 60, 24, 10, 20f);
     }
 
     @Override

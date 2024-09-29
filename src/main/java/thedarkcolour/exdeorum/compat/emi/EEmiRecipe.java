@@ -16,22 +16,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package thedarkcolour.exdeorum.compat.jei;
+package thedarkcolour.exdeorum.compat.emi;
 
-import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.recipe.RecipeType;
-import net.minecraft.network.chat.Component;
-import thedarkcolour.exdeorum.compat.XeiSieveRecipe;
-import thedarkcolour.exdeorum.data.TranslationKeys;
-import thedarkcolour.exdeorum.material.DefaultMaterials;
+import dev.emi.emi.api.recipe.EmiRecipe;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.Recipe;
+import org.jetbrains.annotations.Nullable;
 
-class CompressedSieveCategory extends SieveCategory {
-    CompressedSieveCategory(IGuiHelper helper) {
-        super(helper, DefaultMaterials.OAK_COMPRESSED_SIEVE, Component.translatable(TranslationKeys.COMPRESSED_SIEVE_CATEGORY_TITLE), XeiSieveRecipe.COMPRESSED_SIEVE_ROWS.intValue());
+abstract class EEmiRecipe implements EmiRecipe {
+    protected final ResourceLocation id;
+
+    EEmiRecipe(Recipe<?> recipe) {
+        this.id = recipe.getId();
+    }
+
+    EEmiRecipe(ResourceLocation id) {
+        this.id = id;
     }
 
     @Override
-    public RecipeType<XeiSieveRecipe> getRecipeType() {
-        return ExDeorumJeiPlugin.COMPRESSED_SIEVE;
+    public @Nullable ResourceLocation getId() {
+        return this.id;
     }
 }

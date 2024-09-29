@@ -18,7 +18,6 @@
 
 package thedarkcolour.exdeorum.compat.jei;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
@@ -30,23 +29,19 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.ItemStack;
-import thedarkcolour.exdeorum.client.ClientHandler;
+import thedarkcolour.exdeorum.compat.ClientXeiUtil;
+import thedarkcolour.exdeorum.compat.XeiUtil;
 import thedarkcolour.exdeorum.data.TranslationKeys;
-import thedarkcolour.exdeorum.material.DefaultMaterials;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelCompostRecipe;
 
 class BarrelCompostCategory implements IRecipeCategory<BarrelCompostRecipe> {
-    public static final int WIDTH = 120;
-    public static final int HEIGHT = 18;
-
     private final IDrawable background;
     private final IDrawable slot;
     private final IDrawable icon;
     private final Component title;
 
     public BarrelCompostCategory(IGuiHelper helper) {
-        this.background = helper.createBlankDrawable(WIDTH, HEIGHT);
+        this.background = helper.createBlankDrawable(XeiUtil.BARREL_COMPOST_WIDTH, XeiUtil.BARREL_COMPOST_HEIGHT);
         this.slot = helper.getSlotDrawable();
         this.icon = new DrawableIcon();
         this.title = Component.translatable(TranslationKeys.BARREL_COMPOST_CATEGORY_TITLE);
@@ -88,8 +83,6 @@ class BarrelCompostCategory implements IRecipeCategory<BarrelCompostRecipe> {
     }
 
     private static class DrawableIcon implements IDrawable {
-        private final ItemStack oakBarrel = new ItemStack(DefaultMaterials.OAK_BARREL.getItem());
-
         @Override
         public int getWidth() {
             return 16;
@@ -102,15 +95,7 @@ class BarrelCompostCategory implements IRecipeCategory<BarrelCompostRecipe> {
 
         @Override
         public void draw(GuiGraphics guiGraphics, int xOffset, int yOffset) {
-            // From mezz.jei.library.render.ItemStackRenderer
-            RenderSystem.enableDepthTest();
-
-            Minecraft mc = Minecraft.getInstance();
-            var model = mc.getModelManager().getModel(ClientHandler.OAK_BARREL_COMPOSTING);
-            // From GuiGraphics.renderFakeItem
-            ClientJeiUtil.renderItemAlternativeModel(guiGraphics, model, this.oakBarrel, xOffset, yOffset);
-            // From end of DrawableIngredient
-            RenderSystem.disableDepthTest();
+            ClientXeiUtil.renderFilledCompostBarrel(guiGraphics, xOffset, yOffset);
         }
     }
 }

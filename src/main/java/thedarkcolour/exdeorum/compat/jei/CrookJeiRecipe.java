@@ -19,10 +19,8 @@
 package thedarkcolour.exdeorum.compat.jei;
 
 import com.google.common.collect.ImmutableList;
-import com.google.gson.JsonObject;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.recipe.RecipeIngredientRole;
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -34,6 +32,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jetbrains.annotations.Nullable;
+import thedarkcolour.exdeorum.compat.XeiUtil;
 import thedarkcolour.exdeorum.recipe.BlockPredicate;
 import thedarkcolour.exdeorum.recipe.crook.CrookRecipe;
 
@@ -41,7 +40,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-public sealed abstract class CrookJeiRecipe {
+sealed abstract class CrookJeiRecipe {
     public final List<BlockState> states;
     public Item result;
     @Nullable
@@ -107,16 +106,7 @@ public sealed abstract class CrookJeiRecipe {
 
             this.itemIngredients = itemIngredients.build();
 
-            ImmutableList.Builder<Component> requirements = ImmutableList.builder();
-            if (predicate != null) {
-                var json = predicate.properties().serializeToJson();
-                if (json instanceof JsonObject obj) {
-                    for (var entry : obj.entrySet()) {
-                        requirements.add(Component.literal("  " + entry.getKey() + "=" + entry.getValue().toString()).withStyle(ChatFormatting.GRAY));
-                    }
-                }
-            }
-            this.requirements = requirements.build();
+            this.requirements = XeiUtil.getStateRequirements(predicate);
         }
 
         @Override
@@ -140,7 +130,7 @@ public sealed abstract class CrookJeiRecipe {
         private final ItemStack itemIngredient;
 
         BlockRecipe(Block block, Item result, @Nullable CompoundTag resultNbt, float chance) {
-            super(List.of(block.defaultBlockState()), result, resultNbt, chance);
+            super(ImmutableList.of(block.defaultBlockState()), result, resultNbt, chance);
 
             var item = block.asItem();
             if (item == Items.AIR) {

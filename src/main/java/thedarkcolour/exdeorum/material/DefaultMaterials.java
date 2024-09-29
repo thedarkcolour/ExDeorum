@@ -28,8 +28,8 @@ public class DefaultMaterials {
     public static final MaterialRegistry<BarrelMaterial> BARRELS = new MaterialRegistry<>("barrel");
     public static final MaterialRegistry<SieveMaterial> SIEVES = new MaterialRegistry<>("sieve");
     public static final MaterialRegistry<CompressedSieveMaterial> COMPRESSED_SIEVES = new MaterialRegistry<>("compressed_sieve");
-    public static final MaterialRegistry<AbstractCrucibleMaterial> LAVA_CRUCIBLES = new MaterialRegistry<>("lava_crucible", "crucible");
-    public static final MaterialRegistry<AbstractCrucibleMaterial> WATER_CRUCIBLES = new MaterialRegistry<>("water_crucible", "crucible");
+    public static final MaterialRegistry<LavaCrucibleMaterial> LAVA_CRUCIBLES = new MaterialRegistry<>("lava_crucible", "crucible");
+    public static final MaterialRegistry<WaterCrucibleMaterial> WATER_CRUCIBLES = new MaterialRegistry<>("water_crucible", "crucible");
 
     // Ex Deorum
     public static final BarrelMaterial OAK_BARREL = addDefaultWoodBarrel("oak", SoundType.WOOD, false, MapColor.WOOD, ExDeorum.ID);

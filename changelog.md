@@ -1,3 +1,7 @@
+## Ex Deorum 1.41
+- Add native EMI support.
+- Fix bug where removing all Compressed Sieve recipes would break regular Sieve recipe display in JEI.
+
 ## Ex Deorum 1.40
 - Buffed melt rate of water crucible. Should now be comparable to what it was in older versions.
 - It is now possible to add custom Compressed Sieve block types. Their JSON schema is exactly the same as it is for regular sieve blocks.

@@ -32,15 +32,14 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import thedarkcolour.exdeorum.compat.ClientXeiUtil;
+import thedarkcolour.exdeorum.compat.XeiUtil;
 import thedarkcolour.exdeorum.data.TranslationKeys;
 import thedarkcolour.exdeorum.material.DefaultMaterials;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelFluidMixingRecipe;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelMixingRecipe;
 
-public abstract class BarrelMixingCategory<T> implements IRecipeCategory<T> {
-    public static final int WIDTH = 120;
-    public static final int HEIGHT = 18;
-
+abstract class BarrelMixingCategory<T> implements IRecipeCategory<T> {
     private final IDrawable background;
     private final IDrawable slot;
     private final IDrawable plus;
@@ -49,7 +48,7 @@ public abstract class BarrelMixingCategory<T> implements IRecipeCategory<T> {
     private final Component title;
 
     public BarrelMixingCategory(IGuiHelper helper, IDrawable plus, IDrawable arrow, String titleKey, Item iconItem) {
-        this.background = helper.createBlankDrawable(WIDTH, HEIGHT);
+        this.background = helper.createBlankDrawable(XeiUtil.BARREL_MIXING_WIDTH, XeiUtil.BARREL_MIXING_HEIGHT);
         this.slot = helper.getSlotDrawable();
         this.plus = plus;
         this.arrow = arrow;
@@ -81,7 +80,7 @@ public abstract class BarrelMixingCategory<T> implements IRecipeCategory<T> {
         this.slot.draw(graphics, 78, 0);
     }
 
-    public static class Items extends BarrelMixingCategory<BarrelMixingRecipe> {
+    static class Items extends BarrelMixingCategory<BarrelMixingRecipe> {
         public Items(IGuiHelper helper, IDrawable plus, IDrawable arrow) {
             super(helper, plus, arrow, TranslationKeys.BARREL_MIXING_CATEGORY_TITLE, DefaultMaterials.OAK_BARREL.getItem());
         }
@@ -101,7 +100,7 @@ public abstract class BarrelMixingCategory<T> implements IRecipeCategory<T> {
         }
     }
 
-    public static class Fluids extends BarrelMixingCategory<BarrelFluidMixingRecipe> {
+    static class Fluids extends BarrelMixingCategory<BarrelFluidMixingRecipe> {
         private static final Component CONTENTS_ARE_CONSUMED_TOOLTIP = Component.translatable(TranslationKeys.BARREL_FLUID_MIXING_CONTENTS_ARE_CONSUMED).withStyle(ChatFormatting.RED);
 
         public Fluids(IGuiHelper helper, IDrawable plus, IDrawable arrow) {
@@ -130,7 +129,7 @@ public abstract class BarrelMixingCategory<T> implements IRecipeCategory<T> {
             super.draw(recipe, recipeSlotsView, graphics, mouseX, mouseY);
 
             if (recipe.consumesAdditive) {
-                ClientJeiUtil.renderAsterisk(graphics, 18 + 3 + 3 + 8, 0);
+                ClientXeiUtil.renderAsterisk(graphics, 18 + 3 + 3 + 8, 0);
             }
         }
     }

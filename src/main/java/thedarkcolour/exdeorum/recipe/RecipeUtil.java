@@ -55,6 +55,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.ExDeorum;
+import thedarkcolour.exdeorum.client.ClientsideCode;
 import thedarkcolour.exdeorum.compat.PreferredOres;
 import thedarkcolour.exdeorum.item.CompressedHammerItem;
 import thedarkcolour.exdeorum.item.HammerItem;

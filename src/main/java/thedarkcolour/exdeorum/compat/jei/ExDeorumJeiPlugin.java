@@ -18,7 +18,6 @@
 
 package thedarkcolour.exdeorum.compat.jei;
 
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.VanillaTypes;
@@ -38,10 +37,7 @@ import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LiquidBlock;
-import net.minecraft.world.level.block.WallTorchBlock;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.RegistryObject;
 import net.minecraftforge.fml.ModList;
@@ -49,8 +45,9 @@ import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.client.screen.MechanicalHammerScreen;
 import thedarkcolour.exdeorum.client.screen.MechanicalSieveScreen;
 import thedarkcolour.exdeorum.compat.CompatHelper;
-import thedarkcolour.exdeorum.compat.GroupedSieveRecipe;
+import thedarkcolour.exdeorum.compat.XeiSieveRecipe;
 import thedarkcolour.exdeorum.compat.ModIds;
+import thedarkcolour.exdeorum.compat.XeiUtil;
 import thedarkcolour.exdeorum.data.TranslationKeys;
 import thedarkcolour.exdeorum.item.WateringCanItem;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
@@ -81,16 +78,14 @@ public class ExDeorumJeiPlugin implements IModPlugin {
     static final RecipeType<CrucibleRecipe> LAVA_CRUCIBLE = recipeType("lava_crucible", CrucibleRecipe.class);
     static final RecipeType<CrucibleRecipe> WATER_CRUCIBLE = recipeType("water_crucible", CrucibleRecipe.class);
     static final RecipeType<CrucibleHeatSourceRecipe> CRUCIBLE_HEAT_SOURCES = recipeType("crucible_heat_sources", CrucibleHeatSourceRecipe.class);
-    static final RecipeType<GroupedSieveRecipe> SIEVE = recipeType("sieve", GroupedSieveRecipe.class);
-    static final RecipeType<GroupedSieveRecipe> COMPRESSED_SIEVE = recipeType("compressed_sieve", GroupedSieveRecipe.class);
+    static final RecipeType<XeiSieveRecipe> SIEVE = recipeType("sieve", XeiSieveRecipe.class);
+    static final RecipeType<XeiSieveRecipe> COMPRESSED_SIEVE = recipeType("compressed_sieve", XeiSieveRecipe.class);
     static final RecipeType<HammerRecipe> HAMMER = recipeType("hammer", HammerRecipe.class);
     static final RecipeType<HammerRecipe> COMPRESSED_HAMMER = recipeType("compressed_hammer", CompressedHammerRecipe.class);
     static final RecipeType<CrookJeiRecipe> CROOK = recipeType("crook", CrookJeiRecipe.class);
 
     private static <T> RecipeType<T> recipeType(String path, Class<? extends T> type) {
-        // use alternative namespace so that EMI doesn't skip JEI compatibility
-        String namespace = ModList.get().isLoaded(ModIds.EMI) ? ExDeorum.ID + "_" + ModIds.EMI : ExDeorum.ID;
-        return RecipeType.create(namespace, path, type);
+        return RecipeType.create(ExDeorum.ID, path, type);
     }
 
     @Override
@@ -211,49 +206,31 @@ public class ExDeorumJeiPlugin implements IModPlugin {
             crookRecipes.add(CrookJeiRecipe.create(recipe));
         }
         registration.addRecipes(CROOK, crookRecipes);
-        registration.addRecipes(SIEVE, GroupedSieveRecipe.getAllRecipesGrouped(ERecipeTypes.SIEVE.get()));
-        registration.addRecipes(COMPRESSED_SIEVE, GroupedSieveRecipe.getAllRecipesGrouped(ERecipeTypes.COMPRESSED_SIEVE.get()));
+        registration.addRecipes(SIEVE, XeiSieveRecipe.getAllRecipesGrouped(ERecipeTypes.SIEVE.get(), XeiSieveRecipe.SIEVE_ROWS));
+        registration.addRecipes(COMPRESSED_SIEVE, XeiSieveRecipe.getAllRecipesGrouped(ERecipeTypes.COMPRESSED_SIEVE.get(), XeiSieveRecipe.COMPRESSED_SIEVE_ROWS));
 
         addCrucibleHeatSources(registration);
     }
 
     private static void addCrucibleHeatSources(IRecipeRegistration registration) {
-        var values = new Object2IntOpenHashMap<Block>();
-        for (var entry : RecipeUtil.getHeatSources()) {
-            var state = entry.getKey();
-            var block = state.getBlock();
-
-            if (block instanceof WallTorchBlock) continue;
-
-            if (block != Blocks.AIR) {
-                final int newValue = entry.getIntValue();
-
-                values.computeInt(block, (key, value) -> {
-                    if (value != null) {
-                        return Math.max(value, newValue);
-                    } else {
-                        return newValue == 0 ? null : newValue;
-                    }
-                });
-            }
-        }
         var fluidHelper = registration.getJeiHelpers().getPlatformFluidHelper();
         var fluidIngredientType = fluidHelper.getFluidIngredientType();
         var recipes = new ArrayList<CrucibleHeatSourceRecipe>();
 
-        for (var entry : values.object2IntEntrySet()) {
-            if (entry.getKey() instanceof LiquidBlock liquid) {
-                recipes.add(new CrucibleHeatSourceRecipe(entry.getIntValue(), entry.getKey().defaultBlockState(), fluidIngredientType, fluidHelper.create(liquid.getFluid(), 1000)));
+        XeiUtil.addCrucibleHeatRecipes((heat, state) -> {
+            if (state.getBlock() instanceof LiquidBlock liquid) {
+                recipes.add(new CrucibleHeatSourceRecipe(heat, state, fluidIngredientType, fluidHelper.create(liquid.getFluid(), 1000)));
             } else {
-                var itemForm = entry.getKey().asItem();
+                var itemForm = state.getBlock().asItem();
 
                 if (itemForm != Items.AIR) {
-                    recipes.add(new CrucibleHeatSourceRecipe(entry.getIntValue(), entry.getKey().defaultBlockState(), VanillaTypes.ITEM_STACK, new ItemStack(itemForm)));
+                    recipes.add(new CrucibleHeatSourceRecipe(heat, state, VanillaTypes.ITEM_STACK, new ItemStack(itemForm)));
                 } else {
-                    recipes.add(new CrucibleHeatSourceRecipe(entry.getIntValue(), entry.getKey().defaultBlockState(), null, null));
+                    recipes.add(new CrucibleHeatSourceRecipe(heat, state, null, null));
                 }
             }
-        }
+        });
+
         registration.addRecipes(CRUCIBLE_HEAT_SOURCES, recipes);
     }
 

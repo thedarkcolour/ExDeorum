@@ -19,6 +19,7 @@
 package thedarkcolour.exdeorum.data;
 
 import thedarkcolour.exdeorum.ExDeorum;
+import thedarkcolour.exdeorum.compat.ModIds;
 
 public class TranslationKeys {
     // Misc
@@ -83,6 +84,19 @@ public class TranslationKeys {
     public static final String SIEVE_RECIPE_MIN_OUTPUT = "gui." + ExDeorum.ID + ".category.sieve.min_output";
     public static final String SIEVE_RECIPE_MAX_OUTPUT = "gui." + ExDeorum.ID + ".category.sieve.max_output";
     public static final String SIEVE_RECIPE_BY_HAND_ONLY = "gui." + ExDeorum.ID + ".category.sieve.by_hand_only";
+
+    // EMI recipe categories
+    public static final String EMI_BARREL_COMPOST_CATEGORY_TITLE = ModIds.EMI + ".category." + ExDeorum.ID + ".barrel_compost";
+    public static final String EMI_BARREL_MIXING_CATEGORY_TITLE = ModIds.EMI + ".category." + ExDeorum.ID + ".barrel_mixing";
+    public static final String EMI_BARREL_FLUID_MIXING_CATEGORY_TITLE = ModIds.EMI + ".category." + ExDeorum.ID + ".barrel_fluid_mixing";
+    public static final String EMI_LAVA_CRUCIBLE_CATEGORY_TITLE = ModIds.EMI + ".category." + ExDeorum.ID + ".lava_crucible";
+    public static final String EMI_WATER_CRUCIBLE_CATEGORY_TITLE = ModIds.EMI + ".category." + ExDeorum.ID + ".water_crucible";
+    public static final String EMI_CRUCIBLE_HEAT_SOURCES_CATEGORY_TITLE = ModIds.EMI + ".category." + ExDeorum.ID + ".crucible_heat_sources";
+    public static final String EMI_SIEVE_CATEGORY_TITLE = ModIds.EMI + ".category." + ExDeorum.ID + ".sieve";
+    public static final String EMI_COMPRESSED_SIEVE_CATEGORY_TITLE = ModIds.EMI + ".category." + ExDeorum.ID + ".compressed_sieve";
+    public static final String EMI_HAMMER_CATEGORY_TITLE = ModIds.EMI + ".category." + ExDeorum.ID + ".hammer";
+    public static final String EMI_COMPRESSED_HAMMER_CATEGORY_TITLE = ModIds.EMI + ".category." + ExDeorum.ID + ".compressed_hammer";
+    public static final String EMI_CROOK_CATEGORY_TITLE = ModIds.EMI + ".category." + ExDeorum.ID + ".crook";
 
     // Screens
     public static final String MECHANICAL_SIEVE_SCREEN_TITLE = ExDeorum.ID + ".container.mechanical_sieve";

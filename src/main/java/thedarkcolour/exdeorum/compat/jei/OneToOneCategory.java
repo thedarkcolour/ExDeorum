@@ -28,11 +28,9 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
+import thedarkcolour.exdeorum.compat.XeiUtil;
 
 abstract class OneToOneCategory<T> implements IRecipeCategory<T> {
-    public static final int WIDTH = 72;
-    public static final int HEIGHT = 18;
-
     private final IDrawable background;
     private final IDrawable arrow;
     private final IDrawable icon;
@@ -40,7 +38,7 @@ abstract class OneToOneCategory<T> implements IRecipeCategory<T> {
     private final Component title;
 
     public OneToOneCategory(IGuiHelper helper, IDrawable arrow, IDrawable icon, Component title) {
-        this.background = helper.createBlankDrawable(WIDTH, HEIGHT);
+        this.background = helper.createBlankDrawable(XeiUtil.ONE_TO_ONE_WIDTH, XeiUtil.ONE_TO_ONE_HEIGHT);
         this.arrow = arrow;
         this.icon = icon;
         this.slot = helper.getSlotDrawable();

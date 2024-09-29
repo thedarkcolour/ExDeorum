@@ -16,16 +16,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package thedarkcolour.exdeorum.event;
+package thedarkcolour.exdeorum.client;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.crafting.RecipeManager;
 import org.jetbrains.annotations.Nullable;
 
 // necessary to avoid EventBus loading LocalPlayer through its ASM transformations
-class ClientsideCode {
+public class ClientsideCode {
     @Nullable
-    static Player getLocalPlayer() {
+    public static Player getLocalPlayer() {
         return Minecraft.getInstance().player;
+    }
+
+    @Nullable
+    public static RecipeManager getRecipeManager() {
+        ClientPacketListener connection = Minecraft.getInstance().getConnection();
+        if (connection != null) {
+            return connection.getRecipeManager();
+        }
+        return null;
     }
 }

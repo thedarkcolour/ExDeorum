@@ -24,7 +24,6 @@ import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IJeiHelpers;
-import mezz.jei.api.helpers.IModIdHelper;
 import mezz.jei.api.recipe.IFocusFactory;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
@@ -32,25 +31,19 @@ import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.runtime.IIngredientManager;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.RenderTypeHelper;
-import net.minecraftforge.client.model.data.ModelData;
+import thedarkcolour.exdeorum.compat.ClientXeiUtil;
+import thedarkcolour.exdeorum.compat.XeiUtil;
 import thedarkcolour.exdeorum.data.TranslationKeys;
-import thedarkcolour.exdeorum.registry.EBlocks;
 import thedarkcolour.exdeorum.registry.EItems;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CrookCategory implements IRecipeCategory<CrookJeiRecipe> {
-    private static final Component REQUIRES_CERTAIN_STATE = Component.translatable(TranslationKeys.CROOK_CATEGORY_REQUIRES_STATE).withStyle(ChatFormatting.GRAY);
+class CrookCategory implements IRecipeCategory<CrookJeiRecipe> {
 
     private final IDrawable background;
     private final IDrawable icon;
@@ -60,11 +53,10 @@ public class CrookCategory implements IRecipeCategory<CrookJeiRecipe> {
 
     private final IFocusFactory focusFactory;
     private final IIngredientManager ingredientManager;
-    private final IModIdHelper modIdHelper;
 
     private final CycleTimer timer = new CycleTimer(0);
 
-    public CrookCategory(IJeiHelpers helpers, IDrawable arrow) {
+    CrookCategory(IJeiHelpers helpers, IDrawable arrow) {
         var helper = helpers.getGuiHelper();
         this.background = helper.createBlankDrawable(120, 48);
         this.icon = helper.createDrawableItemStack(new ItemStack(EItems.CROOK.get()));
@@ -74,7 +66,6 @@ public class CrookCategory implements IRecipeCategory<CrookJeiRecipe> {
 
         this.focusFactory = helpers.getFocusFactory();
         this.ingredientManager = helpers.getIngredientManager();
-        this.modIdHelper = helpers.getModIdHelper();
     }
 
     @Override
@@ -103,7 +94,7 @@ public class CrookCategory implements IRecipeCategory<CrookJeiRecipe> {
         ItemStack result = new ItemStack(recipe.result, 1);
         result.setTag(recipe.getResultNbt());
         builder.addSlot(RecipeIngredientRole.OUTPUT, 80, 18).addItemStack(result).addTooltipCallback((recipeSlotView, tooltip) -> {
-            tooltip.add(ClientJeiUtil.formatChance(recipe.chance));
+            tooltip.add(XeiUtil.formatChance(recipe.chance));
         });
     }
 
@@ -115,37 +106,24 @@ public class CrookCategory implements IRecipeCategory<CrookJeiRecipe> {
         this.slot.draw(graphics, 79, 17);
 
         BlockState state = this.timer.getCycledItem(recipe.states);
-        if (state.is(EBlocks.INFESTED_LEAVES.get())) {
-            ClientJeiUtil.renderBlock(graphics, state, 28, 18, 10, 20f, (block, poseStack, buffers) -> {
-                var blockRenderer = Minecraft.getInstance().getBlockRenderer();
-                var bakedmodel = blockRenderer.getBlockModel(state);
-
-                for (var renderType : bakedmodel.getRenderTypes(state, RandomSource.create(42), ModelData.EMPTY)) {
-                    blockRenderer.getModelRenderer().renderModel(poseStack.last(), buffers.getBuffer(RenderTypeHelper.getEntityRenderType(renderType, false)), state, bakedmodel, 1f, 1f, 1f, 15728880, OverlayTexture.NO_OVERLAY, ModelData.EMPTY, renderType);
-                }
-            });
-        } else {
-            ClientJeiUtil.renderBlock(graphics, state, 28, 18, 10, 20f, (block, poseStack, buffers) -> {
-                Minecraft.getInstance().getBlockRenderer().renderSingleBlock(block, poseStack, buffers, 15728880, OverlayTexture.NO_OVERLAY);
-            });
-        }
+        ClientXeiUtil.renderBlock(graphics, state, 28, 18, 10, 20f);
     }
 
     @Override
     public List<Component> getTooltipStrings(CrookJeiRecipe recipe, IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
         if (12 < mouseX && mouseX < 44 && 10 < mouseY && mouseY < 42) {
             var block = this.timer.getCycledItem(recipe.states).getBlock();
-            var modId = BuiltInRegistries.BLOCK.getKey(block).getNamespace();
-            var tooltip = new ArrayList<Component>();
-            tooltip.add(Component.translatable(block.getDescriptionId()));
+
+            // todo replace with XeiUtil
+            ArrayList<Component> extraDetails = new ArrayList<>();
             if (recipe instanceof CrookJeiRecipe.StatesRecipe statesRecipe && !statesRecipe.requirements.isEmpty()) {
-                tooltip.add(REQUIRES_CERTAIN_STATE);
-                tooltip.addAll(statesRecipe.requirements);
+                extraDetails.add(XeiUtil.REQUIRES_CERTAIN_STATE);
+                extraDetails.addAll(statesRecipe.requirements);
             } else if (recipe instanceof CrookJeiRecipe.TagRecipe tagRecipe) {
-                tooltip.add(Component.literal("#" + tagRecipe.tag.location()).withStyle(ChatFormatting.GRAY));
+                extraDetails.add(Component.literal("#" + tagRecipe.tag.location()).withStyle(ChatFormatting.GRAY));
             }
-            tooltip.add(Component.literal(this.modIdHelper.getFormattedModNameForModId(modId)));
-            return tooltip;
+
+            return XeiUtil.getBlockTooltip(extraDetails, block);
         }
 
         return List.of();
