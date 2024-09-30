@@ -244,7 +244,7 @@
 ## Ex Deorum 1.1
 - Fixed the missing barrel mixing recipe for Clay Block
 
-## Ex Deorum 1.0  
+## Ex Deorum 1.0
 *Ex Deorum*'s new additions are listed first, then the additions from original *Ex Nihilo*.
 - Added the Watering Can, which can be used to hydrate farmland and speed up plant and tree growth. It is intended to be
 an alternative to mods like Twerk or Tree Growing Simulator, as a Wooden Watering Can is given to the player at the start (configurable).

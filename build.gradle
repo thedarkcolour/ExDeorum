@@ -3,13 +3,13 @@ plugins {
     id 'net.minecraftforge.gradle' version '[6.0,6.2)'
     id 'org.parchmentmc.librarian.forgegradle' version '1.+'
     id 'org.spongepowered.mixin' version '0.7.+'
+    id("com.modrinth.minotaur") version "2.+"
+    id("com.matthewprenger.cursegradle") version "1.4.0"
 }
 
 version = '1.41'
 group = 'thedarkcolour.exdeorum'
-base {
-    archivesName = 'exdeorum'
-}
+base.archivesName = 'exdeorum'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 java.withSourcesJar()
@@ -214,4 +214,62 @@ idea {
         downloadSources = true
         downloadJavadoc = true
     }
+}
+
+if (System.getenv("CURSEFORGE_TOKEN")) {
+    curseforge {
+        apiKey = System.getenv("CURSEFORGE_TOKEN")
+
+        project {
+            id = "901420"
+            changelogType = "markdown"
+            changelog = getChangelog(project.version)
+
+            releaseType = "release"
+
+            addGameVersion(mc_version)
+            addGameVersion("Forge")
+            addGameVersion("NeoForge")
+            addGameVersion("Java 17")
+
+            mainArtifact(jar.archiveFile) {
+                displayName = "Ex Deorum ${project.version}"
+            }
+        }
+    }
+}
+
+modrinth {
+    token = System.getenv("MODRINTH_TOKEN")
+    projectId = "WP0FLyzv"
+    uploadFile = jar
+    gameVersions = [mc_version]
+    loaders = ["forge", "neoforge"]
+    changelog = getChangelog(project.version)
+}
+
+static def getChangelog(Object version) {
+    version = version.toString()
+
+    def file = new File('changelog.md')
+    if (!file.exists()) {
+        return "Changelog file not found"
+    }
+
+    // Relies on the changelog block being "##blahblahblah_VERSION" where _ is a space
+    def content = file.text.normalize().split("##.* ")
+
+    for (final def chunk in content) {
+        if (chunk.isEmpty()) continue
+
+        def lineTerminatorIndex = chunk.findIndexOf { c -> c == '\n' || c == '\r' }
+        def versionString = chunk.substring(0, lineTerminatorIndex)
+
+        if (versionString == version) {
+            return "## Ex Deorum $version\n" + chunk.substring(lineTerminatorIndex + 1)
+        }
+    }
+
+    // Fallback in case this fails
+    return "Ex Deorum Update ${version}"
 }
