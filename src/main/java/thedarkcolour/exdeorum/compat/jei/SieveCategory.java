@@ -34,6 +34,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraftforge.common.util.Lazy;
+import org.apache.commons.lang3.mutable.MutableInt;
 import thedarkcolour.exdeorum.compat.XeiSieveRecipe;
 import thedarkcolour.exdeorum.compat.XeiUtil;
 import thedarkcolour.exdeorum.data.TranslationKeys;
@@ -45,11 +46,11 @@ class SieveCategory implements IRecipeCategory<XeiSieveRecipe> {
     private final IDrawable row;
     private final IDrawable icon;
     private final Component title;
-    private final int rows;
+    private final MutableInt rows;
 
     // Common constructor
-    SieveCategory(IGuiHelper helper, ItemLike icon, Component title, int rows) {
-        this.background = Lazy.of(() -> helper.createBlankDrawable(XeiUtil.SIEVE_WIDTH, XeiUtil.SIEVE_ROW_START + XeiUtil.SIEVE_ROW_HEIGHT * rows));
+    SieveCategory(IGuiHelper helper, ItemLike icon, Component title, MutableInt rows) {
+        this.background = Lazy.of(() -> helper.createBlankDrawable(XeiUtil.SIEVE_WIDTH, XeiUtil.SIEVE_ROW_START + XeiUtil.SIEVE_ROW_HEIGHT * rows.intValue()));
         this.slot = helper.getSlotDrawable();
         this.row = helper.createDrawable(ExDeorumJeiPlugin.EX_DEORUM_JEI_TEXTURE, 0, 0, 162, 18);
         this.icon = helper.createDrawableItemStack(new ItemStack(icon));
@@ -59,7 +60,7 @@ class SieveCategory implements IRecipeCategory<XeiSieveRecipe> {
 
     // Regular sieve
     SieveCategory(IGuiHelper helper) {
-        this(helper, DefaultMaterials.OAK_SIEVE, Component.translatable(TranslationKeys.SIEVE_CATEGORY_TITLE), XeiSieveRecipe.SIEVE_ROWS.intValue());
+        this(helper, DefaultMaterials.OAK_SIEVE, Component.translatable(TranslationKeys.SIEVE_CATEGORY_TITLE), XeiSieveRecipe.SIEVE_ROWS);
     }
 
     @Override
@@ -110,7 +111,9 @@ class SieveCategory implements IRecipeCategory<XeiSieveRecipe> {
         this.slot.draw(graphics, 58, 0);
         this.slot.draw(graphics, 86, 0);
 
-        for (int i = 0; i < this.rows; i++) {
+        int rows = this.rows.intValue();
+
+        for (int i = 0; i < rows; i++) {
             this.row.draw(graphics, 0, 28 + i * 18);
         }
     }

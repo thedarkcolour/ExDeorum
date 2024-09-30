@@ -27,7 +27,7 @@ import thedarkcolour.exdeorum.material.DefaultMaterials;
 
 class CompressedSieveCategory extends SieveCategory {
     CompressedSieveCategory(IGuiHelper helper) {
-        super(helper, DefaultMaterials.OAK_COMPRESSED_SIEVE, Component.translatable(TranslationKeys.COMPRESSED_SIEVE_CATEGORY_TITLE), XeiSieveRecipe.COMPRESSED_SIEVE_ROWS.intValue());
+        super(helper, DefaultMaterials.OAK_COMPRESSED_SIEVE, Component.translatable(TranslationKeys.COMPRESSED_SIEVE_CATEGORY_TITLE), XeiSieveRecipe.COMPRESSED_SIEVE_ROWS);
     }
 
     @Override

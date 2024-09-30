@@ -1,3 +1,6 @@
+## Ex Deorum 1.42
+- Fix JEI sieve recipe bug
+
 ## Ex Deorum 1.41
 - Add native EMI support.
 - Fix bug where removing all Compressed Sieve recipes would break regular Sieve recipe display in JEI.
