@@ -242,10 +242,13 @@ if (System.getenv("CURSEFORGE_TOKEN")) {
 modrinth {
     token = System.getenv("MODRINTH_TOKEN")
     projectId = "WP0FLyzv"
-    uploadFile = jar
+    versionName = "Ex Deorum ${project.version}"
     gameVersions = [mc_version]
     loaders = ["forge", "neoforge"]
     changelog = getChangelog(project.version)
+
+    uploadFile = jar
+    additionalFiles.add(sourcesJar)
 }
 
 static def getChangelog(Object version) {
