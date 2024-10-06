@@ -60,10 +60,6 @@ public class XeiUtil {
     public static final int BARREL_MIXING_WIDTH = 120;
     public static final int BARREL_MIXING_HEIGHT = 18;
 
-    // Barrel compost
-    public static final int BARREL_COMPOST_WIDTH = 120;
-    public static final int BARREL_COMPOST_HEIGHT = 18;
-
     // Block predicate (Crucible Heat, Sieve)
     public static final Component REQUIRES_CERTAIN_STATE = Component.translatable(TranslationKeys.CROOK_CATEGORY_REQUIRES_STATE).withStyle(ChatFormatting.GRAY);
 

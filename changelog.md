@@ -1,3 +1,7 @@
+## Ex Deorum 3.4
+- Fix JEI bug with sieve recipes overflowing due to JEI API changes
+- Fix invisible output slots on JEI crook recipes
+
 ## Ex Deorum 3.3
 - Now built against Minecraft 1.21.1
 - Add native EMI support.

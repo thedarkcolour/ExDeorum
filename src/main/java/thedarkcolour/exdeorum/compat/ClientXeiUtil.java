@@ -42,11 +42,8 @@ import thedarkcolour.exdeorum.data.TranslationKeys;
 import thedarkcolour.exdeorum.material.DefaultMaterials;
 import thedarkcolour.exdeorum.registry.EBlocks;
 
-import java.text.DecimalFormat;
-
 // client-only logic shared between JEI and EMI
 public class ClientXeiUtil {
-    public static final DecimalFormat FORMATTER = new DecimalFormat();
     private static final ItemStack OAK_BARREL = new ItemStack(DefaultMaterials.OAK_BARREL.getItem());
 
     private static final FluidState EMPTY = Fluids.EMPTY.defaultFluidState();
@@ -94,6 +91,8 @@ public class ClientXeiUtil {
     public static void renderBlock(GuiGraphics guiGraphics, BlockState state, float x, float y, float z, float scale) {
         PoseStack poseStack = guiGraphics.pose();
 
+        poseStack.pushPose();
+
         poseStack.translate(x, y, z);
         poseStack.scale(-scale, -scale, -scale);
         poseStack.translate(-0.5F, -0.5F, 0);
@@ -102,7 +101,6 @@ public class ClientXeiUtil {
         poseStack.mulPose(Axis.YP.rotationDegrees(45f));
         poseStack.translate(-0.5F, 0, 0.5F);
 
-        poseStack.pushPose();
         RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
         poseStack.translate(0, 0, -1);
 
@@ -174,7 +172,7 @@ public class ClientXeiUtil {
 
     // Takes a decimal probability and returns a user-friendly percentage value
     public static Component formatChance(double probability) {
-        var chance = FORMATTER.format(probability * 100);
+        var chance = XeiUtil.FORMATTER.format(probability * 100);
         return Component.translatable(TranslationKeys.SIEVE_RECIPE_CHANCE, chance).withStyle(ChatFormatting.GRAY);
     }
 
