@@ -45,13 +45,11 @@ public class BarrelMixingRecipe extends SingleIngredientRecipe {
     public static final StreamCodec<RegistryFriendlyByteBuf, BarrelMixingRecipe> STREAM_CODEC = StreamCodec.of(BarrelMixingRecipe::toNetwork, BarrelMixingRecipe::fromNetwork);
 
     public final SizedFluidIngredient fluid;
-    public final int fluidAmount;
     public final ItemStack result;
 
     public BarrelMixingRecipe(Ingredient ingredient, SizedFluidIngredient fluid, ItemStack result) {
         super(ingredient);
         this.fluid = fluid;
-        this.fluidAmount = fluid.amount();
         this.result = result;
     }
 
@@ -71,7 +69,7 @@ public class BarrelMixingRecipe extends SingleIngredientRecipe {
     }
 
     public boolean matches(ItemStack item, FluidStack fluid) {
-        return this.ingredient.test(item) && this.fluid.test(fluid) && fluid.getAmount() >= this.fluidAmount;
+        return this.ingredient.test(item) && this.fluid.test(fluid);
     }
 
     @Override

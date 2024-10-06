@@ -31,6 +31,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import thedarkcolour.exdeorum.compat.ClientXeiUtil;
 import thedarkcolour.exdeorum.data.TranslationKeys;
 import thedarkcolour.exdeorum.material.DefaultMaterials;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelFluidMixingRecipe;
@@ -127,7 +128,7 @@ public abstract class BarrelMixingCategory<T> implements IRecipeCategory<T> {
             super.draw(recipe, recipeSlotsView, graphics, mouseX, mouseY);
 
             if (recipe.consumesAdditive()) {
-                ClientJeiUtil.renderAsterisk(graphics, 18 + 3 + 3 + 8, 0);
+                ClientXeiUtil.renderAsterisk(graphics, 18 + 3 + 3 + 8, 0);
             }
         }
     }

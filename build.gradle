@@ -131,13 +131,13 @@ dependencies {
     compileOnly("curse.maven:jade-324717:5109393")
     // JEI OPTIONAL
     compileOnly("mezz.jei:jei-${mc_version}-neoforge-api:${jei_version}")
-    runtimeOnly("mezz.jei:jei-${mc_version}-neoforge:${jei_version}")
+    //runtimeOnly("mezz.jei:jei-${mc_version}-neoforge:${jei_version}")
     // REI OPTIONAL todo add
     compileOnly("me.shedaniel:RoughlyEnoughItems-forge:${rei_version}")
     compileOnly("me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}")
     // EMI OPTIONAL
     compileOnly("dev.emi:emi-neoforge:${emi_version}+${mc_version}:api")
-    compileOnly("dev.emi:emi-neoforge:${emi_version}+${mc_version}")
+    runtimeOnly("dev.emi:emi-neoforge:${emi_version}+${mc_version}")
     //implementation("curse.maven:reipc-521393:4837449")
     // KubeJS OPTIONAL
     implementation("dev.architectury:architectury-neoforge:${architectury_version}")
@@ -156,7 +156,7 @@ dependencies {
 
     // testing
     //implementation("curse.maven:allthecompressed-514045:4938351")
-    implementation("curse.maven:alltheores-405593:5500624")
+    compileOnly("curse.maven:alltheores-405593:5500624")
     //implementation("curse.maven:inventorysorter-240633:4655091")
     //implementation("curse.maven:cyclic-239286:4994392")
     //implementation("curse.maven:flib-661261:4724762")

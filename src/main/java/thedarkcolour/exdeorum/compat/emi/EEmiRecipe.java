@@ -16,16 +16,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package thedarkcolour.exdeorum.event;
+package thedarkcolour.exdeorum.compat.emi;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.world.entity.player.Player;
+import dev.emi.emi.api.recipe.EmiRecipe;
+import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
-// necessary to avoid EventBus loading LocalPlayer through its ASM transformations
-class ClientsideCode {
-    @Nullable
-    static Player getLocalPlayer() {
-        return Minecraft.getInstance().player;
+abstract class EEmiRecipe implements EmiRecipe {
+    protected final ResourceLocation id;
+
+    EEmiRecipe(ResourceLocation id) {
+        this.id = id;
+    }
+
+    @Override
+    public @Nullable ResourceLocation getId() {
+        return this.id;
     }
 }

@@ -72,7 +72,7 @@ public class ClientHandler {
         fmlBus.addListener(ClientHandler::onScreenOpen);
         fmlBus.addListener(ClientHandler::onRecipesUpdated);
 
-        if (ModList.get().isLoaded(ModIds.JEI)) {
+        if (ModList.get().isLoaded(ModIds.JEI) || ModList.get().isLoaded(ModIds.EMI)) {
             modBus.addListener(ClientHandler::registerAdditionalModels);
         }
     }

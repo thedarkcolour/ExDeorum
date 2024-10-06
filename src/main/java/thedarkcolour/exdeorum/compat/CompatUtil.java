@@ -19,10 +19,8 @@
 package thedarkcolour.exdeorum.compat;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.Container;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -36,11 +34,11 @@ import net.minecraft.world.level.Level;
 import net.neoforged.fml.ModList;
 import thedarkcolour.exdeorum.material.DefaultMaterials;
 import thedarkcolour.exdeorum.material.MaterialRegistry;
+import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.registry.EItems;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -82,7 +80,7 @@ public class CompatUtil {
     }
 
     public static <C extends RecipeInput, R extends Recipe<C>, T> List<T> collectAllRecipes(RecipeType<R> recipeType, Function<R, T> mapper) {
-        var byType = Objects.requireNonNull(Minecraft.getInstance().level).getRecipeManager().byType(recipeType);
+        var byType = RecipeUtil.getRecipeManager().byType(recipeType);
         List<T> recipes = new ObjectArrayList<>(byType.size());
         for (RecipeHolder<R> value : byType) {
             recipes.add(mapper.apply(value.value()));

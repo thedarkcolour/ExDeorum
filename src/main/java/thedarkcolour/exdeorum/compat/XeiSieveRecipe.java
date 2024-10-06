@@ -29,6 +29,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import org.apache.commons.lang3.mutable.MutableInt;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.recipe.sieve.SieveRecipe;
 import thedarkcolour.exdeorum.registry.EItems;
@@ -39,11 +40,12 @@ import java.util.List;
 import java.util.function.Function;
 
 // Since no JEI code is used here, this can be reused for REI
-public record GroupedSieveRecipe(Ingredient ingredient, ItemStack mesh, List<Result> results) {
-    public static int maxSieveRows;
+public record XeiSieveRecipe(Ingredient ingredient, ItemStack mesh, List<Result> results) {
+    public static final MutableInt SIEVE_ROWS = new MutableInt(0);
+    public static final MutableInt COMPRESSED_SIEVE_ROWS = new MutableInt(0);
 
-    public static ImmutableList<GroupedSieveRecipe> getAllRecipesGrouped(RecipeType<? extends SieveRecipe> recipeType) {
-        maxSieveRows = 1;
+    public static ImmutableList<XeiSieveRecipe> getAllRecipesGrouped(RecipeType<? extends SieveRecipe> recipeType, MutableInt maxRows) {
+        int maxSieveRows = 1;
 
         var recipes = CompatUtil.collectAllRecipes(recipeType, Function.identity());
         Multimap<Ingredient, SieveRecipe> ingredientGrouper = ArrayListMultimap.create();
@@ -64,11 +66,11 @@ public record GroupedSieveRecipe(Ingredient ingredient, ItemStack mesh, List<Res
             }
         }
 
-        ImmutableList.Builder<GroupedSieveRecipe> jeiRecipes = new ImmutableList.Builder<>();
+        ImmutableList.Builder<XeiSieveRecipe> jeiRecipes = new ImmutableList.Builder<>();
         // Sort based on expected count of result
         var resultSorter = Comparator.comparingDouble(Result::expectedCount).reversed();
         // Sort based on order of sieve tier
-        var meshSorter = Comparator.comparingInt(GroupedSieveRecipe::meshOrder);
+        var meshSorter = Comparator.comparingInt(XeiSieveRecipe::meshOrder);
 
         // ingredients with common ingredients are grouped into lists (ex. dirt)
         for (var ingredient : ingredientGrouper.keySet()) {
@@ -97,7 +99,7 @@ public record GroupedSieveRecipe(Ingredient ingredient, ItemStack mesh, List<Res
 
                 results.sort(resultSorter);
 
-                var jeiRecipe = new GroupedSieveRecipe(ingredient, new ItemStack(mesh), results);
+                var jeiRecipe = new XeiSieveRecipe(ingredient, new ItemStack(mesh), results);
                 jeiRecipes.add(jeiRecipe);
 
                 var rows = Mth.ceil((float) meshRecipes.size() / 9f);
@@ -106,6 +108,9 @@ public record GroupedSieveRecipe(Ingredient ingredient, ItemStack mesh, List<Res
                 }
             }
         }
+
+        maxRows.setValue(maxSieveRows);
+
         return jeiRecipes.build();
     }
 

@@ -1,5 +1,8 @@
 ## Ex Deorum 3.3
 - Now built against Minecraft 1.21.1
+- Add native EMI support.
+- Fix bug where removing all Compressed Sieve recipes would break regular Sieve recipe display in JEI.
+- Hack fix for random crashes with fluid transformation recipe cache
 
 ## Ex Deorum 3.2
 - Fix KubeJS plugin.

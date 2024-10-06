@@ -108,6 +108,18 @@ class English {
         english.add(TranslationKeys.SIEVE_RECIPE_MAX_OUTPUT, "Max: %s");
         english.add(TranslationKeys.SIEVE_RECIPE_BY_HAND_ONLY, "Does not drop from Mechanical Sieve");
 
+        english.add(TranslationKeys.EMI_BARREL_COMPOST_CATEGORY_TITLE, "Barrel Compost");
+        english.add(TranslationKeys.EMI_BARREL_MIXING_CATEGORY_TITLE, "Barrel Mixing");
+        english.add(TranslationKeys.EMI_BARREL_FLUID_MIXING_CATEGORY_TITLE, "Barrel Fluid Mixing");
+        english.add(TranslationKeys.EMI_LAVA_CRUCIBLE_CATEGORY_TITLE, "Lava Crucible");
+        english.add(TranslationKeys.EMI_WATER_CRUCIBLE_CATEGORY_TITLE, "Water Crucible");
+        english.add(TranslationKeys.EMI_CRUCIBLE_HEAT_SOURCES_CATEGORY_TITLE, "Crucible Heat Source");
+        english.add(TranslationKeys.EMI_SIEVE_CATEGORY_TITLE, "Sieve");
+        english.add(TranslationKeys.EMI_COMPRESSED_SIEVE_CATEGORY_TITLE, "Compressed Sieve");
+        english.add(TranslationKeys.EMI_HAMMER_CATEGORY_TITLE, "Hammer");
+        english.add(TranslationKeys.EMI_COMPRESSED_HAMMER_CATEGORY_TITLE, "Compressed Hammer");
+        english.add(TranslationKeys.EMI_CROOK_CATEGORY_TITLE, "Crook");
+
         english.add(TranslationKeys.MECHANICAL_SIEVE_SCREEN_TITLE, "Mechanical Sieve");
         english.add(TranslationKeys.REDSTONE_CONTROL_MODES[RedstoneControlWidget.REDSTONE_MODE_IGNORED], "Always");
         english.add(TranslationKeys.REDSTONE_CONTROL_MODES[RedstoneControlWidget.REDSTONE_MODE_UNPOWERED], "Unpowered");

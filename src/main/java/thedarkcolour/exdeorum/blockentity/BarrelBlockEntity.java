@@ -376,7 +376,7 @@ public class BarrelBlockEntity extends ETankBlockEntity {
         if (recipe != null) {
             if (!simulate) {
                 // Empty barrel
-                this.tank.drain(recipe.fluidAmount, IFluidHandler.FluidAction.EXECUTE);
+                this.tank.drain(recipe.fluid.amount(), IFluidHandler.FluidAction.EXECUTE);
                 // Replace fluid with result
                 setItem(recipe.result.copy());
                 this.level.playSound(null, this.worldPosition, ESounds.BARREL_MIXING.get(), SoundSource.BLOCKS, 0.8f, 1.0f);

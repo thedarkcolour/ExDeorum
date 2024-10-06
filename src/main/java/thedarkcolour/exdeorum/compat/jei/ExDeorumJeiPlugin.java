@@ -49,8 +49,8 @@ import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.client.screen.MechanicalHammerScreen;
 import thedarkcolour.exdeorum.client.screen.MechanicalSieveScreen;
 import thedarkcolour.exdeorum.compat.CompatUtil;
-import thedarkcolour.exdeorum.compat.GroupedSieveRecipe;
 import thedarkcolour.exdeorum.compat.ModIds;
+import thedarkcolour.exdeorum.compat.XeiSieveRecipe;
 import thedarkcolour.exdeorum.data.TranslationKeys;
 import thedarkcolour.exdeorum.item.WateringCanItem;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
@@ -81,8 +81,8 @@ public class ExDeorumJeiPlugin implements IModPlugin {
     static final RecipeType<CrucibleRecipe> LAVA_CRUCIBLE = recipeType("lava_crucible", CrucibleRecipe.class);
     static final RecipeType<CrucibleRecipe> WATER_CRUCIBLE = recipeType("water_crucible", CrucibleRecipe.class);
     static final RecipeType<CrucibleHeatSourceRecipe> CRUCIBLE_HEAT_SOURCES = recipeType("crucible_heat_sources", CrucibleHeatSourceRecipe.class);
-    static final RecipeType<GroupedSieveRecipe> SIEVE = recipeType("sieve", GroupedSieveRecipe.class);
-    static final RecipeType<GroupedSieveRecipe> COMPRESSED_SIEVE = recipeType("compressed_sieve", GroupedSieveRecipe.class);
+    static final RecipeType<XeiSieveRecipe> SIEVE = recipeType("sieve", XeiSieveRecipe.class);
+    static final RecipeType<XeiSieveRecipe> COMPRESSED_SIEVE = recipeType("compressed_sieve", XeiSieveRecipe.class);
     static final RecipeType<HammerRecipe> HAMMER = recipeType("hammer", HammerRecipe.class);
     static final RecipeType<HammerRecipe> COMPRESSED_HAMMER = recipeType("compressed_hammer", CompressedHammerRecipe.class);
     static final RecipeType<CrookJeiRecipe> CROOK = recipeType("crook", CrookJeiRecipe.class);
@@ -198,7 +198,8 @@ public class ExDeorumJeiPlugin implements IModPlugin {
         if (RecipeUtil.isTagEmpty(EItemTags.ORES_ZINC)) toRemove.add(new ItemStack(EItems.ZINC_ORE_CHUNK.get()));
         if (RecipeUtil.isTagEmpty(EItemTags.ORES_IRIDIUM)) toRemove.add(new ItemStack(EItems.IRIDIUM_ORE_CHUNK.get()));
         if (RecipeUtil.isTagEmpty(EItemTags.ORES_THORIUM)) toRemove.add(new ItemStack(EItems.THORIUM_ORE_CHUNK.get()));
-        if (RecipeUtil.isTagEmpty(EItemTags.ORES_MAGNESIUM)) toRemove.add(new ItemStack(EItems.MAGNESIUM_ORE_CHUNK.get()));
+        if (RecipeUtil.isTagEmpty(EItemTags.ORES_MAGNESIUM))
+            toRemove.add(new ItemStack(EItems.MAGNESIUM_ORE_CHUNK.get()));
         if (RecipeUtil.isTagEmpty(EItemTags.ORES_LITHIUM)) toRemove.add(new ItemStack(EItems.LITHIUM_ORE_CHUNK.get()));
         if (RecipeUtil.isTagEmpty(EItemTags.ORES_BORON)) toRemove.add(new ItemStack(EItems.BORON_ORE_CHUNK.get()));
 
@@ -215,8 +216,8 @@ public class ExDeorumJeiPlugin implements IModPlugin {
         //noinspection rawtypes,unchecked
         addRecipes(registration, COMPRESSED_HAMMER, ((DeferredHolder) ERecipeTypes.COMPRESSED_HAMMER));
         registration.addRecipes(CROOK, CompatUtil.collectAllRecipes(ERecipeTypes.CROOK.get(), CrookJeiRecipe::create));
-        registration.addRecipes(SIEVE, GroupedSieveRecipe.getAllRecipesGrouped(ERecipeTypes.SIEVE.get()));
-        registration.addRecipes(COMPRESSED_SIEVE, GroupedSieveRecipe.getAllRecipesGrouped(ERecipeTypes.COMPRESSED_SIEVE.get()));
+        registration.addRecipes(SIEVE, XeiSieveRecipe.getAllRecipesGrouped(ERecipeTypes.SIEVE.get(), XeiSieveRecipe.SIEVE_ROWS));
+        registration.addRecipes(COMPRESSED_SIEVE, XeiSieveRecipe.getAllRecipesGrouped(ERecipeTypes.COMPRESSED_SIEVE.get(), XeiSieveRecipe.COMPRESSED_SIEVE_ROWS));
 
         addCrucibleHeatSources(registration);
     }
