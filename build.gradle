@@ -2,6 +2,8 @@ plugins {
     id 'java-library'
     id 'idea'
     id 'net.neoforged.moddev' version '1.0.17'
+    id("com.modrinth.minotaur") version '2.+'
+    id("com.matthewprenger.cursegradle") version '1.4.0'
 }
 
 version = '3.3'
@@ -185,4 +187,65 @@ idea {
         downloadSources = true
         downloadJavadoc = true
     }
+}
+
+if (System.getenv("CURSEFORGE_TOKEN")) {
+    curseforge {
+        apiKey = System.getenv("CURSEFORGE_TOKEN")
+
+        project {
+            id = "901420"
+            changelogType = "markdown"
+            changelog = getChangelog(project.version)
+
+            releaseType = "release"
+
+            addGameVersion(mc_version)
+            addGameVersion("Forge")
+            addGameVersion("NeoForge")
+            addGameVersion("Java 17")
+
+            mainArtifact(jar.archiveFile) {
+                displayName = "Ex Deorum ${project.version}"
+            }
+        }
+    }
+}
+
+modrinth {
+    token = System.getenv("MODRINTH_TOKEN")
+    projectId = "WP0FLyzv"
+    versionName = "Ex Deorum ${project.version}"
+    gameVersions = [mc_version]
+    loaders = ["neoforge"]
+    changelog = getChangelog(project.version)
+
+    uploadFile = jar
+    additionalFiles.add(sourcesJar)
+}
+
+static def getChangelog(Object version) {
+    version = version.toString()
+
+    def file = new File('changelog.md')
+    if (!file.exists()) {
+        return "Changelog file not found"
+    }
+
+    // Relies on the changelog block being "##blahblahblah_VERSION" where _ is a space
+    def content = file.text.normalize().split("##.* ")
+
+    for (final def chunk in content) {
+        if (chunk.isEmpty()) continue
+
+        def lineTerminatorIndex = chunk.findIndexOf { c -> c == '\n' || c == '\r' }
+        def versionString = chunk.substring(0, lineTerminatorIndex)
+
+        if (versionString == version) {
+            return "## Ex Deorum $version\n" + chunk.substring(lineTerminatorIndex + 1)
+        }
+    }
+
+    // Fallback in case this fails
+    return "Ex Deorum Update ${version}"
 }
