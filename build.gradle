@@ -201,9 +201,8 @@ if (System.getenv("CURSEFORGE_TOKEN")) {
             releaseType = "release"
 
             addGameVersion(mc_version)
-            addGameVersion("Forge")
             addGameVersion("NeoForge")
-            addGameVersion("Java 17")
+            addGameVersion("Java 21")
 
             mainArtifact(jar.archiveFile) {
                 displayName = "Ex Deorum ${project.version}"
