@@ -1,3 +1,6 @@
+## Ex Deorum 1.43
+- Fix sieve recipe bug with latest version of JEI
+
 ## Ex Deorum 1.42
 - Fix JEI sieve recipe bug
 
