@@ -33,7 +33,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
-import net.minecraftforge.common.util.Lazy;
 import org.apache.commons.lang3.mutable.MutableInt;
 import thedarkcolour.exdeorum.compat.XeiSieveRecipe;
 import thedarkcolour.exdeorum.compat.XeiUtil;
@@ -41,7 +40,7 @@ import thedarkcolour.exdeorum.data.TranslationKeys;
 import thedarkcolour.exdeorum.material.DefaultMaterials;
 
 class SieveCategory implements IRecipeCategory<XeiSieveRecipe> {
-    private final Lazy<IDrawable> background;
+    private final IDrawable background;
     private final IDrawable slot;
     private final IDrawable row;
     private final IDrawable icon;
@@ -50,7 +49,7 @@ class SieveCategory implements IRecipeCategory<XeiSieveRecipe> {
 
     // Common constructor
     SieveCategory(IGuiHelper helper, ItemLike icon, Component title, MutableInt rows) {
-        this.background = Lazy.of(() -> helper.createBlankDrawable(XeiUtil.SIEVE_WIDTH, XeiUtil.SIEVE_ROW_START + XeiUtil.SIEVE_ROW_HEIGHT * rows.intValue()));
+        this.background = new Background();
         this.slot = helper.getSlotDrawable();
         this.row = helper.createDrawable(ExDeorumJeiPlugin.EX_DEORUM_JEI_TEXTURE, 0, 0, 162, 18);
         this.icon = helper.createDrawableItemStack(new ItemStack(icon));
@@ -75,7 +74,7 @@ class SieveCategory implements IRecipeCategory<XeiSieveRecipe> {
 
     @Override
     public IDrawable getBackground() {
-        return this.background.get();
+        return this.background;
     }
 
     @Override
@@ -115,6 +114,22 @@ class SieveCategory implements IRecipeCategory<XeiSieveRecipe> {
 
         for (int i = 0; i < rows; i++) {
             this.row.draw(graphics, 0, 28 + i * 18);
+        }
+    }
+
+    private class Background implements IDrawable {
+        @Override
+        public int getWidth() {
+            return XeiUtil.SIEVE_WIDTH;
+        }
+
+        @Override
+        public int getHeight() {
+            return XeiUtil.SIEVE_ROW_START + XeiUtil.SIEVE_ROW_HEIGHT * SieveCategory.this.rows.intValue();
+        }
+
+        @Override
+        public void draw(GuiGraphics guiGraphics, int i, int i1) {
         }
     }
 }
