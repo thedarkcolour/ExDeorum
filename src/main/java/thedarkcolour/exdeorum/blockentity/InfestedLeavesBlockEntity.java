@@ -27,12 +27,8 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.model.data.ModelData;
-import net.minecraftforge.client.model.data.ModelProperty;
-import org.jetbrains.annotations.NotNull;
 import thedarkcolour.exdeorum.block.InfestedLeavesBlock;
 import thedarkcolour.exdeorum.registry.EBlockEntities;
 import thedarkcolour.exdeorum.registry.EBlocks;
@@ -76,10 +72,7 @@ public class InfestedLeavesBlockEntity extends EBlockEntity {
         // DO NOT SPREAD TO ALREADY INFESTED LEAVES
         if (state.is(BlockTags.LEAVES) && state.getBlock() != EBlocks.INFESTED_LEAVES.get()) {
             // Spread and keep distance/persistent properties
-            level.setBlock(targetPos, EBlocks.INFESTED_LEAVES.get().defaultBlockState()
-                    .setValue(LeavesBlock.DISTANCE, state.hasProperty(LeavesBlock.DISTANCE) ? state.getValue(LeavesBlock.DISTANCE) : 0)
-                    .setValue(LeavesBlock.PERSISTENT, state.hasProperty(LeavesBlock.PERSISTENT) ? state.getValue(LeavesBlock.PERSISTENT) : false),
-                    2);
+            InfestedLeavesBlock.setBlock(level, targetPos, state);
             var te = level.getBlockEntity(targetPos);
 
             // Set mimic state of other block

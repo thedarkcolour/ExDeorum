@@ -25,7 +25,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.block.LeavesBlock;
+import thedarkcolour.exdeorum.block.InfestedLeavesBlock;
 import thedarkcolour.exdeorum.blockentity.InfestedLeavesBlockEntity;
 import thedarkcolour.exdeorum.registry.EBlocks;
 import thedarkcolour.exdeorum.registry.ESounds;
@@ -45,9 +45,7 @@ public class SilkWormItem extends Item {
             if (state.is(BlockTags.LEAVES) && state.getBlock() != EBlocks.INFESTED_LEAVES.get()) {
                 if (!level.isClientSide) {
                     // Replace with infested block
-                    level.setBlock(pos, EBlocks.INFESTED_LEAVES.get().defaultBlockState()
-                            .setValue(LeavesBlock.DISTANCE, state.getValue(LeavesBlock.DISTANCE))
-                            .setValue(LeavesBlock.PERSISTENT, state.getValue(LeavesBlock.PERSISTENT)), 2);
+                    InfestedLeavesBlock.setBlock(level, pos, state);
 
                     level.playSound(null, pos, ESounds.SILK_WORM_INFEST.get(), SoundSource.BLOCKS);
 

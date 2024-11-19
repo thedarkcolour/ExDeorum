@@ -19,12 +19,8 @@
 package thedarkcolour.exdeorum.block;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.BlockParticleOption;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -42,7 +38,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import org.jetbrains.annotations.Nullable;
@@ -50,6 +45,7 @@ import thedarkcolour.exdeorum.blockentity.InfestedLeavesBlockEntity;
 import thedarkcolour.exdeorum.client.RenderUtil;
 import thedarkcolour.exdeorum.config.EConfig;
 import thedarkcolour.exdeorum.registry.EBlockEntities;
+import thedarkcolour.exdeorum.registry.EBlocks;
 
 public class InfestedLeavesBlock extends LeavesBlock implements EntityBlock {
     public static final BooleanProperty FULLY_INFESTED = BooleanProperty.create("fully_infested");
@@ -57,6 +53,13 @@ public class InfestedLeavesBlock extends LeavesBlock implements EntityBlock {
     public InfestedLeavesBlock(Properties properties) {
         super(properties);
         registerDefaultState(defaultBlockState().setValue(FULLY_INFESTED, false));
+    }
+
+    public static void setBlock(Level level, BlockPos pos, BlockState fromState) {
+        level.setBlock(pos, EBlocks.INFESTED_LEAVES.get().defaultBlockState()
+                        .setValue(LeavesBlock.DISTANCE, fromState.hasProperty(LeavesBlock.DISTANCE) ? fromState.getValue(LeavesBlock.DISTANCE) : 0)
+                        .setValue(LeavesBlock.PERSISTENT, fromState.hasProperty(LeavesBlock.PERSISTENT) ? fromState.getValue(LeavesBlock.PERSISTENT) : false),
+                2);
     }
 
     @Override

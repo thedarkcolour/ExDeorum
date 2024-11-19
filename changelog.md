@@ -1,3 +1,6 @@
+## Ex Deorum 1.44
+- Fix Silkworms not applying to certain modded leaves like TFC
+
 ## Ex Deorum 1.43
 - Fix sieve recipe bug with latest version of JEI
 
