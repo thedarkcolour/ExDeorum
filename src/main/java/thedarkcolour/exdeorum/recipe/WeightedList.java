@@ -34,6 +34,8 @@ import java.util.function.Function;
 
 // much simpler version of SimpleWeightedRandomList that supports .equals
 public class WeightedList<T> {
+    private static final WeightedList<Object> EMPTY = new WeightedList<>(0, new Object[0], new int[0]);
+
     private final int totalWeight;
     private final Object[] values;
     private final int[] weights;
@@ -132,6 +134,11 @@ public class WeightedList<T> {
 
     public static <T> Builder<T> builder() {
         return new Builder<>();
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> WeightedList<T> empty() {
+        return (WeightedList<T>) EMPTY;
     }
 
     public static class Builder<T> {

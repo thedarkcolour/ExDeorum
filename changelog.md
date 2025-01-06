@@ -1,5 +1,6 @@
 ## Ex Deorum 3.5
 - Remove Yellorium Dust sieve drop (#116)
+- Fixed Fluid Transformation recipes requiring byproducts
 
 ## Ex Deorum 3.4
 - Fix JEI bug with sieve recipes overflowing due to JEI API changes

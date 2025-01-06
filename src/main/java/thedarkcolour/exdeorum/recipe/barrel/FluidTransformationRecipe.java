@@ -57,7 +57,7 @@ public record FluidTransformationRecipe(
             CodecUtil.fluidField("result_fluid", FluidTransformationRecipe::resultFluid),
             Codec.INT.fieldOf("result_color").forGetter(FluidTransformationRecipe::resultColor),
             BlockPredicate.CODEC.fieldOf("catalyst").forGetter(FluidTransformationRecipe::catalyst),
-            WeightedList.codec(Codec.STRING.xmap(RecipeUtil::parseBlockState, RecipeUtil::writeBlockState)).fieldOf("byproducts").forGetter(FluidTransformationRecipe::byproducts),
+            WeightedList.codec(Codec.STRING.xmap(RecipeUtil::parseBlockState, RecipeUtil::writeBlockState)).optionalFieldOf("byproducts", WeightedList.empty()).forGetter(FluidTransformationRecipe::byproducts),
             Codec.INT.fieldOf("duration").forGetter(FluidTransformationRecipe::duration)
     ).apply(instance, FluidTransformationRecipe::new));
     public static final StreamCodec<RegistryFriendlyByteBuf, FluidTransformationRecipe> STREAM_CODEC = StreamCodec.of(FluidTransformationRecipe::toNetwork, FluidTransformationRecipe::fromNetwork);
