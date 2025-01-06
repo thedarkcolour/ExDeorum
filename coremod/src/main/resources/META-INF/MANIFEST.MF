@@ -1,0 +1,2 @@
+Automatic-Module-Name: thedarkcolour.exdeorum.coremod
+FMLModType: LIBRARY

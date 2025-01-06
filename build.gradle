@@ -1,7 +1,7 @@
 plugins {
     id 'java-library'
     id 'idea'
-    id 'net.neoforged.moddev' version '1.0.17'
+    id 'net.neoforged.moddev' version '2.0.71'
     id("com.modrinth.minotaur") version '2.+'
     id("com.matthewprenger.cursegradle") version '1.4.0'
 }
@@ -15,6 +15,8 @@ base {
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 java.toolchain.vendor = JvmVendorSpec.JETBRAINS
 java.withSourcesJar()
+
+evaluationDependsOn(":coremod")
 
 neoForge {
     version = neo_version
@@ -55,7 +57,7 @@ neoForge {
             sourceSet(sourceSets.main)
         }
         coremod {
-            dependency project(':coremod')
+            sourceSet project(':coremod').sourceSets.main
         }
     }
 }
@@ -150,7 +152,8 @@ dependencies {
     implementation('com.github.thedarkcolour:ModKit:81a0889b26')
 
     // Core mod
-    implementation(jarJar(project(':coremod')))
+    implementation(project(':coremod'))
+    jarJar(project(':coremod'))
 
     // Oculus + Embeddium OPTIONAL
     compileOnly('maven.modrinth:oculus:1.20.1-1.6.9')

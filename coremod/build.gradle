@@ -7,7 +7,10 @@ java.toolchain.vendor = JvmVendorSpec.JETBRAINS
 
 jar {
     manifest {
-        attributes(["FMLModType": "LIBRARY"])
+        attributes([
+                "FMLModType": "LIBRARY",
+                "Automatic-Module-Name": "thedarkcolour.exdeorum.coremod"
+        ])
     }
 }
 
