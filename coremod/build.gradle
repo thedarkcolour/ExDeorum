@@ -3,6 +3,7 @@ plugins {
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+java.toolchain.vendor = JvmVendorSpec.JETBRAINS
 
 jar {
     manifest {

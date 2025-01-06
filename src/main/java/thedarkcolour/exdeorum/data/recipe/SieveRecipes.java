@@ -467,7 +467,6 @@ class SieveRecipes {
             drops.add(Items.BLAZE_POWDER, chance(0.03f));
 
             drops.addConditional(ModCompatData.GRAINS_OF_INFINITY.get(), chance(0.06f), Recipes.ENDERIO);
-            drops.addConditional(ModCompatData.YELLORIUM_DUST.get(), chance(0.05f), Recipes.EXTREME_REACTORS);
             drops.addConditional(ModCompatData.SKY_STONE_DUST.get(), chance(0.06f), Recipes.AE2);
             drops.addConditional(ModCompatData.CERTUS_QUARTZ_DUST.get(), chance(0.06f), Recipes.AE2);
         });
@@ -479,7 +478,6 @@ class SieveRecipes {
             drops.add(Items.BLAZE_POWDER, chance(0.04f));
 
             drops.addConditional(ModCompatData.GRAINS_OF_INFINITY.get(), chance(0.07f), Recipes.ENDERIO);
-            drops.addConditional(ModCompatData.YELLORIUM_DUST.get(), chance(0.055f), Recipes.EXTREME_REACTORS);
             drops.addConditional(ModCompatData.SKY_STONE_DUST.get(), chance(0.07f), Recipes.AE2);
             drops.addConditional(ModCompatData.CERTUS_QUARTZ_DUST.get(), chance(0.07f), Recipes.AE2);
         });
@@ -492,7 +490,6 @@ class SieveRecipes {
             drops.add(Items.IRON_NUGGET, chance(0.06f));
 
             drops.addConditional(ModCompatData.GRAINS_OF_INFINITY.get(), chance(0.09f), Recipes.ENDERIO);
-            drops.addConditional(ModCompatData.YELLORIUM_DUST.get(), chance(0.08f), Recipes.EXTREME_REACTORS);
             drops.addConditional(ModCompatData.SKY_STONE_DUST.get(), chance(0.075f), Recipes.AE2);
             drops.addConditional(ModCompatData.CERTUS_QUARTZ_DUST.get(), chance(0.075f), Recipes.AE2);
         });
@@ -506,7 +503,6 @@ class SieveRecipes {
             drops.add(Items.RAW_GOLD, chance(0.02f));
 
             drops.addConditional(ModCompatData.GRAINS_OF_INFINITY.get(), chance(0.11f), Recipes.ENDERIO);
-            drops.addConditional(ModCompatData.YELLORIUM_DUST.get(), chance(0.10f), Recipes.EXTREME_REACTORS);
             drops.addConditional(ModCompatData.SKY_STONE_DUST.get(), chance(0.08f), Recipes.AE2);
             drops.addConditional(ModCompatData.CERTUS_QUARTZ_DUST.get(), chance(0.08f), Recipes.AE2);
         });
@@ -519,7 +515,6 @@ class SieveRecipes {
             drops.add(Items.GOLD_NUGGET, chance(0.08f));
 
             drops.addConditional(ModCompatData.GRAINS_OF_INFINITY.get(), chance(0.12f), Recipes.ENDERIO);
-            drops.addConditional(ModCompatData.YELLORIUM_DUST.get(), chance(0.12f), Recipes.EXTREME_REACTORS);
             drops.addConditional(ModCompatData.SKY_STONE_DUST.get(), chance(0.10f), Recipes.AE2);
             drops.addConditional(ModCompatData.CERTUS_QUARTZ_DUST.get(), chance(0.10f), Recipes.AE2);
         });
@@ -533,7 +528,6 @@ class SieveRecipes {
             drops.add(Items.IRON_NUGGET, chance(0.08f));
 
             drops.addConditional(ModCompatData.GRAINS_OF_INFINITY.get(), chance(0.135f), Recipes.ENDERIO);
-            drops.addConditional(ModCompatData.YELLORIUM_DUST.get(), chance(0.14f), Recipes.EXTREME_REACTORS);
             drops.addConditional(ModCompatData.SKY_STONE_DUST.get(), chance(0.11f), Recipes.AE2);
             drops.addConditional(ModCompatData.CERTUS_QUARTZ_DUST.get(), chance(0.11f), Recipes.AE2);
         });

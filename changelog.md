@@ -1,3 +1,6 @@
+## Ex Deorum 3.5
+- Remove Yellorium Dust sieve drop (#116)
+
 ## Ex Deorum 3.4
 - Fix JEI bug with sieve recipes overflowing due to JEI API changes
 - Fix invisible output slots on JEI crook recipes

@@ -62,8 +62,8 @@ public class ModCompatData {
     public static final DeferredItem<Item>
             GRAINS_OF_INFINITY = item(ModIds.ENDERIO, "grains_of_infinity");
     // Bigger reactors
-    public static final DeferredItem<Item>
-            YELLORIUM_DUST = item(ModIds.BIGGER_REACTORS, "yellorium_dust");
+    //public static final DeferredItem<Item>
+    //        YELLORIUM_DUST = item(ModIds.BIGGER_REACTORS, "yellorium_dust");
     // Biomes O' Plenty
     public static final DeferredBlock<Block>
             FIR_PLANKS = block(ModIds.BIOMES_O_PLENTY, "fir_planks"),
