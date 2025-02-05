@@ -1,5 +1,6 @@
 ## Ex Deorum 3.6
 - Implement custom Compressed Sieve types. Works the same as with sieves, just replace `sieve_materials` with `compressed_sieve_materials`
+- Fix silkworms not applying to certain modded leaves like TFC
 
 ## Ex Deorum 3.5
 - Remove Yellorium Dust sieve drop (#116)
