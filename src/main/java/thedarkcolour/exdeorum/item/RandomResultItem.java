@@ -18,29 +18,31 @@
 
 package thedarkcolour.exdeorum.item;
 
-import com.google.common.collect.Lists;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.data.TranslationKeys;
+import thedarkcolour.exdeorum.registry.EItems;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class RandomResultItem extends Item {
-    public RandomResultItem(Properties properties) {
+public class RandomResultItem extends Item {
+    private final TagKey<Item> possibilities;
+
+    public RandomResultItem(Properties properties, TagKey<Item> possibilities) {
         super(properties);
+        this.possibilities = possibilities;
     }
 
     @Override
@@ -48,12 +50,15 @@ public abstract class RandomResultItem extends Item {
         var stack = player.getItemInHand(hand);
 
         if (!level.isClientSide) {
-            var possibilities = getPossibilities();
+            var possibleResults = new ArrayList<Item>();
+            for (var holder : BuiltInRegistries.ITEM.getTagOrEmpty(this.possibilities)) {
+                possibleResults.add(holder.value());
+            }
 
             if (!player.getAbilities().instabuild) {
                 stack.shrink(1);
             }
-            var newItem = new ItemStack(Util.getRandom(possibilities, level.random));
+            var newItem = new ItemStack(Util.getRandom(possibleResults, level.random));
             player.getInventory().placeItemBackInInventory(newItem);
 
             return InteractionResultHolder.consume(stack.isEmpty() ? player.getItemInHand(hand) : stack);
@@ -61,50 +66,9 @@ public abstract class RandomResultItem extends Item {
         return InteractionResultHolder.success(stack);
     }
 
-    protected abstract List<Item> getPossibilities();
-
-    public static class RandomSherd extends RandomResultItem {
-        public RandomSherd(Properties properties) {
-            super(properties);
-        }
-
-        @Override
-        protected List<Item> getPossibilities() {
-            var list = new ArrayList<Item>();
-            for (var holder : BuiltInRegistries.ITEM.getTagOrEmpty(ItemTags.DECORATED_POT_SHERDS)) {
-                list.add(holder.value());
-            }
-            return list;
-        }
-    }
-
-    public static class RandomArmorTrim extends RandomResultItem {
-        public static final List<Item> POSSIBLE_TRIMS = Lists.newArrayList(
-                Items.WAYFINDER_ARMOR_TRIM_SMITHING_TEMPLATE,
-                Items.SHAPER_ARMOR_TRIM_SMITHING_TEMPLATE,
-                Items.HOST_ARMOR_TRIM_SMITHING_TEMPLATE,
-                Items.RAISER_ARMOR_TRIM_SMITHING_TEMPLATE,
-                Items.COAST_ARMOR_TRIM_SMITHING_TEMPLATE,
-                Items.DUNE_ARMOR_TRIM_SMITHING_TEMPLATE,
-                Items.EYE_ARMOR_TRIM_SMITHING_TEMPLATE,
-                Items.SENTRY_ARMOR_TRIM_SMITHING_TEMPLATE,
-                Items.SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE,
-                Items.VEX_ARMOR_TRIM_SMITHING_TEMPLATE,
-                Items.WARD_ARMOR_TRIM_SMITHING_TEMPLATE,
-                Items.WILD_ARMOR_TRIM_SMITHING_TEMPLATE
-        );
-
-        public RandomArmorTrim(Properties properties) {
-            super(properties);
-        }
-
-        @Override
-        protected List<Item> getPossibilities() {
-            return POSSIBLE_TRIMS;
-        }
-
-        @Override
-        public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> tooltip, TooltipFlag pIsAdvanced) {
+    @Override
+    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag advanced) {
+        if (this == EItems.RANDOM_ARMOR_TRIM.get()) {
             tooltip.add(Component.translatable(TranslationKeys.RANDOM_TRIM_DOES_NOT_CONTAIN_UPGRADE).withStyle(ChatFormatting.DARK_GRAY));
         }
     }

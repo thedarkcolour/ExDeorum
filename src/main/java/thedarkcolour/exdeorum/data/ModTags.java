@@ -23,6 +23,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
@@ -32,7 +33,6 @@ import net.minecraft.world.level.levelgen.structure.BuiltinStructureSets;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.material.Fluid;
 import thedarkcolour.exdeorum.ExDeorum;
-import thedarkcolour.exdeorum.block.CompressedBlockType;
 import thedarkcolour.exdeorum.compat.ModIds;
 import thedarkcolour.exdeorum.material.*;
 import thedarkcolour.exdeorum.registry.EBlocks;
@@ -42,7 +42,6 @@ import thedarkcolour.exdeorum.registry.EItems;
 import thedarkcolour.exdeorum.tag.EBlockTags;
 import thedarkcolour.exdeorum.tag.EItemTags;
 import thedarkcolour.exdeorum.tag.EStructureSetTags;
-import thedarkcolour.modkit.data.DirectTagAppender;
 import thedarkcolour.modkit.data.MKTagsProvider;
 
 import java.util.ArrayList;
@@ -97,6 +96,23 @@ class ModTags {
         tags.tag(EItemTags.WOODEN_BARRELS).add(WOODEN_BARRELS.stream().map(BarrelMaterial::getItem).toArray(Item[]::new));
         tags.tag(EItemTags.STONE_BARRELS).add(DefaultMaterials.STONE_BARREL.getItem(), DefaultMaterials.CRYSTALLIZED_BARREL.getItem());
         tags.tag(EItemTags.BARRELS).addTags(EItemTags.WOODEN_BARRELS, EItemTags.STONE_BARRELS);
+
+        tags.tag(EItemTags.RANDOM_SHERD_DROPS).addTag(ItemTags.DECORATED_POT_SHERDS);
+        tags.tag(EItemTags.RANDOM_TRIM_DROPS).add(
+                Items.WAYFINDER_ARMOR_TRIM_SMITHING_TEMPLATE,
+                Items.SHAPER_ARMOR_TRIM_SMITHING_TEMPLATE,
+                Items.HOST_ARMOR_TRIM_SMITHING_TEMPLATE,
+                Items.RAISER_ARMOR_TRIM_SMITHING_TEMPLATE,
+                Items.COAST_ARMOR_TRIM_SMITHING_TEMPLATE,
+                Items.DUNE_ARMOR_TRIM_SMITHING_TEMPLATE,
+                Items.EYE_ARMOR_TRIM_SMITHING_TEMPLATE,
+                Items.SENTRY_ARMOR_TRIM_SMITHING_TEMPLATE,
+                Items.SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE,
+                Items.VEX_ARMOR_TRIM_SMITHING_TEMPLATE,
+                Items.WARD_ARMOR_TRIM_SMITHING_TEMPLATE,
+                Items.WILD_ARMOR_TRIM_SMITHING_TEMPLATE,
+                Items.TIDE_ARMOR_TRIM_SMITHING_TEMPLATE
+        );
 
         // Cyclic adds ONE compressed block :)
         tags.tag(ECompressedBlocks.COMPRESSED_COBBLESTONE.getTag()).addOptional(new ResourceLocation(ModIds.CYCLIC, "compressed_cobblestone"));

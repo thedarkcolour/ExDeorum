@@ -117,8 +117,8 @@ public class EItems {
     public static final RegistryObject<Item> WARPED_NYLIUM_SPORES = ITEMS.register("warped_nylium_spores", () -> new NyliumSpreaderItem(props(), Blocks.WARPED_NYLIUM::defaultBlockState));
     public static final RegistryObject<Item> CRIMSON_NYLIUM_SPORES = ITEMS.register("crimson_nylium_spores", () -> new NyliumSpreaderItem(props(), Blocks.CRIMSON_NYLIUM::defaultBlockState));
     public static final RegistryObject<Item> SCULK_CORE = ITEMS.register("sculk_core", () -> new SculkCoreItem(props().stacksTo(1)));
-    public static final RegistryObject<Item> RANDOM_POTTERY_SHERD = ITEMS.register("random_pottery_sherd", () -> new RandomResultItem.RandomSherd(props()));
-    public static final RegistryObject<Item> RANDOM_ARMOR_TRIM = ITEMS.register("random_armor_trim", () -> new RandomResultItem.RandomArmorTrim(props()));
+    public static final RegistryObject<Item> RANDOM_POTTERY_SHERD = ITEMS.register("random_pottery_sherd", () -> new RandomResultItem(props(), EItemTags.RANDOM_SHERD_DROPS));
+    public static final RegistryObject<Item> RANDOM_ARMOR_TRIM = ITEMS.register("random_armor_trim", () -> new RandomResultItem(props(), EItemTags.RANDOM_TRIM_DROPS));
     public static final RegistryObject<Item> WOOD_CHIPPINGS = registerSimpleItem("wood_chippings");
 
     // Buckets

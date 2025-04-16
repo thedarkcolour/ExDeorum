@@ -1,3 +1,6 @@
+## Ex Deorum 1.45
+- Allow changing drops for Random Armor Trim and Pottery Sherd, also add Tide to possible trims (#138)
+
 ## Ex Deorum 1.44
 - Fix Silkworms not applying to certain modded leaves like TFC
 
