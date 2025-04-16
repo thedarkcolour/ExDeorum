@@ -246,6 +246,11 @@ public class BarrelBlockEntity extends ETankBlockEntity {
                     var fluid = new FluidStack(Fluids.WATER, 250);
 
                     if (playerItem.getItem() == Items.POTION && PotionUtils.getPotion(playerItem) == Potions.WATER) {
+                    	// Transfer any extra NBT tags from other mods to the fluid
+                    	 var nbt = playerItem.getTag().copy();
+                    	 nbt.remove("Potion");
+                    	 fluid = new FluidStack(Fluids.WATER, 250, nbt);
+
                         if (this.tank.fill(fluid, IFluidHandler.FluidAction.SIMULATE) > 0) {
                             if (!player.getAbilities().instabuild) {
                                 player.setItemInHand(hand, new ItemStack(Items.GLASS_BOTTLE));
@@ -257,6 +262,11 @@ public class BarrelBlockEntity extends ETankBlockEntity {
                             return InteractionResult.sidedSuccess(level.isClientSide);
                         }
                     } else if (playerItem.getItem() == Items.GLASS_BOTTLE) {
+                    	// Check if current fluid is water and use any NBT data
+                    	var currentFluid = this.tank.getFluid();
+                    	if (currentFluid.getRawFluid() == Fluids.WATER) {
+                    		fluid.setTag(currentFluid.getTag());
+                    	}
                         if (this.tank.drain(fluid, IFluidHandler.FluidAction.SIMULATE).getAmount() == 250) {
                             extractWaterBottle(this.tank, level, player, playerItem, fluid);
 
@@ -314,6 +324,8 @@ public class BarrelBlockEntity extends ETankBlockEntity {
             playerItem.shrink(1);
         }
         var bottle = PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER);
+        var nbt = bottle.getOrCreateTag();
+        nbt.merge(fluid.getOrCreateTag());
         if (!player.addItem(bottle)) {
             player.drop(bottle, false);
         }
