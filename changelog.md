@@ -1,3 +1,6 @@
+## Ex Deorum 3.7
+- Fix Barrel Mixing recipes with a result size greater than 1 only giving one output
+
 ## Ex Deorum 3.6
 - Implement custom Compressed Sieve types. Works the same as with sieves, just replace `sieve_materials` with `compressed_sieve_materials`
 - Fix silkworms not applying to certain modded leaves like TFC

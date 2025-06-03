@@ -66,7 +66,6 @@ import thedarkcolour.exdeorum.recipe.barrel.FluidTransformationRecipe;
 import thedarkcolour.exdeorum.registry.EBlockEntities;
 import thedarkcolour.exdeorum.registry.ESounds;
 
-import java.util.Objects;
 import java.util.Optional;
 
 public class BarrelBlockEntity extends ETankBlockEntity {
@@ -640,12 +639,7 @@ public class BarrelBlockEntity extends ETankBlockEntity {
         }
 
         public ItemStack extract(boolean simulate) {
-            return extractItem(0, 1, simulate);
-        }
-
-        @Override
-        public ItemStack extractItem(int slot, int amount, boolean simulate) {
-            return super.extractItem(slot, amount, simulate);
+            return extractItem(0, 64, simulate);
         }
 
         @Override
