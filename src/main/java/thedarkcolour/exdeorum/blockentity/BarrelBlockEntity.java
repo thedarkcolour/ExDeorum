@@ -653,12 +653,7 @@ public class BarrelBlockEntity extends ETankBlockEntity {
         }
 
         public ItemStack extract(boolean simulate) {
-            return extractItem(0, 1, simulate);
-        }
-
-        @Override
-        public ItemStack extractItem(int slot, int amount, boolean simulate) {
-            return super.extractItem(slot, amount, simulate);
+            return extractItem(0, 64, simulate);
         }
 
         @Override

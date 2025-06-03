@@ -1,3 +1,6 @@
+## Ex Deorum 1.46
+- Fix Barrel Mixing recipes with a result size greater than 1 only giving one output
+
 ## Ex Deorum 1.45
 - Allow changing drops for Random Armor Trim and Pottery Sherd, also add Tide to possible trims (#138)
 - Add compatibility with Modern Industrialization, Forestry, Nature Arise ()
