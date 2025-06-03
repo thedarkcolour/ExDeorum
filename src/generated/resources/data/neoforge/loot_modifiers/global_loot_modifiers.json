@@ -1,7 +1,7 @@
 {
   "entries": [
-    "exdeorum:compressed_hammer",
     "exdeorum:hammer",
+    "exdeorum:compressed_hammer",
     "exdeorum:crook"
   ],
   "replace": false

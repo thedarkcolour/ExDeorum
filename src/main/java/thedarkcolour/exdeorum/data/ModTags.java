@@ -99,6 +99,26 @@ class ModTags {
         tags.tag(EItemTags.STONE_BARRELS).add(DefaultMaterials.STONE_BARREL.getItem(), DefaultMaterials.CRYSTALLIZED_BARREL.getItem());
         tags.tag(EItemTags.BARRELS).addTags(EItemTags.WOODEN_BARRELS, EItemTags.STONE_BARRELS);
 
+        tags.tag(EItemTags.RANDOM_SHERD_DROPS).addTag(ItemTags.DECORATED_POT_SHERDS);
+
+        tags.tag(EItemTags.RANDOM_TRIM_DROPS).add(
+                Items.WAYFINDER_ARMOR_TRIM_SMITHING_TEMPLATE,
+                Items.SHAPER_ARMOR_TRIM_SMITHING_TEMPLATE,
+                Items.HOST_ARMOR_TRIM_SMITHING_TEMPLATE,
+                Items.RAISER_ARMOR_TRIM_SMITHING_TEMPLATE,
+                Items.COAST_ARMOR_TRIM_SMITHING_TEMPLATE,
+                Items.DUNE_ARMOR_TRIM_SMITHING_TEMPLATE,
+                Items.EYE_ARMOR_TRIM_SMITHING_TEMPLATE,
+                Items.SENTRY_ARMOR_TRIM_SMITHING_TEMPLATE,
+                Items.SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE,
+                Items.VEX_ARMOR_TRIM_SMITHING_TEMPLATE,
+                Items.WARD_ARMOR_TRIM_SMITHING_TEMPLATE,
+                Items.WILD_ARMOR_TRIM_SMITHING_TEMPLATE,
+                Items.TIDE_ARMOR_TRIM_SMITHING_TEMPLATE,
+                Items.FLOW_ARMOR_TRIM_SMITHING_TEMPLATE,
+                Items.BOLT_ARMOR_TRIM_SMITHING_TEMPLATE
+        );
+
         // Cyclic adds ONE compressed block :)
         tags.tag(ECompressedBlocks.COMPRESSED_COBBLESTONE.getTag()).addOptional(ResourceLocation.fromNamespaceAndPath(ModIds.CYCLIC, "compressed_cobblestone"));
 

@@ -1,5 +1,6 @@
 ## Ex Deorum 3.7
 - Fix Barrel Mixing recipes with a result size greater than 1 only giving one output
+- Allow changing drops for Random Armor Trim and Pottery Sherd, also add Tide to possible trims (#133)
 
 ## Ex Deorum 3.6
 - Implement custom Compressed Sieve types. Works the same as with sieves, just replace `sieve_materials` with `compressed_sieve_materials`

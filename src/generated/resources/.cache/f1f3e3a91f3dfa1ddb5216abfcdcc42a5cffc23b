@@ -1,5 +1,5 @@
-// 1.21.1	2025-01-05T13:28:28.0028751	Global Loot Modifiers : exdeorum
+// 1.21.1	2025-06-03T14:16:11.5333103	Global Loot Modifiers : exdeorum
 539ba0e881830430ae2c03f7ac8dec6f2de478a0 data/exdeorum/loot_modifiers/compressed_hammer.json
 dd0417e36e03e0f51e1f1bbcff295b54128fdf8f data/exdeorum/loot_modifiers/crook.json
 57991d8346a472f12c1a4b6cb94151d2c1bfa371 data/exdeorum/loot_modifiers/hammer.json
-ec4635d28242c1e6ec5858fb58e43c004a34dbc1 data/neoforge/loot_modifiers/global_loot_modifiers.json
+4dbec2c1b329ffcd96f4f903f59382c75e0d538c data/neoforge/loot_modifiers/global_loot_modifiers.json

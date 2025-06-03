@@ -121,7 +121,7 @@ dependencies {
         transitive = false
     }
     // JADE OPTIONAL
-    compileOnly("curse.maven:jade-324717:5109393")
+    implementation("curse.maven:jade-324717:6291517")
     // JEI OPTIONAL
     compileOnly("mezz.jei:jei-${mc_version}-neoforge-api:${jei_version}")
     runtimeOnly("mezz.jei:jei-${mc_version}-neoforge:${jei_version}")
