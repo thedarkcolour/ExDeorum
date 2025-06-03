@@ -48,7 +48,7 @@ neoForge {
             data()
             // instead of using --all, skip file check validation
             programArguments.addAll('--server', '--client', '--dev', '--reports')
-            programArguments.addAll ('--mod', 'exdeorum', '--output', file('src/generated/resources/').absolutePath, '--existing', file('src/main/resources/').absolutePath)
+            programArguments.addAll('--mod', 'exdeorum', '--output', file('src/generated/resources/').absolutePath, '--existing', file('src/main/resources/').absolutePath)
         }
     }
 
@@ -78,34 +78,32 @@ repositories {
         content { includeGroup "mezz.jei" }
     }
     maven {
-        name = 'rei'
-        url = "https://maven.shedaniel.me"
-    }
-    maven {
         name = 'Architectury API'
-        url = "https://maven.architectury.dev"
-        content { includeGroup "dev.architectury" }
+        url = 'https://maven.architectury.dev'
+        content { includeGroup 'dev.architectury' }
     }
     maven {
         name = 'KubeJS and Rhino'
-        url = "https://maven.saps.dev/minecraft"
-        content {
-            includeGroup "dev.latvian.mods"
-            includeGroup "dev.latvian.apps"
-        }
+        url = 'https://maven.latvian.dev/releases'
+        content { includeGroupAndSubgroups 'dev.latvian' }
     }
     maven {
         name = 'ModKit'
         url 'https://jitpack.io'
-        content { includeGroup 'com.github.thedarkcolour' }
+        content {
+            includeGroup 'com.github.thedarkcolour'
+            // Required for KubeJS
+            includeGroup 'com.github.rtyley'
+        }
     }
     maven {
-        name = 'TerraformersMC'
+        name = 'EMI'
         url = 'https://maven.terraformersmc.com'
+        content { includeGroup 'dev.emi' }
     }
     maven {
-        name = "Modrinth"
-        url = "https://api.modrinth.com/maven"
+        name = 'Modrinth'
+        url = 'https://api.modrinth.com/maven'
         content {
             includeModule("maven.modrinth", "oculus")
             includeModule("maven.modrinth", "embeddium")
@@ -113,16 +111,7 @@ repositories {
     }
     maven {
         url "https://cursemaven.com"
-        content {
-            includeGroup "curse.maven"
-        }
-    }
-    // Required for KubeJS
-    maven {
-        url 'https://jitpack.io'
-        content {
-            includeGroup "com.github.rtyley"
-        }
+        content { includeGroup "curse.maven" }
     }
 }
 
@@ -136,20 +125,16 @@ dependencies {
     // JEI OPTIONAL
     compileOnly("mezz.jei:jei-${mc_version}-neoforge-api:${jei_version}")
     runtimeOnly("mezz.jei:jei-${mc_version}-neoforge:${jei_version}")
-    // REI OPTIONAL todo add
-    compileOnly("me.shedaniel:RoughlyEnoughItems-forge:${rei_version}")
-    compileOnly("me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}")
     // EMI OPTIONAL
     compileOnly("dev.emi:emi-neoforge:${emi_version}+${mc_version}:api")
     //runtimeOnly("dev.emi:emi-neoforge:${emi_version}+${mc_version}")
-    //implementation("curse.maven:reipc-521393:4837449")
     // KubeJS OPTIONAL
     implementation("dev.architectury:architectury-neoforge:${architectury_version}")
     implementation("dev.latvian.mods:rhino:${rhino_version}")
     implementation("dev.latvian.mods:kubejs-neoforge:${kubejs_version}")
 
     // ModKit DEV ONLY
-    implementation('com.github.thedarkcolour:ModKit:81a0889b26')
+    implementation('com.github.thedarkcolour:ModKit:4f83c92767')
 
     // Core mod
     implementation(project(':coremod'))
@@ -169,9 +154,9 @@ dependencies {
 
 tasks.withType(ProcessResources).configureEach {
     var replaceProperties = [
-            mc_version: mc_version,
-            mod_version: version,
-            neo_version_range: neo_version_range,
+            mc_version          : mc_version,
+            mod_version         : version,
+            neo_version_range   : neo_version_range,
             loader_version_range: loader_version_range
     ]
     inputs.properties replaceProperties
