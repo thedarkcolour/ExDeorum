@@ -95,8 +95,8 @@ repositories {
     }
     maven {
         name = 'KubeJS and Rhino'
-        url = "https://maven.saps.dev/minecraft"
-        content { includeGroup "dev.latvian.mods" }
+        url = "https://maven.latvian.dev/releases"
+        content { includeGroupAndSubgroups "dev.latvian" }
     }
     maven {
         name = 'ModKit'
@@ -117,9 +117,7 @@ repositories {
     }
     maven {
         url "https://cursemaven.com"
-        content {
-            includeGroup "curse.maven"
-        }
+        content { includeGroup "curse.maven" }
     }
 }
 
