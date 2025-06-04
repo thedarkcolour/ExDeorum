@@ -9,7 +9,7 @@ jobs:
   release:
     name: Publish release JAR for Ex Deorum
     runs-on: ubuntu-latest
-    if: "startsWith(github.event.head_commit.message, '[Release]')"
+    if: "contains(github.event.head_commit.message, '[Release]') || github.event_name == 'workflow_dispatch'"
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
