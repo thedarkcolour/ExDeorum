@@ -1,5 +1,7 @@
 ## Ex Deorum 3.8
 - Fix memory leak in VisualUpdateTracker (#153)
+- Added Hungarian translation (#147)
+- Added Japanese translation (#152)
 
 ## Ex Deorum 3.7
 - Fix Barrel Mixing recipes with a result size greater than 1 only giving one output

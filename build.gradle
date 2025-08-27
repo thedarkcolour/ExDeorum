@@ -6,7 +6,7 @@ plugins {
     id("com.matthewprenger.cursegradle") version '1.4.0'
 }
 
-version = '3.7'
+version = '3.8'
 group = 'thedarkcolour.exdeorum'
 base {
     archivesName = 'exdeorum'
