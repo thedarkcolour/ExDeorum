@@ -63,6 +63,8 @@ public class VisualUpdateTracker {
                         }
                     }
                 }
+
+                pendingUpdates.clear();
             }
         }
     }
