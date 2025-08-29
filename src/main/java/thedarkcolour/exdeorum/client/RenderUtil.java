@@ -337,6 +337,10 @@ public class RenderUtil {
         builder.addVertex(pose, edgeMin, minY, edgeMax).setColor(r, g, b, 255).setUv(uMax, vMax).setUv1(0, 10).setUv2(lightU, lightV).setNormal(normal.x, normal.y, normal.z);
     }
 
+    public static float mix(float a, float b, float progress) {
+        return Math.fma(b - a, progress, a);
+    }
+
     public interface IrisAccess {
         boolean areShadersEnabled();
     }

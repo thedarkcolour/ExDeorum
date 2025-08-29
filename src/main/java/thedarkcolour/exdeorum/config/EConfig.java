@@ -40,15 +40,11 @@ public class EConfig {
     public static final Server SERVER;
 
     public static class Client {
-        public final BooleanValue useFastInfestedLeaves;
         public final BooleanValue rainbowCompostDuringJune;
 
         public Client(ModConfigSpec.Builder builder) {
             builder.comment("Client configuration for Ex Deorum").push("client");
 
-            this.useFastInfestedLeaves = builder
-                    .comment("Whether to use a simplified renderer for infested leaves (reduces FPS lag with lots of infested trees)")
-                    .define("use_fast_infested_leaves", false);
             this.rainbowCompostDuringJune = builder
                     .comment("Whether compost in barrels appears as rainbow colored during the month of June")
                     .define("rainbow_compost_during_june", true);

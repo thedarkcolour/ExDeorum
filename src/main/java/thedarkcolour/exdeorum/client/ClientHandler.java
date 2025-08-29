@@ -19,17 +19,19 @@
 package thedarkcolour.exdeorum.client;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.worldselection.CreateWorldScreen;
 import net.minecraft.client.gui.screens.worldselection.WorldCreationUiState;
+import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.ShaderInstance;
+import net.minecraft.client.renderer.block.BlockModelShaper;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.util.FastColor;
 import net.minecraft.util.Unit;
+import net.minecraft.world.level.FoliageColor;
 import net.minecraft.world.level.levelgen.presets.WorldPreset;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModList;
@@ -39,6 +41,8 @@ import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.common.NeoForge;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.asm.ASMHooks;
+import thedarkcolour.exdeorum.blockentity.InfestedLeavesBlockEntity;
+import thedarkcolour.exdeorum.client.model.InfestedLeavesBakedModel;
 import thedarkcolour.exdeorum.client.screen.MechanicalHammerScreen;
 import thedarkcolour.exdeorum.client.screen.MechanicalSieveScreen;
 import thedarkcolour.exdeorum.client.ter.*;
@@ -46,10 +50,9 @@ import thedarkcolour.exdeorum.compat.ModIds;
 import thedarkcolour.exdeorum.config.EConfig;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.registry.EBlockEntities;
+import thedarkcolour.exdeorum.registry.EBlocks;
 import thedarkcolour.exdeorum.registry.EFluids;
 import thedarkcolour.exdeorum.registry.EMenus;
-
-import java.io.IOException;
 
 public class ClientHandler {
     // Used for the composting recipe category in JEI
@@ -64,9 +67,10 @@ public class ClientHandler {
         modBus.addListener(ClientHandler::clientSetup);
         modBus.addListener(ClientHandler::registerMenuScreens);
         modBus.addListener(ClientHandler::registerRenderers);
-        modBus.addListener(ClientHandler::registerShaders);
         modBus.addListener(ClientHandler::addClientReloadListeners);
         modBus.addListener(ClientHandler::onConfigChanged);
+        modBus.addListener(ClientHandler::onModelBake);
+        modBus.addListener(ClientHandler::addBlockColorHandler);
         fmlBus.addListener(ClientHandler::onPlayerRespawn);
         fmlBus.addListener(ClientHandler::onPlayerLogout);
         fmlBus.addListener(ClientHandler::onScreenOpen);
@@ -124,17 +128,6 @@ public class ClientHandler {
         event.registerBlockEntityRenderer(EBlockEntities.COMPRESSED_SIEVE.get(), ctx -> new CompressedSieveRenderer<>(0.5625f, 16f));
     }
 
-    private static void registerShaders(RegisterShadersEvent event) {
-        try {
-            // NEW_ENTITY is BLOCK except it also uses UV1 (overlay coordinates)
-            event.registerShader(new ShaderInstance(event.getResourceProvider(), ExDeorum.loc("rendertype_tinted_cutout_mipped"), DefaultVertexFormat.NEW_ENTITY), instance -> {
-                RenderUtil.renderTypeTintedCutoutMippedShader = instance;
-            });
-        } catch (IOException e) {
-            ExDeorum.LOGGER.error("Unable to load tinted shader", e);
-        }
-    }
-
     // Sets Ex Deorum world type as default
     private static void onScreenOpen(ScreenEvent.Opening event) {
         if (event.getNewScreen() instanceof CreateWorldScreen screen && EConfig.COMMON.setVoidWorldAsDefault.get()) {
@@ -157,6 +150,36 @@ public class ClientHandler {
     private static void registerAdditionalModels(ModelEvent.RegisterAdditional event) {
         event.register(new ModelResourceLocation(ExDeorum.loc("block/oak_barrel_composting"), ModelResourceLocation.STANDALONE_VARIANT));
         event.register(OAK_BARREL_COMPOSTING);
+    }
+
+    private static void onModelBake(ModelEvent.ModifyBakingResult event) {
+        var model = new InfestedLeavesBakedModel();
+        for (var state : EBlocks.INFESTED_LEAVES.get().getStateDefinition().getPossibleStates()) {
+            var location = BlockModelShaper.stateToModelLocation(state);
+            event.getModels().put(location, model);
+        }
+    }
+
+    private static void addBlockColorHandler(RegisterColorHandlersEvent.Block event) {
+        var blockColors = event.getBlockColors();
+        event.register((state, level, pos, tintIndex) -> {
+            int innerColor;
+            if (level != null && pos != null && level.getBlockEntity(pos) instanceof InfestedLeavesBlockEntity infestedLeavesBlockEntity) {
+                var mimicState = infestedLeavesBlockEntity.getMimic();
+                try {
+                    innerColor = blockColors.getColor(mimicState, level, pos, tintIndex);
+                } catch (Exception e) {
+                    // The block may be unhappy that the BlockState in the world (infested leaves) does not match
+                    // the mimic state that was provided in the argument. In such cases, use the default foliage
+                    // color resolver.
+                    innerColor = level.getBlockTint(pos, BiomeColors.FOLIAGE_COLOR_RESOLVER);
+                }
+            } else {
+                innerColor = FoliageColor.getDefaultColor();
+            }
+            int gray = (30 * FastColor.ARGB32.red(innerColor) + 59 * FastColor.ARGB32.green(innerColor) + 11 * FastColor.ARGB32.blue(innerColor)) / 100;
+            return FastColor.ARGB32.color(255, gray, gray, gray);
+        }, EBlocks.INFESTED_LEAVES.get());
     }
 
     private static void onRecipesUpdated(RecipesUpdatedEvent event) {

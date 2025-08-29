@@ -38,12 +38,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.HitResult;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.fml.loading.FMLEnvironment;
 import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.blockentity.InfestedLeavesBlockEntity;
-import thedarkcolour.exdeorum.client.RenderUtil;
-import thedarkcolour.exdeorum.config.EConfig;
 import thedarkcolour.exdeorum.registry.EBlockEntities;
 import thedarkcolour.exdeorum.registry.EBlocks;
 
@@ -115,7 +111,6 @@ public class InfestedLeavesBlock extends LeavesBlock implements EntityBlock {
 
     @Override
     public RenderShape getRenderShape(BlockState pState) {
-        if (FMLEnvironment.dist == Dist.DEDICATED_SERVER) return RenderShape.MODEL;
-        return (EConfig.CLIENT_SPEC.isLoaded() && EConfig.CLIENT.useFastInfestedLeaves.get()) || RenderUtil.IRIS_ACCESS.areShadersEnabled() ? RenderShape.MODEL : RenderShape.INVISIBLE;
+        return pState.getValue(FULLY_INFESTED) ? RenderShape.MODEL : RenderShape.INVISIBLE;
     }
 }

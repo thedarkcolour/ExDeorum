@@ -19,19 +19,27 @@
 package thedarkcolour.exdeorum.client.ter;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.level.block.Blocks;
+import net.neoforged.neoforge.client.RenderTypeHelper;
 import net.neoforged.neoforge.client.model.data.ModelData;
+import net.neoforged.neoforge.client.model.pipeline.VertexConsumerWrapper;
+import thedarkcolour.exdeorum.block.InfestedLeavesBlock;
 import thedarkcolour.exdeorum.blockentity.InfestedLeavesBlockEntity;
 import thedarkcolour.exdeorum.client.RenderUtil;
-import thedarkcolour.exdeorum.config.EConfig;
 
 public class InfestedLeavesRenderer implements BlockEntityRenderer<InfestedLeavesBlockEntity> {
+
     @Override
     public void render(InfestedLeavesBlockEntity te, float partialTicks, PoseStack stack, MultiBufferSource buffer, int light, int unused) {
-        if (EConfig.CLIENT.useFastInfestedLeaves.get() || RenderUtil.IRIS_ACCESS.areShadersEnabled()) return;
+        // We render a static model when the animation is finished
+        if (te.getBlockState().getValue(InfestedLeavesBlock.FULLY_INFESTED)) {
+            return;
+        }
 
         var mc = Minecraft.getInstance();
         var state = te.getMimic();
@@ -46,10 +54,32 @@ public class InfestedLeavesRenderer implements BlockEntityRenderer<InfestedLeave
         }
 
         // Get infested percentage
-        int progress = Math.min(te.getProgress(), 16000);
+        float progress = Math.min(te.getProgress(), 16000) / 16000f;
         // Render
         var model = mc.getBlockRenderer().getBlockModel(state);
         var pos = te.getBlockPos();
-        mc.getBlockRenderer().getModelRenderer().tesselateBlock(level, model, state, pos, stack, buffer.getBuffer(RenderUtil.TINTED_CUTOUT_MIPPED), false, level.random, state.getSeed(pos), progress, ModelData.EMPTY, null);
+
+        for (var renderType : model.getRenderTypes(state, level.random, ModelData.EMPTY)) {
+            // Dynamically blend the provided vertex colors towards grayscale
+            var vertexConsumer = new VertexConsumerWrapper(buffer.getBuffer(RenderTypeHelper.getMovingBlockRenderType(renderType))) {
+                @Override
+                public VertexConsumer setColor(int r, int g, int b, int a) {
+                    float rF = (r / 255f), gF = (g / 255f), bF = (b / 255f);
+
+                    float avg = rF * 0.3f + gF * 0.59f + bF * 0.11f;
+
+                    return super.setColor(
+                            Math.round(RenderUtil.mix(rF, avg, progress) * 255),
+                            Math.round(RenderUtil.mix(gF, avg, progress) * 255),
+                            Math.round(RenderUtil.mix(bF, avg, progress) * 255),
+                            a
+                    );
+                }
+            };
+
+            mc.getBlockRenderer().getModelRenderer().tesselateBlock(level, model, state, pos, stack, vertexConsumer,
+                    true, level.random, state.getSeed(pos), OverlayTexture.NO_OVERLAY, ModelData.EMPTY,
+                    renderType);
+        }
     }
 }
