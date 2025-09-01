@@ -99,6 +99,10 @@ class ModTags {
         tags.tag(EItemTags.STONE_BARRELS).add(DefaultMaterials.STONE_BARREL.getItem(), DefaultMaterials.CRYSTALLIZED_BARREL.getItem());
         tags.tag(EItemTags.BARRELS).addTags(EItemTags.WOODEN_BARRELS, EItemTags.STONE_BARRELS);
 
+        // empty by default; pack makers can add items they don't want affected by Fortune-enchanted hammers
+        tags.tag(EItemTags.HAMMER_FORTUNE_BLACKLIST);
+        tags.tag(EItemTags.COMPRESSED_HAMMER_FORTUNE_BLACKLIST);
+
         tags.tag(EItemTags.RANDOM_SHERD_DROPS).addTag(ItemTags.DECORATED_POT_SHERDS);
 
         tags.tag(EItemTags.RANDOM_TRIM_DROPS).add(

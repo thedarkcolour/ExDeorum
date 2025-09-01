@@ -152,7 +152,9 @@ public class MechanicalHammerBlockEntity extends AbstractMachineBlockEntity<Mech
                     @SuppressWarnings("DataFlowIssue")
                     LootContext ctx = RecipeUtil.emptyLootContext((ServerLevel) this.level);
                     var resultCount = recipe.resultAmount.getInt(ctx);
-                    resultCount += HammerLootModifier.calculateFortuneBonus(this.level.registryAccess(), this.inventory.getStackInSlot(HAMMER_SLOT), ctx.getRandom(), resultCount == 0);
+                    if (!input.is(EItemTags.HAMMER_FORTUNE_BLACKLIST)) {
+                        resultCount += HammerLootModifier.calculateFortuneBonus(this.level.registryAccess(), this.inventory.getStackInSlot(HAMMER_SLOT), ctx.getRandom(), resultCount == 0);
+                    }
                     var output = this.inventory.getStackInSlot(OUTPUT_SLOT);
                     if (output.isEmpty()) {
                         this.inventory.setStackInSlot(OUTPUT_SLOT, recipe.result.copyWithCount(resultCount));

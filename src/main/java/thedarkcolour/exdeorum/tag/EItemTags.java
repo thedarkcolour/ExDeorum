@@ -33,6 +33,9 @@ public class EItemTags {
     public static final TagKey<Item> ORE_CHUNKS = tag("ore_chunks");
     public static final TagKey<Item> END_CAKE_MATERIAL = tag("end_cake_materials");
 
+    public static final TagKey<Item> HAMMER_FORTUNE_BLACKLIST = tag("hammer_fortune_blacklist");
+    public static final TagKey<Item> COMPRESSED_HAMMER_FORTUNE_BLACKLIST = tag("compressed_hammer_fortune_blacklist");
+
     public static final TagKey<Item> RANDOM_SHERD_DROPS = tag("random_shard_drops");
     public static final TagKey<Item> RANDOM_TRIM_DROPS = tag("random_trim_drops");
 

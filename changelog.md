@@ -1,3 +1,6 @@
+## Ex Deorum 3.9
+- Add `#exdeorum:hammer_fortune_blacklist` and `#exdeorum:compressed_hammer_fortune_blacklist` item tags, allowing pack makers to prevent Fortune from affecting a block's hammer or compressed hammer drops
+
 ## Ex Deorum 3.8
 - Fix memory leak in VisualUpdateTracker (#153)
 - Added Hungarian translation (#147)

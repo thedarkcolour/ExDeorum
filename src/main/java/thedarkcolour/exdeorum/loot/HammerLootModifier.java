@@ -23,6 +23,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -36,42 +37,57 @@ import net.neoforged.neoforge.common.loot.LootModifier;
 import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.recipe.hammer.HammerRecipe;
+import thedarkcolour.exdeorum.tag.EItemTags;
 
 public class HammerLootModifier extends LootModifier {
     public static final MapCodec<HammerLootModifier> CODEC = RecordCodecBuilder.mapCodec(inst -> LootModifier.codecStart(inst).apply(inst, HammerLootModifier::new));
 
+    private final TagKey<Item> fortuneBlacklistTag;
+
     public HammerLootModifier(LootItemCondition[] conditionsIn) {
         super(conditionsIn);
+
+        this.fortuneBlacklistTag = EItemTags.HAMMER_FORTUNE_BLACKLIST;
+    }
+
+    protected HammerLootModifier(LootItemCondition[] conditionsIn, TagKey<Item> fortuneBlacklistTag) {
+        super(conditionsIn);
+
+        this.fortuneBlacklistTag =  fortuneBlacklistTag;
     }
 
     @Override
     protected ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
         var state = context.getParamOrNull(LootContextParams.BLOCK_STATE);
 
-        if (state != null) {
-            var itemForm = state.getBlock().asItem();
-            if (itemForm != Items.AIR) {
-                var recipe = getRecipe(itemForm);
-
-                if (recipe != null) {
-                    ObjectArrayList<ItemStack> newLoot = new ObjectArrayList<>();
-                    var resultAmount = recipe.resultAmount.getInt(context);
-
-                    // fortune handling; more likely to boost drops if there are none to begin with
-                    if (context.hasParam(LootContextParams.TOOL)) {
-                        var hammer = context.getParam(LootContextParams.TOOL);
-                        resultAmount += calculateFortuneBonus(context.getLevel().registryAccess(), hammer, context.getRandom(), resultAmount == 0);
-                    }
-
-                    if (resultAmount > 0) {
-                        newLoot.add(recipe.result.copyWithCount(resultAmount));
-                    }
-                    return newLoot;
-                }
-            }
+        if (state == null) {
+            return generatedLoot;
         }
 
-        return generatedLoot;
+        var itemForm = state.getBlock().asItem();
+        if (itemForm == Items.AIR) {
+            return generatedLoot;
+        }
+
+        var recipe = getRecipe(itemForm);
+        if (recipe == null) {
+            return generatedLoot;
+        }
+
+        ObjectArrayList<ItemStack> newLoot = new ObjectArrayList<>();
+        var resultAmount = recipe.resultAmount.getInt(context);
+
+        if (!itemForm.builtInRegistryHolder().is(this.fortuneBlacklistTag) && context.hasParam(LootContextParams.TOOL)) {
+            var hammer = context.getParam(LootContextParams.TOOL);
+            // fortune handling; more likely to boost drops if there are none to begin with
+            resultAmount += calculateFortuneBonus(context.getLevel().registryAccess(), hammer, context.getRandom(), resultAmount == 0);
+        }
+
+        if (resultAmount > 0) {
+            newLoot.add(recipe.result.copyWithCount(resultAmount));
+        }
+
+        return newLoot;
     }
 
     @Nullable
