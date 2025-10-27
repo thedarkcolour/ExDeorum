@@ -1,3 +1,6 @@
+## Ex Deorum 3.10
+- Now requires KubeJS 7.2 to fix incompatibility (#158)
+
 ## Ex Deorum 3.9
 - Add `#exdeorum:hammer_fortune_blacklist` and `#exdeorum:compressed_hammer_fortune_blacklist` item tags, allowing pack makers to prevent Fortune from affecting a block's hammer or compressed hammer drops
 

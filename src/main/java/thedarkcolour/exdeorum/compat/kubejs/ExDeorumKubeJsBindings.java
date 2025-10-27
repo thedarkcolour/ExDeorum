@@ -1,6 +1,6 @@
 /*
  * Ex Deorum
- * Copyright (c) 2024 thedarkcolour
+ * Copyright (c) 2025 thedarkcolour
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@ package thedarkcolour.exdeorum.compat.kubejs;
 
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
-import dev.latvian.mods.kubejs.bindings.event.ServerEvents;
+import dev.latvian.mods.kubejs.plugin.builtin.event.ServerEvents;
 import dev.latvian.mods.kubejs.recipe.RecipesKubeEvent;
 import dev.latvian.mods.kubejs.recipe.filter.RecipeFilterParseEvent;
 import dev.latvian.mods.kubejs.recipe.match.ReplacementMatchInfo;
@@ -81,7 +81,10 @@ class ExDeorumKubeJsBindings {
 
     @HideFromJS
     private static void removeDefaultRecipes(RecipesKubeEvent event, DeferredHolder<? extends RecipeType<?>, ? extends RecipeType<?>> recipeType) {
-        event.remove(null, (ctx, r) -> r.kjs$getType().equals(recipeType.getId()) && r.kjs$getOrCreateId().getNamespace().equals(ExDeorum.ID));
+        event.remove(null, (ctx) -> {
+            var r = ctx.recipe();
+            return r.kjs$getType().equals(recipeType.getId()) && r.kjs$getOrCreateId().getNamespace().equals(ExDeorum.ID);
+        });
     }
 
     @HideFromJS

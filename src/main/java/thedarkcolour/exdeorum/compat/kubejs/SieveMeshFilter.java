@@ -1,6 +1,6 @@
 /*
  * Ex Deorum
- * Copyright (c) 2024 thedarkcolour
+ * Copyright (c) 2025 thedarkcolour
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,17 +18,17 @@
 
 package thedarkcolour.exdeorum.compat.kubejs;
 
-import dev.latvian.mods.kubejs.core.RecipeLikeKJS;
 import dev.latvian.mods.kubejs.recipe.KubeRecipe;
 import dev.latvian.mods.kubejs.recipe.filter.RecipeFilter;
+import dev.latvian.mods.kubejs.recipe.filter.RecipeMatchContext;
 import dev.latvian.mods.kubejs.recipe.match.ItemMatch;
 import dev.latvian.mods.kubejs.recipe.match.ReplacementMatchInfo;
-import dev.latvian.mods.rhino.Context;
 import thedarkcolour.exdeorum.recipe.sieve.SieveRecipe;
 
 public record SieveMeshFilter(ReplacementMatchInfo info) implements RecipeFilter {
     @Override
-    public boolean test(Context cx, RecipeLikeKJS r) {
-        return r instanceof KubeRecipe recipeJs && recipeJs.getOriginalRecipe() instanceof SieveRecipe sieveRecipe && this.info.match() instanceof ItemMatch match && match.matches(cx, sieveRecipe.mesh, false);
+    public boolean test(RecipeMatchContext ctx) {
+        var r = ctx.recipe();
+        return r instanceof KubeRecipe recipeJs && recipeJs.getOriginalRecipe() instanceof SieveRecipe sieveRecipe && this.info.match() instanceof ItemMatch match && match.matches(ctx, sieveRecipe.mesh, false);
     }
 }
