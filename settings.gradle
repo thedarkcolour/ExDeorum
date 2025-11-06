@@ -5,8 +5,9 @@ pluginManagement {
     }
 }
 
-plugins {
-    id 'org.gradle.toolchains.foojay-resolver-convention' version '0.9.0'
-}
+// Disabled due to network restrictions
+//plugins {
+//    id 'org.gradle.toolchains.foojay-resolver-convention' version '0.9.0'
+//}
 
 include('coremod')
