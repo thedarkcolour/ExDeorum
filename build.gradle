@@ -1,10 +1,9 @@
 plugins {
-    id 'idea'
-    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
-    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
-    id 'org.spongepowered.mixin' version '0.7.+'
-    id("com.modrinth.minotaur") version "2.+"
-    id("com.matthewprenger.cursegradle") version "1.4.0"
+    id('idea')
+    id('com.modrinth.minotaur') version "2.+"
+    id('com.matthewprenger.cursegradle') version "1.4.0"
+    id('net.neoforged.moddev.legacyforge') version '2.0.80'
+    id('org.jetbrains.gradle.plugin.idea-ext') version "1.1.9"
 }
 
 version = '1.46'
@@ -14,57 +13,46 @@ base.archivesName = 'exdeorum'
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 java.withSourcesJar()
 
-minecraft {
-    mappings channel: 'parchment', version: "$parchment_mappings-$mc_version"
-    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+legacyForge {
+    version = "${mc_version}-${forge_version}"
+
+    accessTransformers = files('src/main/resources/META-INF/accesstransformer.cfg')
+
+    parchment {
+        mappingsVersion = project.parchment_mappings
+        minecraftVersion = project.mc_version
+    }
 
     runs {
-        copyIdeResources = true
+        configureEach {
+            logLevel = org.slf4j.event.Level.DEBUG
+            jvmArgument '-XX:+AllowEnhancedClassRedefinition'
+            jvmArgument '-XX:+IgnoreUnrecognizedVMOptions'
+        }
 
         client {
-            workingDirectory project.file('run')
-
-            jvmArgs.add('-XX:+AllowEnhancedClassRedefinition')
-            jvmArgs.add('-XX:+IgnoreUnrecognizedVMOptions')
-
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-            property 'forge.logging.console.level', 'debug'
-
-            mods {
-                exdeorum {
-                    source sourceSets.main
-                }
-            }
+            client()
+            //property 'mixin.env.remapRefMap', 'true'
+            //property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
         }
 
         server {
-            workingDirectory project.file('run/server')
+            server()
 
-            jvmArgs.add('-XX:+AllowEnhancedClassRedefinition')
-            jvmArgs.add('-XX:+IgnoreUnrecognizedVMOptions')
-
-            property 'forge.logging.console.level', 'debug'
-
-            mods {
-                exdeorum {
-                    source sourceSets.main
-                }
-            }
+            gameDirectory.set(project.layout.projectDirectory.dir('run/server'))
+            programArgument '--nogui'
         }
 
         data {
-            workingDirectory project.file('run')
+            data()
 
-            property 'forge.logging.console.level', 'debug'
+            programArguments.addAll('--mod', 'exdeorum', '--all', '--output', file('src/generated/resources/').absolutePath, '--existing', file('src/main/resources/').absolutePath)
+        }
+    }
 
-            args '--mod', 'exdeorum', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
-
-            mods {
-                exdeorum {
-                    source sourceSets.main
-                }
-            }
+    mods {
+        exdeorum {
+            sourceSet sourceSets.main
         }
     }
 }
@@ -122,53 +110,51 @@ repositories {
 }
 
 dependencies {
-    minecraft("net.minecraftforge:forge:${mc_version}-${forge_version}")
-
     // TOP OPTIONAL
-    compileOnly(fg.deobf("mcjty.theoneprobe:theoneprobe:1.20.1-${top_version}") {
+    modCompileOnly("mcjty.theoneprobe:theoneprobe:1.20.1-${top_version}") {
         transitive = false
-    })
+    }
     // JADE OPTIONAL
-    implementation(fg.deobf("curse.maven:jade-324717:4986594"))
+    modImplementation("curse.maven:jade-324717:4986594")
     // JEI OPTIONAL
-    compileOnly(fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}"))
-    compileOnly(fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}"))
-    runtimeOnly(fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}"))
+    modCompileOnly("mezz.jei:jei-${mc_version}-forge-api:${jei_version}")
+    modCompileOnly("mezz.jei:jei-${mc_version}-common-api:${jei_version}")
+    modRuntimeOnly("mezz.jei:jei-${mc_version}-forge:${jei_version}")
     // REI OPTIONAL
-    compileOnly(fg.deobf("me.shedaniel:RoughlyEnoughItems-forge:${rei_version}"))
-    compileOnly(fg.deobf("me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}"))
-    compileOnly(fg.deobf("curse.maven:reipc-521393:4837449"))
+    modCompileOnly("me.shedaniel:RoughlyEnoughItems-forge:${rei_version}")
+    modCompileOnly("me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}")
+    modCompileOnly("curse.maven:reipc-521393:4837449")
     // EMI OPTIONAL
-    compileOnly(fg.deobf("dev.emi:emi-forge:${emi_version}:api"))
-    //runtimeOnly(fg.deobf("dev.emi:emi-forge:${emi_version}"))
+    modCompileOnly("dev.emi:emi-forge:${emi_version}:api")
+    //modRuntimeOnly("dev.emi:emi-forge:${emi_version}")
     // KubeJS OPTIONAL
-    implementation fg.deobf("dev.architectury:architectury-forge:${architectury_version}")
-    implementation fg.deobf("dev.latvian.mods:rhino-forge:${rhino_version}")
-    implementation fg.deobf("dev.latvian.mods:kubejs-forge:${kubejs_version}")
+    modImplementation("dev.architectury:architectury-forge:${architectury_version}")
+    modImplementation("dev.latvian.mods:rhino-forge:${rhino_version}")
+    modImplementation("dev.latvian.mods:kubejs-forge:${kubejs_version}")
 
     // ModKit DEV ONLY
-    implementation fg.deobf('com.github.thedarkcolour:ModKit:78f393bfac')
+    modImplementation('com.github.thedarkcolour:ModKit:cc8f1c11ec')
 
     // Oculus + Embeddium OPTIONAL
-    compileOnly fg.deobf('maven.modrinth:oculus:1.20.1-1.6.9')
-    compileOnly fg.deobf('maven.modrinth:embeddium:0.2.12+mc1.20.1')
+    modCompileOnly('maven.modrinth:oculus:1.20.1-1.6.9')
+    modCompileOnly('maven.modrinth:embeddium:0.2.12+mc1.20.1')
 
     // testing
-    //implementation fg.deobf("curse.maven:allthecompressed-514045:4938351")
-    implementation fg.deobf("curse.maven:inventory-tweaks-refoxed-976858:5315928")
-    //implementation fg.deobf("curse.maven:inventorysorter-240633:4655091")
-    implementation fg.deobf("curse.maven:cyclic-239286:4994392")
-    implementation fg.deobf("curse.maven:flib-661261:4724762")
+    //modImplementation("curse.maven:allthecompressed-514045:4938351")
+    modImplementation("curse.maven:inventory-tweaks-refoxed-976858:5315928")
+    //modImplementation("curse.maven:inventorysorter-240633:4655091")
+    modImplementation("curse.maven:cyclic-239286:4994392")
+    modImplementation("curse.maven:flib-661261:4724762")
 
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
+    // DEV ONLY
+    compileOnly('org.jetbrains:annotations:23.0.0')
 }
 
 test {
     useJUnitPlatform()
 }
 
-def replaceProperties = [ mc_version: mc_version, mod_version: version ]
+def replaceProperties = [mc_version: mc_version, mod_version: version]
 
 processResources {
     inputs.properties replaceProperties
@@ -197,13 +183,13 @@ processResources {
 jar {
     manifest {
         attributes([
-            "Specification-Title": "exdeorum",
-            "Specification-Vendor": "exdeorumsareus",
-            "Specification-Version": "1", // We are version 1 of ourselves
-            "Implementation-Title": project.name,
-            "Implementation-Version": "${version}",
-            "Implementation-Vendor" :"exdeorumsareus",
-            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+                "Specification-Title"     : "exdeorum",
+                "Specification-Vendor"    : "exdeorumsareus",
+                "Specification-Version"   : "1", // We are version 1 of ourselves
+                "Implementation-Title"    : project.name,
+                "Implementation-Version"  : "${version}",
+                "Implementation-Vendor"   : "exdeorumsareus",
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
 }
