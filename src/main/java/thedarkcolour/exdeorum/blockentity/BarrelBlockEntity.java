@@ -253,7 +253,11 @@ public class BarrelBlockEntity extends ETankBlockEntity {
 
                         if (this.tank.fill(fluid, IFluidHandler.FluidAction.SIMULATE) > 0) {
                             if (!player.getAbilities().instabuild) {
-                                player.setItemInHand(hand, new ItemStack(Items.GLASS_BOTTLE));
+                                playerItem.shrink(1);
+                                ItemStack emptyBottle = new ItemStack(Items.GLASS_BOTTLE);
+                                if (!player.addItem(emptyBottle)) {
+                                    player.drop(emptyBottle, false);
+                                }
                             }
                             this.tank.fill(fluid, IFluidHandler.FluidAction.EXECUTE);
                             level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.BOTTLE_FILL, SoundSource.NEUTRAL, 1.0F, 1.0F);
@@ -293,7 +297,15 @@ public class BarrelBlockEntity extends ETankBlockEntity {
 
                             if (recipe.consumesAdditive) {
                                 itemFluidCap.drain(1000, IFluidHandler.FluidAction.EXECUTE);
-                                player.setItemInHand(hand, itemFluidCap.getContainer());
+                                if (!player.getAbilities().instabuild) {
+                                    playerItem.shrink(1);
+                                    ItemStack container = itemFluidCap.getContainer();
+                                    if (!container.isEmpty()) {
+                                        if (!player.addItem(container)) {
+                                            player.drop(container, false);
+                                        }
+                                    }
+                                }
                             }
                         }
                         // If a mix was successful, skip rest of logic
