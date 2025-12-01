@@ -1,3 +1,8 @@
+## Ex Deorum 1.47
+- Fix issues with barrels and water bottles from mods like _Thirst Was Taken_, thanks to pawjwp (#156)
+- Minor translation tweak (#154)
+- Chinese translation changes (#161)
+
 ## Ex Deorum 1.46
 - Fix Barrel Mixing recipes with a result size greater than 1 only giving one output
 
