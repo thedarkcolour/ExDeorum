@@ -1,3 +1,6 @@
+## Ex Deorum 1.48
+- Fix broken mappings crash from 1.47 (#165)
+
 ## Ex Deorum 1.47
 - Fix issues with barrels and water bottles from mods like _Thirst Was Taken_, thanks to pawjwp (#156)
 - Minor translation tweak (#154)

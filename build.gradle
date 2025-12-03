@@ -217,7 +217,7 @@ if (System.getenv("CURSEFORGE_TOKEN")) {
             addGameVersion("NeoForge")
             addGameVersion("Java 17")
 
-            mainArtifact(jar.archiveFile) {
+            mainArtifact(reobfJar.archiveFile) {
                 displayName = "Ex Deorum ${project.version}"
             }
         }
@@ -232,7 +232,7 @@ modrinth {
     loaders = ["forge", "neoforge"]
     changelog = getChangelog(project.version)
 
-    uploadFile = jar
+    uploadFile = reobfJar
     additionalFiles.add(sourcesJar)
 }
 
