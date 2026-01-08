@@ -335,13 +335,15 @@ public class BarrelBlockEntity extends ETankBlockEntity {
         if (!player.getAbilities().instabuild) {
             playerItem.shrink(1);
         }
+        tank.drain(fluid, IFluidHandler.FluidAction.EXECUTE);
         var bottle = PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER);
-        var nbt = bottle.getOrCreateTag();
-        nbt.merge(fluid.getOrCreateTag());
+        if (fluid.hasTag()) {
+            var nbt = bottle.getOrCreateTag();
+            nbt.merge(fluid.getTag());
+        }
         if (!player.addItem(bottle)) {
             player.drop(bottle, false);
         }
-        tank.drain(fluid, IFluidHandler.FluidAction.EXECUTE);
         level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.BOTTLE_EMPTY, SoundSource.NEUTRAL, 1.0F, 1.0F);
     }
 
