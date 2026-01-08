@@ -226,6 +226,54 @@ public class BarrelBlockEntity extends ETankBlockEntity {
             var wasBurning = isBurning();
 
             this.isBeingFilledByPlayer = true;
+            var playerItem = player.getItemInHand(hand);
+
+            // Insert water bucket with NBT
+            if (playerItem.getItem() == Items.WATER_BUCKET && playerItem.hasTag()) {
+                var fluid = new FluidStack(Fluids.WATER, 1000, playerItem.getTag().copy());
+                if (this.tank.fill(fluid, IFluidHandler.FluidAction.SIMULATE) == 1000) {
+                    this.tank.fill(fluid, IFluidHandler.FluidAction.EXECUTE);
+                    if (!player.getAbilities().instabuild) {
+                        playerItem.shrink(1);
+                        if (!player.addItem(new ItemStack(Items.BUCKET))) {
+                            player.drop(new ItemStack(Items.BUCKET), false);
+                        }
+                    }
+                    level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.BUCKET_EMPTY, SoundSource.NEUTRAL, 1.0F, 1.0F);
+                    this.isBeingFilledByPlayer = false;
+                    tryInWorldFluidMixing();
+                    markUpdated();
+
+                    if (wasBurning && !isHotFluid(this.tank.getFluid().getFluid().getFluidType())) {
+                        this.progress = 0.0f;
+                    }
+
+                    return InteractionResult.sidedSuccess(level.isClientSide);
+                }
+            }
+
+            // Extract liquid with NBT
+            if (playerItem.getItem() == Items.BUCKET) {
+                var currentFluid = this.tank.getFluid();
+                if (currentFluid.getFluid() == Fluids.WATER && currentFluid.hasTag() && currentFluid.getAmount() >= 1000) {
+                    if (this.tank.drain(1000, IFluidHandler.FluidAction.SIMULATE).getAmount() == 1000) {
+                        this.tank.drain(1000, IFluidHandler.FluidAction.EXECUTE);
+                        var filledBucket = new ItemStack(Items.WATER_BUCKET);
+                        filledBucket.setTag(currentFluid.getTag().copy());
+                        if (!player.getAbilities().instabuild) {
+                            playerItem.shrink(1);
+                            if (!player.addItem(filledBucket)) {
+                                player.drop(filledBucket, false);
+                            }
+                        }
+                        level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.BUCKET_FILL, SoundSource.NEUTRAL, 1.0F, 1.0F);
+                        this.isBeingFilledByPlayer = false;
+                        tryInWorldFluidMixing();
+                        markUpdated();
+                        return InteractionResult.sidedSuccess(level.isClientSide);
+                    }
+                }
+            }
 
             if (FluidUtil.interactWithFluidHandler(player, hand, this.tank)) {
                 this.isBeingFilledByPlayer = false;
@@ -241,7 +289,6 @@ public class BarrelBlockEntity extends ETankBlockEntity {
             } else {
                 this.isBeingFilledByPlayer = false;
                 // try one more time to transfer fluids between item and barrel
-                var playerItem = player.getItemInHand(hand);
                 if (EConfig.SERVER.allowWaterBottleTransfer.get()) {
                     var fluid = new FluidStack(Fluids.WATER, 250);
 
