@@ -249,6 +249,7 @@ public class BarrelBlockEntity extends ETankBlockEntity {
                     	// Transfer any extra NBT tags from other mods to the fluid
                     	 var nbt = playerItem.getTag().copy();
                     	 nbt.remove("Potion");
+                         if (nbt.isEmpty()) nbt = null;
                     	 fluid = new FluidStack(Fluids.WATER, 250, nbt);
 
                         if (this.tank.fill(fluid, IFluidHandler.FluidAction.SIMULATE) > 0) {
