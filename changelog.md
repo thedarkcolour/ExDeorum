@@ -1,3 +1,8 @@
+## Ex Deorum 1.49
+- Fixed more issues with _Thirst Was Taken_, thanks to pawjwp (#170)
+  - Fixed Dust not having a map color (#169)
+  - Fixed Water Bottles not draining properly from Barrel (#171)
+
 ## Ex Deorum 1.48
 - Fix broken mappings crash from 1.47 (#165)
 
