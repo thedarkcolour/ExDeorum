@@ -145,6 +145,7 @@ dependencies {
     //modImplementation("curse.maven:inventorysorter-240633:4655091")
     modImplementation("curse.maven:cyclic-239286:4994392")
     modImplementation("curse.maven:flib-661261:4724762")
+    modImplementation("curse.maven:thirst-was-taken-679270:6660408")
 
     // DEV ONLY
     compileOnly('org.jetbrains:annotations:23.0.0')
