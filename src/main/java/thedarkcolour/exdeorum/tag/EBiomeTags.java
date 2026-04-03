@@ -20,7 +20,7 @@ package thedarkcolour.exdeorum.tag;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.features.TreeFeatures;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
@@ -45,17 +45,17 @@ public class EBiomeTags {
         addTreeTag("dark_oak_tree_biomes", TreeFeatures.DARK_OAK.location());
         addTreeTag("mangrove_tree_biomes", TreeFeatures.MANGROVE.location());
         // Bop tags
-        addTreeTag("flowering_oak_tree_biomes", ResourceLocation.fromNamespaceAndPath(ModIds.BIOMES_O_PLENTY, "flowering_oak_tree_bees"));
-        addTreeTag("mahogany_tree_biomes", ResourceLocation.fromNamespaceAndPath(ModIds.BIOMES_O_PLENTY, "mahogany_tree"));
-        addTreeTag("jacaranda_tree_biomes", ResourceLocation.fromNamespaceAndPath(ModIds.BIOMES_O_PLENTY, "jacaranda_tree_bees"));
-        addTreeTag("palm_tree_biomes", ResourceLocation.fromNamespaceAndPath(ModIds.BIOMES_O_PLENTY, "palm_tree"));
-        addTreeTag("willow_tree_biomes", ResourceLocation.fromNamespaceAndPath(ModIds.BIOMES_O_PLENTY, "willow_tree"));
-        addTreeTag("dead_tree_biomes", ResourceLocation.fromNamespaceAndPath(ModIds.BIOMES_O_PLENTY, "dead_tree_wasteland"));
-        addTreeTag("magic_tree_biomes", ResourceLocation.fromNamespaceAndPath(ModIds.BIOMES_O_PLENTY, "magic_tree"));
-        addTreeTag("umbran_tree_biomes", ResourceLocation.fromNamespaceAndPath(ModIds.BIOMES_O_PLENTY, "umbran_tree"));
+        addTreeTag("flowering_oak_tree_biomes", Identifier.fromNamespaceAndPath(ModIds.BIOMES_O_PLENTY, "flowering_oak_tree_bees"));
+        addTreeTag("mahogany_tree_biomes", Identifier.fromNamespaceAndPath(ModIds.BIOMES_O_PLENTY, "mahogany_tree"));
+        addTreeTag("jacaranda_tree_biomes", Identifier.fromNamespaceAndPath(ModIds.BIOMES_O_PLENTY, "jacaranda_tree_bees"));
+        addTreeTag("palm_tree_biomes", Identifier.fromNamespaceAndPath(ModIds.BIOMES_O_PLENTY, "palm_tree"));
+        addTreeTag("willow_tree_biomes", Identifier.fromNamespaceAndPath(ModIds.BIOMES_O_PLENTY, "willow_tree"));
+        addTreeTag("dead_tree_biomes", Identifier.fromNamespaceAndPath(ModIds.BIOMES_O_PLENTY, "dead_tree_wasteland"));
+        addTreeTag("magic_tree_biomes", Identifier.fromNamespaceAndPath(ModIds.BIOMES_O_PLENTY, "magic_tree"));
+        addTreeTag("umbran_tree_biomes", Identifier.fromNamespaceAndPath(ModIds.BIOMES_O_PLENTY, "umbran_tree"));
     }
 
-    private static void addTreeTag(String tagName, ResourceLocation id) {
+    private static void addTreeTag(String tagName, Identifier id) {
         var tag = tag(tagName);
         if (TREE_TAGS.put(tag, DeferredHolder.create(Registries.CONFIGURED_FEATURE, id)) != null) {
             throw new IllegalStateException("Already added a tree tag under " + tag);

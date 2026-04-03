@@ -33,7 +33,7 @@ import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Recipe;
@@ -73,7 +73,7 @@ import java.util.function.Supplier;
 
 @JeiPlugin
 public class ExDeorumJeiPlugin implements IModPlugin {
-    public static final ResourceLocation EX_DEORUM_JEI_TEXTURE = ExDeorum.loc("textures/gui/jei/enr_jei.png");
+    public static final Identifier EX_DEORUM_JEI_TEXTURE = ExDeorum.loc("textures/gui/jei/enr_jei.png");
 
     static final RecipeType<BarrelCompostRecipe> BARREL_COMPOST = recipeType("barrel_compost", BarrelCompostRecipe.class);
     static final RecipeType<BarrelMixingRecipe> BARREL_MIXING = recipeType("barrel_mixing", BarrelMixingRecipe.class);
@@ -94,7 +94,7 @@ public class ExDeorumJeiPlugin implements IModPlugin {
     }
 
     @Override
-    public ResourceLocation getPluginUid() {
+    public Identifier getPluginUid() {
         return ExDeorum.loc("jei_plugin");
     }
 

@@ -27,7 +27,6 @@ import net.minecraft.stats.Stats;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -109,7 +108,7 @@ public abstract class AbstractSieveBlockEntity extends EBlockEntity implements S
     }
 
     @Override
-    public ItemInteractionResult useItemOn(Level level, Player player, ItemStack stack, InteractionHand hand) {
+    public InteractionResult useItemOn(Level level, Player player, ItemStack stack, InteractionHand hand) {
         ItemStack playerItem = player.getItemInHand(hand);
         boolean isClientSide = level.isClientSide;
 
@@ -122,9 +121,9 @@ public abstract class AbstractSieveBlockEntity extends EBlockEntity implements S
                     if (!player.getAbilities().instabuild) {
                         playerItem.shrink(1);
                     }
-                    return ItemInteractionResult.CONSUME;
+                    return InteractionResult.CONSUME;
                 } else {
-                    return ItemInteractionResult.SUCCESS;
+                    return InteractionResult.SUCCESS;
                 }
             }
         } else if (this.logic.getContents().isEmpty()) {
@@ -207,7 +206,7 @@ public abstract class AbstractSieveBlockEntity extends EBlockEntity implements S
             }
         }
 
-        return ItemInteractionResult.sidedSuccess(isClientSide);
+        return InteractionResult.SUCCESS;
     }
 
     // search for another stack in inventory and restock held item

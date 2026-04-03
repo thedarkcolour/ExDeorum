@@ -19,7 +19,7 @@
 package thedarkcolour.exdeorum.tag;
 
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import thedarkcolour.exdeorum.ExDeorum;

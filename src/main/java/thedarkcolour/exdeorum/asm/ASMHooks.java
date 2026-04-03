@@ -21,7 +21,7 @@ package thedarkcolour.exdeorum.asm;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.levelgen.presets.WorldPreset;
 import net.minecraft.world.level.levelgen.presets.WorldPresets;
 import net.minecraft.world.level.levelgen.structure.Structure;
@@ -67,7 +67,7 @@ public final class ASMHooks {
      */
     public static ResourceKey<WorldPreset> overrideDefaultWorldPreset() {
         if (ModList.get().isLoaded(ModIds.SKYBLOCK_BUILDER)) {
-            return ResourceKey.create(Registries.WORLD_PRESET, ResourceLocation.fromNamespaceAndPath(ModIds.SKYBLOCK_BUILDER, "skyblock"));
+            return ResourceKey.create(Registries.WORLD_PRESET, Identifier.fromNamespaceAndPath(ModIds.SKYBLOCK_BUILDER, "skyblock"));
         }
         return EConfig.COMMON.setVoidWorldAsDefault.get() ? EWorldPresets.VOID_WORLD : WorldPresets.NORMAL;
     }

@@ -18,11 +18,11 @@
 
 package thedarkcolour.exdeorum.client.screen;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.Nullable;
@@ -32,7 +32,7 @@ import thedarkcolour.exdeorum.config.EConfig;
 import thedarkcolour.exdeorum.data.TranslationKeys;
 
 public class MechanicalHammerScreen extends AbstractContainerScreen<MechanicalHammerMenu> {
-    private static final ResourceLocation BACKGROUND_TEXTURE = ExDeorum.loc("textures/gui/container/mechanical_hammer.png");
+    private static final Identifier BACKGROUND_TEXTURE = ExDeorum.loc("textures/gui/container/mechanical_hammer.png");
 
     public static final int RECIPE_CLICK_AREA_POS_X = 80;
     public static final int RECIPE_CLICK_AREA_POS_Y = 34;
@@ -63,31 +63,29 @@ public class MechanicalHammerScreen extends AbstractContainerScreen<MechanicalHa
     }
 
     @Override
-    protected void renderBg(GuiGraphics graphics, float pPartialTick, int pMouseX, int pMouseY) {
+    public void extractContents(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
         int left = this.leftPos;
         int top = this.topPos;
-        graphics.blit(BACKGROUND_TEXTURE, left, top, 0, 0, this.imageWidth, this.imageHeight);
+        graphics.blit(RenderPipelines.GUI_TEXTURED, BACKGROUND_TEXTURE, left, top, 0, 0, this.imageWidth, this.imageHeight, 256, 256);
 
         // energy bar
         int energy = Mth.floor(54 * ((float) this.menu.prevEnergy / EConfig.SERVER.mechanicalSieveEnergyStorage.get()));
-        graphics.blit(BACKGROUND_TEXTURE, left + 10, top + 15 + 54 - energy, this.imageWidth, 16 + 54 - energy, 12, energy);
+        graphics.blit(RenderPipelines.GUI_TEXTURED, BACKGROUND_TEXTURE, left + 10, top + 15 + 54 - energy, this.imageWidth, 16 + 54 - energy, 12, energy, 256, 256);
 
         // progress arrow
         int progress = Math.min(23, this.menu.machine.getGuiProgress());
-        graphics.blit(BACKGROUND_TEXTURE, left + RECIPE_CLICK_AREA_POS_X, top + RECIPE_CLICK_AREA_POS_Y, this.imageWidth, 0, progress, 16);
-    }
+        graphics.blit(RenderPipelines.GUI_TEXTURED, BACKGROUND_TEXTURE, left + RECIPE_CLICK_AREA_POS_X, top + RECIPE_CLICK_AREA_POS_Y, this.imageWidth, 0, progress, 16, 256, 256);
 
-    @Override
-    public void render(GuiGraphics graphics, int mx, int my, float pPartialTick) {
-        super.render(graphics, mx, my, pPartialTick);
-        renderTooltip(graphics, mx, my);
+        super.extractContents(graphics, mouseX, mouseY, a);
 
-        int rx = mx - this.leftPos;
-        int ry = my - this.topPos;
+        int rx = mouseX - left;
+        int ry = mouseY - top;
 
         if (9 <= rx && rx < 23 && 14 <= ry && ry < 70) {
             var energyTooltip = Component.translatable(TranslationKeys.ENERGY).append(Component.translatable(TranslationKeys.FRACTION_DISPLAY, this.menu.prevEnergy, EConfig.SERVER.mechanicalSieveEnergyStorage.get())).append(" FE");
-            graphics.renderTooltip(Minecraft.getInstance().font, energyTooltip, mx, my);
+            graphics.setTooltipForNextFrame(energyTooltip, mouseX, mouseY);
         }
+
+        extractTooltip(graphics, mouseX, mouseY);
     }
 }

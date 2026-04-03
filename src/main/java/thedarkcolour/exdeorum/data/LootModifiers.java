@@ -1,6 +1,6 @@
 package thedarkcolour.exdeorum.data;
 
-import net.minecraft.advancements.critereon.ItemPredicate;
+import net.minecraft.advancements.criterion.ItemPredicate;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.tags.TagKey;

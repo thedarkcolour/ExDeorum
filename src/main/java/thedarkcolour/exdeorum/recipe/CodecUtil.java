@@ -44,7 +44,7 @@ public class CodecUtil {
     public static final StreamCodec<RegistryFriendlyByteBuf, NumberProvider> NUMBER_PROVIDER_CODEC = StreamCodec.of(RecipeUtil::toNetworkNumberProvider, RecipeUtil::fromNetworkNumberProvider);
 
     public static <T extends SingleIngredientRecipe> App<RecordCodecBuilder.Mu<T>, Ingredient> ingredientField() {
-        return Ingredient.CODEC_NONEMPTY.fieldOf("ingredient").forGetter(SingleIngredientRecipe::ingredient);
+        return Ingredient.CODEC.fieldOf("ingredient").forGetter(SingleIngredientRecipe::ingredient);
     }
 
     public static <T> App<RecordCodecBuilder.Mu<T>, Block> blockField(String name, Function<T, Block> getter) {

@@ -19,37 +19,21 @@
 package thedarkcolour.exdeorum.client.ter;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
-import net.minecraft.world.level.block.Blocks;
-import net.neoforged.neoforge.client.model.data.ModelData;
+import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
 import thedarkcolour.exdeorum.blockentity.InfestedLeavesBlockEntity;
-import thedarkcolour.exdeorum.client.RenderUtil;
-import thedarkcolour.exdeorum.config.EConfig;
 
-public class InfestedLeavesRenderer implements BlockEntityRenderer<InfestedLeavesBlockEntity> {
+// TODO: port InfestedLeavesRenderer to MC 26.x rendering API (BlockEntityRenderer changed to extract/submit pattern)
+public class InfestedLeavesRenderer implements BlockEntityRenderer<InfestedLeavesBlockEntity, BlockEntityRenderState> {
     @Override
-    public void render(InfestedLeavesBlockEntity te, float partialTicks, PoseStack stack, MultiBufferSource buffer, int light, int unused) {
-        if (EConfig.CLIENT.useFastInfestedLeaves.get() || RenderUtil.IRIS_ACCESS.areShadersEnabled()) return;
+    public BlockEntityRenderState createRenderState() {
+        return new BlockEntityRenderState();
+    }
 
-        var mc = Minecraft.getInstance();
-        var state = te.getMimic();
-
-        // Default to oak leaves
-        if (state == null) state = Blocks.OAK_LEAVES.defaultBlockState();
-
-        // If something is wrong skip rendering
-        var level = te.getLevel();
-        if (level == null) {
-            return;
-        }
-
-        // Get infested percentage
-        int progress = Math.min(te.getProgress(), 16000);
-        // Render
-        var model = mc.getBlockRenderer().getBlockModel(state);
-        var pos = te.getBlockPos();
-        mc.getBlockRenderer().getModelRenderer().tesselateBlock(level, model, state, pos, stack, buffer.getBuffer(RenderUtil.TINTED_CUTOUT_MIPPED), false, level.random, state.getSeed(pos), progress, ModelData.EMPTY, null);
+    @Override
+    public void submit(BlockEntityRenderState state, PoseStack stack, SubmitNodeCollector collector, CameraRenderState cameraState) {
+        // TODO: implement infested leaves tinting using new 26.x rendering API
     }
 }

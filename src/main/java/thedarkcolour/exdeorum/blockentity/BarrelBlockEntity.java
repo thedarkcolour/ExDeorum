@@ -29,7 +29,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -211,7 +211,7 @@ public class BarrelBlockEntity extends ETankBlockEntity {
     }
 
     @Override
-    public ItemInteractionResult useItemOn(Level level, Player player, ItemStack stack, InteractionHand hand) {
+    public InteractionResult useItemOn(Level level, Player player, ItemStack stack, InteractionHand hand) {
         // Collect an item
         if (!getItem().isEmpty()) {
             return giveResultItem(level);
@@ -233,7 +233,7 @@ public class BarrelBlockEntity extends ETankBlockEntity {
                     this.progress = 0.0f;
                 }
 
-                return ItemInteractionResult.sidedSuccess(level.isClientSide);
+                return InteractionResult.SUCCESS;
             } else {
                 this.isBeingFilledByPlayer = false;
                 // try one more time to transfer fluids between item and barrel
@@ -250,14 +250,14 @@ public class BarrelBlockEntity extends ETankBlockEntity {
                             level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.BOTTLE_FILL, SoundSource.NEUTRAL, 1.0F, 1.0F);
 
                             markUpdated();
-                            return ItemInteractionResult.sidedSuccess(level.isClientSide);
+                            return InteractionResult.SUCCESS;
                         }
                     } else if (playerItem.getItem() == Items.GLASS_BOTTLE) {
                         if (this.tank.drain(fluid, IFluidHandler.FluidAction.SIMULATE).getAmount() == 250) {
                             extractWaterBottle(this.tank, level, player, playerItem, fluid);
 
                             markUpdated();
-                            return ItemInteractionResult.sidedSuccess(level.isClientSide);
+                            return InteractionResult.SUCCESS;
                         }
                     }
                 }
@@ -280,7 +280,7 @@ public class BarrelBlockEntity extends ETankBlockEntity {
                             }
                         }
                         // If a mix was successful, skip rest of logic
-                        return ItemInteractionResult.sidedSuccess(level.isClientSide);
+                        return InteractionResult.SUCCESS;
                     }
                 }
             }
@@ -298,7 +298,7 @@ public class BarrelBlockEntity extends ETankBlockEntity {
             }
         }
 
-        return ItemInteractionResult.sidedSuccess(level.isClientSide);
+        return InteractionResult.SUCCESS;
     }
 
     // Also used by Water Crucibles
@@ -316,7 +316,7 @@ public class BarrelBlockEntity extends ETankBlockEntity {
     }
 
     // Pops the item out of the barrel (ex. dirt that has finished composting)
-    private ItemInteractionResult giveResultItem(Level level) {
+    private InteractionResult giveResultItem(Level level) {
         if (!level.isClientSide) {
             popOutItem(level, this.worldPosition, this.item.extract(false));
 
@@ -325,7 +325,7 @@ public class BarrelBlockEntity extends ETankBlockEntity {
             markUpdated();
         }
 
-        return ItemInteractionResult.sidedSuccess(level.isClientSide);
+        return InteractionResult.SUCCESS;
     }
 
     private static void popOutItem(Level level, BlockPos pos, ItemStack stack) {
@@ -370,7 +370,7 @@ public class BarrelBlockEntity extends ETankBlockEntity {
             return false;
         }
 
-        var recipe = RecipeUtil.getBarrelMixingRecipe(this.level.getRecipeManager(), playerItem, this.tank.getFluid());
+        var recipe = RecipeUtil.getBarrelMixingRecipe(playerItem, this.tank.getFluid());
 
         if (recipe != null) {
             if (!simulate) {

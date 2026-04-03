@@ -18,7 +18,7 @@
 
 package thedarkcolour.exdeorum.recipe.cache;
 
-import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeMap;
 import net.minecraft.world.level.material.Fluid;
 import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelFluidMixingRecipe;
@@ -29,11 +29,11 @@ import java.util.Map;
 
 // for now, only simple recipes
 public class BarrelFluidMixingRecipeCache {
-    private RecipeManager recipeManager;
+    private RecipeMap recipeManager;
     @Nullable
     private Map<Fluid, Map<Fluid, BarrelFluidMixingRecipe>> recipes;
 
-    public BarrelFluidMixingRecipeCache(RecipeManager recipeManager) {
+    public BarrelFluidMixingRecipeCache(RecipeMap recipeManager) {
         this.recipeManager = recipeManager;
     }
 

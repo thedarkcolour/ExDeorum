@@ -19,25 +19,21 @@
 package thedarkcolour.exdeorum.item;
 
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.MilkBucketItem;
 import net.minecraft.world.level.Level;
 import thedarkcolour.exdeorum.registry.EItems;
 
-public class PorcelainMilkBucket extends MilkBucketItem {
+public class PorcelainMilkBucket extends Item {
     public PorcelainMilkBucket(Properties properties) {
         super(properties);
     }
 
     @Override
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity living) {
-        var ret = super.finishUsingItem(new ItemStack(Items.MILK_BUCKET), level, living);
-
-        if (ret.getItem() == Items.BUCKET) {
-            return new ItemStack(EItems.PORCELAIN_BUCKET.get());
-        } else {
-            return stack;
+        if (!level.isClientSide) {
+            living.removeAllEffects();
         }
+        return new ItemStack(EItems.PORCELAIN_BUCKET.get());
     }
 }

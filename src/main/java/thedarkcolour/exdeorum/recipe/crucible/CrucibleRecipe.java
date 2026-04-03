@@ -77,12 +77,12 @@ public abstract class CrucibleRecipe extends SingleIngredientRecipe {
         }
 
         @Override
-        public RecipeSerializer<?> getSerializer() {
+        public RecipeSerializer<Lava> getSerializer() {
             return ERecipeSerializers.LAVA_CRUCIBLE.get();
         }
 
         @Override
-        public RecipeType<?> getType() {
+        public RecipeType<CrucibleRecipe> getType() {
             return ERecipeTypes.LAVA_CRUCIBLE.get();
         }
     }
@@ -96,25 +96,14 @@ public abstract class CrucibleRecipe extends SingleIngredientRecipe {
         }
 
         @Override
-        public RecipeSerializer<?> getSerializer() {
+        public RecipeSerializer<Water> getSerializer() {
             return ERecipeSerializers.WATER_CRUCIBLE.get();
         }
 
         @Override
-        public RecipeType<?> getType() {
+        public RecipeType<CrucibleRecipe> getType() {
             return ERecipeTypes.WATER_CRUCIBLE.get();
         }
     }
 
-    public record Serializer<R extends CrucibleRecipe>(MapCodec<R> recipeCodec, StreamCodec<RegistryFriendlyByteBuf, R> streamCodec) implements RecipeSerializer<R> {
-        @Override
-        public MapCodec<R> codec() {
-            return this.recipeCodec;
-        }
-
-        @Override
-        public StreamCodec<RegistryFriendlyByteBuf, R> streamCodec() {
-            return this.streamCodec;
-        }
-    }
 }

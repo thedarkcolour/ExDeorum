@@ -18,15 +18,16 @@
 
 package thedarkcolour.exdeorum.registry;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;
+import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.loot.SummationGenerator;
 
 public class ENumberProviders {
-    public static final DeferredRegister<LootNumberProviderType> NUMBER_PROVIDERS = DeferredRegister.create(Registries.LOOT_NUMBER_PROVIDER_TYPE, ExDeorum.ID);
+    public static final DeferredRegister<MapCodec<? extends NumberProvider>> NUMBER_PROVIDERS = DeferredRegister.create(Registries.LOOT_NUMBER_PROVIDER_TYPE, ExDeorum.ID);
 
-    public static final DeferredHolder<LootNumberProviderType, LootNumberProviderType> SUMMATION = NUMBER_PROVIDERS.register("summation", () -> new LootNumberProviderType(SummationGenerator.CODEC));
+    public static final DeferredHolder<MapCodec<? extends NumberProvider>, MapCodec<SummationGenerator>> SUMMATION = NUMBER_PROVIDERS.register("summation", () -> SummationGenerator.CODEC);
 }

@@ -24,7 +24,7 @@ import dev.emi.emi.api.render.EmiTexture;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import thedarkcolour.exdeorum.compat.XeiUtil;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelFluidMixingRecipe;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelMixingRecipe;
@@ -37,7 +37,7 @@ abstract class BarrelMixingEmiRecipe extends EEmiRecipe {
     private final List<EmiIngredient> inputs;
     private final List<EmiStack> outputs;
 
-    public BarrelMixingEmiRecipe(EmiIngredient base, EmiIngredient additive, List<EmiStack> outputs, ResourceLocation id) {
+    public BarrelMixingEmiRecipe(EmiIngredient base, EmiIngredient additive, List<EmiStack> outputs, Identifier id) {
         super(id);
 
         this.base = base;
@@ -77,7 +77,7 @@ abstract class BarrelMixingEmiRecipe extends EEmiRecipe {
     }
 
     static class Items extends BarrelMixingEmiRecipe {
-        public Items(BarrelMixingRecipe recipe, ResourceLocation id) {
+        public Items(BarrelMixingRecipe recipe, Identifier id) {
             super(NeoForgeEmiIngredient.of(recipe.fluid), EmiIngredient.of(recipe.ingredient), EmiUtil.outputs(recipe.result), id);
         }
 
@@ -88,7 +88,7 @@ abstract class BarrelMixingEmiRecipe extends EEmiRecipe {
     }
 
     static class Fluids extends BarrelMixingEmiRecipe {
-        public Fluids(BarrelFluidMixingRecipe recipe, ResourceLocation id) {
+        public Fluids(BarrelFluidMixingRecipe recipe, Identifier id) {
             super(NeoForgeEmiIngredient.of(recipe.baseFluid()), NeoForgeEmiIngredient.of(recipe.additiveFluid()), EmiUtil.outputs(recipe.result()), id);
         }
 

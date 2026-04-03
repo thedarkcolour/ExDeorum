@@ -19,7 +19,7 @@
 package thedarkcolour.exdeorum.data;
 
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.client.model.generators.BlockModelBuilder;
@@ -263,9 +263,9 @@ class BlockModels {
                 .texture("side", texture);
     }
 
-    private static ResourceLocation texture(Block block, String prefix, String suffix) {
+    private static Identifier texture(Block block, String prefix, String suffix) {
         var key = Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(block));
-        return ResourceLocation.fromNamespaceAndPath(key.getNamespace(), "block/" + prefix + key.getPath() + suffix);
+        return Identifier.fromNamespaceAndPath(key.getNamespace(), "block/" + prefix + key.getPath() + suffix);
     }
 
     public static void barrel(MKBlockModelProvider models, Block block, Block appearance) {

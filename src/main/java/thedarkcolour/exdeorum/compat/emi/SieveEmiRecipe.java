@@ -26,7 +26,7 @@ import dev.emi.emi.api.widget.SlotWidget;
 import dev.emi.emi.api.widget.WidgetHolder;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
@@ -56,7 +56,7 @@ abstract class SieveEmiRecipe extends EEmiRecipe {
         this.outputs = outputs.build();
     }
 
-    private static ResourceLocation determineId(XeiSieveRecipe recipe) {
+    private static Identifier determineId(XeiSieveRecipe recipe) {
         Item mesh = recipe.mesh().getItem();
         int hashCode = Arrays.hashCode(Arrays.stream(recipe.ingredient().getItems())
                 .map(ItemStack::getItem)

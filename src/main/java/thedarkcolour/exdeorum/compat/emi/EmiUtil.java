@@ -24,7 +24,7 @@ import dev.emi.emi.api.neoforge.NeoForgeEmiStack;
 import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -74,7 +74,7 @@ class EmiUtil {
         return ImmutableList.of();
     }
 
-    public static <C extends RecipeInput, R extends Recipe<C>> void addAll(EmiRegistry registry, Supplier<RecipeType<R>> type, BiFunction<R, ResourceLocation, ? extends EmiRecipe> factory) {
+    public static <C extends RecipeInput, R extends Recipe<C>> void addAll(EmiRegistry registry, Supplier<RecipeType<R>> type, BiFunction<R, Identifier, ? extends EmiRecipe> factory) {
         for (var holder : registry.getRecipeManager().byType(type.get())) {
             registry.addRecipe(factory.apply(holder.value(), holder.id()));
         }

@@ -18,7 +18,7 @@
 
 package thedarkcolour.exdeorum.data;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -213,15 +213,15 @@ public class ModCompatData {
             MAPLE_LOG_ITEM = item(ModIds.BLUE_SKIES, "maple_log"),
             CRYSTALLIZED_LOG_ITEM = item(ModIds.BLUE_SKIES, "crystallized_log");
 
-    public static final ResourceLocation[] PAMS_CROPS;
+    public static final Identifier[] PAMS_CROPS;
 
     static {
         // copy and pasted from the GitHub
         String[] names = { "pamagavecrop", "pamamaranthcrop", "pamarrowrootcrop", "pamartichokecrop", "pamasparaguscrop", "pambarleycrop", "pambeancrop", "pambellpeppercrop", "pamblackberrycrop", "pamblueberrycrop", "pambroccolicrop", "pambrusselsproutcrop", "pamcabbagecrop", "pamcactusfruitcrop", "pamcandleberrycrop", "pamcantaloupecrop", "pamcassavacrop", "pamcauliflowercrop", "pamcelerycrop", "pamchickpeacrop", "pamchilipeppercrop", "pamcoffeebeancrop", "pamcorncrop", "pamcottoncrop", "pamcranberrycrop", "pamcucumbercrop", "pameggplantcrop", "pamelderberrycrop", "pamflaxcrop", "pamgarliccrop", "pamgingercrop", "pamgrapecrop", "pamgreengrapecrop", "pamhuckleberrycrop", "pamjicamacrop", "pamjuniperberrycrop", "pamjutecrop", "pamkalecrop", "pamkenafcrop", "pamkiwicrop", "pamkohlrabicrop", "pamleekcrop", "pamlentilcrop", "pamlettucecrop", "pammilletcrop", "pammulberrycrop", "pammustardseedscrop", "pamoatscrop", "pamokracrop", "pamonioncrop", "pamparsnipcrop", "pampeanutcrop", "pampeascrop", "pampineapplecrop", "pamquinoacrop", "pamradishcrop", "pamraspberrycrop", "pamrhubarbcrop", "pamricecrop", "pamrutabagacrop", "pamryecrop", "pamscallioncrop", "pamsesameseedscrop", "pamsisalcrop", "pamsoybeancrop", "pamspiceleafcrop", "pamspinachcrop", "pamstrawberrycrop", "pamsweetpotatocrop", "pamtarocrop", "pamtealeafcrop", "pamtomatillocrop", "pamtomatocrop", "pamturnipcrop", "pamwaterchestnutcrop", "pamwhitemushroomcrop", "pamwintersquashcrop", "pamzucchinicrop"};
-        PAMS_CROPS = new ResourceLocation[names.length];
+        PAMS_CROPS = new Identifier[names.length];
 
         for (int i = 0, namesLength = names.length; i < namesLength; i++) {
-            PAMS_CROPS[i] = ResourceLocation.fromNamespaceAndPath(ModIds.PAMS_HARVESTCRAFT_CROPS, names[i]);
+            PAMS_CROPS[i] = Identifier.fromNamespaceAndPath(ModIds.PAMS_HARVESTCRAFT_CROPS, names[i]);
         }
     }
 

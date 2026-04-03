@@ -18,7 +18,7 @@
 
 package thedarkcolour.exdeorum.event;
 
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -26,14 +26,14 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.features.TreeFeatures;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.Unit;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -49,7 +49,7 @@ import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.client.event.ClientChatEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.NeoForgeMod;
-import net.neoforged.neoforge.event.AddReloadListenerEvent;
+import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.level.LevelEvent;
 import net.neoforged.neoforge.event.server.ServerStoppingEvent;
@@ -125,7 +125,7 @@ public final class EventHandler {
             // grow tree, has 5% chance to spawn bees based on world seed
             var configuredFeatureRegistry = level.registryAccess().registryOrThrow(Registries.CONFIGURED_FEATURE);
             var defaultTreeFeature = TreeFeatures.OAK_BEES_005;
-            var defaultTreeFeatureLoc = ResourceLocation.tryParse(EConfig.SERVER.defaultSpawnTreeFeature.get());
+            var defaultTreeFeatureLoc = Identifier.tryParse(EConfig.SERVER.defaultSpawnTreeFeature.get());
 
             Holder<ConfiguredFeature<?, ?>> holder = configuredFeatureRegistry.getHolder(defaultTreeFeature).orElse(null);
 
@@ -193,7 +193,7 @@ public final class EventHandler {
             // tries to account for other SkyBlock generator mods like SkyBlockBuilder
             if (generator instanceof VoidChunkGenerator || generator.getClass().getName().toLowerCase(Locale.ROOT).contains("skyblock")) {
                 NetworkHandler.sendVoidWorld(player);
-                var advancement = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(ExDeorum.ID, "core/root"));
+                var advancement = player.server.getAdvancements().get(Identifier.fromNamespaceAndPath(ExDeorum.ID, "core/root"));
 
                 if (advancement != null) {
                     if (!player.getAdvancements().getOrStartProgress(advancement).isDone()) {
@@ -209,10 +209,6 @@ public final class EventHandler {
                     ExDeorum.LOGGER.error("Unable to grant player the Void World advancement. Ex Deorum advancements will not show");
                 }
             }
-        } else {
-            if (Minecraft.getInstance().getConnection() != null) {
-                RecipeUtil.reload(Minecraft.getInstance().getConnection().getRecipeManager());
-            }
         }
     }
 
@@ -227,11 +223,11 @@ public final class EventHandler {
         }
     }
 
-    private static void addReloadListeners(AddReloadListenerEvent event) {
-        var recipes = event.getServerResources().getRecipeManager();
-        event.addListener((prepBarrier, resourceManager, prepProfiler, reloadProfiler, backgroundExecutor, gameExecutor) -> {
+    private static void addReloadListeners(AddServerReloadListenersEvent event) {
+        var recipeMap = event.getServerResources().getRecipeManager().recipeMap();
+        event.addListener(ExDeorum.loc("recipes"), (prepBarrier, resourceManager, prepProfiler, reloadProfiler, backgroundExecutor, gameExecutor) -> {
             return prepBarrier.wait(Unit.INSTANCE).thenRunAsync(() -> {
-                RecipeUtil.reload(recipes);
+                RecipeUtil.reload(recipeMap);
             }, gameExecutor);
         });
     }

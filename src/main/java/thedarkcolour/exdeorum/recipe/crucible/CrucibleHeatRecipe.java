@@ -21,11 +21,13 @@ package thedarkcolour.exdeorum.recipe.crucible;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.PlacementInfo;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeBookCategories;
+import net.minecraft.world.item.crafting.RecipeBookCategory;
 import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -47,27 +49,37 @@ public record CrucibleHeatRecipe(BlockPredicate blockPredicate, int heatValue) i
     }
 
     @Override
-    public ItemStack assemble(RecipeInput input, HolderLookup.Provider registries) {
+    public ItemStack assemble(RecipeInput input) {
         return ItemStack.EMPTY;
     }
 
     @Override
-    public boolean canCraftInDimensions(int width, int height) {
+    public boolean showNotification() {
         return false;
     }
 
     @Override
-    public ItemStack getResultItem(HolderLookup.Provider registries) {
-        return ItemStack.EMPTY;
+    public String group() {
+        return "";
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public PlacementInfo placementInfo() {
+        return PlacementInfo.NOT_PLACEABLE;
+    }
+
+    @Override
+    public RecipeBookCategory recipeBookCategory() {
+        return RecipeBookCategories.CRAFTING_MISC;
+    }
+
+    @Override
+    public RecipeSerializer<CrucibleHeatRecipe> getSerializer() {
         return ERecipeSerializers.CRUCIBLE_HEAT_SOURCE.get();
     }
 
     @Override
-    public RecipeType<?> getType() {
+    public RecipeType<CrucibleHeatRecipe> getType() {
         return ERecipeTypes.CRUCIBLE_HEAT_SOURCE.get();
     }
 
@@ -82,15 +94,4 @@ public record CrucibleHeatRecipe(BlockPredicate blockPredicate, int heatValue) i
         return new CrucibleHeatRecipe(blockPredicate, heatValue);
     }
 
-    public static class Serializer implements RecipeSerializer<CrucibleHeatRecipe> {
-        @Override
-        public MapCodec<CrucibleHeatRecipe> codec() {
-            return CODEC;
-        }
-
-        @Override
-        public StreamCodec<RegistryFriendlyByteBuf, CrucibleHeatRecipe> streamCodec() {
-            return STREAM_CODEC;
-        }
-    }
 }

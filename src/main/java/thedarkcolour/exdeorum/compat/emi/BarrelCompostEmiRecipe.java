@@ -23,7 +23,7 @@ import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import thedarkcolour.exdeorum.data.TranslationKeys;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelCompostRecipe;
 
@@ -33,7 +33,7 @@ class BarrelCompostEmiRecipe extends EEmiRecipe {
     private final List<EmiIngredient> inputs;
     private final int volume;
 
-    public BarrelCompostEmiRecipe(BarrelCompostRecipe recipe, ResourceLocation id) {
+    public BarrelCompostEmiRecipe(BarrelCompostRecipe recipe, Identifier id) {
         super(id);
 
         this.inputs = EmiUtil.inputs(recipe);

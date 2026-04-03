@@ -20,7 +20,6 @@ package thedarkcolour.exdeorum.recipe;
 
 import com.mojang.datafixers.Products;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
@@ -42,11 +41,6 @@ public abstract class ProbabilityRecipe extends SingleIngredientRecipe {
                 ItemStack.CODEC.fieldOf("result").forGetter(ProbabilityRecipe::result),
                 NumberProviders.CODEC.fieldOf("result_amount").forGetter(ProbabilityRecipe::resultAmount)
         );
-    }
-
-    @Override
-    public ItemStack getResultItem(HolderLookup.Provider access) {
-        return this.result;
     }
 
     public ItemStack result() {

@@ -23,7 +23,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.WorldGenRegion;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.LevelHeightAccessor;
@@ -62,8 +62,8 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
         super(biomeSource, settings);
         this.settings = settings;
         this.allowedStructureSets = allowedStructureSets;
-        this.generateNormal = (settings.is(ResourceLocation.parse("minecraft:end")) && !EConfig.COMMON.voidEndGeneration.get()) || (settings.is(ResourceLocation.parse("minecraft:nether")) && !EConfig.COMMON.voidNetherGeneration.get());
-        this.allowBiomeDecoration = !settings.is(ResourceLocation.parse("minecraft:overworld"));
+        this.generateNormal = (settings.is(Identifier.parse("minecraft:end")) && !EConfig.COMMON.voidEndGeneration.get()) || (settings.is(Identifier.parse("minecraft:nether")) && !EConfig.COMMON.voidNetherGeneration.get());
+        this.allowBiomeDecoration = !settings.is(Identifier.parse("minecraft:overworld"));
     }
 
     @Override
@@ -72,9 +72,9 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
     }
 
     @Override
-    public void applyCarvers(WorldGenRegion pLevel, long pSeed, RandomState pRandom, BiomeManager pBiomeManager, StructureManager pStructureManager, ChunkAccess pChunk, GenerationStep.Carving pStep) {
+    public void applyCarvers(WorldGenRegion pLevel, long pSeed, RandomState pRandom, BiomeManager pBiomeManager, StructureManager pStructureManager, ChunkAccess pChunk) {
         if (this.generateNormal) {
-            super.applyCarvers(pLevel, pSeed, pRandom, pBiomeManager, pStructureManager, pChunk, pStep);
+            super.applyCarvers(pLevel, pSeed, pRandom, pBiomeManager, pStructureManager, pChunk);
         }
     }
 

@@ -18,15 +18,16 @@
 
 package thedarkcolour.exdeorum.registry;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.loot.MachineLootFunction;
 
 public class ELootFunctions {
-    public static final DeferredRegister<LootItemFunctionType<?>> LOOT_FUNCTIONS = DeferredRegister.create(Registries.LOOT_FUNCTION_TYPE, ExDeorum.ID);
+    public static final DeferredRegister<MapCodec<? extends LootItemFunction>> LOOT_FUNCTIONS = DeferredRegister.create(Registries.LOOT_FUNCTION_TYPE, ExDeorum.ID);
 
-    public static final DeferredHolder<LootItemFunctionType<?>, LootItemFunctionType<MachineLootFunction>> MACHINE = LOOT_FUNCTIONS.register("machine", () -> new LootItemFunctionType<>(MachineLootFunction.CODEC));
+    public static final DeferredHolder<MapCodec<? extends LootItemFunction>, MapCodec<MachineLootFunction>> MACHINE = LOOT_FUNCTIONS.register("machine", () -> MachineLootFunction.CODEC);
 }

@@ -19,7 +19,7 @@
 package thedarkcolour.exdeorum.menu;
 
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.DataSlot;
@@ -31,7 +31,7 @@ import thedarkcolour.exdeorum.registry.EMenus;
 import thedarkcolour.exdeorum.tag.EItemTags;
 
 public class MechanicalHammerMenu extends AbstractMachineMenu<MechanicalHammerBlockEntity> {
-    private static final ResourceLocation EMPTY_SLOT_HAMMER = ExDeorum.loc("item/empty_slot_hammer");
+    private static final Identifier EMPTY_SLOT_HAMMER = ExDeorum.loc("item/empty_slot_hammer");
     private static final int NUM_SLOTS = 3;
 
     public MechanicalHammerMenu(int containerId, Inventory playerInventory, FriendlyByteBuf data) {

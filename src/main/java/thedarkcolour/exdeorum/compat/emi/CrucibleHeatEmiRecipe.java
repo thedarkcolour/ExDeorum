@@ -24,7 +24,7 @@ import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.TextWidget;
 import dev.emi.emi.api.widget.WidgetHolder;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.state.BlockState;
 import thedarkcolour.exdeorum.compat.XeiUtil;
 import thedarkcolour.exdeorum.data.TranslationKeys;
@@ -39,7 +39,7 @@ class CrucibleHeatEmiRecipe extends EEmiRecipe {
     private final BlockPredicate predicate;
     private final int heatValue;
 
-    public CrucibleHeatEmiRecipe(CrucibleHeatRecipe recipe, ResourceLocation id) {
+    public CrucibleHeatEmiRecipe(CrucibleHeatRecipe recipe, Identifier id) {
         super(id);
 
         this.inputs = EmiUtil.inputs(recipe.blockPredicate());

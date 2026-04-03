@@ -21,17 +21,17 @@ package thedarkcolour.exdeorum.recipe.cache;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectSet;
-import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeMap;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.registry.ERecipeTypes;
 
 public class CrucibleHeatRecipeCache {
-    private RecipeManager recipeManager;
+    private RecipeMap recipeManager;
     @Nullable
     private Object2IntMap<BlockState> recipes;
 
-    public CrucibleHeatRecipeCache(RecipeManager recipeManager) {
+    public CrucibleHeatRecipeCache(RecipeMap recipeManager) {
         this.recipeManager = recipeManager;
     }
 

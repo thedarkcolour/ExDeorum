@@ -16,6 +16,5 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-@net.minecraft.MethodsReturnNonnullByDefault
 @javax.annotation.ParametersAreNonnullByDefault
 package thedarkcolour.exdeorum.recipe;

@@ -20,7 +20,6 @@ package thedarkcolour.exdeorum.recipe.barrel;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
@@ -73,17 +72,12 @@ public class BarrelMixingRecipe extends SingleIngredientRecipe {
     }
 
     @Override
-    public ItemStack getResultItem(HolderLookup.Provider access) {
-        return this.result;
-    }
-
-    @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<BarrelMixingRecipe> getSerializer() {
         return ERecipeSerializers.BARREL_MIXING.get();
     }
 
     @Override
-    public RecipeType<?> getType() {
+    public RecipeType<BarrelMixingRecipe> getType() {
         return ERecipeTypes.BARREL_MIXING.get();
     }
 
@@ -101,15 +95,4 @@ public class BarrelMixingRecipe extends SingleIngredientRecipe {
         return new BarrelMixingRecipe(ingredient, fluid, result);
     }
 
-    public static class Serializer implements RecipeSerializer<BarrelMixingRecipe> {
-        @Override
-        public MapCodec<BarrelMixingRecipe> codec() {
-            return CODEC;
-        }
-
-        @Override
-        public StreamCodec<RegistryFriendlyByteBuf, BarrelMixingRecipe> streamCodec() {
-            return STREAM_CODEC;
-        }
-    }
 }

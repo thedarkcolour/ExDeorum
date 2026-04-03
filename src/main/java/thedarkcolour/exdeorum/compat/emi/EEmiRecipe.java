@@ -19,18 +19,18 @@
 package thedarkcolour.exdeorum.compat.emi;
 
 import dev.emi.emi.api.recipe.EmiRecipe;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.Nullable;
 
 abstract class EEmiRecipe implements EmiRecipe {
-    protected final ResourceLocation id;
+    protected final Identifier id;
 
-    EEmiRecipe(ResourceLocation id) {
+    EEmiRecipe(Identifier id) {
         this.id = id;
     }
 
     @Override
-    public @Nullable ResourceLocation getId() {
+    public @Nullable Identifier getId() {
         return this.id;
     }
 }

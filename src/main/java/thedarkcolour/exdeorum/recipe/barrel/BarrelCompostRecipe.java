@@ -51,12 +51,12 @@ public class BarrelCompostRecipe extends SingleIngredientRecipe {
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<BarrelCompostRecipe> getSerializer() {
         return ERecipeSerializers.BARREL_COMPOST.get();
     }
 
     @Override
-    public RecipeType<?> getType() {
+    public RecipeType<BarrelCompostRecipe> getType() {
         return ERecipeTypes.BARREL_COMPOST.get();
     }
 
@@ -72,15 +72,4 @@ public class BarrelCompostRecipe extends SingleIngredientRecipe {
         return new BarrelCompostRecipe(ingredient, volume);
     }
 
-    public static class Serializer implements RecipeSerializer<BarrelCompostRecipe> {
-        @Override
-        public MapCodec<BarrelCompostRecipe> codec() {
-            return CODEC;
-        }
-
-        @Override
-        public StreamCodec<RegistryFriendlyByteBuf, BarrelCompostRecipe> streamCodec() {
-            return STREAM_CODEC;
-        }
-    }
 }

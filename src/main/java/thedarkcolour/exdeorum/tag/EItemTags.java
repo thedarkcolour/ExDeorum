@@ -18,7 +18,7 @@
 
 package thedarkcolour.exdeorum.tag;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -66,6 +66,6 @@ public class EItemTags {
     }
 
     public static TagKey<Item> commonTag(String name) {
-        return ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", name));
+        return ItemTags.create(Identifier.fromNamespaceAndPath("c", name));
     }
 }

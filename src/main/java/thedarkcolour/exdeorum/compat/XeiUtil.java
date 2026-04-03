@@ -22,7 +22,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonObject;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.ChatFormatting;
-import net.minecraft.advancements.critereon.StatePropertiesPredicate;
+import net.minecraft.advancements.criterion.StatePropertiesPredicate;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.Block;

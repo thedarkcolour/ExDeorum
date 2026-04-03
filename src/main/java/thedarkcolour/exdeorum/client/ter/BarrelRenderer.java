@@ -19,120 +19,26 @@
 package thedarkcolour.exdeorum.client.ter;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Axis;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.BlockRenderDispatcher;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
-import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.client.renderer.entity.ItemRenderer;
-import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
-import net.minecraft.world.inventory.InventoryMenu;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.ItemDisplayContext;
-import net.neoforged.neoforge.client.model.data.ModelData;
+import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
+import net.minecraft.resources.Identifier;
 import thedarkcolour.exdeorum.ExDeorum;
-import thedarkcolour.exdeorum.block.BarrelBlock;
 import thedarkcolour.exdeorum.blockentity.BarrelBlockEntity;
-import thedarkcolour.exdeorum.client.RenderUtil;
-import thedarkcolour.exdeorum.config.EConfig;
 
-import java.util.Objects;
+// TODO: port BarrelRenderer to MC 26.x rendering API (BlockEntityRenderer changed to extract/submit pattern,
+//       BlockRenderDispatcher/ItemRenderer removed, fluid color/texture APIs changed)
+public class BarrelRenderer implements BlockEntityRenderer<BarrelBlockEntity, BlockEntityRenderState> {
+    public static final Identifier COMPOST_DIRT_TEXTURE = ExDeorum.loc("block/compost_dirt");
 
-public class BarrelRenderer implements BlockEntityRenderer<BarrelBlockEntity> {
-    public static final ResourceLocation COMPOST_DIRT_TEXTURE = ExDeorum.loc("block/compost_dirt");
-    private final BlockRenderDispatcher blockRenderer;
-    private final ItemRenderer itemRenderer;
-
-    public BarrelRenderer(BlockEntityRendererProvider.Context ctx) {
-        this.blockRenderer = ctx.getBlockRenderDispatcher();
-        this.itemRenderer = ctx.getItemRenderer();
+    @Override
+    public BlockEntityRenderState createRenderState() {
+        return new BlockEntityRenderState();
     }
 
     @Override
-    public void render(BarrelBlockEntity barrel, float partialTicks, PoseStack stack, MultiBufferSource buffers, int light, int overlay) {
-        var item = barrel.getItem();
-
-        // render an output
-        if (item.getItem() instanceof BlockItem blockItem) {
-            var block = blockItem.getBlock();
-            var state = block.defaultBlockState();
-
-            stack.pushPose();
-            stack.translate(2 / 16f, 2 / 16f, 2 / 16f);
-            stack.scale(12 / 16f, 12 / 16f, 12 / 16f);
-
-            //noinspection DataFlowIssue
-            this.blockRenderer.renderSingleBlock(state, stack, buffers, light, overlay, ModelData.EMPTY, null);
-
-            stack.popPose();
-        } else {
-            stack.pushPose();
-            stack.translate(0.5, 1.5 / 16f + (barrel.getTank().getFluidAmount() / 1000f) * 13f / 16f, 0.5);
-            stack.mulPose(Axis.XP.rotation(Mth.HALF_PI));
-            this.itemRenderer.renderStatic(item, ItemDisplayContext.FIXED, light, OverlayTexture.NO_OVERLAY, stack, buffers, null, 0);
-            stack.popPose();
-        }
-
-        var tank = barrel.getTank();
-        var fluidStack = tank.getFluidInTank(0);
-
-        if (!fluidStack.isEmpty()) { // Get texture
-            var fluid = fluidStack.getFluid();
-            var level = Objects.requireNonNull(barrel.getLevel());
-            var pos = barrel.getBlockPos();
-            var percentage = fluidStack.getAmount() / 1000.0f;
-            var y = Mth.lerp(percentage, BarrelBlock.BARREL_FLUID_BOTTOM, BarrelBlock.BARREL_FLUID_TOP);
-            var inputFluidColor = RenderUtil.getFluidColor(fluid, level, pos);
-            // Split into RGB components
-            var r = (inputFluidColor >> 16) & 0xff;
-            var g = (inputFluidColor >> 8) & 0xff;
-            var b = inputFluidColor & 0xff;
-
-            if (barrel.isBrewing()) {
-                float progress = barrel.progress;
-
-                // Transition between water color and witch water color (200B41)
-                r = (int) Mth.lerp(progress, r, barrel.r);
-                g = (int) Mth.lerp(progress, g, barrel.g);
-                b = (int) Mth.lerp(progress, b, barrel.b);
-            }
-
-            if (barrel.transparent) {
-                RenderUtil.renderFluidCube(buffers, stack, level, pos, BarrelBlock.BARREL_FLUID_BOTTOM, y, 2.0f, light, r, g, b, fluid);
-            } else {
-                RenderUtil.renderFlatFluidSprite(buffers, stack, level, pos, y, 2.0f, light, r, g, b, fluid);
-            }
-        }
-
-        // render compost
-        if (barrel.compost > 0) {
-            var sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(COMPOST_DIRT_TEXTURE);
-            var builder = buffers.getBuffer(RenderType.solid());
-
-            float compostProgress = barrel.progress;
-            int r, g, b;
-
-            if (ExDeorum.IS_JUNE && EConfig.CLIENT.rainbowCompostDuringJune.get() && barrel.getLevel() != null) {
-                var rainbow = RenderUtil.getRainbowColor(barrel.getLevel().getGameTime(), partialTicks);
-                r = rainbow.getRed();
-                g = rainbow.getGreen();
-                b = rainbow.getBlue();
-            } else {
-                r = barrel.r;
-                g = barrel.g;
-                b = barrel.b;
-            }
-
-            // Transition between default green and dirt brown
-            r = (int) Mth.lerp(compostProgress, r, 238);  // default green is
-            g = (int) Mth.lerp(compostProgress, g, 169);  // default green is
-            b = (int) Mth.lerp(compostProgress, b, 109);  // default green is
-
-            RenderUtil.renderFlatSpriteLerp(builder, stack, barrel.compost / 1000.0f, r, g, b, sprite, light, 2.0f, BarrelBlock.BARREL_FLUID_BOTTOM * 16f, BarrelBlock.BARREL_FLUID_TOP * 16f);
-        }
+    public void submit(BlockEntityRenderState state, PoseStack stack, SubmitNodeCollector collector, CameraRenderState cameraState) {
+        // TODO: implement barrel fluid/compost/item rendering using new 26.x rendering API
     }
 }

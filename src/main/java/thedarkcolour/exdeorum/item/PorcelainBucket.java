@@ -28,9 +28,8 @@ import net.minecraft.stats.Stats;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.animal.Cow;
+import net.minecraft.world.entity.animal.cow.Cow;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -87,13 +86,13 @@ public class PorcelainBucket extends Item {
         return InteractionResult.PASS;
     }
 
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand pHand) {
+    public InteractionResult use(Level level, Player player, InteractionHand pHand) {
         var stack = player.getItemInHand(pHand);
         var hitResult = getPlayerPOVHitResult(level, player, this.fluid.get() == Fluids.EMPTY ? ClipContext.Fluid.SOURCE_ONLY : ClipContext.Fluid.NONE);
         if (hitResult.getType() == HitResult.Type.MISS) {
-            return InteractionResultHolder.pass(stack);
+            return InteractionResult.PASS;
         } else if (hitResult.getType() != HitResult.Type.BLOCK) {
-            return InteractionResultHolder.pass(stack);
+            return InteractionResult.PASS;
         } else {
             var pos = hitResult.getBlockPos();
             var face = hitResult.getDirection();
@@ -124,12 +123,13 @@ public class PorcelainBucket extends Item {
                                     CriteriaTriggers.FILLED_BUCKET.trigger((ServerPlayer) player, result);
                                 }
 
-                                return InteractionResultHolder.sidedSuccess(filled, level.isClientSide());
+                                var success = level.isClientSide() ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
+                                return success.heldItemTransformedTo(filled);
                             }
                         }
                     }
 
-                    return InteractionResultHolder.fail(stack);
+                    return InteractionResult.FAIL;
                 } else {
                     var state = level.getBlockState(pos);
                     var placePos = canBlockContainFluid(player, level, pos, state) ? pos : relative;
@@ -140,13 +140,14 @@ public class PorcelainBucket extends Item {
                         }
 
                         player.awardStat(Stats.ITEM_USED.get(this));
-                        return InteractionResultHolder.sidedSuccess(getEmptySuccessItem(stack, player), level.isClientSide());
+                        var success = level.isClientSide() ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
+                        return success.heldItemTransformedTo(getEmptySuccessItem(stack, player));
                     } else {
-                        return InteractionResultHolder.fail(stack);
+                        return InteractionResult.FAIL;
                     }
                 }
             } else {
-                return InteractionResultHolder.fail(stack);
+                return InteractionResult.FAIL;
             }
         }
     }

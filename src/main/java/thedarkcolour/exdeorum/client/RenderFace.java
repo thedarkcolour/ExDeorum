@@ -21,7 +21,7 @@ package thedarkcolour.exdeorum.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import it.unimi.dsi.fastutil.Pair;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 
 import java.util.List;

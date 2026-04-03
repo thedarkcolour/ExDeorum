@@ -23,9 +23,9 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -103,8 +103,8 @@ public abstract class AbstractCrucibleBlockEntity extends ETankBlockEntity {
         super.loadAdditional(nbt, registries);
 
         this.tank.readFromNBT(registries, nbt.getCompound("Tank"));
-        this.lastMelted = BuiltInRegistries.BLOCK.get(ResourceLocation.parse(nbt.getString("LastMelted")));
-        this.fluid = BuiltInRegistries.FLUID.get(ResourceLocation.parse(nbt.getString("Fluid")));
+        this.lastMelted = BuiltInRegistries.BLOCK.get(Identifier.parse(nbt.getString("LastMelted")));
+        this.fluid = BuiltInRegistries.FLUID.get(Identifier.parse(nbt.getString("Fluid")));
         this.solids = nbt.getShort("Solids");
 
         updateLight(this.level, this.worldPosition, this.fluid);
@@ -152,11 +152,11 @@ public abstract class AbstractCrucibleBlockEntity extends ETankBlockEntity {
     }
 
     @Override
-    public ItemInteractionResult useItemOn(Level level, Player player, ItemStack stack, InteractionHand hand) {
+    public InteractionResult useItemOn(Level level, Player player, ItemStack stack, InteractionHand hand) {
         var playerItem = player.getItemInHand(hand);
 
         if (playerItem.getCapability(Capabilities.FluidHandler.ITEM) != null) {
-            return FluidUtil.interactWithFluidHandler(player, hand, this.tank) ? ItemInteractionResult.sidedSuccess(level.isClientSide) : ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+            return FluidUtil.interactWithFluidHandler(player, hand, this.tank) ? InteractionResult.SUCCESS : InteractionResult.TRY_WITH_EMPTY_HAND;
         }
 
         if (playerItem.getItem() == Items.GLASS_BOTTLE && this.getType() == EBlockEntities.WATER_CRUCIBLE.get() && EConfig.SERVER.allowWaterBottleTransfer.get()) {
@@ -167,21 +167,21 @@ public abstract class AbstractCrucibleBlockEntity extends ETankBlockEntity {
                     BarrelBlockEntity.extractWaterBottle(this.tank, level, player, playerItem, fluid);
                     markUpdated();
                 }
-                return ItemInteractionResult.sidedSuccess(level.isClientSide);
+                return InteractionResult.SUCCESS;
             }
         } else {
             var result = canInsertItem(playerItem);
 
             if (result == InsertionResult.YES) {
                 if (tryMelt(playerItem, player.getAbilities().instabuild ? playerStack -> {} : playerStack -> playerStack.shrink(1))) {
-                    return ItemInteractionResult.sidedSuccess(level.isClientSide);
+                    return InteractionResult.SUCCESS;
                 }
             } else if (result == InsertionResult.FULL) {
-                return ItemInteractionResult.sidedSuccess(level.isClientSide);
+                return InteractionResult.SUCCESS;
             }
         }
 
-        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        return InteractionResult.TRY_WITH_EMPTY_HAND;
     }
 
     // Gets a crucible recipe, using the cache if possible
@@ -296,7 +296,7 @@ public abstract class AbstractCrucibleBlockEntity extends ETankBlockEntity {
 
                 if (key.getPath().endsWith("sapling")) {
                     try {
-                        overrides.put(item, BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(key.getNamespace(), key.getPath().replace("sapling", "leaves"))));
+                        overrides.put(item, BuiltInRegistries.BLOCK.get(Identifier.fromNamespaceAndPath(key.getNamespace(), key.getPath().replace("sapling", "leaves"))));
                     } catch (Exception ignored) {
                     }
                 }

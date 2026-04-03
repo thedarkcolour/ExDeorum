@@ -26,7 +26,6 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
-import net.neoforged.neoforge.common.EffectCures;
 import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.fluids.FluidStack;
 import thedarkcolour.exdeorum.blockentity.ETankBlockEntity;
@@ -65,7 +64,7 @@ public abstract class ETankBlock extends EBlock {
         } else if (fluidType.getFluidType().canExtinguish(entity)) {
             entity.extinguishFire();
         } else if (entity instanceof LivingEntity living && NeoForgeMod.MILK.isBound() && fluidType == NeoForgeMod.MILK.get()) {
-            living.removeEffectsCuredBy(EffectCures.MILK);
+            living.removeAllEffects();
         }
     }
 }

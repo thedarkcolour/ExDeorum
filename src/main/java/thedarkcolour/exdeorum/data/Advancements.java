@@ -21,14 +21,14 @@ package thedarkcolour.exdeorum.data;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementType;
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.advancements.critereon.ImpossibleTrigger;
+import net.minecraft.advancements.criterion.ImpossibleTrigger;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
+import net.minecraft.data.advancements.AdvancementProvider;
+import net.minecraft.data.advancements.AdvancementSubProvider;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Blocks;
-import net.neoforged.neoforge.common.data.AdvancementProvider;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.material.DefaultMaterials;
 import thedarkcolour.exdeorum.registry.EItems;
@@ -39,21 +39,21 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 import static net.minecraft.advancements.Advancement.Builder.advancement;
-import static net.minecraft.advancements.critereon.InventoryChangeTrigger.TriggerInstance.hasItems;
-import static net.minecraft.advancements.critereon.ItemPredicate.Builder.item;
+import static net.minecraft.advancements.criterion.InventoryChangeTrigger.TriggerInstance.hasItems;
+import static net.minecraft.advancements.criterion.ItemPredicate.Builder.item;
 
 class Advancements extends AdvancementProvider {
-    public Advancements(PackOutput output, CompletableFuture<HolderLookup.Provider> registries, ExistingFileHelper existingFileHelper) {
-        super(output, registries, existingFileHelper, List.of(new CoreAchievements()));
+    public Advancements(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+        super(output, registries, List.of(new CoreAchievements()));
     }
 
-    private static ResourceLocation modLoc(String path) {
-        return ResourceLocation.fromNamespaceAndPath(ExDeorum.ID, path);
+    private static String modLoc(String path) {
+        return Identifier.fromNamespaceAndPath(ExDeorum.ID, path).toString();
     }
 
-    public static class CoreAchievements implements AdvancementGenerator {
+    public static class CoreAchievements implements AdvancementSubProvider {
         @Override
-        public void generate(HolderLookup.Provider registries, Consumer<AdvancementHolder> saver, ExistingFileHelper helper) {
+        public void generate(HolderLookup.Provider registries, Consumer<AdvancementHolder> saver) {
             var root = advancement()
                     .display(
                             Blocks.OAK_SAPLING,
@@ -67,7 +67,7 @@ class Advancements extends AdvancementProvider {
                     )
                     // hardcoded to EventHandler
                     .addCriterion("in_void_world", CriteriaTriggers.IMPOSSIBLE.createCriterion(new ImpossibleTrigger.TriggerInstance()))
-                    .save(saver, modLoc("core/root"), helper);
+                    .save(saver, modLoc("core/root"));
             var crook = advancement()
                     .parent(root)
                     .display(
@@ -81,7 +81,7 @@ class Advancements extends AdvancementProvider {
                             true
                     )
                     .addCriterion("craft_crook", hasItems(item().of(EItemTags.CROOKS).build()))
-                    .save(saver, modLoc("core/crook"), helper);
+                    .save(saver, modLoc("core/crook"));
             var barrel = advancement()
                     .parent(root)
                     .display(
@@ -95,7 +95,7 @@ class Advancements extends AdvancementProvider {
                             true
                     )
                     .addCriterion("has_barrel", hasItems(item().of(EItemTags.BARRELS).build()))
-                    .save(saver, modLoc("core/barrel"), helper);
+                    .save(saver, modLoc("core/barrel"));
             var silkWorm = advancement()
                     .parent(crook)
                     .display(
@@ -109,7 +109,7 @@ class Advancements extends AdvancementProvider {
                             false
                     )
                     .addCriterion("has_silk_worm", hasItems(item().of(EItems.SILKWORM.get()).build()))
-                    .save(saver, modLoc("core/silk_worm"), helper);
+                    .save(saver, modLoc("core/silk_worm"));
             var stringMesh = advancement()
                     .parent(silkWorm)
                     .display(
@@ -123,7 +123,7 @@ class Advancements extends AdvancementProvider {
                             false
                     )
                     .addCriterion("has_string_mesh", hasItems(item().of(EItems.STRING_MESH.get()).build()))
-                    .save(saver, modLoc("core/string_mesh"), helper);
+                    .save(saver, modLoc("core/string_mesh"));
         }
     }
 }

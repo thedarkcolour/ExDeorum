@@ -27,7 +27,7 @@ import dev.latvian.mods.kubejs.recipe.match.ReplacementMatchInfo;
 import dev.latvian.mods.kubejs.script.ScriptType;
 import dev.latvian.mods.rhino.Context;
 import dev.latvian.mods.rhino.util.HideFromJS;
-import net.minecraft.advancements.critereon.StatePropertiesPredicate;
+import net.minecraft.advancements.criterion.StatePropertiesPredicate;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;

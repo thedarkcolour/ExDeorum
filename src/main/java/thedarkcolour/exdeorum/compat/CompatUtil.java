@@ -80,7 +80,7 @@ public class CompatUtil {
     }
 
     public static <C extends RecipeInput, R extends Recipe<C>, T> List<T> collectAllRecipes(RecipeType<R> recipeType, Function<R, T> mapper) {
-        var byType = RecipeUtil.getRecipeManager().byType(recipeType);
+        var byType = RecipeUtil.getRecipeMap().byType(recipeType);
         List<T> recipes = new ObjectArrayList<>(byType.size());
         for (RecipeHolder<R> value : byType) {
             recipes.add(mapper.apply(value.value()));

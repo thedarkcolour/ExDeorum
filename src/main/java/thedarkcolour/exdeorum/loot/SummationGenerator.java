@@ -20,11 +20,10 @@ package thedarkcolour.exdeorum.loot;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
-import thedarkcolour.exdeorum.registry.ENumberProviders;
 
 import java.util.List;
 
@@ -41,7 +40,7 @@ public record SummationGenerator(List<NumberProvider> providers) implements Numb
     }
 
     @Override
-    public LootNumberProviderType getType() {
-        return ENumberProviders.SUMMATION.get();
+    public MapCodec<SummationGenerator> codec() {
+        return CODEC;
     }
 }

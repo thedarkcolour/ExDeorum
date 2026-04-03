@@ -22,7 +22,7 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeMap;
 import net.minecraft.world.item.crafting.RecipeType;
 import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.recipe.SingleIngredientRecipe;
@@ -35,7 +35,7 @@ import java.util.function.Supplier;
 
 public class SingleIngredientRecipeCache<T extends SingleIngredientRecipe> {
     private final Supplier<RecipeType<T>> recipeType;
-    private RecipeManager recipeManager;
+    private RecipeMap recipeManager;
     @Nullable
     private Map<Item, T> simpleRecipes;
     @Nullable
@@ -44,7 +44,7 @@ public class SingleIngredientRecipeCache<T extends SingleIngredientRecipe> {
     private Collection<RecipeHolder<T>> allRecipes;
     private boolean trackAllRecipes;
 
-    public SingleIngredientRecipeCache(RecipeManager recipeManager, Supplier<RecipeType<T>> recipeType) {
+    public SingleIngredientRecipeCache(RecipeMap recipeManager, Supplier<RecipeType<T>> recipeType) {
         this.recipeType = recipeType;
         this.recipeManager = recipeManager;
     }

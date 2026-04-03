@@ -19,53 +19,21 @@
 package thedarkcolour.exdeorum.client.ter;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
-import net.minecraft.util.Mth;
-import thedarkcolour.exdeorum.block.AbstractCrucibleBlock;
+import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
 import thedarkcolour.exdeorum.blockentity.AbstractCrucibleBlockEntity;
-import thedarkcolour.exdeorum.client.RenderUtil;
 
-public class CrucibleRenderer implements BlockEntityRenderer<AbstractCrucibleBlockEntity> {
+// TODO: port CrucibleRenderer to MC 26.x rendering API (BlockEntityRenderer changed to extract/submit pattern)
+public class CrucibleRenderer implements BlockEntityRenderer<AbstractCrucibleBlockEntity, BlockEntityRenderState> {
     @Override
-    public void render(AbstractCrucibleBlockEntity crucible, float partialTicks, PoseStack stack, MultiBufferSource buffers, int light, int overlay) {
-        var tank = crucible.getTank();
-        var level = crucible.getLevel();
-        if (level == null) return;
+    public BlockEntityRenderState createRenderState() {
+        return new BlockEntityRenderState();
+    }
 
-        var fluidStack = tank.getFluidInTank(0);
-
-        // These are percentages
-        var solids = (float) crucible.getSolids() / (float) AbstractCrucibleBlockEntity.MAX_SOLIDS;
-        var liquid = (float) fluidStack.getAmount() / (float) tank.getTankCapacity(0);
-
-        if (solids != 0 || liquid != 0) {
-            var pos = crucible.getBlockPos();
-
-            if (liquid != 0) {
-                var fluid = fluidStack.getFluid();
-                var color = RenderUtil.getFluidColor(fluid, level, pos);
-                var y = Mth.lerp(liquid, AbstractCrucibleBlock.CRUCIBLE_FLUID_BOTTOM, AbstractCrucibleBlock.CRUCIBLE_FLUID_TOP);
-
-                RenderUtil.renderFlatFluidSprite(buffers, stack, level, pos, y, 2.0f, light, (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff, fluid);
-            }
-            if (solids != 0) {
-                // eating my words rn :(
-                var lastMelted = crucible.getLastMelted();
-                if (lastMelted == null) {
-                    lastMelted = crucible.getDefaultMeltBlock();
-                }
-
-                var face = RenderUtil.getTopFaceOrDefault(lastMelted, crucible.getDefaultMeltBlock());
-
-                var color = Minecraft.getInstance().getBlockColors().getColor(lastMelted.defaultBlockState(), level, pos, 0);
-
-                if (color == -1) color = 0xffffff;
-
-                face.renderFlatSpriteLerp(buffers, stack, solids, (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff, light, 2.0f, AbstractCrucibleBlock.CRUCIBLE_FLUID_BOTTOM * 16f, AbstractCrucibleBlock.CRUCIBLE_FLUID_TOP * 16f);
-
-            }
-        }
+    @Override
+    public void submit(BlockEntityRenderState state, PoseStack stack, SubmitNodeCollector collector, CameraRenderState cameraState) {
+        // TODO: implement crucible fluid/solid rendering using new 26.x rendering API
     }
 }

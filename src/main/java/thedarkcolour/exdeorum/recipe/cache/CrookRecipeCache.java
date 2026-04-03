@@ -18,7 +18,7 @@
 
 package thedarkcolour.exdeorum.recipe.cache;
 
-import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeMap;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.recipe.crook.CrookRecipe;
@@ -27,11 +27,11 @@ import thedarkcolour.exdeorum.registry.ERecipeTypes;
 import java.util.*;
 
 public class CrookRecipeCache {
-    private RecipeManager recipeManager;
+    private RecipeMap recipeManager;
     @Nullable
     private Map<BlockState, List<CrookRecipe>> recipes;
 
-    public CrookRecipeCache(RecipeManager recipeManager) {
+    public CrookRecipeCache(RecipeMap recipeManager) {
         this.recipeManager = recipeManager;
     }
 

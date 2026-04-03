@@ -1,7 +1,7 @@
 package thedarkcolour.exdeorum.block;
 
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -67,19 +67,19 @@ public class CompressedBlockType implements ItemLike {
         return this.hasCompressium;
     }
 
-    public ResourceLocation getAtc() {
-        return ResourceLocation.fromNamespaceAndPath(ModIds.ALL_THE_COMPRESSED, BuiltInRegistries.BLOCK.getKey(this.base.get()).getPath() + "_1x");
+    public Identifier getAtc() {
+        return Identifier.fromNamespaceAndPath(ModIds.ALL_THE_COMPRESSED, BuiltInRegistries.BLOCK.getKey(this.base.get()).getPath() + "_1x");
     }
 
-    public ResourceLocation getCompressium() {
-        return ResourceLocation.fromNamespaceAndPath(ModIds.COMPRESSIUM, BuiltInRegistries.BLOCK.getKey(this.base.get()).getPath() + "_1");
+    public Identifier getCompressium() {
+        return Identifier.fromNamespaceAndPath(ModIds.COMPRESSIUM, BuiltInRegistries.BLOCK.getKey(this.base.get()).getPath() + "_1");
     }
 
     public Block getBase() {
         return this.base.get();
     }
 
-    public ResourceLocation getId() {
+    public Identifier getId() {
         return this.block.getId();
     }
 }

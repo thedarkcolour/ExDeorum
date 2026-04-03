@@ -22,7 +22,7 @@ import com.google.common.collect.Lists;
 import it.unimi.dsi.fastutil.Hash;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -66,7 +66,7 @@ public class PreferredOres {
      * @param defaultOre The default ore choice, picked by Ex Deorum based on which mod is the "best" choice according to thedarkcolour.
      */
     private static void putPreferredOre(TagKey<Item> tag, ModConfigSpec.ConfigValue<String> config, Item defaultOre) {
-        var item = BuiltInRegistries.ITEM.get(ResourceLocation.parse(config.get()));
+        var item = BuiltInRegistries.ITEM.get(Identifier.parse(config.get()));
 
         if (item == Items.AIR) {
             item = defaultOre;
@@ -171,11 +171,11 @@ public class PreferredOres {
 
         if (modId != null) {
             if (modId.equals(ModIds.FACTORIUM)) {
-                return BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(modId, "mat_" + path));
+                return BuiltInRegistries.ITEM.get(Identifier.fromNamespaceAndPath(modId, "mat_" + path));
             } else if (modId.equals(ModIds.IMMERSIVE_ENGINEERING)) {
-                return BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(modId, "ore_" + path.substring(0, path.length() - 4)));
+                return BuiltInRegistries.ITEM.get(Identifier.fromNamespaceAndPath(modId, "ore_" + path.substring(0, path.length() - 4)));
             } else {
-                return BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(modId, path));
+                return BuiltInRegistries.ITEM.get(Identifier.fromNamespaceAndPath(modId, path));
             }
         } else {
             return Items.AIR;

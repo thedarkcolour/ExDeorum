@@ -20,7 +20,7 @@ package thedarkcolour.exdeorum.data;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ItemTags;
@@ -62,7 +62,7 @@ class ModTags {
     public static void createBlockTags(MKTagsProvider<Block> tags) {
         var wateringCanTickable = tags.tag(EBlockTags.WATERING_CAN_TICKABLE);
         wateringCanTickable.add(Blocks.GRASS_BLOCK, Blocks.MYCELIUM, Blocks.CRIMSON_FUNGUS, Blocks.WARPED_FUNGUS, Blocks.RED_MUSHROOM, Blocks.BROWN_MUSHROOM, Blocks.CACTUS, Blocks.SUGAR_CANE, Blocks.SWEET_BERRY_BUSH, Blocks.COCOA).addTags(BlockTags.SAPLINGS, BlockTags.NYLIUM, BlockTags.BEE_GROWABLES);
-        for (ResourceLocation path : ModCompatData.PAMS_CROPS) {
+        for (Identifier path : ModCompatData.PAMS_CROPS) {
             wateringCanTickable.addOptional(path);
         }
         tags.tag(EBlockTags.MINEABLE_WITH_HAMMER)
@@ -124,7 +124,7 @@ class ModTags {
         );
 
         // Cyclic adds ONE compressed block :)
-        tags.tag(ECompressedBlocks.COMPRESSED_COBBLESTONE.getTag()).addOptional(ResourceLocation.fromNamespaceAndPath(ModIds.CYCLIC, "compressed_cobblestone"));
+        tags.tag(ECompressedBlocks.COMPRESSED_COBBLESTONE.getTag()).addOptional(Identifier.fromNamespaceAndPath(ModIds.CYCLIC, "compressed_cobblestone"));
 
         for (var variant : ECompressedBlocks.ALL_VARIANTS) {
             var builder = tags.tag(variant.getTag()).add(variant.getItem());
@@ -150,7 +150,7 @@ class ModTags {
     }
 
     public static void createWorldPresetTags(MKTagsProvider<WorldPreset> tags) {
-        tags.tag(net.minecraft.tags.WorldPresetTags.NORMAL).add(ResourceKey.create(Registries.WORLD_PRESET, ResourceLocation.fromNamespaceAndPath(ExDeorum.ID, "void_world")));
+        tags.tag(net.minecraft.tags.WorldPresetTags.NORMAL).add(ResourceKey.create(Registries.WORLD_PRESET, Identifier.fromNamespaceAndPath(ExDeorum.ID, "void_world")));
     }
 
     public static void createFluidTags(MKTagsProvider<Fluid> tags) {

@@ -19,12 +19,12 @@
 package thedarkcolour.exdeorum.item;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -46,7 +46,7 @@ public class RandomResultItem extends Item {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
         var stack = player.getItemInHand(hand);
 
         if (!level.isClientSide) {
@@ -61,9 +61,9 @@ public class RandomResultItem extends Item {
             var newItem = new ItemStack(Util.getRandom(possibleResults, level.random));
             player.getInventory().placeItemBackInInventory(newItem);
 
-            return InteractionResultHolder.consume(stack.isEmpty() ? player.getItemInHand(hand) : stack);
+            return InteractionResult.CONSUME.heldItemTransformedTo(stack.isEmpty() ? player.getItemInHand(hand) : stack);
         }
-        return InteractionResultHolder.success(stack);
+        return InteractionResult.SUCCESS.heldItemTransformedTo(stack);
     }
 
     @Override

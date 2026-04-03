@@ -27,8 +27,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.MinecraftServer;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -36,7 +35,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeMap;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.material.Fluid;
@@ -44,13 +43,9 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.providers.number.*;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.compat.PreferredOres;
-import thedarkcolour.exdeorum.client.ClientsideCode;
 import thedarkcolour.exdeorum.loot.SummationGenerator;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelCompostRecipe;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelFluidMixingRecipe;
@@ -86,8 +81,12 @@ public final class RecipeUtil {
     private static FluidTransformationRecipeCache fluidTransformationRecipeCache;
     private static CrookRecipeCache crookRecipeCache;
     private static CrucibleHeatRecipeCache crucibleHeatRecipeCache;
+    private static List<BarrelMixingRecipe> barrelMixingRecipes;
+    private static RecipeMap currentRecipeMap;
 
-    public static void reload(RecipeManager recipes) {
+    public static void reload(RecipeMap recipes) {
+        currentRecipeMap = recipes;
+        barrelMixingRecipes = recipes.byType(ERecipeTypes.BARREL_MIXING.get()).stream().map(RecipeHolder::value).toList();
         barrelCompostRecipeCache = new SingleIngredientRecipeCache<>(recipes, ERecipeTypes.BARREL_COMPOST);
         lavaCrucibleRecipeCache = new SingleIngredientRecipeCache<>(recipes, ERecipeTypes.LAVA_CRUCIBLE);
         waterCrucibleRecipeCache = new SingleIngredientRecipeCache<>(recipes, ERecipeTypes.WATER_CRUCIBLE);
@@ -113,6 +112,8 @@ public final class RecipeUtil {
         fluidTransformationRecipeCache = null;
         crookRecipeCache = null;
         crucibleHeatRecipeCache = null;
+        barrelMixingRecipes = null;
+        currentRecipeMap = null;
     }
 
     public static List<SieveRecipe> getSieveRecipes(Item mesh, ItemStack item) {
@@ -203,97 +204,23 @@ public final class RecipeUtil {
         };
     }
 
-    // todo support Forge's ingredient types
     public static boolean areIngredientsEqual(Ingredient first, Ingredient second) {
-        // although unlikely, we should check this anyway
         if (first == second) return true;
-
-        if (!first.isCustom() && !second.isCustom()) {
-            var firstValues = new ObjectArrayList<>(first.getValues());
-            var secondValues = new ObjectArrayList<>(second.getValues());
-
-            // if arrays are same size, check if their contents are equal (order does not matter)
-            if (firstValues.size() == secondValues.size()) {
-                outer:
-                for (int i = 0; i < firstValues.size(); i++) {
-                    var firstValue = firstValues.get(i);
-
-                    for (int j = 0; j < firstValues.size(); j++) {
-                        if (areValuesEqual(firstValue, secondValues.get(j))) {
-                            firstValues.remove(i);
-                            secondValues.remove(j);
-                            i--;
-
-                            continue outer;
-                        }
-                    }
-
-                    return false;
-                }
-
-                // return true if everything was equal
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private static boolean areValuesEqual(Ingredient.Value firstValue, Ingredient.Value secondValue) {
-        Class<?> firstKlass = firstValue.getClass();
-        Class<?> secondKlass = secondValue.getClass();
-
-        // if values are the same type of class
-        if (firstKlass == secondKlass) {
-            if (firstKlass == Ingredient.ItemValue.class) {
-                // if items are different, return false
-                return ItemStack.matches(((Ingredient.ItemValue) firstValue).item(), ((Ingredient.ItemValue) secondValue).item());
-            } else if (firstKlass == Ingredient.TagValue.class) {
-                // if tags are different, return false
-                // identity comparison is okay because tags are always interned in vanilla
-                return ((Ingredient.TagValue) firstValue).tag() == ((Ingredient.TagValue) secondValue).tag();
-            } else {
-                var firstItems = firstValue.getItems();
-                var secondItems = secondValue.getItems();
-                var len = firstItems.size();
-
-                if (len == secondItems.size()) {
-                    Iterator<ItemStack> firstIter = firstItems.iterator();
-                    Iterator<ItemStack> secondIter = secondItems.iterator();
-
-                    while (firstIter.hasNext()) {
-                        if (!ItemStack.matches(firstIter.next(), secondIter.next())) {
-                            // if one of the items is different, return false
-                            return false;
-                        }
-                    }
-                } else {
-                    // if values have different amounts of items, return false
-                    return false;
-                }
-
-                // if all items are the same, return true
-                return true;
-            }
-        } else {
-            // if the values are different types, return false
-            return false;
-        }
+        return first.equals(second);
     }
 
     public static boolean isCompostable(ItemStack stack) {
         return barrelCompostRecipeCache != null && barrelCompostRecipeCache.getRecipe(stack) != null;
     }
 
-    // todo stop using the RecipeManager
     @Nullable
-    public static BarrelMixingRecipe getBarrelMixingRecipe(RecipeManager recipes, ItemStack stack, FluidStack fluid) {
-        for (var recipe : recipes.byType(ERecipeTypes.BARREL_MIXING.get())) {
-            if (recipe.value().matches(stack, fluid)) {
-                return recipe.value();
+    public static BarrelMixingRecipe getBarrelMixingRecipe(ItemStack stack, FluidStack fluid) {
+        if (barrelMixingRecipes == null) return null;
+        for (var recipe : barrelMixingRecipes) {
+            if (recipe.matches(stack, fluid)) {
+                return recipe;
             }
         }
-
         return null;
     }
 
@@ -399,24 +326,22 @@ public final class RecipeUtil {
     }
 
     public static void writeTag(FriendlyByteBuf buffer, TagKey<?> ore) {
-        buffer.writeResourceLocation(ore.location());
+        buffer.writeIdentifier(ore.location());
     }
 
     public static <T> TagKey<T> readTag(FriendlyByteBuf buffer, ResourceKey<Registry<T>> registry) {
-        return TagKey.create(registry, buffer.readResourceLocation());
+        return TagKey.create(registry, buffer.readIdentifier());
     }
 
     public static boolean isValidResourceLocation(String string) {
-        return ResourceLocation.tryParse(string) != null;
+        return Identifier.tryParse(string) != null;
     }
 
     /**
-     * From Forestry: Community Edition
-     * @return The global registry manager. {@code null} on server when there is no server, or when there is no world (on client).
+     * @return The global recipe map. {@code null} if recipes have not been loaded yet.
      */
     @Nullable
-    public static RecipeManager getRecipeManager() {
-        MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
-        return server == null ? (FMLEnvironment.dist == Dist.CLIENT ? ClientsideCode.getRecipeManager() : null) : server.getRecipeManager();
+    public static RecipeMap getRecipeMap() {
+        return currentRecipeMap;
     }
 }

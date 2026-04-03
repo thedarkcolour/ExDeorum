@@ -2,7 +2,7 @@ package thedarkcolour.exdeorum.compat.emi;
 
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiStack;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import thedarkcolour.exdeorum.recipe.hammer.HammerRecipe;
 
 import java.util.List;
@@ -10,7 +10,7 @@ import java.util.List;
 abstract class HammerEmiRecipe extends EmiOneToOneRecipe {
     private final List<EmiStack> outputs;
 
-    HammerEmiRecipe(HammerRecipe recipe, ResourceLocation id) {
+    HammerEmiRecipe(HammerRecipe recipe, Identifier id) {
         super(recipe, id);
 
         this.outputs = EmiUtil.outputs(recipe.result);
@@ -22,7 +22,7 @@ abstract class HammerEmiRecipe extends EmiOneToOneRecipe {
     }
 
     static class Hammer extends HammerEmiRecipe {
-        Hammer(HammerRecipe recipe, ResourceLocation id) {
+        Hammer(HammerRecipe recipe, Identifier id) {
             super(recipe, id);
         }
 
@@ -33,7 +33,7 @@ abstract class HammerEmiRecipe extends EmiOneToOneRecipe {
     }
 
     static class CompressedHammer extends HammerEmiRecipe {
-        CompressedHammer(HammerRecipe recipe, ResourceLocation id) {
+        CompressedHammer(HammerRecipe recipe, Identifier id) {
             super(recipe, id);
         }
 

@@ -18,27 +18,24 @@
 
 package thedarkcolour.exdeorum.fluid;
 
-import net.minecraft.client.Camera;
-import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
-import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.common.SoundActions;
 import net.neoforged.neoforge.fluids.BaseFlowingFluid;
 import net.neoforged.neoforge.fluids.FluidType;
-import org.jetbrains.annotations.NotNull;
-import org.joml.Vector3f;
+import net.minecraft.client.Camera;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
+import org.joml.Vector4f;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.registry.EBlocks;
 import thedarkcolour.exdeorum.registry.EFluids;
 import thedarkcolour.exdeorum.registry.EItems;
 
-import java.util.function.Consumer;
-
 public class WitchWaterFluid extends FluidType {
-    private static final ResourceLocation STILL_TEXTURE = ExDeorum.loc("block/witch_water_still");
-    private static final ResourceLocation FLOWING_TEXTURE = ExDeorum.loc("block/witch_water_flowing");
-    private static final ResourceLocation OVERLAY_TEXTURE = ResourceLocation.withDefaultNamespace("block/water_overlay");
+    public static final Identifier STILL_TEXTURE = ExDeorum.loc("block/witch_water_still");
+    public static final Identifier FLOWING_TEXTURE = ExDeorum.loc("block/witch_water_flowing");
+    public static final Identifier OVERLAY_TEXTURE = Identifier.withDefaultNamespace("block/water_overlay");
 
     public static BaseFlowingFluid.Properties properties() {
         return new BaseFlowingFluid.Properties(EFluids.WITCH_WATER_TYPE, EFluids.WITCH_WATER, EFluids.WITCH_WATER_FLOWING).block(EBlocks.WITCH_WATER).bucket(EItems.WITCH_WATER_BUCKET);
@@ -55,34 +52,27 @@ public class WitchWaterFluid extends FluidType {
         );
     }
 
-    @Override
-    public void initializeClient(Consumer<IClientFluidTypeExtensions> consumer) {
-        consumer.accept(new IClientFluidTypeExtensions() {
-            private static final Vector3f FOG_COLOR = new Vector3f(32f / 255f, 12f / 255f, 64f / 255f);
+    public static IClientFluidTypeExtensions createClientExtensions() {
+        return new IClientFluidTypeExtensions() {
             @Override
-            public ResourceLocation getStillTexture() {
+            public Identifier getStillTexture() {
                 return STILL_TEXTURE;
             }
 
             @Override
-            public ResourceLocation getFlowingTexture() {
+            public Identifier getFlowingTexture() {
                 return FLOWING_TEXTURE;
             }
 
             @Override
-            public ResourceLocation getOverlayTexture() {
+            public Identifier getOverlayTexture() {
                 return OVERLAY_TEXTURE;
             }
 
             @Override
-            public @NotNull Vector3f modifyFogColor(Camera camera, float partialTick, ClientLevel level, int renderDistance, float darkenWorldAmount, Vector3f fluidFogColor) {
-                return FOG_COLOR;
+            public void modifyFogColor(Camera camera, float partialTick, ClientLevel level, int renderDistance, float darkenWorldAmount, Vector4f fluidFogColor) {
+                fluidFogColor.set(32f / 255f, 12f / 255f, 64f / 255f, fluidFogColor.w);
             }
-
-            @Override
-            public int getTintColor() {
-                return 0xffffffff;
-            }
-        });
+        };
     }
 }

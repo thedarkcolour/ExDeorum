@@ -18,7 +18,7 @@
 
 package thedarkcolour.exdeorum;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModList;
@@ -90,7 +90,7 @@ public class ExDeorum {
         ECompressedBlocks.register();
     }
 
-    public static ResourceLocation loc(String menuProperty) {
-        return ResourceLocation.fromNamespaceAndPath(ID, menuProperty);
+    public static Identifier loc(String menuProperty) {
+        return Identifier.fromNamespaceAndPath(ID, menuProperty);
     }
 }

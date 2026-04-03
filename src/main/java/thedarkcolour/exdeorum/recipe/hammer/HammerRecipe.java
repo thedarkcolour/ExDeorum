@@ -33,8 +33,8 @@ import thedarkcolour.exdeorum.registry.ERecipeSerializers;
 import thedarkcolour.exdeorum.registry.ERecipeTypes;
 
 public class HammerRecipe extends ProbabilityRecipe {
-    private static final MapCodec<HammerRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> ProbabilityRecipe.commonFields(instance).apply(instance, HammerRecipe::new));
-    private static final StreamCodec<RegistryFriendlyByteBuf, HammerRecipe> STREAM_CODEC = StreamCodec.composite(
+    public static final MapCodec<HammerRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> ProbabilityRecipe.commonFields(instance).apply(instance, HammerRecipe::new));
+    public static final StreamCodec<RegistryFriendlyByteBuf, HammerRecipe> STREAM_CODEC = StreamCodec.composite(
             Ingredient.CONTENTS_STREAM_CODEC, HammerRecipe::ingredient,
             ItemStack.STREAM_CODEC, HammerRecipe::result,
             CodecUtil.NUMBER_PROVIDER_CODEC, HammerRecipe::resultAmount,
@@ -45,24 +45,13 @@ public class HammerRecipe extends ProbabilityRecipe {
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<HammerRecipe> getSerializer() {
         return ERecipeSerializers.HAMMER.get();
     }
 
     @Override
-    public RecipeType<?> getType() {
+    public RecipeType<HammerRecipe> getType() {
         return ERecipeTypes.HAMMER.get();
     }
 
-    public static class Serializer implements RecipeSerializer<HammerRecipe> {
-        @Override
-        public MapCodec<HammerRecipe> codec() {
-            return CODEC;
-        }
-
-        @Override
-        public StreamCodec<RegistryFriendlyByteBuf, HammerRecipe> streamCodec() {
-            return STREAM_CODEC;
-        }
-    }
 }

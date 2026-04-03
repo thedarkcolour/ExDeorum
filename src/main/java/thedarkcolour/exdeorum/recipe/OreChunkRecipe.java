@@ -20,7 +20,6 @@ package thedarkcolour.exdeorum.recipe;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -29,6 +28,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.item.crafting.PlacementInfo;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.util.Lazy;
 import thedarkcolour.exdeorum.compat.PreferredOres;
@@ -39,7 +39,7 @@ import java.util.Map;
 
 public class OreChunkRecipe implements CraftingRecipe {
     public static final MapCodec<OreChunkRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            Ingredient.CODEC_NONEMPTY.fieldOf("ore_chunk").forGetter(OreChunkRecipe::getOreChunk),
+            Ingredient.CODEC.fieldOf("ore_chunk").forGetter(OreChunkRecipe::getOreChunk),
             TagKey.codec(Registries.ITEM).fieldOf("ore").forGetter(OreChunkRecipe::getOre)
     ).apply(instance, OreChunkRecipe::new));
     public static final StreamCodec<RegistryFriendlyByteBuf, OreChunkRecipe> STREAM_CODEC = StreamCodec.of(OreChunkRecipe::toNetwork, OreChunkRecipe::fromNetwork);
@@ -72,12 +72,7 @@ public class OreChunkRecipe implements CraftingRecipe {
     }
 
     @Override
-    public ItemStack getResultItem(HolderLookup.Provider registries) {
-        return this.resultItem.get();
-    }
-
-    @Override
-    public ItemStack assemble(CraftingInput input, HolderLookup.Provider lookup) {
+    public ItemStack assemble(CraftingInput input) {
         return this.resultItem.get().copy();
     }
 
@@ -87,8 +82,18 @@ public class OreChunkRecipe implements CraftingRecipe {
     }
 
     @Override
-    public boolean canCraftInDimensions(int width, int height) {
-        return width >= 2 && height >= 2;
+    public String group() {
+        return "";
+    }
+
+    @Override
+    public boolean showNotification() {
+        return false;
+    }
+
+    @Override
+    public PlacementInfo placementInfo() {
+        return PlacementInfo.create(getIngredients());
     }
 
     @Override
@@ -110,15 +115,4 @@ public class OreChunkRecipe implements CraftingRecipe {
         RecipeUtil.writeTag(buffer, recipe.ore);
     }
 
-    public static class Serializer implements RecipeSerializer<OreChunkRecipe> {
-        @Override
-        public MapCodec<OreChunkRecipe> codec() {
-            return CODEC;
-        }
-
-        @Override
-        public StreamCodec<RegistryFriendlyByteBuf, OreChunkRecipe> streamCodec() {
-            return STREAM_CODEC;
-        }
-    }
 }

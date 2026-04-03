@@ -21,7 +21,7 @@ package thedarkcolour.exdeorum.recipe.cache;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeMap;
 import net.minecraft.world.item.crafting.RecipeType;
 import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.recipe.sieve.SieveRecipe;
@@ -33,12 +33,12 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 public class SieveRecipeCache<T extends SieveRecipe> {
-    private RecipeManager recipeManager;
+    private RecipeMap recipeManager;
     private final Supplier<? extends RecipeType<T>> recipeType;
     @Nullable
     private Map<Item, MeshRecipeCache<T>> meshCaches;
 
-    public SieveRecipeCache(RecipeManager recipeManager, Supplier<? extends RecipeType<T>> recipeType) {
+    public SieveRecipeCache(RecipeMap recipeManager, Supplier<? extends RecipeType<T>> recipeType) {
         this.recipeManager = recipeManager;
         this.recipeType = recipeType;
     }

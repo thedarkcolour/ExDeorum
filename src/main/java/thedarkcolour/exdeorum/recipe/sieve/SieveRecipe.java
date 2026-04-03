@@ -37,8 +37,8 @@ import thedarkcolour.exdeorum.registry.ERecipeSerializers;
 import thedarkcolour.exdeorum.registry.ERecipeTypes;
 
 public class SieveRecipe extends ProbabilityRecipe {
-    private static final MapCodec<SieveRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> commonSieveFields(instance).apply(instance, SieveRecipe::new));
-    private static final StreamCodec<RegistryFriendlyByteBuf, SieveRecipe> STREAM_CODEC = sieveStreamCodec(SieveRecipe::new);
+    public static final MapCodec<SieveRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> commonSieveFields(instance).apply(instance, SieveRecipe::new));
+    public static final StreamCodec<RegistryFriendlyByteBuf, SieveRecipe> STREAM_CODEC = sieveStreamCodec(SieveRecipe::new);
 
     static <T extends SieveRecipe> StreamCodec<RegistryFriendlyByteBuf, T> sieveStreamCodec(Function5<Ingredient, ItemStack, NumberProvider, Ingredient, Boolean, T> factory) {
         return StreamCodec.composite(
@@ -54,7 +54,7 @@ public class SieveRecipe extends ProbabilityRecipe {
     protected static <T extends SieveRecipe> Products.P5<RecordCodecBuilder.Mu<T>, Ingredient, ItemStack, NumberProvider, Ingredient, Boolean> commonSieveFields(RecordCodecBuilder.Instance<T> instance) {
         return commonFields(instance).and(
                 instance.group(
-                        Ingredient.CODEC_NONEMPTY.fieldOf("mesh").forGetter(SieveRecipe::mesh),
+                        Ingredient.CODEC.fieldOf("mesh").forGetter(SieveRecipe::mesh),
                         Codec.BOOL.optionalFieldOf("by_hand_only", false).forGetter(SieveRecipe::byHandOnly)
                 ));
     }
@@ -78,24 +78,13 @@ public class SieveRecipe extends ProbabilityRecipe {
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<SieveRecipe> getSerializer() {
         return ERecipeSerializers.SIEVE.get();
     }
 
     @Override
-    public RecipeType<?> getType() {
+    public RecipeType<SieveRecipe> getType() {
         return ERecipeTypes.SIEVE.get();
     }
 
-    public static class Serializer implements RecipeSerializer<SieveRecipe> {
-        @Override
-        public MapCodec<SieveRecipe> codec() {
-            return CODEC;
-        }
-
-        @Override
-        public StreamCodec<RegistryFriendlyByteBuf, SieveRecipe> streamCodec() {
-            return STREAM_CODEC;
-        }
-    }
 }

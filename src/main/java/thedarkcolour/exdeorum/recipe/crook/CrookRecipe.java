@@ -21,11 +21,13 @@ package thedarkcolour.exdeorum.recipe.crook;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.PlacementInfo;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeBookCategories;
+import net.minecraft.world.item.crafting.RecipeBookCategory;
 import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -48,27 +50,37 @@ public record CrookRecipe(BlockPredicate blockPredicate, ItemStack result, float
     }
 
     @Override
-    public ItemStack assemble(RecipeInput input, HolderLookup.Provider registries) {
+    public ItemStack assemble(RecipeInput input) {
         return ItemStack.EMPTY;
     }
 
     @Override
-    public boolean canCraftInDimensions(int pWidth, int pHeight) {
+    public boolean showNotification() {
         return false;
     }
 
     @Override
-    public ItemStack getResultItem(HolderLookup.Provider registries) {
-        return this.result;
+    public String group() {
+        return "";
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public PlacementInfo placementInfo() {
+        return PlacementInfo.NOT_PLACEABLE;
+    }
+
+    @Override
+    public RecipeBookCategory recipeBookCategory() {
+        return RecipeBookCategories.CRAFTING_MISC;
+    }
+
+    @Override
+    public RecipeSerializer<CrookRecipe> getSerializer() {
         return ERecipeSerializers.CROOK.get();
     }
 
     @Override
-    public RecipeType<?> getType() {
+    public RecipeType<CrookRecipe> getType() {
         return ERecipeTypes.CROOK.get();
     }
 
@@ -86,15 +98,4 @@ public record CrookRecipe(BlockPredicate blockPredicate, ItemStack result, float
         return new CrookRecipe(blockPredicate, result, chance);
     }
 
-    public static class Serializer implements RecipeSerializer<CrookRecipe> {
-        @Override
-        public MapCodec<CrookRecipe> codec() {
-            return CODEC;
-        }
-
-        @Override
-        public StreamCodec<RegistryFriendlyByteBuf, CrookRecipe> streamCodec() {
-            return STREAM_CODEC;
-        }
-    }
 }

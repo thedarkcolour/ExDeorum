@@ -19,15 +19,14 @@
 package thedarkcolour.exdeorum.data;
 
 import net.minecraft.data.PackOutput;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.common.data.SoundDefinition;
 import net.neoforged.neoforge.common.data.SoundDefinitionsProvider;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.registry.ESounds;
 
 class Sounds extends SoundDefinitionsProvider {
-    protected Sounds(PackOutput output, ExistingFileHelper helper) {
-        super(output, ExDeorum.ID, helper);
+    protected Sounds(PackOutput output) {
+        super(output, ExDeorum.ID);
     }
 
     @Override

@@ -31,32 +31,21 @@ import thedarkcolour.exdeorum.registry.ERecipeSerializers;
 import thedarkcolour.exdeorum.registry.ERecipeTypes;
 
 public class CompressedSieveRecipe extends SieveRecipe {
-    private static final MapCodec<CompressedSieveRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> commonSieveFields(instance).apply(instance, CompressedSieveRecipe::new));
-    private static final StreamCodec<RegistryFriendlyByteBuf, CompressedSieveRecipe> STREAM_CODEC = sieveStreamCodec(CompressedSieveRecipe::new);
+    public static final MapCodec<CompressedSieveRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> commonSieveFields(instance).apply(instance, CompressedSieveRecipe::new));
+    public static final StreamCodec<RegistryFriendlyByteBuf, CompressedSieveRecipe> STREAM_CODEC = sieveStreamCodec(CompressedSieveRecipe::new);
 
     public CompressedSieveRecipe(Ingredient ingredient, ItemStack result, NumberProvider resultAmount, Ingredient mesh, boolean byHandOnly) {
         super(ingredient, result, resultAmount, mesh, byHandOnly);
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<CompressedSieveRecipe> getSerializer() {
         return ERecipeSerializers.COMPRESSED_SIEVE.get();
     }
 
     @Override
-    public RecipeType<?> getType() {
+    public RecipeType<CompressedSieveRecipe> getType() {
         return ERecipeTypes.COMPRESSED_SIEVE.get();
     }
 
-    public static class Serializer implements RecipeSerializer<CompressedSieveRecipe> {
-        @Override
-        public MapCodec<CompressedSieveRecipe> codec() {
-            return CODEC;
-        }
-
-        @Override
-        public StreamCodec<RegistryFriendlyByteBuf, CompressedSieveRecipe> streamCodec() {
-            return STREAM_CODEC;
-        }
-    }
 }

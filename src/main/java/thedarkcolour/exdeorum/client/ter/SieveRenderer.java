@@ -19,23 +19,20 @@
 package thedarkcolour.exdeorum.client.ter;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import thedarkcolour.exdeorum.blockentity.EBlockEntity;
 import thedarkcolour.exdeorum.blockentity.logic.SieveLogic;
-import thedarkcolour.exdeorum.client.RenderUtil;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class SieveRenderer<T extends EBlockEntity & SieveLogic.Owner> implements BlockEntityRenderer<T> {
+// TODO: port SieveRenderer to MC 26.x rendering API (BlockEntityRenderer changed to extract/submit pattern)
+public class SieveRenderer<T extends EBlockEntity & SieveLogic.Owner> implements BlockEntityRenderer<T, BlockEntityRenderState> {
     public static final Map<Item, TextureAtlasSprite> MESH_TEXTURES = new HashMap<>();
 
     private final float meshHeight;
@@ -49,47 +46,15 @@ public class SieveRenderer<T extends EBlockEntity & SieveLogic.Owner> implements
     }
 
     @Override
-    public void render(T sieve, float partialTicks, PoseStack stack, MultiBufferSource buffers, int light, int overlay) {
-        var logic = sieve.getLogic();
-        var contents = logic.getContents();
-
-        if (!contents.isEmpty() && contents.getItem() instanceof BlockItem blockItem) {
-            var block = blockItem.getBlock();
-            var percentage = logic.getProgress();
-            var face = RenderUtil.getTopFace(block);
-
-            if (shouldContentsRender3d(sieve)) {
-                face.renderCuboid(buffers, stack, this.contentsMinY / 16f, Mth.lerp(percentage, this.contentsMaxY, this.contentsMinY) / 16f, 0xff, 0xff, 0xff, light, 1.0f);
-            } else {
-                face.renderFlatSpriteLerp(buffers, stack, percentage, 0xff, 0xff, 0xff, light, 1.0f, this.contentsMaxY, this.contentsMinY);
-            }
-        }
-
-        var mesh = logic.getMesh();
-
-        if (!mesh.isEmpty()) {
-            var builder = buffers.getBuffer(RenderType.cutoutMipped());
-            var meshItem = mesh.getItem();
-
-            TextureAtlasSprite meshSprite;
-            if (MESH_TEXTURES.containsKey(meshItem)) {
-                meshSprite = MESH_TEXTURES.get(meshItem);
-            } else {
-                ResourceLocation registryName = BuiltInRegistries.ITEM.getKey(meshItem);
-                ResourceLocation textureLoc = registryName.withPrefix("item/mesh/");
-                meshSprite = RenderUtil.blockAtlas.getSprite(textureLoc);
-                MESH_TEXTURES.put(meshItem, meshSprite);
-            }
-
-            RenderUtil.renderFlatSprite(builder, stack, this.meshHeight, 0xff, 0xff, 0xff, meshSprite, light, 1f);
-
-            if (mesh.hasFoil()) {
-                RenderUtil.renderFlatSprite(buffers.getBuffer(RenderType.glint()), stack, this.meshHeight, 0xff, 0xff, 0xff, meshSprite, light, 1f);
-            }
-        }
+    public BlockEntityRenderState createRenderState() {
+        return new BlockEntityRenderState();
     }
 
-    // todo return true for transparent sieves
+    @Override
+    public void submit(BlockEntityRenderState state, PoseStack stack, SubmitNodeCollector collector, CameraRenderState cameraState) {
+        // TODO: implement sieve mesh/contents rendering using new 26.x rendering API
+    }
+
     protected boolean shouldContentsRender3d(T sieve) {
         return false;
     }

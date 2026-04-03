@@ -18,15 +18,9 @@
 
 package thedarkcolour.exdeorum.client;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.worldselection.CreateWorldScreen;
 import net.minecraft.client.gui.screens.worldselection.WorldCreationUiState;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.ShaderInstance;
-import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.util.Unit;
@@ -34,8 +28,8 @@ import net.minecraft.world.level.levelgen.presets.WorldPreset;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.event.config.ModConfigEvent;
-import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.*;
+import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.asm.ASMHooks;
@@ -44,16 +38,13 @@ import thedarkcolour.exdeorum.client.screen.MechanicalSieveScreen;
 import thedarkcolour.exdeorum.client.ter.*;
 import thedarkcolour.exdeorum.compat.ModIds;
 import thedarkcolour.exdeorum.config.EConfig;
+import thedarkcolour.exdeorum.fluid.WitchWaterFluid;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.registry.EBlockEntities;
 import thedarkcolour.exdeorum.registry.EFluids;
 import thedarkcolour.exdeorum.registry.EMenus;
 
-import java.io.IOException;
-
 public class ClientHandler {
-    // Used for the composting recipe category in JEI
-    public static final ModelResourceLocation OAK_BARREL_COMPOSTING = new ModelResourceLocation(ExDeorum.loc("item/oak_barrel_composting"), ModelResourceLocation.STANDALONE_VARIANT);
     public static boolean isInVoidWorld;
     // This is used to prevent Ex Deorum from resetting world type when trying to configure Superflat, Single Biome, etc.
     public static Holder<WorldPreset> originalDefaultWorldPreset;
@@ -61,41 +52,30 @@ public class ClientHandler {
     public static void register(IEventBus modBus) {
         var fmlBus = NeoForge.EVENT_BUS;
 
-        modBus.addListener(ClientHandler::clientSetup);
         modBus.addListener(ClientHandler::registerMenuScreens);
         modBus.addListener(ClientHandler::registerRenderers);
-        modBus.addListener(ClientHandler::registerShaders);
+        modBus.addListener(ClientHandler::registerClientExtensions);
         modBus.addListener(ClientHandler::addClientReloadListeners);
         modBus.addListener(ClientHandler::onConfigChanged);
         fmlBus.addListener(ClientHandler::onPlayerRespawn);
         fmlBus.addListener(ClientHandler::onPlayerLogout);
         fmlBus.addListener(ClientHandler::onScreenOpen);
-        fmlBus.addListener(ClientHandler::onRecipesUpdated);
-
-        if (ModList.get().isLoaded(ModIds.JEI) || ModList.get().isLoaded(ModIds.EMI)) {
-            modBus.addListener(ClientHandler::registerAdditionalModels);
-        }
+        fmlBus.addListener(ClientHandler::onRecipesReceived);
     }
 
-    private static void addClientReloadListeners(RegisterClientReloadListenersEvent event) {
-        event.registerReloadListener((prepBarrier, resourceManager, prepProfiler, reloadProfiler, backgroundExecutor, gameExecutor) -> {
+    private static void registerClientExtensions(RegisterClientExtensionsEvent event) {
+        event.registerFluidType(WitchWaterFluid.createClientExtensions(), EFluids.WITCH_WATER_TYPE.get());
+    }
+
+    private static void addClientReloadListeners(AddClientReloadListenersEvent event) {
+        event.addListener(ExDeorum.loc("render_util"), (prepBarrier, resourceManager, prepProfiler, reloadProfiler, backgroundExecutor, gameExecutor) -> {
             return prepBarrier.wait(Unit.INSTANCE).thenRunAsync(RenderUtil::reload, gameExecutor);
         });
-    }
-
-    private static void clientSetup(FMLClientSetupEvent event) {
-        event.enqueueWork(ClientHandler::setRenderLayers);
     }
 
     private static void registerMenuScreens(RegisterMenuScreensEvent event) {
         event.register(EMenus.MECHANICAL_SIEVE.get(), MechanicalSieveScreen::new);
         event.register(EMenus.MECHANICAL_HAMMER.get(), MechanicalHammerScreen::new);
-    }
-
-    private static void setRenderLayers() {
-        // Fluids
-        ItemBlockRenderTypes.setRenderLayer(EFluids.WITCH_WATER.get(), RenderType.translucent());
-        ItemBlockRenderTypes.setRenderLayer(EFluids.WITCH_WATER_FLOWING.get(), RenderType.translucent());
     }
 
     private static void onPlayerRespawn(ClientPlayerNetworkEvent.Clone event) {
@@ -110,29 +90,18 @@ public class ClientHandler {
 
     private static void onConfigChanged(ModConfigEvent.Reloading event) {
         if (event.getConfig().getSpec() == EConfig.CLIENT_SPEC) {
-            RenderSystem.recordRenderCall(() -> Minecraft.getInstance().levelRenderer.allChanged());
+            Minecraft.getInstance().levelRenderer.allChanged();
         }
     }
 
     private static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(EBlockEntities.INFESTED_LEAVES.get(), ctx -> new InfestedLeavesRenderer());
-        event.registerBlockEntityRenderer(EBlockEntities.BARREL.get(), BarrelRenderer::new);
+        event.registerBlockEntityRenderer(EBlockEntities.BARREL.get(), ctx -> new BarrelRenderer());
         event.registerBlockEntityRenderer(EBlockEntities.LAVA_CRUCIBLE.get(), ctx -> new CrucibleRenderer());
         event.registerBlockEntityRenderer(EBlockEntities.WATER_CRUCIBLE.get(), ctx -> new CrucibleRenderer());
         event.registerBlockEntityRenderer(EBlockEntities.SIEVE.get(), ctx -> new SieveRenderer<>(0.75f, 15f));
         event.registerBlockEntityRenderer(EBlockEntities.MECHANICAL_SIEVE.get(), ctx -> new SieveRenderer<>(0.75f, 15f));
         event.registerBlockEntityRenderer(EBlockEntities.COMPRESSED_SIEVE.get(), ctx -> new CompressedSieveRenderer<>(0.5625f, 16f));
-    }
-
-    private static void registerShaders(RegisterShadersEvent event) {
-        try {
-            // NEW_ENTITY is BLOCK except it also uses UV1 (overlay coordinates)
-            event.registerShader(new ShaderInstance(event.getResourceProvider(), ExDeorum.loc("rendertype_tinted_cutout_mipped"), DefaultVertexFormat.NEW_ENTITY), instance -> {
-                RenderUtil.renderTypeTintedCutoutMippedShader = instance;
-            });
-        } catch (IOException e) {
-            ExDeorum.LOGGER.error("Unable to load tinted shader", e);
-        }
     }
 
     // Sets Ex Deorum world type as default
@@ -153,16 +122,8 @@ public class ClientHandler {
         }
     }
 
-    // Only called when JEI is loaded, because this registers the recipe category icon models.
-    private static void registerAdditionalModels(ModelEvent.RegisterAdditional event) {
-        event.register(new ModelResourceLocation(ExDeorum.loc("block/oak_barrel_composting"), ModelResourceLocation.STANDALONE_VARIANT));
-        event.register(OAK_BARREL_COMPOSTING);
-    }
-
-    private static void onRecipesUpdated(RecipesUpdatedEvent event) {
-        if (!Minecraft.getInstance().isSingleplayer()) {
-            RecipeUtil.reload(event.getRecipeManager());
-        }
+    private static void onRecipesReceived(RecipesReceivedEvent event) {
+        RecipeUtil.reload(event.getRecipeMap());
     }
 
     public static void disableVoidFogRendering() {

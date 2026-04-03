@@ -63,20 +63,20 @@ public class EItems {
     public static final DeferredItem<Item> NETHERITE_MESH = ITEMS.register("netherite_mesh", () -> new MeshItem(props().stacksTo(16)));
 
     // Hammers
-    public static final DeferredItem<Item> WOODEN_HAMMER = ITEMS.register("wooden_hammer", () -> new HammerItem(Tiers.WOOD, props()));
-    public static final DeferredItem<Item> STONE_HAMMER = ITEMS.register("stone_hammer", () -> new HammerItem(Tiers.STONE, props()));
-    public static final DeferredItem<Item> GOLDEN_HAMMER = ITEMS.register("golden_hammer", () -> new HammerItem(Tiers.GOLD, props()));
-    public static final DeferredItem<Item> IRON_HAMMER = ITEMS.register("iron_hammer", () -> new HammerItem(Tiers.IRON, props()));
-    public static final DeferredItem<Item> DIAMOND_HAMMER = ITEMS.register("diamond_hammer", () -> new HammerItem(Tiers.DIAMOND, props()));
-    public static final DeferredItem<Item> NETHERITE_HAMMER = ITEMS.register("netherite_hammer", () -> new HammerItem(Tiers.NETHERITE, props()));
+    public static final DeferredItem<Item> WOODEN_HAMMER = ITEMS.register("wooden_hammer", () -> new HammerItem(ToolMaterial.WOOD, props()));
+    public static final DeferredItem<Item> STONE_HAMMER = ITEMS.register("stone_hammer", () -> new HammerItem(ToolMaterial.STONE, props()));
+    public static final DeferredItem<Item> GOLDEN_HAMMER = ITEMS.register("golden_hammer", () -> new HammerItem(ToolMaterial.GOLD, props()));
+    public static final DeferredItem<Item> IRON_HAMMER = ITEMS.register("iron_hammer", () -> new HammerItem(ToolMaterial.IRON, props()));
+    public static final DeferredItem<Item> DIAMOND_HAMMER = ITEMS.register("diamond_hammer", () -> new HammerItem(ToolMaterial.DIAMOND, props()));
+    public static final DeferredItem<Item> NETHERITE_HAMMER = ITEMS.register("netherite_hammer", () -> new HammerItem(ToolMaterial.NETHERITE, props()));
 
     // Compressed Hammers
-    public static final DeferredItem<Item> COMPRESSED_WOODEN_HAMMER = ITEMS.register("compressed_wooden_hammer", () -> new HammerItem(Tiers.WOOD, props()));
-    public static final DeferredItem<Item> COMPRESSED_STONE_HAMMER = ITEMS.register("compressed_stone_hammer", () -> new HammerItem(Tiers.STONE, props()));
-    public static final DeferredItem<Item> COMPRESSED_GOLDEN_HAMMER = ITEMS.register("compressed_golden_hammer", () -> new HammerItem(Tiers.GOLD, props()));
-    public static final DeferredItem<Item> COMPRESSED_IRON_HAMMER = ITEMS.register("compressed_iron_hammer", () -> new HammerItem(Tiers.IRON, props()));
-    public static final DeferredItem<Item> COMPRESSED_DIAMOND_HAMMER = ITEMS.register("compressed_diamond_hammer", () -> new HammerItem(Tiers.DIAMOND, props()));
-    public static final DeferredItem<Item> COMPRESSED_NETHERITE_HAMMER = ITEMS.register("compressed_netherite_hammer", () -> new HammerItem(Tiers.NETHERITE, props()));
+    public static final DeferredItem<Item> COMPRESSED_WOODEN_HAMMER = ITEMS.register("compressed_wooden_hammer", () -> new HammerItem(ToolMaterial.WOOD, props()));
+    public static final DeferredItem<Item> COMPRESSED_STONE_HAMMER = ITEMS.register("compressed_stone_hammer", () -> new HammerItem(ToolMaterial.STONE, props()));
+    public static final DeferredItem<Item> COMPRESSED_GOLDEN_HAMMER = ITEMS.register("compressed_golden_hammer", () -> new HammerItem(ToolMaterial.GOLD, props()));
+    public static final DeferredItem<Item> COMPRESSED_IRON_HAMMER = ITEMS.register("compressed_iron_hammer", () -> new HammerItem(ToolMaterial.IRON, props()));
+    public static final DeferredItem<Item> COMPRESSED_DIAMOND_HAMMER = ITEMS.register("compressed_diamond_hammer", () -> new HammerItem(ToolMaterial.DIAMOND, props()));
+    public static final DeferredItem<Item> COMPRESSED_NETHERITE_HAMMER = ITEMS.register("compressed_netherite_hammer", () -> new HammerItem(ToolMaterial.NETHERITE, props()));
 
     // Ore Chunks
     public static final DeferredItem<Item> IRON_ORE_CHUNK = registerSimpleItem("iron_ore_chunk");

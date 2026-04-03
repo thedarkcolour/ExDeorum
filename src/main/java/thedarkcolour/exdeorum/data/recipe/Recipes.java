@@ -18,12 +18,12 @@
 
 package thedarkcolour.exdeorum.data.recipe;
 
-import net.minecraft.advancements.critereon.StatePropertiesPredicate;
+import net.minecraft.advancements.criterion.StatePropertiesPredicate;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
@@ -752,7 +752,7 @@ public class Recipes {
         writer.accept(modLoc("barrel_fluid_transformation/witch_water"), new FluidTransformationRecipe(FluidIngredient.of(Fluids.WATER), EFluids.WITCH_WATER.get(), 0x2B1057, BlockPredicate.singleBlock(Blocks.MYCELIUM), WeightedList.<BlockState>builder().add(50, Blocks.RED_MUSHROOM.defaultBlockState()).add(50, Blocks.BROWN_MUSHROOM.defaultBlockState()).build(), 1700), null);
     }
 
-    static ResourceLocation modLoc(String path) {
+    static Identifier modLoc(String path) {
         return ExDeorum.loc(path);
     }
 

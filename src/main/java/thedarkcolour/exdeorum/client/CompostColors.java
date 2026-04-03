@@ -21,14 +21,13 @@ package thedarkcolour.exdeorum.client;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.NativeImage;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import it.unimi.dsi.fastutil.objects.ObjectSet;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.Item;
@@ -37,7 +36,6 @@ import net.minecraft.world.item.Items;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLEnvironment;
-import net.neoforged.neoforge.client.model.data.ModelData;
 import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3i;
@@ -89,50 +87,9 @@ public class CompostColors {
     }
 
     // Used to generate the list of vanilla colors shipped with the Ex Deorum jar
+    // TODO: port debugCompute to MC 26.x (ItemRenderer/getItemModelShaper/BakedModel.getParticleIcon removed)
     public static void debugCompute() {
-        // Instead of reading from files, this method pulls colors directly from the texture atlas.
-        var atlas = Minecraft.getInstance().getModelManager().getAtlas(InventoryMenu.BLOCK_ATLAS);
-        int atlasWidth = atlas.width;
-        int atlasHeight = atlas.height;
-
-        try (var image = new NativeImage(atlasWidth, atlasHeight, false)) {
-            // should already be bound but just in case
-            GlStateManager._bindTexture(atlas.getId());
-            // alpha doesn't matter, only RGB
-            image.downloadTexture(0, false);
-
-            for (var item : BuiltInRegistries.ITEM) {
-                var model = Minecraft.getInstance().getItemRenderer().getItemModelShaper().getItemModel(item);
-
-                if (model != null) {
-                    var sprite = model.getParticleIcon(ModelData.EMPTY);
-
-                    if (sprite.atlasLocation().equals(InventoryMenu.BLOCK_ATLAS)) {
-                        int width = sprite.contents().width();
-                        int height = sprite.contents().height();
-                        int pixels = 0;
-                        int totalR = 0;
-                        int totalG = 0;
-                        int totalB = 0;
-
-                        for (int i = sprite.x; i < sprite.x + width; i++) {
-                            for (int j = sprite.y; j < sprite.y + height; j++) {
-                                int pixel = image.getPixelRGBA(i, j);
-                                if (pixel != 0) {
-                                    // bgr because Minecraft has the pixels backwards
-                                    totalB += (pixel >> 16) & 0xff;
-                                    totalG += (pixel >> 8) & 0xff;
-                                    totalR += (pixel) & 0xff;
-                                    pixels++;
-                                }
-                            }
-                        }
-
-                        putColor(pixels, totalR, totalG, totalB, item);
-                    }
-                }
-            }
-        }
+        throw new UnsupportedOperationException("debugCompute not yet ported to MC 26.x");
     }
 
     private static void loadModded() {
@@ -216,7 +173,7 @@ public class CompostColors {
     @Nullable
     private static String findFirstTexture(JsonObject textureMap) {
         if (textureMap.get("layer0") instanceof JsonPrimitive primitive) {
-            return ResourceLocation.parse(primitive.getAsString()).getPath();
+            return Identifier.parse(primitive.getAsString()).getPath();
         }
 
         return null;
@@ -310,7 +267,7 @@ public class CompostColors {
 
                         var tokenizer = new StringTokenizer(line, ", #");
                         try {
-                            var id = ResourceLocation.fromNamespaceAndPath(modid, tokenizer.nextToken());
+                            var id = Identifier.fromNamespaceAndPath(modid, tokenizer.nextToken());
                             var item = BuiltInRegistries.ITEM.get(id);
                             String token = tokenizer.nextToken();
                             var color = Integer.parseInt(token, 16);

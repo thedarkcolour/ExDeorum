@@ -22,12 +22,11 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
-import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import thedarkcolour.exdeorum.registry.ELootFunctions;
 
 import java.util.List;
 
@@ -49,8 +48,8 @@ public class MachineLootFunction extends LootItemConditionalFunction {
     }
 
     @Override
-    public LootItemFunctionType<? extends LootItemConditionalFunction> getType() {
-        return ELootFunctions.MACHINE.get();
+    public MapCodec<MachineLootFunction> codec() {
+        return CODEC;
     }
 
     public static LootItemConditionalFunction.Builder<?> machineLoot() {

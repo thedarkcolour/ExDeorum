@@ -18,70 +18,37 @@
 
 package thedarkcolour.exdeorum.client;
 
-import com.google.common.collect.ImmutableMap;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.blaze3d.vertex.VertexFormat;
-import net.irisshaders.iris.api.v0.IrisApi;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderStateShard;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.levelgen.LegacyRandomSource;
 import net.minecraft.world.level.material.Fluid;
-import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
-import net.neoforged.neoforge.client.model.CompositeModel;
-import net.neoforged.neoforge.client.model.data.ModelData;
 import org.joml.Vector3f;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.client.ter.SieveRenderer;
 
 import java.awt.Color;
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.VarHandle;
 import java.util.HashMap;
 import java.util.Map;
 
 public class RenderUtil {
-    private static final VarHandle COMPOSITE_MODEL_CHILDREN;
     private static final Map<Block, RenderFace> TOP_FACES = new HashMap<>();
-    public static final RenderStateShard.ShaderStateShard RENDER_TYPE_TINTED_CUTOUT_MIPPED_SHADER = new RenderStateShard.ShaderStateShard(RenderUtil::getRenderTypeTintedCutoutMippedShader);
-    public static final RenderType TINTED_CUTOUT_MIPPED = RenderType.create(ExDeorum.ID + ":tinted_cutout_mipped", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, RenderType.SMALL_BUFFER_SIZE, false, false, RenderType.CompositeState.builder().setLightmapState(RenderStateShard.LIGHTMAP).setShaderState(RENDER_TYPE_TINTED_CUTOUT_MIPPED_SHADER).setTextureState(RenderStateShard.BLOCK_SHEET_MIPPED).createCompositeState(true));
+    // TODO: port TINTED_CUTOUT_MIPPED to MC 26.x RenderSetup API (RenderStateShard/CompositeState removed)
+    public static final Object TINTED_CUTOUT_MIPPED = null;
     public static TextureAtlas blockAtlas;
-    public static ShaderInstance renderTypeTintedCutoutMippedShader;
     public static final IrisAccess IRIS_ACCESS;
 
     static {
-        IrisAccess irisAccess;
-        try {
-            Class.forName("net.irisshaders.iris.api.v0.IrisApi");
-            irisAccess = IrisApi.getInstance()::isShaderPackInUse;
-        } catch (ClassNotFoundException e) {
-            irisAccess = () -> false;
-        }
-        IRIS_ACCESS = irisAccess;
-
-        var lookup = MethodHandles.lookup();
-        try {
-            COMPOSITE_MODEL_CHILDREN = MethodHandles.privateLookupIn(CompositeModel.Baked.class, lookup).findVarHandle(CompositeModel.Baked.class, "children", ImmutableMap.class);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
+        IRIS_ACCESS = () -> false;
     }
 
     public static void reload() {
@@ -95,91 +62,45 @@ public class RenderUtil {
         blockAtlas = null;
     }
 
+    // TODO: port getTopFace to MC 26.x (BakedModel/BlockRenderDispatcher removed; use FluidStateModelSet/BlockStateModelSet)
     public static RenderFace getTopFaceOrDefault(Block block, Block defaultBlock) {
-        var face = getTopFace(block);
-        if (face.isMissingTexture()) {
-            return getTopFace(defaultBlock);
-        } else {
-            return face;
-        }
+        return getTopFace(block);
     }
 
     public static RenderFace getTopFace(Block block) {
-        if (TOP_FACES.containsKey(block)) {
-            return TOP_FACES.get(block);
-        } else {
-            var rand = new LegacyRandomSource(block.hashCode());
-            BakedModel model = Minecraft.getInstance().getBlockRenderer().getBlockModel(block.defaultBlockState());
-            RenderFace face;
-
-            if (model instanceof CompositeModel.Baked composite) {
-                @SuppressWarnings("unchecked")
-                ImmutableMap<String, BakedModel> children = (ImmutableMap<String, BakedModel>) COMPOSITE_MODEL_CHILDREN.get(composite);
-                RenderFace.CompositeLayer[] layers = new RenderFace.CompositeLayer[children.size()];
-                int i = 0;
-
-                for (var childModel : children.values()) {
-                    var singleFace = getFaceFromModel(block, rand, childModel);
-                    layers[i++] = new RenderFace.CompositeLayer(singleFace.renderType(), singleFace.sprite());
-                }
-
-                face = new RenderFace.Composite(layers);
-            } else {
-                face = getFaceFromModel(block, rand, model);
-            }
-
-            TOP_FACES.put(block, face);
-
-            return face;
-        }
-    }
-
-    private static RenderFace.Single getFaceFromModel(Block block, RandomSource rand, BakedModel model) {
-        var texture = getTopTexture(block, model);
-        var blockTypes = model.getRenderTypes(block.defaultBlockState(), rand, ModelData.EMPTY);
-        for (var bufferLayer : RenderType.chunkBufferLayers()) {
-            if (blockTypes.contains(bufferLayer)) {
-                return new RenderFace.Single(bufferLayer, texture);
-            }
-        }
-        throw new IllegalStateException("No render type found for block " + block);
-    }
-
-    private static TextureAtlasSprite getTopTexture(Block block, BakedModel model) {
-        var registryName = BuiltInRegistries.BLOCK.getKey(block);
-        var sprite = blockAtlas.getSprite(registryName.withPrefix("block/"));
-        // for stuff like azalea bush, retry to get the top texture
-        if (isMissingTexture(sprite)) {
-            sprite = blockAtlas.getSprite(ResourceLocation.fromNamespaceAndPath(registryName.getNamespace(), "block/" + registryName.getPath() + "_top"));
-        }
-        if (isMissingTexture(sprite)) {
-            sprite = model.getParticleIcon(ModelData.EMPTY);
-        }
-        return sprite;
+        return TOP_FACES.computeIfAbsent(block, b -> {
+            // TODO: implement using 26.x block model API
+            // Placeholder: use missing texture sprite
+            var sprite = blockAtlas != null ? blockAtlas.getSprite(MissingTextureAtlasSprite.getLocation()) : null;
+            return new RenderFace.Single(null, sprite);
+        });
     }
 
     public static boolean isMissingTexture(TextureAtlasSprite sprite) {
         return sprite.contents().name() == MissingTextureAtlasSprite.getLocation();
     }
 
+    // TODO: port renderFlatFluidSprite to 26.x (IClientFluidTypeExtensions no longer has getStillTexture/getTintColor)
     public static void renderFlatFluidSprite(MultiBufferSource buffers, PoseStack stack, Level level, BlockPos pos, float y, float edge, int light, int r, int g, int b, Fluid fluid) {
-        var extensions = IClientFluidTypeExtensions.of(fluid);
-        var state = fluid.defaultFluidState();
-        var builder = buffers.getBuffer(Sheets.translucentCullBlockSheet());
-
-        RenderUtil.renderFlatSprite(builder, stack, y, r, g, b, RenderUtil.blockAtlas.getSprite(extensions.getStillTexture(state, level, pos)), light, edge);
+        if (blockAtlas == null) return;
+        var builder = buffers.getBuffer(Sheets.translucentBlockSheet());
+        // Use a placeholder sprite until fluid model system is ported
+        var sprite = blockAtlas.getSprite(MissingTextureAtlasSprite.getLocation());
+        RenderUtil.renderFlatSprite(builder, stack, y, r, g, b, sprite, light, edge);
     }
 
+    // TODO: port renderFluidCube to 26.x (IClientFluidTypeExtensions no longer has getStillTexture/getTintColor)
     @SuppressWarnings("DuplicatedCode")
     public static void renderFluidCube(MultiBufferSource buffers, PoseStack stack, Level level, BlockPos pos, float minY, float maxY, float edge, int light, int r, int g, int b, Fluid fluid) {
-        var extensions = IClientFluidTypeExtensions.of(fluid);
-        var state = fluid.defaultFluidState();
-        var builder = buffers.getBuffer(Sheets.translucentCullBlockSheet());
+        if (blockAtlas == null) return;
+        var builder = buffers.getBuffer(Sheets.translucentBlockSheet());
+        // Use a placeholder sprite until fluid model system is ported
+        var sprite = blockAtlas.getSprite(MissingTextureAtlasSprite.getLocation());
+
         var pose = stack.last().pose();
         var poseNormal = stack.last().normal();
 
         Vector3f normal;
-        TextureAtlasSprite sprite = RenderUtil.blockAtlas.getSprite(extensions.getStillTexture(state, level, pos));
         float uMin = sprite.getU0();
         float uMax = sprite.getU1();
         float vMin = sprite.getV0();
@@ -200,13 +121,6 @@ public class RenderUtil {
         builder.addVertex(pose, edgeMax, minY, edgeMin).setColor(r, g, b, 255).setUv(uMax, vMin).setUv1(0, 10).setLight(light).setNormal(normal.x, normal.y, normal.z);
         builder.addVertex(pose, edgeMax, minY, edgeMax).setColor(r, g, b, 255).setUv(uMax, vMax).setUv1(0, 10).setLight(light).setNormal(normal.x, normal.y, normal.z);
         builder.addVertex(pose, edgeMin, minY, edgeMax).setColor(r, g, b, 255).setUv(uMin, vMax).setUv1(0, 10).setLight(light).setNormal(normal.x, normal.y, normal.z);
-
-        // Flowing texture coordinates
-        //sprite = RenderUtil.blockAtlas.getSprite(extensions.getFlowingTexture(state, level, pos));
-        //uMin = sprite.getU0();
-        //uMax = sprite.getU(8);
-        //vMin = sprite.getV0();
-        //vMax = sprite.getV(8);
 
         // South face
         normal = poseNormal.transform(new Vector3f(0, 0, 1));
@@ -237,13 +151,13 @@ public class RenderUtil {
     // Renders a sprite inside the barrel with the height determined by how full the barrel is.
     public static void renderFlatSpriteLerp(VertexConsumer builder, PoseStack stack, float percentage, int r, int g, int b, TextureAtlasSprite sprite, int light, float edge, float yMin, float yMax) {
         float y = Mth.lerp(percentage, yMin, yMax) / 16f;
-
         renderFlatSprite(builder, stack, y, r, g, b, sprite, light, edge);
     }
 
     // Renders a sprite (y should be between 0 and 1)
     @SuppressWarnings("DuplicatedCode")
     public static void renderFlatSprite(VertexConsumer builder, PoseStack stack, float y, int r, int g, int b, TextureAtlasSprite sprite, int light, float edge) {
+        if (sprite == null) return;
         var pose = stack.last().pose();
         var normal = stack.last().normal().transform(new Vector3f(0, 1, 0));
 
@@ -268,17 +182,15 @@ public class RenderUtil {
         return Color.getHSBColor((180 * Mth.sin((time + partialTicks) / 30.0f) - 180) / 360.0f, 0.5f, 0.8f);
     }
 
-    public static ShaderInstance getRenderTypeTintedCutoutMippedShader() {
-        return renderTypeTintedCutoutMippedShader;
-    }
-
+    // TODO: port getFluidColor to 26.x (IClientFluidTypeExtensions no longer has getTintColor)
     public static int getFluidColor(Fluid fluid, Level level, BlockPos pos) {
-        return IClientFluidTypeExtensions.of(fluid).getTintColor(fluid.defaultFluidState(), level, pos);
+        return -1; // white/no tint; use FluidModel.fluidTintSource() in 26.x
     }
 
     // todo use ambient occlusion
     // Renders a cuboid using the same side sprite on all six sides
     public static void renderCuboid(VertexConsumer builder, PoseStack stack, float minY, float maxY, int r, int g, int b, TextureAtlasSprite sprite, int light, float edge) {
+        if (sprite == null) return;
         var pose = stack.last().pose();
         var poseNormal = stack.last().normal();
 

@@ -24,7 +24,7 @@ import dev.emi.emi.api.render.EmiTexture;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.state.BlockState;
 import thedarkcolour.exdeorum.compat.XeiUtil;
 import thedarkcolour.exdeorum.recipe.BlockPredicate;
@@ -38,7 +38,7 @@ class CrookEmiRecipe extends EEmiRecipe {
     private final List<BlockState> states;
     private final BlockPredicate predicate;
 
-    public CrookEmiRecipe(CrookRecipe recipe, ResourceLocation id) {
+    public CrookEmiRecipe(CrookRecipe recipe, Identifier id) {
         super(id);
 
         this.inputs = EmiUtil.inputs(recipe.blockPredicate());

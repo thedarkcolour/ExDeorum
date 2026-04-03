@@ -18,17 +18,17 @@
 
 package thedarkcolour.exdeorum.item;
 
-import net.minecraft.world.item.DiggerItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.crafting.RecipeType;
 import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.registry.EItems;
 import thedarkcolour.exdeorum.tag.EBlockTags;
 
-public class HammerItem extends DiggerItem {
-    public HammerItem(Tier tier, Properties properties) {
-        super(tier, EBlockTags.MINEABLE_WITH_HAMMER, properties);
+public class HammerItem extends Item {
+    public HammerItem(ToolMaterial material, Properties properties) {
+        super(material.applyToolProperties(properties, EBlockTags.MINEABLE_WITH_HAMMER, 1.5f, -2.8f, 0f));
     }
 
     @Override

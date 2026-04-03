@@ -18,7 +18,7 @@
 
 package thedarkcolour.exdeorum.recipe.cache;
 
-import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeMap;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import org.jetbrains.annotations.Nullable;
@@ -29,11 +29,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FluidTransformationRecipeCache {
-    private RecipeManager recipeManager;
+    private RecipeMap recipeManager;
     @Nullable
     private Map<BlockState, Map<Fluid, FluidTransformationRecipe>> recipes;
 
-    public FluidTransformationRecipeCache(RecipeManager manager) {
+    public FluidTransformationRecipeCache(RecipeMap manager) {
         this.recipeManager = manager;
     }
 

@@ -21,7 +21,7 @@ package thedarkcolour.exdeorum.compat.top;
 import mcjty.theoneprobe.api.*;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -36,8 +36,8 @@ import thedarkcolour.exdeorum.registry.EBlocks;
 
 public class ExDeorumInfoProvider implements IProbeInfoProvider {
     @Override
-    public ResourceLocation getID() {
-        return ResourceLocation.fromNamespaceAndPath(ExDeorum.ID, "info_provider");
+    public Identifier getID() {
+        return Identifier.fromNamespaceAndPath(ExDeorum.ID, "info_provider");
     }
 
     @Override

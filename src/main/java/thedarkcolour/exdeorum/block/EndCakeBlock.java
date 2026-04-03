@@ -23,7 +23,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -43,12 +42,12 @@ public class EndCakeBlock extends CakeBlock {
     }
 
     @Override
-    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         if (stack.is(EItemTags.END_CAKE_MATERIAL)) {
             int bites = state.getValue(BITES);
 
             if (bites == 0) {
-                return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+                return InteractionResult.TRY_WITH_EMPTY_HAND;
             } else {
                 if (!level.isClientSide) {
                     if (!player.getAbilities().instabuild) {
@@ -57,10 +56,10 @@ public class EndCakeBlock extends CakeBlock {
                     level.setBlock(pos, state.setValue(BITES, bites - 1), 3);
                 }
 
-                return ItemInteractionResult.sidedSuccess(level.isClientSide);
+                return InteractionResult.SUCCESS;
             }
         }
-        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        return InteractionResult.TRY_WITH_EMPTY_HAND;
     }
 
     @Override
@@ -83,7 +82,7 @@ public class EndCakeBlock extends CakeBlock {
                 }
             }
 
-            return InteractionResult.sidedSuccess(level.isClientSide);
+            return InteractionResult.SUCCESS;
         }
 
         return InteractionResult.PASS;

@@ -18,7 +18,7 @@
 
 package thedarkcolour.exdeorum.compat.jade;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import snownee.jade.api.IWailaClientRegistration;
 import snownee.jade.api.IWailaPlugin;
 import snownee.jade.api.WailaPlugin;
@@ -30,10 +30,10 @@ import thedarkcolour.exdeorum.block.SieveBlock;
 
 @WailaPlugin
 public class ExDeorumJadePlugin implements IWailaPlugin {
-    static final ResourceLocation INFESTED_LEAVES = ExDeorum.loc("infested_leaves");
-    static final ResourceLocation BARREL = ExDeorum.loc("barrel");
-    static final ResourceLocation SIEVE = ExDeorum.loc("sieve");
-    static final ResourceLocation CRUCIBLE = ExDeorum.loc("crucible");
+    static final Identifier INFESTED_LEAVES = ExDeorum.loc("infested_leaves");
+    static final Identifier BARREL = ExDeorum.loc("barrel");
+    static final Identifier SIEVE = ExDeorum.loc("sieve");
+    static final Identifier CRUCIBLE = ExDeorum.loc("crucible");
 
     @Override
     public void registerClient(IWailaClientRegistration registration) {

@@ -26,7 +26,6 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -71,8 +70,8 @@ public abstract class EBlockEntity extends BlockEntity {
     public void copyVisualData(BlockEntity fromIntegratedServer) {
     }
 
-    public ItemInteractionResult useItemOn(Level level, Player player, ItemStack stack, InteractionHand hand) {
-        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+    public InteractionResult useItemOn(Level level, Player player, ItemStack stack, InteractionHand hand) {
+        return InteractionResult.TRY_WITH_EMPTY_HAND;
     }
 
     public InteractionResult useWithoutItem(Level level, Player player) {

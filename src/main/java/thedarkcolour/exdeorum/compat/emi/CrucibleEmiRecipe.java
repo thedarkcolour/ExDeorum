@@ -20,7 +20,7 @@ package thedarkcolour.exdeorum.compat.emi;
 
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiStack;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import thedarkcolour.exdeorum.recipe.crucible.CrucibleRecipe;
 
 import java.util.List;
@@ -28,7 +28,7 @@ import java.util.List;
 abstract class CrucibleEmiRecipe extends EmiOneToOneRecipe {
     private final List<EmiStack> outputs;
 
-    CrucibleEmiRecipe(CrucibleRecipe recipe, ResourceLocation id) {
+    CrucibleEmiRecipe(CrucibleRecipe recipe, Identifier id) {
         super(recipe, id);
 
         this.outputs = EmiUtil.outputs(recipe.getResult());
@@ -40,7 +40,7 @@ abstract class CrucibleEmiRecipe extends EmiOneToOneRecipe {
     }
 
     static class Lava extends CrucibleEmiRecipe {
-        Lava(CrucibleRecipe recipe, ResourceLocation id) {
+        Lava(CrucibleRecipe recipe, Identifier id) {
             super(recipe, id);
         }
 
@@ -51,7 +51,7 @@ abstract class CrucibleEmiRecipe extends EmiOneToOneRecipe {
     }
 
     static class Water extends CrucibleEmiRecipe {
-        Water(CrucibleRecipe recipe, ResourceLocation id) {
+        Water(CrucibleRecipe recipe, Identifier id) {
             super(recipe, id);
         }
 

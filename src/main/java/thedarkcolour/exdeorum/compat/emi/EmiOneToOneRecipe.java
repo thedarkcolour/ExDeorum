@@ -21,7 +21,7 @@ package thedarkcolour.exdeorum.compat.emi;
 import dev.emi.emi.api.render.EmiTexture;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.widget.WidgetHolder;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import thedarkcolour.exdeorum.compat.XeiUtil;
 import thedarkcolour.exdeorum.recipe.SingleIngredientRecipe;
 
@@ -30,7 +30,7 @@ import java.util.List;
 abstract class EmiOneToOneRecipe extends EEmiRecipe {
     private final List<EmiIngredient> inputs;
 
-    EmiOneToOneRecipe(SingleIngredientRecipe recipe, ResourceLocation id) {
+    EmiOneToOneRecipe(SingleIngredientRecipe recipe, Identifier id) {
         super(id);
 
         this.inputs = EmiUtil.inputs(recipe);

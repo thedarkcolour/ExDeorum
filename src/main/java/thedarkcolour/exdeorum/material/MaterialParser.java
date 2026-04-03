@@ -21,7 +21,7 @@ package thedarkcolour.exdeorum.material;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.SoundType;
 import net.neoforged.neoforge.common.util.DeferredSoundType;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -60,11 +60,11 @@ public class MaterialParser {
             } else if (soundTypeJson instanceof JsonObject soundTypeObj) {
                 if (soundTypeObj.has("break_sound") && soundTypeObj.has("step_sound") && soundTypeObj.has("place_sound") && soundTypeObj.has("hit_sound") && soundTypeObj.has("fall_sound")) {
                     return new DeferredSoundType(1.0f, 1.0f,
-                            DeferredHolder.create(Registries.SOUND_EVENT, ResourceLocation.parse(soundTypeObj.get("break_sound").getAsString())),
-                            DeferredHolder.create(Registries.SOUND_EVENT, ResourceLocation.parse(soundTypeObj.get("step_sound").getAsString())),
-                            DeferredHolder.create(Registries.SOUND_EVENT, ResourceLocation.parse(soundTypeObj.get("place_sound").getAsString())),
-                            DeferredHolder.create(Registries.SOUND_EVENT, ResourceLocation.parse(soundTypeObj.get("hit_sound").getAsString())),
-                            DeferredHolder.create(Registries.SOUND_EVENT, ResourceLocation.parse(soundTypeObj.get("fall_sound").getAsString()))
+                            DeferredHolder.create(Registries.SOUND_EVENT, Identifier.parse(soundTypeObj.get("break_sound").getAsString())),
+                            DeferredHolder.create(Registries.SOUND_EVENT, Identifier.parse(soundTypeObj.get("step_sound").getAsString())),
+                            DeferredHolder.create(Registries.SOUND_EVENT, Identifier.parse(soundTypeObj.get("place_sound").getAsString())),
+                            DeferredHolder.create(Registries.SOUND_EVENT, Identifier.parse(soundTypeObj.get("hit_sound").getAsString())),
+                            DeferredHolder.create(Registries.SOUND_EVENT, Identifier.parse(soundTypeObj.get("fall_sound").getAsString()))
                     );
                 }
             } else {

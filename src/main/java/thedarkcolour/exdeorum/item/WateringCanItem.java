@@ -30,7 +30,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -38,12 +38,12 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BucketPickup;
-import net.minecraft.world.level.block.FarmBlock;
+import net.minecraft.world.level.block.FarmlandBlock;
 import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.SugarCaneBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -132,8 +132,8 @@ public class WateringCanItem extends Item {
     }
 
     @Override
-    public UseAnim getUseAnimation(ItemStack stack) {
-        return UseAnim.NONE;
+    public ItemUseAnimation getUseAnimation(ItemStack stack) {
+        return ItemUseAnimation.NONE;
     }
 
     @Override
@@ -146,7 +146,7 @@ public class WateringCanItem extends Item {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
         var itemInHand = player.getItemInHand(hand);
         var fluidHandler = itemInHand.getCapability(Capabilities.FluidHandler.ITEM);
         if (fluidHandler != null) {
@@ -164,7 +164,7 @@ public class WateringCanItem extends Item {
                             pickup.getPickupSound(state).ifPresent(sound -> player.playSound(sound, 1.0F, 1.0F));
                         }
 
-                        return InteractionResultHolder.sidedSuccess(itemInHand, level.isClientSide);
+                        return level.isClientSide ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
                     }
                 }
             }
@@ -178,10 +178,10 @@ public class WateringCanItem extends Item {
                     onUseTick(level, player, itemInHand, 72000);
                 }
 
-                return InteractionResultHolder.consume(itemInHand);
+                return InteractionResult.CONSUME;
             }
         }
-        return InteractionResultHolder.pass(itemInHand);
+        return InteractionResult.PASS;
     }
 
     @Override
@@ -258,7 +258,7 @@ public class WateringCanItem extends Item {
         } else {
             if (BarrelBlockEntity.isHotFluid(state.getFluidState().getFluidType())) {
                 level.levelEvent(LevelEvent.LAVA_FIZZ, pos, 0);
-            } else if (state.getBlock() == Blocks.FARMLAND) {
+            } else if (state.getBlock() instanceof FarmlandBlock) {
                 hydrateFarmland(level, pos, state);
             }
         }
@@ -281,8 +281,8 @@ public class WateringCanItem extends Item {
             }
         }
 
-        if (state.getValue(FarmBlock.MOISTURE) < 7) {
-            level.setBlockAndUpdate(pos, state.setValue(FarmBlock.MOISTURE, 7));
+        if (state.getValue(FarmlandBlock.MOISTURE) < 7) {
+            level.setBlockAndUpdate(pos, state.setValue(FarmlandBlock.MOISTURE, 7));
         }
     }
 

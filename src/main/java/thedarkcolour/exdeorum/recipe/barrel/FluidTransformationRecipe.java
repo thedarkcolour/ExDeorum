@@ -21,12 +21,14 @@ package thedarkcolour.exdeorum.recipe.barrel;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.PlacementInfo;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeBookCategories;
+import net.minecraft.world.item.crafting.RecipeBookCategory;
 import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -68,27 +70,37 @@ public record FluidTransformationRecipe(
     }
 
     @Override
-    public ItemStack assemble(RecipeInput input, HolderLookup.Provider lookup) {
+    public ItemStack assemble(RecipeInput input) {
         return ItemStack.EMPTY;
     }
 
     @Override
-    public boolean canCraftInDimensions(int pWidth, int pHeight) {
+    public boolean showNotification() {
         return false;
     }
 
     @Override
-    public ItemStack getResultItem(HolderLookup.Provider lookup) {
-        return ItemStack.EMPTY;
+    public String group() {
+        return "";
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public PlacementInfo placementInfo() {
+        return PlacementInfo.NOT_PLACEABLE;
+    }
+
+    @Override
+    public RecipeBookCategory recipeBookCategory() {
+        return RecipeBookCategories.CRAFTING_MISC;
+    }
+
+    @Override
+    public RecipeSerializer<FluidTransformationRecipe> getSerializer() {
         return ERecipeSerializers.BARREL_FLUID_TRANSFORMATION.get();
     }
 
     @Override
-    public RecipeType<?> getType() {
+    public RecipeType<FluidTransformationRecipe> getType() {
         return ERecipeTypes.BARREL_FLUID_TRANSFORMATION.get();
     }
 
@@ -111,15 +123,4 @@ public record FluidTransformationRecipe(
         return new FluidTransformationRecipe(baseFluid, resultFluid, resultColor, catalyst, byproducts, duration);
     }
 
-    public static class Serializer implements RecipeSerializer<FluidTransformationRecipe> {
-        @Override
-        public MapCodec<FluidTransformationRecipe> codec() {
-            return CODEC;
-        }
-
-        @Override
-        public StreamCodec<RegistryFriendlyByteBuf, FluidTransformationRecipe> streamCodec() {
-            return STREAM_CODEC;
-        }
-    }
 }

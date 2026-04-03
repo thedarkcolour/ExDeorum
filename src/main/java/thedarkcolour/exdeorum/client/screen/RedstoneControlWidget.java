@@ -20,15 +20,16 @@ package thedarkcolour.exdeorum.client.screen;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import thedarkcolour.exdeorum.data.TranslationKeys;
 import thedarkcolour.exdeorum.menu.AbstractMachineMenu;
@@ -48,7 +49,7 @@ public class RedstoneControlWidget implements GuiEventListener, NarratableEntry,
     private static final Component REDSTONE_CONTROL_LABEL = Component.translatable(TranslationKeys.REDSTONE_CONTROL_LABEL);
 
     private final AbstractMachineMenu<?> screen;
-    private final ResourceLocation texture;
+    private final Identifier texture;
     private final int posX;
     private final int posY;
     private final int tabU;
@@ -69,7 +70,7 @@ public class RedstoneControlWidget implements GuiEventListener, NarratableEntry,
     // Last time (from currentTimeMillis) this button was clicked, used in animation lerp
     private long lastClicked = -1L;
 
-    public RedstoneControlWidget(AbstractMachineMenu<?> screen, ResourceLocation texture, int posX, int posY) {
+    public RedstoneControlWidget(AbstractMachineMenu<?> screen, Identifier texture, int posX, int posY) {
         this.screen = screen;
         this.texture = texture;
         this.posX = posX;
@@ -88,7 +89,7 @@ public class RedstoneControlWidget implements GuiEventListener, NarratableEntry,
     }
 
     @Override
-    public void render(GuiGraphics graphics, int mx, int my, float pPartialTick) {
+    public void extractRenderState(GuiGraphicsExtractor graphics, int mx, int my, float pPartialTick) {
         if (this.lastClicked != -1L) {
             // animation is 200 ms
             this.percentage = (System.currentTimeMillis() - this.lastClicked) / 200.0f;
@@ -108,20 +109,20 @@ public class RedstoneControlWidget implements GuiEventListener, NarratableEntry,
 
         if (this.expanded) {
             var redstoneMode = this.screen.machine.getRedstoneMode();
-            graphics.blit(this.texture, this.posX, this.posY, this.expandedU, this.expandedV, this.expandedWidth, this.expandedHeight);
+            graphics.blit(RenderPipelines.GUI_TEXTURED, this.texture, this.posX, this.posY, this.expandedU, this.expandedV, this.expandedWidth, this.expandedHeight, 256, 256);
             for (int i = 0; i < 3; ++i) {
-                graphics.blit(this.texture, this.buttonsPosX + (i * 19), this.buttonsPosY, (redstoneMode == i ? this.tabU + 16 : this.tabU), this.tabV + this.tabHeight, 16, 16);
+                graphics.blit(RenderPipelines.GUI_TEXTURED, this.texture, this.buttonsPosX + (i * 19), this.buttonsPosY, (redstoneMode == i ? this.tabU + 16 : this.tabU), this.tabV + this.tabHeight, 16, 16, 256, 256);
             }
-            graphics.blit(this.texture, this.buttonsPosX, this.buttonsPosY, this.tabU, this.tabV + this.tabHeight + 16, 52, 14);
+            graphics.blit(RenderPipelines.GUI_TEXTURED, this.texture, this.buttonsPosX, this.buttonsPosY, this.tabU, this.tabV + this.tabHeight + 16, 52, 14, 256, 256);
 
-            graphics.drawString(font, Component.translatable(TranslationKeys.REDSTONE_CONTROL_LABEL), this.posX + 16, this.posY + 10, 0xffffff);
+            graphics.text(font, Component.translatable(TranslationKeys.REDSTONE_CONTROL_LABEL), this.posX + 16, this.posY + 10, 0xffffff);
             // The label
-            graphics.drawString(font, Component.translatable(TranslationKeys.REDSTONE_CONTROL_MODE).append(REDSTONE_MODES[redstoneMode]), this.posX + 4, this.posY + 26, 0xffffff);
+            graphics.text(font, Component.translatable(TranslationKeys.REDSTONE_CONTROL_MODE).append(REDSTONE_MODES[redstoneMode]), this.posX + 4, this.posY + 26, 0xffffff);
         } else {
-            graphics.blit(this.texture, this.posX, this.posY, this.tabU, this.tabV, this.tabWidth, this.tabHeight);
+            graphics.blit(RenderPipelines.GUI_TEXTURED, this.texture, this.posX, this.posY, this.tabU, this.tabV, this.tabWidth, this.tabHeight, 256, 256);
 
             if (this.posX <= mx && mx < this.posX + this.tabWidth && this.posY <= my && my < this.posY + this.tabHeight) {
-                graphics.renderTooltip(font, REDSTONE_CONTROL_LABEL, mx, my);
+                graphics.setTooltipForNextFrame(REDSTONE_CONTROL_LABEL, mx, my);
             }
         }
     }
@@ -164,7 +165,7 @@ public class RedstoneControlWidget implements GuiEventListener, NarratableEntry,
         Minecraft.getInstance().gameMode.handleInventoryButtonClick(this.screen.containerId, redstoneMode);
     }
 
-    private void drawPartialConfig(GuiGraphics graphics) {
+    private void drawPartialConfig(GuiGraphicsExtractor graphics) {
         float percentage = this.expanded ? 1.0f - this.percentage : this.percentage;
         // top left without edge
         int width = getWidth(percentage) - 3;
@@ -174,13 +175,13 @@ public class RedstoneControlWidget implements GuiEventListener, NarratableEntry,
         int edgeV = this.expandedV + this.expandedHeight - 3;
 
         // top left section (no edges)
-        graphics.blit(this.texture, this.posX, this.posY, this.expandedU, this.expandedV, width, height);
+        graphics.blit(RenderPipelines.GUI_TEXTURED, this.texture, this.posX, this.posY, this.expandedU, this.expandedV, width, height, 256, 256);
         // bottom edge
-        graphics.blit(this.texture, this.posX, this.posY + height, this.expandedU, edgeV, width, 3);
+        graphics.blit(RenderPipelines.GUI_TEXTURED, this.texture, this.posX, this.posY + height, this.expandedU, edgeV, width, 3, 256, 256);
         // right edge
-        graphics.blit(this.texture, this.posX + width, this.posY, edgeU, this.expandedV, 3, height);
+        graphics.blit(RenderPipelines.GUI_TEXTURED, this.texture, this.posX + width, this.posY, edgeU, this.expandedV, 3, height, 256, 256);
         // bottom right corner
-        graphics.blit(this.texture, this.posX + width, this.posY + height, edgeU, edgeV, 3, 3);
+        graphics.blit(RenderPipelines.GUI_TEXTURED, this.texture, this.posX + width, this.posY + height, edgeU, edgeV, 3, 3, 256, 256);
     }
 
     public int getWidth(float percentage) {
