@@ -32,7 +32,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeMap;
@@ -40,12 +39,12 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.util.context.ContextMap;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.providers.number.*;
 import net.neoforged.neoforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
-import thedarkcolour.exdeorum.compat.PreferredOres;
 import thedarkcolour.exdeorum.loot.SummationGenerator;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelCompostRecipe;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelFluidMixingRecipe;
@@ -58,7 +57,6 @@ import thedarkcolour.exdeorum.recipe.hammer.CompressedHammerRecipe;
 import thedarkcolour.exdeorum.recipe.hammer.HammerRecipe;
 import thedarkcolour.exdeorum.recipe.sieve.CompressedSieveRecipe;
 import thedarkcolour.exdeorum.recipe.sieve.SieveRecipe;
-import thedarkcolour.exdeorum.registry.ENumberProviders;
 import thedarkcolour.exdeorum.registry.ERecipeTypes;
 
 import java.util.*;
@@ -158,21 +156,18 @@ public final class RecipeUtil {
     }
 
     public static void toNetworkNumberProvider(FriendlyByteBuf buffer, NumberProvider provider) {
-        if (provider.getType() == NumberProviders.CONSTANT) {
+        if (provider instanceof ConstantValue constant) {
             buffer.writeByte(CONSTANT_TYPE);
-            buffer.writeFloat(((ConstantValue) provider).value());
-        } else if (provider.getType() == NumberProviders.UNIFORM) {
-            var uniform = (UniformGenerator) provider;
+            buffer.writeFloat(constant.value());
+        } else if (provider instanceof UniformGenerator uniform) {
             buffer.writeByte(UNIFORM_TYPE);
             toNetworkNumberProvider(buffer, uniform.min());
             toNetworkNumberProvider(buffer, uniform.max());
-        } else if (provider.getType() == NumberProviders.BINOMIAL) {
-            var binomial = (BinomialDistributionGenerator) provider;
+        } else if (provider instanceof BinomialDistributionGenerator binomial) {
             buffer.writeByte(BINOMIAL_TYPE);
             toNetworkNumberProvider(buffer, binomial.n());
             toNetworkNumberProvider(buffer, binomial.p());
-        } else if (provider.getType() == ENumberProviders.SUMMATION.get()) {
-            var summation = (SummationGenerator) provider;
+        } else if (provider instanceof SummationGenerator summation) {
             var providers = summation.providers();
             int length = providers.size();
             buffer.writeByte(SUMMATION_TYPE);
@@ -272,11 +267,11 @@ public final class RecipeUtil {
     }
 
     public static boolean isTagEmpty(TagKey<Item> tag) {
-        return BuiltInRegistries.ITEM.getTag(tag).map(set -> !set.iterator().hasNext()).orElse(PreferredOres.getPreferredOre(tag) == Items.AIR);
+        return !BuiltInRegistries.ITEM.getTagOrEmpty(tag).iterator().hasNext();
     }
 
     public static LootContext emptyLootContext(ServerLevel level) {
-        return new LootContext.Builder(new LootParams(level, Map.of(), Map.of(), 0)).create(Optional.empty());
+        return new LootContext.Builder(new LootParams(level, ContextMap.EMPTY, Map.of(), 0f)).create(Optional.empty());
     }
 
     public static List<CrookRecipe> getCrookRecipes(BlockState state) {
@@ -319,7 +314,7 @@ public final class RecipeUtil {
 
     public static BlockState parseBlockState(String stateString) {
         try {
-            return BlockStateParser.parseForBlock(BuiltInRegistries.BLOCK.asLookup(), stateString, false).blockState();
+            return BlockStateParser.parseForBlock(BuiltInRegistries.BLOCK, stateString, false).blockState();
         } catch (CommandSyntaxException e) {
             throw new IllegalArgumentException("Failed to parse BlockState string \"" + stateString + "\"");
         }

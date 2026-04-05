@@ -22,7 +22,6 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemStack;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.blockentity.MechanicalSieveBlockEntity;
@@ -42,7 +41,7 @@ public class MechanicalSieveMenu extends AbstractMachineMenu<MechanicalSieveBloc
         // input slot
         addSlot(sieve.inventory.createSlot(0, 26, 30));
         // mesh slot
-        addSlot(sieve.inventory.createSlot(1, 26, 53).setBackground(InventoryMenu.BLOCK_ATLAS, EMPTY_SLOT_MESH));
+        addSlot(sieve.inventory.createSlot(1, 26, 53).setBackground(EMPTY_SLOT_MESH));
         // output slots
         for (int r = 0; r < 4; ++r) {
             for (int c = 0; c < 5; ++c) {

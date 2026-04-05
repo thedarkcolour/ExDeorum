@@ -18,13 +18,12 @@
 
 package thedarkcolour.exdeorum.data;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.neoforged.neoforge.client.model.generators.BlockModelBuilder;
-import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
-import net.neoforged.neoforge.client.model.generators.loaders.CompositeModelBuilder;
 import thedarkcolour.exdeorum.material.DefaultMaterials;
 import thedarkcolour.exdeorum.registry.EBlocks;
 import thedarkcolour.exdeorum.registry.ECompressedBlocks;
@@ -33,6 +32,24 @@ import thedarkcolour.modkit.data.MKBlockModelProvider;
 import java.util.Objects;
 
 class BlockModels {
+    /**
+     * Wraps a pending model JSON so callers can chain .renderType() after creating a model.
+     * The JSON is registered lazily, so mutations (renderType) before run() are reflected.
+     */
+    static class ModelBuilder {
+        private final JsonObject json;
+
+        ModelBuilder(MKBlockModelProvider models, Identifier modelId, JsonObject json) {
+            this.json = json;
+            models.acceptModel(modelId, () -> json);
+        }
+
+        public ModelBuilder renderType(String type) {
+            json.addProperty("render_type", "minecraft:" + type);
+            return this;
+        }
+    }
+
     public static void addBlockModels(MKBlockModelProvider models) {
         models.simpleBlock(EBlocks.DUST.get());
         models.simpleBlock(EBlocks.CRUSHED_NETHERRACK.get());
@@ -228,39 +245,62 @@ class BlockModels {
     }
 
     public static void compressedBlock(MKBlockModelProvider models, Block block, Block appearance) {
-        var original = models.file(models.blockTexture(appearance));
+        Identifier originalModelId = models.blockTexture(appearance);
+        Identifier modelId = models.modBlock(models.name(block));
 
-        models.getVariantBuilder(block).partialState().addModels(new ConfiguredModel(
-                models.models().getBuilder(models.name(block)).customLoader(CompositeModelBuilder::begin)
-                        .child("base", models.models().nested()
-                                .parent(original)
-                                .renderType("solid")
-                        )
-                        .child("overlay", models.models().nested()
-                                .parent(models.mcFile("cube_all"))
-                                .texture("all", models.modLoc("block/compressed_overlay"))
-                                .renderType("translucent")
-                        )
-                        .itemRenderOrder("base", "overlay")
-                        .end()
-                        .parent(models.mcFile("block"))
-                        .texture("particle", models.blockTexture(appearance))
-        ));
+        JsonObject json = new JsonObject();
+        json.addProperty("parent", models.mcBlock("block").toString());
+        json.addProperty("loader", "neoforge:composite");
+
+        JsonObject textures = new JsonObject();
+        textures.addProperty("particle", originalModelId.toString());
+        json.add("textures", textures);
+
+        JsonObject children = new JsonObject();
+
+        JsonObject baseChild = new JsonObject();
+        baseChild.addProperty("parent", originalModelId.toString());
+        baseChild.addProperty("render_type", "minecraft:solid");
+        children.add("base", baseChild);
+
+        JsonObject overlayChild = new JsonObject();
+        overlayChild.addProperty("parent", models.mcBlock("cube_all").toString());
+        overlayChild.addProperty("render_type", "minecraft:translucent");
+        JsonObject overlayTextures = new JsonObject();
+        overlayTextures.addProperty("all", models.modLoc("block/compressed_overlay").toString());
+        overlayChild.add("textures", overlayTextures);
+        children.add("overlay", overlayChild);
+
+        json.add("children", children);
+
+        JsonArray itemRenderOrder = new JsonArray();
+        itemRenderOrder.add("base");
+        itemRenderOrder.add("overlay");
+        json.add("item_render_order", itemRenderOrder);
+
+        models.acceptModel(modelId, () -> json);
+        models.simpleBlock(block, modelId);
     }
 
     public static void crucible(MKBlockModelProvider models, Block block, Block appearance) {
         crucible(models, block, appearance, "", "");
     }
 
-    public static BlockModelBuilder crucible(MKBlockModelProvider models, Block block, Block appearance, String pathPrefix, String pathSuffix) {
+    public static ModelBuilder crucible(MKBlockModelProvider models, Block block, Block appearance, String pathPrefix, String pathSuffix) {
         var texture = texture(appearance, pathPrefix, pathSuffix);
+        Identifier modelId = models.modBlock(models.name(block));
 
-        return singleModel(models, block)
-                .parent(models.modFile("template_crucible"))
-                .texture("inside", texture)
-                .texture("top", texture)
-                .texture("bottom", texture)
-                .texture("side", texture);
+        JsonObject json = new JsonObject();
+        json.addProperty("parent", models.modBlock("template_crucible").toString());
+        JsonObject textures = new JsonObject();
+        textures.addProperty("inside", texture.toString());
+        textures.addProperty("top", texture.toString());
+        textures.addProperty("bottom", texture.toString());
+        textures.addProperty("side", texture.toString());
+        json.add("textures", textures);
+
+        models.simpleBlock(block, modelId);
+        return new ModelBuilder(models, modelId, json);
     }
 
     private static Identifier texture(Block block, String prefix, String suffix) {
@@ -272,41 +312,53 @@ class BlockModels {
         barrel(models, block, appearance, "");
     }
 
-    public static BlockModelBuilder barrel(MKBlockModelProvider models, Block block, Block appearance, String pathPrefix) {
-        return singleModel(models, block)
-                .parent(models.modFile("template_barrel"))
-                .texture("barrel", texture(appearance, pathPrefix, ""));
+    public static ModelBuilder barrel(MKBlockModelProvider models, Block block, Block appearance, String pathPrefix) {
+        var texture = texture(appearance, pathPrefix, "");
+        Identifier modelId = models.modBlock(models.name(block));
+
+        JsonObject json = new JsonObject();
+        json.addProperty("parent", models.modBlock("template_barrel").toString());
+        JsonObject textures = new JsonObject();
+        textures.addProperty("barrel", texture.toString());
+        json.add("textures", textures);
+
+        models.simpleBlock(block, modelId);
+        return new ModelBuilder(models, modelId, json);
     }
 
     public static void sieve(MKBlockModelProvider models, Block block, Block appearance) {
         sieve(models, block, appearance, "");
     }
 
-    public static BlockModelBuilder sieve(MKBlockModelProvider models, Block block, Block appearance, String pathPrefix) {
-        return singleModel(models, block)
-                .parent(models.modFile("template_sieve"))
-                .texture("texture", texture(appearance, pathPrefix, ""));
+    public static ModelBuilder sieve(MKBlockModelProvider models, Block block, Block appearance, String pathPrefix) {
+        var texture = texture(appearance, pathPrefix, "");
+        Identifier modelId = models.modBlock(models.name(block));
+
+        JsonObject json = new JsonObject();
+        json.addProperty("parent", models.modBlock("template_sieve").toString());
+        JsonObject textures = new JsonObject();
+        textures.addProperty("texture", texture.toString());
+        json.add("textures", textures);
+
+        models.simpleBlock(block, modelId);
+        return new ModelBuilder(models, modelId, json);
     }
 
     public static void compressedSieve(MKBlockModelProvider models, Block block, Block appearance) {
         compressedSieve(models, block, appearance, "", "");
     }
 
-    public static BlockModelBuilder compressedSieve(MKBlockModelProvider models, Block block, Block appearance, String pathPrefix, String pathSuffix) {
-        return singleModel(models, block)
-                .parent(models.modFile("template_compressed_sieve"))
-                .texture("texture", texture(appearance, pathPrefix, pathSuffix));
-    }
+    public static ModelBuilder compressedSieve(MKBlockModelProvider models, Block block, Block appearance, String pathPrefix, String pathSuffix) {
+        var texture = texture(appearance, pathPrefix, pathSuffix);
+        Identifier modelId = models.modBlock(models.name(block));
 
-    public static BlockModelBuilder singleModel(MKBlockModelProvider models, Block block) {
-        BlockModelBuilder builder = blockModel(models, block);
+        JsonObject json = new JsonObject();
+        json.addProperty("parent", models.modBlock("template_compressed_sieve").toString());
+        JsonObject textures = new JsonObject();
+        textures.addProperty("texture", texture.toString());
+        json.add("textures", textures);
 
-        models.getVariantBuilder(block).partialState().addModels(new ConfiguredModel(builder));
-
-        return builder;
-    }
-
-    public static BlockModelBuilder blockModel(MKBlockModelProvider models, Block block) {
-        return models.models().getBuilder(models.name(block));
+        models.simpleBlock(block, modelId);
+        return new ModelBuilder(models, modelId, json);
     }
 }

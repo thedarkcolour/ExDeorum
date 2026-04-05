@@ -30,9 +30,6 @@ public class Data {
         var gen = event.getGenerator(); // writes to json
         var output = gen.getPackOutput();
         var registries = event.getLookupProvider();
-        // reads existing files like pngs and parent models
-        var helper = event.getExistingFileHelper();
-
         var dataHelper = new DataHelper(ExDeorum.ID, event);
         dataHelper.createEnglish(true, English::addTranslations);
         dataHelper.createBlockModels(BlockModels::addBlockModels);
@@ -46,8 +43,8 @@ public class Data {
         dataHelper.createTags(Registries.WORLD_PRESET, ModTags::createWorldPresetTags);
 
         gen.addProvider(true, new LootTables(output, registries));
-        gen.addProvider(true, new Advancements(output, registries, helper));
-        gen.addProvider(true, new Sounds(output, helper));
+        gen.addProvider(true, new Advancements(output, registries));
+        gen.addProvider(true, new Sounds(output));
         gen.addProvider(true, new LootModifiers(output, registries));
     }
 }

@@ -43,13 +43,13 @@ public class SculkCoreItem extends Item {
             var stack = context.getItemInHand();
             var player = context.getPlayer();
 
-            if (!level.isClientSide) {
+            if (!level.isClientSide()) {
                 if (!player.getAbilities().instabuild) {
                     stack.shrink(1);
                 }
                 level.setBlock(pos, state.setValue(SculkShriekerBlock.CAN_SUMMON, true), 3);
             } else {
-                var rand = level.random;
+                var rand = level.getRandom();
                 for (int i = 0; i < 10; i++) {
                     int j = i * 36;
                     double radians = Math.toRadians(j);
@@ -61,7 +61,7 @@ public class SculkCoreItem extends Item {
             }
             level.playSound(null, pos, ESounds.SCULK_CORE_ACTIVATE.get(), SoundSource.BLOCKS, 1.0f, 1.0f);
 
-            return InteractionResult.sidedSuccess(level.isClientSide);
+            return InteractionResult.sidedSuccess(level.isClientSide());
         }
 
         return InteractionResult.PASS;

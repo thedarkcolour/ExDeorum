@@ -20,9 +20,9 @@ package thedarkcolour.exdeorum.blockentity.logic;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -90,7 +90,7 @@ public class SieveLogic {
         if (this.progress >= 1.0f - Mth.EPSILON) {
             var level = this.owner.getServerLevel();
             var context = RecipeUtil.emptyLootContext(level);
-            var rand = level.random;
+            var rand = level.getRandom();
             var limitDrops = this.contents.getItem() == Items.MOSS_BLOCK && EConfig.SERVER.limitMossSieveDrops.get();
             var handledAnyDrops = false;
             var hasDrops = false;
@@ -165,33 +165,22 @@ public class SieveLogic {
         }
     }
 
-    public void saveNbt(CompoundTag nbt, HolderLookup.Provider registries) {
+    public void saveNbt(ValueOutput output) {
         if (!this.contents.isEmpty()) {
-            nbt.put("contents", this.contents.save(registries));
+            output.store("contents", ItemStack.CODEC, this.contents);
         }
         if (!this.mechanical && !this.mesh.isEmpty()) {
-            nbt.put("mesh", this.mesh.save(registries));
+            output.store("mesh", ItemStack.CODEC, this.mesh);
         }
-        nbt.putFloat("progress", this.progress);
+        output.putFloat("progress", this.progress);
     }
 
-    public void loadNbt(CompoundTag nbt, HolderLookup.Provider registries) {
-        if (nbt.contains("contents")) {
-            this.contents = ItemStack.parseOptional(registries, nbt.getCompound("contents"));
-        } else {
-            this.contents = ItemStack.EMPTY;
-        }
-        if (nbt.getTagType("progress") == Tag.TAG_SHORT) {
-            this.progress = (float) nbt.getShort("progress") / 100f;
-        } else {
-            this.progress = nbt.getFloat("progress");
-        }
+    public void loadNbt(ValueInput input) {
+        var registries = input.lookup();
+        this.contents = input.read("contents", ItemStack.CODEC).orElse(ItemStack.EMPTY);
+        this.progress = input.getFloatOr("progress", 0f);
         if (!this.mechanical) {
-            if (nbt.contains("mesh")) {
-                setMesh(registries, ItemStack.parseOptional(registries, nbt.getCompound("mesh")), false);
-            } else {
-                setMesh(registries, ItemStack.EMPTY, false);
-            }
+            setMesh(registries, input.read("mesh", ItemStack.CODEC).orElse(ItemStack.EMPTY), false);
         }
     }
 

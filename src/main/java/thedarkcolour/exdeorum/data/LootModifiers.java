@@ -2,6 +2,7 @@ package thedarkcolour.exdeorum.data;
 
 import net.minecraft.advancements.criterion.ItemPredicate;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -33,6 +34,6 @@ class LootModifiers extends GlobalLootModifierProvider {
     }
 
     private void add(String name, Function<LootItemCondition[], IGlobalLootModifier> constructor, TagKey<Item> requiredTag) {
-        add(name, constructor.apply(new LootItemCondition[]{new MatchTool(Optional.of(ItemPredicate.Builder.item().of(requiredTag).build()))}), List.of());
+        add(name, constructor.apply(new LootItemCondition[]{new MatchTool(Optional.of(ItemPredicate.Builder.item().of(this.registries.lookupOrThrow(Registries.ITEM), requiredTag).build()))}), List.of());
     }
 }

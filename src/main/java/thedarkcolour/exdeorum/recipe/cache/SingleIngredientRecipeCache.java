@@ -108,9 +108,7 @@ public class SingleIngredientRecipeCache<T extends SingleIngredientRecipe> {
             var ingredient = recipe.ingredient();
 
             if (ingredient.isSimple()) {
-                for (var item : ingredient.getItems()) {
-                    this.simpleRecipes.put(item.getItem(), recipe);
-                }
+                ingredient.items().forEach(itemHolder -> this.simpleRecipes.put(itemHolder.value(), recipe));
             } else {
                 complexRecipes.add(recipe);
             }

@@ -66,9 +66,11 @@ public class OreChunkRecipe implements CraftingRecipe {
         return this.ore;
     }
 
-    @Override
-    public NonNullList<Ingredient> getIngredients() {
-        return this.pattern.ingredients();
+    public List<Ingredient> getIngredients() {
+        return this.pattern.ingredients().stream()
+                .filter(java.util.Optional::isPresent)
+                .map(java.util.Optional::get)
+                .toList();
     }
 
     @Override
@@ -102,7 +104,7 @@ public class OreChunkRecipe implements CraftingRecipe {
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<OreChunkRecipe> getSerializer() {
         return ERecipeSerializers.ORE_CHUNK.get();
     }
 

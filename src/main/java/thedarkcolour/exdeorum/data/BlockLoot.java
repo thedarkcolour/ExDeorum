@@ -23,7 +23,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.storage.loot.BuiltInLootTables;
+
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
@@ -47,7 +47,7 @@ class BlockLoot extends BlockLootSubProvider {
     @Override
     protected void generate() {
         MKUtils.forModRegistry(Registries.BLOCK, ExDeorum.ID, (id, block) -> {
-            if (block.getLootTable() != BuiltInLootTables.EMPTY) {
+            if (block.getLootTable().isPresent()) {
                 dropSelf(block);
             }
         });

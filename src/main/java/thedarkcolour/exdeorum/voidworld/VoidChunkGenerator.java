@@ -26,6 +26,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.WorldGenRegion;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.NoiseColumn;
 import net.minecraft.world.level.StructureManager;
@@ -147,14 +148,14 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
     }
 
     @Override
-    public void createStructures(RegistryAccess registries, ChunkGeneratorStructureState pStructureState, StructureManager pStructureManager, ChunkAccess pChunk, StructureTemplateManager pStructureTemplateManager) {
+    public void createStructures(RegistryAccess registries, ChunkGeneratorStructureState pStructureState, StructureManager pStructureManager, ChunkAccess pChunk, StructureTemplateManager pStructureTemplateManager, ResourceKey<Level> level) {
         if (this.generateNormal || hasStructures(registries)) {
-            super.createStructures(registries, pStructureState, pStructureManager, pChunk, pStructureTemplateManager);
+            super.createStructures(registries, pStructureState, pStructureManager, pChunk, pStructureTemplateManager, level);
         }
     }
 
     private boolean hasStructures(RegistryAccess registries) {
-        return registries.registryOrThrow(Registries.STRUCTURE_SET).getTagOrEmpty(this.allowedStructureSets).iterator().hasNext();
+        return registries.lookupOrThrow(Registries.STRUCTURE_SET).getTagOrEmpty(this.allowedStructureSets).iterator().hasNext();
     }
 
     private record FilteredLookup(HolderLookup<StructureSet> parent,

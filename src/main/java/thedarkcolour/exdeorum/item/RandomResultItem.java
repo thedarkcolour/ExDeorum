@@ -28,13 +28,15 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipDisplay;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+
+import java.util.function.Consumer;
 import thedarkcolour.exdeorum.data.TranslationKeys;
 import thedarkcolour.exdeorum.registry.EItems;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class RandomResultItem extends Item {
     private final TagKey<Item> possibilities;
@@ -49,7 +51,7 @@ public class RandomResultItem extends Item {
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         var stack = player.getItemInHand(hand);
 
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             var possibleResults = new ArrayList<Item>();
             for (var holder : BuiltInRegistries.ITEM.getTagOrEmpty(this.possibilities)) {
                 possibleResults.add(holder.value());
@@ -58,7 +60,7 @@ public class RandomResultItem extends Item {
             if (!player.getAbilities().instabuild) {
                 stack.shrink(1);
             }
-            var newItem = new ItemStack(Util.getRandom(possibleResults, level.random));
+            var newItem = new ItemStack(Util.getRandom(possibleResults, level.getRandom()));
             player.getInventory().placeItemBackInInventory(newItem);
 
             return InteractionResult.CONSUME.heldItemTransformedTo(stack.isEmpty() ? player.getItemInHand(hand) : stack);
@@ -67,9 +69,9 @@ public class RandomResultItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack pStack, TooltipContext pLevel, List<Component> tooltip, TooltipFlag pIsAdvanced) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltipAdder, TooltipFlag advanced) {
         if (this == EItems.RANDOM_ARMOR_TRIM.value()) {
-            tooltip.add(Component.translatable(TranslationKeys.RANDOM_TRIM_DOES_NOT_CONTAIN_UPGRADE).withStyle(ChatFormatting.DARK_GRAY));
+            tooltipAdder.accept(Component.translatable(TranslationKeys.RANDOM_TRIM_DOES_NOT_CONTAIN_UPGRADE).withStyle(ChatFormatting.DARK_GRAY));
         }
     }
 }

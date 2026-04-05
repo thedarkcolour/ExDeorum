@@ -23,7 +23,6 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.DataSlot;
-import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemStack;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.blockentity.MechanicalHammerBlockEntity;
@@ -44,7 +43,7 @@ public class MechanicalHammerMenu extends AbstractMachineMenu<MechanicalHammerBl
         // input slot
         addSlot(machine.inventory.createSlot(0, 32, 35));
         // hammer slot
-        addSlot(machine.inventory.createSlot(1, 56, 35).setBackground(InventoryMenu.BLOCK_ATLAS, EMPTY_SLOT_HAMMER));
+        addSlot(machine.inventory.createSlot(1, 56, 35).setBackground(EMPTY_SLOT_HAMMER));
         // output slot
         addSlot(machine.inventory.createSlot(2, 116, 35));
 

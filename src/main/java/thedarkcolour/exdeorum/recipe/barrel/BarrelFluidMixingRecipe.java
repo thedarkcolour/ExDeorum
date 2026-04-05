@@ -48,8 +48,8 @@ public record BarrelFluidMixingRecipe(
         boolean consumesAdditive
 ) implements Recipe<RecipeInput> {
     public static final MapCodec<BarrelFluidMixingRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            SizedFluidIngredient.FLAT_CODEC.fieldOf("base_fluid").forGetter(BarrelFluidMixingRecipe::baseFluid),
-            FluidIngredient.CODEC_NON_EMPTY.fieldOf("additive_fluid").forGetter(BarrelFluidMixingRecipe::additiveFluid),
+            SizedFluidIngredient.CODEC.fieldOf("base_fluid").forGetter(BarrelFluidMixingRecipe::baseFluid),
+            FluidIngredient.CODEC.fieldOf("additive_fluid").forGetter(BarrelFluidMixingRecipe::additiveFluid),
             ItemStack.CODEC.fieldOf("result").forGetter(BarrelFluidMixingRecipe::result),
             Codec.BOOL.optionalFieldOf("consumes_additive", false).forGetter(BarrelFluidMixingRecipe::consumesAdditive)
     ).apply(instance, BarrelFluidMixingRecipe::new));

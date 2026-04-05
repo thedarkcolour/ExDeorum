@@ -56,9 +56,7 @@ public class SieveRecipeCache<T extends SieveRecipe> {
         var tempMap = new HashMap<Item, List<T>>();
         for (var holder : this.recipeManager.byType(this.recipeType.get())) {
             var recipe = holder.value();
-            for (var stack : recipe.mesh.getItems()) {
-                tempMap.computeIfAbsent(stack.getItem(), k -> new ArrayList<>()).add(recipe);
-            }
+            recipe.mesh.items().forEach(meshHolder -> tempMap.computeIfAbsent(meshHolder.value(), k -> new ArrayList<>()).add(recipe));
         }
         this.meshCaches = new HashMap<>();
         for (var mesh : tempMap.entrySet()) {
@@ -80,9 +78,7 @@ public class SieveRecipeCache<T extends SieveRecipe> {
             var temp = new HashMap<Item, ImmutableList.Builder<T>>();
 
             for (var recipe : recipes) {
-                for (var item : recipe.ingredient.getItems()) {
-                    temp.computeIfAbsent(item.getItem(), k -> ImmutableList.builder()).add(recipe);
-                }
+                recipe.ingredient.items().forEach(holder -> temp.computeIfAbsent(holder.value(), k -> ImmutableList.builder()).add(recipe));
             }
 
             for (var entry : temp.entrySet()) {

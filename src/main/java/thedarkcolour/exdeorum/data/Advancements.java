@@ -26,6 +26,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.advancements.AdvancementProvider;
 import net.minecraft.data.advancements.AdvancementSubProvider;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Blocks;
@@ -47,8 +48,8 @@ class Advancements extends AdvancementProvider {
         super(output, registries, List.of(new CoreAchievements()));
     }
 
-    private static String modLoc(String path) {
-        return Identifier.fromNamespaceAndPath(ExDeorum.ID, path).toString();
+    private static Identifier modLoc(String path) {
+        return Identifier.fromNamespaceAndPath(ExDeorum.ID, path);
     }
 
     public static class CoreAchievements implements AdvancementSubProvider {
@@ -80,7 +81,7 @@ class Advancements extends AdvancementProvider {
                             true,
                             true
                     )
-                    .addCriterion("craft_crook", hasItems(item().of(EItemTags.CROOKS).build()))
+                    .addCriterion("craft_crook", hasItems(item().of(registries.lookupOrThrow(Registries.ITEM), EItemTags.CROOKS).build()))
                     .save(saver, modLoc("core/crook"));
             var barrel = advancement()
                     .parent(root)
@@ -94,7 +95,7 @@ class Advancements extends AdvancementProvider {
                             true,
                             true
                     )
-                    .addCriterion("has_barrel", hasItems(item().of(EItemTags.BARRELS).build()))
+                    .addCriterion("has_barrel", hasItems(item().of(registries.lookupOrThrow(Registries.ITEM), EItemTags.BARRELS).build()))
                     .save(saver, modLoc("core/barrel"));
             var silkWorm = advancement()
                     .parent(crook)
@@ -108,7 +109,7 @@ class Advancements extends AdvancementProvider {
                             true,
                             false
                     )
-                    .addCriterion("has_silk_worm", hasItems(item().of(EItems.SILKWORM.get()).build()))
+                    .addCriterion("has_silk_worm", hasItems(item().of(registries.lookupOrThrow(Registries.ITEM), EItems.SILKWORM.get()).build()))
                     .save(saver, modLoc("core/silk_worm"));
             var stringMesh = advancement()
                     .parent(silkWorm)
@@ -122,7 +123,7 @@ class Advancements extends AdvancementProvider {
                             true,
                             false
                     )
-                    .addCriterion("has_string_mesh", hasItems(item().of(EItems.STRING_MESH.get()).build()))
+                    .addCriterion("has_string_mesh", hasItems(item().of(registries.lookupOrThrow(Registries.ITEM), EItems.STRING_MESH.get()).build()))
                     .save(saver, modLoc("core/string_mesh"));
         }
     }

@@ -73,13 +73,13 @@ public class PorcelainBucket extends Item {
             if (!target.isBaby()) {
                 var level = player.level();
                 player.playSound(SoundEvents.COW_MILK, 1.0f, 1.0f);
-                if (!level.isClientSide) {
+                if (!level.isClientSide()) {
                     // have to make a copy to prevent player voiding the item stack in line 1056
                     // when it calls interactLivingEntity and checks if the stack is empty afterwards
                     var result = ItemUtils.createFilledResult(stack.getCount() == 1 ? stack.copy() : stack, player, new ItemStack(EItems.PORCELAIN_MILK_BUCKET.get()));
                     player.setItemInHand(hand, result);
                 }
-                return InteractionResult.sidedSuccess(level.isClientSide);
+                return InteractionResult.sidedSuccess(level.isClientSide());
             }
         }
 
@@ -183,7 +183,7 @@ public class PorcelainBucket extends Item {
                 var i = pos.getX();
                 var j = pos.getY();
                 var k = pos.getZ();
-                level.playSound(player, pos, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 0.5F, 2.6F + (level.random.nextFloat() - level.random.nextFloat()) * 0.8F);
+                level.playSound(player, pos, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 0.5F, 2.6F + (level.getRandom().nextFloat() - level.getRandom().nextFloat()) * 0.8F);
 
                 for (int l = 0; l < 8; ++l) {
                     level.addParticle(ParticleTypes.LARGE_SMOKE, i + Math.random(), j + Math.random(), k + Math.random(), 0, 0, 0);
@@ -195,7 +195,7 @@ public class PorcelainBucket extends Item {
                 playEmptySound(player, level, pos);
                 return true;
             } else {
-                if (!level.isClientSide && replacing && !state.liquid()) {
+                if (!level.isClientSide() && replacing && !state.liquid()) {
                     level.destroyBlock(pos, true);
                 }
 

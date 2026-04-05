@@ -38,7 +38,7 @@ import thedarkcolour.exdeorum.registry.ERecipeTypes;
 public class BarrelMixingRecipe extends SingleIngredientRecipe {
     public static final MapCodec<BarrelMixingRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             CodecUtil.ingredientField(),
-            SizedFluidIngredient.FLAT_CODEC.fieldOf("fluid").forGetter(BarrelMixingRecipe::getFluid),
+            SizedFluidIngredient.CODEC.fieldOf("fluid").forGetter(BarrelMixingRecipe::getFluid),
             ItemStack.CODEC.fieldOf("result").forGetter(BarrelMixingRecipe::getResult)
     ).apply(instance, BarrelMixingRecipe::new));
     public static final StreamCodec<RegistryFriendlyByteBuf, BarrelMixingRecipe> STREAM_CODEC = StreamCodec.of(BarrelMixingRecipe::toNetwork, BarrelMixingRecipe::fromNetwork);

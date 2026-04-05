@@ -19,9 +19,9 @@
 package thedarkcolour.exdeorum.blockentity;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -55,21 +55,21 @@ public abstract class AbstractMachineBlockEntity<M extends AbstractMachineBlockE
     }
 
     @Override
-    protected void saveAdditional(CompoundTag nbt, HolderLookup.Provider registries) {
-        super.saveAdditional(nbt, registries);
+    protected void saveAdditional(ValueOutput output) {
+        super.saveAdditional(output);
 
-        nbt.put("inventory", this.inventory.serializeNBT(registries));
-        nbt.putInt("energy", this.energy.getEnergyStored());
-        nbt.putInt("redstoneMode", this.redstoneMode);
+        this.inventory.serialize(output.child("inventory"));
+        output.putInt("energy", this.energy.getEnergyStored());
+        output.putInt("redstoneMode", this.redstoneMode);
     }
 
     @Override
-    public void loadAdditional(CompoundTag nbt, HolderLookup.Provider registries) {
-        super.loadAdditional(nbt, registries);
+    public void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
 
-        this.inventory.deserializeNBT(registries, nbt.getCompound("inventory"));
-        this.energy.setStoredEnergy(nbt.getInt("energy"));
-        this.redstoneMode = Mth.clamp(nbt.getInt("redstoneMode"), 0, 2);
+        this.inventory.deserialize(input.childOrEmpty("inventory"));
+        this.energy.setStoredEnergy(input.getIntOr("energy", 0));
+        this.redstoneMode = Mth.clamp(input.getIntOr("redstoneMode", 0), 0, 2);
     }
 
     @Override

@@ -78,12 +78,12 @@ public class SieveRecipe extends ProbabilityRecipe {
     }
 
     @Override
-    public RecipeSerializer<SieveRecipe> getSerializer() {
+    public RecipeSerializer<? extends SieveRecipe> getSerializer() {
         return ERecipeSerializers.SIEVE.get();
     }
 
     @Override
-    public RecipeType<SieveRecipe> getType() {
+    public RecipeType<? extends SieveRecipe> getType() {
         return ERecipeTypes.SIEVE.get();
     }
 

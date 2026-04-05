@@ -45,12 +45,12 @@ public class HammerRecipe extends ProbabilityRecipe {
     }
 
     @Override
-    public RecipeSerializer<HammerRecipe> getSerializer() {
+    public RecipeSerializer<? extends HammerRecipe> getSerializer() {
         return ERecipeSerializers.HAMMER.get();
     }
 
     @Override
-    public RecipeType<HammerRecipe> getType() {
+    public RecipeType<? extends HammerRecipe> getType() {
         return ERecipeTypes.HAMMER.get();
     }
 

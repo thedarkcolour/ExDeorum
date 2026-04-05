@@ -109,7 +109,7 @@ public class MaterialRegistry<M extends AbstractMaterial> implements Iterable<M>
             validBlocks.add(material.block.get());
         }
 
-        return new BlockEntityType<>(factory, validBlocks.build(), null);
+        return new BlockEntityType<>(factory, validBlocks.build());
     }
 
     @Override

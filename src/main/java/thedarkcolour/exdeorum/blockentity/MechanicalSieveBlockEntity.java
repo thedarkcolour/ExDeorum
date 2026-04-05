@@ -19,8 +19,6 @@
 package thedarkcolour.exdeorum.blockentity;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -31,6 +29,8 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import thedarkcolour.exdeorum.blockentity.helper.ItemHelper;
 import thedarkcolour.exdeorum.blockentity.logic.SieveLogic;
 import thedarkcolour.exdeorum.config.EConfig;
@@ -54,17 +54,17 @@ public class MechanicalSieveBlockEntity extends AbstractMachineBlockEntity<Mecha
     }
 
     @Override
-    protected void saveAdditional(CompoundTag nbt, HolderLookup.Provider registries) {
-        super.saveAdditional(nbt, registries);
+    protected void saveAdditional(ValueOutput output) {
+        super.saveAdditional(output);
 
-        this.logic.saveNbt(nbt, registries);
+        this.logic.saveNbt(output);
     }
 
     @Override
-    public void loadAdditional(CompoundTag nbt, HolderLookup.Provider registries) {
-        super.loadAdditional(nbt, registries);
+    public void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
 
-        this.logic.loadNbt(nbt, registries);
+        this.logic.loadNbt(input);
     }
 
     @Override
@@ -208,10 +208,10 @@ public class MechanicalSieveBlockEntity extends AbstractMachineBlockEntity<Mecha
 
         // Used instead of onLoad because missing parameter
         @Override
-        public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
-            super.deserializeNBT(provider, nbt);
+        public void deserialize(ValueInput input) {
+            super.deserialize(input);
 
-            this.sieve.logic.setMesh(provider, this.sieve.inventory.getStackInSlot(MESH_SLOT), false);
+            this.sieve.logic.setMesh(input.lookup(), this.sieve.inventory.getStackInSlot(MESH_SLOT), false);
         }
     }
 }
