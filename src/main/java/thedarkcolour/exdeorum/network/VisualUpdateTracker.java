@@ -41,9 +41,9 @@ public class VisualUpdateTracker {
     public static void sendVisualUpdate(EBlockEntity blockEntity) {
         var level = blockEntity.getLevel();
 
-        if (level != null && !level.isClientSide) {
+        if (level != null && !level.isClientSide()) {
             Map<ChunkPos, Set<BlockPos>> chunkUpdates = UPDATES.computeIfAbsent(level.dimension(), key -> new HashMap<>());
-            chunkUpdates.computeIfAbsent(new ChunkPos(blockEntity.getBlockPos()), key -> new HashSet<>()).add(blockEntity.getBlockPos());
+            chunkUpdates.computeIfAbsent(new ChunkPos(blockEntity.getBlockPos().getX() >> 4, blockEntity.getBlockPos().getZ() >> 4), key -> new HashSet<>()).add(blockEntity.getBlockPos());
         }
     }
 

@@ -26,6 +26,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.cow.Cow;
 import net.minecraft.world.entity.player.Player;
@@ -55,7 +56,7 @@ public class GrassSpreaderItem extends Item {
         var grass = this.grassState.get();
 
         if (canSpread(state) && grass != state) {
-            if (!level.isClientSide) {
+            if (!level.isClientSide()) {
                 level.setBlock(pos, grass, 3);
                 level.playSound(null, pos, ESounds.GRASS_SEEDS_PLACE.get(), SoundSource.BLOCKS);
 
@@ -77,14 +78,14 @@ public class GrassSpreaderItem extends Item {
     @Override
     public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity target, InteractionHand pUsedHand) {
         if (stack.getItem() == EItems.MYCELIUM_SPORES.get() && target instanceof Cow cow) {
-            var mushroomCow = EntityType.MOOSHROOM.create(cow.level());
+            var mushroomCow = EntityType.MOOSHROOM.create(cow.level(), EntitySpawnReason.CONVERSION);
 
             if (mushroomCow != null) {
                 if (!player.getAbilities().instabuild) {
                     stack.shrink(1);
                 }
                 cow.discard();
-                mushroomCow.moveTo(cow.getX(), cow.getY(), cow.getZ());
+                mushroomCow.setPos(cow.getX(), cow.getY(), cow.getZ());
                 mushroomCow.setHealth(cow.getHealth());
                 mushroomCow.yBodyRot = cow.yBodyRot;
 
@@ -98,7 +99,7 @@ public class GrassSpreaderItem extends Item {
                 mushroomCow.setInvulnerable(cow.isInvulnerable());
                 cow.level().addFreshEntity(mushroomCow);
 
-                if (!cow.level().isClientSide) {
+                if (!cow.level().isClientSide()) {
                     ((ServerLevel)cow.level()).sendParticles(ParticleTypes.EXPLOSION, cow.getX(), cow.getY(0.5D), cow.getZ(), 1, 0.0D, 0.0D, 0.0D, 0.0D);
                 }
                 cow.playSound(SoundEvents.MOOSHROOM_CONVERT, 2.0F, 1.0F);

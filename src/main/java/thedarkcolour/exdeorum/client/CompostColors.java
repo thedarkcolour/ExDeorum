@@ -96,7 +96,7 @@ public class CompostColors {
         var readMods = readModdedColorFiles();
 
         for (var entry : BuiltInRegistries.ITEM.entrySet()) {
-            var key = entry.getKey().location();
+            var key = entry.getKey().identifier();
             var modid = key.getNamespace();
 
             if (!readMods.contains(modid)) {

@@ -87,6 +87,7 @@ import static thedarkcolour.modkit.data.MKRecipeProvider.id;
 
 public class Recipes {
     private static final Ingredient SPORES_AND_SEEDS = ingredient(EItems.GRASS_SEEDS, EItems.MYCELIUM_SPORES, EItems.WARPED_NYLIUM_SPORES, EItems.CRIMSON_NYLIUM_SPORES);
+    private static final TagKey<Item> TALL_FLOWERS = ItemTags.create(Identifier.withDefaultNamespace("tall_flowers"));
 
     public static void addRecipes(RecipeOutput writer, MKRecipeProvider recipes) {
         craftingRecipes(writer, recipes);
@@ -512,7 +513,7 @@ public class Recipes {
         waterCrucible(writer, "saplings", recipes.ingredient(ItemTags.SAPLINGS), 100);
         waterCrucible(writer, "leaves", recipes.ingredient(ItemTags.LEAVES), 250);
         waterCrucible(writer, "small_flowers", recipes.ingredient(ItemTags.SMALL_FLOWERS), 100);
-        waterCrucible(writer, "tall_flowers", recipes.ingredient(ItemTags.TALL_FLOWERS), 200);
+        waterCrucible(writer, "tall_flowers", recipes.ingredient(TALL_FLOWERS), 200);
         waterCrucible(writer, "mushrooms", recipes.ingredient(Tags.Items.MUSHROOMS), 100);
         waterCrucible(writer, "lily_pad", ingredient(Items.LILY_PAD), 150);
         waterCrucible(writer, "sugar_cane", ingredient(Items.SUGAR_CANE), 100);
@@ -646,7 +647,7 @@ public class Recipes {
         barrelCompost(writer, "saplings", recipes.ingredient(ItemTags.SAPLINGS), 125);
         barrelCompost(writer, "leaves", recipes.ingredient(ItemTags.LEAVES), 125);
         barrelCompost(writer, "small_flowers", recipes.ingredient(ItemTags.SMALL_FLOWERS), 100);
-        barrelCompost(writer, "tall_flowers", recipes.ingredient(ItemTags.TALL_FLOWERS), 150);
+        barrelCompost(writer, "tall_flowers", recipes.ingredient(TALL_FLOWERS), 150);
         barrelCompost(writer, "mushrooms", recipes.ingredient(Tags.Items.MUSHROOMS), 100);
         barrelCompost(writer, "lily_pad", ingredient(Items.LILY_PAD), 100);
         barrelCompost(writer, "sugar_cane", ingredient(Items.SUGAR_CANE), 80);

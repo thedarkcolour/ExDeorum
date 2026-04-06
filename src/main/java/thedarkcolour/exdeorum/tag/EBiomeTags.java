@@ -36,14 +36,14 @@ public class EBiomeTags {
 
     static {
         // Vanilla
-        addTreeTag("oak_tree_biomes", TreeFeatures.OAK_BEES_005.location());
-        addTreeTag("spruce_tree_biomes", TreeFeatures.SPRUCE.location());
-        addTreeTag("birch_tree_biomes", TreeFeatures.BIRCH_BEES_002.location());
-        addTreeTag("jungle_tree_biomes", TreeFeatures.JUNGLE_TREE_NO_VINE.location());
-        addTreeTag("acacia_tree_biomes", TreeFeatures.ACACIA.location());
-        addTreeTag("cherry_tree_biomes", TreeFeatures.CHERRY_BEES_005.location());
-        addTreeTag("dark_oak_tree_biomes", TreeFeatures.DARK_OAK.location());
-        addTreeTag("mangrove_tree_biomes", TreeFeatures.MANGROVE.location());
+        addTreeTag("oak_tree_biomes", TreeFeatures.OAK_BEES_005.identifier());
+        addTreeTag("spruce_tree_biomes", TreeFeatures.SPRUCE.identifier());
+        addTreeTag("birch_tree_biomes", TreeFeatures.BIRCH_BEES_002.identifier());
+        addTreeTag("jungle_tree_biomes", TreeFeatures.JUNGLE_TREE_NO_VINE.identifier());
+        addTreeTag("acacia_tree_biomes", TreeFeatures.ACACIA.identifier());
+        addTreeTag("cherry_tree_biomes", TreeFeatures.CHERRY_BEES_005.identifier());
+        addTreeTag("dark_oak_tree_biomes", TreeFeatures.DARK_OAK.identifier());
+        addTreeTag("mangrove_tree_biomes", TreeFeatures.MANGROVE.identifier());
         // Bop tags
         addTreeTag("flowering_oak_tree_biomes", Identifier.fromNamespaceAndPath(ModIds.BIOMES_O_PLENTY, "flowering_oak_tree_bees"));
         addTreeTag("mahogany_tree_biomes", Identifier.fromNamespaceAndPath(ModIds.BIOMES_O_PLENTY, "mahogany_tree"));

@@ -32,7 +32,7 @@ public class WideWateringCanItem extends WateringCanItem {
     protected void tryWatering(ServerLevel level, BlockPos pos, BlockState state) {
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
-                if (level.random.nextInt(3) != 0) {
+                if (level.getRandom().nextInt(3) != 0) {
                     var newPos = pos.offset(i, 0, j);
                     var newState = state;
 

@@ -155,7 +155,7 @@ public abstract class AbstractCrucibleBlockEntity extends ETankBlockEntity {
     public InteractionResult useItemOn(Level level, Player player, ItemStack stack, InteractionHand hand) {
         var playerItem = player.getItemInHand(hand);
 
-        if (playerItem.getCapability(Capabilities.FluidHandler.ITEM) != null) {
+        if (playerItem.getCapability(Capabilities.Fluid.ITEM) != null) {
             return FluidUtil.interactWithFluidHandler(player, hand, this.tank) ? InteractionResult.SUCCESS : InteractionResult.TRY_WITH_EMPTY_HAND;
         }
 
@@ -163,7 +163,7 @@ public abstract class AbstractCrucibleBlockEntity extends ETankBlockEntity {
             var fluid = new FluidStack(Fluids.WATER, 250);
 
             if (this.tank.drain(fluid, IFluidHandler.FluidAction.SIMULATE).getAmount() == 250) {
-                if (!level.isClientSide) {
+                if (!level.isClientSide()) {
                     BarrelBlockEntity.extractWaterBottle(this.tank, level, player, playerItem, fluid);
                     markUpdated();
                 }
@@ -203,7 +203,7 @@ public abstract class AbstractCrucibleBlockEntity extends ETankBlockEntity {
             this.item.setStackInSlot(0, ItemStack.EMPTY);
             return false;
         }
-        if (this.level != null && this.level.isClientSide) {
+        if (this.level != null && this.level.isClientSide()) {
             return true;
         }
         var result = recipe.getResult();
@@ -292,7 +292,7 @@ public abstract class AbstractCrucibleBlockEntity extends ETankBlockEntity {
             var item = sapling.getValue().asItem();
 
             if (!overrides.containsKey(item)) {
-                var key = sapling.getKey().location();
+                var key = sapling.getKey().identifier();
 
                 if (key.getPath().endsWith("sapling")) {
                     try {
@@ -342,7 +342,7 @@ public abstract class AbstractCrucibleBlockEntity extends ETankBlockEntity {
         @Override
         public void tick(Level level, BlockPos pos, BlockState state, AbstractCrucibleBlockEntity crucible) {
             // Update twice per second
-            if (!level.isClientSide) {
+            if (!level.isClientSide()) {
                 var tank = crucible.tank;
 
                 if ((level.getGameTime() % 10L) == 0L) {

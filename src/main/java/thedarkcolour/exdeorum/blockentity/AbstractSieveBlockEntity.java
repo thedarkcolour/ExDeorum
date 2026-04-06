@@ -19,8 +19,6 @@
 package thedarkcolour.exdeorum.blockentity;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.stats.Stats;
@@ -32,6 +30,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -74,17 +74,15 @@ public abstract class AbstractSieveBlockEntity extends EBlockEntity implements S
     }
 
     @Override
-    protected void saveAdditional(CompoundTag nbt, HolderLookup.Provider registries) {
-        super.saveAdditional(nbt, registries);
-
-        this.logic.saveNbt(nbt, registries);
+    protected void saveAdditional(ValueOutput output) {
+        super.saveAdditional(output);
+        this.logic.saveNbt(output);
     }
 
     @Override
-    public void loadAdditional(CompoundTag nbt, HolderLookup.Provider registries) {
-        super.loadAdditional(nbt, registries);
-
-        this.logic.loadNbt(nbt, registries);
+    public void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
+        this.logic.loadNbt(input);
     }
 
     @Override
@@ -110,7 +108,7 @@ public abstract class AbstractSieveBlockEntity extends EBlockEntity implements S
     @Override
     public InteractionResult useItemOn(Level level, Player player, ItemStack stack, InteractionHand hand) {
         ItemStack playerItem = player.getItemInHand(hand);
-        boolean isClientSide = level.isClientSide;
+        boolean isClientSide = level.isClientSide();
 
         // Try insert mesh
         if (this.logic.getMesh().isEmpty()) {
@@ -242,10 +240,10 @@ public abstract class AbstractSieveBlockEntity extends EBlockEntity implements S
 
     // Do not call on client side
     public static void popOutMesh(Level level, BlockPos sievePos, SieveLogic logic) {
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             // Pop out item
             var itemEntity = new ItemEntity(level, sievePos.getX() + 0.5, sievePos.getY() + 1.5, sievePos.getZ() + 0.5, logic.getMesh());
-            var rand = level.random;
+            var rand = level.getRandom();
             itemEntity.setDeltaMovement(rand.nextGaussian() * 0.05, 0.2, rand.nextGaussian() * 0.05);
             level.addFreshEntity(itemEntity);
 

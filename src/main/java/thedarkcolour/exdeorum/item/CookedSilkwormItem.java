@@ -28,7 +28,6 @@ public class CookedSilkwormItem extends Item {
     }
 
     // Yummy silk worms :)
-    @Override
     public SoundEvent getEatingSound() {
         return ESounds.SILK_WORM_EAT.get();
     }

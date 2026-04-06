@@ -31,7 +31,7 @@ public class PorcelainMilkBucket extends Item {
 
     @Override
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity living) {
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             living.removeAllEffects();
         }
         return new ItemStack(EItems.PORCELAIN_BUCKET.get());

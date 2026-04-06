@@ -56,7 +56,7 @@ public class SieveBlock extends EBlock {
 
     @Override
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean pIsMoving) {
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             if (!state.is(newState.getBlock())) {
                 if (level.getBlockEntity(pos) instanceof AbstractSieveBlockEntity sieve) {
                     var mesh = sieve.getLogic().getMesh();

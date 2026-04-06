@@ -18,10 +18,9 @@
 
 package thedarkcolour.exdeorum.blockentity.helper;
 
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
+import net.minecraft.world.level.storage.ValueInput;
 
 // Changed behavior from FluidTank:
 // - fluid stacks read from NBT are clamped.
@@ -71,12 +70,10 @@ public class FluidHelper extends FluidTank {
     }
 
     @Override
-    public FluidTank readFromNBT(HolderLookup.Provider provider, CompoundTag nbt) {
-        super.readFromNBT(provider, nbt);
+    public void deserialize(ValueInput input) {
+        super.deserialize(input);
         if (!this.fluid.isEmpty()) {
             this.fluid.setAmount(Math.min(this.capacity, this.fluid.getAmount()));
         }
-
-        return this;
     }
 }

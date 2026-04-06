@@ -29,18 +29,15 @@ public class MeshItem extends Item {
         super(properties);
     }
 
-    @Override
     public boolean isPrimaryItemFor(ItemStack stack, Holder<Enchantment> enchantment) {
         var key = enchantment.getKey();
         return key == Enchantments.EFFICIENCY || key == Enchantments.FORTUNE;
     }
 
-    @Override
     public boolean isEnchantable(ItemStack stack) {
         return true;
     }
 
-    @Override
     public int getEnchantmentValue() {
         return 10;
     }

@@ -54,25 +54,22 @@ public class CrookItem extends Item {
 
     @Override
     public boolean mineBlock(ItemStack stack, Level level, BlockState state, BlockPos pos, LivingEntity living) {
-        if (!level.isClientSide && state.getDestroySpeed(level, pos) != 0.0F) {
+        if (!level.isClientSide() && state.getDestroySpeed(level, pos) != 0.0F) {
             stack.hurtAndBreak(1, living, EquipmentSlot.MAINHAND);
         }
 
         return true;
     }
 
-    @Override
     public boolean isPrimaryItemFor(ItemStack stack, Holder<Enchantment> enchantment) {
         var key = enchantment.getKey();
         return key == Enchantments.FORTUNE || key == Enchantments.UNBREAKING || key == Enchantments.EFFICIENCY;
     }
 
-    @Override
     public int getEnchantmentValue() {
         return 1;
     }
 
-    @Override
     public boolean isValidRepairItem(ItemStack tool, ItemStack material) {
         if (this == EItems.BONE_CROOK.get()) {
             return material.is(Tags.Items.BONES);

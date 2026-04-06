@@ -20,9 +20,11 @@ package thedarkcolour.exdeorum.loot;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import com.mojang.serialization.MapCodec;
+import net.minecraft.world.level.storage.TagValueOutput;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
@@ -39,9 +41,11 @@ public class MachineLootFunction extends LootItemConditionalFunction {
 
     @Override
     protected ItemStack run(ItemStack stack, LootContext ctx) {
-        BlockEntity blockEntity = ctx.getParamOrNull(LootContextParams.BLOCK_ENTITY);
-        if (blockEntity != null) {
-            blockEntity.saveToItem(stack, ctx.getLevel().registryAccess());
+        BlockEntity blockEntity = ctx.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
+        if (blockEntity != null && stack.getItem() instanceof BlockItem) {
+            var output = TagValueOutput.createWithContext(ProblemReporter.DISCARDING, ctx.getLevel().registryAccess());
+            blockEntity.saveCustomOnly(output);
+            BlockItem.setBlockEntityData(stack, blockEntity.getType(), output);
         }
 
         return stack;

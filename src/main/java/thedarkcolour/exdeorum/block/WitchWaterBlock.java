@@ -49,7 +49,7 @@ public class WitchWaterBlock extends LiquidBlock {
 
     @Override
     public void entityInside(BlockState pState, Level level, BlockPos pPos, Entity entity) {
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             witchWaterEntityEffects(level, entity);
         }
     }
@@ -104,7 +104,7 @@ public class WitchWaterBlock extends LiquidBlock {
                 } else if (entityType == EntityType.PUFFERFISH) {
                     attemptToConvertEntity(level, entity, EntityType.GUARDIAN);
                 } else if (entityType == EntityType.HORSE) {
-                    if (level.random.nextBoolean()) {
+                    if (level.getRandom().nextBoolean()) {
                         attemptToConvertEntity(level, entity, EntityType.ZOMBIE_HORSE);
                     } else {
                         attemptToConvertEntity(level, entity, EntityType.SKELETON_HORSE);

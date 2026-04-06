@@ -94,7 +94,7 @@ public class WateringCanItem extends Item {
 
     public static ItemStack getFull(Supplier<? extends Item> wateringCan) {
         var stack = new ItemStack(wateringCan.get());
-        var fluidHandler = stack.getCapability(Capabilities.FluidHandler.ITEM);
+        var fluidHandler = stack.getCapability(Capabilities.Fluid.ITEM);
         if (fluidHandler != null) {
             fluidHandler.fill(new FluidStack(Fluids.WATER, Integer.MAX_VALUE), IFluidHandler.FluidAction.EXECUTE);
         }
@@ -104,7 +104,7 @@ public class WateringCanItem extends Item {
     @Override
     public boolean isBarVisible(ItemStack stack) {
         if (this.renewing) {
-            var fluidHandler = stack.getCapability(Capabilities.FluidHandler.ITEM);
+            var fluidHandler = stack.getCapability(Capabilities.Fluid.ITEM);
             return fluidHandler == null || fluidHandler.getFluidInTank(0).getAmount() < this.capacity;
         } else {
             return true;
@@ -118,7 +118,7 @@ public class WateringCanItem extends Item {
 
     @Override
     public int getBarWidth(ItemStack stack) {
-        var fluidHandler = stack.getCapability(Capabilities.FluidHandler.ITEM);
+        var fluidHandler = stack.getCapability(Capabilities.Fluid.ITEM);
         if (fluidHandler != null) {
             return Math.round((float) fluidHandler.getFluidInTank(0).getAmount() * 13f / (float) this.capacity);
         } else {
@@ -136,9 +136,8 @@ public class WateringCanItem extends Item {
         return ItemUseAnimation.NONE;
     }
 
-    @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag pIsAdvanced) {
-        var fluidHandler = stack.getCapability(Capabilities.FluidHandler.ITEM);
+        var fluidHandler = stack.getCapability(Capabilities.Fluid.ITEM);
         if (fluidHandler != null) {
             // use the block name which is guaranteed to have a vanilla translation
             tooltip.add(Component.translatable("block.minecraft.water").append(Component.translatable(TranslationKeys.FRACTION_DISPLAY, fluidHandler.getFluidInTank(0).getAmount(), this.capacity)).withStyle(ChatFormatting.GRAY));
@@ -148,7 +147,7 @@ public class WateringCanItem extends Item {
     @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         var itemInHand = player.getItemInHand(hand);
-        var fluidHandler = itemInHand.getCapability(Capabilities.FluidHandler.ITEM);
+        var fluidHandler = itemInHand.getCapability(Capabilities.Fluid.ITEM);
         if (fluidHandler != null) {
             if (fluidHandler.getFluidInTank(0).getAmount() < this.capacity) {
                 var hitResult = getPlayerPOVHitResult(level, player, ClipContext.Fluid.SOURCE_ONLY);
@@ -158,13 +157,13 @@ public class WateringCanItem extends Item {
                     var state = level.getBlockState(pos);
 
                     if (state.getFluidState().getType() == Fluids.WATER && state.getBlock() instanceof BucketPickup pickup) {
-                        if (!level.isClientSide) {
+                        if (!level.isClientSide()) {
                             fluidHandler.fill(new FluidStack(Fluids.WATER, 1000), IFluidHandler.FluidAction.EXECUTE);
                             pickup.pickupBlock(player, level, pos, state);
                             pickup.getPickupSound(state).ifPresent(sound -> player.playSound(sound, 1.0F, 1.0F));
                         }
 
-                        return level.isClientSide ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
+                        return level.isClientSide() ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
                     }
                 }
             }
@@ -189,7 +188,7 @@ public class WateringCanItem extends Item {
         var useTicks = 72000 - remainingTicks;
 
         if (useTicks >= STARTUP_TIME || living instanceof FakePlayer) {
-            var fluidHandler = stack.getCapability(Capabilities.FluidHandler.ITEM);
+            var fluidHandler = stack.getCapability(Capabilities.Fluid.ITEM);
             if (fluidHandler != null) {
                 if (!fluidHandler.getFluidInTank(0).isEmpty()) {
                     // do watering can
@@ -200,7 +199,7 @@ public class WateringCanItem extends Item {
                         var pos = blockHit.getBlockPos();
                         var state = level.getBlockState(pos);
 
-                        if (!level.isClientSide) {
+                        if (!level.isClientSide()) {
                             if (useTicks % WATERING_INTERVAL == 0) {
                                 tryWatering((ServerLevel) level, pos, state);
 
@@ -231,17 +230,18 @@ public class WateringCanItem extends Item {
     }
 
     @Override
-    public void releaseUsing(ItemStack stack, Level level, LivingEntity living, int timeCharged) {
+    public boolean releaseUsing(ItemStack stack, Level level, LivingEntity living, int timeCharged) {
         if (timeCharged > STARTUP_TIME) {
             level.playLocalSound(living.getX(), living.getY(), living.getZ(), ESounds.WATERING_CAN_STOP.get(), living.getSoundSource(), 0.6f, 0.7f, false);
         }
+        return false;
     }
 
     protected void tryWatering(ServerLevel level, BlockPos pos, BlockState state) {
         if (state.is(EBlockTags.WATERING_CAN_TICKABLE)) {
             if (state.is(BlockTags.SAPLINGS)) {
-                if (level.random.nextInt(3) == 0) {
-                    state.randomTick(level, pos, level.random);
+                if (level.getRandom().nextInt(3) == 0) {
+                    state.randomTick(level, pos, level.getRandom());
                     level.levelEvent(LevelEvent.PARTICLES_AND_SOUND_PLANT_GROWTH, pos, 0);
                 }
             } else if (state.getBlock() instanceof SugarCaneBlock block) {
@@ -251,9 +251,9 @@ public class WateringCanItem extends Item {
                 }
                 // randomTick only works on the top sugarcane block
                 var topState = level.getBlockState(cursor.move(0, -1, 0));
-                topState.randomTick(level, cursor, level.random);
+                topState.randomTick(level, cursor, level.getRandom());
             } else {
-                state.randomTick(level, pos, level.random);
+                state.randomTick(level, pos, level.getRandom());
             }
         } else {
             if (BarrelBlockEntity.isHotFluid(state.getFluidState().getFluidType())) {
@@ -270,7 +270,7 @@ public class WateringCanItem extends Item {
     }
 
     private static void hydrateFarmland(ServerLevel level, BlockPos pos, BlockState state) {
-        var randomPos = pos.offset(level.random.nextIntBetweenInclusive(-1, 1), 0, level.random.nextIntBetweenInclusive(-1, 1));
+        var randomPos = pos.offset(level.getRandom().nextIntBetweenInclusive(-1, 1), 0, level.getRandom().nextIntBetweenInclusive(-1, 1));
 
         if (randomPos != pos) {
             pos = randomPos;
@@ -288,16 +288,16 @@ public class WateringCanItem extends Item {
 
     protected void waterParticles(Level level, BlockPos pos, BlockState state) {
         if (level instanceof ServerLevel serverLevel) {
-            double x = pos.getX() + 0.5 + level.random.nextGaussian() / 8f;
+            double x = pos.getX() + 0.5 + level.getRandom().nextGaussian() / 8f;
             double y = pos.getY();
-            double z = pos.getZ() + 0.5 + level.random.nextGaussian() / 8f;
+            double z = pos.getZ() + 0.5 + level.getRandom().nextGaussian() / 8f;
             var collisionShape = state.getCollisionShape(level, pos);
             if (!collisionShape.isEmpty()) {
                 y += collisionShape.max(Direction.Axis.Y);
             }
             for (int i = -1; i <= 1; i++) {
                 for (int j = -1; j <= 1; j++) {
-                    if (level.random.nextBoolean()) {
+                    if (level.getRandom().nextBoolean()) {
                         serverLevel.sendParticles(ParticleTypes.RAIN, x + i * 0.33, y, z + j * 0.33, 2, 0, 0, 0, 0.2);
                     }
                 }
@@ -305,7 +305,6 @@ public class WateringCanItem extends Item {
         }
     }
 
-    @Override
     public void initializeClient(Consumer<IClientItemExtensions> consumer) {
         consumer.accept(ClientExtensions.INSTANCE);
     }

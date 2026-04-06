@@ -49,7 +49,7 @@ public class EndCakeBlock extends CakeBlock {
             if (bites == 0) {
                 return InteractionResult.TRY_WITH_EMPTY_HAND;
             } else {
-                if (!level.isClientSide) {
+                if (!level.isClientSide()) {
                     if (!player.getAbilities().instabuild) {
                         stack.shrink(1);
                     }
@@ -67,7 +67,7 @@ public class EndCakeBlock extends CakeBlock {
         if (!player.isShiftKeyDown()) {
             int bites = state.getValue(BITES);
 
-            if (!level.isClientSide) {
+            if (!level.isClientSide()) {
                 if (tryTeleport((ServerLevel) level, player)) {
                     player.awardStat(Stats.EAT_CAKE_SLICE);
                     player.getFoodData().eat(2, 0.1f);

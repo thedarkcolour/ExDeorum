@@ -61,7 +61,7 @@ public class SculkCoreItem extends Item {
             }
             level.playSound(null, pos, ESounds.SCULK_CORE_ACTIVATE.get(), SoundSource.BLOCKS, 1.0f, 1.0f);
 
-            return InteractionResult.sidedSuccess(level.isClientSide());
+            return level.isClientSide() ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
         }
 
         return InteractionResult.PASS;

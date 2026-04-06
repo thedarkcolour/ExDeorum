@@ -43,7 +43,7 @@ public class SilkwormItem extends Item {
 
         if (!state.isAir()) {
             if (state.is(BlockTags.LEAVES) && state.getBlock() != EBlocks.INFESTED_LEAVES.get()) {
-                if (!level.isClientSide) {
+                if (!level.isClientSide()) {
                     // Replace with infested block
                     InfestedLeavesBlock.setBlock(level, pos, state);
 
@@ -56,7 +56,7 @@ public class SilkwormItem extends Item {
                     context.getItemInHand().shrink(1);
                 }
 
-                return InteractionResult.sidedSuccess(level.isClientSide);
+                return level.isClientSide() ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
             }
         }
 

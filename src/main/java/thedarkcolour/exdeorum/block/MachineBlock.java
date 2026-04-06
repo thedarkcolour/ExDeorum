@@ -51,7 +51,7 @@ public abstract class MachineBlock extends EBlock {
 
     @SuppressWarnings("unchecked")
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return !level.isClientSide && type == this.blockEntityType.get() ? (BlockEntityTicker<T>) new AbstractMachineBlockEntity.ServerTicker<>() : null;
+        return !level.isClientSide() && type == this.blockEntityType.get() ? (BlockEntityTicker<T>) new AbstractMachineBlockEntity.ServerTicker<>() : null;
     }
 
     // Slot in the machine's inventory where the mesh/hammer is
@@ -96,7 +96,7 @@ public abstract class MachineBlock extends EBlock {
     // Drops the item for creative mode players
     @Override
     public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState pState, Player player) {
-        if (!level.isClientSide && player.isCreative() && level.getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS)) {
+        if (!level.isClientSide() && player.isCreative() && level.getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS)) {
             if (level.getBlockEntity(pos) instanceof AbstractMachineBlockEntity<?> machine) {
                 if (!machine.inventory.getStackInSlot(getHighlightItemSlot()).isEmpty()) {
                     var stack = new ItemStack(this);

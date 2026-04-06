@@ -31,7 +31,6 @@ public class HammerItem extends Item {
         super(material.applyToolProperties(properties, EBlockTags.MINEABLE_WITH_HAMMER, 1.5f, -2.8f, 0f));
     }
 
-    @Override
     public int getBurnTime(ItemStack stack, @Nullable RecipeType<?> recipeType) {
         return (this == EItems.WOODEN_HAMMER.get() || this == EItems.COMPRESSED_WOODEN_HAMMER.get()) ? 200 : 0;
     }

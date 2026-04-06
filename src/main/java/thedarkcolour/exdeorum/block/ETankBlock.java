@@ -41,7 +41,7 @@ public abstract class ETankBlock extends EBlock {
 
     @Override
     public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
-        if (!level.isClientSide && level.getBlockEntity(pos) instanceof ETankBlockEntity blockEntity) {
+        if (!level.isClientSide() && level.getBlockEntity(pos) instanceof ETankBlockEntity blockEntity) {
             var tank = blockEntity.getTank();
             var fluid = tank.getFluid();
 

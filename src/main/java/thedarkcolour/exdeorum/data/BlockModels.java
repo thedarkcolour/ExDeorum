@@ -22,6 +22,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.client.data.models.model.ModelInstance;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import thedarkcolour.exdeorum.material.DefaultMaterials;
@@ -29,6 +30,8 @@ import thedarkcolour.exdeorum.registry.EBlocks;
 import thedarkcolour.exdeorum.registry.ECompressedBlocks;
 import thedarkcolour.modkit.data.MKBlockModelProvider;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Objects;
 
 class BlockModels {
@@ -41,7 +44,7 @@ class BlockModels {
 
         ModelBuilder(MKBlockModelProvider models, Identifier modelId, JsonObject json) {
             this.json = json;
-            models.acceptModel(modelId, () -> json);
+            acceptModel(models, modelId, () -> json);
         }
 
         public ModelBuilder renderType(String type) {
@@ -278,7 +281,7 @@ class BlockModels {
         itemRenderOrder.add("overlay");
         json.add("item_render_order", itemRenderOrder);
 
-        models.acceptModel(modelId, () -> json);
+        acceptModel(models, modelId, () -> json);
         models.simpleBlock(block, modelId);
     }
 
@@ -306,6 +309,16 @@ class BlockModels {
     private static Identifier texture(Block block, String prefix, String suffix) {
         var key = Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(block));
         return Identifier.fromNamespaceAndPath(key.getNamespace(), "block/" + prefix + key.getPath() + suffix);
+    }
+
+    private static void acceptModel(MKBlockModelProvider models, Identifier modelId, ModelInstance model) {
+        try {
+            Method acceptModel = MKBlockModelProvider.class.getDeclaredMethod("acceptModel", Identifier.class, ModelInstance.class);
+            acceptModel.setAccessible(true);
+            acceptModel.invoke(models, modelId, model);
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException exception) {
+            throw new IllegalStateException("Unable to register generated model " + modelId, exception);
+        }
     }
 
     public static void barrel(MKBlockModelProvider models, Block block, Block appearance) {

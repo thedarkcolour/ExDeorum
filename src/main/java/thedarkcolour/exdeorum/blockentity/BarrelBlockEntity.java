@@ -263,14 +263,14 @@ public class BarrelBlockEntity extends ETankBlockEntity {
                 }
 
                 // Otherwise, mix the item's fluid into the barrel's fluid
-                var itemFluidCap = playerItem.getCapability(Capabilities.FluidHandler.ITEM);
+                var itemFluidCap = playerItem.getCapability(Capabilities.Fluid.ITEM);
                 if (itemFluidCap != null) {
                     var itemFluid = itemFluidCap.drain(1000, IFluidHandler.FluidAction.SIMULATE);
                     BarrelFluidMixingRecipe recipe = RecipeUtil.getFluidMixingRecipe(this.tank.getFluid(), itemFluid.getFluid());
 
                     // If draining item fluid was possible and tank has enough fluid to mix...
                     if (recipe != null && this.tank.getFluidAmount() >= recipe.baseFluid().amount() && itemFluid.getAmount() == 1000) {
-                        if (!level.isClientSide) {
+                        if (!level.isClientSide()) {
                             this.tank.drain(recipe.baseFluid().amount(), IFluidHandler.FluidAction.EXECUTE);
                             setItem(recipe.result().copy());
 
@@ -288,7 +288,7 @@ public class BarrelBlockEntity extends ETankBlockEntity {
 
         // If the barrel has no solids and no fluid mixing/transfer happened
         var playerItem = player.getItemInHand(hand);
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             // mix item ingredient into fluid OR turn into compost (delegated to item handler)
             var handItem = this.item.insertItem(0, player.getAbilities().instabuild ? playerItem.copy() : playerItem, false);
 
@@ -317,7 +317,7 @@ public class BarrelBlockEntity extends ETankBlockEntity {
 
     // Pops the item out of the barrel (ex. dirt that has finished composting)
     private InteractionResult giveResultItem(Level level) {
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             popOutItem(level, this.worldPosition, this.item.extract(false));
 
             // Empty contents
@@ -329,8 +329,8 @@ public class BarrelBlockEntity extends ETankBlockEntity {
     }
 
     private static void popOutItem(Level level, BlockPos pos, ItemStack stack) {
-        if (!level.isClientSide && !stack.isEmpty()) {
-            var rand = level.random;
+        if (!level.isClientSide() && !stack.isEmpty()) {
+            var rand = level.getRandom();
             var itemEntity = new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, stack);
             itemEntity.setDeltaMovement(rand.nextGaussian() * 0.05, 0.2, rand.nextGaussian() * 0.05);
             level.addFreshEntity(itemEntity);
@@ -429,7 +429,7 @@ public class BarrelBlockEntity extends ETankBlockEntity {
      * <li> When the fluid in the barrel changes (see {@link FluidHandler#onContentsChanged()}) </li>
      */
     public void tryInWorldFluidMixing() {
-        if (!this.level.isClientSide) {
+        if (!this.level.isClientSide()) {
             if (!this.tank.isEmpty() && this.item.getStackInSlot(0).isEmpty()) {
                 var abovePos = this.worldPosition.above();
                 var aboveBlockState = this.level.getBlockState(abovePos);
@@ -459,7 +459,7 @@ public class BarrelBlockEntity extends ETankBlockEntity {
     }
 
     public void updateFluidTransform() {
-        if (!this.level.isClientSide) {
+        if (!this.level.isClientSide()) {
             if (this.tank.getFluidAmount() != MAX_CAPACITY) {
                 this.currentTransformRecipe = null;
             } else {
@@ -485,7 +485,7 @@ public class BarrelBlockEntity extends ETankBlockEntity {
     public static class Ticker implements BlockEntityTicker<BarrelBlockEntity> {
         @Override
         public void tick(Level level, BlockPos pos, BlockState state, BarrelBlockEntity barrel) {
-            if (!level.isClientSide) {
+            if (!level.isClientSide()) {
                 var tank = barrel.tank;
                 // Turn compost to dirt
                 if (barrel.isComposting()) {
@@ -509,7 +509,7 @@ public class BarrelBlockEntity extends ETankBlockEntity {
                             catalysts++;
 
                             if (!recipe.byproducts().isEmpty()) {
-                                var rand = level.random;
+                                var rand = level.getRandom();
 
                                 if (rand.nextInt(1500) == 0) {
                                     var above = cursor.above();
@@ -548,7 +548,7 @@ public class BarrelBlockEntity extends ETankBlockEntity {
                     }
                 } else if (barrel.hasFullWater()) {
                     if (tank.getFluid().getFluid().getFluidType() == NeoForgeMod.WATER_TYPE.value()) {
-                        var rand = level.random;
+                        var rand = level.getRandom();
                         // Leak water to create moss (only wooden barrels do this)
                         if (state.ignitedByLava() && rand.nextInt(500) == 0) {
                             var randomPos = pos.offset(rand.nextIntBetweenInclusive(-MOSS_SPREAD_RANGE, MOSS_SPREAD_RANGE), -1, rand.nextIntBetweenInclusive(-MOSS_SPREAD_RANGE, MOSS_SPREAD_RANGE));
@@ -644,7 +644,7 @@ public class BarrelBlockEntity extends ETankBlockEntity {
 
         @Override
         protected void onContentsChanged(int slot) {
-            if (!BarrelBlockEntity.this.level.isClientSide) {
+            if (!BarrelBlockEntity.this.level.isClientSide()) {
                 markUpdated();
             }
         }

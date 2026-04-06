@@ -54,17 +54,14 @@ public class WitchWaterFluid extends FluidType {
 
     public static IClientFluidTypeExtensions createClientExtensions() {
         return new IClientFluidTypeExtensions() {
-            @Override
             public Identifier getStillTexture() {
                 return STILL_TEXTURE;
             }
 
-            @Override
             public Identifier getFlowingTexture() {
                 return FLOWING_TEXTURE;
             }
 
-            @Override
             public Identifier getOverlayTexture() {
                 return OVERLAY_TEXTURE;
             }

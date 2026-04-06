@@ -58,7 +58,7 @@ public class HammerLootModifier extends LootModifier {
 
     @Override
     protected ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
-        var state = context.getParamOrNull(LootContextParams.BLOCK_STATE);
+        var state = context.getOptionalParameter(LootContextParams.BLOCK_STATE);
 
         if (state == null) {
             return generatedLoot;
@@ -77,8 +77,8 @@ public class HammerLootModifier extends LootModifier {
         ObjectArrayList<ItemStack> newLoot = new ObjectArrayList<>();
         var resultAmount = recipe.resultAmount.getInt(context);
 
-        if (!itemForm.builtInRegistryHolder().is(this.fortuneBlacklistTag) && context.hasParam(LootContextParams.TOOL)) {
-            var hammer = context.getParam(LootContextParams.TOOL);
+        if (!itemForm.builtInRegistryHolder().is(this.fortuneBlacklistTag) && context.hasParameter(LootContextParams.TOOL)) {
+            var hammer = context.getParameter(LootContextParams.TOOL);
             // fortune handling; more likely to boost drops if there are none to begin with
             resultAmount += calculateFortuneBonus(context.getLevel().registryAccess(), hammer, context.getRandom(), resultAmount == 0);
         }
@@ -129,4 +129,3 @@ public class HammerLootModifier extends LootModifier {
         return 0;
     }
 }
-

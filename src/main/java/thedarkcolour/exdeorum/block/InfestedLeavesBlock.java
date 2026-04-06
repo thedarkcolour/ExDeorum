@@ -79,7 +79,7 @@ public class InfestedLeavesBlock extends LeavesBlock implements EntityBlock {
     @Override
     public void setPlacedBy(Level level, BlockPos pos, BlockState pState, @Nullable LivingEntity player, ItemStack pStack) {
         if (player != null) {
-            if (!level.isClientSide && level.getBlockEntity(pos) instanceof InfestedLeavesBlockEntity leaves) {
+            if (!level.isClientSide() && level.getBlockEntity(pos) instanceof InfestedLeavesBlockEntity leaves) {
                 leaves.setProgress(InfestedLeavesBlockEntity.MAX_PROGRESS);
             }
         }

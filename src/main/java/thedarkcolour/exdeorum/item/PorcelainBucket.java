@@ -79,7 +79,7 @@ public class PorcelainBucket extends Item {
                     var result = ItemUtils.createFilledResult(stack.getCount() == 1 ? stack.copy() : stack, player, new ItemStack(EItems.PORCELAIN_MILK_BUCKET.get()));
                     player.setItemInHand(hand, result);
                 }
-                return InteractionResult.sidedSuccess(level.isClientSide());
+                return level.isClientSide() ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
             }
         }
 
@@ -119,7 +119,7 @@ public class PorcelainBucket extends Item {
                                 pickup.getPickupSound(state).ifPresent(sound -> player.playSound(sound, 1.0F, 1.0F));
                                 level.gameEvent(player, GameEvent.FLUID_PICKUP, pos);
                                 var filled = ItemUtils.createFilledResult(stack, player, result);
-                                if (!level.isClientSide) {
+                                if (!level.isClientSide()) {
                                     CriteriaTriggers.FILLED_BUCKET.trigger((ServerPlayer) player, result);
                                 }
 
@@ -179,7 +179,7 @@ public class PorcelainBucket extends Item {
             } else if (containedFluidStack.isPresent() && this.fluid.get().getFluidType().isVaporizedOnPlacement(level, pos, containedFluidStack.get())) {
                 this.fluid.get().getFluidType().onVaporize(player, level, pos, containedFluidStack.get());
                 return true;
-            } else if (level.dimensionType().ultraWarm() && this.fluid.get().is(FluidTags.WATER)) {
+            } else if (level.dimension() == Level.NETHER && this.fluid.get().is(FluidTags.WATER)) {
                 var i = pos.getX();
                 var j = pos.getY();
                 var k = pos.getZ();

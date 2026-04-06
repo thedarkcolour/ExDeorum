@@ -49,8 +49,8 @@ public class CrookLootModifier extends LootModifier {
 
     @Override
     protected @NotNull ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
-        var state = context.getParamOrNull(LootContextParams.BLOCK_STATE);
-        var stack = context.getParamOrNull(LootContextParams.TOOL);
+        var state = context.getOptionalParameter(LootContextParams.BLOCK_STATE);
+        var stack = context.getOptionalParameter(LootContextParams.TOOL);
 
         if (state != null && stack != null) {
             var rand = context.getRandom();
@@ -85,14 +85,14 @@ public class CrookLootModifier extends LootModifier {
 
     private static List<ItemStack> reRollDrops(LootContext context, ItemStack nonCrook, BlockState state) {
         var builder = new LootParams.Builder(context.getLevel());
-        builder.withParameter(LootContextParams.BLOCK_STATE, context.getParam(LootContextParams.BLOCK_STATE));
+        builder.withParameter(LootContextParams.BLOCK_STATE, context.getParameter(LootContextParams.BLOCK_STATE));
         builder.withParameter(LootContextParams.TOOL, nonCrook);
 
-        if (context.hasParam(LootContextParams.THIS_ENTITY)) {
-            builder.withParameter(LootContextParams.THIS_ENTITY, context.getParam(LootContextParams.THIS_ENTITY));
+        if (context.hasParameter(LootContextParams.THIS_ENTITY)) {
+            builder.withParameter(LootContextParams.THIS_ENTITY, context.getParameter(LootContextParams.THIS_ENTITY));
         }
-        if (context.hasParam(LootContextParams.ORIGIN)) {
-            builder.withParameter(LootContextParams.ORIGIN, context.getParam(LootContextParams.ORIGIN));
+        if (context.hasParameter(LootContextParams.ORIGIN)) {
+            builder.withParameter(LootContextParams.ORIGIN, context.getParameter(LootContextParams.ORIGIN));
         }
         return state.getDrops(builder);
     }

@@ -19,14 +19,13 @@
 package thedarkcolour.exdeorum.blockentity;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -80,9 +79,9 @@ public class InfestedLeavesBlockEntity extends EBlockEntity {
     // Attempt to convert a leaf block within 1 block radius around this block
     private void trySpread(Level level) {
         // Get random offset
-        int x = level.random.nextInt(3) - 1;
-        int y = level.random.nextInt(3) - 1;
-        int z = level.random.nextInt(3) - 1;
+        int x = level.getRandom().nextInt(3) - 1;
+        int y = level.getRandom().nextInt(3) - 1;
+        int z = level.getRandom().nextInt(3) - 1;
 
         // Get the block in the world
         BlockPos targetPos = getBlockPos().offset(x, y, z);
@@ -103,24 +102,25 @@ public class InfestedLeavesBlockEntity extends EBlockEntity {
     }
 
     @Override
-    public void loadAdditional(CompoundTag nbt, HolderLookup.Provider registries) {
-        super.loadAdditional(nbt, registries);
+    public void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
 
-        // From PistonMovingBlockEntity
-        var holderLookup = this.level != null ? this.level.holderLookup(Registries.BLOCK) : BuiltInRegistries.BLOCK.asLookup();
-        this.mimic = NbtUtils.readBlockState(holderLookup, nbt.getCompound("mimic"));
-        this.progress = nbt.getShort("progress");
+        var holderLookup = input.lookup().lookupOrThrow(Registries.BLOCK);
+        this.mimic = input.child("mimic")
+                .map(child -> NbtUtils.readBlockState(holderLookup, child.asTag()))
+                .orElse(Blocks.OAK_LEAVES.defaultBlockState());
+        this.progress = (short) input.getShortOr("progress", (short) 0);
     }
 
     @Override
-    public void saveAdditional(CompoundTag nbt, HolderLookup.Provider registries) {
-        super.saveAdditional(nbt, registries);
+    public void saveAdditional(ValueOutput output) {
+        super.saveAdditional(output);
 
         if (this.mimic == null || this.mimic.getBlock() == EBlocks.INFESTED_LEAVES.get()) {
             this.mimic = Blocks.OAK_LEAVES.defaultBlockState();
         }
-        nbt.put("mimic", NbtUtils.writeBlockState(this.mimic));
-        nbt.putShort("progress", this.progress);
+        output.child("mimic").store(NbtUtils.writeBlockState(this.mimic));
+        output.putShort("progress", this.progress);
     }
 
     public int getProgress() {
@@ -157,13 +157,13 @@ public class InfestedLeavesBlockEntity extends EBlockEntity {
             }
 
             // If the leave is infested enough, advance the spread timer
-            if (!level.isClientSide && leaves.progress >= SPREAD_THRESHOLD) {
+            if (!level.isClientSide() && leaves.progress >= SPREAD_THRESHOLD) {
                 ++leaves.spreadTimer;
 
                 // Attempt to spread and reset the timer
                 if (leaves.spreadTimer >= SPREAD_INTERVAL) {
                     leaves.trySpread(level);
-                    leaves.spreadTimer = level.random.nextInt(10);
+                    leaves.spreadTimer = level.getRandom().nextInt(10);
                 }
             }
         }

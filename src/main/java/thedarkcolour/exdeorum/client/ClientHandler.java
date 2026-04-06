@@ -115,7 +115,7 @@ public class ClientHandler {
                     originalDefaultWorldPreset = originalPreset;
                 }
                 if (originalDefaultWorldPreset.unwrapKey().equals(originalPreset.unwrapKey())) {
-                    var voidWorldPreset = uiState.getSettings().worldgenLoadContext().registryOrThrow(Registries.WORLD_PRESET).getHolder(ASMHooks.overrideDefaultWorldPreset()).orElse(null);
+                    var voidWorldPreset = uiState.getSettings().worldgenLoadContext().lookupOrThrow(Registries.WORLD_PRESET).get(ASMHooks.overrideDefaultWorldPreset()).orElse(null);
                     uiState.setWorldType(new WorldCreationUiState.WorldTypeEntry(voidWorldPreset));
                 }
             }

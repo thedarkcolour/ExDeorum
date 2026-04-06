@@ -65,7 +65,7 @@ public class BarrelBlock extends ETankBlock {
 
     @Override
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             if (!state.is(newState.getBlock())) {
                 if (level.getBlockEntity(pos) instanceof BarrelBlockEntity barrel) {
                     var item = barrel.getItem();

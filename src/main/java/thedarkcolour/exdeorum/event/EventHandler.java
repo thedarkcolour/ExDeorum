@@ -39,6 +39,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.XoroshiroRandomSource;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.storage.LevelData;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.InterModComms;
 import net.neoforged.fml.ModList;
@@ -108,7 +109,7 @@ public final class EventHandler {
             CompostColors.loadColors();
             var player = Minecraft.getInstance().player;
             if (player != null) {
-                player.displayClientMessage(Component.literal("Reloaded " + CompostColors.COLORS.size() + " compost colors!"), false);
+                player.sendSystemMessage(Component.literal("Reloaded " + CompostColors.COLORS.size() + " compost colors!"));
             }
         } else if (event.getMessage().equals(".breakpoint")) {
             event.setCanceled(true);
@@ -123,14 +124,14 @@ public final class EventHandler {
             pos.move(0, 1, 0);
 
             // grow tree, has 5% chance to spawn bees based on world seed
-            var configuredFeatureRegistry = level.registryAccess().registryOrThrow(Registries.CONFIGURED_FEATURE);
+            var configuredFeatureRegistry = level.registryAccess().lookupOrThrow(Registries.CONFIGURED_FEATURE);
             var defaultTreeFeature = TreeFeatures.OAK_BEES_005;
             var defaultTreeFeatureLoc = Identifier.tryParse(EConfig.SERVER.defaultSpawnTreeFeature.get());
 
-            Holder<ConfiguredFeature<?, ?>> holder = configuredFeatureRegistry.getHolder(defaultTreeFeature).orElse(null);
+            Holder<ConfiguredFeature<?, ?>> holder = configuredFeatureRegistry.get(defaultTreeFeature).orElse(null);
 
             if (defaultTreeFeatureLoc != null) {
-                var value = configuredFeatureRegistry.getHolder(ResourceKey.create(Registries.CONFIGURED_FEATURE, defaultTreeFeatureLoc)).orElse(null);
+                var value = configuredFeatureRegistry.get(ResourceKey.create(Registries.CONFIGURED_FEATURE, defaultTreeFeatureLoc)).orElse(null);
                 if (value != null) {
                     holder = value;
                 }
@@ -158,8 +159,8 @@ public final class EventHandler {
             }
 
             event.setCanceled(true);
-            event.getSettings().setSpawn(level.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, pos), 90.0F);
-            level.getGameRules().getRule(GameRules.RULE_SPAWN_RADIUS).set(0, level.getServer());
+            event.getSettings().setSpawn(LevelData.RespawnData.of(level.dimension(), level.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, pos), 90.0F, 0.0F));
+            level.getGameRules().getRule(GameRules.RESPAWN_RADIUS).set(0, level.getServer());
         }
     }
 
@@ -188,12 +189,12 @@ public final class EventHandler {
 
     private static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
-            var generator = player.serverLevel().getChunkSource().getGenerator();
+            var generator = ((ServerLevel) player.level()).getChunkSource().getGenerator();
 
             // tries to account for other SkyBlock generator mods like SkyBlockBuilder
             if (generator instanceof VoidChunkGenerator || generator.getClass().getName().toLowerCase(Locale.ROOT).contains("skyblock")) {
                 NetworkHandler.sendVoidWorld(player);
-                var advancement = player.server.getAdvancements().get(Identifier.fromNamespaceAndPath(ExDeorum.ID, "core/root"));
+                var advancement = player.getServer().getAdvancements().get(Identifier.fromNamespaceAndPath(ExDeorum.ID, "core/root"));
 
                 if (advancement != null) {
                     if (!player.getAdvancements().getOrStartProgress(advancement).isDone()) {
@@ -237,28 +238,28 @@ public final class EventHandler {
     }
 
     private static void registerCapabilities(RegisterCapabilitiesEvent event) {
-        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, EBlockEntities.BARREL.get(), (barrel, direction) -> barrel.getItemHandler());
-        event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, EBlockEntities.BARREL.get(), (barrel, direction) -> barrel.getTank());
+        event.registerBlockEntity(Capabilities.Item.BLOCK, EBlockEntities.BARREL.get(), (barrel, direction) -> barrel.getItemHandler());
+        event.registerBlockEntity(Capabilities.Fluid.BLOCK, EBlockEntities.BARREL.get(), (barrel, direction) -> barrel.getTank());
 
-        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, EBlockEntities.MECHANICAL_SIEVE.get(), (sieve, direction) -> sieve.getItemHandler());
-        event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, EBlockEntities.MECHANICAL_SIEVE.get(), (sieve, direction) -> sieve.getEnergyStorage());
+        event.registerBlockEntity(Capabilities.Item.BLOCK, EBlockEntities.MECHANICAL_SIEVE.get(), (sieve, direction) -> sieve.getItemHandler());
+        event.registerBlockEntity(Capabilities.Energy.BLOCK, EBlockEntities.MECHANICAL_SIEVE.get(), (sieve, direction) -> sieve.getEnergyStorage());
 
-        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, EBlockEntities.MECHANICAL_HAMMER.get(), (hammer, direction) -> hammer.getItemHandler());
-        event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, EBlockEntities.MECHANICAL_HAMMER.get(), (hammer, direction) -> hammer.getEnergyStorage());
+        event.registerBlockEntity(Capabilities.Item.BLOCK, EBlockEntities.MECHANICAL_HAMMER.get(), (hammer, direction) -> hammer.getItemHandler());
+        event.registerBlockEntity(Capabilities.Energy.BLOCK, EBlockEntities.MECHANICAL_HAMMER.get(), (hammer, direction) -> hammer.getEnergyStorage());
 
-        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, EBlockEntities.LAVA_CRUCIBLE.get(), (hammer, direction) -> hammer.getItem());
-        event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, EBlockEntities.LAVA_CRUCIBLE.get(), (hammer, direction) -> hammer.getTank());
+        event.registerBlockEntity(Capabilities.Item.BLOCK, EBlockEntities.LAVA_CRUCIBLE.get(), (hammer, direction) -> hammer.getItem());
+        event.registerBlockEntity(Capabilities.Fluid.BLOCK, EBlockEntities.LAVA_CRUCIBLE.get(), (hammer, direction) -> hammer.getTank());
 
-        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, EBlockEntities.WATER_CRUCIBLE.get(), (hammer, direction) -> hammer.getItem());
-        event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, EBlockEntities.WATER_CRUCIBLE.get(), (hammer, direction) -> hammer.getTank());
+        event.registerBlockEntity(Capabilities.Item.BLOCK, EBlockEntities.WATER_CRUCIBLE.get(), (hammer, direction) -> hammer.getItem());
+        event.registerBlockEntity(Capabilities.Fluid.BLOCK, EBlockEntities.WATER_CRUCIBLE.get(), (hammer, direction) -> hammer.getTank());
 
-        event.registerItem(Capabilities.FluidHandler.ITEM, (stack, ctx) -> new PorcelainBucket.ItemHandler(stack),
+        event.registerItem(Capabilities.Fluid.ITEM, (stack, ctx) -> new PorcelainBucket.ItemHandler(stack),
                 EItems.PORCELAIN_BUCKET,
                 EItems.PORCELAIN_WATER_BUCKET,
                 EItems.PORCELAIN_LAVA_BUCKET,
                 EItems.PORCELAIN_MILK_BUCKET,
                 EItems.PORCELAIN_WITCH_WATER_BUCKET);
-        event.registerItem(Capabilities.FluidHandler.ITEM, (stack, ctx) -> new WateringCanItem.FluidHandler(stack),
+        event.registerItem(Capabilities.Fluid.ITEM, (stack, ctx) -> new WateringCanItem.FluidHandler(stack),
                 EItems.WOODEN_WATERING_CAN,
                 EItems.STONE_WATERING_CAN,
                 EItems.IRON_WATERING_CAN,
