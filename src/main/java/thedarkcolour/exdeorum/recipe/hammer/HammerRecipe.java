@@ -22,7 +22,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -36,11 +36,11 @@ public class HammerRecipe extends ProbabilityRecipe {
     public static final MapCodec<HammerRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> ProbabilityRecipe.commonFields(instance).apply(instance, HammerRecipe::new));
     public static final StreamCodec<RegistryFriendlyByteBuf, HammerRecipe> STREAM_CODEC = StreamCodec.composite(
             Ingredient.CONTENTS_STREAM_CODEC, HammerRecipe::ingredient,
-            ItemStack.STREAM_CODEC, HammerRecipe::result,
+            ItemStackTemplate.STREAM_CODEC, HammerRecipe::result,
             CodecUtil.NUMBER_PROVIDER_CODEC, HammerRecipe::resultAmount,
             HammerRecipe::new);
 
-    public HammerRecipe(Ingredient ingredient, ItemStack result, NumberProvider resultAmount) {
+    public HammerRecipe(Ingredient ingredient, ItemStackTemplate result, NumberProvider resultAmount) {
         super(ingredient, result, resultAmount);
     }
 

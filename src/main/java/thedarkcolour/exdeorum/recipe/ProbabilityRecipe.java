@@ -21,29 +21,30 @@ package thedarkcolour.exdeorum.recipe;
 import com.mojang.datafixers.Products;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 
 public abstract class ProbabilityRecipe extends SingleIngredientRecipe {
-    public final ItemStack result;
+    public final ItemStackTemplate result;
     public final NumberProvider resultAmount;
 
-    public ProbabilityRecipe(Ingredient ingredient, ItemStack result, NumberProvider resultAmount) {
+    public ProbabilityRecipe(Ingredient ingredient, ItemStackTemplate result, NumberProvider resultAmount) {
         super(ingredient);
         this.result = result;
         this.resultAmount = resultAmount;
     }
 
-    protected static <T extends ProbabilityRecipe> Products.P3<RecordCodecBuilder.Mu<T>, Ingredient, ItemStack, NumberProvider> commonFields(RecordCodecBuilder.Instance<T> instance) {
+    protected static <T extends ProbabilityRecipe> Products.P3<RecordCodecBuilder.Mu<T>, Ingredient, ItemStackTemplate, NumberProvider> commonFields(RecordCodecBuilder.Instance<T> instance) {
         return instance.group(
                 CodecUtil.ingredientField(),
-                ItemStack.CODEC.fieldOf("result").forGetter(ProbabilityRecipe::result),
+                ItemStackTemplate.CODEC.fieldOf("result").forGetter(ProbabilityRecipe::result),
                 NumberProviders.CODEC.fieldOf("result_amount").forGetter(ProbabilityRecipe::resultAmount)
         );
     }
 
-    public ItemStack result() {
+    public ItemStackTemplate result() {
         return this.result;
     }
 

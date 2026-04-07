@@ -31,7 +31,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
@@ -52,6 +52,7 @@ import net.neoforged.neoforge.common.conditions.ModLoadedCondition;
 import net.neoforged.neoforge.common.conditions.NotCondition;
 import net.neoforged.neoforge.common.conditions.TagEmptyCondition;
 import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStackTemplate;
 import net.neoforged.neoforge.fluids.crafting.FluidIngredient;
 import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 import thedarkcolour.exdeorum.ExDeorum;
@@ -348,7 +349,7 @@ public class Recipes {
         recipes.netheriteUpgrade(RecipeCategory.TOOLS, ingredient(EItems.DIAMOND_WATERING_CAN), EItems.NETHERITE_WATERING_CAN.get());
 
         // misc
-        recipes.shapelessCrafting(RecipeCategory.MISC, new ItemStack(EItems.PORCELAIN_CLAY_BALL.get()), ingredient(Items.CLAY_BALL), ingredient(Items.BONE_MEAL));
+        recipes.shapelessCrafting(RecipeCategory.MISC, EItems.PORCELAIN_CLAY_BALL.get(), 1, ingredient(Items.CLAY_BALL), ingredient(Items.BONE_MEAL));
         recipes.shapedCrafting(RecipeCategory.MISC, EItems.UNFIRED_PORCELAIN_BUCKET.get(), recipe -> {
             recipe.define('#', EItems.PORCELAIN_CLAY_BALL);
             recipe.pattern("# #");
@@ -539,11 +540,11 @@ public class Recipes {
     }
 
     private static void lavaCrucible(RecipeOutput writer, String id, Ingredient ingredient, int volume) {
-        writer.accept(ResourceKey.create(Registries.RECIPE, modLoc("lava_crucible/" + id)), new CrucibleRecipe.Lava(ingredient, new FluidStack(Fluids.LAVA, volume)), null);
+        writer.accept(ResourceKey.create(Registries.RECIPE, modLoc("lava_crucible/" + id)), new CrucibleRecipe.Lava(ingredient, new FluidStackTemplate(Fluids.LAVA, volume)), null);
     }
 
     private static void waterCrucible(RecipeOutput writer, String id, Ingredient ingredient, int volume) {
-        writer.accept(ResourceKey.create(Registries.RECIPE, modLoc("water_crucible/" + id)), new CrucibleRecipe.Water(ingredient, new FluidStack(Fluids.WATER, volume)), null);
+        writer.accept(ResourceKey.create(Registries.RECIPE, modLoc("water_crucible/" + id)), new CrucibleRecipe.Water(ingredient, new FluidStackTemplate(Fluids.WATER, volume)), null);
     }
 
     private static void hammerRecipes(RecipeOutput writer, MKRecipeProvider recipes) {
@@ -594,7 +595,7 @@ public class Recipes {
     }
 
     private static void compressedHammerRecipe(RecipeOutput writer, ItemLike result, Ingredient block) {
-        writer.accept(ResourceKey.create(Registries.RECIPE, modLoc("compressed_hammer/" + path(result))), new CompressedHammerRecipe(block, new ItemStack(result.asItem()), exactly(9)), null);
+        writer.accept(ResourceKey.create(Registries.RECIPE, modLoc("compressed_hammer/" + path(result))), new CompressedHammerRecipe(block, new ItemStackTemplate(result.asItem()), exactly(9)), null);
     }
 
     private static void hammerRecipe(RecipeOutput writer, String name, Ingredient block, ItemLike result) {
@@ -602,7 +603,7 @@ public class Recipes {
     }
 
     private static void hammerRecipe(RecipeOutput writer, String name, Ingredient block, ItemLike result, NumberProvider resultAmount) {
-        writer.accept(ResourceKey.create(Registries.RECIPE, modLoc("hammer/" + name)), new HammerRecipe(block, new ItemStack(result.asItem()), resultAmount), null);
+        writer.accept(ResourceKey.create(Registries.RECIPE, modLoc("hammer/" + name)), new HammerRecipe(block, new ItemStackTemplate(result.asItem()), resultAmount), null);
     }
 
     private static void crookRecipes(RecipeOutput writer) {
@@ -615,7 +616,7 @@ public class Recipes {
     }
 
     private static void crookRecipe(RecipeOutput writer, String name, BlockPredicate blockPredicate, ItemLike result, float chance) {
-        writer.accept(ResourceKey.create(Registries.RECIPE, modLoc("crook/" + name)), new CrookRecipe(blockPredicate, new ItemStack(result), chance), null);
+        writer.accept(ResourceKey.create(Registries.RECIPE, modLoc("crook/" + name)), new CrookRecipe(blockPredicate, new ItemStackTemplate(result.asItem()), chance), null);
     }
 
     @SuppressWarnings("OptionalGetWithoutIsPresent")
@@ -742,11 +743,11 @@ public class Recipes {
     }
 
     private static void barrelMixing(RecipeOutput writer, String suffix, Ingredient ingredient, Fluid fluidType, Item result) {
-        writer.accept(ResourceKey.create(Registries.RECIPE, modLoc("barrel_mixing/" + path(result) + suffix)), new BarrelMixingRecipe(ingredient, SizedFluidIngredient.of(fluidType, 1000), new ItemStack(result)), null);
+        writer.accept(ResourceKey.create(Registries.RECIPE, modLoc("barrel_mixing/" + path(result) + suffix)), new BarrelMixingRecipe(ingredient, SizedFluidIngredient.of(fluidType, 1000), new ItemStackTemplate(result)), null);
     }
 
     private static void barrelFluidMixing(RecipeOutput writer, Fluid base, Fluid additive, Item result, boolean consumesAdditive) {
-        writer.accept(ResourceKey.create(Registries.RECIPE, modLoc("barrel_fluid_mixing/" + path(result))), new BarrelFluidMixingRecipe(SizedFluidIngredient.of(base, 1000), FluidIngredient.of(additive), new ItemStack(result), consumesAdditive), null);
+        writer.accept(ResourceKey.create(Registries.RECIPE, modLoc("barrel_fluid_mixing/" + path(result))), new BarrelFluidMixingRecipe(SizedFluidIngredient.of(base, 1000), FluidIngredient.of(additive), new ItemStackTemplate(result), consumesAdditive), null);
     }
 
     private static void fluidTransformationRecipes(RecipeOutput writer) {

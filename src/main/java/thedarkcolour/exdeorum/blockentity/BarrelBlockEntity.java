@@ -272,7 +272,7 @@ public class BarrelBlockEntity extends ETankBlockEntity {
                     if (recipe != null && this.tank.getFluidAmount() >= recipe.baseFluid().amount() && itemFluid.getAmount() == 1000) {
                         if (!level.isClientSide()) {
                             this.tank.drain(recipe.baseFluid().amount(), IFluidHandler.FluidAction.EXECUTE);
-                            setItem(recipe.result().copy());
+                            setItem(recipe.result().create());
 
                             if (recipe.consumesAdditive()) {
                                 itemFluidCap.drain(1000, IFluidHandler.FluidAction.EXECUTE);
@@ -376,7 +376,7 @@ public class BarrelBlockEntity extends ETankBlockEntity {
                 // Empty barrel
                 this.tank.drain(recipe.fluid.amount(), IFluidHandler.FluidAction.EXECUTE);
                 // Replace fluid with result
-                setItem(recipe.result.copy());
+                setItem(recipe.result.create());
                 this.level.playSound(null, this.worldPosition, ESounds.BARREL_MIXING.get(), SoundSource.BLOCKS, 0.8f, 1.0f);
             }
             // Mixing was successful, so return true
@@ -443,12 +443,12 @@ public class BarrelBlockEntity extends ETankBlockEntity {
                         // If additive is consumed, check that the additive can be consumed before crafting
                         if (!recipe.consumesAdditive()) {
                             this.tank.drain(recipe.baseFluid().amount(), IFluidHandler.FluidAction.EXECUTE);
-                            setItem(recipe.result().copy());
+                            setItem(recipe.result().create());
                         } else if (aboveBlockState.getBlock() instanceof BucketPickup pickup) {
                             // If something was picked up, we can craft
                             if (!pickup.pickupBlock(null, this.level, abovePos, aboveBlockState).isEmpty()) {
                                 this.tank.drain(recipe.baseFluid().amount(), IFluidHandler.FluidAction.EXECUTE);
-                                setItem(recipe.result().copy());
+                                setItem(recipe.result().create());
                             }
                         }
                     }

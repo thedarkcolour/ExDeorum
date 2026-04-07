@@ -40,9 +40,7 @@ neoForge {
         }
 
         data {
-            data()
-            // instead of using --all, skip file check validation
-            programArguments.addAll('--server', '--client', '--dev', '--reports')
+            clientData()
             programArguments.addAll('--mod', 'exdeorum', '--output', file('src/generated/resources/').absolutePath, '--existing', file('src/main/resources/').absolutePath)
         }
     }

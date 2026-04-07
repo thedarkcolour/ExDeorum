@@ -24,6 +24,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.PlacementInfo;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeBookCategories;
@@ -36,10 +37,10 @@ import thedarkcolour.exdeorum.recipe.BlockPredicate;
 import thedarkcolour.exdeorum.registry.ERecipeSerializers;
 import thedarkcolour.exdeorum.registry.ERecipeTypes;
 
-public record CrookRecipe(BlockPredicate blockPredicate, ItemStack result, float chance) implements Recipe<RecipeInput> {
+public record CrookRecipe(BlockPredicate blockPredicate, ItemStackTemplate result, float chance) implements Recipe<RecipeInput> {
     public static final MapCodec<CrookRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             BlockPredicate.CODEC.fieldOf("block_predicate").forGetter(CrookRecipe::blockPredicate),
-            ItemStack.CODEC.fieldOf("result").forGetter(CrookRecipe::result),
+            ItemStackTemplate.CODEC.fieldOf("result").forGetter(CrookRecipe::result),
             Codec.FLOAT.fieldOf("chance").forGetter(CrookRecipe::chance)
     ).apply(instance, CrookRecipe::new));
     public static final StreamCodec<RegistryFriendlyByteBuf, CrookRecipe> STREAM_CODEC = StreamCodec.of(CrookRecipe::toNetwork, CrookRecipe::fromNetwork);
@@ -86,13 +87,13 @@ public record CrookRecipe(BlockPredicate blockPredicate, ItemStack result, float
 
     public static void toNetwork(RegistryFriendlyByteBuf buffer, CrookRecipe recipe) {
         recipe.blockPredicate.toNetwork(buffer);
-        ItemStack.STREAM_CODEC.encode(buffer, recipe.result);
+        ItemStackTemplate.STREAM_CODEC.encode(buffer, recipe.result);
         buffer.writeFloat(recipe.chance);
     }
 
     public static CrookRecipe fromNetwork(RegistryFriendlyByteBuf buffer) {
         BlockPredicate blockPredicate = BlockPredicate.STREAM_CODEC.decode(buffer);
-        ItemStack result = ItemStack.STREAM_CODEC.decode(buffer);
+        ItemStackTemplate result = ItemStackTemplate.STREAM_CODEC.decode(buffer);
         float chance = buffer.readFloat();
 
         return new CrookRecipe(blockPredicate, result, chance);

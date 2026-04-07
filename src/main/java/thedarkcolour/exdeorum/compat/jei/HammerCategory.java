@@ -52,9 +52,9 @@ class HammerCategory extends OneToOneCategory<HammerRecipe> {
     @Override
     protected void addOutput(IRecipeSlotBuilder slot, HammerRecipe recipe) {
         if (recipe.resultAmount instanceof ConstantValue constant) {
-            slot.addItemStack(recipe.result.getCount() == 1 ? recipe.result : recipe.result.copyWithCount((int) constant.value()));
+            slot.addItemStack(recipe.result.count() == 1 ? recipe.result.create() : recipe.result.withCount((int) constant.value()).create());
         } else {
-            slot.addItemStack(recipe.result);
+            slot.addItemStack(recipe.result.create());
             SieveCategory.addTooltips(slot, false, recipe.resultAmount);
         }
     }

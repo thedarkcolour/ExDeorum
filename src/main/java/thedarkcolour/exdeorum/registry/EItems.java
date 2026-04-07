@@ -19,6 +19,9 @@
 package thedarkcolour.exdeorum.registry;
 
 import com.google.common.collect.Iterables;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
@@ -39,44 +42,44 @@ public class EItems {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(ExDeorum.ID);
 
     // Silk Worm
-    public static final DeferredItem<SilkwormItem> SILKWORM = ITEMS.register("silkworm", () -> new SilkwormItem(props()));
-    public static final DeferredItem<Item> COOKED_SILKWORM = ITEMS.register("cooked_silkworm", () -> new CookedSilkwormItem(props().food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.6f).build())));
+    public static final DeferredItem<SilkwormItem> SILKWORM = register("silkworm", SilkwormItem::new);
+    public static final DeferredItem<Item> COOKED_SILKWORM = register("cooked_silkworm", properties -> new CookedSilkwormItem(properties.food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.6f).build())));
 
     // Crooks
-    public static final DeferredItem<Item> CROOK = ITEMS.register("crook", () -> new CrookItem(props().durability(128), 2.0f));
-    public static final DeferredItem<Item> BONE_CROOK = ITEMS.register("bone_crook", () -> new CrookItem(props().durability(312), 4.0f));
+    public static final DeferredItem<Item> CROOK = register("crook", properties -> new CrookItem(properties.durability(128), 2.0f));
+    public static final DeferredItem<Item> BONE_CROOK = register("bone_crook", properties -> new CrookItem(properties.durability(312), 4.0f));
 
     // Watering cans
-    public static final DeferredItem<Item> WOODEN_WATERING_CAN = ITEMS.register("wooden_watering_can", () -> new WateringCanItem(300, props().stacksTo(1)));
-    public static final DeferredItem<Item> STONE_WATERING_CAN = ITEMS.register("stone_watering_can", () -> new WateringCanItem(1000, props().stacksTo(1)));
-    public static final DeferredItem<Item> IRON_WATERING_CAN = ITEMS.register("iron_watering_can", () -> new WateringCanItem(2000, props().stacksTo(1)));
-    public static final DeferredItem<Item> GOLDEN_WATERING_CAN = ITEMS.register("golden_watering_can", () -> new WateringCanItem(4000, props().stacksTo(1)));
-    public static final DeferredItem<Item> DIAMOND_WATERING_CAN = ITEMS.register("diamond_watering_can", () -> new WideWateringCanItem(false, props().stacksTo(1)));
-    public static final DeferredItem<Item> NETHERITE_WATERING_CAN = ITEMS.register("netherite_watering_can", () -> new WideWateringCanItem(true, props().stacksTo(1)));
+    public static final DeferredItem<Item> WOODEN_WATERING_CAN = register("wooden_watering_can", properties -> new WateringCanItem(300, properties.stacksTo(1)));
+    public static final DeferredItem<Item> STONE_WATERING_CAN = register("stone_watering_can", properties -> new WateringCanItem(1000, properties.stacksTo(1)));
+    public static final DeferredItem<Item> IRON_WATERING_CAN = register("iron_watering_can", properties -> new WateringCanItem(2000, properties.stacksTo(1)));
+    public static final DeferredItem<Item> GOLDEN_WATERING_CAN = register("golden_watering_can", properties -> new WateringCanItem(4000, properties.stacksTo(1)));
+    public static final DeferredItem<Item> DIAMOND_WATERING_CAN = register("diamond_watering_can", properties -> new WideWateringCanItem(false, properties.stacksTo(1)));
+    public static final DeferredItem<Item> NETHERITE_WATERING_CAN = register("netherite_watering_can", properties -> new WideWateringCanItem(true, properties.stacksTo(1)));
 
     // Sieve Meshes
-    public static final DeferredItem<Item> STRING_MESH = ITEMS.register("string_mesh", () -> new MeshItem(props().stacksTo(16)));
-    public static final DeferredItem<Item> FLINT_MESH = ITEMS.register("flint_mesh", () -> new MeshItem(props().stacksTo(16)));
-    public static final DeferredItem<Item> IRON_MESH = ITEMS.register("iron_mesh", () -> new MeshItem(props().stacksTo(16)));
-    public static final DeferredItem<Item> GOLDEN_MESH = ITEMS.register("golden_mesh", () -> new MeshItem(props().stacksTo(16)));
-    public static final DeferredItem<Item> DIAMOND_MESH = ITEMS.register("diamond_mesh", () -> new MeshItem(props().stacksTo(16)));
-    public static final DeferredItem<Item> NETHERITE_MESH = ITEMS.register("netherite_mesh", () -> new MeshItem(props().stacksTo(16)));
+    public static final DeferredItem<Item> STRING_MESH = register("string_mesh", properties -> new MeshItem(properties.stacksTo(16)));
+    public static final DeferredItem<Item> FLINT_MESH = register("flint_mesh", properties -> new MeshItem(properties.stacksTo(16)));
+    public static final DeferredItem<Item> IRON_MESH = register("iron_mesh", properties -> new MeshItem(properties.stacksTo(16)));
+    public static final DeferredItem<Item> GOLDEN_MESH = register("golden_mesh", properties -> new MeshItem(properties.stacksTo(16)));
+    public static final DeferredItem<Item> DIAMOND_MESH = register("diamond_mesh", properties -> new MeshItem(properties.stacksTo(16)));
+    public static final DeferredItem<Item> NETHERITE_MESH = register("netherite_mesh", properties -> new MeshItem(properties.stacksTo(16)));
 
     // Hammers
-    public static final DeferredItem<Item> WOODEN_HAMMER = ITEMS.register("wooden_hammer", () -> new HammerItem(ToolMaterial.WOOD, props()));
-    public static final DeferredItem<Item> STONE_HAMMER = ITEMS.register("stone_hammer", () -> new HammerItem(ToolMaterial.STONE, props()));
-    public static final DeferredItem<Item> GOLDEN_HAMMER = ITEMS.register("golden_hammer", () -> new HammerItem(ToolMaterial.GOLD, props()));
-    public static final DeferredItem<Item> IRON_HAMMER = ITEMS.register("iron_hammer", () -> new HammerItem(ToolMaterial.IRON, props()));
-    public static final DeferredItem<Item> DIAMOND_HAMMER = ITEMS.register("diamond_hammer", () -> new HammerItem(ToolMaterial.DIAMOND, props()));
-    public static final DeferredItem<Item> NETHERITE_HAMMER = ITEMS.register("netherite_hammer", () -> new HammerItem(ToolMaterial.NETHERITE, props()));
+    public static final DeferredItem<Item> WOODEN_HAMMER = register("wooden_hammer", properties -> new HammerItem(ToolMaterial.WOOD, properties));
+    public static final DeferredItem<Item> STONE_HAMMER = register("stone_hammer", properties -> new HammerItem(ToolMaterial.STONE, properties));
+    public static final DeferredItem<Item> GOLDEN_HAMMER = register("golden_hammer", properties -> new HammerItem(ToolMaterial.GOLD, properties));
+    public static final DeferredItem<Item> IRON_HAMMER = register("iron_hammer", properties -> new HammerItem(ToolMaterial.IRON, properties));
+    public static final DeferredItem<Item> DIAMOND_HAMMER = register("diamond_hammer", properties -> new HammerItem(ToolMaterial.DIAMOND, properties));
+    public static final DeferredItem<Item> NETHERITE_HAMMER = register("netherite_hammer", properties -> new HammerItem(ToolMaterial.NETHERITE, properties));
 
     // Compressed Hammers
-    public static final DeferredItem<Item> COMPRESSED_WOODEN_HAMMER = ITEMS.register("compressed_wooden_hammer", () -> new HammerItem(ToolMaterial.WOOD, props()));
-    public static final DeferredItem<Item> COMPRESSED_STONE_HAMMER = ITEMS.register("compressed_stone_hammer", () -> new HammerItem(ToolMaterial.STONE, props()));
-    public static final DeferredItem<Item> COMPRESSED_GOLDEN_HAMMER = ITEMS.register("compressed_golden_hammer", () -> new HammerItem(ToolMaterial.GOLD, props()));
-    public static final DeferredItem<Item> COMPRESSED_IRON_HAMMER = ITEMS.register("compressed_iron_hammer", () -> new HammerItem(ToolMaterial.IRON, props()));
-    public static final DeferredItem<Item> COMPRESSED_DIAMOND_HAMMER = ITEMS.register("compressed_diamond_hammer", () -> new HammerItem(ToolMaterial.DIAMOND, props()));
-    public static final DeferredItem<Item> COMPRESSED_NETHERITE_HAMMER = ITEMS.register("compressed_netherite_hammer", () -> new HammerItem(ToolMaterial.NETHERITE, props()));
+    public static final DeferredItem<Item> COMPRESSED_WOODEN_HAMMER = register("compressed_wooden_hammer", properties -> new HammerItem(ToolMaterial.WOOD, properties));
+    public static final DeferredItem<Item> COMPRESSED_STONE_HAMMER = register("compressed_stone_hammer", properties -> new HammerItem(ToolMaterial.STONE, properties));
+    public static final DeferredItem<Item> COMPRESSED_GOLDEN_HAMMER = register("compressed_golden_hammer", properties -> new HammerItem(ToolMaterial.GOLD, properties));
+    public static final DeferredItem<Item> COMPRESSED_IRON_HAMMER = register("compressed_iron_hammer", properties -> new HammerItem(ToolMaterial.IRON, properties));
+    public static final DeferredItem<Item> COMPRESSED_DIAMOND_HAMMER = register("compressed_diamond_hammer", properties -> new HammerItem(ToolMaterial.DIAMOND, properties));
+    public static final DeferredItem<Item> COMPRESSED_NETHERITE_HAMMER = register("compressed_netherite_hammer", properties -> new HammerItem(ToolMaterial.NETHERITE, properties));
 
     // Ore Chunks
     public static final DeferredItem<Item> IRON_ORE_CHUNK = registerSimpleItem("iron_ore_chunk");
@@ -112,38 +115,42 @@ public class EItems {
 
     // Misc
     public static final DeferredItem<Item> PORCELAIN_CLAY_BALL = registerSimpleItem("porcelain_clay_ball");
-    public static final DeferredItem<Item> GRASS_SEEDS = ITEMS.register("grass_seeds", () -> new GrassSpreaderItem(props(), Blocks.GRASS_BLOCK::defaultBlockState));
-    public static final DeferredItem<Item> MYCELIUM_SPORES = ITEMS.register("mycelium_spores", () -> new GrassSpreaderItem(props(), Blocks.MYCELIUM::defaultBlockState));
-    public static final DeferredItem<Item> WARPED_NYLIUM_SPORES = ITEMS.register("warped_nylium_spores", () -> new NyliumSpreaderItem(props(), Blocks.WARPED_NYLIUM::defaultBlockState));
-    public static final DeferredItem<Item> CRIMSON_NYLIUM_SPORES = ITEMS.register("crimson_nylium_spores", () -> new NyliumSpreaderItem(props(), Blocks.CRIMSON_NYLIUM::defaultBlockState));
-    public static final DeferredItem<Item> SCULK_CORE = ITEMS.register("sculk_core", () -> new SculkCoreItem(props().stacksTo(1)));
-    public static final DeferredItem<Item> RANDOM_POTTERY_SHERD = ITEMS.register("random_pottery_sherd", () -> new RandomResultItem(props(), EItemTags.RANDOM_SHERD_DROPS));
-    public static final DeferredItem<Item> RANDOM_ARMOR_TRIM = ITEMS.register("random_armor_trim", () -> new RandomResultItem(props(), EItemTags.RANDOM_TRIM_DROPS));
+    public static final DeferredItem<Item> GRASS_SEEDS = register("grass_seeds", properties -> new GrassSpreaderItem(properties, Blocks.GRASS_BLOCK::defaultBlockState));
+    public static final DeferredItem<Item> MYCELIUM_SPORES = register("mycelium_spores", properties -> new GrassSpreaderItem(properties, Blocks.MYCELIUM::defaultBlockState));
+    public static final DeferredItem<Item> WARPED_NYLIUM_SPORES = register("warped_nylium_spores", properties -> new NyliumSpreaderItem(properties, Blocks.WARPED_NYLIUM::defaultBlockState));
+    public static final DeferredItem<Item> CRIMSON_NYLIUM_SPORES = register("crimson_nylium_spores", properties -> new NyliumSpreaderItem(properties, Blocks.CRIMSON_NYLIUM::defaultBlockState));
+    public static final DeferredItem<Item> SCULK_CORE = register("sculk_core", properties -> new SculkCoreItem(properties.stacksTo(1)));
+    public static final DeferredItem<Item> RANDOM_POTTERY_SHERD = register("random_pottery_sherd", properties -> new RandomResultItem(properties, EItemTags.RANDOM_SHERD_DROPS));
+    public static final DeferredItem<Item> RANDOM_ARMOR_TRIM = register("random_armor_trim", properties -> new RandomResultItem(properties, EItemTags.RANDOM_TRIM_DROPS));
     public static final DeferredItem<Item> WOOD_CHIPPINGS = registerSimpleItem("wood_chippings");
 
     // Buckets
     public static final DeferredItem<Item> UNFIRED_PORCELAIN_BUCKET = registerSimpleItem("unfired_porcelain_bucket");
-    public static final DeferredItem<Item> PORCELAIN_BUCKET = ITEMS.register("porcelain_bucket", () -> new PorcelainBucket(() -> Fluids.EMPTY, props().stacksTo(16)));
-    public static final DeferredItem<Item> PORCELAIN_WATER_BUCKET = ITEMS.register("porcelain_water_bucket", () -> new PorcelainBucket(() -> Fluids.WATER, props().craftRemainder(PORCELAIN_BUCKET.get()).stacksTo(1)));
-    public static final DeferredItem<Item> PORCELAIN_LAVA_BUCKET = ITEMS.register("porcelain_lava_bucket", () -> new PorcelainBucket(() -> Fluids.LAVA, props().stacksTo(1)));
-    public static final DeferredItem<Item> PORCELAIN_MILK_BUCKET = ITEMS.register("porcelain_milk_bucket", () -> new PorcelainMilkBucket(props().craftRemainder(PORCELAIN_BUCKET.get()).stacksTo(1)));
-    public static final DeferredItem<Item> PORCELAIN_WITCH_WATER_BUCKET = ITEMS.register("porcelain_witch_water_bucket", () -> new PorcelainBucket(EFluids.WITCH_WATER, props().craftRemainder(PORCELAIN_BUCKET.get()).stacksTo(1)));
+    public static final DeferredItem<Item> PORCELAIN_BUCKET = register("porcelain_bucket", properties -> new PorcelainBucket(() -> Fluids.EMPTY, properties.stacksTo(16)));
+    public static final DeferredItem<Item> PORCELAIN_WATER_BUCKET = register("porcelain_water_bucket", properties -> new PorcelainBucket(() -> Fluids.WATER, properties.craftRemainder(PORCELAIN_BUCKET.get()).stacksTo(1)));
+    public static final DeferredItem<Item> PORCELAIN_LAVA_BUCKET = register("porcelain_lava_bucket", properties -> new PorcelainBucket(() -> Fluids.LAVA, properties.stacksTo(1)));
+    public static final DeferredItem<Item> PORCELAIN_MILK_BUCKET = register("porcelain_milk_bucket", properties -> new PorcelainMilkBucket(properties.craftRemainder(PORCELAIN_BUCKET.get()).stacksTo(1)));
+    public static final DeferredItem<Item> PORCELAIN_WITCH_WATER_BUCKET = register("porcelain_witch_water_bucket", properties -> new PorcelainBucket(EFluids.WITCH_WATER, properties.craftRemainder(PORCELAIN_BUCKET.get()).stacksTo(1)));
 
     // Fluids
-    public static final DeferredItem<Item> WITCH_WATER_BUCKET = ITEMS.register("witch_water_bucket", () -> new BucketItem(EFluids.WITCH_WATER.get(), props().craftRemainder(Items.BUCKET).stacksTo(1)));
+    public static final DeferredItem<Item> WITCH_WATER_BUCKET = register("witch_water_bucket", properties -> new BucketItem(EFluids.WITCH_WATER.get(), properties.craftRemainder(Items.BUCKET).stacksTo(1)));
 
     public static DeferredItem<Item> registerSimpleItem(String name) {
-        return ITEMS.register(name, () -> new Item(props()));
+        return register(name, Item::new);
     }
 
     // Returns new properties with creative tab set
-    public static Item.Properties props() {
-        return new Item.Properties();
+    public static Item.Properties props(Identifier id) {
+        return new Item.Properties().setId(ResourceKey.create(Registries.ITEM, id));
+    }
+
+    public static <T extends Item> DeferredItem<T> register(String name, java.util.function.Function<Item.Properties, T> factory) {
+        return ITEMS.register(name, id -> factory.apply(props(id)));
     }
 
     // Register a block item
     public static DeferredItem<BlockItem> registerItemBlock(DeferredBlock<? extends Block> block) {
-        return ITEMS.register(block.getId().getPath(), () -> new BlockItem(block.get(), props()));
+        return ITEMS.register(block.getId().getPath(), id -> new BlockItem(block.get(), props(id)));
     }
 
     // BlockItems

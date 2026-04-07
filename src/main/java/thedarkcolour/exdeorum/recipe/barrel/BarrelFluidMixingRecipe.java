@@ -24,6 +24,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.PlacementInfo;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeBookCategories;
@@ -44,13 +45,13 @@ import thedarkcolour.exdeorum.registry.ERecipeTypes;
 public record BarrelFluidMixingRecipe(
         SizedFluidIngredient baseFluid,
         FluidIngredient additiveFluid,
-        ItemStack result,
+        ItemStackTemplate result,
         boolean consumesAdditive
 ) implements Recipe<RecipeInput> {
     public static final MapCodec<BarrelFluidMixingRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             SizedFluidIngredient.CODEC.fieldOf("base_fluid").forGetter(BarrelFluidMixingRecipe::baseFluid),
             FluidIngredient.CODEC.fieldOf("additive_fluid").forGetter(BarrelFluidMixingRecipe::additiveFluid),
-            ItemStack.CODEC.fieldOf("result").forGetter(BarrelFluidMixingRecipe::result),
+            ItemStackTemplate.CODEC.fieldOf("result").forGetter(BarrelFluidMixingRecipe::result),
             Codec.BOOL.optionalFieldOf("consumes_additive", false).forGetter(BarrelFluidMixingRecipe::consumesAdditive)
     ).apply(instance, BarrelFluidMixingRecipe::new));
     public static final StreamCodec<RegistryFriendlyByteBuf, BarrelFluidMixingRecipe> STREAM_CODEC = StreamCodec.of(BarrelFluidMixingRecipe::toNetwork, BarrelFluidMixingRecipe::fromNetwork);
@@ -98,14 +99,14 @@ public record BarrelFluidMixingRecipe(
     public static void toNetwork(RegistryFriendlyByteBuf buffer, BarrelFluidMixingRecipe recipe) {
         SizedFluidIngredient.STREAM_CODEC.encode(buffer, recipe.baseFluid);
         FluidIngredient.STREAM_CODEC.encode(buffer, recipe.additiveFluid);
-        ItemStack.STREAM_CODEC.encode(buffer, recipe.result);
+        ItemStackTemplate.STREAM_CODEC.encode(buffer, recipe.result);
         buffer.writeBoolean(recipe.consumesAdditive);
     }
 
     public static BarrelFluidMixingRecipe fromNetwork(RegistryFriendlyByteBuf buffer) {
         SizedFluidIngredient baseFluid = SizedFluidIngredient.STREAM_CODEC.decode(buffer);
         FluidIngredient additiveFluid = FluidIngredient.STREAM_CODEC.decode(buffer);
-        ItemStack result = ItemStack.STREAM_CODEC.decode(buffer);
+        ItemStackTemplate result = ItemStackTemplate.STREAM_CODEC.decode(buffer);
         boolean consumesAdditive = buffer.readBoolean();
 
         return new BarrelFluidMixingRecipe(baseFluid, additiveFluid, result, consumesAdditive);

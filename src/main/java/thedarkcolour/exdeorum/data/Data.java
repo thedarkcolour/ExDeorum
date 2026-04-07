@@ -25,7 +25,7 @@ import thedarkcolour.exdeorum.data.recipe.Recipes;
 import thedarkcolour.modkit.data.DataHelper;
 
 public class Data {
-    public static void generateData(GatherDataEvent event) {
+    public static void generateData(GatherDataEvent.Client event) {
         // Two things used by data generators
         var gen = event.getGenerator(); // writes to json
         var output = gen.getPackOutput();

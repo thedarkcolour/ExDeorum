@@ -18,6 +18,7 @@
 
 package thedarkcolour.exdeorum.material;
 
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import org.jetbrains.annotations.Nullable;
@@ -42,8 +43,8 @@ public class BarrelMaterial extends AbstractMaterial {
     }
 
     @Override
-    protected Block createBlock() {
-        var props = props().noOcclusion();
+    protected Block createBlock(Identifier id) {
+        var props = props(id).noOcclusion();
         if (!this.fireproof) props.ignitedByLava();
         return new BarrelBlock(props);
     }

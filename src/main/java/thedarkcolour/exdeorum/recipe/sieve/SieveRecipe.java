@@ -26,7 +26,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -40,10 +40,10 @@ public class SieveRecipe extends ProbabilityRecipe {
     public static final MapCodec<SieveRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> commonSieveFields(instance).apply(instance, SieveRecipe::new));
     public static final StreamCodec<RegistryFriendlyByteBuf, SieveRecipe> STREAM_CODEC = sieveStreamCodec(SieveRecipe::new);
 
-    static <T extends SieveRecipe> StreamCodec<RegistryFriendlyByteBuf, T> sieveStreamCodec(Function5<Ingredient, ItemStack, NumberProvider, Ingredient, Boolean, T> factory) {
+    static <T extends SieveRecipe> StreamCodec<RegistryFriendlyByteBuf, T> sieveStreamCodec(Function5<Ingredient, ItemStackTemplate, NumberProvider, Ingredient, Boolean, T> factory) {
         return StreamCodec.composite(
                 Ingredient.CONTENTS_STREAM_CODEC, T::ingredient,
-                ItemStack.STREAM_CODEC, T::result,
+                ItemStackTemplate.STREAM_CODEC, T::result,
                 CodecUtil.NUMBER_PROVIDER_CODEC, T::resultAmount,
                 Ingredient.CONTENTS_STREAM_CODEC, T::mesh,
                 ByteBufCodecs.BOOL, T::byHandOnly,
@@ -51,7 +51,7 @@ public class SieveRecipe extends ProbabilityRecipe {
         );
     }
 
-    protected static <T extends SieveRecipe> Products.P5<RecordCodecBuilder.Mu<T>, Ingredient, ItemStack, NumberProvider, Ingredient, Boolean> commonSieveFields(RecordCodecBuilder.Instance<T> instance) {
+    protected static <T extends SieveRecipe> Products.P5<RecordCodecBuilder.Mu<T>, Ingredient, ItemStackTemplate, NumberProvider, Ingredient, Boolean> commonSieveFields(RecordCodecBuilder.Instance<T> instance) {
         return commonFields(instance).and(
                 instance.group(
                         Ingredient.CODEC.fieldOf("mesh").forGetter(SieveRecipe::mesh),
@@ -62,7 +62,7 @@ public class SieveRecipe extends ProbabilityRecipe {
     public final Ingredient mesh;
     public final boolean byHandOnly;
 
-    public SieveRecipe(Ingredient ingredient, ItemStack result, NumberProvider resultAmount, Ingredient mesh, boolean byHandOnly) {
+    public SieveRecipe(Ingredient ingredient, ItemStackTemplate result, NumberProvider resultAmount, Ingredient mesh, boolean byHandOnly) {
         super(ingredient, result, resultAmount);
 
         this.mesh = mesh;

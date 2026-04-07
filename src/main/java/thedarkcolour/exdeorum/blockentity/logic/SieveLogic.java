@@ -102,9 +102,9 @@ public class SieveLogic {
                 while (amount > 0) {
                     hasDrops = true;
                     // make a single item copy of recipe result
-                    var result = recipe.result.copyWithCount(1);
+                    var result = recipe.result.withCount(1).create();
                     // the size of the stack respecting stack limits (ex. ender pearl limits to 16)
-                    var stackAmount = Math.min(amount, recipe.result.getMaxStackSize());
+                    var stackAmount = Math.min(amount, result.getMaxStackSize());
                     result.setCount(stackAmount);
                     amount -= stackAmount;
                     var handleDrop = this.owner.handleResultItem(result, level, rand);

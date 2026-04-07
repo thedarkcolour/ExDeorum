@@ -216,10 +216,10 @@ public abstract class AbstractCrucibleBlockEntity extends ETankBlockEntity {
         var result = recipe.getResult();
         var contained = this.tank.getFluid();
         shrinkAction.accept(item);
-        this.solids = (short) Math.min(this.solids + result.getAmount(), MAX_SOLIDS);
+        this.solids = (short) Math.min(this.solids + result.amount(), MAX_SOLIDS);
 
         if (contained.isEmpty()) {
-            this.fluid = result.getFluid();
+            this.fluid = result.fluid().value();
             updateLight(this.level, this.worldPosition, this.fluid);
         }
 
@@ -249,8 +249,8 @@ public abstract class AbstractCrucibleBlockEntity extends ETankBlockEntity {
             var result = recipe.getResult();
             var contained = this.tank.getFluid();
 
-            if (FluidStack.isSameFluidSameComponents(result, contained) || contained.isEmpty()) {
-                return result.getAmount() + this.solids <= MAX_SOLIDS ? InsertionResult.YES : InsertionResult.FULL;
+            if (FluidStack.isSameFluidSameComponents(contained, result) || contained.isEmpty()) {
+                return result.amount() + this.solids <= MAX_SOLIDS ? InsertionResult.YES : InsertionResult.FULL;
             }
         }
 

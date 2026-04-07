@@ -1,7 +1,9 @@
 package thedarkcolour.exdeorum.block;
 
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -32,8 +34,8 @@ public class CompressedBlockType implements ItemLike {
         this.base = base;
     }
 
-    private Block createBlock() {
-        return new Block(BlockBehaviour.Properties.ofFullCopy(this.base.get()));
+    private Block createBlock(Identifier id) {
+        return new Block(BlockBehaviour.Properties.ofFullCopy(this.base.get()).setId(ResourceKey.create(Registries.BLOCK, id)));
     }
 
     public Block getBlock() {

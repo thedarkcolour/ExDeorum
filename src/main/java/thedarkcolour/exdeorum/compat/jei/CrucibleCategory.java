@@ -41,8 +41,8 @@ abstract class CrucibleCategory extends OneToOneCategory<CrucibleRecipe> {
 
     @Override
     protected void addOutput(IRecipeSlotBuilder slot, CrucibleRecipe recipe) {
-        slot.addFluidStack(recipe.getResult().getFluid(), recipe.getResult().getAmount())
-                .setFluidRenderer(Math.max(1000, recipe.getResult().getAmount()), false, 16, 16);
+        slot.addFluidStack(recipe.getResult().fluid().value(), recipe.getResult().amount())
+                .setFluidRenderer(Math.max(1000, recipe.getResult().amount()), false, 16, 16);
     }
 
     static class LavaCrucible extends CrucibleCategory {

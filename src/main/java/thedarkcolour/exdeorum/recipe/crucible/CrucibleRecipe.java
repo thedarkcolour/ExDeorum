@@ -26,6 +26,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStackTemplate;
 import thedarkcolour.exdeorum.recipe.CodecUtil;
 import thedarkcolour.exdeorum.recipe.SingleIngredientRecipe;
 import thedarkcolour.exdeorum.registry.ERecipeSerializers;
@@ -34,9 +35,9 @@ import thedarkcolour.exdeorum.registry.ERecipeTypes;
 import java.util.function.BiFunction;
 
 public abstract class CrucibleRecipe extends SingleIngredientRecipe {
-    private final FluidStack result;
+    private final FluidStackTemplate result;
 
-    protected CrucibleRecipe(Ingredient ingredient, FluidStack result) {
+    protected CrucibleRecipe(Ingredient ingredient, FluidStackTemplate result) {
         super(ingredient);
         this.result = result;
 
@@ -45,34 +46,38 @@ public abstract class CrucibleRecipe extends SingleIngredientRecipe {
         }
     }
 
-    public FluidStack getResult() {
+    public FluidStackTemplate getResult() {
         return this.result;
     }
 
-    private static <R extends CrucibleRecipe> MapCodec<R> mapCodec(BiFunction<Ingredient, FluidStack, R> factory) {
+    public FluidStack createResult() {
+        return this.result.create();
+    }
+
+    private static <R extends CrucibleRecipe> MapCodec<R> mapCodec(BiFunction<Ingredient, FluidStackTemplate, R> factory) {
         return RecordCodecBuilder.mapCodec(instance -> instance.group(
                 CodecUtil.ingredientField(),
-                CodecUtil.FLUIDSTACK_CODEC.fieldOf("fluid").forGetter(CrucibleRecipe::getResult)
+                FluidStackTemplate.CODEC.fieldOf("fluid").forGetter(CrucibleRecipe::getResult)
         ).apply(instance, factory));
     }
 
-    private static <R extends CrucibleRecipe> StreamCodec<RegistryFriendlyByteBuf, R> streamCodec(BiFunction<Ingredient, FluidStack, R> factory) {
+    private static <R extends CrucibleRecipe> StreamCodec<RegistryFriendlyByteBuf, R> streamCodec(BiFunction<Ingredient, FluidStackTemplate, R> factory) {
         return StreamCodec.of(
                 CrucibleRecipe::toNetwork,
-                buffer -> factory.apply(Ingredient.CONTENTS_STREAM_CODEC.decode(buffer), FluidStack.STREAM_CODEC.decode(buffer))
+                buffer -> factory.apply(Ingredient.CONTENTS_STREAM_CODEC.decode(buffer), FluidStackTemplate.STREAM_CODEC.decode(buffer))
         );
     }
 
     public static void toNetwork(RegistryFriendlyByteBuf buffer, CrucibleRecipe recipe) {
         Ingredient.CONTENTS_STREAM_CODEC.encode(buffer, recipe.ingredient);
-        FluidStack.STREAM_CODEC.encode(buffer, recipe.result);
+        FluidStackTemplate.STREAM_CODEC.encode(buffer, recipe.result);
     }
 
     public static class Lava extends CrucibleRecipe {
         public static final MapCodec<Lava> CODEC = mapCodec(Lava::new);
         public static final StreamCodec<RegistryFriendlyByteBuf, Lava> STREAM_CODEC = streamCodec(Lava::new);
 
-        public Lava(Ingredient ingredient, FluidStack result) {
+        public Lava(Ingredient ingredient, FluidStackTemplate result) {
             super(ingredient, result);
         }
 
@@ -91,7 +96,7 @@ public abstract class CrucibleRecipe extends SingleIngredientRecipe {
         public static final MapCodec<Water> CODEC = mapCodec(Water::new);
         public static final StreamCodec<RegistryFriendlyByteBuf, Water> STREAM_CODEC = streamCodec(Water::new);
 
-        public Water(Ingredient ingredient, FluidStack result) {
+        public Water(Ingredient ingredient, FluidStackTemplate result) {
             super(ingredient, result);
         }
 

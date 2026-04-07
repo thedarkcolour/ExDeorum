@@ -90,7 +90,7 @@ public abstract class BarrelMixingCategory<T> implements IRecipeCategory<T> {
         public void setRecipe(IRecipeLayoutBuilder builder, BarrelMixingRecipe recipe, IFocusGroup focuses) {
             JeiUtil.addFluidIngredient(builder.addSlot(RecipeIngredientRole.INPUT, 1, 1), recipe.fluid).setFluidRenderer(1000, false, 16, 16);
             builder.addSlot(RecipeIngredientRole.INPUT, 33, 1).addIngredients(recipe.ingredient());
-            builder.addSlot(RecipeIngredientRole.OUTPUT, 79, 1).addItemStack(recipe.result);
+            builder.addSlot(RecipeIngredientRole.OUTPUT, 79, 1).addItemStack(recipe.result.create());
         }
 
         @Override
@@ -115,7 +115,7 @@ public abstract class BarrelMixingCategory<T> implements IRecipeCategory<T> {
             if (recipe.consumesAdditive()) {
                 additiveSlot.addTooltipCallback((view, tooltip) -> tooltip.add(CONTENTS_ARE_CONSUMED_TOOLTIP));
             }
-            builder.addSlot(RecipeIngredientRole.OUTPUT, 79, 1).addItemStack(recipe.result().copy());
+            builder.addSlot(RecipeIngredientRole.OUTPUT, 79, 1).addItemStack(recipe.result().create());
         }
 
         @Override

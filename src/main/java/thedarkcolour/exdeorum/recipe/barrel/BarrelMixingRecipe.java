@@ -23,6 +23,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -39,14 +40,14 @@ public class BarrelMixingRecipe extends SingleIngredientRecipe {
     public static final MapCodec<BarrelMixingRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             CodecUtil.ingredientField(),
             SizedFluidIngredient.CODEC.fieldOf("fluid").forGetter(BarrelMixingRecipe::getFluid),
-            ItemStack.CODEC.fieldOf("result").forGetter(BarrelMixingRecipe::getResult)
+            ItemStackTemplate.CODEC.fieldOf("result").forGetter(BarrelMixingRecipe::getResult)
     ).apply(instance, BarrelMixingRecipe::new));
     public static final StreamCodec<RegistryFriendlyByteBuf, BarrelMixingRecipe> STREAM_CODEC = StreamCodec.of(BarrelMixingRecipe::toNetwork, BarrelMixingRecipe::fromNetwork);
 
     public final SizedFluidIngredient fluid;
-    public final ItemStack result;
+    public final ItemStackTemplate result;
 
-    public BarrelMixingRecipe(Ingredient ingredient, SizedFluidIngredient fluid, ItemStack result) {
+    public BarrelMixingRecipe(Ingredient ingredient, SizedFluidIngredient fluid, ItemStackTemplate result) {
         super(ingredient);
         this.fluid = fluid;
         this.result = result;
@@ -56,7 +57,7 @@ public class BarrelMixingRecipe extends SingleIngredientRecipe {
         return this.fluid;
     }
 
-    public ItemStack getResult() {
+    public ItemStackTemplate getResult() {
         return this.result;
     }
 
@@ -84,13 +85,13 @@ public class BarrelMixingRecipe extends SingleIngredientRecipe {
     public static void toNetwork(RegistryFriendlyByteBuf buffer, BarrelMixingRecipe recipe) {
         Ingredient.CONTENTS_STREAM_CODEC.encode(buffer, recipe.ingredient);
         SizedFluidIngredient.STREAM_CODEC.encode(buffer, recipe.fluid);
-        ItemStack.STREAM_CODEC.encode(buffer, recipe.result);
+        ItemStackTemplate.STREAM_CODEC.encode(buffer, recipe.result);
     }
 
     public static BarrelMixingRecipe fromNetwork(RegistryFriendlyByteBuf buffer) {
         Ingredient ingredient = Ingredient.CONTENTS_STREAM_CODEC.decode(buffer);
         SizedFluidIngredient fluid = SizedFluidIngredient.STREAM_CODEC.decode(buffer);
-        ItemStack result = ItemStack.STREAM_CODEC.decode(buffer);
+        ItemStackTemplate result = ItemStackTemplate.STREAM_CODEC.decode(buffer);
 
         return new BarrelMixingRecipe(ingredient, fluid, result);
     }

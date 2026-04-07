@@ -18,6 +18,9 @@
 
 package thedarkcolour.exdeorum.material;
 
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
@@ -50,12 +53,12 @@ public abstract class AbstractMaterial implements ItemLike {
         this.requiredModId = requiredModId;
     }
 
-    protected abstract Block createBlock();
+    protected abstract Block createBlock(Identifier id);
 
-    protected BlockBehaviour.Properties props() {
+    protected BlockBehaviour.Properties props(Identifier id) {
         var properties = BlockBehaviour.Properties.of().strength(this.strength).sound(this.soundType);
         if (this.needsCorrectTool) properties.requiresCorrectToolForDrops();
-        return properties;
+        return properties.setId(ResourceKey.create(Registries.BLOCK, id));
     }
 
     public Item getItem() {

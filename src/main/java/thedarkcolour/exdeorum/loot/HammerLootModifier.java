@@ -86,7 +86,7 @@ public class HammerLootModifier extends LootModifier {
         }
 
         if (resultAmount > 0) {
-            newLoot.add(recipe.result.copyWithCount(resultAmount));
+            newLoot.add(recipe.result.withCount(resultAmount).create());
         }
 
         return newLoot;

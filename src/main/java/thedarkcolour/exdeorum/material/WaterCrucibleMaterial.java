@@ -18,6 +18,7 @@
 
 package thedarkcolour.exdeorum.material;
 
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import thedarkcolour.exdeorum.block.WaterCrucibleBlock;
@@ -28,7 +29,7 @@ public class WaterCrucibleMaterial extends AbstractCrucibleMaterial {
     }
 
     @Override
-    protected Block createBlock() {
-        return new WaterCrucibleBlock(props().noOcclusion());
+    protected Block createBlock(Identifier id) {
+        return new WaterCrucibleBlock(props(id).noOcclusion());
     }
 }

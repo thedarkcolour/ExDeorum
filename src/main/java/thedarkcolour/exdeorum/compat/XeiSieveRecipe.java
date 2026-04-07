@@ -94,7 +94,7 @@ public record XeiSieveRecipe(Ingredient ingredient, ItemStack mesh, List<Result>
 
                 for (var recipe : meshRecipes) {
                     int resultCount = recipe.resultAmount instanceof ConstantValue constant ? Math.round(constant.value()) : 1;
-                    results.add(new Result(recipe.result.copyWithCount(resultCount), recipe.resultAmount, recipe.byHandOnly));
+                    results.add(new Result(recipe.result.withCount(resultCount).create(), recipe.resultAmount, recipe.byHandOnly));
                 }
 
                 results.sort(resultSorter);

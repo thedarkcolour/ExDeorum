@@ -18,6 +18,7 @@
 
 package thedarkcolour.exdeorum.material;
 
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import org.jetbrains.annotations.Nullable;
@@ -29,8 +30,8 @@ public class SieveMaterial extends AbstractMaterial {
     }
 
     @Override
-    protected Block createBlock() {
-        return new SieveBlock(props().noOcclusion());
+    protected Block createBlock(Identifier id) {
+        return new SieveBlock(props(id).noOcclusion());
     }
 
     @Nullable

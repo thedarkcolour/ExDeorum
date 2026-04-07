@@ -39,6 +39,7 @@ import thedarkcolour.exdeorum.registry.EBlocks;
 import thedarkcolour.exdeorum.registry.ECompressedBlocks;
 import thedarkcolour.exdeorum.registry.EFluids;
 import thedarkcolour.exdeorum.registry.EItems;
+import thedarkcolour.exdeorum.registry.EWorldPresets;
 import thedarkcolour.exdeorum.tag.EBlockTags;
 import thedarkcolour.exdeorum.tag.EItemTags;
 import thedarkcolour.exdeorum.tag.EStructureSetTags;
@@ -150,7 +151,7 @@ class ModTags {
     }
 
     public static void createWorldPresetTags(MKTagsProvider<WorldPreset> tags) {
-        tags.tag(net.minecraft.tags.WorldPresetTags.NORMAL).add(ResourceKey.create(Registries.WORLD_PRESET, Identifier.fromNamespaceAndPath(ExDeorum.ID, "void_world")));
+        tags.tag(net.minecraft.tags.WorldPresetTags.NORMAL).addOptional(EWorldPresets.VOID_WORLD.identifier());
     }
 
     public static void createFluidTags(MKTagsProvider<Fluid> tags) {

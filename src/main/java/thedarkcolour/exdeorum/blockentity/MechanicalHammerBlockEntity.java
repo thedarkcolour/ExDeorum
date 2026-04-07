@@ -131,7 +131,7 @@ public class MechanicalHammerBlockEntity extends AbstractMachineBlockEntity<Mech
         if (output.isEmpty() || output.getCount() < output.getMaxStackSize()) {
             var recipe = RecipeUtil.getHammerRecipe(input.getItem());
 
-            if (recipe != null && (output.isEmpty() || ItemStack.isSameItemSameComponents(recipe.result, output))) {
+            if (recipe != null && (output.isEmpty() || ItemStack.isSameItemSameComponents(recipe.result.create(), output))) {
                 return recipe;
             }
         }
@@ -158,7 +158,7 @@ public class MechanicalHammerBlockEntity extends AbstractMachineBlockEntity<Mech
                     }
                     var output = this.inventory.getStackInSlot(OUTPUT_SLOT);
                     if (output.isEmpty()) {
-                        this.inventory.setStackInSlot(OUTPUT_SLOT, recipe.result.copyWithCount(resultCount));
+                        this.inventory.setStackInSlot(OUTPUT_SLOT, recipe.result.withCount(resultCount).create());
                     } else {
                         output.setCount(Math.min(output.getMaxStackSize(), resultCount + output.getCount()));
                     }

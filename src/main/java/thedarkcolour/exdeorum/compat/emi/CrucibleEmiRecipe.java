@@ -31,7 +31,7 @@ abstract class CrucibleEmiRecipe extends EmiOneToOneRecipe {
     CrucibleEmiRecipe(CrucibleRecipe recipe, Identifier id) {
         super(recipe, id);
 
-        this.outputs = EmiUtil.outputs(recipe.getResult());
+        this.outputs = EmiUtil.outputs(recipe.createResult());
     }
 
     @Override

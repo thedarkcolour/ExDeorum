@@ -18,7 +18,9 @@
 
 package thedarkcolour.exdeorum.data;
 
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -42,7 +44,7 @@ public class ModCompatData {
     private static DeferredItem<Item> item(String modid, String name) {
         if (DatagenModLoader.isRunningDataGen()) {
             DeferredRegister.Items registry = itemRegistries.computeIfAbsent(modid, DeferredRegister::createItems);
-            return registry.register(name, () -> new Item(new Item.Properties()));
+            return registry.register(name, id -> new Item(new Item.Properties().setId(ResourceKey.create(Registries.ITEM, id))));
         } else {
             return null;
         }
@@ -52,7 +54,7 @@ public class ModCompatData {
     private static DeferredBlock<Block> block(String modid, String name) {
         if (DatagenModLoader.isRunningDataGen()) {
             DeferredRegister.Blocks registry = blockRegistries.computeIfAbsent(modid, DeferredRegister::createBlocks);
-            return registry.register(name, () -> new Block(BlockBehaviour.Properties.of()));
+            return registry.register(name, id -> new Block(BlockBehaviour.Properties.of().setId(ResourceKey.create(Registries.BLOCK, id))));
         } else {
             return null;
         }

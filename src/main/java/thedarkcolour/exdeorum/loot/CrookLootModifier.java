@@ -62,7 +62,7 @@ public class CrookLootModifier extends LootModifier {
                 for (CrookRecipe recipe : RecipeUtil.getCrookRecipes(state)) {
                     for (int i = 0; i < rolls; i++) {
                         if (rand.nextFloat() < recipe.chance()) {
-                            generatedLoot.add(recipe.result().copy());
+                            generatedLoot.add(recipe.result().create());
                         }
                     }
                 }

@@ -22,7 +22,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -34,7 +34,7 @@ public class CompressedSieveRecipe extends SieveRecipe {
     public static final MapCodec<CompressedSieveRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> commonSieveFields(instance).apply(instance, CompressedSieveRecipe::new));
     public static final StreamCodec<RegistryFriendlyByteBuf, CompressedSieveRecipe> STREAM_CODEC = sieveStreamCodec(CompressedSieveRecipe::new);
 
-    public CompressedSieveRecipe(Ingredient ingredient, ItemStack result, NumberProvider resultAmount, Ingredient mesh, boolean byHandOnly) {
+    public CompressedSieveRecipe(Ingredient ingredient, ItemStackTemplate result, NumberProvider resultAmount, Ingredient mesh, boolean byHandOnly) {
         super(ingredient, result, resultAmount, mesh, byHandOnly);
     }
 
