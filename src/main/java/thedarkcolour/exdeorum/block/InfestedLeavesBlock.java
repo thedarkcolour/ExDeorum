@@ -37,10 +37,8 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.phys.HitResult;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.fml.loading.FMLEnvironment;
 import org.jetbrains.annotations.Nullable;
+import com.mojang.serialization.MapCodec;
 import thedarkcolour.exdeorum.blockentity.InfestedLeavesBlockEntity;
 import thedarkcolour.exdeorum.client.RenderUtil;
 import thedarkcolour.exdeorum.config.EConfig;
@@ -49,10 +47,16 @@ import thedarkcolour.exdeorum.registry.EBlocks;
 
 public class InfestedLeavesBlock extends LeavesBlock implements EntityBlock {
     public static final BooleanProperty FULLY_INFESTED = BooleanProperty.create("fully_infested");
+    public static final MapCodec<InfestedLeavesBlock> CODEC = simpleCodec(InfestedLeavesBlock::new);
 
     public InfestedLeavesBlock(Properties properties) {
-        super(properties);
+        super(0.005f, properties);
         registerDefaultState(defaultBlockState().setValue(FULLY_INFESTED, false));
+    }
+
+    @Override
+    public MapCodec<? extends LeavesBlock> codec() {
+        return CODEC;
     }
 
     public static void setBlock(Level level, BlockPos pos, BlockState fromState) {
@@ -98,11 +102,15 @@ public class InfestedLeavesBlock extends LeavesBlock implements EntityBlock {
     }
 
     @Override
-    public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos, Player player) {
+    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData) {
         if (level.getBlockEntity(pos) instanceof InfestedLeavesBlockEntity leaves) {
-            return leaves.getMimic().getCloneItemStack(target, level, pos, player);
+            return leaves.getMimic().getCloneItemStack(pos, level, includeData, null);
         }
-        return ItemStack.EMPTY;
+        return state.getCloneItemStack(pos, level, includeData, null);
+    }
+
+    @Override
+    protected void spawnFallingLeavesParticle(Level level, BlockPos pos, RandomSource random) {
     }
 
     @Override
@@ -115,7 +123,9 @@ public class InfestedLeavesBlock extends LeavesBlock implements EntityBlock {
 
     @Override
     public RenderShape getRenderShape(BlockState pState) {
-        if (FMLEnvironment.dist == Dist.DEDICATED_SERVER) return RenderShape.MODEL;
-        return (EConfig.CLIENT_SPEC.isLoaded() && EConfig.CLIENT.useFastInfestedLeaves.get()) || RenderUtil.IRIS_ACCESS.areShadersEnabled() ? RenderShape.MODEL : RenderShape.INVISIBLE;
+        if (!EConfig.CLIENT_SPEC.isLoaded()) {
+            return RenderShape.MODEL;
+        }
+        return (EConfig.CLIENT.useFastInfestedLeaves.get() || RenderUtil.IRIS_ACCESS.areShadersEnabled()) ? RenderShape.MODEL : RenderShape.INVISIBLE;
     }
 }

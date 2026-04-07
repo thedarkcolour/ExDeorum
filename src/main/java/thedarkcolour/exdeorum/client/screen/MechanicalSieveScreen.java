@@ -44,10 +44,8 @@ public class MechanicalSieveScreen extends AbstractContainerScreen<MechanicalSie
     private RedstoneControlWidget redstoneControlWidget;
 
     public MechanicalSieveScreen(MechanicalSieveMenu menu, Inventory playerInventory, Component title) {
-        super(menu, playerInventory, title);
+        super(menu, playerInventory, title, 176, 173);
 
-        this.imageWidth = 176;
-        this.imageHeight = 173;
         this.inventoryLabelY += 7;
     }
 

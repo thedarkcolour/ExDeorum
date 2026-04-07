@@ -23,7 +23,6 @@ import net.minecraft.client.gui.screens.worldselection.CreateWorldScreen;
 import net.minecraft.client.gui.screens.worldselection.WorldCreationUiState;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.util.Unit;
 import net.minecraft.world.level.levelgen.presets.WorldPreset;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModList;
@@ -31,6 +30,7 @@ import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.common.NeoForge;
+import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.asm.ASMHooks;
 import thedarkcolour.exdeorum.client.screen.MechanicalHammerScreen;
@@ -68,9 +68,7 @@ public class ClientHandler {
     }
 
     private static void addClientReloadListeners(AddClientReloadListenersEvent event) {
-        event.addListener(ExDeorum.loc("render_util"), (prepBarrier, resourceManager, prepProfiler, reloadProfiler, backgroundExecutor, gameExecutor) -> {
-            return prepBarrier.wait(Unit.INSTANCE).thenRunAsync(RenderUtil::reload, gameExecutor);
-        });
+        event.addListener(ExDeorum.loc("render_util"), (ResourceManagerReloadListener) resourceManager -> RenderUtil.reload());
     }
 
     private static void registerMenuScreens(RegisterMenuScreensEvent event) {
@@ -96,7 +94,7 @@ public class ClientHandler {
 
     private static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(EBlockEntities.INFESTED_LEAVES.get(), ctx -> new InfestedLeavesRenderer());
-        event.registerBlockEntityRenderer(EBlockEntities.BARREL.get(), ctx -> new BarrelRenderer());
+        event.registerBlockEntityRenderer(EBlockEntities.BARREL.get(), BarrelRenderer::new);
         event.registerBlockEntityRenderer(EBlockEntities.LAVA_CRUCIBLE.get(), ctx -> new CrucibleRenderer());
         event.registerBlockEntityRenderer(EBlockEntities.WATER_CRUCIBLE.get(), ctx -> new CrucibleRenderer());
         event.registerBlockEntityRenderer(EBlockEntities.SIEVE.get(), ctx -> new SieveRenderer<>(0.75f, 15f));

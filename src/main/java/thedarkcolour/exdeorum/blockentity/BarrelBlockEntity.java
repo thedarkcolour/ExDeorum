@@ -19,10 +19,8 @@
 package thedarkcolour.exdeorum.blockentity;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -36,6 +34,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BucketPickup;
@@ -54,6 +54,7 @@ import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.transfer.access.ItemAccess;
 import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.block.BarrelBlock;
 import thedarkcolour.exdeorum.blockentity.helper.FluidHelper;
@@ -65,8 +66,6 @@ import thedarkcolour.exdeorum.recipe.barrel.BarrelFluidMixingRecipe;
 import thedarkcolour.exdeorum.recipe.barrel.FluidTransformationRecipe;
 import thedarkcolour.exdeorum.registry.EBlockEntities;
 import thedarkcolour.exdeorum.registry.ESounds;
-
-import java.util.Optional;
 
 public class BarrelBlockEntity extends ETankBlockEntity {
     private static final int MOSS_SPREAD_RANGE = 2;
@@ -93,29 +92,29 @@ public class BarrelBlockEntity extends ETankBlockEntity {
     }
 
     @Override
-    public void saveAdditional(CompoundTag nbt, HolderLookup.Provider lookup) {
-        super.saveAdditional(nbt, lookup);
+    protected void saveAdditional(ValueOutput output) {
+        super.saveAdditional(output);
 
-        nbt.put("item", this.item.serializeNBT(lookup));
-        nbt.put("tank", this.tank.writeToNBT(lookup, new CompoundTag()));
-        nbt.putShort("compost", this.compost);
-        nbt.putFloat("progress", this.progress);
-        nbt.putShort("r", this.r);
-        nbt.putShort("g", this.g);
-        nbt.putShort("b", this.b);
+        this.item.serialize(output.child("item"));
+        this.tank.serialize(output.child("tank"));
+        output.putShort("compost", this.compost);
+        output.putFloat("progress", this.progress);
+        output.putShort("r", this.r);
+        output.putShort("g", this.g);
+        output.putShort("b", this.b);
     }
 
     @Override
-    public void loadAdditional(CompoundTag nbt, HolderLookup.Provider lookup) {
-        super.loadAdditional(nbt, lookup);
+    public void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
 
-        this.item.deserializeNBT(lookup, nbt.getCompound("item"));
-        this.tank.readFromNBT(lookup, nbt.getCompound("tank"));
-        this.compost = nbt.getShort("compost");
-        this.progress = nbt.getFloat("progress");
-        this.r = nbt.getShort("r");
-        this.g = nbt.getShort("g");
-        this.b = nbt.getShort("b");
+        this.item.deserialize(input.childOrEmpty("item"));
+        this.tank.deserialize(input.childOrEmpty("tank"));
+        this.compost = (short) input.getShortOr("compost", (short) 0);
+        this.progress = input.getFloatOr("progress", 0f);
+        this.r = (short) input.getShortOr("r", (short) 0);
+        this.g = (short) input.getShortOr("g", (short) 0);
+        this.b = (short) input.getShortOr("b", (short) 0);
 
         AbstractCrucibleBlockEntity.updateLight(this.level, this.worldPosition, this.tank.getFluid().getFluid());
     }
@@ -263,7 +262,8 @@ public class BarrelBlockEntity extends ETankBlockEntity {
                 }
 
                 // Otherwise, mix the item's fluid into the barrel's fluid
-                var itemFluidCap = playerItem.getCapability(Capabilities.Fluid.ITEM);
+                var itemAccess = ItemAccess.forPlayerInteraction(player, hand);
+                var itemFluidCap = getFluidHandler(itemAccess);
                 if (itemFluidCap != null) {
                     var itemFluid = itemFluidCap.drain(1000, IFluidHandler.FluidAction.SIMULATE);
                     BarrelFluidMixingRecipe recipe = RecipeUtil.getFluidMixingRecipe(this.tank.getFluid(), itemFluid.getFluid());
@@ -276,7 +276,6 @@ public class BarrelBlockEntity extends ETankBlockEntity {
 
                             if (recipe.consumesAdditive()) {
                                 itemFluidCap.drain(1000, IFluidHandler.FluidAction.EXECUTE);
-                                player.setItemInHand(hand, itemFluidCap.getContainer());
                             }
                         }
                         // If a mix was successful, skip rest of logic
@@ -478,8 +477,13 @@ public class BarrelBlockEntity extends ETankBlockEntity {
         }
     }
 
-    public IItemHandler getItemHandler() {
+    public ItemStackHandler getItemHandler() {
         return this.item;
+    }
+
+    private static IFluidHandler getFluidHandler(ItemAccess itemAccess) {
+        var handler = itemAccess.getCapability(Capabilities.Fluid.ITEM);
+        return handler == null ? null : IFluidHandler.of(handler);
     }
 
     public static class Ticker implements BlockEntityTicker<BarrelBlockEntity> {
@@ -595,9 +599,13 @@ public class BarrelBlockEntity extends ETankBlockEntity {
     }
 
     private static ItemStack getRemainderItem(ItemStack stack) {
-        var food = stack.get(DataComponents.FOOD);
-        Optional<ItemStack> foodRemainder = food == null ? Optional.empty() : food.usingConvertsTo();
-        return foodRemainder.map(ItemStack::copy).orElseGet(stack::getCraftingRemainingItem);
+        var useRemainder = stack.get(DataComponents.USE_REMAINDER);
+        if (useRemainder != null) {
+            return useRemainder.convertInto().create();
+        }
+
+        var craftingRemainder = stack.getItem().getCraftingRemainder();
+        return craftingRemainder != null ? craftingRemainder.create() : ItemStack.EMPTY;
     }
 
     @Override

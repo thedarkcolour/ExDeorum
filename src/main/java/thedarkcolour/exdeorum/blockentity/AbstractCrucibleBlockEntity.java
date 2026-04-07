@@ -19,9 +19,7 @@
 package thedarkcolour.exdeorum.blockentity;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.InteractionHand;
@@ -32,6 +30,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -48,6 +48,7 @@ import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.transfer.access.ItemAccess;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.blockentity.helper.FluidHelper;
@@ -85,27 +86,33 @@ public abstract class AbstractCrucibleBlockEntity extends ETankBlockEntity {
 
     // NBT
     @Override
-    public void saveAdditional(CompoundTag nbt, HolderLookup.Provider registries) {
-        super.saveAdditional(nbt, registries);
+    protected void saveAdditional(ValueOutput output) {
+        super.saveAdditional(output);
 
-        nbt.put("Tank", this.tank.writeToNBT(registries, new CompoundTag()));
+        this.tank.serialize(output.child("tank"));
         if (this.lastMelted != null) {
-            nbt.putString("LastMelted", BuiltInRegistries.BLOCK.getKey(this.lastMelted).toString());
+            output.putString("lastMelted", BuiltInRegistries.BLOCK.getKey(this.lastMelted).toString());
         }
         if (this.fluid != null) {
-            nbt.putString("Fluid", BuiltInRegistries.FLUID.getKey(this.fluid).toString());
+            output.putString("fluid", BuiltInRegistries.FLUID.getKey(this.fluid).toString());
         }
-        nbt.putShort("Solids", this.solids);
+        output.putShort("solids", this.solids);
     }
 
     @Override
-    public void loadAdditional(CompoundTag nbt, HolderLookup.Provider registries) {
-        super.loadAdditional(nbt, registries);
+    public void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
 
-        this.tank.readFromNBT(registries, nbt.getCompound("Tank"));
-        this.lastMelted = BuiltInRegistries.BLOCK.get(Identifier.parse(nbt.getString("LastMelted")));
-        this.fluid = BuiltInRegistries.FLUID.get(Identifier.parse(nbt.getString("Fluid")));
-        this.solids = nbt.getShort("Solids");
+        this.tank.deserialize(input.childOrEmpty("tank"));
+        this.lastMelted = input.getString("lastMelted")
+                .map(Identifier::parse)
+                .flatMap(id -> BuiltInRegistries.BLOCK.get(id).map(reference -> reference.value()))
+                .orElse(null);
+        this.fluid = input.getString("fluid")
+                .map(Identifier::parse)
+                .flatMap(id -> BuiltInRegistries.FLUID.get(id).map(reference -> reference.value()))
+                .orElse(null);
+        this.solids = (short) input.getShortOr("solids", (short) 0);
 
         updateLight(this.level, this.worldPosition, this.fluid);
     }
@@ -155,7 +162,7 @@ public abstract class AbstractCrucibleBlockEntity extends ETankBlockEntity {
     public InteractionResult useItemOn(Level level, Player player, ItemStack stack, InteractionHand hand) {
         var playerItem = player.getItemInHand(hand);
 
-        if (playerItem.getCapability(Capabilities.Fluid.ITEM) != null) {
+        if (getFluidHandler(playerItem) != null) {
             return FluidUtil.interactWithFluidHandler(player, hand, this.tank) ? InteractionResult.SUCCESS : InteractionResult.TRY_WITH_EMPTY_HAND;
         }
 
@@ -261,8 +268,17 @@ public abstract class AbstractCrucibleBlockEntity extends ETankBlockEntity {
         return this.tank;
     }
 
-    public IItemHandler getItem() {
+    public ItemStackHandler getItem() {
         return this.item;
+    }
+
+    private static IFluidHandler getFluidHandler(ItemStack stack) {
+        if (stack.isEmpty()) {
+            return null;
+        }
+
+        var handler = stack.getCapability(Capabilities.Fluid.ITEM, ItemAccess.forStack(stack));
+        return handler == null ? null : IFluidHandler.of(handler);
     }
 
     public abstract Block getDefaultMeltBlock();
@@ -296,7 +312,12 @@ public abstract class AbstractCrucibleBlockEntity extends ETankBlockEntity {
 
                 if (key.getPath().endsWith("sapling")) {
                     try {
-                        overrides.put(item, BuiltInRegistries.BLOCK.get(Identifier.fromNamespaceAndPath(key.getNamespace(), key.getPath().replace("sapling", "leaves"))));
+                        var leaves = BuiltInRegistries.BLOCK.get(Identifier.fromNamespaceAndPath(key.getNamespace(), key.getPath().replace("sapling", "leaves")))
+                                .map(reference -> reference.value())
+                                .orElse(Blocks.AIR);
+                        if (leaves != Blocks.AIR) {
+                            overrides.put(item, leaves);
+                        }
                     } catch (Exception ignored) {
                     }
                 }

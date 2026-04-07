@@ -66,13 +66,13 @@ public class PreferredOres {
      * @param defaultOre The default ore choice, picked by Ex Deorum based on which mod is the "best" choice according to thedarkcolour.
      */
     private static void putPreferredOre(TagKey<Item> tag, ModConfigSpec.ConfigValue<String> config, Item defaultOre) {
-        var item = BuiltInRegistries.ITEM.get(Identifier.parse(config.get()));
+        var item = BuiltInRegistries.ITEM.get(Identifier.parse(config.get())).map(reference -> reference.value()).orElse(Items.AIR);
 
         if (item == Items.AIR) {
             item = defaultOre;
             ExDeorum.LOGGER.debug("No preferred ore was set for tag {}. Using default choice {}", tag.location(), BuiltInRegistries.ITEM.getKey(item));
         }
-        PREFERRED_ORE_ITEMS.put(tag, defaultOre);
+        PREFERRED_ORE_ITEMS.put(tag, item);
     }
 
     /**
@@ -171,11 +171,11 @@ public class PreferredOres {
 
         if (modId != null) {
             if (modId.equals(ModIds.FACTORIUM)) {
-                return BuiltInRegistries.ITEM.get(Identifier.fromNamespaceAndPath(modId, "mat_" + path));
+                return BuiltInRegistries.ITEM.get(Identifier.fromNamespaceAndPath(modId, "mat_" + path)).map(reference -> reference.value()).orElse(Items.AIR);
             } else if (modId.equals(ModIds.IMMERSIVE_ENGINEERING)) {
-                return BuiltInRegistries.ITEM.get(Identifier.fromNamespaceAndPath(modId, "ore_" + path.substring(0, path.length() - 4)));
+                return BuiltInRegistries.ITEM.get(Identifier.fromNamespaceAndPath(modId, "ore_" + path.substring(0, path.length() - 4))).map(reference -> reference.value()).orElse(Items.AIR);
             } else {
-                return BuiltInRegistries.ITEM.get(Identifier.fromNamespaceAndPath(modId, path));
+                return BuiltInRegistries.ITEM.get(Identifier.fromNamespaceAndPath(modId, path)).map(reference -> reference.value()).orElse(Items.AIR);
             }
         } else {
             return Items.AIR;

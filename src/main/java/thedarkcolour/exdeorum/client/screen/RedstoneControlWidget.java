@@ -20,6 +20,7 @@ package thedarkcolour.exdeorum.client.screen;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.GuiEventListener;
@@ -128,7 +129,11 @@ public class RedstoneControlWidget implements GuiEventListener, NarratableEntry,
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+    public boolean mouseClicked(MouseButtonEvent event, boolean focused) {
+        return handleMouseClicked(event.x(), event.y(), event.button());
+    }
+
+    private boolean handleMouseClicked(double mouseX, double mouseY, int button) {
         // relative xy
         int mx = (int) mouseX;
         int my = (int) mouseY;

@@ -20,7 +20,6 @@ package thedarkcolour.exdeorum.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.Level;
@@ -33,6 +32,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.model.data.ModelData;
 import net.neoforged.neoforge.model.data.ModelProperty;
 import org.jetbrains.annotations.NotNull;
+import net.minecraft.nbt.NbtUtils;
 import thedarkcolour.exdeorum.block.InfestedLeavesBlock;
 import thedarkcolour.exdeorum.registry.EBlockEntities;
 import thedarkcolour.exdeorum.registry.EBlocks;
@@ -105,10 +105,8 @@ public class InfestedLeavesBlockEntity extends EBlockEntity {
     public void loadAdditional(ValueInput input) {
         super.loadAdditional(input);
 
-        var holderLookup = input.lookup().lookupOrThrow(Registries.BLOCK);
-        this.mimic = input.child("mimic")
-                .map(child -> NbtUtils.readBlockState(holderLookup, child.asTag()))
-                .orElse(Blocks.OAK_LEAVES.defaultBlockState());
+        input.lookup().lookupOrThrow(Registries.BLOCK);
+        this.mimic = input.read("mimic", BlockState.CODEC).orElse(Blocks.OAK_LEAVES.defaultBlockState());
         this.progress = (short) input.getShortOr("progress", (short) 0);
     }
 

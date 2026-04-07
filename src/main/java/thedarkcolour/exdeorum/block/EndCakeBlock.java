@@ -28,8 +28,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CakeBlock;
-import net.minecraft.world.level.block.EndPortalBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.portal.TeleportTransition;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 import thedarkcolour.exdeorum.tag.EItemTags;
@@ -94,10 +95,9 @@ public class EndCakeBlock extends CakeBlock {
             var endLevel = level.getServer().getLevel(Level.END);
 
             if (endLevel != null) {
-                if (player.canChangeDimensions(level, endLevel)) {
-                    player.changeDimension(((EndPortalBlock) Blocks.END_PORTAL).getPortalDestination(level, player, player.getOnPos()));
-                    return true;
-                }
+                var spawn = ServerLevel.END_SPAWN_POINT.getBottomCenter();
+                player.teleportTo(endLevel, spawn.x, spawn.y, spawn.z, java.util.Set.of(), player.getYRot(), player.getXRot(), false);
+                return true;
             }
         }
 

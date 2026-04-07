@@ -19,27 +19,26 @@
 package thedarkcolour.exdeorum.block;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.NbtOps;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.entity.animal.cow.MushroomCow;
 import net.minecraft.world.entity.animal.rabbit.Rabbit;
 import net.minecraft.world.entity.animal.axolotl.Axolotl;
 import net.minecraft.world.entity.monster.Creeper;
-import net.minecraft.world.entity.monster.zombie.Zombie;
+import net.minecraft.world.entity.monster.zombie.ZombieVillager;
 import net.minecraft.world.entity.npc.villager.Villager;
 import net.minecraft.world.entity.npc.villager.VillagerProfession;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FlowingFluid;
-import net.neoforged.neoforge.event.EventHooks;
 import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.config.EConfig;
 
+import java.lang.reflect.Method;
 import java.util.function.Supplier;
 
 public class WitchWaterBlock extends LiquidBlock {
@@ -48,7 +47,7 @@ public class WitchWaterBlock extends LiquidBlock {
     }
 
     @Override
-    public void entityInside(BlockState pState, Level level, BlockPos pPos, Entity entity) {
+    protected void entityInside(BlockState pState, Level level, BlockPos pPos, Entity entity, InsideBlockEffectApplier pEffectApplier, boolean pCanTriggerEffects) {
         if (!level.isClientSide()) {
             witchWaterEntityEffects(level, entity);
         }
@@ -64,23 +63,15 @@ public class WitchWaterBlock extends LiquidBlock {
                     var villager = (Villager) entity;
 
                     if (level.getDifficulty() != Difficulty.PEACEFUL) {
-                        if (!villager.isBaby() && villager.getVillagerData().getProfession() == VillagerProfession.CLERIC) {
-                            if (attemptToConvertEntity(level, villager, EntityType.WITCH) != null) {
-                                villager.releaseAllPois();
-                            }
+                        if (!villager.isBaby() && villager.getVillagerData().profession().is(VillagerProfession.CLERIC)) {
+                            attemptToConvertEntity(level, villager, EntityType.WITCH);
                         } else {
-                            var zombieVillager = villager.convertTo(EntityType.ZOMBIE_VILLAGER, false);
-                            if (zombieVillager != null) {
-                                EventHooks.finalizeMobSpawn(zombieVillager, (ServerLevelAccessor) level, level.getCurrentDifficultyAt(zombieVillager.blockPosition()), MobSpawnType.CONVERSION, new Zombie.ZombieGroupData(false, true));
+                            villager.convertTo(EntityType.ZOMBIE_VILLAGER, ConversionParams.single(villager, false, false), EntitySpawnReason.CONVERSION, (ZombieVillager zombieVillager) -> {
                                 zombieVillager.setVillagerData(villager.getVillagerData());
-                                zombieVillager.setGossips(villager.getGossips().store(NbtOps.INSTANCE));
+                                zombieVillager.setGossips(villager.getGossips().copy());
                                 zombieVillager.setTradeOffers(villager.getOffers().copy());
                                 zombieVillager.setVillagerXp(villager.getVillagerXp());
-
-                                EventHooks.onLivingConvert(villager, zombieVillager);
-
-                                villager.discard();
-                            }
+                            });
                         }
                     }
                 } else if (entityType == EntityType.SKELETON) {
@@ -96,11 +87,11 @@ public class WitchWaterBlock extends LiquidBlock {
                 } else if (entityType == EntityType.HOGLIN) {
                     attemptToConvertEntity(level, entity, EntityType.ZOGLIN);
                 } else if (entityType == EntityType.MOOSHROOM) {
-                    ((MushroomCow) entity).setVariant(MushroomCow.MushroomType.BROWN);
+                    setVariant((MushroomCow) entity, "setVariant", MushroomCow.Variant.class, MushroomCow.Variant.BROWN);
                 } else if (entityType == EntityType.AXOLOTL) {
-                    ((Axolotl) entity).setVariant(Axolotl.Variant.BLUE);
+                    setVariant((Axolotl) entity, "setVariant", Axolotl.Variant.class, Axolotl.Variant.BLUE);
                 } else if (entityType == EntityType.RABBIT) {
-                    ((Rabbit) entity).setVariant(Rabbit.Variant.EVIL);
+                    setVariant((Rabbit) entity, "setVariant", Rabbit.Variant.class, Rabbit.Variant.EVIL);
                 } else if (entityType == EntityType.PUFFERFISH) {
                     attemptToConvertEntity(level, entity, EntityType.GUARDIAN);
                 } else if (entityType == EntityType.HORSE) {
@@ -117,36 +108,34 @@ public class WitchWaterBlock extends LiquidBlock {
                 living.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 210));
                 living.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 210, 2));
                 living.addEffect(new MobEffectInstance(MobEffects.WITHER, 210));
-                living.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 210));
+                living.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 210));
             }
         }
     }
 
     @Nullable
     private static <T extends Mob> T attemptToConvertEntity(Level level, Entity entity, EntityType<T> newType) {
-        if (level.getDifficulty() != Difficulty.PEACEFUL && entity instanceof LivingEntity) {
-            var newEntity = newType.create(level);
-
-            if (newEntity != null) {
-                var serverLevel = (ServerLevelAccessor) level;
-                newEntity.copyPosition(entity);
-                EventHooks.finalizeMobSpawn(newEntity, serverLevel, level.getCurrentDifficultyAt(entity.blockPosition()), MobSpawnType.CONVERSION, null);
-                newEntity.setNoAi(newEntity.isNoAi());
-
+        if (level.getDifficulty() != Difficulty.PEACEFUL && entity instanceof Mob mob) {
+            return mob.convertTo(newType, ConversionParams.single(mob, false, false), EntitySpawnReason.CONVERSION, converted -> {
                 if (entity.hasCustomName()) {
-                    newEntity.setCustomName(entity.getCustomName());
-                    newEntity.setCustomNameVisible(entity.isCustomNameVisible());
+                    converted.setCustomName(entity.getCustomName());
+                    converted.setCustomNameVisible(entity.isCustomNameVisible());
                 }
 
-                newEntity.setPersistenceRequired();
-                EventHooks.onLivingConvert((LivingEntity) entity, newEntity);
-                serverLevel.addFreshEntityWithPassengers(newEntity);
-                entity.discard();
-            }
-
-            return newEntity;
+                converted.setPersistenceRequired();
+            });
         }
 
         return null;
+    }
+
+    private static <T extends LivingEntity, V> void setVariant(T entity, String methodName, Class<V> variantType, V variant) {
+        try {
+            Method method = entity.getClass().getDeclaredMethod(methodName, variantType);
+            method.setAccessible(true);
+            method.invoke(entity, variant);
+        } catch (ReflectiveOperationException e) {
+            throw new IllegalStateException("Failed to set entity variant for " + entity.getClass().getName(), e);
+        }
     }
 }

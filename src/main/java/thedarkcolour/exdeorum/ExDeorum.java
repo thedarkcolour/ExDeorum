@@ -19,7 +19,6 @@
 package thedarkcolour.exdeorum;
 
 import net.minecraft.resources.Identifier;
-import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.Mod;
@@ -60,7 +59,7 @@ public class ExDeorum {
         // Game Events
         EventHandler.register(modBus);
         // Client init
-        if (FMLEnvironment.dist == Dist.CLIENT) {
+        if (FMLEnvironment.getDist().isClient()) {
             ClientHandler.register(modBus);
         }
         // Config init

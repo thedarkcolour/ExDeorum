@@ -20,6 +20,7 @@ package thedarkcolour.exdeorum.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -40,7 +41,7 @@ public abstract class ETankBlock extends EBlock {
     }
 
     @Override
-    public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
+    public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier applier, boolean shouldApplyEffects) {
         if (!level.isClientSide() && level.getBlockEntity(pos) instanceof ETankBlockEntity blockEntity) {
             var tank = blockEntity.getTank();
             var fluid = tank.getFluid();

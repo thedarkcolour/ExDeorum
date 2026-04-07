@@ -43,10 +43,7 @@ public class MechanicalHammerScreen extends AbstractContainerScreen<MechanicalHa
     private RedstoneControlWidget redstoneControlWidget;
 
     public MechanicalHammerScreen(MechanicalHammerMenu menu, Inventory playerInventory, Component title) {
-        super(menu, playerInventory, title);
-
-        this.imageWidth = 176;
-        this.imageHeight = 166;
+        super(menu, playerInventory, title, 176, 166);
     }
 
     @Override

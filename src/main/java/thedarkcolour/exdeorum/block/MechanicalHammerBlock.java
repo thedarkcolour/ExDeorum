@@ -67,7 +67,7 @@ public class MechanicalHammerBlock extends MachineBlock {
             @SuppressWarnings("deprecation")
             var nbt = customData.getUnsafe();
 
-            if (nbt.contains("progress") && nbt.getInt("progress") != MechanicalHammerBlockEntity.NOT_RUNNING) {
+            if (nbt.contains("progress") && nbt.getIntOr("progress", MechanicalHammerBlockEntity.NOT_RUNNING) != MechanicalHammerBlockEntity.NOT_RUNNING) {
                 state = state.setValue(RUNNING, true);
             }
         }

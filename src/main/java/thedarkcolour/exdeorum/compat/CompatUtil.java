@@ -91,7 +91,7 @@ public class CompatUtil {
     public static void addEnchantmentsTooltip(ItemStack mesh, Level level, Consumer<Component> aggregator) {
         var enchantments = mesh.getOrDefault(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY);
         if (!enchantments.isEmpty()) {
-            enchantments.addToTooltip(Item.TooltipContext.of(level), aggregator, TooltipFlag.NORMAL);
+            enchantments.addToTooltip(Item.TooltipContext.of(level), aggregator, TooltipFlag.NORMAL, mesh);
         }
     }
 }

@@ -56,6 +56,7 @@ import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidHandlerItemStack;
+import net.neoforged.neoforge.transfer.access.ItemAccess;
 import thedarkcolour.exdeorum.blockentity.BarrelBlockEntity;
 import thedarkcolour.exdeorum.data.TranslationKeys;
 import thedarkcolour.exdeorum.registry.EDataComponents;
@@ -94,7 +95,7 @@ public class WateringCanItem extends Item {
 
     public static ItemStack getFull(Supplier<? extends Item> wateringCan) {
         var stack = new ItemStack(wateringCan.get());
-        var fluidHandler = stack.getCapability(Capabilities.Fluid.ITEM);
+        var fluidHandler = getFluidHandler(stack);
         if (fluidHandler != null) {
             fluidHandler.fill(new FluidStack(Fluids.WATER, Integer.MAX_VALUE), IFluidHandler.FluidAction.EXECUTE);
         }
@@ -104,7 +105,7 @@ public class WateringCanItem extends Item {
     @Override
     public boolean isBarVisible(ItemStack stack) {
         if (this.renewing) {
-            var fluidHandler = stack.getCapability(Capabilities.Fluid.ITEM);
+            var fluidHandler = getFluidHandler(stack);
             return fluidHandler == null || fluidHandler.getFluidInTank(0).getAmount() < this.capacity;
         } else {
             return true;
@@ -118,7 +119,7 @@ public class WateringCanItem extends Item {
 
     @Override
     public int getBarWidth(ItemStack stack) {
-        var fluidHandler = stack.getCapability(Capabilities.Fluid.ITEM);
+        var fluidHandler = getFluidHandler(stack);
         if (fluidHandler != null) {
             return Math.round((float) fluidHandler.getFluidInTank(0).getAmount() * 13f / (float) this.capacity);
         } else {
@@ -137,7 +138,7 @@ public class WateringCanItem extends Item {
     }
 
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag pIsAdvanced) {
-        var fluidHandler = stack.getCapability(Capabilities.Fluid.ITEM);
+        var fluidHandler = getFluidHandler(stack);
         if (fluidHandler != null) {
             // use the block name which is guaranteed to have a vanilla translation
             tooltip.add(Component.translatable("block.minecraft.water").append(Component.translatable(TranslationKeys.FRACTION_DISPLAY, fluidHandler.getFluidInTank(0).getAmount(), this.capacity)).withStyle(ChatFormatting.GRAY));
@@ -147,7 +148,8 @@ public class WateringCanItem extends Item {
     @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         var itemInHand = player.getItemInHand(hand);
-        var fluidHandler = itemInHand.getCapability(Capabilities.Fluid.ITEM);
+        var itemAccess = ItemAccess.forPlayerInteraction(player, hand);
+        var fluidHandler = getFluidHandler(itemAccess);
         if (fluidHandler != null) {
             if (fluidHandler.getFluidInTank(0).getAmount() < this.capacity) {
                 var hitResult = getPlayerPOVHitResult(level, player, ClipContext.Fluid.SOURCE_ONLY);
@@ -188,7 +190,7 @@ public class WateringCanItem extends Item {
         var useTicks = 72000 - remainingTicks;
 
         if (useTicks >= STARTUP_TIME || living instanceof FakePlayer) {
-            var fluidHandler = stack.getCapability(Capabilities.Fluid.ITEM);
+            var fluidHandler = getFluidHandler(stack);
             if (fluidHandler != null) {
                 if (!fluidHandler.getFluidInTank(0).isEmpty()) {
                     // do watering can
@@ -205,7 +207,7 @@ public class WateringCanItem extends Item {
 
                                 if (!this.renewing || fluidHandler.getFluidInTank(0).getAmount() != this.capacity) {
                                     if (!(living instanceof Player player && player.getAbilities().instabuild)) {
-                                        ((FluidHandler) fluidHandler).drain();
+                                        new FluidHandler(stack).drain();
                                     }
                                 }
                             }
@@ -385,5 +387,19 @@ public class WateringCanItem extends Item {
             var opposite = 1 - progress;
             return 1 - opposite * opposite * opposite;
         }
+    }
+
+    private static IFluidHandler getFluidHandler(ItemAccess itemAccess) {
+        var handler = itemAccess.getCapability(Capabilities.Fluid.ITEM);
+        return handler == null ? null : IFluidHandler.of(handler);
+    }
+
+    private static IFluidHandler getFluidHandler(ItemStack stack) {
+        if (stack.isEmpty()) {
+            return null;
+        }
+
+        var itemAccess = ItemAccess.forStack(stack);
+        return getFluidHandler(itemAccess);
     }
 }

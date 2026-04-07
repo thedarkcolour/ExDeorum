@@ -18,46 +18,32 @@
 
 package thedarkcolour.exdeorum.client;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonPrimitive;
-import com.mojang.blaze3d.platform.NativeImage;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
-import it.unimi.dsi.fastutil.objects.ObjectSet;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
-import net.minecraft.util.GsonHelper;
-import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.fml.ModList;
-import net.neoforged.fml.loading.FMLEnvironment;
-import org.apache.commons.io.IOUtils;
-import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3i;
 import thedarkcolour.exdeorum.ExDeorum;
-import thedarkcolour.exdeorum.compat.ModIds;
 
-import javax.imageio.ImageIO;
-import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UncheckedIOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.StringTokenizer;
 import java.util.stream.Collectors;
 
-// ExDeorum comes with a precomputed list of vanilla colors, since textures don't exist on the server.
-// However, modded textures usually DO exist on the server, so their colors can be computed by the server once
-// and stored in a file which can be configured by the user after the fact.
+// Server-safe compost color loader. Vanilla colors come from the bundled text file,
+// while modded overrides are read from config/exdeorum/compost_colors.
 public class CompostColors {
     public static final String VANILLA_COMPOST_COLORS_FILE = "vanilla_compost_colors.txt";
     public static final Path COMPOST_COLORS_CONFIGS = Paths.get("config/exdeorum/compost_colors");
@@ -67,7 +53,6 @@ public class CompostColors {
 
     public static void loadColors() {
         COLORS.clear();
-
         loadVanilla();
         loadModded();
     }
@@ -77,280 +62,118 @@ public class CompostColors {
     }
 
     private static void loadVanilla() {
-        var vanillaColors = ModList.get().getModFileById(ExDeorum.ID).getFile().findResource(CompostColors.VANILLA_COMPOST_COLORS_FILE);
+        try (var stream = CompostColors.class.getClassLoader().getResourceAsStream(VANILLA_COMPOST_COLORS_FILE)) {
+            if (stream == null) {
+                ExDeorum.LOGGER.error("Failed to load bundled vanilla compost colors");
+                return;
+            }
 
-        if (!Files.exists(vanillaColors)) {
-            ExDeorum.LOGGER.error("Failed to load vanilla colors!");
-        } else {
-            readColorFile(ModIds.MINECRAFT, vanillaColors);
+            try (var reader = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8))) {
+                readColorEntries("minecraft", reader, VANILLA_COMPOST_COLORS_FILE);
+            }
+        } catch (IOException exception) {
+            ExDeorum.LOGGER.error("Failed to read bundled vanilla compost colors", exception);
         }
-    }
-
-    // Used to generate the list of vanilla colors shipped with the Ex Deorum jar
-    // TODO: port debugCompute to MC 26.x (ItemRenderer/getItemModelShaper/BakedModel.getParticleIcon removed)
-    public static void debugCompute() {
-        throw new UnsupportedOperationException("debugCompute not yet ported to MC 26.x");
     }
 
     private static void loadModded() {
-        var readMods = readModdedColorFiles();
-
-        for (var entry : BuiltInRegistries.ITEM.entrySet()) {
-            var key = entry.getKey().identifier();
-            var modid = key.getNamespace();
-
-            if (!readMods.contains(modid)) {
-                var id = key.getPath();
-                var modFile = ModList.get().getModFileById(modid);
-                if (modFile == null)
-                    continue;
-                var jarFile = modFile.getFile();
-                var modelPath = jarFile.findResource("assets/" + modid + "/models/item/" + id + ".json");
-
-                if (Files.exists(modelPath)) {
-                    JsonObject modelJson = parseModelJson(modelPath, modid, id);
-
-                    if (modelJson != null) {
-                        var textures = modelJson.get("textures");
-
-                        if (textures instanceof JsonObject textureMap) {
-                            String texture = findFirstTexture(textureMap);
-
-                            if (texture != null) {
-                                // Best case scenario, we are in a plain old 2D item.
-                                var texturePath = jarFile.findResource("assets/" + modid + "/textures/" + texture + ".png");
-
-                                if (Files.exists(texturePath)) {
-                                    try (var stream = Files.newInputStream(texturePath)) {
-                                        var img = ImageIO.read(stream);
-                                        int width = img.getWidth();
-                                        int height = img.getHeight();
-                                        int pixels = 0;
-                                        int totalR = 0;
-                                        int totalG = 0;
-                                        int totalB = 0;
-
-                                        for (int x = 0; x < width; x++) {
-                                            for (int y = 0; y < height; y++) {
-                                                int pixel = img.getRGB(x, y);
-                                                if (pixel != 0) {
-                                                    totalR += (pixel >> 16) & 0xff;
-                                                    totalG += (pixel >> 8) & 0xff;
-                                                    totalB += (pixel) & 0xff;
-                                                    pixels++;
-                                                }
-                                            }
-                                        }
-
-                                        putColor(pixels, totalR, totalG, totalB, entry.getValue());
-
-                                        if (ExDeorum.DEBUG) {
-                                            ExDeorum.LOGGER.debug("Item {}:{} has color {}", modid, id, COLORS.get(entry.getValue()));
-                                        }
-                                    } catch (IOException exception) {
-                                        ExDeorum.LOGGER.error("Failed to read texture file for item {}:{}", modid, id);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        // todo should i sort the registry before iterating it, or should I keep the sort here?
-        Map<String, List<Item>> entries = COLORS.keySet().stream()
-                .sorted(Comparator.comparing(BuiltInRegistries.ITEM::getKey))
-                .collect(Collectors.groupingBy(item -> BuiltInRegistries.ITEM.getKey(item).getNamespace()));
-
-        for (var entry : entries.entrySet()) {
-            if (!readMods.contains(entry.getKey())) {
-                export(entry.getKey(), entry.getValue());
-            }
-        }
-    }
-
-    @Nullable
-    private static String findFirstTexture(JsonObject textureMap) {
-        if (textureMap.get("layer0") instanceof JsonPrimitive primitive) {
-            return Identifier.parse(primitive.getAsString()).getPath();
-        }
-
-        return null;
-    }
-
-    // Returns a set of the mod ids that were read
-    private static ObjectSet<String> readModdedColorFiles() {
         var colorsFolder = COMPOST_COLORS_CONFIGS.toFile();
+        if (!colorsFolder.exists() || !colorsFolder.isDirectory()) {
+            return;
+        }
 
-        // Minecraft is hardcoded in the Ex Deorum jar file
-        var readMods = new ObjectOpenHashSet<String>();
-        readMods.add("minecraft");
+        var children = colorsFolder.list();
+        if (children == null) {
+            return;
+        }
 
-        if (colorsFolder.exists() && colorsFolder.isDirectory()) {
-            var children = colorsFolder.list();
+        for (var child : children) {
+            if (!child.endsWith(".txt")) {
+                continue;
+            }
 
-            if (children != null) {
-                // child should be "modid.txt"
-                for (var child : children) {
-                    if (child.endsWith(".txt")) {
-                        var modid = child.replace(".txt", "");
+            var modid = child.substring(0, child.length() - 4);
+            var path = COMPOST_COLORS_CONFIGS.resolve(child);
+            try (var reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
+                readColorEntries(modid, reader, path.toString());
+            } catch (IOException exception) {
+                ExDeorum.LOGGER.error("Error reading compost colors file {}", path, exception);
+            }
+        }
+    }
 
-                        if (ModList.get().isLoaded(modid) && !modid.equals("minecraft")) {
-                            if (readColorFile(modid, COMPOST_COLORS_CONFIGS.resolve(child))) {
-                                readMods.add(modid);
-                            }
-                        }
-                    }
+    private static void readColorEntries(String modid, BufferedReader reader, String source) throws IOException {
+        int lineNumber = 0;
+        String line;
+        while ((line = reader.readLine()) != null) {
+            lineNumber++;
+            if (line.isBlank() || line.startsWith("//")) {
+                continue;
+            }
+
+            var tokenizer = new StringTokenizer(line, ", #");
+            try {
+                var id = Identifier.fromNamespaceAndPath(modid, tokenizer.nextToken());
+                var item = BuiltInRegistries.ITEM.get(id).map(reference -> reference.value()).orElse(Items.AIR);
+                int color = Integer.parseInt(tokenizer.nextToken(), 16);
+
+                if (item == Items.AIR) {
+                    ExDeorum.LOGGER.error("Unknown item {} in compost colors source {} line {}", id, source, lineNumber);
+                    continue;
                 }
+
+                COLORS.put(item, new Vector3i((color >> 16) & 255, (color >> 8) & 255, color & 255));
+            } catch (IllegalArgumentException | NoSuchElementException exception) {
+                ExDeorum.LOGGER.error("Invalid compost color entry in {} line {}", source, lineNumber, exception);
             }
-        }
-
-        return readMods;
-    }
-
-    @Nullable
-    private static JsonObject parseModelJson(Path modelPath, String modid, String id) {
-        try (var stream = Files.newInputStream(modelPath)) {
-            try (var streamReader = new InputStreamReader(stream)) {
-                try {
-                    return GsonHelper.parse(IOUtils.toString(streamReader));
-                } catch (JsonParseException exception) {
-                    ExDeorum.LOGGER.error("Failed to parse model file for item {}:{}", modid, id);
-                }
-            }
-        } catch (IOException exception) {
-            ExDeorum.LOGGER.error("Failed to read model file for item {}:{}", modid, id);
-        }
-
-        return null;
-    }
-
-    private static void putColor(int pixels, int totalR, int totalG, int totalB, Item item) {
-        if (pixels > 0 && (totalR | totalG | totalB) != 0) {
-            var tint = getTint(item);
-            Color c;
-            if (tint == 0) {
-                c = new Color(totalR / pixels, totalG / pixels, totalB / pixels).brighter();
-            } else {
-                c = new Color(
-                        ((float) totalR / pixels / 255f) * ((tint >> 16 & 0xff) / 255f),
-                        ((float) totalG / pixels / 255f) * ((tint >> 8 & 0xff) / 255f),
-                        ((float) totalB / pixels / 255f) * ((tint & 0xff) / 255f)
-                );
-            }
-
-            Vector3i color = new Vector3i(c.getRed(), c.getGreen(), c.getBlue());
-            CompostColors.COLORS.put(item, color);
         }
     }
 
-    private static int getTint(Item item) {
-        if (ExDeorum.DEBUG && FMLEnvironment.dist == Dist.CLIENT) {
-            return Minecraft.getInstance().getItemColors().getColor(new ItemStack(item), 0);
-        } else {
-            return 0;
-        }
-    }
-
-    private static boolean readColorFile(String modid, Path path) {
-        try (var stream = Files.newInputStream(path)) {
-            try (var streamReader = new InputStreamReader(stream)) {
-                try (var reader = new BufferedReader(streamReader)) {
-                    int readColors = 0;
-                    int lineNumber = 0;
-                    String line;
-
-                    while ((line = reader.readLine()) != null) {
-                        lineNumber++;
-                        if (line.startsWith("//")) continue;
-
-                        var tokenizer = new StringTokenizer(line, ", #");
-                        try {
-                            var id = Identifier.fromNamespaceAndPath(modid, tokenizer.nextToken());
-                            var item = BuiltInRegistries.ITEM.get(id);
-                            String token = tokenizer.nextToken();
-                            var color = Integer.parseInt(token, 16);
-
-                            if (item != Items.AIR) {
-                                readColors++;
-
-                                COLORS.put(item, new Vector3i(
-                                        (color >> 16) & 255,
-                                        (color >> 8) & 255,
-                                        (color) & 255
-                                ));
-                            } else {
-                                ExDeorum.LOGGER.error("Failed to read line {} of compost colors file {} - Unknown item {}", lineNumber, path, id);
-                            }
-                        } catch (NumberFormatException | NoSuchElementException e) {
-                            ExDeorum.LOGGER.error("Failed to read line {} of compost colors file {} - Invalid format: {}", lineNumber, path, e.getMessage());
-                        }
-                    }
-
-                    if (readColors > 0) {
-                        ExDeorum.LOGGER.debug("Read {} compost colors from compost colors file {}", readColors, path);
-                        return true;
-                    } else {
-                        ExDeorum.LOGGER.debug("Ignoring empty compost colors file {}", path);
-                        return false;
-                    }
-                }
-            }
-        } catch (IOException e) {
-            ExDeorum.LOGGER.error("Error reading colors file {} : {}", path, e);
-        }
-
-        return false;
+    public static void debugCompute() {
+        throw new UnsupportedOperationException("debugCompute is not ported to MC 26.x");
     }
 
     public static void export(String modid) {
-        export(modid, COLORS.keySet().stream().filter(key -> BuiltInRegistries.ITEM.getKey(key).getNamespace().equals(modid)).sorted(Comparator.comparing(BuiltInRegistries.ITEM::getKey)).toList());
+        export(modid, COLORS.keySet().stream()
+                .filter(item -> BuiltInRegistries.ITEM.getKey(item).getNamespace().equals(modid))
+                .sorted(Comparator.comparing(BuiltInRegistries.ITEM::getKey))
+                .toList());
     }
 
-    // The given list should be sorted
     private static void export(String modid, List<Item> sortedToExport) {
         try {
-            if (createConfigFolder(COMPOST_COLORS_CONFIGS)) {
-                var path = COMPOST_COLORS_CONFIGS.resolve(modid + ".txt");
-                var file = path.toFile();
-
-                if ((file.exists() && file.delete()) || file.createNewFile()) {
-                    try (var fileWriter = new FileWriter(file)) {
-                        try (var writer = new BufferedWriter(fileWriter)) {
-                            // sort file entries alphabetically
-                            var alphabeticalItems = new ArrayList<>(sortedToExport);
-                            alphabeticalItems.sort(Comparator.comparing(item -> BuiltInRegistries.ITEM.getKey(item).getPath()));
-
-                            writer.write("// Compost colors for " + modid + ". You may add your own colors, change existing ones, or remove colors that aren't needed.\n");
-
-                            for (var item : alphabeticalItems) {
-                                if (COLORS.containsKey(item)) {
-                                    writer.write(BuiltInRegistries.ITEM.getKey(item).getPath());
-                                    writer.write(", #");
-                                    var colorVec = COLORS.get(item);
-                                    writer.write(Integer.toHexString(new Color(colorVec.x, colorVec.y, colorVec.z).getRGB() & 0xffffff));
-                                    writer.write('\n');
-                                }
-                            }
-
-                            // Skips the error message
-                            return;
-                        }
-                    }
-                }
+            if (!createConfigFolder(COMPOST_COLORS_CONFIGS)) {
+                ExDeorum.LOGGER.error("Unable to create compost color config folder for {}", modid);
+                return;
             }
 
-            ExDeorum.LOGGER.error("Unable to save compost colors for mod \"{}\"", modid);
-        } catch (IOException e) {
-            ExDeorum.LOGGER.error("Encountered exception while trying to save compost colors for mod \"{}\"", modid, e);
+            var path = COMPOST_COLORS_CONFIGS.resolve(modid + ".txt");
+            try (var writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
+                writer.write("// Compost colors for " + modid + ".\n");
+
+                var alphabeticalItems = new ArrayList<>(sortedToExport);
+                alphabeticalItems.sort(Comparator.comparing(item -> BuiltInRegistries.ITEM.getKey(item).getPath()));
+
+                for (var item : alphabeticalItems) {
+                    var color = COLORS.get(item);
+                    if (color == null) {
+                        continue;
+                    }
+
+                    writer.write(BuiltInRegistries.ITEM.getKey(item).getPath());
+                    writer.write(", #");
+                    writer.write(String.format("%02x%02x%02x", color.x, color.y, color.z));
+                    writer.write('\n');
+                }
+            }
+        } catch (IOException exception) {
+            throw new UncheckedIOException("Failed to export compost colors for " + modid, exception);
         }
     }
 
     public static boolean createConfigFolder(Path configPath) {
         var colorsFolder = configPath.toFile();
         var configFolder = configPath.getParent().toFile();
-
         return (configFolder.exists() || configFolder.mkdir()) && (colorsFolder.exists() || colorsFolder.mkdir());
     }
 }

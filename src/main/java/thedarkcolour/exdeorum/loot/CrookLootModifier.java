@@ -50,9 +50,9 @@ public class CrookLootModifier extends LootModifier {
     @Override
     protected @NotNull ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
         var state = context.getOptionalParameter(LootContextParams.BLOCK_STATE);
-        var stack = context.getOptionalParameter(LootContextParams.TOOL);
+        var tool = context.getOptionalParameter(LootContextParams.TOOL);
 
-        if (state != null && stack != null) {
+        if (state != null && tool instanceof ItemStack stack) {
             var rand = context.getRandom();
 
             if (stack.getEnchantmentLevel(context.getLevel().holderLookup(Registries.ENCHANTMENT).getOrThrow(Enchantments.SILK_TOUCH)) == 0) {
@@ -71,7 +71,8 @@ public class CrookLootModifier extends LootModifier {
                 if (state.is(BlockTags.LEAVES)) {
                     // this must not be a crook in order to avoid recursively triggering CrookLootModifier from the re roll method
                     // copying the tag is required so that enchantments like fortune are preserved
-                    var nonCrook = stack.transmuteCopy(Items.BARRIER, 1);
+                    var nonCrook = new ItemStack(Items.BARRIER, 1);
+                    nonCrook.applyComponents(stack.getComponentsPatch());
 
                     for (int i = 0; i < rolls; i++) {
                         generatedLoot.addAll(reRollDrops(context, nonCrook, state));

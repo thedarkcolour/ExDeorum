@@ -23,6 +23,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -64,33 +65,23 @@ public class BarrelBlock extends ETankBlock {
     }
 
     @Override
-    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
-        if (!level.isClientSide()) {
-            if (!state.is(newState.getBlock())) {
-                if (level.getBlockEntity(pos) instanceof BarrelBlockEntity barrel) {
-                    var item = barrel.getItem();
+    public void affectNeighborsAfterRemoval(BlockState state, ServerLevel level, BlockPos pos, boolean movedByPiston) {
+        if (level.getBlockEntity(pos) instanceof BarrelBlockEntity barrel) {
+            var item = barrel.getItem();
 
-                    if (!item.isEmpty()) {
-                        EBlock.dropItem(level, pos, item);
-                    }
-                }
+            if (!item.isEmpty()) {
+                EBlock.dropItem(level, pos, item);
             }
         }
 
-        super.onRemove(state, level, pos, newState, isMoving);
+        super.affectNeighborsAfterRemoval(state, level, pos, movedByPiston);
     }
 
     @Override
-    public void neighborChanged(BlockState pState, Level level, BlockPos pos, Block pBlock, BlockPos fromPos, boolean pIsMoving) {
-        // Only check when the above block is updated, or when the below block is updated
-        if (fromPos.getY() - pos.getY() == 1) {
-            if (level.getBlockEntity(pos) instanceof BarrelBlockEntity barrel) {
-                barrel.tryInWorldFluidMixing();
-            }
-        } else if (fromPos.getY() - pos.getY() == -1) {
-            if (level.getBlockEntity(pos) instanceof BarrelBlockEntity barrel) {
-                barrel.updateFluidTransform();
-            }
+    public void neighborChanged(BlockState pState, Level level, BlockPos pos, Block pBlock, @org.jetbrains.annotations.Nullable net.minecraft.world.level.redstone.Orientation orientation, boolean pIsMoving) {
+        if (level.getBlockEntity(pos) instanceof BarrelBlockEntity barrel) {
+            barrel.tryInWorldFluidMixing();
+            barrel.updateFluidTransform();
         }
     }
 

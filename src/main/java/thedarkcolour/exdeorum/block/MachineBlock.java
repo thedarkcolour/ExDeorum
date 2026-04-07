@@ -21,21 +21,25 @@ package thedarkcolour.exdeorum.block;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.redstone.Orientation;
+import net.minecraft.world.level.storage.TagValueInput;
+import net.minecraft.world.level.storage.TagValueOutput;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import thedarkcolour.exdeorum.blockentity.AbstractMachineBlockEntity;
 import thedarkcolour.exdeorum.config.EConfig;
@@ -60,7 +64,6 @@ public abstract class MachineBlock extends EBlock {
     // Label for the item tooltip where the mesh/hammer is listed
     protected abstract MutableComponent getHighlightItemLabel();
 
-    @Override
     public void appendHoverText(ItemStack stack, Item.TooltipContext level, List<Component> tooltip, TooltipFlag flag) {
         var lookup = level.registries();
         if (lookup != null) {
@@ -73,14 +76,14 @@ public abstract class MachineBlock extends EBlock {
 
                 if (nbt.contains("inventory")) {
                     var inventory = new ItemStackHandler();
-                    inventory.deserializeNBT(lookup, nbt.getCompound("inventory"));
+                    inventory.deserialize(TagValueInput.create(ProblemReporter.DISCARDING, lookup, nbt.getCompound("inventory").orElseGet(CompoundTag::new)));
 
                     // Hammer or sieve mesh
                     var highlightItem = inventory.getStackInSlot(getHighlightItemSlot());
 
                     if (!highlightItem.isEmpty()) {
                         // display the mesh/hammer inside the machine
-                        tooltip.add(getHighlightItemLabel().withStyle(ChatFormatting.GRAY).append(Component.translatable(highlightItem.getDescriptionId())));
+                        tooltip.add(getHighlightItemLabel().withStyle(ChatFormatting.GRAY).append(Component.translatable(highlightItem.getItem().getDescriptionId())));
                     }
                 }
 
@@ -96,12 +99,14 @@ public abstract class MachineBlock extends EBlock {
     // Drops the item for creative mode players
     @Override
     public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState pState, Player player) {
-        if (!level.isClientSide() && player.isCreative() && level.getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS)) {
+        if (!level.isClientSide() && player.isCreative()) {
             if (level.getBlockEntity(pos) instanceof AbstractMachineBlockEntity<?> machine) {
                 if (!machine.inventory.getStackInSlot(getHighlightItemSlot()).isEmpty()) {
                     var stack = new ItemStack(this);
                     // save machine properties to the item if mesh/hammer slot is not empty
-                    BlockItem.setBlockEntityData(stack, this.blockEntityType.get(), machine.saveWithoutMetadata(level.registryAccess()));
+                    var data = TagValueOutput.createWithContext(ProblemReporter.DISCARDING, level.registryAccess());
+                    machine.saveCustomOnly(data);
+                    BlockItem.setBlockEntityData(stack, this.blockEntityType.get(), data);
                     var itemEntity = new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, stack);
                     itemEntity.setDefaultPickUpDelay();
                     level.addFreshEntity(itemEntity);
@@ -124,7 +129,7 @@ public abstract class MachineBlock extends EBlock {
 
     // Redstone state
     @Override
-    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
+    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, @org.jetbrains.annotations.Nullable Orientation orientation, boolean isMoving) {
         if (level.getBlockEntity(pos) instanceof AbstractMachineBlockEntity<?> machine) {
             machine.checkPoweredState(level, pos);
         }

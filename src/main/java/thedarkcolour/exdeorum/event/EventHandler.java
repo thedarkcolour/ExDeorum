@@ -57,7 +57,11 @@ import net.neoforged.neoforge.event.server.ServerStoppingEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.neoforged.neoforge.fluids.FluidInteractionRegistry;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import thedarkcolour.exdeorum.ExDeorum;
+import thedarkcolour.exdeorum.blockentity.AbstractCrucibleBlockEntity;
+import thedarkcolour.exdeorum.blockentity.AbstractMachineBlockEntity;
+import thedarkcolour.exdeorum.blockentity.BarrelBlockEntity;
 import thedarkcolour.exdeorum.blockentity.helper.ItemHelper;
 import thedarkcolour.exdeorum.client.CompostColors;
 import thedarkcolour.exdeorum.compat.ModIds;
@@ -72,6 +76,10 @@ import thedarkcolour.exdeorum.registry.EBlockEntities;
 import thedarkcolour.exdeorum.registry.EFluids;
 import thedarkcolour.exdeorum.registry.EItems;
 import thedarkcolour.exdeorum.tag.EBiomeTags;
+import thedarkcolour.exdeorum.transfer.LegacyEnergyStorageTransfer;
+import thedarkcolour.exdeorum.transfer.LegacyFluidItemAccessTransfer;
+import thedarkcolour.exdeorum.transfer.LegacyFluidTankTransfer;
+import thedarkcolour.exdeorum.transfer.LegacyItemHandlerTransfer;
 import thedarkcolour.exdeorum.voidworld.VoidChunkGenerator;
 
 import java.util.Locale;
@@ -160,7 +168,7 @@ public final class EventHandler {
 
             event.setCanceled(true);
             event.getSettings().setSpawn(LevelData.RespawnData.of(level.dimension(), level.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, pos), 90.0F, 0.0F));
-            level.getGameRules().getRule(GameRules.RESPAWN_RADIUS).set(0, level.getServer());
+            level.getGameRules().set(GameRules.RESPAWN_RADIUS, 0, level.getServer());
         }
     }
 
@@ -194,7 +202,7 @@ public final class EventHandler {
             // tries to account for other SkyBlock generator mods like SkyBlockBuilder
             if (generator instanceof VoidChunkGenerator || generator.getClass().getName().toLowerCase(Locale.ROOT).contains("skyblock")) {
                 NetworkHandler.sendVoidWorld(player);
-                var advancement = player.getServer().getAdvancements().get(Identifier.fromNamespaceAndPath(ExDeorum.ID, "core/root"));
+                var advancement = player.level().getServer().getAdvancements().get(Identifier.fromNamespaceAndPath(ExDeorum.ID, "core/root"));
 
                 if (advancement != null) {
                     if (!player.getAdvancements().getOrStartProgress(advancement).isDone()) {
@@ -226,11 +234,7 @@ public final class EventHandler {
 
     private static void addReloadListeners(AddServerReloadListenersEvent event) {
         var recipeMap = event.getServerResources().getRecipeManager().recipeMap();
-        event.addListener(ExDeorum.loc("recipes"), (prepBarrier, resourceManager, prepProfiler, reloadProfiler, backgroundExecutor, gameExecutor) -> {
-            return prepBarrier.wait(Unit.INSTANCE).thenRunAsync(() -> {
-                RecipeUtil.reload(recipeMap);
-            }, gameExecutor);
-        });
+        event.addListener(ExDeorum.loc("recipes"), (ResourceManagerReloadListener) resourceManager -> RecipeUtil.reload(recipeMap));
     }
 
     private static void serverTick(ServerTickEvent.Post event) {
@@ -238,28 +242,28 @@ public final class EventHandler {
     }
 
     private static void registerCapabilities(RegisterCapabilitiesEvent event) {
-        event.registerBlockEntity(Capabilities.Item.BLOCK, EBlockEntities.BARREL.get(), (barrel, direction) -> barrel.getItemHandler());
-        event.registerBlockEntity(Capabilities.Fluid.BLOCK, EBlockEntities.BARREL.get(), (barrel, direction) -> barrel.getTank());
+        event.registerBlockEntity(Capabilities.Item.BLOCK, EBlockEntities.BARREL.get(), (barrel, direction) -> new LegacyItemHandlerTransfer(barrel.getItemHandler()));
+        event.registerBlockEntity(Capabilities.Fluid.BLOCK, EBlockEntities.BARREL.get(), (barrel, direction) -> new LegacyFluidTankTransfer(barrel.getTank()));
 
-        event.registerBlockEntity(Capabilities.Item.BLOCK, EBlockEntities.MECHANICAL_SIEVE.get(), (sieve, direction) -> sieve.getItemHandler());
-        event.registerBlockEntity(Capabilities.Energy.BLOCK, EBlockEntities.MECHANICAL_SIEVE.get(), (sieve, direction) -> sieve.getEnergyStorage());
+        event.registerBlockEntity(Capabilities.Item.BLOCK, EBlockEntities.MECHANICAL_SIEVE.get(), (sieve, direction) -> new LegacyItemHandlerTransfer(sieve.inventory));
+        event.registerBlockEntity(Capabilities.Energy.BLOCK, EBlockEntities.MECHANICAL_SIEVE.get(), (sieve, direction) -> new LegacyEnergyStorageTransfer(sieve.getEnergyStorage(), sieve.energy::setStoredEnergy));
 
-        event.registerBlockEntity(Capabilities.Item.BLOCK, EBlockEntities.MECHANICAL_HAMMER.get(), (hammer, direction) -> hammer.getItemHandler());
-        event.registerBlockEntity(Capabilities.Energy.BLOCK, EBlockEntities.MECHANICAL_HAMMER.get(), (hammer, direction) -> hammer.getEnergyStorage());
+        event.registerBlockEntity(Capabilities.Item.BLOCK, EBlockEntities.MECHANICAL_HAMMER.get(), (hammer, direction) -> new LegacyItemHandlerTransfer(hammer.inventory));
+        event.registerBlockEntity(Capabilities.Energy.BLOCK, EBlockEntities.MECHANICAL_HAMMER.get(), (hammer, direction) -> new LegacyEnergyStorageTransfer(hammer.getEnergyStorage(), hammer.energy::setStoredEnergy));
 
-        event.registerBlockEntity(Capabilities.Item.BLOCK, EBlockEntities.LAVA_CRUCIBLE.get(), (hammer, direction) -> hammer.getItem());
-        event.registerBlockEntity(Capabilities.Fluid.BLOCK, EBlockEntities.LAVA_CRUCIBLE.get(), (hammer, direction) -> hammer.getTank());
+        event.registerBlockEntity(Capabilities.Item.BLOCK, EBlockEntities.LAVA_CRUCIBLE.get(), (crucible, direction) -> new LegacyItemHandlerTransfer(crucible.getItem()));
+        event.registerBlockEntity(Capabilities.Fluid.BLOCK, EBlockEntities.LAVA_CRUCIBLE.get(), (crucible, direction) -> new LegacyFluidTankTransfer(crucible.getTank()));
 
-        event.registerBlockEntity(Capabilities.Item.BLOCK, EBlockEntities.WATER_CRUCIBLE.get(), (hammer, direction) -> hammer.getItem());
-        event.registerBlockEntity(Capabilities.Fluid.BLOCK, EBlockEntities.WATER_CRUCIBLE.get(), (hammer, direction) -> hammer.getTank());
+        event.registerBlockEntity(Capabilities.Item.BLOCK, EBlockEntities.WATER_CRUCIBLE.get(), (crucible, direction) -> new LegacyItemHandlerTransfer(crucible.getItem()));
+        event.registerBlockEntity(Capabilities.Fluid.BLOCK, EBlockEntities.WATER_CRUCIBLE.get(), (crucible, direction) -> new LegacyFluidTankTransfer(crucible.getTank()));
 
-        event.registerItem(Capabilities.Fluid.ITEM, (stack, ctx) -> new PorcelainBucket.ItemHandler(stack),
+        event.registerItem(Capabilities.Fluid.ITEM, (stack, ctx) -> ctx == null ? null : new LegacyFluidItemAccessTransfer(ctx, PorcelainBucket.ItemHandler::new),
                 EItems.PORCELAIN_BUCKET,
                 EItems.PORCELAIN_WATER_BUCKET,
                 EItems.PORCELAIN_LAVA_BUCKET,
                 EItems.PORCELAIN_MILK_BUCKET,
                 EItems.PORCELAIN_WITCH_WATER_BUCKET);
-        event.registerItem(Capabilities.Fluid.ITEM, (stack, ctx) -> new WateringCanItem.FluidHandler(stack),
+        event.registerItem(Capabilities.Fluid.ITEM, (stack, ctx) -> ctx == null ? null : new LegacyFluidItemAccessTransfer(ctx, WateringCanItem.FluidHandler::new),
                 EItems.WOODEN_WATERING_CAN,
                 EItems.STONE_WATERING_CAN,
                 EItems.IRON_WATERING_CAN,

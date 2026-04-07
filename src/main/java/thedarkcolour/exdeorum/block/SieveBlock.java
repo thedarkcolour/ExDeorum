@@ -21,6 +21,7 @@ package thedarkcolour.exdeorum.block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -55,19 +56,15 @@ public class SieveBlock extends EBlock {
     }
 
     @Override
-    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean pIsMoving) {
-        if (!level.isClientSide()) {
-            if (!state.is(newState.getBlock())) {
-                if (level.getBlockEntity(pos) instanceof AbstractSieveBlockEntity sieve) {
-                    var mesh = sieve.getLogic().getMesh();
+    public void affectNeighborsAfterRemoval(BlockState state, ServerLevel level, BlockPos pos, boolean movedByPiston) {
+        if (level.getBlockEntity(pos) instanceof AbstractSieveBlockEntity sieve) {
+            var mesh = sieve.getLogic().getMesh();
 
-                    if (!mesh.isEmpty()) {
-                        dropItem(level, pos, mesh);
-                    }
-                }
+            if (!mesh.isEmpty()) {
+                dropItem(level, pos, mesh);
             }
         }
 
-        super.onRemove(state, level, pos, newState, pIsMoving);
+        super.affectNeighborsAfterRemoval(state, level, pos, movedByPiston);
     }
 }

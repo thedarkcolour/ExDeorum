@@ -79,8 +79,8 @@ public record XeiSieveRecipe(Ingredient ingredient, ItemStack mesh, List<Result>
 
             // these lists are grouped into sub lists based on their meshes (ex. dirt with string mesh)
             for (var recipe : values) {
-                for (var stack : recipe.mesh.getItems()) {
-                    meshGrouper.put(stack.getItem(), recipe);
+                for (var holder : recipe.mesh.items().toList()) {
+                    meshGrouper.put(holder.value(), recipe);
                 }
             }
 

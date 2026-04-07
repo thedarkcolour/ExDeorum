@@ -78,9 +78,11 @@ public class HammerLootModifier extends LootModifier {
         var resultAmount = recipe.resultAmount.getInt(context);
 
         if (!itemForm.builtInRegistryHolder().is(this.fortuneBlacklistTag) && context.hasParameter(LootContextParams.TOOL)) {
-            var hammer = context.getParameter(LootContextParams.TOOL);
-            // fortune handling; more likely to boost drops if there are none to begin with
-            resultAmount += calculateFortuneBonus(context.getLevel().registryAccess(), hammer, context.getRandom(), resultAmount == 0);
+            var tool = context.getParameter(LootContextParams.TOOL);
+            if (tool instanceof ItemStack hammer) {
+                // fortune handling; more likely to boost drops if there are none to begin with
+                resultAmount += calculateFortuneBonus(context.getLevel().registryAccess(), hammer, context.getRandom(), resultAmount == 0);
+            }
         }
 
         if (resultAmount > 0) {
