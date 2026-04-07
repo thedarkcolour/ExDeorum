@@ -8,15 +8,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "I": {
-      "tag": "c:rods/wooden"
-    },
-    "O": {
-      "item": "biomesoplenty:willow_planks"
-    },
-    "_": {
-      "item": "biomesoplenty:willow_slab"
-    }
+    "I": "#c:rods/wooden",
+    "O": "biomesoplenty:willow_planks",
+    "_": "biomesoplenty:willow_slab"
   },
   "pattern": [
     "O O",
@@ -24,7 +18,6 @@
     "I I"
   ],
   "result": {
-    "count": 1,
     "id": "exdeorum:willow_sieve"
   }
 }

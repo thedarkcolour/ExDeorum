@@ -1,12 +1,8 @@
 {
   "type": "exdeorum:barrel_compost",
   "ingredient": [
-    {
-      "item": "minecraft:tall_grass"
-    },
-    {
-      "item": "minecraft:large_fern"
-    }
+    "minecraft:tall_grass",
+    "minecraft:large_fern"
   ],
   "volume": 150
 }

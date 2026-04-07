@@ -1,13 +1,8 @@
 {
   "type": "exdeorum:sieve",
-  "ingredient": {
-    "item": "minecraft:sand"
-  },
-  "mesh": {
-    "item": "exdeorum:iron_mesh"
-  },
+  "ingredient": "minecraft:sand",
+  "mesh": "exdeorum:iron_mesh",
   "result": {
-    "count": 1,
     "id": "minecraft:flint"
   },
   "result_amount": {

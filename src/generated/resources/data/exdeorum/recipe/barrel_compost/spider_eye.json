@@ -1,7 +1,5 @@
 {
   "type": "exdeorum:barrel_compost",
-  "ingredient": {
-    "item": "minecraft:spider_eye"
-  },
+  "ingredient": "minecraft:spider_eye",
   "volume": 80
 }

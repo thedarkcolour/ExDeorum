@@ -1,12 +1,8 @@
 {
   "type": "exdeorum:barrel_compost",
   "ingredient": [
-    {
-      "item": "exdeorum:silkworm"
-    },
-    {
-      "item": "exdeorum:cooked_silkworm"
-    }
+    "exdeorum:silkworm",
+    "exdeorum:cooked_silkworm"
   ],
   "volume": 40
 }

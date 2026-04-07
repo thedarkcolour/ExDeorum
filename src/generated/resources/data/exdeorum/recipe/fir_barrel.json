@@ -8,12 +8,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "m": {
-      "item": "biomesoplenty:fir_slab"
-    },
-    "s": {
-      "item": "biomesoplenty:fir_planks"
-    }
+    "m": "biomesoplenty:fir_slab",
+    "s": "biomesoplenty:fir_planks"
   },
   "pattern": [
     "s s",
@@ -21,7 +17,6 @@
     "sms"
   ],
   "result": {
-    "count": 1,
     "id": "exdeorum:fir_barrel"
   }
 }

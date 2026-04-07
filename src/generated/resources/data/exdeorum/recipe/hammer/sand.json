@@ -1,10 +1,7 @@
 {
   "type": "exdeorum:hammer",
-  "ingredient": {
-    "item": "minecraft:gravel"
-  },
+  "ingredient": "minecraft:gravel",
   "result": {
-    "count": 1,
     "id": "minecraft:sand"
   },
   "result_amount": 1.0

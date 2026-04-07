@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "m": {
-      "tag": "minecraft:stone_crafting_materials"
-    },
-    "s": {
-      "tag": "c:rods/wooden"
-    }
+    "m": "#minecraft:stone_crafting_materials",
+    "s": "#c:rods/wooden"
   },
   "pattern": [
     " m ",
@@ -15,7 +11,6 @@
     "s  "
   ],
   "result": {
-    "count": 1,
     "id": "exdeorum:stone_hammer"
   }
 }

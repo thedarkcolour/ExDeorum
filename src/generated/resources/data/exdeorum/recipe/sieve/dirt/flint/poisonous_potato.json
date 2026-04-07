@@ -1,13 +1,8 @@
 {
   "type": "exdeorum:sieve",
-  "ingredient": {
-    "item": "minecraft:dirt"
-  },
-  "mesh": {
-    "item": "exdeorum:flint_mesh"
-  },
+  "ingredient": "minecraft:dirt",
+  "mesh": "exdeorum:flint_mesh",
   "result": {
-    "count": 1,
     "id": "minecraft:poisonous_potato"
   },
   "result_amount": {

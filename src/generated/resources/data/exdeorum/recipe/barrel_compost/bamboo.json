@@ -1,7 +1,5 @@
 {
   "type": "exdeorum:barrel_compost",
-  "ingredient": {
-    "item": "minecraft:bamboo"
-  },
+  "ingredient": "minecraft:bamboo",
   "volume": 100
 }

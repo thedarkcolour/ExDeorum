@@ -1,13 +1,8 @@
 {
   "type": "exdeorum:sieve",
-  "ingredient": {
-    "item": "minecraft:sand"
-  },
-  "mesh": {
-    "item": "exdeorum:netherite_mesh"
-  },
+  "ingredient": "minecraft:sand",
+  "mesh": "exdeorum:netherite_mesh",
   "result": {
-    "count": 1,
     "id": "minecraft:sea_pickle"
   },
   "result_amount": {

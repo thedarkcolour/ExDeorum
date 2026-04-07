@@ -18,9 +18,7 @@
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "key": {
-    "#": {
-      "item": "minecraft:red_sand"
-    }
+    "#": "minecraft:red_sand"
   },
   "pattern": [
     "###",
@@ -28,7 +26,6 @@
     "###"
   ],
   "result": {
-    "count": 1,
     "id": "exdeorum:compressed_red_sand"
   }
 }

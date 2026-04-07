@@ -8,12 +8,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "m": {
-      "item": "biomesoplenty:hellbark_slab"
-    },
-    "s": {
-      "item": "biomesoplenty:hellbark_planks"
-    }
+    "m": "biomesoplenty:hellbark_slab",
+    "s": "biomesoplenty:hellbark_planks"
   },
   "pattern": [
     "s s",
@@ -21,7 +17,6 @@
     "sms"
   ],
   "result": {
-    "count": 1,
     "id": "exdeorum:hellbark_barrel"
   }
 }

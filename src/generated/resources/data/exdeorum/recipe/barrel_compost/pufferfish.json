@@ -1,7 +1,5 @@
 {
   "type": "exdeorum:barrel_compost",
-  "ingredient": {
-    "item": "minecraft:pufferfish"
-  },
+  "ingredient": "minecraft:pufferfish",
   "volume": 80
 }

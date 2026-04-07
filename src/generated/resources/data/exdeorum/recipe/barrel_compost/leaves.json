@@ -1,7 +1,5 @@
 {
   "type": "exdeorum:barrel_compost",
-  "ingredient": {
-    "tag": "minecraft:leaves"
-  },
+  "ingredient": "#minecraft:leaves",
   "volume": 125
 }

@@ -8,15 +8,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "I": {
-      "tag": "c:rods/wooden"
-    },
-    "O": {
-      "item": "biomesoplenty:hellbark_planks"
-    },
-    "_": {
-      "item": "biomesoplenty:hellbark_slab"
-    }
+    "I": "#c:rods/wooden",
+    "O": "biomesoplenty:hellbark_planks",
+    "_": "biomesoplenty:hellbark_slab"
   },
   "pattern": [
     "O O",
@@ -24,7 +18,6 @@
     "I I"
   ],
   "result": {
-    "count": 1,
     "id": "exdeorum:hellbark_sieve"
   }
 }

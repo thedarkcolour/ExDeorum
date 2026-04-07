@@ -1,7 +1,5 @@
 {
   "type": "exdeorum:barrel_compost",
-  "ingredient": {
-    "tag": "c:crops/wheat"
-  },
+  "ingredient": "#c:crops/wheat",
   "volume": 80
 }

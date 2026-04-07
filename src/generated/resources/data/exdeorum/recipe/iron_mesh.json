@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "#": {
-      "tag": "c:ingots/iron"
-    },
-    "S": {
-      "tag": "c:strings"
-    }
+    "#": "#c:ingots/iron",
+    "S": "#c:strings"
   },
   "pattern": [
     "S#S",
@@ -15,7 +11,6 @@
     "S#S"
   ],
   "result": {
-    "count": 1,
     "id": "exdeorum:iron_mesh"
   }
 }

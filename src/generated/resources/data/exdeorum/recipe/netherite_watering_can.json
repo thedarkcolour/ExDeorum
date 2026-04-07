@@ -1,16 +1,9 @@
 {
   "type": "minecraft:smithing_transform",
-  "addition": {
-    "tag": "c:ingots/netherite"
-  },
-  "base": {
-    "item": "exdeorum:diamond_watering_can"
-  },
+  "addition": "#c:ingots/netherite",
+  "base": "exdeorum:diamond_watering_can",
   "result": {
-    "count": 1,
     "id": "exdeorum:netherite_watering_can"
   },
-  "template": {
-    "item": "minecraft:netherite_upgrade_smithing_template"
-  }
+  "template": "minecraft:netherite_upgrade_smithing_template"
 }

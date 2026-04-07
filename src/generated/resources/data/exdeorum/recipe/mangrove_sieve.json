@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "I": {
-      "tag": "c:rods/wooden"
-    },
-    "O": {
-      "item": "minecraft:mangrove_planks"
-    },
-    "_": {
-      "item": "minecraft:mangrove_slab"
-    }
+    "I": "#c:rods/wooden",
+    "O": "minecraft:mangrove_planks",
+    "_": "minecraft:mangrove_slab"
   },
   "pattern": [
     "O O",
@@ -18,7 +12,6 @@
     "I I"
   ],
   "result": {
-    "count": 1,
     "id": "exdeorum:mangrove_sieve"
   }
 }

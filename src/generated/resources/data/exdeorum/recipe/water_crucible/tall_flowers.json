@@ -4,7 +4,5 @@
     "amount": 200,
     "id": "minecraft:water"
   },
-  "ingredient": {
-    "tag": "minecraft:tall_flowers"
-  }
+  "ingredient": "#minecraft:tall_flowers"
 }

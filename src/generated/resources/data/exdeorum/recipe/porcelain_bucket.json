@@ -3,11 +3,8 @@
   "category": "misc",
   "cookingtime": 200,
   "experience": 0.1,
-  "ingredient": {
-    "item": "exdeorum:unfired_porcelain_bucket"
-  },
+  "ingredient": "exdeorum:unfired_porcelain_bucket",
   "result": {
-    "count": 1,
     "id": "exdeorum:porcelain_bucket"
   }
 }

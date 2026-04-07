@@ -1,7 +1,5 @@
 {
   "type": "exdeorum:barrel_compost",
-  "ingredient": {
-    "item": "minecraft:seagrass"
-  },
+  "ingredient": "minecraft:seagrass",
   "volume": 80
 }

@@ -1,7 +1,5 @@
 {
   "type": "exdeorum:barrel_compost",
-  "ingredient": {
-    "tag": "c:seeds"
-  },
+  "ingredient": "#c:seeds",
   "volume": 80
 }

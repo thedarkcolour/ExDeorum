@@ -8,12 +8,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "m": {
-      "item": "blue_skies:bluebright_slab"
-    },
-    "s": {
-      "item": "blue_skies:bluebright_planks"
-    }
+    "m": "blue_skies:bluebright_slab",
+    "s": "blue_skies:bluebright_planks"
   },
   "pattern": [
     "s s",
@@ -21,7 +17,6 @@
     "sms"
   ],
   "result": {
-    "count": 1,
     "id": "exdeorum:bluebright_barrel"
   }
 }

@@ -1,13 +1,8 @@
 {
   "type": "exdeorum:sieve",
-  "ingredient": {
-    "item": "exdeorum:dust"
-  },
-  "mesh": {
-    "item": "exdeorum:string_mesh"
-  },
+  "ingredient": "exdeorum:dust",
+  "mesh": "exdeorum:string_mesh",
   "result": {
-    "count": 1,
     "id": "minecraft:blaze_powder"
   },
   "result_amount": {

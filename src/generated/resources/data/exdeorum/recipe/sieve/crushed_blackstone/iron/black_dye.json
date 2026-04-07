@@ -1,13 +1,8 @@
 {
   "type": "exdeorum:sieve",
-  "ingredient": {
-    "item": "exdeorum:crushed_blackstone"
-  },
-  "mesh": {
-    "item": "exdeorum:iron_mesh"
-  },
+  "ingredient": "exdeorum:crushed_blackstone",
+  "mesh": "exdeorum:iron_mesh",
   "result": {
-    "count": 1,
     "id": "minecraft:black_dye"
   },
   "result_amount": {

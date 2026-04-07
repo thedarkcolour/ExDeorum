@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "key": {
-    "C": {
-      "item": "exdeorum:wood_chippings"
-    },
-    "S": {
-      "item": "minecraft:slime_block"
-    },
-    "W": {
-      "tag": "minecraft:wool"
-    }
+    "C": "exdeorum:wood_chippings",
+    "S": "minecraft:slime_block",
+    "W": "#minecraft:wool"
   },
   "pattern": [
     "WCW",
@@ -18,7 +12,6 @@
     "WCW"
   ],
   "result": {
-    "count": 1,
     "id": "minecraft:sponge"
   }
 }

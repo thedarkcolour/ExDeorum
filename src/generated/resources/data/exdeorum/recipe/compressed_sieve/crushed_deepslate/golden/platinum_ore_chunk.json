@@ -9,14 +9,9 @@
     }
   ],
   "type": "exdeorum:compressed_sieve",
-  "ingredient": {
-    "tag": "exdeorum:compressed/crushed_deepslate"
-  },
-  "mesh": {
-    "item": "exdeorum:golden_mesh"
-  },
+  "ingredient": "#exdeorum:compressed/crushed_deepslate",
+  "mesh": "exdeorum:golden_mesh",
   "result": {
-    "count": 1,
     "id": "exdeorum:platinum_ore_chunk"
   },
   "result_amount": {

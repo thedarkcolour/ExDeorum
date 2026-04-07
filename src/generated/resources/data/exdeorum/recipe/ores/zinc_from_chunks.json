@@ -10,7 +10,5 @@
   ],
   "type": "exdeorum:ore_chunk",
   "ore": "c:ores/zinc",
-  "ore_chunk": {
-    "item": "exdeorum:zinc_ore_chunk"
-  }
+  "ore_chunk": "exdeorum:zinc_ore_chunk"
 }

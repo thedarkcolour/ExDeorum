@@ -8,15 +8,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "I": {
-      "tag": "c:rods/wooden"
-    },
-    "O": {
-      "item": "ars_nouveau:archwood_planks"
-    },
-    "_": {
-      "item": "ars_nouveau:archwood_slab"
-    }
+    "I": "#c:rods/wooden",
+    "O": "ars_nouveau:archwood_planks",
+    "_": "ars_nouveau:archwood_slab"
   },
   "pattern": [
     "O O",
@@ -24,7 +18,6 @@
     "I I"
   ],
   "result": {
-    "count": 1,
     "id": "exdeorum:archwood_sieve"
   }
 }

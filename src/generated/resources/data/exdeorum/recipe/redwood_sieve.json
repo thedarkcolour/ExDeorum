@@ -8,15 +8,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "I": {
-      "tag": "c:rods/wooden"
-    },
-    "O": {
-      "item": "biomesoplenty:redwood_planks"
-    },
-    "_": {
-      "item": "biomesoplenty:redwood_slab"
-    }
+    "I": "#c:rods/wooden",
+    "O": "biomesoplenty:redwood_planks",
+    "_": "biomesoplenty:redwood_slab"
   },
   "pattern": [
     "O O",
@@ -24,7 +18,6 @@
     "I I"
   ],
   "result": {
-    "count": 1,
     "id": "exdeorum:redwood_sieve"
   }
 }

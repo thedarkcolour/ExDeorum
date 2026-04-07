@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "m": {
-      "item": "minecraft:stone_slab"
-    },
-    "s": {
-      "item": "minecraft:stone"
-    }
+    "m": "minecraft:stone_slab",
+    "s": "minecraft:stone"
   },
   "pattern": [
     "s s",
@@ -15,7 +11,6 @@
     "sms"
   ],
   "result": {
-    "count": 1,
     "id": "exdeorum:stone_barrel"
   }
 }

@@ -5,11 +5,7 @@
     "id": "minecraft:water"
   },
   "ingredient": [
-    {
-      "item": "minecraft:sweet_berries"
-    },
-    {
-      "item": "minecraft:glow_berries"
-    }
+    "minecraft:sweet_berries",
+    "minecraft:glow_berries"
   ]
 }

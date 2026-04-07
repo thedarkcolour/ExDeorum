@@ -18,9 +18,7 @@
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "key": {
-    "#": {
-      "item": "minecraft:andesite"
-    }
+    "#": "minecraft:andesite"
   },
   "pattern": [
     "###",
@@ -28,7 +26,6 @@
     "###"
   ],
   "result": {
-    "count": 1,
     "id": "exdeorum:compressed_andesite"
   }
 }

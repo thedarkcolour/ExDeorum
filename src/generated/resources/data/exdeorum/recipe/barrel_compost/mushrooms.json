@@ -1,7 +1,5 @@
 {
   "type": "exdeorum:barrel_compost",
-  "ingredient": {
-    "tag": "c:mushrooms"
-  },
+  "ingredient": "#c:mushrooms",
   "volume": 100
 }

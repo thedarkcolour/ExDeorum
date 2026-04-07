@@ -8,12 +8,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "m": {
-      "item": "ars_nouveau:archwood_slab"
-    },
-    "s": {
-      "item": "ars_nouveau:archwood_planks"
-    }
+    "m": "ars_nouveau:archwood_slab",
+    "s": "ars_nouveau:archwood_planks"
   },
   "pattern": [
     "s s",
@@ -21,7 +17,6 @@
     "sms"
   ],
   "result": {
-    "count": 1,
     "id": "exdeorum:archwood_barrel"
   }
 }

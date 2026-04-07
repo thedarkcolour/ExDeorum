@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "m": {
-      "item": "minecraft:cherry_slab"
-    },
-    "s": {
-      "item": "minecraft:cherry_log"
-    }
+    "m": "minecraft:cherry_slab",
+    "s": "minecraft:cherry_log"
   },
   "pattern": [
     "s s",
@@ -15,7 +11,6 @@
     "sms"
   ],
   "result": {
-    "count": 1,
     "id": "exdeorum:cherry_crucible"
   }
 }

@@ -1,13 +1,8 @@
 {
   "type": "exdeorum:compressed_sieve",
-  "ingredient": {
-    "tag": "exdeorum:compressed/crushed_deepslate"
-  },
-  "mesh": {
-    "item": "exdeorum:iron_mesh"
-  },
+  "ingredient": "#exdeorum:compressed/crushed_deepslate",
+  "mesh": "exdeorum:iron_mesh",
   "result": {
-    "count": 1,
     "id": "exdeorum:copper_ore_chunk"
   },
   "result_amount": {

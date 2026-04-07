@@ -1,13 +1,8 @@
 {
   "type": "exdeorum:compressed_sieve",
-  "ingredient": {
-    "tag": "exdeorum:compressed/dirt"
-  },
-  "mesh": {
-    "item": "exdeorum:flint_mesh"
-  },
+  "ingredient": "#exdeorum:compressed/dirt",
+  "mesh": "exdeorum:flint_mesh",
   "result": {
-    "count": 1,
     "id": "minecraft:sweet_berries"
   },
   "result_amount": {

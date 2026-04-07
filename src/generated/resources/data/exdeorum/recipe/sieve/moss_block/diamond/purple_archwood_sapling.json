@@ -6,14 +6,9 @@
     }
   ],
   "type": "exdeorum:sieve",
-  "ingredient": {
-    "item": "minecraft:moss_block"
-  },
-  "mesh": {
-    "item": "exdeorum:diamond_mesh"
-  },
+  "ingredient": "minecraft:moss_block",
+  "mesh": "exdeorum:diamond_mesh",
   "result": {
-    "count": 1,
     "id": "ars_nouveau:purple_archwood_sapling"
   },
   "result_amount": {

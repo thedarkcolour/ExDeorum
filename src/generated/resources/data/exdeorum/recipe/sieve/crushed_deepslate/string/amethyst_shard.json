@@ -1,13 +1,8 @@
 {
   "type": "exdeorum:sieve",
-  "ingredient": {
-    "item": "exdeorum:crushed_deepslate"
-  },
-  "mesh": {
-    "item": "exdeorum:string_mesh"
-  },
+  "ingredient": "exdeorum:crushed_deepslate",
+  "mesh": "exdeorum:string_mesh",
   "result": {
-    "count": 1,
     "id": "minecraft:amethyst_shard"
   },
   "result_amount": {

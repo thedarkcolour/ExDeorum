@@ -1,4 +1,4 @@
-// 1.21.1	2025-09-01T13:22:27.1441593	Tags for minecraft:item mod id exdeorum
+// 26.1.1	2026-04-06T22:07:00.434246363	Tags for minecraft:item mod id exdeorum
 6c72957356b1d59a27be736fa1da54a5a9795ef7 data/exdeorum/tags/item/barrels.json
 6afa16b45f76c0defa1675d07586e2c6e6b0be69 data/exdeorum/tags/item/compressed/andesite.json
 31b46613766e4cdc53196850495ab1019f61cb48 data/exdeorum/tags/item/compressed/blackstone.json
@@ -21,12 +21,12 @@ fc279d9fa656ad00c5504b3f313586ca34fc4477 data/exdeorum/tags/item/compressed/red_
 34876a108ba8da4125a273e83324dbb4685618a1 data/exdeorum/tags/item/compressed/sand.json
 2de46f3e2e91a340f1b71ea5b600f8383a7ce875 data/exdeorum/tags/item/compressed/sands.json
 874b33131f557d077ab366fc6506c41369151a40 data/exdeorum/tags/item/compressed/soul_sand.json
-dad00c75d1a0b74a2f843bead336ee278e9cecba data/exdeorum/tags/item/compressed_hammers.json
 35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/exdeorum/tags/item/compressed_hammer_fortune_blacklist.json
+dad00c75d1a0b74a2f843bead336ee278e9cecba data/exdeorum/tags/item/compressed_hammers.json
 5feb54ce68fa657af5ce696f75b8c7a6d04cc7a7 data/exdeorum/tags/item/crooks.json
 74eefeb986d633d26ad42202c4a6b5e71463c425 data/exdeorum/tags/item/end_cake_materials.json
-be46bf2abe731d5ee5bd15ce72f222b2b9a49385 data/exdeorum/tags/item/hammers.json
 35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/exdeorum/tags/item/hammer_fortune_blacklist.json
+be46bf2abe731d5ee5bd15ce72f222b2b9a49385 data/exdeorum/tags/item/hammers.json
 008b4a382f07b9c0f9a07c78bedb949b4400e011 data/exdeorum/tags/item/ore_chunks.json
 b90bd3c642e69b9e800c58a9f8f53e369652e6ba data/exdeorum/tags/item/pebbles.json
 10f2167f7a9472e5df6870bad71b95869fc64b9a data/exdeorum/tags/item/random_shard_drops.json

@@ -1,13 +1,8 @@
 {
   "type": "exdeorum:sieve",
-  "ingredient": {
-    "item": "minecraft:moss_block"
-  },
-  "mesh": {
-    "item": "exdeorum:netherite_mesh"
-  },
+  "ingredient": "minecraft:moss_block",
+  "mesh": "exdeorum:netherite_mesh",
   "result": {
-    "count": 1,
     "id": "minecraft:jungle_sapling"
   },
   "result_amount": {

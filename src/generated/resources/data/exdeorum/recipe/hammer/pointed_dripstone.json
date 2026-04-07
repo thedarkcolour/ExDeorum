@@ -1,10 +1,7 @@
 {
   "type": "exdeorum:hammer",
-  "ingredient": {
-    "item": "minecraft:dripstone_block"
-  },
+  "ingredient": "minecraft:dripstone_block",
   "result": {
-    "count": 1,
     "id": "minecraft:pointed_dripstone"
   },
   "result_amount": {

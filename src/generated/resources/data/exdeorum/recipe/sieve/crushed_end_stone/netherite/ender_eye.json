@@ -1,13 +1,8 @@
 {
   "type": "exdeorum:sieve",
-  "ingredient": {
-    "item": "exdeorum:crushed_end_stone"
-  },
-  "mesh": {
-    "item": "exdeorum:netherite_mesh"
-  },
+  "ingredient": "exdeorum:crushed_end_stone",
+  "mesh": "exdeorum:netherite_mesh",
   "result": {
-    "count": 1,
     "id": "minecraft:ender_eye"
   },
   "result_amount": {

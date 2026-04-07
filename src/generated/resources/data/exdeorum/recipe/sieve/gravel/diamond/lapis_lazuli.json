@@ -1,13 +1,8 @@
 {
   "type": "exdeorum:sieve",
-  "ingredient": {
-    "item": "minecraft:gravel"
-  },
-  "mesh": {
-    "item": "exdeorum:diamond_mesh"
-  },
+  "ingredient": "minecraft:gravel",
+  "mesh": "exdeorum:diamond_mesh",
   "result": {
-    "count": 1,
     "id": "minecraft:lapis_lazuli"
   },
   "result_amount": {

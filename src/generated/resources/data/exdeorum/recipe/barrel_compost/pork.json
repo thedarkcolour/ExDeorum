@@ -1,12 +1,8 @@
 {
   "type": "exdeorum:barrel_compost",
   "ingredient": [
-    {
-      "item": "minecraft:porkchop"
-    },
-    {
-      "item": "minecraft:cooked_porkchop"
-    }
+    "minecraft:porkchop",
+    "minecraft:cooked_porkchop"
   ],
   "volume": 150
 }

@@ -1,10 +1,7 @@
 {
   "type": "exdeorum:hammer",
-  "ingredient": {
-    "item": "minecraft:stone_bricks"
-  },
+  "ingredient": "minecraft:stone_bricks",
   "result": {
-    "count": 1,
     "id": "minecraft:cracked_stone_bricks"
   },
   "result_amount": 1.0

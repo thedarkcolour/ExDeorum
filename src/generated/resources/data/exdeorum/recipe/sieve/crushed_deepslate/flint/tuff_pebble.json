@@ -1,13 +1,8 @@
 {
   "type": "exdeorum:sieve",
-  "ingredient": {
-    "item": "exdeorum:crushed_deepslate"
-  },
-  "mesh": {
-    "item": "exdeorum:flint_mesh"
-  },
+  "ingredient": "exdeorum:crushed_deepslate",
+  "mesh": "exdeorum:flint_mesh",
   "result": {
-    "count": 1,
     "id": "exdeorum:tuff_pebble"
   },
   "result_amount": {

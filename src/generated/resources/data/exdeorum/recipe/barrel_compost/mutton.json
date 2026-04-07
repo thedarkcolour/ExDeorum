@@ -1,12 +1,8 @@
 {
   "type": "exdeorum:barrel_compost",
   "ingredient": [
-    {
-      "item": "minecraft:mutton"
-    },
-    {
-      "item": "minecraft:cooked_mutton"
-    }
+    "minecraft:mutton",
+    "minecraft:cooked_mutton"
   ],
   "volume": 125
 }

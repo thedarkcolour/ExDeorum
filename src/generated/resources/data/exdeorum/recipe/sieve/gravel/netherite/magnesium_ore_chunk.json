@@ -9,14 +9,9 @@
     }
   ],
   "type": "exdeorum:sieve",
-  "ingredient": {
-    "item": "minecraft:gravel"
-  },
-  "mesh": {
-    "item": "exdeorum:netherite_mesh"
-  },
+  "ingredient": "minecraft:gravel",
+  "mesh": "exdeorum:netherite_mesh",
   "result": {
-    "count": 1,
     "id": "exdeorum:magnesium_ore_chunk"
   },
   "result_amount": {

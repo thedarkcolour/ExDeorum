@@ -8,12 +8,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "m": {
-      "item": "biomesoplenty:jacaranda_slab"
-    },
-    "s": {
-      "item": "biomesoplenty:jacaranda_log"
-    }
+    "m": "biomesoplenty:jacaranda_slab",
+    "s": "biomesoplenty:jacaranda_log"
   },
   "pattern": [
     "s s",
@@ -21,7 +17,6 @@
     "sms"
   ],
   "result": {
-    "count": 1,
     "id": "exdeorum:jacaranda_crucible"
   }
 }

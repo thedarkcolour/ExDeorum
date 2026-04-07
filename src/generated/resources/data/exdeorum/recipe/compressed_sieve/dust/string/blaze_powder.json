@@ -1,13 +1,8 @@
 {
   "type": "exdeorum:compressed_sieve",
-  "ingredient": {
-    "tag": "exdeorum:compressed/dust"
-  },
-  "mesh": {
-    "item": "exdeorum:string_mesh"
-  },
+  "ingredient": "#exdeorum:compressed/dust",
+  "mesh": "exdeorum:string_mesh",
   "result": {
-    "count": 1,
     "id": "minecraft:blaze_powder"
   },
   "result_amount": {

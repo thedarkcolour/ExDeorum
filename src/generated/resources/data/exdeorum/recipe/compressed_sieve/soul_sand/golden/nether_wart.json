@@ -1,13 +1,8 @@
 {
   "type": "exdeorum:compressed_sieve",
-  "ingredient": {
-    "tag": "exdeorum:compressed/soul_sand"
-  },
-  "mesh": {
-    "item": "exdeorum:golden_mesh"
-  },
+  "ingredient": "#exdeorum:compressed/soul_sand",
+  "mesh": "exdeorum:golden_mesh",
   "result": {
-    "count": 1,
     "id": "minecraft:nether_wart"
   },
   "result_amount": {

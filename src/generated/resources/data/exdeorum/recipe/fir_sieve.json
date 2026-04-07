@@ -8,15 +8,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "I": {
-      "tag": "c:rods/wooden"
-    },
-    "O": {
-      "item": "biomesoplenty:fir_planks"
-    },
-    "_": {
-      "item": "biomesoplenty:fir_slab"
-    }
+    "I": "#c:rods/wooden",
+    "O": "biomesoplenty:fir_planks",
+    "_": "biomesoplenty:fir_slab"
   },
   "pattern": [
     "O O",
@@ -24,7 +18,6 @@
     "I I"
   ],
   "result": {
-    "count": 1,
     "id": "exdeorum:fir_sieve"
   }
 }

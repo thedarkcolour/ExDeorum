@@ -1,12 +1,8 @@
 {
   "type": "exdeorum:barrel_compost",
   "ingredient": [
-    {
-      "item": "minecraft:sweet_berries"
-    },
-    {
-      "item": "minecraft:glow_berries"
-    }
+    "minecraft:sweet_berries",
+    "minecraft:glow_berries"
   ],
   "volume": 80
 }

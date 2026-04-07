@@ -10,7 +10,5 @@
   ],
   "type": "exdeorum:ore_chunk",
   "ore": "c:ores/osmium",
-  "ore_chunk": {
-    "item": "exdeorum:osmium_ore_chunk"
-  }
+  "ore_chunk": "exdeorum:osmium_ore_chunk"
 }

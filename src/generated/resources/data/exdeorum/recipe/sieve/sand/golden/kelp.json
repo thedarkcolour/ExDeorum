@@ -1,13 +1,8 @@
 {
   "type": "exdeorum:sieve",
-  "ingredient": {
-    "item": "minecraft:sand"
-  },
-  "mesh": {
-    "item": "exdeorum:golden_mesh"
-  },
+  "ingredient": "minecraft:sand",
+  "mesh": "exdeorum:golden_mesh",
   "result": {
-    "count": 1,
     "id": "minecraft:kelp"
   },
   "result_amount": {

@@ -1,13 +1,8 @@
 {
   "type": "exdeorum:sieve",
-  "ingredient": {
-    "item": "minecraft:red_sand"
-  },
-  "mesh": {
-    "item": "exdeorum:golden_mesh"
-  },
+  "ingredient": "minecraft:red_sand",
+  "mesh": "exdeorum:golden_mesh",
   "result": {
-    "count": 1,
     "id": "minecraft:cactus"
   },
   "result_amount": {

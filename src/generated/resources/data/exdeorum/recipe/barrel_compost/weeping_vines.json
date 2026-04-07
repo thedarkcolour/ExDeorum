@@ -1,7 +1,5 @@
 {
   "type": "exdeorum:barrel_compost",
-  "ingredient": {
-    "item": "minecraft:weeping_vines"
-  },
+  "ingredient": "minecraft:weeping_vines",
   "volume": 100
 }

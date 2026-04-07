@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "I": {
-      "tag": "c:rods/wooden"
-    },
-    "O": {
-      "item": "minecraft:bamboo_planks"
-    },
-    "_": {
-      "item": "minecraft:bamboo_slab"
-    }
+    "I": "#c:rods/wooden",
+    "O": "minecraft:bamboo_planks",
+    "_": "minecraft:bamboo_slab"
   },
   "pattern": [
     "O O",
@@ -18,7 +12,6 @@
     "I I"
   ],
   "result": {
-    "count": 1,
     "id": "exdeorum:bamboo_sieve"
   }
 }

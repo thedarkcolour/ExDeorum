@@ -1,13 +1,8 @@
 {
   "type": "exdeorum:sieve",
-  "ingredient": {
-    "item": "minecraft:moss_block"
-  },
-  "mesh": {
-    "item": "exdeorum:diamond_mesh"
-  },
+  "ingredient": "minecraft:moss_block",
+  "mesh": "exdeorum:diamond_mesh",
   "result": {
-    "count": 1,
     "id": "minecraft:mangrove_propagule"
   },
   "result_amount": {

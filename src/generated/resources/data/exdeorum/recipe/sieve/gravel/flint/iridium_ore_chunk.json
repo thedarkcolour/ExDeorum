@@ -9,14 +9,9 @@
     }
   ],
   "type": "exdeorum:sieve",
-  "ingredient": {
-    "item": "minecraft:gravel"
-  },
-  "mesh": {
-    "item": "exdeorum:flint_mesh"
-  },
+  "ingredient": "minecraft:gravel",
+  "mesh": "exdeorum:flint_mesh",
   "result": {
-    "count": 1,
     "id": "exdeorum:iridium_ore_chunk"
   },
   "result_amount": {

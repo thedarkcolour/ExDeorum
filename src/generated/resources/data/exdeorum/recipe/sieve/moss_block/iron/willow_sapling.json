@@ -6,14 +6,9 @@
     }
   ],
   "type": "exdeorum:sieve",
-  "ingredient": {
-    "item": "minecraft:moss_block"
-  },
-  "mesh": {
-    "item": "exdeorum:iron_mesh"
-  },
+  "ingredient": "minecraft:moss_block",
+  "mesh": "exdeorum:iron_mesh",
   "result": {
-    "count": 1,
     "id": "biomesoplenty:willow_sapling"
   },
   "result_amount": {

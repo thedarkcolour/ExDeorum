@@ -10,7 +10,5 @@
   ],
   "type": "exdeorum:ore_chunk",
   "ore": "c:ores/boron",
-  "ore_chunk": {
-    "item": "exdeorum:boron_ore_chunk"
-  }
+  "ore_chunk": "exdeorum:boron_ore_chunk"
 }

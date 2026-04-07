@@ -8,15 +8,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "I": {
-      "tag": "c:rods/wooden"
-    },
-    "O": {
-      "item": "blue_skies:bluebright_log"
-    },
-    "_": {
-      "tag": "c:ingots/iron"
-    }
+    "I": "#c:rods/wooden",
+    "O": "blue_skies:bluebright_log",
+    "_": "#c:ingots/iron"
   },
   "pattern": [
     "O O",
@@ -24,7 +18,6 @@
     "I I"
   ],
   "result": {
-    "count": 1,
     "id": "exdeorum:bluebright_compressed_sieve"
   }
 }

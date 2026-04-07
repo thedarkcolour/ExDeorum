@@ -1,13 +1,8 @@
 {
   "type": "exdeorum:sieve",
-  "ingredient": {
-    "item": "exdeorum:crushed_netherrack"
-  },
-  "mesh": {
-    "item": "exdeorum:string_mesh"
-  },
+  "ingredient": "exdeorum:crushed_netherrack",
+  "mesh": "exdeorum:string_mesh",
   "result": {
-    "count": 1,
     "id": "minecraft:gold_nugget"
   },
   "result_amount": {

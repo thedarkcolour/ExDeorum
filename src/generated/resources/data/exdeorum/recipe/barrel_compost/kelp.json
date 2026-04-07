@@ -1,12 +1,8 @@
 {
   "type": "exdeorum:barrel_compost",
   "ingredient": [
-    {
-      "item": "minecraft:kelp"
-    },
-    {
-      "item": "minecraft:dried_kelp"
-    }
+    "minecraft:kelp",
+    "minecraft:dried_kelp"
   ],
   "volume": 80
 }

@@ -1,13 +1,8 @@
 {
   "type": "exdeorum:compressed_sieve",
-  "ingredient": {
-    "tag": "exdeorum:compressed/moss_block"
-  },
-  "mesh": {
-    "item": "exdeorum:flint_mesh"
-  },
+  "ingredient": "#exdeorum:compressed/moss_block",
+  "mesh": "exdeorum:flint_mesh",
   "result": {
-    "count": 1,
     "id": "minecraft:big_dripleaf"
   },
   "result_amount": {

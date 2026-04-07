@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "exdeorum:compressed_moss_block"
-    }
+    "exdeorum:compressed_moss_block"
   ],
   "result": {
     "count": 9,

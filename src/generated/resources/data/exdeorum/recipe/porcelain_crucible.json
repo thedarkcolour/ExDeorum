@@ -1,13 +1,10 @@
 {
   "type": "minecraft:smelting",
-  "category": "blocks",
+  "category": "misc",
   "cookingtime": 200,
   "experience": 0.1,
-  "ingredient": {
-    "item": "exdeorum:unfired_porcelain_crucible"
-  },
+  "ingredient": "exdeorum:unfired_porcelain_crucible",
   "result": {
-    "count": 1,
     "id": "exdeorum:porcelain_crucible"
   }
 }

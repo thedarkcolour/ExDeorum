@@ -1,13 +1,8 @@
 {
   "type": "exdeorum:sieve",
-  "ingredient": {
-    "item": "minecraft:soul_sand"
-  },
-  "mesh": {
-    "item": "exdeorum:flint_mesh"
-  },
+  "ingredient": "minecraft:soul_sand",
+  "mesh": "exdeorum:flint_mesh",
   "result": {
-    "count": 1,
     "id": "minecraft:glowstone_dust"
   },
   "result_amount": {

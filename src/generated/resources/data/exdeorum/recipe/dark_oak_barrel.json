@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "m": {
-      "item": "minecraft:dark_oak_slab"
-    },
-    "s": {
-      "item": "minecraft:dark_oak_planks"
-    }
+    "m": "minecraft:dark_oak_slab",
+    "s": "minecraft:dark_oak_planks"
   },
   "pattern": [
     "s s",
@@ -15,7 +11,6 @@
     "sms"
   ],
   "result": {
-    "count": 1,
     "id": "exdeorum:dark_oak_barrel"
   }
 }

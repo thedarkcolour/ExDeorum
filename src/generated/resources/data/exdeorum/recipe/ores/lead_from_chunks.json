@@ -10,7 +10,5 @@
   ],
   "type": "exdeorum:ore_chunk",
   "ore": "c:ores/lead",
-  "ore_chunk": {
-    "item": "exdeorum:lead_ore_chunk"
-  }
+  "ore_chunk": "exdeorum:lead_ore_chunk"
 }

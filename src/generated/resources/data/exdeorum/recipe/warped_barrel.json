@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "m": {
-      "item": "minecraft:warped_slab"
-    },
-    "s": {
-      "item": "minecraft:warped_planks"
-    }
+    "m": "minecraft:warped_slab",
+    "s": "minecraft:warped_planks"
   },
   "pattern": [
     "s s",
@@ -15,7 +11,6 @@
     "sms"
   ],
   "result": {
-    "count": 1,
     "id": "exdeorum:warped_barrel"
   }
 }

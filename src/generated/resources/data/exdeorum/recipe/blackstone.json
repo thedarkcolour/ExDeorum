@@ -2,16 +2,13 @@
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "key": {
-    "#": {
-      "item": "exdeorum:blackstone_pebble"
-    }
+    "#": "exdeorum:blackstone_pebble"
   },
   "pattern": [
     "##",
     "##"
   ],
   "result": {
-    "count": 1,
     "id": "minecraft:blackstone"
   }
 }

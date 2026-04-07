@@ -10,7 +10,5 @@
   ],
   "type": "exdeorum:ore_chunk",
   "ore": "c:ores/tin",
-  "ore_chunk": {
-    "item": "exdeorum:tin_ore_chunk"
-  }
+  "ore_chunk": "exdeorum:tin_ore_chunk"
 }

@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "x": {
-      "tag": "c:rods/wooden"
-    }
+    "x": "#c:rods/wooden"
   },
   "pattern": [
     "xx",
@@ -12,7 +10,6 @@
     " x"
   ],
   "result": {
-    "count": 1,
     "id": "exdeorum:crook"
   }
 }

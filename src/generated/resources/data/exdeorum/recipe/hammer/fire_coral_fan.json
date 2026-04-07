@@ -1,10 +1,7 @@
 {
   "type": "exdeorum:hammer",
-  "ingredient": {
-    "item": "minecraft:fire_coral"
-  },
+  "ingredient": "minecraft:fire_coral",
   "result": {
-    "count": 1,
     "id": "minecraft:fire_coral_fan"
   },
   "result_amount": 1.0

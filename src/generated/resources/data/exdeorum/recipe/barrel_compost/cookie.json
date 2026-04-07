@@ -1,7 +1,5 @@
 {
   "type": "exdeorum:barrel_compost",
-  "ingredient": {
-    "item": "minecraft:cookie"
-  },
+  "ingredient": "minecraft:cookie",
   "volume": 100
 }

@@ -1,7 +1,5 @@
 {
   "type": "exdeorum:barrel_compost",
-  "ingredient": {
-    "item": "minecraft:rabbit_foot"
-  },
+  "ingredient": "minecraft:rabbit_foot",
   "volume": 100
 }

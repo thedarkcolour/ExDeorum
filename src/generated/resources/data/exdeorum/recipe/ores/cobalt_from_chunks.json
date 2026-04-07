@@ -10,7 +10,5 @@
   ],
   "type": "exdeorum:ore_chunk",
   "ore": "c:ores/cobalt",
-  "ore_chunk": {
-    "item": "exdeorum:cobalt_ore_chunk"
-  }
+  "ore_chunk": "exdeorum:cobalt_ore_chunk"
 }

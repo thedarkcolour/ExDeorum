@@ -2,16 +2,13 @@
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "key": {
-    "#": {
-      "item": "exdeorum:deepslate_pebble"
-    }
+    "#": "exdeorum:deepslate_pebble"
   },
   "pattern": [
     "##",
     "##"
   ],
   "result": {
-    "count": 1,
     "id": "minecraft:cobbled_deepslate"
   }
 }

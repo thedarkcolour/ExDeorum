@@ -8,12 +8,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "m": {
-      "item": "biomesoplenty:magic_slab"
-    },
-    "s": {
-      "item": "biomesoplenty:magic_log"
-    }
+    "m": "biomesoplenty:magic_slab",
+    "s": "biomesoplenty:magic_log"
   },
   "pattern": [
     "s s",
@@ -21,7 +17,6 @@
     "sms"
   ],
   "result": {
-    "count": 1,
     "id": "exdeorum:magic_crucible"
   }
 }

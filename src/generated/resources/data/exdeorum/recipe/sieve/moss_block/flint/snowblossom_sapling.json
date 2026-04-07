@@ -6,14 +6,9 @@
     }
   ],
   "type": "exdeorum:sieve",
-  "ingredient": {
-    "item": "minecraft:moss_block"
-  },
-  "mesh": {
-    "item": "exdeorum:flint_mesh"
-  },
+  "ingredient": "minecraft:moss_block",
+  "mesh": "exdeorum:flint_mesh",
   "result": {
-    "count": 1,
     "id": "biomesoplenty:snowblossom_sapling"
   },
   "result_amount": {

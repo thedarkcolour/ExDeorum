@@ -9,14 +9,9 @@
     }
   ],
   "type": "exdeorum:sieve",
-  "ingredient": {
-    "item": "minecraft:gravel"
-  },
-  "mesh": {
-    "item": "exdeorum:string_mesh"
-  },
+  "ingredient": "minecraft:gravel",
+  "mesh": "exdeorum:string_mesh",
   "result": {
-    "count": 1,
     "id": "exdeorum:nickel_ore_chunk"
   },
   "result_amount": {

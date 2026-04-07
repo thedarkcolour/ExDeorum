@@ -1,10 +1,7 @@
 {
   "type": "exdeorum:compressed_hammer",
-  "ingredient": {
-    "tag": "exdeorum:compressed/crushed_netherrack"
-  },
+  "ingredient": "#exdeorum:compressed/crushed_netherrack",
   "result": {
-    "count": 1,
     "id": "minecraft:red_sand"
   },
   "result_amount": 9.0

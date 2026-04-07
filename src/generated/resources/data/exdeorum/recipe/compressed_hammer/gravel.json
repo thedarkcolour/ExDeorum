@@ -1,21 +1,15 @@
 {
   "type": "exdeorum:compressed_hammer",
-  "ingredient": [
-    {
-      "tag": "exdeorum:compressed/cobblestone"
-    },
-    {
-      "tag": "exdeorum:compressed/diorite"
-    },
-    {
-      "tag": "exdeorum:compressed/granite"
-    },
-    {
-      "tag": "exdeorum:compressed/andesite"
-    }
-  ],
+  "ingredient": {
+    "neoforge:ingredient_type": "neoforge:compound",
+    "children": [
+      "#exdeorum:compressed/cobblestone",
+      "#exdeorum:compressed/diorite",
+      "#exdeorum:compressed/granite",
+      "#exdeorum:compressed/andesite"
+    ]
+  },
   "result": {
-    "count": 1,
     "id": "minecraft:gravel"
   },
   "result_amount": 9.0

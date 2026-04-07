@@ -1,13 +1,8 @@
 {
   "type": "exdeorum:compressed_sieve",
-  "ingredient": {
-    "tag": "exdeorum:compressed/sand"
-  },
-  "mesh": {
-    "item": "exdeorum:iron_mesh"
-  },
+  "ingredient": "#exdeorum:compressed/sand",
+  "mesh": "exdeorum:iron_mesh",
   "result": {
-    "count": 1,
     "id": "minecraft:prismarine_crystals"
   },
   "result_amount": {

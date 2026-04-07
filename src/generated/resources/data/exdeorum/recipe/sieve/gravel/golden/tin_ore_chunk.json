@@ -9,14 +9,9 @@
     }
   ],
   "type": "exdeorum:sieve",
-  "ingredient": {
-    "item": "minecraft:gravel"
-  },
-  "mesh": {
-    "item": "exdeorum:golden_mesh"
-  },
+  "ingredient": "minecraft:gravel",
+  "mesh": "exdeorum:golden_mesh",
   "result": {
-    "count": 1,
     "id": "exdeorum:tin_ore_chunk"
   },
   "result_amount": {

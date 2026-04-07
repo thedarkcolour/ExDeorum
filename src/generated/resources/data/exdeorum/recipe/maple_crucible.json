@@ -8,12 +8,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "m": {
-      "item": "blue_skies:maple_slab"
-    },
-    "s": {
-      "item": "blue_skies:maple_log"
-    }
+    "m": "blue_skies:maple_slab",
+    "s": "blue_skies:maple_log"
   },
   "pattern": [
     "s s",
@@ -21,7 +17,6 @@
     "sms"
   ],
   "result": {
-    "count": 1,
     "id": "exdeorum:maple_crucible"
   }
 }

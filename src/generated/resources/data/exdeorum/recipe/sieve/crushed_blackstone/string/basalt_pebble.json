@@ -1,13 +1,8 @@
 {
   "type": "exdeorum:sieve",
-  "ingredient": {
-    "item": "exdeorum:crushed_blackstone"
-  },
-  "mesh": {
-    "item": "exdeorum:string_mesh"
-  },
+  "ingredient": "exdeorum:crushed_blackstone",
+  "mesh": "exdeorum:string_mesh",
   "result": {
-    "count": 1,
     "id": "exdeorum:basalt_pebble"
   },
   "result_amount": {

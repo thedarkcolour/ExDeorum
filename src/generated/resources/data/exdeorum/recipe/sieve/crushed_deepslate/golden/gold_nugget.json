@@ -1,13 +1,8 @@
 {
   "type": "exdeorum:sieve",
-  "ingredient": {
-    "item": "exdeorum:crushed_deepslate"
-  },
-  "mesh": {
-    "item": "exdeorum:golden_mesh"
-  },
+  "ingredient": "exdeorum:crushed_deepslate",
+  "mesh": "exdeorum:golden_mesh",
   "result": {
-    "count": 1,
     "id": "minecraft:gold_nugget"
   },
   "result_amount": {

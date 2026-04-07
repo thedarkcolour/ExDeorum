@@ -1,13 +1,8 @@
 {
   "type": "exdeorum:sieve",
-  "ingredient": {
-    "item": "minecraft:dirt"
-  },
-  "mesh": {
-    "item": "exdeorum:iron_mesh"
-  },
+  "ingredient": "minecraft:dirt",
+  "mesh": "exdeorum:iron_mesh",
   "result": {
-    "count": 1,
     "id": "exdeorum:mycelium_spores"
   },
   "result_amount": {

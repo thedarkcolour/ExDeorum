@@ -1,13 +1,8 @@
 {
   "type": "exdeorum:compressed_sieve",
-  "ingredient": {
-    "tag": "exdeorum:compressed/dirt"
-  },
-  "mesh": {
-    "item": "exdeorum:netherite_mesh"
-  },
+  "ingredient": "#exdeorum:compressed/dirt",
+  "mesh": "exdeorum:netherite_mesh",
   "result": {
-    "count": 1,
     "id": "minecraft:potato"
   },
   "result_amount": {

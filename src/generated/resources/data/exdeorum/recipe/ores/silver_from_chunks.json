@@ -10,7 +10,5 @@
   ],
   "type": "exdeorum:ore_chunk",
   "ore": "c:ores/silver",
-  "ore_chunk": {
-    "item": "exdeorum:silver_ore_chunk"
-  }
+  "ore_chunk": "exdeorum:silver_ore_chunk"
 }

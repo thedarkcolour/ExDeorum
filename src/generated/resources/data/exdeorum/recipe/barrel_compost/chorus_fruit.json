@@ -1,7 +1,5 @@
 {
   "type": "exdeorum:barrel_compost",
-  "ingredient": {
-    "item": "minecraft:chorus_fruit"
-  },
+  "ingredient": "minecraft:chorus_fruit",
   "volume": 80
 }

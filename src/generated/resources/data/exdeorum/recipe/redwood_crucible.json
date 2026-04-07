@@ -8,12 +8,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "m": {
-      "item": "biomesoplenty:redwood_slab"
-    },
-    "s": {
-      "item": "biomesoplenty:redwood_log"
-    }
+    "m": "biomesoplenty:redwood_slab",
+    "s": "biomesoplenty:redwood_log"
   },
   "pattern": [
     "s s",
@@ -21,7 +17,6 @@
     "sms"
   ],
   "result": {
-    "count": 1,
     "id": "exdeorum:redwood_crucible"
   }
 }

@@ -1,7 +1,5 @@
 {
   "type": "exdeorum:barrel_compost",
-  "ingredient": {
-    "item": "minecraft:twisting_vines"
-  },
+  "ingredient": "minecraft:twisting_vines",
   "volume": 100
 }

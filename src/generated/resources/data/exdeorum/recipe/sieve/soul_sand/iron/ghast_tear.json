@@ -1,13 +1,8 @@
 {
   "type": "exdeorum:sieve",
-  "ingredient": {
-    "item": "minecraft:soul_sand"
-  },
-  "mesh": {
-    "item": "exdeorum:iron_mesh"
-  },
+  "ingredient": "minecraft:soul_sand",
+  "mesh": "exdeorum:iron_mesh",
   "result": {
-    "count": 1,
     "id": "minecraft:ghast_tear"
   },
   "result_amount": {

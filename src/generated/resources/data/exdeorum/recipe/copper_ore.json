@@ -2,16 +2,13 @@
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "key": {
-    "#": {
-      "item": "exdeorum:copper_ore_chunk"
-    }
+    "#": "exdeorum:copper_ore_chunk"
   },
   "pattern": [
     "##",
     "##"
   ],
   "result": {
-    "count": 1,
     "id": "minecraft:copper_ore"
   }
 }

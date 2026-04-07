@@ -1,18 +1,11 @@
 {
   "type": "exdeorum:hammer",
   "ingredient": [
-    {
-      "item": "minecraft:prismarine"
-    },
-    {
-      "item": "minecraft:prismarine_bricks"
-    },
-    {
-      "item": "minecraft:dark_prismarine"
-    }
+    "minecraft:prismarine",
+    "minecraft:prismarine_bricks",
+    "minecraft:dark_prismarine"
   ],
   "result": {
-    "count": 1,
     "id": "minecraft:prismarine_shard"
   },
   "result_amount": {

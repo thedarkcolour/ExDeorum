@@ -1,5 +1,8 @@
 {
   "values": [
-    "exdeorum:void_world"
+    {
+      "id": "exdeorum:void_world",
+      "required": false
+    }
   ]
 }

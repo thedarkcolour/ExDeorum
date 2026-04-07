@@ -4,7 +4,5 @@
     "amount": 500,
     "id": "minecraft:lava"
   },
-  "ingredient": {
-    "tag": "c:netherracks"
-  }
+  "ingredient": "#c:netherracks"
 }

@@ -6,14 +6,9 @@
     }
   ],
   "type": "exdeorum:compressed_sieve",
-  "ingredient": {
-    "tag": "exdeorum:compressed/sand"
-  },
-  "mesh": {
-    "item": "exdeorum:flint_mesh"
-  },
+  "ingredient": "#exdeorum:compressed/sand",
+  "mesh": "exdeorum:flint_mesh",
   "result": {
-    "count": 1,
     "id": "ae2:charged_certus_quartz_crystal"
   },
   "result_amount": {

@@ -6,14 +6,9 @@
     }
   ],
   "type": "exdeorum:sieve",
-  "ingredient": {
-    "item": "exdeorum:dust"
-  },
-  "mesh": {
-    "item": "exdeorum:golden_mesh"
-  },
+  "ingredient": "exdeorum:dust",
+  "mesh": "exdeorum:golden_mesh",
   "result": {
-    "count": 1,
     "id": "ae2:certus_quartz_dust"
   },
   "result_amount": {

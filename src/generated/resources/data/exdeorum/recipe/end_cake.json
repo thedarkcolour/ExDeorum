@@ -2,18 +2,10 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "C": {
-      "item": "exdeorum:crushed_end_stone"
-    },
-    "E": {
-      "tag": "c:eggs"
-    },
-    "P": {
-      "item": "minecraft:ender_eye"
-    },
-    "S": {
-      "item": "minecraft:sugar"
-    }
+    "C": "exdeorum:crushed_end_stone",
+    "E": "#c:eggs",
+    "P": "minecraft:ender_eye",
+    "S": "minecraft:sugar"
   },
   "pattern": [
     "PPP",
@@ -21,7 +13,6 @@
     "CCC"
   ],
   "result": {
-    "count": 1,
     "id": "exdeorum:end_cake"
   }
 }

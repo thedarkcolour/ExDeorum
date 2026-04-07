@@ -1,13 +1,8 @@
 {
   "type": "exdeorum:compressed_sieve",
-  "ingredient": {
-    "tag": "exdeorum:compressed/crushed_end_stone"
-  },
-  "mesh": {
-    "item": "exdeorum:flint_mesh"
-  },
+  "ingredient": "#exdeorum:compressed/crushed_end_stone",
+  "mesh": "exdeorum:flint_mesh",
   "result": {
-    "count": 1,
     "id": "minecraft:ender_pearl"
   },
   "result_amount": {

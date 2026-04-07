@@ -1,10 +1,7 @@
 {
   "type": "exdeorum:hammer",
-  "ingredient": {
-    "item": "exdeorum:crushed_netherrack"
-  },
+  "ingredient": "exdeorum:crushed_netherrack",
   "result": {
-    "count": 1,
     "id": "minecraft:red_sand"
   },
   "result_amount": 1.0

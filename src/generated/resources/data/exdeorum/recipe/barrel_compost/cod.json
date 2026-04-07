@@ -1,12 +1,8 @@
 {
   "type": "exdeorum:barrel_compost",
   "ingredient": [
-    {
-      "item": "minecraft:cod"
-    },
-    {
-      "item": "minecraft:cooked_cod"
-    }
+    "minecraft:cod",
+    "minecraft:cooked_cod"
   ],
   "volume": 100
 }

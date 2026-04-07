@@ -10,7 +10,5 @@
   ],
   "type": "exdeorum:ore_chunk",
   "ore": "c:ores/lithium",
-  "ore_chunk": {
-    "item": "exdeorum:lithium_ore_chunk"
-  }
+  "ore_chunk": "exdeorum:lithium_ore_chunk"
 }

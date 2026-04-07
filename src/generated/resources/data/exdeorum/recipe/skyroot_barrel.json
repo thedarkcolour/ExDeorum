@@ -8,12 +8,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "m": {
-      "item": "aether:skyroot_slab"
-    },
-    "s": {
-      "item": "aether:skyroot_planks"
-    }
+    "m": "aether:skyroot_slab",
+    "s": "aether:skyroot_planks"
   },
   "pattern": [
     "s s",
@@ -21,7 +17,6 @@
     "sms"
   ],
   "result": {
-    "count": 1,
     "id": "exdeorum:skyroot_barrel"
   }
 }

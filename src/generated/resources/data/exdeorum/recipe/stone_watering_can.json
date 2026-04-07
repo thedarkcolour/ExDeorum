@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "#": {
-      "tag": "minecraft:stone_tool_materials"
-    },
-    "B": {
-      "item": "minecraft:bowl"
-    }
+    "#": "#minecraft:stone_tool_materials",
+    "B": "minecraft:bowl"
   },
   "pattern": [
     "#  ",
@@ -15,7 +11,6 @@
     " # "
   ],
   "result": {
-    "count": 1,
     "id": "exdeorum:stone_watering_can"
   }
 }

@@ -1,13 +1,8 @@
 {
   "type": "exdeorum:compressed_sieve",
-  "ingredient": {
-    "tag": "exdeorum:compressed/dust"
-  },
-  "mesh": {
-    "item": "exdeorum:iron_mesh"
-  },
+  "ingredient": "#exdeorum:compressed/dust",
+  "mesh": "exdeorum:iron_mesh",
   "result": {
-    "count": 1,
     "id": "minecraft:redstone"
   },
   "result_amount": {

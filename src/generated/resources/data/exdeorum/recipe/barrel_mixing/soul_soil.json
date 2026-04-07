@@ -2,13 +2,10 @@
   "type": "exdeorum:barrel_mixing",
   "fluid": {
     "amount": 1000,
-    "fluid": "minecraft:lava"
+    "ingredient": "minecraft:lava"
   },
-  "ingredient": {
-    "item": "minecraft:soul_sand"
-  },
+  "ingredient": "minecraft:soul_sand",
   "result": {
-    "count": 1,
     "id": "minecraft:soul_soil"
   }
 }

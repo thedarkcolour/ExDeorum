@@ -1,13 +1,8 @@
 {
   "type": "exdeorum:compressed_sieve",
-  "ingredient": {
-    "tag": "exdeorum:compressed/soul_sand"
-  },
-  "mesh": {
-    "item": "exdeorum:flint_mesh"
-  },
+  "ingredient": "#exdeorum:compressed/soul_sand",
+  "mesh": "exdeorum:flint_mesh",
   "result": {
-    "count": 1,
     "id": "exdeorum:warped_nylium_spores"
   },
   "result_amount": {

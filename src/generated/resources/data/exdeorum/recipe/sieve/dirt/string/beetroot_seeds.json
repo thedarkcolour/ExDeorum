@@ -1,13 +1,8 @@
 {
   "type": "exdeorum:sieve",
-  "ingredient": {
-    "item": "minecraft:dirt"
-  },
-  "mesh": {
-    "item": "exdeorum:string_mesh"
-  },
+  "ingredient": "minecraft:dirt",
+  "mesh": "exdeorum:string_mesh",
   "result": {
-    "count": 1,
     "id": "minecraft:beetroot_seeds"
   },
   "result_amount": {

@@ -6,14 +6,9 @@
     }
   ],
   "type": "exdeorum:sieve",
-  "ingredient": {
-    "item": "minecraft:sand"
-  },
-  "mesh": {
-    "item": "exdeorum:diamond_mesh"
-  },
+  "ingredient": "minecraft:sand",
+  "mesh": "exdeorum:diamond_mesh",
   "result": {
-    "count": 1,
     "id": "ae2:charged_certus_quartz_crystal"
   },
   "result_amount": {

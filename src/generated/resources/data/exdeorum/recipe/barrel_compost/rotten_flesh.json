@@ -1,7 +1,5 @@
 {
   "type": "exdeorum:barrel_compost",
-  "ingredient": {
-    "item": "minecraft:rotten_flesh"
-  },
+  "ingredient": "minecraft:rotten_flesh",
   "volume": 100
 }

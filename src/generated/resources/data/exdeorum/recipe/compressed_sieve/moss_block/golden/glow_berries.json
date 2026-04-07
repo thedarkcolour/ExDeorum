@@ -1,13 +1,8 @@
 {
   "type": "exdeorum:compressed_sieve",
-  "ingredient": {
-    "tag": "exdeorum:compressed/moss_block"
-  },
-  "mesh": {
-    "item": "exdeorum:golden_mesh"
-  },
+  "ingredient": "#exdeorum:compressed/moss_block",
+  "mesh": "exdeorum:golden_mesh",
   "result": {
-    "count": 1,
     "id": "minecraft:glow_berries"
   },
   "result_amount": {

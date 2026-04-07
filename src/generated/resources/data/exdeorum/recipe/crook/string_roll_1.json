@@ -8,7 +8,6 @@
   },
   "chance": 0.4,
   "result": {
-    "count": 1,
     "id": "minecraft:string"
   }
 }

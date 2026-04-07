@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "m": {
-      "item": "minecraft:mangrove_slab"
-    },
-    "s": {
-      "item": "minecraft:mangrove_log"
-    }
+    "m": "minecraft:mangrove_slab",
+    "s": "minecraft:mangrove_log"
   },
   "pattern": [
     "s s",
@@ -15,7 +11,6 @@
     "sms"
   ],
   "result": {
-    "count": 1,
     "id": "exdeorum:mangrove_crucible"
   }
 }

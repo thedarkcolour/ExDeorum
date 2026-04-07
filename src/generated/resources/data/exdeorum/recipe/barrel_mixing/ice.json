@@ -2,13 +2,10 @@
   "type": "exdeorum:barrel_mixing",
   "fluid": {
     "amount": 1000,
-    "fluid": "minecraft:water"
+    "ingredient": "minecraft:water"
   },
-  "ingredient": {
-    "item": "minecraft:snowball"
-  },
+  "ingredient": "minecraft:snowball",
   "result": {
-    "count": 1,
     "id": "minecraft:ice"
   }
 }

@@ -6,14 +6,9 @@
     }
   ],
   "type": "exdeorum:compressed_sieve",
-  "ingredient": {
-    "tag": "exdeorum:compressed/moss_block"
-  },
-  "mesh": {
-    "item": "exdeorum:iron_mesh"
-  },
+  "ingredient": "#exdeorum:compressed/moss_block",
+  "mesh": "exdeorum:iron_mesh",
   "result": {
-    "count": 1,
     "id": "ars_nouveau:green_archwood_sapling"
   },
   "result_amount": {

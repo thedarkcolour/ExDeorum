@@ -9,14 +9,9 @@
     }
   ],
   "type": "exdeorum:compressed_sieve",
-  "ingredient": {
-    "tag": "exdeorum:compressed/gravel"
-  },
-  "mesh": {
-    "item": "exdeorum:flint_mesh"
-  },
+  "ingredient": "#exdeorum:compressed/gravel",
+  "mesh": "exdeorum:flint_mesh",
   "result": {
-    "count": 1,
     "id": "exdeorum:osmium_ore_chunk"
   },
   "result_amount": {

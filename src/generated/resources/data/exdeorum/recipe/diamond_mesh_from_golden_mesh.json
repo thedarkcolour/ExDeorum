@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "#": {
-      "tag": "c:gems/diamond"
-    },
-    "M": {
-      "item": "exdeorum:golden_mesh"
-    }
+    "#": "#c:gems/diamond",
+    "M": "exdeorum:golden_mesh"
   },
   "pattern": [
     " # ",
@@ -15,7 +11,6 @@
     " # "
   ],
   "result": {
-    "count": 1,
     "id": "exdeorum:diamond_mesh"
   }
 }

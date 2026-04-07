@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "exdeorum:compressed_diorite"
-    }
+    "exdeorum:compressed_diorite"
   ],
   "result": {
     "count": 9,

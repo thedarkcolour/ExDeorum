@@ -4,7 +4,5 @@
     "amount": 250,
     "id": "minecraft:water"
   },
-  "ingredient": {
-    "item": "minecraft:pumpkin"
-  }
+  "ingredient": "minecraft:pumpkin"
 }

@@ -8,15 +8,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "I": {
-      "tag": "c:rods/wooden"
-    },
-    "O": {
-      "item": "biomesoplenty:palm_planks"
-    },
-    "_": {
-      "item": "biomesoplenty:palm_slab"
-    }
+    "I": "#c:rods/wooden",
+    "O": "biomesoplenty:palm_planks",
+    "_": "biomesoplenty:palm_slab"
   },
   "pattern": [
     "O O",
@@ -24,7 +18,6 @@
     "I I"
   ],
   "result": {
-    "count": 1,
     "id": "exdeorum:palm_sieve"
   }
 }

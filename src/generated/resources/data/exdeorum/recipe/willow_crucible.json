@@ -8,12 +8,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "m": {
-      "item": "biomesoplenty:willow_slab"
-    },
-    "s": {
-      "item": "biomesoplenty:willow_log"
-    }
+    "m": "biomesoplenty:willow_slab",
+    "s": "biomesoplenty:willow_log"
   },
   "pattern": [
     "s s",
@@ -21,7 +17,6 @@
     "sms"
   ],
   "result": {
-    "count": 1,
     "id": "exdeorum:willow_crucible"
   }
 }

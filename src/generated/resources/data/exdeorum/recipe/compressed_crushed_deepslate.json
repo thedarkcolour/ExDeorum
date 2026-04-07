@@ -11,9 +11,7 @@
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "key": {
-    "#": {
-      "item": "exdeorum:crushed_deepslate"
-    }
+    "#": "exdeorum:crushed_deepslate"
   },
   "pattern": [
     "###",
@@ -21,7 +19,6 @@
     "###"
   ],
   "result": {
-    "count": 1,
     "id": "exdeorum:compressed_crushed_deepslate"
   }
 }

@@ -10,7 +10,5 @@
   ],
   "type": "exdeorum:ore_chunk",
   "ore": "c:ores/iridium",
-  "ore_chunk": {
-    "item": "exdeorum:iridium_ore_chunk"
-  }
+  "ore_chunk": "exdeorum:iridium_ore_chunk"
 }

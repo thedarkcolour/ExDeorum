@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "I": {
-      "tag": "c:rods/wooden"
-    },
-    "O": {
-      "item": "minecraft:bamboo_block"
-    },
-    "_": {
-      "tag": "c:ingots/iron"
-    }
+    "I": "#c:rods/wooden",
+    "O": "minecraft:bamboo_block",
+    "_": "#c:ingots/iron"
   },
   "pattern": [
     "O O",
@@ -18,7 +12,6 @@
     "I I"
   ],
   "result": {
-    "count": 1,
     "id": "exdeorum:bamboo_compressed_sieve"
   }
 }

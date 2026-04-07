@@ -1,7 +1,5 @@
 {
   "type": "exdeorum:barrel_compost",
-  "ingredient": {
-    "item": "minecraft:pumpkin"
-  },
+  "ingredient": "minecraft:pumpkin",
   "volume": 500
 }

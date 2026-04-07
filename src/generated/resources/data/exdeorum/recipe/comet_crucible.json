@@ -8,12 +8,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "m": {
-      "item": "blue_skies:comet_slab"
-    },
-    "s": {
-      "item": "blue_skies:comet_log"
-    }
+    "m": "blue_skies:comet_slab",
+    "s": "blue_skies:comet_log"
   },
   "pattern": [
     "s s",
@@ -21,7 +17,6 @@
     "sms"
   ],
   "result": {
-    "count": 1,
     "id": "exdeorum:comet_crucible"
   }
 }

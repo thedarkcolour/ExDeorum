@@ -1,18 +1,10 @@
 {
   "type": "exdeorum:barrel_compost",
   "ingredient": [
-    {
-      "item": "exdeorum:grass_seeds"
-    },
-    {
-      "item": "exdeorum:mycelium_spores"
-    },
-    {
-      "item": "exdeorum:warped_nylium_spores"
-    },
-    {
-      "item": "exdeorum:crimson_nylium_spores"
-    }
+    "exdeorum:grass_seeds",
+    "exdeorum:mycelium_spores",
+    "exdeorum:warped_nylium_spores",
+    "exdeorum:crimson_nylium_spores"
   ],
   "volume": 80
 }

@@ -1,10 +1,7 @@
 {
   "type": "exdeorum:hammer",
-  "ingredient": {
-    "tag": "minecraft:logs"
-  },
+  "ingredient": "#minecraft:logs",
   "result": {
-    "count": 1,
     "id": "exdeorum:wood_chippings"
   },
   "result_amount": {

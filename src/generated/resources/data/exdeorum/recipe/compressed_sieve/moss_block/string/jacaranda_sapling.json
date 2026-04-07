@@ -6,14 +6,9 @@
     }
   ],
   "type": "exdeorum:compressed_sieve",
-  "ingredient": {
-    "tag": "exdeorum:compressed/moss_block"
-  },
-  "mesh": {
-    "item": "exdeorum:string_mesh"
-  },
+  "ingredient": "#exdeorum:compressed/moss_block",
+  "mesh": "exdeorum:string_mesh",
   "result": {
-    "count": 1,
     "id": "biomesoplenty:jacaranda_sapling"
   },
   "result_amount": {

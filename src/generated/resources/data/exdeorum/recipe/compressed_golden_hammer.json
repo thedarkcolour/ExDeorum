@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "#": {
-      "item": "exdeorum:golden_hammer"
-    }
+    "#": "exdeorum:golden_hammer"
   },
   "pattern": [
     "###",
@@ -12,7 +10,6 @@
     "###"
   ],
   "result": {
-    "count": 1,
     "id": "exdeorum:compressed_golden_hammer"
   }
 }

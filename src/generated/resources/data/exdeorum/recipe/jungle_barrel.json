@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "m": {
-      "item": "minecraft:jungle_slab"
-    },
-    "s": {
-      "item": "minecraft:jungle_planks"
-    }
+    "m": "minecraft:jungle_slab",
+    "s": "minecraft:jungle_planks"
   },
   "pattern": [
     "s s",
@@ -15,7 +11,6 @@
     "sms"
   ],
   "result": {
-    "count": 1,
     "id": "exdeorum:jungle_barrel"
   }
 }

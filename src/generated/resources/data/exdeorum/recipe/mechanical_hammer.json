@@ -2,18 +2,10 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "#": {
-      "item": "minecraft:iron_block"
-    },
-    "H": {
-      "item": "minecraft:hopper"
-    },
-    "I": {
-      "item": "minecraft:iron_ingot"
-    },
-    "T": {
-      "tag": "exdeorum:hammers"
-    }
+    "#": "minecraft:iron_block",
+    "H": "minecraft:hopper",
+    "I": "minecraft:iron_ingot",
+    "T": "#exdeorum:hammers"
   },
   "pattern": [
     "III",
@@ -21,7 +13,6 @@
     "#H#"
   ],
   "result": {
-    "count": 1,
     "id": "exdeorum:mechanical_hammer"
   }
 }

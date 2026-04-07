@@ -11,9 +11,7 @@
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "key": {
-    "#": {
-      "item": "minecraft:moss_block"
-    }
+    "#": "minecraft:moss_block"
   },
   "pattern": [
     "###",
@@ -21,7 +19,6 @@
     "###"
   ],
   "result": {
-    "count": 1,
     "id": "exdeorum:compressed_moss_block"
   }
 }

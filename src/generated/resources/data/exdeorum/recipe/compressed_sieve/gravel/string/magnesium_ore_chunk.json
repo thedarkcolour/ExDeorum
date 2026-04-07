@@ -9,14 +9,9 @@
     }
   ],
   "type": "exdeorum:compressed_sieve",
-  "ingredient": {
-    "tag": "exdeorum:compressed/gravel"
-  },
-  "mesh": {
-    "item": "exdeorum:string_mesh"
-  },
+  "ingredient": "#exdeorum:compressed/gravel",
+  "mesh": "exdeorum:string_mesh",
   "result": {
-    "count": 1,
     "id": "exdeorum:magnesium_ore_chunk"
   },
   "result_amount": {

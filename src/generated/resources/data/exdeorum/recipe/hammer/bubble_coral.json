@@ -1,10 +1,7 @@
 {
   "type": "exdeorum:hammer",
-  "ingredient": {
-    "item": "minecraft:bubble_coral_block"
-  },
+  "ingredient": "minecraft:bubble_coral_block",
   "result": {
-    "count": 1,
     "id": "minecraft:bubble_coral"
   },
   "result_amount": 1.0

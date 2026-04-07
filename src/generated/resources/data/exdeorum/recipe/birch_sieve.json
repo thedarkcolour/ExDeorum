@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "I": {
-      "tag": "c:rods/wooden"
-    },
-    "O": {
-      "item": "minecraft:birch_planks"
-    },
-    "_": {
-      "item": "minecraft:birch_slab"
-    }
+    "I": "#c:rods/wooden",
+    "O": "minecraft:birch_planks",
+    "_": "minecraft:birch_slab"
   },
   "pattern": [
     "O O",
@@ -18,7 +12,6 @@
     "I I"
   ],
   "result": {
-    "count": 1,
     "id": "exdeorum:birch_sieve"
   }
 }

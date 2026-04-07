@@ -10,7 +10,5 @@
   ],
   "type": "exdeorum:ore_chunk",
   "ore": "c:ores/magnesium",
-  "ore_chunk": {
-    "item": "exdeorum:magnesium_ore_chunk"
-  }
+  "ore_chunk": "exdeorum:magnesium_ore_chunk"
 }

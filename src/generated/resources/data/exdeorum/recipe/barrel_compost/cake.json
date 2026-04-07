@@ -1,7 +1,5 @@
 {
   "type": "exdeorum:barrel_compost",
-  "ingredient": {
-    "item": "minecraft:cake"
-  },
+  "ingredient": "minecraft:cake",
   "volume": 500
 }

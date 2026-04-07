@@ -4,7 +4,5 @@
     "amount": 250,
     "id": "minecraft:water"
   },
-  "ingredient": {
-    "tag": "minecraft:leaves"
-  }
+  "ingredient": "#minecraft:leaves"
 }

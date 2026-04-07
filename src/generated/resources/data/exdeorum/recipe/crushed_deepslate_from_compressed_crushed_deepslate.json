@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "exdeorum:compressed_crushed_deepslate"
-    }
+    "exdeorum:compressed_crushed_deepslate"
   ],
   "result": {
     "count": 9,
