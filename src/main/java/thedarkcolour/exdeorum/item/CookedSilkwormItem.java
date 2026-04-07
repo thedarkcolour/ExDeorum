@@ -20,15 +20,18 @@ package thedarkcolour.exdeorum.item;
 
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.Consumable;
 import thedarkcolour.exdeorum.registry.ESounds;
 
-public class CookedSilkwormItem extends Item {
+public class CookedSilkwormItem extends Item implements Consumable.OverrideConsumeSound {
     public CookedSilkwormItem(Properties properties) {
         super(properties);
     }
 
     // Yummy silk worms :)
-    public SoundEvent getEatingSound() {
+    @Override
+    public SoundEvent getConsumeSound(ItemStack stack) {
         return ESounds.SILK_WORM_EAT.get();
     }
 }

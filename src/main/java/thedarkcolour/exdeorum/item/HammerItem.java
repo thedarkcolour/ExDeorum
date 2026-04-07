@@ -22,6 +22,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.block.entity.FuelValues;
 import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.registry.EItems;
 import thedarkcolour.exdeorum.tag.EBlockTags;
@@ -31,7 +32,8 @@ public class HammerItem extends Item {
         super(material.applyToolProperties(properties, EBlockTags.MINEABLE_WITH_HAMMER, 1.5f, -2.8f, 0f));
     }
 
-    public int getBurnTime(ItemStack stack, @Nullable RecipeType<?> recipeType) {
+    @Override
+    public int getBurnTime(ItemStack stack, @Nullable RecipeType<?> recipeType, FuelValues fuelValues) {
         return (this == EItems.WOODEN_HAMMER.get() || this == EItems.COMPRESSED_WOODEN_HAMMER.get()) ? 200 : 0;
     }
 }

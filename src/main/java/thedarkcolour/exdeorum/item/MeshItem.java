@@ -19,26 +19,21 @@
 package thedarkcolour.exdeorum.item;
 
 import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantable;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 
 public class MeshItem extends Item {
     public MeshItem(Properties properties) {
-        super(properties);
+        super(properties.component(DataComponents.ENCHANTABLE, new Enchantable(10)));
     }
 
+    @Override
     public boolean isPrimaryItemFor(ItemStack stack, Holder<Enchantment> enchantment) {
         var key = enchantment.getKey();
         return key == Enchantments.EFFICIENCY || key == Enchantments.FORTUNE;
-    }
-
-    public boolean isEnchantable(ItemStack stack) {
-        return true;
-    }
-
-    public int getEnchantmentValue() {
-        return 10;
     }
 }
