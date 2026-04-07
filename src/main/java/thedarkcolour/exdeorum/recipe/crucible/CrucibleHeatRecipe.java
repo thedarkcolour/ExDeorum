@@ -69,6 +69,11 @@ public record CrucibleHeatRecipe(BlockPredicate blockPredicate, int heatValue) i
     }
 
     @Override
+    public boolean isSpecial() {
+        return true;
+    }
+
+    @Override
     public RecipeBookCategory recipeBookCategory() {
         return RecipeBookCategories.CRAFTING_MISC;
     }

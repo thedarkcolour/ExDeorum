@@ -71,6 +71,11 @@ public record CrookRecipe(BlockPredicate blockPredicate, ItemStackTemplate resul
     }
 
     @Override
+    public boolean isSpecial() {
+        return true;
+    }
+
+    @Override
     public RecipeBookCategory recipeBookCategory() {
         return RecipeBookCategories.CRAFTING_MISC;
     }

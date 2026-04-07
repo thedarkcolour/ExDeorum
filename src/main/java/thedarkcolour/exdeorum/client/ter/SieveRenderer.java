@@ -80,8 +80,11 @@ public class SieveRenderer<T extends EBlockEntity & SieveLogic.Owner> implements
             if (MESH_TEXTURES.containsKey(meshItem)) {
                 state.meshSprite = MESH_TEXTURES.get(meshItem);
             } else {
-                Identifier textureLoc = BuiltInRegistries.ITEM.getKey(meshItem).withPrefix("item/mesh/");
-                var sprite = RenderUtil.getBlockSprite(textureLoc);
+                Identifier registryName = BuiltInRegistries.ITEM.getKey(meshItem);
+                var sprite = RenderUtil.getBlockSprite(registryName.withPrefix("item/mesh/"));
+                if (RenderUtil.isMissingTexture(sprite)) {
+                    sprite = RenderUtil.getBlockSprite(registryName.withPrefix("item/"));
+                }
                 MESH_TEXTURES.put(meshItem, sprite);
                 state.meshSprite = sprite;
             }

@@ -66,7 +66,7 @@ public class InfestedLeavesBlockEntity extends EBlockEntity {
 
     @Override
     public void readVisualData(RegistryFriendlyByteBuf buffer) {
-        buffer.readShort();
+        this.progress = buffer.readShort();
     }
 
     @Override

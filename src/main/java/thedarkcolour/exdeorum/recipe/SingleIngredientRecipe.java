@@ -27,6 +27,8 @@ import net.minecraft.world.item.crafting.RecipeBookCategory;
 import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.level.Level;
 
+import java.util.List;
+
 /**
  * Represents a recipe that does not take place in any screen or container.
  * <p>
@@ -68,7 +70,7 @@ public abstract class SingleIngredientRecipe implements Recipe<RecipeInput> {
 
     @Override
     public PlacementInfo placementInfo() {
-        return PlacementInfo.NOT_PLACEABLE;
+        return PlacementInfo.create(List.of(this.ingredient));
     }
 
     @Override

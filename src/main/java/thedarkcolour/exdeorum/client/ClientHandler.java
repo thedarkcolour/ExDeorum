@@ -93,7 +93,7 @@ public class ClientHandler {
     }
 
     private static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
-        event.registerBlockEntityRenderer(EBlockEntities.INFESTED_LEAVES.get(), ctx -> new InfestedLeavesRenderer());
+        event.registerBlockEntityRenderer(EBlockEntities.INFESTED_LEAVES.get(), InfestedLeavesRenderer::new);
         event.registerBlockEntityRenderer(EBlockEntities.BARREL.get(), BarrelRenderer::new);
         event.registerBlockEntityRenderer(EBlockEntities.LAVA_CRUCIBLE.get(), ctx -> new CrucibleRenderer());
         event.registerBlockEntityRenderer(EBlockEntities.WATER_CRUCIBLE.get(), ctx -> new CrucibleRenderer());
