@@ -58,6 +58,7 @@ import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.neoforged.neoforge.fluids.FluidInteractionRegistry;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
+import net.neoforged.neoforge.resource.VanillaServerListeners;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.blockentity.AbstractCrucibleBlockEntity;
 import thedarkcolour.exdeorum.blockentity.AbstractMachineBlockEntity;
@@ -233,8 +234,10 @@ public final class EventHandler {
     }
 
     private static void addReloadListeners(AddServerReloadListenersEvent event) {
-        var recipeMap = event.getServerResources().getRecipeManager().recipeMap();
-        event.addListener(ExDeorum.loc("recipes"), (ResourceManagerReloadListener) resourceManager -> RecipeUtil.reload(recipeMap));
+        var recipeManager = event.getServerResources().getRecipeManager();
+        var listenerId = ExDeorum.loc("recipes");
+        event.addListener(listenerId, (ResourceManagerReloadListener) resourceManager -> RecipeUtil.reload(recipeManager.recipeMap()));
+        event.addDependency(listenerId, VanillaServerListeners.RECIPES);
     }
 
     private static void serverTick(ServerTickEvent.Post event) {
