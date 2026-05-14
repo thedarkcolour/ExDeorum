@@ -20,14 +20,14 @@ package thedarkcolour.exdeorum.client.screen;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
-import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.Rect2i;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -42,7 +42,7 @@ public class RedstoneControlWidget implements GuiEventListener, NarratableEntry,
     public static final int REDSTONE_MODE_UNPOWERED = 1;
     public static final int REDSTONE_MODE_POWERED = 2;
 
-    private static final Component[] REDSTONE_MODES = new Component[] {
+    private static final Component[] REDSTONE_MODES = new Component[]{
             Component.translatable(TranslationKeys.REDSTONE_CONTROL_MODES[REDSTONE_MODE_IGNORED]).withStyle(ChatFormatting.YELLOW),
             Component.translatable(TranslationKeys.REDSTONE_CONTROL_MODES[REDSTONE_MODE_UNPOWERED]).withStyle(ChatFormatting.GRAY),
             Component.translatable(TranslationKeys.REDSTONE_CONTROL_MODES[REDSTONE_MODE_POWERED]).withStyle(ChatFormatting.WHITE),
@@ -116,9 +116,9 @@ public class RedstoneControlWidget implements GuiEventListener, NarratableEntry,
             }
             graphics.blit(RenderPipelines.GUI_TEXTURED, this.texture, this.buttonsPosX, this.buttonsPosY, this.tabU, this.tabV + this.tabHeight + 16, 52, 14, 256, 256);
 
-            graphics.text(font, Component.translatable(TranslationKeys.REDSTONE_CONTROL_LABEL), this.posX + 16, this.posY + 10, 0xffffff);
+            graphics.text(font, Component.translatable(TranslationKeys.REDSTONE_CONTROL_LABEL), this.posX + 16, this.posY + 10, 0xffffffff);
             // The label
-            graphics.text(font, Component.translatable(TranslationKeys.REDSTONE_CONTROL_MODE).append(REDSTONE_MODES[redstoneMode]), this.posX + 4, this.posY + 26, 0xffffff);
+            graphics.text(font, Component.translatable(TranslationKeys.REDSTONE_CONTROL_MODE).append(REDSTONE_MODES[redstoneMode]), this.posX + 4, this.posY + 26, 0xffffffff);
         } else {
             graphics.blit(RenderPipelines.GUI_TEXTURED, this.texture, this.posX, this.posY, this.tabU, this.tabV, this.tabWidth, this.tabHeight, 256, 256);
 
@@ -129,37 +129,41 @@ public class RedstoneControlWidget implements GuiEventListener, NarratableEntry,
     }
 
     @Override
-    public boolean mouseClicked(MouseButtonEvent event, boolean focused) {
-        return handleMouseClicked(event.x(), event.y(), event.button());
-    }
-
-    private boolean handleMouseClicked(double mouseX, double mouseY, int button) {
-        // relative xy
+    public boolean isMouseOver(double mouseX, double mouseY) {
         int mx = (int) mouseX;
         int my = (int) mouseY;
-        var rx = mx - this.posX;
-        var ry = my - this.posY;
+        int rx = mx - this.posX;
+        int ry = my - this.posY;
 
         float percentage = this.expanded ? 1.0f - this.percentage : this.percentage;
 
-        if (0 <= rx && rx < getWidth(percentage) && 0 <= ry && ry < getHeight(percentage)) {
-            if (this.expanded) {
-                if (this.buttonsPosY <= my && my < this.buttonsPosY + 16) {
-                    for (int i = 0; i < 3; ++i) {
-                        int buttonStartX = this.buttonsPosX + (i * 19);
+        return 0 <= rx && rx < getWidth(percentage) && 0 <= ry && ry < getHeight(percentage);
+    }
 
-                        if (buttonStartX <= mx && mx < buttonStartX + 16) {
-                            setRedstoneMode(i);
-                            Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.05f));
-                            return true;
-                        }
+    @Override
+    public boolean mouseClicked(MouseButtonEvent event, boolean focused) {
+        // relative xy
+        int mx = (int) event.x();
+        int my = (int) event.y();
+        var rx = mx - this.posX;
+        var ry = my - this.posY;
+
+        if (this.expanded) {
+            if (this.buttonsPosY <= my && my < this.buttonsPosY + 16) {
+                for (int i = 0; i < 3; ++i) {
+                    int buttonStartX = this.buttonsPosX + (i * 19);
+
+                    if (buttonStartX <= mx && mx < buttonStartX + 16) {
+                        setRedstoneMode(i);
+                        Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.05f));
+                        return true;
                     }
                 }
             }
-            if (this.lastClicked == -1L && rx < this.tabWidth && ry < this.tabHeight) {
-                this.lastClicked = System.currentTimeMillis();
-                Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0f));
-            }
+        }
+        if (this.lastClicked == -1L && rx < this.tabWidth && ry < this.tabHeight) {
+            this.lastClicked = System.currentTimeMillis();
+            Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0f));
         }
         return false;
     }

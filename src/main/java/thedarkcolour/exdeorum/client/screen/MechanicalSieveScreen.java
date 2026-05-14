@@ -45,8 +45,6 @@ public class MechanicalSieveScreen extends AbstractContainerScreen<MechanicalSie
 
     public MechanicalSieveScreen(MechanicalSieveMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title, 176, 173);
-
-        this.inventoryLabelY += 7;
     }
 
     @Override
