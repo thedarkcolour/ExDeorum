@@ -1,4 +1,4 @@
-// 26.1.1	2026-04-06T22:07:00.418703971	ModKit Block Models for mod 'exdeorum'
+// 26.1.1	2026-05-14T21:40:52.184629639	ModKit Block Models for mod 'exdeorum'
 c73197f2dc770a353883c387b2b1f0b082283576 assets/exdeorum/blockstates/acacia_barrel.json
 e36a3d22e00c0eae2336a39f3d0c904ef1d89119 assets/exdeorum/blockstates/acacia_compressed_sieve.json
 a3ef4562a4c7833439d8d66ff9c210406d317995 assets/exdeorum/blockstates/acacia_crucible.json
@@ -120,6 +120,10 @@ eae290513fb18b4939057ff9d2b5c1c01c27d24f assets/exdeorum/blockstates/maple_barre
 4c6d676b3bc9eb7e655dfeb03b68f4f3cecd59e1 assets/exdeorum/blockstates/oak_compressed_sieve.json
 426eb8511dae435c2bcf78343cf7552c7bddcb38 assets/exdeorum/blockstates/oak_crucible.json
 119a076801031739f1b4323050260c0f2af7cb94 assets/exdeorum/blockstates/oak_sieve.json
+42e3d537d757c5b2c28c2c421c45d1b12965e5a9 assets/exdeorum/blockstates/pale_oak_barrel.json
+b507279b1f503b255c98720e5d5968887b9cce86 assets/exdeorum/blockstates/pale_oak_compressed_sieve.json
+ab7d81756bb9aea44a9adb4f5d63640309424d5a assets/exdeorum/blockstates/pale_oak_crucible.json
+d55e5d7e5be29fe7222d88d6054dc1d2078a9902 assets/exdeorum/blockstates/pale_oak_sieve.json
 ea8ce1e2d897636e796c53271928e47a4e568746 assets/exdeorum/blockstates/palm_barrel.json
 44804539c68bb6d30676f284c4b391faa555fb36 assets/exdeorum/blockstates/palm_compressed_sieve.json
 e6cc311733a888fcbb7f1b54d295375b9a01b1df assets/exdeorum/blockstates/palm_crucible.json
@@ -280,6 +284,10 @@ ab7dc4690a875587d3db6f7434c17bcf1f791ce5 assets/exdeorum/models/block/oak_barrel
 cc4607279d85b27800c5a7c1be3278a0dc57a74e assets/exdeorum/models/block/oak_compressed_sieve.json
 c38c960b89de5cf12880ade53b2e5d93353999a3 assets/exdeorum/models/block/oak_crucible.json
 e99bd2a977838d228af9431c39adbf9209b21484 assets/exdeorum/models/block/oak_sieve.json
+eb5e085cb9dade615582ecd18abbcf3133ae9253 assets/exdeorum/models/block/pale_oak_barrel.json
+7a5dd9a6e9be8868b5d661a1edc5ec1f467b0490 assets/exdeorum/models/block/pale_oak_compressed_sieve.json
+45f5363af1582411afc3b0ef0b8d8d92910a4deb assets/exdeorum/models/block/pale_oak_crucible.json
+647b9245ed6e41b9bd83c504e32d67a8dc74e52c assets/exdeorum/models/block/pale_oak_sieve.json
 cf4d2e0edae49e117f740ce0ddfe91ac2914aae7 assets/exdeorum/models/block/palm_barrel.json
 fbc63a0229cf70f2f9975ebcff59a022f819ad55 assets/exdeorum/models/block/palm_compressed_sieve.json
 14c6411a10b0ec4491a4b9009d1892d5331ad4c3 assets/exdeorum/models/block/palm_crucible.json

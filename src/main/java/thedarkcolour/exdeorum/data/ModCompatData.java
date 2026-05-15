@@ -29,6 +29,7 @@ import net.neoforged.neoforge.data.loading.DatagenModLoader;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import org.jspecify.annotations.NonNull;
 import thedarkcolour.exdeorum.compat.ModIds;
 
 import java.util.HashMap;
@@ -40,6 +41,7 @@ public class ModCompatData {
     private static final Map<String, DeferredRegister.Items> itemRegistries = new HashMap<>();
     private static final Map<String, DeferredRegister.Blocks> blockRegistries = new HashMap<>();
 
+    @NonNull
     @SuppressWarnings("DataFlowIssue")
     private static DeferredItem<Item> item(String modid, String name) {
         if (DatagenModLoader.isRunningDataGen()) {
@@ -50,6 +52,7 @@ public class ModCompatData {
         }
     }
 
+    @NonNull
     @SuppressWarnings("DataFlowIssue")
     private static DeferredBlock<Block> block(String modid, String name) {
         if (DatagenModLoader.isRunningDataGen()) {

@@ -1,4 +1,4 @@
-// 26.1.1	2026-04-06T22:07:00.419886078	Loot Tables
+// 26.1.1	2026-05-14T19:37:53.704965043	Loot Tables
 105d8a61ea7145d7798146d385d4aad24fd1588d data/exdeorum/loot_table/blocks/acacia_barrel.json
 83d50cbd5e45dfa72bf102fd4c0103a388cff9c4 data/exdeorum/loot_table/blocks/acacia_compressed_sieve.json
 1e77127a82cbba0937bb02694f65cf1893aeffcb data/exdeorum/loot_table/blocks/acacia_crucible.json
@@ -123,6 +123,10 @@ cad973c873a2e50ccfac91e88eadb3c2462d39d1 data/exdeorum/loot_table/blocks/oak_bar
 940b82e9fc6bbcda8eaa84eca60b03efa9d5e166 data/exdeorum/loot_table/blocks/oak_compressed_sieve.json
 f94bc97efbfd26ccf7dba32d414fb5e33decd5f6 data/exdeorum/loot_table/blocks/oak_crucible.json
 8d69a87e09fc8a179d5a1bc8eba5faab66e77a6c data/exdeorum/loot_table/blocks/oak_sieve.json
+0c3ae38f21f4e6d77ecc4493609dc416378fca0f data/exdeorum/loot_table/blocks/pale_oak_barrel.json
+ea23501dc53b610c47d5371f7703bd21d5b0c6ff data/exdeorum/loot_table/blocks/pale_oak_compressed_sieve.json
+0c61aac2d480e5598ede91afec91b64bf86a796d data/exdeorum/loot_table/blocks/pale_oak_crucible.json
+8e96bbb30d62fafe839bf2015048070558d68d59 data/exdeorum/loot_table/blocks/pale_oak_sieve.json
 8b02ade5c505b239d953d9080fec34d2d9c812de data/exdeorum/loot_table/blocks/palm_barrel.json
 59a97f2ab82012b5ef1e1fedd5a916752a7e684e data/exdeorum/loot_table/blocks/palm_compressed_sieve.json
 843ba3f8cca4445dab6e0be2e3b3af48c3603489 data/exdeorum/loot_table/blocks/palm_crucible.json

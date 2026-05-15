@@ -24,9 +24,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.Identifier;
-
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
@@ -51,7 +49,6 @@ import net.neoforged.neoforge.common.conditions.ICondition;
 import net.neoforged.neoforge.common.conditions.ModLoadedCondition;
 import net.neoforged.neoforge.common.conditions.NotCondition;
 import net.neoforged.neoforge.common.conditions.TagEmptyCondition;
-import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidStackTemplate;
 import net.neoforged.neoforge.fluids.crafting.FluidIngredient;
 import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
@@ -60,10 +57,13 @@ import thedarkcolour.exdeorum.block.InfestedLeavesBlock;
 import thedarkcolour.exdeorum.compat.ModIds;
 import thedarkcolour.exdeorum.data.ModCompatData;
 import thedarkcolour.exdeorum.material.DefaultMaterials;
+import thedarkcolour.exdeorum.recipe.BlockPredicate;
 import thedarkcolour.exdeorum.recipe.OreChunkRecipe;
 import thedarkcolour.exdeorum.recipe.WeightedList;
-import thedarkcolour.exdeorum.recipe.barrel.*;
-import thedarkcolour.exdeorum.recipe.BlockPredicate;
+import thedarkcolour.exdeorum.recipe.barrel.BarrelCompostRecipe;
+import thedarkcolour.exdeorum.recipe.barrel.BarrelFluidMixingRecipe;
+import thedarkcolour.exdeorum.recipe.barrel.BarrelMixingRecipe;
+import thedarkcolour.exdeorum.recipe.barrel.FluidTransformationRecipe;
 import thedarkcolour.exdeorum.recipe.crook.CrookRecipe;
 import thedarkcolour.exdeorum.recipe.crucible.CrucibleHeatRecipe;
 import thedarkcolour.exdeorum.recipe.crucible.CrucibleRecipe;
@@ -84,7 +84,6 @@ import static net.minecraft.world.level.storage.loot.providers.number.BinomialDi
 import static net.minecraft.world.level.storage.loot.providers.number.ConstantValue.exactly;
 import static net.minecraft.world.level.storage.loot.providers.number.UniformGenerator.between;
 import static thedarkcolour.modkit.data.MKRecipeProvider.*;
-import static thedarkcolour.modkit.data.MKRecipeProvider.id;
 
 public class Recipes {
     private static final Ingredient SPORES_AND_SEEDS = ingredient(EItems.GRASS_SEEDS, EItems.MYCELIUM_SPORES, EItems.WARPED_NYLIUM_SPORES, EItems.CRIMSON_NYLIUM_SPORES);
@@ -126,6 +125,7 @@ public class Recipes {
         uShaped(recipes, DefaultMaterials.DARK_OAK_CRUCIBLE.getItem(), ingredient(Items.DARK_OAK_LOG), ingredient(Items.DARK_OAK_SLAB));
         uShaped(recipes, DefaultMaterials.MANGROVE_CRUCIBLE.getItem(), ingredient(Items.MANGROVE_LOG), ingredient(Items.MANGROVE_SLAB));
         uShaped(recipes, DefaultMaterials.CHERRY_CRUCIBLE.getItem(), ingredient(Items.CHERRY_LOG), ingredient(Items.CHERRY_SLAB));
+        uShaped(recipes, DefaultMaterials.PALE_OAK_CRUCIBLE.getItem(), ingredient(Items.PALE_OAK_LOG), ingredient(Items.PALE_OAK_SLAB));
         uShaped(recipes, DefaultMaterials.BAMBOO_CRUCIBLE.getItem(), ingredient(Items.BAMBOO_BLOCK), ingredient(Items.BAMBOO_SLAB));
         uShaped(recipes, DefaultMaterials.CRIMSON_CRUCIBLE.getItem(), ingredient(Items.CRIMSON_STEM), ingredient(Items.CRIMSON_SLAB));
         uShaped(recipes, DefaultMaterials.WARPED_CRUCIBLE.getItem(), ingredient(Items.WARPED_STEM), ingredient(Items.WARPED_SLAB));
@@ -168,6 +168,7 @@ public class Recipes {
         uShaped(recipes, DefaultMaterials.DARK_OAK_BARREL.getItem(), ingredient(Items.DARK_OAK_PLANKS), ingredient(Items.DARK_OAK_SLAB));
         uShaped(recipes, DefaultMaterials.MANGROVE_BARREL.getItem(), ingredient(Items.MANGROVE_PLANKS), ingredient(Items.MANGROVE_SLAB));
         uShaped(recipes, DefaultMaterials.CHERRY_BARREL.getItem(), ingredient(Items.CHERRY_PLANKS), ingredient(Items.CHERRY_SLAB));
+        uShaped(recipes, DefaultMaterials.PALE_OAK_BARREL.getItem(), ingredient(Items.PALE_OAK_PLANKS), ingredient(Items.PALE_OAK_SLAB));
         uShaped(recipes, DefaultMaterials.BAMBOO_BARREL.getItem(), ingredient(Items.BAMBOO_PLANKS), ingredient(Items.BAMBOO_SLAB));
         uShaped(recipes, DefaultMaterials.CRIMSON_BARREL.getItem(), ingredient(Items.CRIMSON_PLANKS), ingredient(Items.CRIMSON_SLAB));
         uShaped(recipes, DefaultMaterials.WARPED_BARREL.getItem(), ingredient(Items.WARPED_PLANKS), ingredient(Items.WARPED_SLAB));
@@ -248,6 +249,7 @@ public class Recipes {
         compressedSieve(recipes, DefaultMaterials.DARK_OAK_COMPRESSED_SIEVE, ingredient(Items.DARK_OAK_LOG));
         compressedSieve(recipes, DefaultMaterials.MANGROVE_COMPRESSED_SIEVE, ingredient(Items.MANGROVE_LOG));
         compressedSieve(recipes, DefaultMaterials.CHERRY_COMPRESSED_SIEVE, ingredient(Items.CHERRY_LOG));
+        compressedSieve(recipes, DefaultMaterials.PALE_OAK_COMPRESSED_SIEVE, ingredient(Items.PALE_OAK_LOG));
         compressedSieve(recipes, DefaultMaterials.BAMBOO_COMPRESSED_SIEVE, ingredient(Items.BAMBOO_BLOCK));
         compressedSieve(recipes, DefaultMaterials.WARPED_COMPRESSED_SIEVE, ingredient(Items.WARPED_STEM));
         compressedSieve(recipes, DefaultMaterials.CRIMSON_COMPRESSED_SIEVE, ingredient(Items.CRIMSON_STEM));
@@ -303,6 +305,7 @@ public class Recipes {
         sieve(recipes, DefaultMaterials.DARK_OAK_SIEVE.getItem(), Items.DARK_OAK_PLANKS, Items.DARK_OAK_SLAB);
         sieve(recipes, DefaultMaterials.MANGROVE_SIEVE.getItem(), Items.MANGROVE_PLANKS, Items.MANGROVE_SLAB);
         sieve(recipes, DefaultMaterials.CHERRY_SIEVE.getItem(), Items.CHERRY_PLANKS, Items.CHERRY_SLAB);
+        sieve(recipes, DefaultMaterials.PALE_OAK_SIEVE.getItem(), Items.PALE_OAK_PLANKS, Items.PALE_OAK_SLAB);
         sieve(recipes, DefaultMaterials.BAMBOO_SIEVE.getItem(), Items.BAMBOO_PLANKS, Items.BAMBOO_SLAB);
         sieve(recipes, DefaultMaterials.CRIMSON_SIEVE.getItem(), Items.CRIMSON_PLANKS, Items.CRIMSON_SLAB);
         sieve(recipes, DefaultMaterials.WARPED_SIEVE.getItem(), Items.WARPED_PLANKS, Items.WARPED_SLAB);
@@ -317,7 +320,7 @@ public class Recipes {
         modSieve(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.MAGIC_PLANKS_ITEM, ModCompatData.MAGIC_SLAB, DefaultMaterials.MAGIC_SIEVE.getItem());
         modSieve(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.UMBRAN_PLANKS_ITEM, ModCompatData.UMBRAN_SLAB, DefaultMaterials.UMBRAN_SIEVE.getItem());
         modSieve(recipes, ModIds.BIOMES_O_PLENTY, ModCompatData.HELLBARK_PLANKS_ITEM, ModCompatData.HELLBARK_SLAB, DefaultMaterials.HELLBARK_SIEVE.getItem());
-        modSieve(recipes, ModIds.ARS_NOUVEAU, ModCompatData.ARCHWOOD_PLANKS_ITEM, ModCompatData.ARCHWOOD_SLAB,  DefaultMaterials.ARCHWOOD_SIEVE.getItem());
+        modSieve(recipes, ModIds.ARS_NOUVEAU, ModCompatData.ARCHWOOD_PLANKS_ITEM, ModCompatData.ARCHWOOD_SLAB, DefaultMaterials.ARCHWOOD_SIEVE.getItem());
         modSieve(recipes, ModIds.AETHER, ModCompatData.SKYROOT_PLANKS_ITEM, ModCompatData.SKYROOT_SLAB, DefaultMaterials.SKYROOT_SIEVE.getItem());
         modSieve(recipes, ModIds.BLUE_SKIES, ModCompatData.BLUEBRIGHT_PLANKS_ITEM, ModCompatData.BLUEBRIGHT_SLAB, DefaultMaterials.BLUEBRIGHT_SIEVE.getItem());
         modSieve(recipes, ModIds.BLUE_SKIES, ModCompatData.STARLIT_PLANKS_ITEM, ModCompatData.STARLIT_SLAB, DefaultMaterials.STARLIT_SIEVE.getItem());
@@ -505,6 +508,7 @@ public class Recipes {
 
         recipes.foodCooking(EItems.SILKWORM.get(), EItems.COOKED_SILKWORM.get(), 0.1f);
     }
+
     private static void crucibleRecipes(RecipeOutput writer, MKRecipeProvider recipes) {
         lavaCrucible(writer, "cobblestone", recipes.ingredient(Tags.Items.COBBLESTONES), 250);
         lavaCrucible(writer, "stone", recipes.ingredient(Tags.Items.STONES), 250);

@@ -1,4 +1,4 @@
-// 26.1.1	2026-04-06T22:07:00.420592265	ModKit Recipes for mod 'exdeorum'
+// 26.1.1	2026-05-14T21:40:52.187136309	ModKit Recipes for mod 'exdeorum'
 0060d0e16dba2df44cc115f8ed68ef5dc52c74f1 data/exdeorum/advancement/recipes/building_blocks/andesite.json
 b9c5d12771d724cd646e637641da7a4d6b0a6bbf data/exdeorum/advancement/recipes/building_blocks/basalt.json
 d87a237248c140367dbfb748d45f532534e5b45c data/exdeorum/advancement/recipes/building_blocks/blackstone.json
@@ -149,6 +149,10 @@ e427a00c409b605d6eaec71abe633d928e5f56cf data/exdeorum/advancement/recipes/misc/
 8fb2ed665671177256dab128a243b8e49f8fd1ad data/exdeorum/advancement/recipes/misc/oak_compressed_sieve.json
 e3f2c8d06e30854a1923a901051cfeecfa95ae37 data/exdeorum/advancement/recipes/misc/oak_crucible.json
 a6557c1185130b640811feae16852a24ca690e0d data/exdeorum/advancement/recipes/misc/oak_sieve.json
+5814013bc9c9aa1613a95c60c639bd31253e6d97 data/exdeorum/advancement/recipes/misc/pale_oak_barrel.json
+38e39737165af4c00e76f639428feec440174fe2 data/exdeorum/advancement/recipes/misc/pale_oak_compressed_sieve.json
+4207b5007502c715cb9e98da4d96693d16afea38 data/exdeorum/advancement/recipes/misc/pale_oak_crucible.json
+83833d68114775dfd16335b4029e84bffd3b5566 data/exdeorum/advancement/recipes/misc/pale_oak_sieve.json
 fdfe05ab66211d3c146cb0a91dc15add89e69c50 data/exdeorum/advancement/recipes/misc/palm_barrel.json
 629d92b4f9fd8bc27c5dd3577930ffb0dc13706e data/exdeorum/advancement/recipes/misc/palm_compressed_sieve.json
 06705fb6dbc25ae6dd51c38ce8a67738c50a7516 data/exdeorum/advancement/recipes/misc/palm_crucible.json
@@ -1368,6 +1372,10 @@ c5472d2fb80d22dedc7411bd34f5113017acf938 data/exdeorum/recipe/ores/silver_from_c
 e58731237fb0b6df5228887dcd3eecdadddb587e data/exdeorum/recipe/ores/tin_from_chunks.json
 a66466ae61d9826c14b159cfa3f6c79e8a7c4035 data/exdeorum/recipe/ores/uranium_from_chunks.json
 ef87e4ed7da37ccf35033fd85b0c15458c8cfb31 data/exdeorum/recipe/ores/zinc_from_chunks.json
+357ced318480b9cee2d5808662207bddc28fcab6 data/exdeorum/recipe/pale_oak_barrel.json
+2145a75cedd72299d40fa5f43e7ba5d629632bd5 data/exdeorum/recipe/pale_oak_compressed_sieve.json
+36021ca263b9558d70bbacb75aa68b5d0a7a617d data/exdeorum/recipe/pale_oak_crucible.json
+2bad103fec80006a3eeaeccb7cd9d2c9ec3dbc57 data/exdeorum/recipe/pale_oak_sieve.json
 d099979caef1e43fa37ed395b57efa5472ae1939 data/exdeorum/recipe/palm_barrel.json
 2fb527fb6417cb1c026dcf1ef1c75ca968a578d3 data/exdeorum/recipe/palm_compressed_sieve.json
 e2f297f6da8cce20dfcc521b7aa9d96fb3c68b5e data/exdeorum/recipe/palm_crucible.json

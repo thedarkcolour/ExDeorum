@@ -1,4 +1,4 @@
-// 26.1.1	2026-04-06T22:07:00.434246363	Tags for minecraft:item mod id exdeorum
+// 26.1.1	2026-05-14T19:37:53.714706698	Tags for minecraft:item mod id exdeorum
 6c72957356b1d59a27be736fa1da54a5a9795ef7 data/exdeorum/tags/item/barrels.json
 6afa16b45f76c0defa1675d07586e2c6e6b0be69 data/exdeorum/tags/item/compressed/andesite.json
 31b46613766e4cdc53196850495ab1019f61cb48 data/exdeorum/tags/item/compressed/blackstone.json
@@ -33,7 +33,7 @@ b90bd3c642e69b9e800c58a9f8f53e369652e6ba data/exdeorum/tags/item/pebbles.json
 d6fa5886b22a121a9402c1ca9b7938dc29b19a10 data/exdeorum/tags/item/random_trim_drops.json
 8e1b5ab26037123d3948e9ac9f50da1b7cd0a129 data/exdeorum/tags/item/sieve_meshes.json
 0152da758e7665bf282f17f466599c7a009d9a15 data/exdeorum/tags/item/stone_barrels.json
-8bde4a30abefaa373fa41813da07b6f79f32b874 data/exdeorum/tags/item/wooden_barrels.json
+b0790116e2361bd8a4afc9e6e440b61e71c7df50 data/exdeorum/tags/item/wooden_barrels.json
 28fd077df8796b5061613218d902549c88f3e2fb data/minecraft/tags/item/enchantable/durability.json
 564bef8c17ecd8c359840d05c11c4af926e2a795 data/minecraft/tags/item/enchantable/mining.json
 564bef8c17ecd8c359840d05c11c4af926e2a795 data/minecraft/tags/item/enchantable/mining_loot.json

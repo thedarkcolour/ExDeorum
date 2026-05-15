@@ -40,6 +40,7 @@ public class DefaultMaterials {
     public static final BarrelMaterial DARK_OAK_BARREL = addDefaultWoodBarrel("dark_oak", SoundType.WOOD, false, MapColor.COLOR_BROWN, ExDeorum.ID);
     public static final BarrelMaterial MANGROVE_BARREL = addDefaultWoodBarrel("mangrove", SoundType.WOOD, false, MapColor.COLOR_RED, ExDeorum.ID);
     public static final BarrelMaterial CHERRY_BARREL = addDefaultWoodBarrel("cherry", SoundType.CHERRY_WOOD, false, MapColor.TERRACOTTA_WHITE, ExDeorum.ID);
+    public static final BarrelMaterial PALE_OAK_BARREL = addDefaultWoodBarrel("pale_oak", SoundType.WOOD, false, MapColor.QUARTZ, ExDeorum.ID);
     public static final BarrelMaterial BAMBOO_BARREL = addDefaultWoodBarrel("bamboo", SoundType.BAMBOO_WOOD, false, MapColor.COLOR_YELLOW, ExDeorum.ID);
     public static final BarrelMaterial CRIMSON_BARREL = addDefaultWoodBarrel("crimson", SoundType.NETHER_WOOD, true, MapColor.CRIMSON_STEM, ExDeorum.ID);
     public static final BarrelMaterial WARPED_BARREL = addDefaultWoodBarrel("warped", SoundType.NETHER_WOOD, true, MapColor.WARPED_STEM, ExDeorum.ID);
@@ -78,6 +79,7 @@ public class DefaultMaterials {
     public static final SieveMaterial DARK_OAK_SIEVE = addDefaultSieve("dark_oak", SoundType.WOOD, ExDeorum.ID);
     public static final SieveMaterial MANGROVE_SIEVE = addDefaultSieve("mangrove", SoundType.WOOD, ExDeorum.ID);
     public static final SieveMaterial CHERRY_SIEVE = addDefaultSieve("cherry", SoundType.CHERRY_WOOD, ExDeorum.ID);
+    public static final SieveMaterial PALE_OAK_SIEVE = addDefaultSieve("pale_oak", SoundType.WOOD, ExDeorum.ID);
     public static final SieveMaterial BAMBOO_SIEVE = addDefaultSieve("bamboo", SoundType.BAMBOO_WOOD, ExDeorum.ID);
     public static final SieveMaterial CRIMSON_SIEVE = addDefaultSieve("crimson", SoundType.NETHER_WOOD, ExDeorum.ID);
     public static final SieveMaterial WARPED_SIEVE = addDefaultSieve("warped", SoundType.NETHER_WOOD, ExDeorum.ID);
@@ -115,6 +117,7 @@ public class DefaultMaterials {
     public static final CompressedSieveMaterial DARK_OAK_COMPRESSED_SIEVE = addDefaultCompressedSieve("dark_oak", SoundType.WOOD, ExDeorum.ID);
     public static final CompressedSieveMaterial MANGROVE_COMPRESSED_SIEVE = addDefaultCompressedSieve("mangrove", SoundType.WOOD, ExDeorum.ID);
     public static final CompressedSieveMaterial CHERRY_COMPRESSED_SIEVE = addDefaultCompressedSieve("cherry", SoundType.CHERRY_WOOD, ExDeorum.ID);
+    public static final CompressedSieveMaterial PALE_OAK_COMPRESSED_SIEVE = addDefaultCompressedSieve("pale_oak", SoundType.WOOD, ExDeorum.ID);
     public static final CompressedSieveMaterial BAMBOO_COMPRESSED_SIEVE = addDefaultCompressedSieve("bamboo", SoundType.BAMBOO_WOOD, ExDeorum.ID);
     public static final CompressedSieveMaterial WARPED_COMPRESSED_SIEVE = addDefaultCompressedSieve("warped", SoundType.NETHER_WOOD, ExDeorum.ID);
     public static final CompressedSieveMaterial CRIMSON_COMPRESSED_SIEVE = addDefaultCompressedSieve("crimson", SoundType.NETHER_WOOD, ExDeorum.ID);
@@ -165,6 +168,7 @@ public class DefaultMaterials {
     public static final WaterCrucibleMaterial DARK_OAK_CRUCIBLE = addDefaultWaterCrucible("dark_oak", SoundType.WOOD, MapColor.COLOR_BROWN, ExDeorum.ID);
     public static final WaterCrucibleMaterial MANGROVE_CRUCIBLE = addDefaultWaterCrucible("mangrove", SoundType.WOOD, MapColor.COLOR_RED, ExDeorum.ID);
     public static final WaterCrucibleMaterial CHERRY_CRUCIBLE = addDefaultWaterCrucible("cherry", SoundType.CHERRY_WOOD, MapColor.TERRACOTTA_WHITE, ExDeorum.ID);
+    public static final WaterCrucibleMaterial PALE_OAK_CRUCIBLE = addDefaultWaterCrucible("pale_oak", SoundType.WOOD, MapColor.QUARTZ, ExDeorum.ID);
     public static final WaterCrucibleMaterial BAMBOO_CRUCIBLE = addDefaultWaterCrucible("bamboo", SoundType.BAMBOO_WOOD, MapColor.COLOR_YELLOW, ExDeorum.ID);
     // Biomes O' Plenty
     public static final WaterCrucibleMaterial FIR_CRUCIBLE = addDefaultWaterCrucible("fir", SoundType.WOOD, MapColor.TERRACOTTA_WHITE, ModIds.BIOMES_O_PLENTY);

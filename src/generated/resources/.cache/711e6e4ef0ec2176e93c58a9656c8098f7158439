@@ -1,8 +1,8 @@
-// 26.1.1	2026-04-06T22:07:00.433617829	Tags for minecraft:block mod id exdeorum
+// 26.1.1	2026-05-14T19:37:53.7142837	Tags for minecraft:block mod id exdeorum
 c2f6fb7224bd1e2fdb87249751113c4d66dbc21f data/exdeorum/tags/block/mineable/hammer.json
 77dfab311d3714c77bcac2df0397d23d4707f03b data/exdeorum/tags/block/watering_can_tickable.json
 f6a9610ebae09549baf17e27200037cd17318055 data/minecraft/tags/block/leaves.json
-133e5ec65e3916d03320a67e2f4a475188028d08 data/minecraft/tags/block/mineable/axe.json
+6487030487a094082c219a02705b423e0a4eacd8 data/minecraft/tags/block/mineable/axe.json
 6eacf4b84abd2ad9b9671966c74f22d02d8208d6 data/minecraft/tags/block/mineable/hoe.json
 ef50fd58cd0831ca14958819cfb6af97d4dabee8 data/minecraft/tags/block/mineable/pickaxe.json
 7a2ffab44cdf6dca9d9c3a0f3a610d2af88700bf data/minecraft/tags/block/mineable/shovel.json

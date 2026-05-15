@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "I": "#c:rods/wooden",
+    "O": "minecraft:pale_oak_log",
+    "_": "#c:ingots/iron"
+  },
+  "pattern": [
+    "O O",
+    "O_O",
+    "I I"
+  ],
+  "result": {
+    "id": "exdeorum:pale_oak_compressed_sieve"
+  }
+}

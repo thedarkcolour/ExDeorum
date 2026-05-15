@@ -73,6 +73,7 @@ class BlockModels {
         barrel(models, DefaultMaterials.DARK_OAK_BARREL.getBlock(), Blocks.DARK_OAK_PLANKS);
         barrel(models, DefaultMaterials.MANGROVE_BARREL.getBlock(), Blocks.MANGROVE_PLANKS);
         barrel(models, DefaultMaterials.CHERRY_BARREL.getBlock(), Blocks.CHERRY_PLANKS);
+        barrel(models, DefaultMaterials.PALE_OAK_BARREL.getBlock(), Blocks.PALE_OAK_PLANKS);
         barrel(models, DefaultMaterials.BAMBOO_BARREL.getBlock(), Blocks.BAMBOO_PLANKS);
         barrel(models, DefaultMaterials.CRIMSON_BARREL.getBlock(), Blocks.CRIMSON_PLANKS);
         barrel(models, DefaultMaterials.WARPED_BARREL.getBlock(), Blocks.WARPED_PLANKS);
@@ -86,6 +87,7 @@ class BlockModels {
         sieve(models, DefaultMaterials.DARK_OAK_SIEVE.getBlock(), Blocks.DARK_OAK_PLANKS);
         sieve(models, DefaultMaterials.MANGROVE_SIEVE.getBlock(), Blocks.MANGROVE_PLANKS);
         sieve(models, DefaultMaterials.CHERRY_SIEVE.getBlock(), Blocks.CHERRY_PLANKS);
+        sieve(models, DefaultMaterials.PALE_OAK_SIEVE.getBlock(), Blocks.PALE_OAK_PLANKS);
         sieve(models, DefaultMaterials.BAMBOO_SIEVE.getBlock(), Blocks.BAMBOO_PLANKS);
         sieve(models, DefaultMaterials.CRIMSON_SIEVE.getBlock(), Blocks.CRIMSON_PLANKS);
         sieve(models, DefaultMaterials.WARPED_SIEVE.getBlock(), Blocks.WARPED_PLANKS);
@@ -99,6 +101,7 @@ class BlockModels {
         compressedSieve(models, DefaultMaterials.DARK_OAK_COMPRESSED_SIEVE.getBlock(), Blocks.DARK_OAK_LOG);
         compressedSieve(models, DefaultMaterials.MANGROVE_COMPRESSED_SIEVE.getBlock(), Blocks.MANGROVE_LOG);
         compressedSieve(models, DefaultMaterials.CHERRY_COMPRESSED_SIEVE.getBlock(), Blocks.CHERRY_LOG);
+        compressedSieve(models, DefaultMaterials.PALE_OAK_COMPRESSED_SIEVE.getBlock(), Blocks.PALE_OAK_LOG);
         compressedSieve(models, DefaultMaterials.BAMBOO_COMPRESSED_SIEVE.getBlock(), Blocks.BAMBOO_BLOCK);
         compressedSieve(models, DefaultMaterials.WARPED_COMPRESSED_SIEVE.getBlock(), Blocks.WARPED_STEM);
         compressedSieve(models, DefaultMaterials.CRIMSON_COMPRESSED_SIEVE.getBlock(), Blocks.CRIMSON_STEM);
@@ -118,6 +121,7 @@ class BlockModels {
         crucible(models, DefaultMaterials.DARK_OAK_CRUCIBLE.getBlock(), Blocks.DARK_OAK_LOG);
         crucible(models, DefaultMaterials.MANGROVE_CRUCIBLE.getBlock(), Blocks.MANGROVE_LOG);
         crucible(models, DefaultMaterials.CHERRY_CRUCIBLE.getBlock(), Blocks.CHERRY_LOG);
+        crucible(models, DefaultMaterials.PALE_OAK_CRUCIBLE.getBlock(), Blocks.PALE_OAK_LOG);
         crucible(models, DefaultMaterials.BAMBOO_CRUCIBLE.getBlock(), Blocks.BAMBOO_BLOCK);
 
         // Mod compat
