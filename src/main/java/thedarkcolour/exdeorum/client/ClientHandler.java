@@ -40,9 +40,11 @@ import thedarkcolour.exdeorum.client.screen.MechanicalSieveScreen;
 import thedarkcolour.exdeorum.client.ter.*;
 import thedarkcolour.exdeorum.config.EConfig;
 import thedarkcolour.exdeorum.fluid.WitchWaterFluid;
+import thedarkcolour.exdeorum.item.WateringCanItem;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.registry.EBlockEntities;
 import thedarkcolour.exdeorum.registry.EFluids;
+import thedarkcolour.exdeorum.registry.EItems;
 import thedarkcolour.exdeorum.registry.EMenus;
 
 public class ClientHandler {
@@ -66,7 +68,15 @@ public class ClientHandler {
     }
 
     private static void registerClientExtensions(RegisterClientExtensionsEvent event) {
-        event.registerFluidType(WitchWaterFluid.createClientExtensions(), EFluids.WITCH_WATER_TYPE.get());
+        event.registerFluidType(new WitchWaterFluid.ClientExtensions(), EFluids.WITCH_WATER_TYPE.get());
+        event.registerItem(new WateringCanItem.ClientExtensions(),
+                EItems.WOODEN_WATERING_CAN.get(),
+                EItems.STONE_WATERING_CAN.get(),
+                EItems.IRON_WATERING_CAN.get(),
+                EItems.GOLDEN_WATERING_CAN.get(),
+                EItems.DIAMOND_WATERING_CAN.get(),
+                EItems.NETHERITE_WATERING_CAN.get()
+        );
     }
 
     private static void registerFluidModels(RegisterFluidModelsEvent event) {

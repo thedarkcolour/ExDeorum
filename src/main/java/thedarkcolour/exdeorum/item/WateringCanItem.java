@@ -39,6 +39,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.ItemUseAnimation;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
@@ -137,11 +138,12 @@ public class WateringCanItem extends Item {
         return ItemUseAnimation.NONE;
     }
 
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag pIsAdvanced) {
+    @Override
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag tooltipFlag) {
         var fluidHandler = getFluidHandler(stack);
         if (fluidHandler != null) {
             // use the block name which is guaranteed to have a vanilla translation
-            tooltip.add(Component.translatable("block.minecraft.water").append(Component.translatable(TranslationKeys.FRACTION_DISPLAY, fluidHandler.getFluidInTank(0).getAmount(), this.capacity)).withStyle(ChatFormatting.GRAY));
+            tooltip.accept(Component.translatable("block.minecraft.water").append(Component.translatable(TranslationKeys.FRACTION_DISPLAY, fluidHandler.getFluidInTank(0).getAmount(), this.capacity)).withStyle(ChatFormatting.GRAY));
         }
     }
 
@@ -307,8 +309,18 @@ public class WateringCanItem extends Item {
         }
     }
 
-    public void initializeClient(Consumer<IClientItemExtensions> consumer) {
-        consumer.accept(ClientExtensions.INSTANCE);
+    private static IFluidHandler getFluidHandler(ItemAccess itemAccess) {
+        var handler = itemAccess.getCapability(Capabilities.Fluid.ITEM);
+        return handler == null ? null : IFluidHandler.of(handler);
+    }
+
+    private static IFluidHandler getFluidHandler(ItemStack stack) {
+        if (stack.isEmpty()) {
+            return null;
+        }
+
+        var itemAccess = ItemAccess.forStack(stack);
+        return getFluidHandler(itemAccess);
     }
 
     public static class FluidHandler extends FluidHandlerItemStack {
@@ -351,9 +363,7 @@ public class WateringCanItem extends Item {
         }
     }
 
-    private enum ClientExtensions implements IClientItemExtensions {
-        INSTANCE;
-
+    public static class ClientExtensions implements IClientItemExtensions {
         @Override
         public boolean applyForgeHandTransform(PoseStack poseStack, LocalPlayer player, HumanoidArm arm, ItemStack itemInHand, float partialTick, float equipProcess, float swingProcess) {
             if (player.isUsingItem()) {
@@ -387,19 +397,5 @@ public class WateringCanItem extends Item {
             var opposite = 1 - progress;
             return 1 - opposite * opposite * opposite;
         }
-    }
-
-    private static IFluidHandler getFluidHandler(ItemAccess itemAccess) {
-        var handler = itemAccess.getCapability(Capabilities.Fluid.ITEM);
-        return handler == null ? null : IFluidHandler.of(handler);
-    }
-
-    private static IFluidHandler getFluidHandler(ItemStack stack) {
-        if (stack.isEmpty()) {
-            return null;
-        }
-
-        var itemAccess = ItemAccess.forStack(stack);
-        return getFluidHandler(itemAccess);
     }
 }
