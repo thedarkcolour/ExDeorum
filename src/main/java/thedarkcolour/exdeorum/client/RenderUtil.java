@@ -40,15 +40,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
 import org.joml.Vector3f;
-import thedarkcolour.exdeorum.ExDeorum;
+import org.jspecify.annotations.Nullable;
 import thedarkcolour.exdeorum.client.ter.SieveRenderer;
 
-import java.awt.Color;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
+import java.awt.*;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 public class RenderUtil {
     private static final Map<Block, RenderFace> TOP_FACES = new HashMap<>();
@@ -164,7 +161,7 @@ public class RenderUtil {
 
     // Renders a sprite (y should be between 0 and 1)
     @SuppressWarnings("DuplicatedCode")
-    public static void renderFlatSprite(VertexConsumer builder, PoseStack stack, float y, int r, int g, int b, TextureAtlasSprite sprite, int light, float edge) {
+    public static void renderFlatSprite(VertexConsumer builder, PoseStack stack, float y, int r, int g, int b, @Nullable TextureAtlasSprite sprite, int light, float edge) {
         if (sprite == null) return;
         var pose = stack.last().pose();
         var normal = stack.last().normal().transform(new Vector3f(0, 1, 0));
@@ -186,7 +183,7 @@ public class RenderUtil {
         builder.addVertex(pose, edgeMax, y, edgeMin).setColor(r, g, b, 255).setUv(uMax, vMin).setUv1(0, 10).setLight(light).setNormal(normal.x, normal.y, normal.z);
     }
 
-    public static void renderFlatSprite(VertexConsumer builder, PoseStack.Pose pose, float y, int r, int g, int b, TextureAtlasSprite sprite, int light, float edge) {
+    public static void renderFlatSprite(VertexConsumer builder, PoseStack.Pose pose, float y, int r, int g, int b, @Nullable TextureAtlasSprite sprite, int light, float edge) {
         if (sprite == null) return;
         var normal = pose.normal().transform(new Vector3f(0, 1, 0));
         float edgeMin = edge / 16.0f;

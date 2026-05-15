@@ -46,5 +46,6 @@ public class Data {
         gen.addProvider(true, new Advancements(output, registries));
         gen.addProvider(true, new Sounds(output));
         gen.addProvider(true, new LootModifiers(output, registries));
+        gen.addProvider(true, new Atlases(output, registries));
     }
 }

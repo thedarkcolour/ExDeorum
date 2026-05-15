@@ -136,7 +136,7 @@ dependencies {
     //implementation("dev.latvian.mods:kubejs-neoforge:${kubejs_version}")
 
     // ModKit DEV ONLY
-    implementation('com.github.thedarkcolour:ModKit:d801a318cf')
+    implementation('com.github.thedarkcolour:ModKit:944589c2a7')
 
     // Core mod
     implementation(project(':coremod'))

@@ -25,13 +25,13 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
-import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import org.jspecify.annotations.Nullable;
 import thedarkcolour.exdeorum.blockentity.EBlockEntity;
 import thedarkcolour.exdeorum.blockentity.logic.SieveLogic;
 import thedarkcolour.exdeorum.client.RenderFace;
@@ -81,7 +81,7 @@ public class SieveRenderer<T extends EBlockEntity & SieveLogic.Owner> implements
                 state.meshSprite = MESH_TEXTURES.get(meshItem);
             } else {
                 Identifier registryName = BuiltInRegistries.ITEM.getKey(meshItem);
-                var sprite = RenderUtil.getBlockSprite(registryName.withPrefix("item/mesh/"));
+                var sprite = RenderUtil.getBlockSprite(registryName);
                 if (RenderUtil.isMissingTexture(sprite)) {
                     sprite = RenderUtil.getBlockSprite(registryName.withPrefix("item/"));
                 }
@@ -131,9 +131,11 @@ public class SieveRenderer<T extends EBlockEntity & SieveLogic.Owner> implements
     }
 
     public static class SieveRenderState extends BlockEntityRenderState {
+        @Nullable
         public RenderFace contentsFace;
         public float contentsPercentage;
         public boolean renderContents3d;
+        @Nullable
         public TextureAtlasSprite meshSprite;
         public boolean meshHasFoil;
     }

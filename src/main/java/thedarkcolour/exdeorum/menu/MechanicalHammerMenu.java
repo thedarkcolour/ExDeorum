@@ -30,7 +30,7 @@ import thedarkcolour.exdeorum.registry.EMenus;
 import thedarkcolour.exdeorum.tag.EItemTags;
 
 public class MechanicalHammerMenu extends AbstractMachineMenu<MechanicalHammerBlockEntity> {
-    private static final Identifier EMPTY_SLOT_HAMMER = ExDeorum.loc("item/empty_slot_hammer");
+    private static final Identifier EMPTY_SLOT_HAMMER = ExDeorum.loc("container/slot/empty_slot_hammer");
     private static final int NUM_SLOTS = 3;
 
     public MechanicalHammerMenu(int containerId, Inventory playerInventory, FriendlyByteBuf data) {
