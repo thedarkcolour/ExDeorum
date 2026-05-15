@@ -26,9 +26,9 @@ import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
-import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-import net.minecraft.client.gui.GuiGraphics;
+import mezz.jei.api.recipe.types.IRecipeType;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
@@ -59,7 +59,7 @@ class SieveCategory implements IRecipeCategory<XeiSieveRecipe> {
     }
 
     @Override
-    public RecipeType<XeiSieveRecipe> getRecipeType() {
+    public IRecipeType<XeiSieveRecipe> getRecipeType() {
         return ExDeorumJeiPlugin.SIEVE;
     }
 
@@ -85,12 +85,12 @@ class SieveCategory implements IRecipeCategory<XeiSieveRecipe> {
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, XeiSieveRecipe recipe, IFocusGroup focuses) {
-        builder.addSlot(RecipeIngredientRole.INPUT, 59, 1).addIngredients(recipe.ingredient());
-        builder.addSlot(RecipeIngredientRole.CATALYST, 87, 1).addItemStack(recipe.mesh());
+        builder.addSlot(RecipeIngredientRole.INPUT, 59, 1).add(recipe.ingredient());
+        builder.addSlot(RecipeIngredientRole.CRAFTING_STATION, 87, 1).add(recipe.mesh());
 
         for (int i = 0; i < recipe.results().size(); i++) {
             var result = recipe.results().get(i);
-            var slot = builder.addSlot(RecipeIngredientRole.OUTPUT, 1 + (i % 9) * 18, 1 + XeiUtil.SIEVE_ROW_START + 18 * (i / 9)).addItemStack(result.item);
+            var slot = builder.addSlot(RecipeIngredientRole.OUTPUT, 1 + (i % 9) * 18, 1 + XeiUtil.SIEVE_ROW_START + 18 * (i / 9)).add(result.item);
 
             addTooltips(slot, result.byHandOnly, result.provider);
         }
@@ -100,13 +100,13 @@ class SieveCategory implements IRecipeCategory<XeiSieveRecipe> {
         if (byHandOnly) {
             slot.setCustomRenderer(VanillaTypes.ITEM_STACK, ClientJeiUtil.AsteriskItemRenderer.INSTANCE);
         }
-        slot.addRichTooltipCallback((slotView, tooltip) -> {
+        slot.addRichTooltipCallback((_, tooltip) -> {
             XeiUtil.addSieveDropTooltip(byHandOnly, provider, tooltip::add);
         });
     }
 
     @Override
-    public void draw(XeiSieveRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
+    public void draw(XeiSieveRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphicsExtractor graphics, double mouseX, double mouseY) {
         this.slot.draw(graphics, 58, 0);
         this.slot.draw(graphics, 86, 0);
 

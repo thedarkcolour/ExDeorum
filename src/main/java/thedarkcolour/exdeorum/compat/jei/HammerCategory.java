@@ -21,7 +21,7 @@ package thedarkcolour.exdeorum.compat.jei;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.recipe.RecipeType;
+import mezz.jei.api.recipe.types.IRecipeType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -31,30 +31,30 @@ import thedarkcolour.exdeorum.recipe.hammer.HammerRecipe;
 import java.util.function.Supplier;
 
 class HammerCategory extends OneToOneCategory<HammerRecipe> {
-    private final RecipeType<HammerRecipe> recipeType;
+    private final IRecipeType<HammerRecipe> recipeType;
 
-    public HammerCategory(IGuiHelper helper, IDrawable arrow, Supplier<? extends Item> icon, Component title, RecipeType<HammerRecipe> recipeType) {
+    public HammerCategory(IGuiHelper helper, IDrawable arrow, Supplier<? extends Item> icon, Component title, IRecipeType<HammerRecipe> recipeType) {
         super(helper, arrow, helper.createDrawableItemStack(new ItemStack(icon.get())), title);
 
         this.recipeType = recipeType;
     }
 
     @Override
-    public RecipeType<HammerRecipe> getRecipeType() {
+    public IRecipeType<HammerRecipe> getRecipeType() {
         return this.recipeType;
     }
 
     @Override
     protected void addInput(IRecipeSlotBuilder slot, HammerRecipe recipe) {
-        slot.addIngredients(recipe.ingredient());
+        slot.add(recipe.ingredient());
     }
 
     @Override
     protected void addOutput(IRecipeSlotBuilder slot, HammerRecipe recipe) {
-        if (recipe.resultAmount instanceof ConstantValue constant) {
-            slot.addItemStack(recipe.result.count() == 1 ? recipe.result.create() : recipe.result.withCount((int) constant.value()).create());
+        if (recipe.resultAmount instanceof ConstantValue(float value)) {
+            slot.add(recipe.result.count() == 1 ? recipe.result.create() : recipe.result.withCount((int) value).create());
         } else {
-            slot.addItemStack(recipe.result.create());
+            slot.add(recipe.result.create());
             SieveCategory.addTooltips(slot, false, recipe.resultAmount);
         }
     }

@@ -26,21 +26,19 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 
 abstract class OneToOneCategory<T> implements IRecipeCategory<T> {
     public static final int WIDTH = 72;
     public static final int HEIGHT = 18;
 
-    private final IDrawable background;
     private final IDrawable arrow;
     private final IDrawable icon;
     private final IDrawable slot;
     private final Component title;
 
     public OneToOneCategory(IGuiHelper helper, IDrawable arrow, IDrawable icon, Component title) {
-        this.background = helper.createBlankDrawable(WIDTH, HEIGHT);
         this.arrow = arrow;
         this.icon = icon;
         this.slot = helper.getSlotDrawable();
@@ -48,6 +46,7 @@ abstract class OneToOneCategory<T> implements IRecipeCategory<T> {
     }
 
     protected abstract void addInput(IRecipeSlotBuilder slot, T recipe);
+
     protected abstract void addOutput(IRecipeSlotBuilder slot, T recipe);
 
     @Override
@@ -62,8 +61,13 @@ abstract class OneToOneCategory<T> implements IRecipeCategory<T> {
     }
 
     @Override
-    public IDrawable getBackground() {
-        return this.background;
+    public int getWidth() {
+        return WIDTH;
+    }
+
+    @Override
+    public int getHeight() {
+        return HEIGHT;
     }
 
     @Override
@@ -72,7 +76,7 @@ abstract class OneToOneCategory<T> implements IRecipeCategory<T> {
     }
 
     @Override
-    public void draw(T recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
+    public void draw(T recipe, IRecipeSlotsView recipeSlotsView, GuiGraphicsExtractor graphics, double mouseX, double mouseY) {
         this.slot.draw(graphics);
         this.arrow.draw(graphics, 25, 1);
         this.slot.draw(graphics, 54, 0);

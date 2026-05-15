@@ -22,6 +22,8 @@ import mezz.jei.api.ingredients.IIngredientType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
+// constructor must be different from field types to make generics happy
+@SuppressWarnings("ClassCanBeRecord")
 final class CrucibleHeatSourceRecipe {
     private final int meltRate;
     private final BlockState blockState;

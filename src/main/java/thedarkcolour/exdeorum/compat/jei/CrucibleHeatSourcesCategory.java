@@ -21,18 +21,24 @@ package thedarkcolour.exdeorum.compat.jei;
 import com.mojang.blaze3d.platform.InputConstants;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
+import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
+import mezz.jei.api.gui.inputs.IJeiInputHandler;
+import mezz.jei.api.gui.inputs.IJeiUserInput;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
+import mezz.jei.api.gui.widgets.IRecipeExtrasBuilder;
 import mezz.jei.api.helpers.IJeiHelpers;
 import mezz.jei.api.helpers.IModIdHelper;
+import mezz.jei.api.ingredients.IIngredientType;
 import mezz.jei.api.recipe.IFocusFactory;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
-import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import mezz.jei.api.recipe.types.IRecipeType;
 import mezz.jei.api.runtime.IIngredientManager;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
@@ -41,13 +47,11 @@ import thedarkcolour.exdeorum.compat.ClientXeiUtil;
 import thedarkcolour.exdeorum.data.TranslationKeys;
 import thedarkcolour.exdeorum.material.DefaultMaterials;
 
-import java.util.List;
-
 class CrucibleHeatSourcesCategory implements IRecipeCategory<CrucibleHeatSourceRecipe> {
     public static final int WIDTH = 120;
     public static final int HEIGHT = 48;
+    private static final ScreenRectangle HEAT_SOURCE_AREA = new ScreenRectangle(44, 16, 32, 32);
 
-    private final IDrawable background;
     private final IDrawable icon;
     private final Component title;
 
@@ -57,7 +61,6 @@ class CrucibleHeatSourcesCategory implements IRecipeCategory<CrucibleHeatSourceR
 
     public CrucibleHeatSourcesCategory(IJeiHelpers helpers) {
         var helper = helpers.getGuiHelper();
-        this.background = helper.createBlankDrawable(WIDTH, HEIGHT);
         this.title = Component.translatable(TranslationKeys.CRUCIBLE_HEAT_SOURCE_CATEGORY_TITLE);
         this.icon = helper.createDrawableItemStack(new ItemStack(DefaultMaterials.PORCELAIN_CRUCIBLE.getItem()));
 
@@ -67,7 +70,7 @@ class CrucibleHeatSourcesCategory implements IRecipeCategory<CrucibleHeatSourceR
     }
 
     @Override
-    public RecipeType<CrucibleHeatSourceRecipe> getRecipeType() {
+    public IRecipeType<CrucibleHeatSourceRecipe> getRecipeType() {
         return ExDeorumJeiPlugin.CRUCIBLE_HEAT_SOURCES;
     }
 
@@ -77,8 +80,13 @@ class CrucibleHeatSourcesCategory implements IRecipeCategory<CrucibleHeatSourceR
     }
 
     @Override
-    public IDrawable getBackground() {
-        return this.background;
+    public int getWidth() {
+        return WIDTH;
+    }
+
+    @Override
+    public int getHeight() {
+        return HEIGHT;
     }
 
     @Override
@@ -89,61 +97,75 @@ class CrucibleHeatSourcesCategory implements IRecipeCategory<CrucibleHeatSourceR
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, CrucibleHeatSourceRecipe recipe, IFocusGroup focuses) {
         if (recipe.ingredientType() != null && recipe.ingredient() != null) {
-            builder.addInvisibleIngredients(RecipeIngredientRole.INPUT).addIngredient(recipe.ingredientType(), recipe.ingredient());
+            builder.addInvisibleIngredients(RecipeIngredientRole.INPUT).add(recipe.ingredientType(), recipe.ingredient());
         } else {
-            builder.addInvisibleIngredients(RecipeIngredientRole.INPUT).addIngredient(VanillaTypes.ITEM_STACK, ItemStack.EMPTY);
+            builder.addInvisibleIngredients(RecipeIngredientRole.INPUT).add(VanillaTypes.ITEM_STACK, ItemStack.EMPTY);
         }
     }
 
     @Override
-    public void draw(CrucibleHeatSourceRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
+    public void createRecipeExtras(IRecipeExtrasBuilder builder, CrucibleHeatSourceRecipe recipe, IFocusGroup focuses) {
+        builder.addInputHandler(new IJeiInputHandler() {
+            @Override
+            public ScreenRectangle getArea() {
+                return HEAT_SOURCE_AREA;
+            }
+
+            @Override
+            public boolean handleInput(double mouseX, double mouseY, IJeiUserInput input) {
+                return CrucibleHeatSourcesCategory.this.handleHeatSourceInput(recipe, input);
+            }
+        });
+    }
+
+    @Override
+    public void draw(CrucibleHeatSourceRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphicsExtractor graphics, double mouseX, double mouseY) {
         var volume = recipe.meltRate();
         var volumeLabel = Component.translatable(TranslationKeys.CRUCIBLE_HEAT_SOURCE_CATEGORY_MULTIPLIER, volume);
         var font = Minecraft.getInstance().font;
 
-        graphics.drawString(font, volumeLabel, 60 - font.width(volumeLabel) / 2, 5, 0xff808080, false);
+        graphics.text(font, volumeLabel, 60 - font.width(volumeLabel) / 2, 5, 0xff808080, false);
 
         ClientXeiUtil.renderBlock(graphics, recipe.blockState(), 60, 24, 10, 20F);
     }
 
     @Override
-    public List<Component> getTooltipStrings(CrucibleHeatSourceRecipe recipe, IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
+    public void getTooltip(ITooltipBuilder tooltip, CrucibleHeatSourceRecipe recipe, IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
         if (44.0 < mouseX && mouseX < 76.0 && 16 < mouseY && mouseY < 48) {
             if (recipe.ingredientType() != null && recipe.ingredient() != null) {
-                var tooltip = this.ingredientManager.getIngredientRenderer(recipe.ingredientType()).getTooltip(recipe.ingredient(), Minecraft.getInstance().options.advancedItemTooltips ? TooltipFlag.ADVANCED : TooltipFlag.NORMAL);
-                return this.modIdHelper.addModNameToIngredientTooltip(tooltip, recipe.ingredient(), this.ingredientManager.getIngredientHelper(recipe.ingredientType()));
+                var tooltipLines = this.ingredientManager.getIngredientRenderer(recipe.ingredientType()).getTooltip(recipe.ingredient(), Minecraft.getInstance().options.advancedItemTooltips ? TooltipFlag.ADVANCED : TooltipFlag.NORMAL);
+                tooltip.addAll(tooltipLines);
+                this.ingredientManager.createTypedIngredient(recipe.ingredientType(), recipe.ingredient(), false)
+                        .flatMap(this.modIdHelper::getModNameForTooltip)
+                        .ifPresent(tooltip::add);
             } else {
                 var block = recipe.blockState().getBlock();
                 var modId = BuiltInRegistries.BLOCK.getKey(block).getNamespace();
-                return List.of(Component.translatable(block.getDescriptionId()), Component.literal(this.modIdHelper.getFormattedModNameForModId(modId)));
+                tooltip.add(Component.translatable(block.getDescriptionId()));
+                tooltip.add(Component.literal(this.modIdHelper.getFormattedModNameForModId(modId)));
             }
         }
-
-        return List.of();
     }
 
-    @Override
-    public boolean handleInput(CrucibleHeatSourceRecipe recipe, double mouseX, double mouseY, InputConstants.Key input) {
-        if (input.getType() == InputConstants.Type.MOUSE && (input.getValue() == InputConstants.MOUSE_BUTTON_LEFT || input.getValue() == InputConstants.MOUSE_BUTTON_RIGHT)) {
-            if (44.0 < mouseX && mouseX < 76.0 && 16 < mouseY && mouseY < 48) {
-                if (recipe.ingredientType() != null) {
-                    ClientJeiUtil.checkTypedIngredient(this.ingredientManager, recipe.ingredientType(), recipe.ingredient(), ingredient -> {
-                        if (input.getValue() == InputConstants.MOUSE_BUTTON_LEFT) {
-                            ClientJeiUtil.showRecipes(this.focusFactory, ingredient);
-                        } else if (input.getValue() == InputConstants.MOUSE_BUTTON_RIGHT) {
-                            ClientJeiUtil.showUsages(this.focusFactory, ingredient);
-                        }
-                    });
-                }
-
+    private boolean handleHeatSourceInput(CrucibleHeatSourceRecipe recipe, IJeiUserInput input) {
+        var key = input.getKey();
+        if (key.getType() == InputConstants.Type.MOUSE && (key.getValue() == InputConstants.MOUSE_BUTTON_LEFT || key.getValue() == InputConstants.MOUSE_BUTTON_RIGHT)) {
+            if (input.isSimulate()) {
                 return true;
             }
+
+            if (recipe.ingredientType() != null) {
+                ClientJeiUtil.checkTypedIngredient(this.ingredientManager, recipe.ingredientType(), recipe.ingredient(), ingredient -> {
+                    if (key.getValue() == InputConstants.MOUSE_BUTTON_LEFT) {
+                        ClientJeiUtil.showRecipes(this.focusFactory, ingredient);
+                    } else {
+                        ClientJeiUtil.showUsages(this.focusFactory, ingredient);
+                    }
+                });
+            }
+
+            return true;
         }
         return false;
-    }
-
-    @Override
-    public int getHeight() {
-        return 48;
     }
 }

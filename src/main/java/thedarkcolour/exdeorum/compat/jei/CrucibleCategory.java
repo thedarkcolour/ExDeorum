@@ -21,7 +21,7 @@ package thedarkcolour.exdeorum.compat.jei;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.recipe.RecipeType;
+import mezz.jei.api.recipe.types.IRecipeType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -36,12 +36,12 @@ abstract class CrucibleCategory extends OneToOneCategory<CrucibleRecipe> {
 
     @Override
     protected void addInput(IRecipeSlotBuilder slot, CrucibleRecipe recipe) {
-        slot.addIngredients(recipe.ingredient());
+        slot.add(recipe.ingredient());
     }
 
     @Override
     protected void addOutput(IRecipeSlotBuilder slot, CrucibleRecipe recipe) {
-        slot.addFluidStack(recipe.getResult().fluid().value(), recipe.getResult().amount())
+        slot.add(recipe.getResult().fluid().value(), recipe.getResult().amount())
                 .setFluidRenderer(Math.max(1000, recipe.getResult().amount()), false, 16, 16);
     }
 
@@ -51,7 +51,7 @@ abstract class CrucibleCategory extends OneToOneCategory<CrucibleRecipe> {
         }
 
         @Override
-        public RecipeType<CrucibleRecipe> getRecipeType() {
+        public IRecipeType<CrucibleRecipe> getRecipeType() {
             return ExDeorumJeiPlugin.LAVA_CRUCIBLE;
         }
     }
@@ -62,7 +62,7 @@ abstract class CrucibleCategory extends OneToOneCategory<CrucibleRecipe> {
         }
 
         @Override
-        public RecipeType<CrucibleRecipe> getRecipeType() {
+        public IRecipeType<CrucibleRecipe> getRecipeType() {
             return ExDeorumJeiPlugin.WATER_CRUCIBLE;
         }
     }

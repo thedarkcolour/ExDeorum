@@ -1,7 +1,7 @@
 package thedarkcolour.exdeorum.compat.jei;
 
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.recipe.RecipeType;
+import mezz.jei.api.recipe.types.IRecipeType;
 import net.minecraft.network.chat.Component;
 import thedarkcolour.exdeorum.compat.XeiSieveRecipe;
 import thedarkcolour.exdeorum.data.TranslationKeys;
@@ -13,7 +13,7 @@ class CompressedSieveCategory extends SieveCategory {
     }
 
     @Override
-    public RecipeType<XeiSieveRecipe> getRecipeType() {
+    public IRecipeType<XeiSieveRecipe> getRecipeType() {
         return ExDeorumJeiPlugin.COMPRESSED_SIEVE;
     }
 }

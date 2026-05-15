@@ -18,7 +18,6 @@
 
 package thedarkcolour.exdeorum.compat.jei;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import mezz.jei.api.ingredients.IIngredientRenderer;
 import mezz.jei.api.ingredients.IIngredientType;
 import mezz.jei.api.ingredients.ITypedIngredient;
@@ -27,7 +26,7 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.runtime.IIngredientManager;
 import mezz.jei.api.runtime.IRecipesGui;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -41,10 +40,11 @@ import java.util.List;
 import java.util.function.Consumer;
 
 class ClientJeiUtil {
+    // todo is this still needed? i'm not supporting REI anymore
     // Required due to broken JEI implementation in REI plugin compatibility
     static <T> void checkTypedIngredient(IIngredientManager manager, IIngredientType<T> ingredientType, @Nullable T uncheckedIngredient, Consumer<ITypedIngredient<T>> action) {
         if ((uncheckedIngredient instanceof ItemStack stack && !stack.isEmpty()) || (uncheckedIngredient instanceof FluidStack fluidStack && !fluidStack.isEmpty())) {
-            manager.createTypedIngredient(ingredientType, uncheckedIngredient).ifPresent(action);
+            manager.createTypedIngredient(ingredientType, uncheckedIngredient, false).ifPresent(action);
         }
     }
 
@@ -57,7 +57,7 @@ class ClientJeiUtil {
     static <T> void showUsages(IFocusFactory focusFactory, ITypedIngredient<T> ingredient) {
         if (Minecraft.getInstance().screen instanceof IRecipesGui recipesGui) {
             // input + catalyst
-            recipesGui.show(List.of(focusFactory.createFocus(RecipeIngredientRole.INPUT, ingredient), focusFactory.createFocus(RecipeIngredientRole.CATALYST, ingredient)));
+            recipesGui.show(List.of(focusFactory.createFocus(RecipeIngredientRole.INPUT, ingredient), focusFactory.createFocus(RecipeIngredientRole.CRAFTING_STATION, ingredient)));
         }
     }
 
@@ -65,13 +65,10 @@ class ClientJeiUtil {
         INSTANCE;
 
         @Override
-        public void render(GuiGraphics graphics, @Nullable ItemStack ingredient) {
+        public void render(GuiGraphicsExtractor graphics, @Nullable ItemStack ingredient) {
             if (ingredient != null) {
-                // From mezz.jei.library.render.ItemStackRenderer
-                RenderSystem.enableDepthTest();
+                // From mezz.jei.library.render.ItemStackRenderer.render
                 ClientXeiUtil.renderItemWithAsterisk(graphics, ingredient);
-                // From end of DrawableIngredient
-                RenderSystem.disableDepthTest();
             }
         }
 

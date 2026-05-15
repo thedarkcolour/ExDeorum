@@ -23,17 +23,22 @@ import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
+import mezz.jei.api.gui.inputs.IJeiInputHandler;
+import mezz.jei.api.gui.inputs.IJeiUserInput;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
+import mezz.jei.api.gui.widgets.IRecipeExtrasBuilder;
 import mezz.jei.api.helpers.IJeiHelpers;
 import mezz.jei.api.helpers.IModIdHelper;
 import mezz.jei.api.recipe.IFocusFactory;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
-import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import mezz.jei.api.recipe.types.IRecipeType;
 import mezz.jei.api.runtime.IIngredientManager;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
@@ -44,8 +49,10 @@ import thedarkcolour.exdeorum.registry.EItems;
 
 public class CrookCategory implements IRecipeCategory<CrookJeiRecipe> {
     private static final Component REQUIRES_CERTAIN_STATE = Component.translatable(TranslationKeys.CROOK_CATEGORY_REQUIRES_STATE).withStyle(ChatFormatting.GRAY);
+    private static final int WIDTH = 120;
+    private static final int HEIGHT = 48;
+    private static final ScreenRectangle BLOCK_AREA = new ScreenRectangle(12, 10, 32, 32);
 
-    private final IDrawable background;
     private final IDrawable icon;
     private final IDrawable arrow;
     private final IDrawable slot;
@@ -59,7 +66,6 @@ public class CrookCategory implements IRecipeCategory<CrookJeiRecipe> {
 
     public CrookCategory(IJeiHelpers helpers, IDrawable arrow) {
         var helper = helpers.getGuiHelper();
-        this.background = helper.createBlankDrawable(120, 48);
         this.icon = helper.createDrawableItemStack(new ItemStack(EItems.CROOK.get()));
         this.arrow = arrow;
         this.slot = helper.getSlotDrawable();
@@ -71,7 +77,7 @@ public class CrookCategory implements IRecipeCategory<CrookJeiRecipe> {
     }
 
     @Override
-    public RecipeType<CrookJeiRecipe> getRecipeType() {
+    public IRecipeType<CrookJeiRecipe> getRecipeType() {
         return ExDeorumJeiPlugin.CROOK;
     }
 
@@ -81,8 +87,13 @@ public class CrookCategory implements IRecipeCategory<CrookJeiRecipe> {
     }
 
     @Override
-    public IDrawable getBackground() {
-        return this.background;
+    public int getWidth() {
+        return WIDTH;
+    }
+
+    @Override
+    public int getHeight() {
+        return HEIGHT;
     }
 
     @Override
@@ -93,14 +104,29 @@ public class CrookCategory implements IRecipeCategory<CrookJeiRecipe> {
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, CrookJeiRecipe recipe, IFocusGroup focuses) {
         recipe.addIngredients(builder);
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 80, 18).addItemStack(recipe.result).addRichTooltipCallback((recipeSlotView, tooltip) -> {
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 80, 18).add(recipe.result).addRichTooltipCallback((_, tooltip) -> {
             tooltip.add(ClientXeiUtil.formatChance(recipe.chance));
         });
     }
 
     @Override
-    public void draw(CrookJeiRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
-        this.timer.onDraw();
+    public void createRecipeExtras(IRecipeExtrasBuilder builder, CrookJeiRecipe recipe, IFocusGroup focuses) {
+        builder.addInputHandler(new IJeiInputHandler() {
+            @Override
+            public ScreenRectangle getArea() {
+                return BLOCK_AREA;
+            }
+
+            @Override
+            public boolean handleInput(double mouseX, double mouseY, IJeiUserInput input) {
+                return CrookCategory.this.handleBlockInput(recipe, input);
+            }
+        });
+    }
+
+    @Override
+    public void draw(CrookJeiRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphicsExtractor graphics, double mouseX, double mouseY) {
+        this.timer.onDraw(Minecraft.getInstance().hasShiftDown());
 
         this.arrow.draw(graphics, 50, 18);
         this.slot.draw(graphics, 79, 17);
@@ -126,22 +152,24 @@ public class CrookCategory implements IRecipeCategory<CrookJeiRecipe> {
         }
     }
 
-    @Override
-    public boolean handleInput(CrookJeiRecipe recipe, double mouseX, double mouseY, InputConstants.Key input) {
-        if (input.getType() == InputConstants.Type.MOUSE && (input.getValue() == InputConstants.MOUSE_BUTTON_LEFT || input.getValue() == InputConstants.MOUSE_BUTTON_RIGHT)) {
-            if (12 < mouseX && mouseX < 44 && 10 < mouseY && mouseY < 42) {
-                var block = this.timer.getCycledItem(recipe.states).getBlock();
-
-                ClientJeiUtil.checkTypedIngredient(this.ingredientManager, VanillaTypes.ITEM_STACK, new ItemStack(block.asItem()), ingredient -> {
-                    if (input.getValue() == InputConstants.MOUSE_BUTTON_LEFT) {
-                        ClientJeiUtil.showRecipes(this.focusFactory, ingredient);
-                    } else if (input.getValue() == InputConstants.MOUSE_BUTTON_RIGHT) {
-                        ClientJeiUtil.showUsages(this.focusFactory, ingredient);
-                    }
-                });
-
+    private boolean handleBlockInput(CrookJeiRecipe recipe, IJeiUserInput input) {
+        var key = input.getKey();
+        if (key.getType() == InputConstants.Type.MOUSE && (key.getValue() == InputConstants.MOUSE_BUTTON_LEFT || key.getValue() == InputConstants.MOUSE_BUTTON_RIGHT)) {
+            if (input.isSimulate()) {
                 return true;
             }
+
+            var block = this.timer.getCycledItem(recipe.states).getBlock();
+
+            ClientJeiUtil.checkTypedIngredient(this.ingredientManager, VanillaTypes.ITEM_STACK, new ItemStack(block.asItem()), ingredient -> {
+                if (key.getValue() == InputConstants.MOUSE_BUTTON_LEFT) {
+                    ClientJeiUtil.showRecipes(this.focusFactory, ingredient);
+                } else {
+                    ClientJeiUtil.showUsages(this.focusFactory, ingredient);
+                }
+            });
+
+            return true;
         }
         return false;
     }

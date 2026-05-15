@@ -25,7 +25,7 @@ import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.handlers.IGuiClickableArea;
 import mezz.jei.api.gui.handlers.IGuiContainerHandler;
 import mezz.jei.api.neoforge.NeoForgeTypes;
-import mezz.jei.api.recipe.RecipeType;
+import mezz.jei.api.recipe.types.IRecipeType;
 import mezz.jei.api.registration.IGuiHandlerRegistration;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
@@ -75,22 +75,22 @@ import java.util.function.Supplier;
 public class ExDeorumJeiPlugin implements IModPlugin {
     public static final Identifier EX_DEORUM_JEI_TEXTURE = ExDeorum.loc("textures/gui/jei/enr_jei.png");
 
-    static final RecipeType<BarrelCompostRecipe> BARREL_COMPOST = recipeType("barrel_compost", BarrelCompostRecipe.class);
-    static final RecipeType<BarrelMixingRecipe> BARREL_MIXING = recipeType("barrel_mixing", BarrelMixingRecipe.class);
-    static final RecipeType<BarrelFluidMixingRecipe> BARREL_FLUID_MIXING = recipeType("barrel_fluid_mixing", BarrelFluidMixingRecipe.class);
-    static final RecipeType<CrucibleRecipe> LAVA_CRUCIBLE = recipeType("lava_crucible", CrucibleRecipe.class);
-    static final RecipeType<CrucibleRecipe> WATER_CRUCIBLE = recipeType("water_crucible", CrucibleRecipe.class);
-    static final RecipeType<CrucibleHeatSourceRecipe> CRUCIBLE_HEAT_SOURCES = recipeType("crucible_heat_sources", CrucibleHeatSourceRecipe.class);
-    static final RecipeType<XeiSieveRecipe> SIEVE = recipeType("sieve", XeiSieveRecipe.class);
-    static final RecipeType<XeiSieveRecipe> COMPRESSED_SIEVE = recipeType("compressed_sieve", XeiSieveRecipe.class);
-    static final RecipeType<HammerRecipe> HAMMER = recipeType("hammer", HammerRecipe.class);
-    static final RecipeType<HammerRecipe> COMPRESSED_HAMMER = recipeType("compressed_hammer", CompressedHammerRecipe.class);
-    static final RecipeType<CrookJeiRecipe> CROOK = recipeType("crook", CrookJeiRecipe.class);
+    static final IRecipeType<BarrelCompostRecipe> BARREL_COMPOST = recipeType("barrel_compost", BarrelCompostRecipe.class);
+    static final IRecipeType<BarrelMixingRecipe> BARREL_MIXING = recipeType("barrel_mixing", BarrelMixingRecipe.class);
+    static final IRecipeType<BarrelFluidMixingRecipe> BARREL_FLUID_MIXING = recipeType("barrel_fluid_mixing", BarrelFluidMixingRecipe.class);
+    static final IRecipeType<CrucibleRecipe> LAVA_CRUCIBLE = recipeType("lava_crucible", CrucibleRecipe.class);
+    static final IRecipeType<CrucibleRecipe> WATER_CRUCIBLE = recipeType("water_crucible", CrucibleRecipe.class);
+    static final IRecipeType<CrucibleHeatSourceRecipe> CRUCIBLE_HEAT_SOURCES = recipeType("crucible_heat_sources", CrucibleHeatSourceRecipe.class);
+    static final IRecipeType<XeiSieveRecipe> SIEVE = recipeType("sieve", XeiSieveRecipe.class);
+    static final IRecipeType<XeiSieveRecipe> COMPRESSED_SIEVE = recipeType("compressed_sieve", XeiSieveRecipe.class);
+    static final IRecipeType<HammerRecipe> HAMMER = recipeType("hammer", HammerRecipe.class);
+    static final IRecipeType<HammerRecipe> COMPRESSED_HAMMER = recipeType("compressed_hammer", CompressedHammerRecipe.class);
+    static final IRecipeType<CrookJeiRecipe> CROOK = recipeType("crook", CrookJeiRecipe.class);
 
-    private static <T> RecipeType<T> recipeType(String path, Class<? extends T> type) {
+    private static <T> IRecipeType<T> recipeType(String path, Class<? extends T> type) {
         // use alternative namespace so that EMI doesn't skip JEI compatibility
         String namespace = ModList.get().isLoaded(ModIds.EMI) ? ExDeorum.ID + "_" + ModIds.EMI : ExDeorum.ID;
-        return RecipeType.create(namespace, path, type);
+        return IRecipeType.create(namespace, path, type);
     }
 
     @Override
@@ -127,42 +127,42 @@ public class ExDeorumJeiPlugin implements IModPlugin {
 
         for (var barrel : barrels) {
             var stack = new ItemStack(barrel);
-            registration.addRecipeCatalyst(stack, BARREL_COMPOST);
-            registration.addRecipeCatalyst(stack, BARREL_MIXING);
-            registration.addRecipeCatalyst(stack, BARREL_FLUID_MIXING);
+            registration.addCraftingStation(BARREL_COMPOST, stack);
+            registration.addCraftingStation(BARREL_MIXING, stack);
+            registration.addCraftingStation(BARREL_FLUID_MIXING, stack);
         }
         for (var lavaCrucible : lavaCrucibles) {
             var stack = new ItemStack(lavaCrucible);
-            registration.addRecipeCatalyst(stack, LAVA_CRUCIBLE);
-            registration.addRecipeCatalyst(stack, CRUCIBLE_HEAT_SOURCES);
+            registration.addCraftingStation(LAVA_CRUCIBLE, stack);
+            registration.addCraftingStation(CRUCIBLE_HEAT_SOURCES, stack);
         }
         for (var waterCrucible : waterCrucibles) {
-            registration.addRecipeCatalyst(new ItemStack(waterCrucible), WATER_CRUCIBLE);
+            registration.addCraftingStation(WATER_CRUCIBLE, new ItemStack(waterCrucible));
         }
         for (var sieve : sieves) {
-            registration.addRecipeCatalyst(new ItemStack(sieve), SIEVE);
+            registration.addCraftingStation(SIEVE, new ItemStack(sieve));
         }
         for (var compressedSieve : compressedSieves) {
-            registration.addRecipeCatalyst(new ItemStack(compressedSieve), COMPRESSED_SIEVE);
+            registration.addCraftingStation(COMPRESSED_SIEVE, new ItemStack(compressedSieve));
         }
 
-        registration.addRecipeCatalyst(new ItemStack(EItems.WOODEN_HAMMER.get()), HAMMER);
-        registration.addRecipeCatalyst(new ItemStack(EItems.STONE_HAMMER.get()), HAMMER);
-        registration.addRecipeCatalyst(new ItemStack(EItems.GOLDEN_HAMMER.get()), HAMMER);
-        registration.addRecipeCatalyst(new ItemStack(EItems.IRON_HAMMER.get()), HAMMER);
-        registration.addRecipeCatalyst(new ItemStack(EItems.DIAMOND_HAMMER.get()), HAMMER);
-        registration.addRecipeCatalyst(new ItemStack(EItems.NETHERITE_HAMMER.get()), HAMMER);
-        registration.addRecipeCatalyst(new ItemStack(EItems.MECHANICAL_HAMMER.get()), HAMMER);
+        registration.addCraftingStation(HAMMER, new ItemStack(EItems.WOODEN_HAMMER.get()));
+        registration.addCraftingStation(HAMMER, new ItemStack(EItems.STONE_HAMMER.get()));
+        registration.addCraftingStation(HAMMER, new ItemStack(EItems.GOLDEN_HAMMER.get()));
+        registration.addCraftingStation(HAMMER, new ItemStack(EItems.IRON_HAMMER.get()));
+        registration.addCraftingStation(HAMMER, new ItemStack(EItems.DIAMOND_HAMMER.get()));
+        registration.addCraftingStation(HAMMER, new ItemStack(EItems.NETHERITE_HAMMER.get()));
+        registration.addCraftingStation(HAMMER, new ItemStack(EItems.MECHANICAL_HAMMER.get()));
 
-        registration.addRecipeCatalyst(new ItemStack(EItems.COMPRESSED_WOODEN_HAMMER.get()), COMPRESSED_HAMMER);
-        registration.addRecipeCatalyst(new ItemStack(EItems.COMPRESSED_STONE_HAMMER.get()), COMPRESSED_HAMMER);
-        registration.addRecipeCatalyst(new ItemStack(EItems.COMPRESSED_GOLDEN_HAMMER.get()), COMPRESSED_HAMMER);
-        registration.addRecipeCatalyst(new ItemStack(EItems.COMPRESSED_IRON_HAMMER.get()), COMPRESSED_HAMMER);
-        registration.addRecipeCatalyst(new ItemStack(EItems.COMPRESSED_DIAMOND_HAMMER.get()), COMPRESSED_HAMMER);
-        registration.addRecipeCatalyst(new ItemStack(EItems.COMPRESSED_NETHERITE_HAMMER.get()), COMPRESSED_HAMMER);
+        registration.addCraftingStation(COMPRESSED_HAMMER, new ItemStack(EItems.COMPRESSED_WOODEN_HAMMER.get()));
+        registration.addCraftingStation(COMPRESSED_HAMMER, new ItemStack(EItems.COMPRESSED_STONE_HAMMER.get()));
+        registration.addCraftingStation(COMPRESSED_HAMMER, new ItemStack(EItems.COMPRESSED_GOLDEN_HAMMER.get()));
+        registration.addCraftingStation(COMPRESSED_HAMMER, new ItemStack(EItems.COMPRESSED_IRON_HAMMER.get()));
+        registration.addCraftingStation(COMPRESSED_HAMMER, new ItemStack(EItems.COMPRESSED_DIAMOND_HAMMER.get()));
+        registration.addCraftingStation(COMPRESSED_HAMMER, new ItemStack(EItems.COMPRESSED_NETHERITE_HAMMER.get()));
 
-        registration.addRecipeCatalyst(new ItemStack(EItems.CROOK.get()), CROOK);
-        registration.addRecipeCatalyst(new ItemStack(EItems.BONE_CROOK.get()), CROOK);
+        registration.addCraftingStation(CROOK, new ItemStack(EItems.CROOK.get()));
+        registration.addCraftingStation(CROOK, new ItemStack(EItems.BONE_CROOK.get()));
     }
 
     @Override
@@ -299,7 +299,7 @@ public class ExDeorumJeiPlugin implements IModPlugin {
         });
     }
 
-    private static <C extends RecipeInput, T extends Recipe<C>> void addRecipes(IRecipeRegistration registration, RecipeType<T> category, Supplier<net.minecraft.world.item.crafting.RecipeType<T>> type) {
+    private static <C extends RecipeInput, T extends Recipe<C>> void addRecipes(IRecipeRegistration registration, IRecipeType<T> category, Supplier<net.minecraft.world.item.crafting.RecipeType<T>> type) {
         registration.addRecipes(category, CompatUtil.collectAllRecipes(type.get(), Function.identity()));
     }
 }

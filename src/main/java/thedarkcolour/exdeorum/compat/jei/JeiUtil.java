@@ -10,8 +10,8 @@ class JeiUtil {
     }
 
     public static IRecipeSlotBuilder addFluidIngredient(IRecipeSlotBuilder builder, FluidIngredient ingredient, int amount) {
-        for (var stack : ingredient.getStacks()) {
-            builder.addFluidStack(stack.getFluid(), amount);
+        for (var fluidHolder : ingredient.fluids()) {
+            builder.add(fluidHolder.value(), amount);
         }
         return builder;
     }

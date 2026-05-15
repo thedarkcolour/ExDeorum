@@ -60,7 +60,6 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 // Exclude compat packages for libraries without 1.26.1 support yet
 sourceSets.main.java.exclude(
-    '**/compat/jei/**',
     '**/compat/emi/**',
     '**/compat/jade/**',
     '**/compat/kubejs/**',
@@ -124,9 +123,9 @@ dependencies {
     //}
     // JADE OPTIONAL
     //implementation("curse.maven:jade-324717:6291517")
-    // JEI OPTIONAL
-    //compileOnly("mezz.jei:jei-${mc_version}-neoforge-api:${jei_version}")
-    //runtimeOnly("mezz.jei:jei-${mc_version}-neoforge:${jei_version}")
+    // JEI OPTIONAL todo change back to mc_version
+    compileOnly("mezz.jei:jei-${'26.1.2'}-neoforge-api:${jei_version}")
+    runtimeOnly("mezz.jei:jei-${'26.1.2'}-neoforge:${jei_version}")
     // EMI OPTIONAL
     //compileOnly("dev.emi:emi-neoforge:${emi_version}+${mc_version}:api")
     //runtimeOnly("dev.emi:emi-neoforge:${emi_version}+${mc_version}")
