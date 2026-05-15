@@ -1,6 +1,7 @@
 ## Ex Deorum 4.0
 - Added Pale Oak Crucible, Sieve, Compressed Sieve, and Barrel
 - Added Creaking Core to turn Pale Oak Log into Creaking Heart
+- Added Copper Watering Can in parity with Vanilla's new copper tools
 - Added new Moss Block sieve drops:
   - Pale Oak Sapling now drops from all meshes
   - Bush now drops from Flint Mesh

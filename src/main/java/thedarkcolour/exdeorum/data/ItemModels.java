@@ -41,6 +41,7 @@ class ItemModels {
 
         models.handheld(EItems.WOODEN_WATERING_CAN);
         models.handheld(EItems.STONE_WATERING_CAN);
+        models.handheld(EItems.COPPER_WATERING_CAN);
         models.handheld(EItems.IRON_WATERING_CAN);
         models.handheld(EItems.GOLDEN_WATERING_CAN);
         models.handheld(EItems.DIAMOND_WATERING_CAN);

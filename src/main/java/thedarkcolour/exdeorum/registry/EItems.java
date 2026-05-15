@@ -52,6 +52,7 @@ public class EItems {
     // Watering cans
     public static final DeferredItem<Item> WOODEN_WATERING_CAN = register("wooden_watering_can", properties -> new WateringCanItem(300, properties.stacksTo(1)));
     public static final DeferredItem<Item> STONE_WATERING_CAN = register("stone_watering_can", properties -> new WateringCanItem(1000, properties.stacksTo(1)));
+    public static final DeferredItem<Item> COPPER_WATERING_CAN = register("copper_watering_can", properties -> new WateringCanItem(2000, properties.stacksTo(1)));
     public static final DeferredItem<Item> IRON_WATERING_CAN = register("iron_watering_can", properties -> new WateringCanItem(2000, properties.stacksTo(1)));
     public static final DeferredItem<Item> GOLDEN_WATERING_CAN = register("golden_watering_can", properties -> new WateringCanItem(4000, properties.stacksTo(1)));
     public static final DeferredItem<Item> DIAMOND_WATERING_CAN = register("diamond_watering_can", properties -> new WideWateringCanItem(false, properties.stacksTo(1)));
@@ -170,6 +171,7 @@ public class EItems {
     public static final DeferredItem<BlockItem> END_CAKE = registerItemBlock(EBlocks.END_CAKE);
     public static final DeferredItem<BlockItem> INFESTED_LEAVES = registerItemBlock(EBlocks.INFESTED_LEAVES);
 
+    public static final List<DeferredItem<Item>> WATERING_CANS = List.of(WOODEN_WATERING_CAN, STONE_WATERING_CAN, COPPER_WATERING_CAN, IRON_WATERING_CAN, GOLDEN_WATERING_CAN, DIAMOND_WATERING_CAN, NETHERITE_WATERING_CAN);
 
     public static void addItemsToMainTab(CreativeModeTab.Output output) {
         for (var material : Iterables.concat(CompatUtil.getAvailableBarrels(true), CompatUtil.getAvailableSieves(true, false), CompatUtil.getAvailableCompressedSieves(true))) {
@@ -219,8 +221,7 @@ public class EItems {
         output.accept(COOKED_SILKWORM.get());
         output.accept(CROOK.get());
         output.accept(BONE_CROOK.get());
-        var wateringCans = List.of(WOODEN_WATERING_CAN, STONE_WATERING_CAN, IRON_WATERING_CAN, GOLDEN_WATERING_CAN, DIAMOND_WATERING_CAN, NETHERITE_WATERING_CAN);
-        for (var wateringCan : wateringCans) {
+        for (var wateringCan : WATERING_CANS) {
             var full = WateringCanItem.getFull(wateringCan);
             output.accept(wateringCan.get());
             output.accept(full);

@@ -34,6 +34,7 @@ import net.minecraft.util.Unit;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -283,18 +284,12 @@ public final class EventHandler {
         event.registerBlockEntity(Capabilities.Item.BLOCK, EBlockEntities.WATER_CRUCIBLE.get(), (crucible, direction) -> new LegacyItemHandlerTransfer(crucible.getItem()));
         event.registerBlockEntity(Capabilities.Fluid.BLOCK, EBlockEntities.WATER_CRUCIBLE.get(), (crucible, direction) -> new LegacyFluidTankTransfer(crucible.getTank()));
 
-        event.registerItem(Capabilities.Fluid.ITEM, (stack, ctx) -> ctx == null ? null : new LegacyFluidItemAccessTransfer(ctx, PorcelainBucket.ItemHandler::new),
+        event.registerItem(Capabilities.Fluid.ITEM, (_, ctx) -> new LegacyFluidItemAccessTransfer(ctx, PorcelainBucket.ItemHandler::new),
                 EItems.PORCELAIN_BUCKET,
                 EItems.PORCELAIN_WATER_BUCKET,
                 EItems.PORCELAIN_LAVA_BUCKET,
                 EItems.PORCELAIN_MILK_BUCKET,
                 EItems.PORCELAIN_WITCH_WATER_BUCKET);
-        event.registerItem(Capabilities.Fluid.ITEM, (stack, ctx) -> ctx == null ? null : new LegacyFluidItemAccessTransfer(ctx, WateringCanItem.FluidHandler::new),
-                EItems.WOODEN_WATERING_CAN,
-                EItems.STONE_WATERING_CAN,
-                EItems.IRON_WATERING_CAN,
-                EItems.GOLDEN_WATERING_CAN,
-                EItems.DIAMOND_WATERING_CAN,
-                EItems.NETHERITE_WATERING_CAN);
+        event.registerItem(Capabilities.Fluid.ITEM, (_, ctx) -> new LegacyFluidItemAccessTransfer(ctx, WateringCanItem.FluidHandler::new), EItems.WATERING_CANS.toArray(ItemLike[]::new));
     }
 }

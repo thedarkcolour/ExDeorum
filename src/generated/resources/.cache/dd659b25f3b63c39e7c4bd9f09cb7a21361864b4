@@ -1,4 +1,4 @@
-// 26.1.2	2026-05-15T13:35:45.564024987	ModKit Recipes for mod 'exdeorum'
+// 26.1.2	2026-05-15T14:18:28.258585953	ModKit Recipes for mod 'exdeorum'
 0060d0e16dba2df44cc115f8ed68ef5dc52c74f1 data/exdeorum/advancement/recipes/building_blocks/andesite.json
 b9c5d12771d724cd646e637641da7a4d6b0a6bbf data/exdeorum/advancement/recipes/building_blocks/basalt.json
 d87a237248c140367dbfb748d45f532534e5b45c data/exdeorum/advancement/recipes/building_blocks/blackstone.json
@@ -205,6 +205,7 @@ fa317e0e8887b640978d7b3cf13a894c01918752 data/exdeorum/advancement/recipes/tools
 6da1d5298bda12a9b9037871e99d0ec6997b23cc data/exdeorum/advancement/recipes/tools/compressed_netherite_hammer.json
 6eccf976923f18bea6072818b804dae52e1588da data/exdeorum/advancement/recipes/tools/compressed_stone_hammer.json
 ca061bf2d0df36d7e73c3d115a7ee909eae5d978 data/exdeorum/advancement/recipes/tools/compressed_wooden_hammer.json
+d614acd345ba5d6ec095f116b0499079de2e1b7a data/exdeorum/advancement/recipes/tools/copper_watering_can.json
 3024e4883143c79e5ca1b787b1b6f882c31df9dd data/exdeorum/advancement/recipes/tools/crook.json
 5611c6255c467b58903146b6aa45c04b2333b6f5 data/exdeorum/advancement/recipes/tools/diamond_hammer.json
 e6a4a0f007a873628ad73e63fda13e5d41140343 data/exdeorum/advancement/recipes/tools/diamond_watering_can.json
@@ -1225,6 +1226,7 @@ f75f50de4e82c951d409cf2ee2c9ef36fb530681 data/exdeorum/recipe/compressed_stone_h
 a96c72e752d046013e08ad0647a4e1315edac0af data/exdeorum/recipe/cooked_silkworm_from_campfire_cooking.json
 0ac4b2838492d19d35923e15c6fd6e09d2fa1667 data/exdeorum/recipe/cooked_silkworm_from_smoking.json
 65684fe56a6af62a689c2b13844cc27cefaafeb9 data/exdeorum/recipe/copper_ore.json
+ee0a2755375533b3b246d643adcb6d0b00c1f291 data/exdeorum/recipe/copper_watering_can.json
 9e43f8e85af0e75617f824566b580f3f731c7c05 data/exdeorum/recipe/creaking_core.json
 cceee6f7baeb4725a3ac6568f869f9724e2a21b9 data/exdeorum/recipe/crimson_barrel.json
 f7caaff7a9c182901eaff290b6d61382efa279bb data/exdeorum/recipe/crimson_compressed_sieve.json

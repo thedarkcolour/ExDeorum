@@ -26,12 +26,14 @@ import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.levelgen.presets.WorldPreset;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.asm.ASMHooks;
@@ -69,14 +71,7 @@ public class ClientHandler {
 
     private static void registerClientExtensions(RegisterClientExtensionsEvent event) {
         event.registerFluidType(new WitchWaterFluid.ClientExtensions(), EFluids.WITCH_WATER_TYPE.get());
-        event.registerItem(new WateringCanItem.ClientExtensions(),
-                EItems.WOODEN_WATERING_CAN.get(),
-                EItems.STONE_WATERING_CAN.get(),
-                EItems.IRON_WATERING_CAN.get(),
-                EItems.GOLDEN_WATERING_CAN.get(),
-                EItems.DIAMOND_WATERING_CAN.get(),
-                EItems.NETHERITE_WATERING_CAN.get()
-        );
+        event.registerItem(new WateringCanItem.ClientExtensions(), EItems.WATERING_CANS.stream().map(DeferredItem::asItem).toArray(Item[]::new));
     }
 
     private static void registerFluidModels(RegisterFluidModelsEvent event) {
@@ -93,7 +88,7 @@ public class ClientHandler {
     }
 
     private static void addClientReloadListeners(AddClientReloadListenersEvent event) {
-        event.addListener(ExDeorum.loc("render_util"), (ResourceManagerReloadListener) resourceManager -> RenderUtil.reload());
+        event.addListener(ExDeorum.loc("render_util"), (ResourceManagerReloadListener) _ -> RenderUtil.reload());
     }
 
     private static void registerMenuScreens(RegisterMenuScreensEvent event) {
@@ -120,11 +115,11 @@ public class ClientHandler {
     private static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(EBlockEntities.INFESTED_LEAVES.get(), InfestedLeavesRenderer::new);
         event.registerBlockEntityRenderer(EBlockEntities.BARREL.get(), BarrelRenderer::new);
-        event.registerBlockEntityRenderer(EBlockEntities.LAVA_CRUCIBLE.get(), ctx -> new CrucibleRenderer());
-        event.registerBlockEntityRenderer(EBlockEntities.WATER_CRUCIBLE.get(), ctx -> new CrucibleRenderer());
-        event.registerBlockEntityRenderer(EBlockEntities.SIEVE.get(), ctx -> new SieveRenderer<>(0.75f, 15f));
-        event.registerBlockEntityRenderer(EBlockEntities.MECHANICAL_SIEVE.get(), ctx -> new SieveRenderer<>(0.75f, 15f));
-        event.registerBlockEntityRenderer(EBlockEntities.COMPRESSED_SIEVE.get(), ctx -> new CompressedSieveRenderer<>(0.5625f, 16f));
+        event.registerBlockEntityRenderer(EBlockEntities.LAVA_CRUCIBLE.get(), _ -> new CrucibleRenderer());
+        event.registerBlockEntityRenderer(EBlockEntities.WATER_CRUCIBLE.get(), _ -> new CrucibleRenderer());
+        event.registerBlockEntityRenderer(EBlockEntities.SIEVE.get(), _ -> new SieveRenderer<>(0.75f, 15f));
+        event.registerBlockEntityRenderer(EBlockEntities.MECHANICAL_SIEVE.get(), _ -> new SieveRenderer<>(0.75f, 15f));
+        event.registerBlockEntityRenderer(EBlockEntities.COMPRESSED_SIEVE.get(), _ -> new CompressedSieveRenderer<>(0.5625f, 16f));
     }
 
     // Sets Ex Deorum world type as default

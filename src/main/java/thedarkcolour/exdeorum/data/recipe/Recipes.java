@@ -346,6 +346,7 @@ public class Recipes {
         // Watering cans
         wateringCan(recipes, EItems.WOODEN_WATERING_CAN, recipes.ingredient(ItemTags.PLANKS));
         wateringCan(recipes, EItems.STONE_WATERING_CAN, recipes.ingredient(ItemTags.STONE_TOOL_MATERIALS));
+        wateringCan(recipes, EItems.COPPER_WATERING_CAN, recipes.ingredient(Tags.Items.INGOTS_COPPER));
         wateringCan(recipes, EItems.IRON_WATERING_CAN, recipes.ingredient(Tags.Items.INGOTS_IRON));
         wateringCan(recipes, EItems.GOLDEN_WATERING_CAN, recipes.ingredient(Tags.Items.INGOTS_GOLD));
         wateringCan(recipes, EItems.DIAMOND_WATERING_CAN, recipes.ingredient(Tags.Items.GEMS_DIAMOND));
