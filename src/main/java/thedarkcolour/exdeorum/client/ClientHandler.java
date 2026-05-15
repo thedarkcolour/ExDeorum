@@ -27,10 +27,12 @@ import net.minecraft.world.level.levelgen.presets.WorldPreset;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.event.config.ModConfigEvent;
+import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.asm.ASMHooks;
 import thedarkcolour.exdeorum.client.screen.MechanicalHammerScreen;
@@ -121,7 +123,9 @@ public class ClientHandler {
     }
 
     private static void onRecipesReceived(RecipesReceivedEvent event) {
-        RecipeUtil.reload(event.getRecipeMap());
+        if (ServerLifecycleHooks.getCurrentServer() == null) {
+            RecipeUtil.reload(event.getRecipeMap());
+        }
     }
 
     public static void disableVoidFogRendering() {

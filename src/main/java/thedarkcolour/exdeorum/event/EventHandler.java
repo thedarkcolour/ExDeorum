@@ -33,6 +33,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.util.Unit;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -50,15 +51,17 @@ import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.client.event.ClientChatEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.NeoForgeMod;
-import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
+import net.neoforged.neoforge.event.OnDatapackSyncEvent;
+import net.neoforged.neoforge.event.TagsUpdatedEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.level.LevelEvent;
+import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.neoforged.neoforge.event.server.ServerStoppingEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.neoforged.neoforge.fluids.FluidInteractionRegistry;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
-import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
-import net.neoforged.neoforge.resource.VanillaServerListeners;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.blockentity.AbstractCrucibleBlockEntity;
 import thedarkcolour.exdeorum.blockentity.AbstractMachineBlockEntity;
@@ -76,6 +79,7 @@ import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.registry.EBlockEntities;
 import thedarkcolour.exdeorum.registry.EFluids;
 import thedarkcolour.exdeorum.registry.EItems;
+import thedarkcolour.exdeorum.registry.ERecipeTypes;
 import thedarkcolour.exdeorum.tag.EBiomeTags;
 import thedarkcolour.exdeorum.transfer.LegacyEnergyStorageTransfer;
 import thedarkcolour.exdeorum.transfer.LegacyFluidItemAccessTransfer;
@@ -86,12 +90,16 @@ import thedarkcolour.exdeorum.voidworld.VoidChunkGenerator;
 import java.util.Locale;
 
 public final class EventHandler {
+    private static boolean reloadRecipesNextTick;
+
     public static void register(IEventBus modBus) {
         var fmlBus = NeoForge.EVENT_BUS;
 
         fmlBus.addListener(EventHandler::onPlayerLogin);
-        fmlBus.addListener(EventHandler::addReloadListeners);
         fmlBus.addListener(EventHandler::createSpawnTree);
+        fmlBus.addListener(EventHandler::serverStarted);
+        fmlBus.addListener(EventHandler::tagsUpdated);
+        fmlBus.addListener(EventHandler::onDataPackSync);
         modBus.addListener(EventHandler::interModEnqueue);
         modBus.addListener(EventHandler::onCommonSetup);
         modBus.addListener(EventHandler::registerPayloadHandler);
@@ -105,7 +113,24 @@ public final class EventHandler {
     }
 
     private static void serverShutdown(ServerStoppingEvent event) {
+        reloadRecipesNextTick = false;
         RecipeUtil.unload();
+    }
+
+    private static void serverStarted(ServerStartedEvent event) {
+        reloadRecipesNextTick = false;
+        RecipeUtil.reload(event.getServer().getRecipeManager().recipeMap());
+    }
+
+    private static void tagsUpdated(TagsUpdatedEvent event) {
+        if (event.getUpdateCause() == TagsUpdatedEvent.UpdateCause.SERVER_DATA_LOAD && ServerLifecycleHooks.getCurrentServer() != null) {
+            reloadRecipesNextTick = true;
+        }
+    }
+
+    private static void onDataPackSync(OnDatapackSyncEvent event) {
+        // sync all recipes
+        event.sendRecipes(ERecipeTypes.RECIPE_TYPES.getEntries().stream().map(DeferredHolder::get).toArray(RecipeType[]::new));
     }
 
     private static void handleDebugCommands(ClientChatEvent event) {
@@ -198,7 +223,7 @@ public final class EventHandler {
 
     private static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
-            var generator = ((ServerLevel) player.level()).getChunkSource().getGenerator();
+            var generator = player.level().getChunkSource().getGenerator();
 
             // tries to account for other SkyBlock generator mods like SkyBlockBuilder
             if (generator instanceof VoidChunkGenerator || generator.getClass().getName().toLowerCase(Locale.ROOT).contains("skyblock")) {
@@ -233,14 +258,12 @@ public final class EventHandler {
         }
     }
 
-    private static void addReloadListeners(AddServerReloadListenersEvent event) {
-        var recipeManager = event.getServerResources().getRecipeManager();
-        var listenerId = ExDeorum.loc("recipes");
-        event.addListener(listenerId, (ResourceManagerReloadListener) resourceManager -> RecipeUtil.reload(recipeManager.recipeMap()));
-        event.addDependency(listenerId, VanillaServerListeners.RECIPES);
-    }
-
     private static void serverTick(ServerTickEvent.Post event) {
+        if (reloadRecipesNextTick) {
+            reloadRecipesNextTick = false;
+            RecipeUtil.reload(event.getServer().getRecipeManager().recipeMap());
+        }
+
         VisualUpdateTracker.syncVisualUpdates(event.getServer());
     }
 
