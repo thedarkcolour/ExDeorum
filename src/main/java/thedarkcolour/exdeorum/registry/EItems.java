@@ -120,6 +120,7 @@ public class EItems {
     public static final DeferredItem<Item> WARPED_NYLIUM_SPORES = register("warped_nylium_spores", properties -> new NyliumSpreaderItem(properties, Blocks.WARPED_NYLIUM::defaultBlockState));
     public static final DeferredItem<Item> CRIMSON_NYLIUM_SPORES = register("crimson_nylium_spores", properties -> new NyliumSpreaderItem(properties, Blocks.CRIMSON_NYLIUM::defaultBlockState));
     public static final DeferredItem<Item> SCULK_CORE = register("sculk_core", properties -> new SculkCoreItem(properties.stacksTo(1)));
+    public static final DeferredItem<Item> CREAKING_CORE = register("creaking_core", CreakingCoreItem::new);
     public static final DeferredItem<Item> RANDOM_POTTERY_SHERD = register("random_pottery_sherd", properties -> new RandomResultItem(properties, EItemTags.RANDOM_SHERD_DROPS));
     public static final DeferredItem<Item> RANDOM_ARMOR_TRIM = register("random_armor_trim", properties -> new RandomResultItem(properties, EItemTags.RANDOM_TRIM_DROPS));
     public static final DeferredItem<Item> WOOD_CHIPPINGS = registerSimpleItem("wood_chippings");
@@ -276,6 +277,7 @@ public class EItems {
         output.accept(WARPED_NYLIUM_SPORES.get());
         output.accept(CRIMSON_NYLIUM_SPORES.get());
         output.accept(SCULK_CORE.get());
+        output.accept(CREAKING_CORE.get());
         output.accept(WOOD_CHIPPINGS.get());
         output.accept(PORCELAIN_CLAY_BALL.get());
         output.accept(UNFIRED_PORCELAIN_BUCKET.get());

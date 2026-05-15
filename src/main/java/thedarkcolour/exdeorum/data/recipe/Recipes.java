@@ -365,6 +365,13 @@ public class Recipes {
             recipe.pattern("#O#");
             recipe.pattern(" # ");
         });
+        recipes.shapedCrafting(RecipeCategory.MISC, EItems.CREAKING_CORE.get(), recipe -> {
+            recipe.define('#', Items.RESIN_CLUMP);
+            recipe.define('O', Items.ENDER_PEARL);
+            recipe.pattern(" # ");
+            recipe.pattern("#O#");
+            recipe.pattern(" # ");
+        });
         recipes.shapedCrafting(RecipeCategory.FOOD, EItems.END_CAKE.get(), recipe -> {
             recipe.define('P', Items.ENDER_EYE);
             recipe.define('S', Items.SUGAR);

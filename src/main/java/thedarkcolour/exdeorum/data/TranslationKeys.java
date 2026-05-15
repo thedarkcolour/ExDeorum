@@ -60,6 +60,7 @@ public class TranslationKeys {
     public static final String WARPED_NYLIUM_SPORES_JEI_INFO = "info." + ExDeorum.ID + ".warped_nylium_spores";
     public static final String CRIMSON_NYLIUM_SPORES_JEI_INFO = "info." + ExDeorum.ID + ".crimson_nylium_spores";
     public static final String SCULK_CORE_JEI_INFO = "info." + ExDeorum.ID + ".sculk_core";
+    public static final String CREAKING_CORE_JEI_INFO = "info." + ExDeorum.ID + ".creaking_core";
     public static final String MECHANICAL_SIEVE_JEI_INFO = "info." + ExDeorum.ID + ".mechanical_sieve";
     public static final String MECHANICAL_HAMMER_JEI_INFO = "info." + ExDeorum.ID + ".mechanical_hammer";
 

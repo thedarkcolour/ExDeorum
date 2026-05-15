@@ -18,52 +18,41 @@
 
 package thedarkcolour.exdeorum.item;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SculkShriekerBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import org.joml.Math;
 import thedarkcolour.exdeorum.registry.ESounds;
 
-public class SculkCoreItem extends Item {
+public class SculkCoreItem extends BlockTransformingItem {
     public SculkCoreItem(Properties properties) {
         super(properties);
     }
 
     @Override
-    public InteractionResult useOn(UseOnContext context) {
-        var level = context.getLevel();
-        var pos = context.getClickedPos();
-        var state = level.getBlockState(pos);
+    protected boolean canTransformState(BlockState state) {
+        return state.getBlock() == Blocks.SCULK_SHRIEKER && !state.getValue(SculkShriekerBlock.CAN_SUMMON);
+    }
 
-        if (state.getBlock() == Blocks.SCULK_SHRIEKER && !state.getValue(SculkShriekerBlock.CAN_SUMMON)) {
-            var stack = context.getItemInHand();
-            var player = context.getPlayer();
-
-            if (!level.isClientSide()) {
-                if (!player.getAbilities().instabuild) {
-                    stack.shrink(1);
-                }
-                level.setBlock(pos, state.setValue(SculkShriekerBlock.CAN_SUMMON, true), 3);
-            } else {
-                var rand = level.getRandom();
-                for (int i = 0; i < 10; i++) {
-                    int j = i * 36;
-                    double radians = Math.toRadians(j);
-                    for (int k = 0; k < 3; k++) {
-                        level.addParticle(ParticleTypes.PORTAL, pos.getX() + 0.5 + 0.3 * (-0.5 + rand.nextFloat()), pos.getY() + 0.5625, pos.getZ() + 0.5 + 0.3 * (-0.5 + rand.nextFloat()),
-                                Math.cos(radians) * 0.15, 0.15, Math.sin(radians) * 0.15);
-                    }
+    @Override
+    protected void doTransformState(Level level, BlockPos pos, BlockState state) {
+        if (!level.isClientSide()) {
+            level.setBlock(pos, state.setValue(SculkShriekerBlock.CAN_SUMMON, true), 3);
+        } else {
+            var rand = level.getRandom();
+            for (int i = 0; i < 10; i++) {
+                int j = i * 36;
+                double radians = Math.toRadians(j);
+                for (int k = 0; k < 3; k++) {
+                    level.addParticle(ParticleTypes.PORTAL, pos.getX() + 0.5 + 0.3 * (-0.5 + rand.nextFloat()), pos.getY() + 0.5625, pos.getZ() + 0.5 + 0.3 * (-0.5 + rand.nextFloat()),
+                            Math.cos(radians) * 0.15, 0.15, Math.sin(radians) * 0.15);
                 }
             }
-            level.playSound(null, pos, ESounds.SCULK_CORE_ACTIVATE.get(), SoundSource.BLOCKS, 1.0f, 1.0f);
-
-            return level.isClientSide() ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
         }
-
-        return InteractionResult.PASS;
+        level.playSound(null, pos, ESounds.SCULK_CORE_ACTIVATE.get(), SoundSource.BLOCKS, 1.0f, 1.0f);
     }
 }

@@ -1,4 +1,4 @@
-// 26.1.1	2026-05-14T21:40:52.187136309	ModKit Recipes for mod 'exdeorum'
+// 26.1.1	2026-05-15T11:59:32.033519479	ModKit Recipes for mod 'exdeorum'
 0060d0e16dba2df44cc115f8ed68ef5dc52c74f1 data/exdeorum/advancement/recipes/building_blocks/andesite.json
 b9c5d12771d724cd646e637641da7a4d6b0a6bbf data/exdeorum/advancement/recipes/building_blocks/basalt.json
 d87a237248c140367dbfb748d45f532534e5b45c data/exdeorum/advancement/recipes/building_blocks/blackstone.json
@@ -65,6 +65,7 @@ fbc3177ba6245faa8910f589be2bbe089985950a data/exdeorum/advancement/recipes/misc/
 936078196fa7564a0c9aa131061d2679745068c3 data/exdeorum/advancement/recipes/misc/cooked_silkworm.json
 f0984681c912fcad8769e5dcffacb60befc0687b data/exdeorum/advancement/recipes/misc/cooked_silkworm_from_campfire_cooking.json
 1f94ea7eba0d7f40a7de0317035a9345f18dc72b data/exdeorum/advancement/recipes/misc/cooked_silkworm_from_smoking.json
+3f69e677b6224c2e166cf2e483b09283d81d27be data/exdeorum/advancement/recipes/misc/creaking_core.json
 4a374da9a6c7356bcd48fe4cd982444b65f1a935 data/exdeorum/advancement/recipes/misc/crimson_barrel.json
 7b80139f137891960bc0a35edb205ccfd58989de data/exdeorum/advancement/recipes/misc/crimson_compressed_sieve.json
 2f9e0122d86df790a363819123dc4b1c64a2ded4 data/exdeorum/advancement/recipes/misc/crimson_crucible.json

@@ -18,49 +18,41 @@
 
 package thedarkcolour.exdeorum.item;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import thedarkcolour.exdeorum.block.InfestedLeavesBlock;
 import thedarkcolour.exdeorum.blockentity.InfestedLeavesBlockEntity;
 import thedarkcolour.exdeorum.registry.EBlocks;
 import thedarkcolour.exdeorum.registry.ESounds;
 
-public class SilkwormItem extends Item {
-    public SilkwormItem(Item.Properties properties) {
+public class SilkwormItem extends BlockTransformingItem {
+    public SilkwormItem(Properties properties) {
         super(properties);
     }
 
     @Override
-    public InteractionResult useOn(UseOnContext context) {
-        var pos = context.getClickedPos();
-        var level = context.getLevel();
-        var state = level.getBlockState(pos);
+    protected boolean canTransformState(BlockState state) {
+        return !state.isAir() && state.is(BlockTags.LEAVES) && state.getBlock() != EBlocks.INFESTED_LEAVES.get();
+    }
 
-        if (!state.isAir()) {
-            if (state.is(BlockTags.LEAVES) && state.getBlock() != EBlocks.INFESTED_LEAVES.get()) {
-                if (!level.isClientSide()) {
-                    // Replace with infested block
-                    InfestedLeavesBlock.setBlock(level, pos, state);
+    @Override
+    protected void doTransformState(Level level, BlockPos pos, BlockState state) {
+        if (!level.isClientSide()) {
+            // Replace with infested block
+            InfestedLeavesBlock.setBlock(level, pos, state);
 
-                    level.playSound(null, pos, ESounds.SILK_WORM_INFEST.get(), SoundSource.BLOCKS);
+            level.playSound(null, pos, ESounds.SILK_WORM_INFEST.get(), SoundSource.BLOCKS);
 
-                    // Set mimic
-                    if (level.getBlockEntity(pos) instanceof InfestedLeavesBlockEntity leaves) {
-                        leaves.setMimic(state);
-                    }
-                    context.getItemInHand().shrink(1);
-                }
-
-                return level.isClientSide() ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
+            // Set mimic
+            if (level.getBlockEntity(pos) instanceof InfestedLeavesBlockEntity leaves) {
+                leaves.setMimic(state);
             }
         }
-
-        return InteractionResult.PASS;
     }
 
     @Override

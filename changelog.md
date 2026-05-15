@@ -1,5 +1,6 @@
 ## Ex Deorum 4.0
 - Added Pale Oak Crucible, Sieve, Compressed Sieve, and Barrel
+- Added Creaking Core to turn Pale Oak Log into Creaking Heart
 
 ## Ex Deorum 3.10
 - Now requires KubeJS 7.2 to fix incompatibility (#158)

@@ -1,4 +1,4 @@
-// 26.1.1	2026-05-14T19:37:53.700441026	ModKit Item Models for mod 'exdeorum'
+// 26.1.1	2026-05-15T11:59:32.028019255	ModKit Item Models for mod 'exdeorum'
 8cfb1fdb327d53288205eb62b8b7857eafa2a091 assets/exdeorum/items/acacia_barrel.json
 8c5b35194de98a2325ed84334623e72596e50b0f assets/exdeorum/items/acacia_compressed_sieve.json
 930e698609436fdf71a3ab0b738f7566adfe15c7 assets/exdeorum/items/acacia_crucible.json
@@ -63,6 +63,7 @@ e6d96fa05cd3c8ebaa5f2e0d3e67ba04f203b741 assets/exdeorum/items/compressed_stone_
 f1cd9e3ce836021d8e435bc206fc8e62c242a615 assets/exdeorum/items/compressed_wooden_hammer.json
 52de2263e21e688edae120e80bac0f15a95397c9 assets/exdeorum/items/cooked_silkworm.json
 1d5add85d17aa829a184d469690e654f9fdbf5ef assets/exdeorum/items/copper_ore_chunk.json
+e109bde87167aec1b6cf7d5d6c1ca50824f974c2 assets/exdeorum/items/creaking_core.json
 535f3bf29763fe534df092396589e75f41ff25bd assets/exdeorum/items/crimson_barrel.json
 2ea9c91eacc0413d3ba0794bef229f502d076eb0 assets/exdeorum/items/crimson_compressed_sieve.json
 4572720da57b1f2571dbc0ecae12e1a013dcb810 assets/exdeorum/items/crimson_crucible.json
@@ -302,6 +303,7 @@ fa43f2736b5d430be09a4040699d50f4716422d0 assets/exdeorum/models/item/compressed_
 8ee0cde55fd9244eff5b9ed65e8027ba89362c03 assets/exdeorum/models/item/compressed_wooden_hammer.json
 2738250c8aaede17c32c2df28612bfd70145a158 assets/exdeorum/models/item/cooked_silkworm.json
 f611abadb3d337ab6a40255116e974e6f5b6edf2 assets/exdeorum/models/item/copper_ore_chunk.json
+9303141f016767327bc7e8de59fa58bc26529a05 assets/exdeorum/models/item/creaking_core.json
 d6109df4904776aca591e7dfc8ee8da50664e1df assets/exdeorum/models/item/crimson_barrel.json
 b240f3070b3c93e54ddbf02bf2c3f6876a28a4bc assets/exdeorum/models/item/crimson_compressed_sieve.json
 de4c8c3d97810a3da75d7c0e27622af66c12fb61 assets/exdeorum/models/item/crimson_crucible.json
