@@ -19,6 +19,7 @@
 package thedarkcolour.exdeorum.blockentity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
@@ -46,7 +47,6 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidUtil;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
-import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.transfer.access.ItemAccess;
 import org.jetbrains.annotations.NotNull;
@@ -74,10 +74,8 @@ public abstract class AbstractCrucibleBlockEntity extends ETankBlockEntity {
     private final AbstractCrucibleBlockEntity.ItemHandler item = new AbstractCrucibleBlockEntity.ItemHandler();
     private final AbstractCrucibleBlockEntity.FluidHandler tank = new AbstractCrucibleBlockEntity.FluidHandler();
 
-    @Nullable
-    private Block lastMelted;
-    @Nullable
-    private Fluid fluid = null;
+    private Block lastMelted = Blocks.AIR;
+    private Fluid fluid = Fluids.EMPTY;
     private short solids;
 
     public AbstractCrucibleBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
@@ -90,10 +88,10 @@ public abstract class AbstractCrucibleBlockEntity extends ETankBlockEntity {
         super.saveAdditional(output);
 
         this.tank.serialize(output.child("tank"));
-        if (this.lastMelted != null) {
+        if (this.lastMelted != Blocks.AIR) {
             output.putString("lastMelted", BuiltInRegistries.BLOCK.getKey(this.lastMelted).toString());
         }
-        if (this.fluid != null) {
+        if (this.fluid != Fluids.EMPTY) {
             output.putString("fluid", BuiltInRegistries.FLUID.getKey(this.fluid).toString());
         }
         output.putShort("solids", this.solids);
@@ -106,12 +104,12 @@ public abstract class AbstractCrucibleBlockEntity extends ETankBlockEntity {
         this.tank.deserialize(input.childOrEmpty("tank"));
         this.lastMelted = input.getString("lastMelted")
                 .map(Identifier::parse)
-                .flatMap(id -> BuiltInRegistries.BLOCK.get(id).map(reference -> reference.value()))
-                .orElse(null);
+                .flatMap(id -> BuiltInRegistries.BLOCK.get(id).map(Holder.Reference::value))
+                .orElse(Blocks.AIR);
         this.fluid = input.getString("fluid")
                 .map(Identifier::parse)
-                .flatMap(id -> BuiltInRegistries.FLUID.get(id).map(reference -> reference.value()))
-                .orElse(null);
+                .flatMap(id -> BuiltInRegistries.FLUID.get(id).map(Holder.Reference::value))
+                .orElse(Fluids.EMPTY);
         this.solids = (short) input.getShortOr("solids", (short) 0);
 
         updateLight(this.level, this.worldPosition, this.fluid);
@@ -139,8 +137,7 @@ public abstract class AbstractCrucibleBlockEntity extends ETankBlockEntity {
     public void readVisualData(RegistryFriendlyByteBuf buffer) {
         var fluid = buffer.readById(BuiltInRegistries.FLUID::byId);
         this.tank.setFluid(new FluidStack(fluid, buffer.readVarInt()));
-        var lastMelted = buffer.readById(BuiltInRegistries.BLOCK::byId);
-        this.lastMelted = lastMelted == Blocks.AIR ? null : lastMelted;
+        this.lastMelted = buffer.readById(BuiltInRegistries.BLOCK::byId);
         this.solids = buffer.readShort();
 
         // needed on client
