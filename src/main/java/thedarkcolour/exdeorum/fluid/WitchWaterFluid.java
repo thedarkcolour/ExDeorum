@@ -54,18 +54,6 @@ public class WitchWaterFluid extends FluidType {
 
     public static IClientFluidTypeExtensions createClientExtensions() {
         return new IClientFluidTypeExtensions() {
-            public Identifier getStillTexture() {
-                return STILL_TEXTURE;
-            }
-
-            public Identifier getFlowingTexture() {
-                return FLOWING_TEXTURE;
-            }
-
-            public Identifier getOverlayTexture() {
-                return OVERLAY_TEXTURE;
-            }
-
             @Override
             public void modifyFogColor(Camera camera, float partialTick, ClientLevel level, int renderDistance, float darkenWorldAmount, Vector4f fluidFogColor) {
                 fluidFogColor.set(32f / 255f, 12f / 255f, 64f / 255f, fluidFogColor.w);

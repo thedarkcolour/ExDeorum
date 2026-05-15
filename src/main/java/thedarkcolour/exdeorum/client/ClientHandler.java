@@ -21,24 +21,23 @@ package thedarkcolour.exdeorum.client;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.worldselection.CreateWorldScreen;
 import net.minecraft.client.gui.screens.worldselection.WorldCreationUiState;
+import net.minecraft.client.renderer.block.FluidModel;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.world.level.levelgen.presets.WorldPreset;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.ModList;
 import net.neoforged.fml.event.config.ModConfigEvent;
-import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.common.NeoForge;
-import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.asm.ASMHooks;
 import thedarkcolour.exdeorum.client.screen.MechanicalHammerScreen;
 import thedarkcolour.exdeorum.client.screen.MechanicalSieveScreen;
 import thedarkcolour.exdeorum.client.ter.*;
-import thedarkcolour.exdeorum.compat.ModIds;
 import thedarkcolour.exdeorum.config.EConfig;
 import thedarkcolour.exdeorum.fluid.WitchWaterFluid;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
@@ -57,6 +56,7 @@ public class ClientHandler {
         modBus.addListener(ClientHandler::registerMenuScreens);
         modBus.addListener(ClientHandler::registerRenderers);
         modBus.addListener(ClientHandler::registerClientExtensions);
+        modBus.addListener(ClientHandler::registerFluidModels);
         modBus.addListener(ClientHandler::addClientReloadListeners);
         modBus.addListener(ClientHandler::onConfigChanged);
         fmlBus.addListener(ClientHandler::onPlayerRespawn);
@@ -67,6 +67,19 @@ public class ClientHandler {
 
     private static void registerClientExtensions(RegisterClientExtensionsEvent event) {
         event.registerFluidType(WitchWaterFluid.createClientExtensions(), EFluids.WITCH_WATER_TYPE.get());
+    }
+
+    private static void registerFluidModels(RegisterFluidModelsEvent event) {
+        event.register(
+                new FluidModel.Unbaked(
+                        new Material(WitchWaterFluid.STILL_TEXTURE),
+                        new Material(WitchWaterFluid.FLOWING_TEXTURE),
+                        new Material(WitchWaterFluid.OVERLAY_TEXTURE),
+                        null
+                ),
+                EFluids.WITCH_WATER,
+                EFluids.WITCH_WATER_FLOWING
+        );
     }
 
     private static void addClientReloadListeners(AddClientReloadListenersEvent event) {

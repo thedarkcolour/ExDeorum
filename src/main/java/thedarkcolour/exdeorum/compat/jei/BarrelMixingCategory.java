@@ -104,6 +104,22 @@ public abstract class BarrelMixingCategory<T> implements IRecipeCategory<T> {
 
     public static class Fluids extends BarrelMixingCategory<BarrelFluidMixingRecipe> {
         private static final Component CONTENTS_ARE_CONSUMED_TOOLTIP = Component.translatable(TranslationKeys.BARREL_FLUID_MIXING_CONTENTS_ARE_CONSUMED).withStyle(ChatFormatting.RED);
+        private static final IDrawable CONTENTS_ARE_CONSUMED_OVERLAY = new IDrawable() {
+            @Override
+            public int getWidth() {
+                return 16;
+            }
+
+            @Override
+            public int getHeight() {
+                return 16;
+            }
+
+            @Override
+            public void draw(GuiGraphicsExtractor guiGraphics, int xOffset, int yOffset) {
+                ClientXeiUtil.renderAsterisk(guiGraphics, xOffset, yOffset);
+            }
+        };
 
         public Fluids(IGuiHelper helper, IDrawable plus, IDrawable arrow) {
             super(helper, plus, arrow, TranslationKeys.BARREL_FLUID_MIXING_CATEGORY_TITLE, DefaultMaterials.STONE_BARREL.getItem());
@@ -117,6 +133,7 @@ public abstract class BarrelMixingCategory<T> implements IRecipeCategory<T> {
                     .setFluidRenderer(1000, false, 16, 16);
             if (recipe.consumesAdditive()) {
                 additiveSlot.addRichTooltipCallback((_, tooltip) -> tooltip.add(CONTENTS_ARE_CONSUMED_TOOLTIP));
+                additiveSlot.setOverlay(CONTENTS_ARE_CONSUMED_OVERLAY, 0, 0);
             }
             builder.addSlot(RecipeIngredientRole.OUTPUT, 79, 1).add(recipe.result().create());
         }
@@ -124,15 +141,6 @@ public abstract class BarrelMixingCategory<T> implements IRecipeCategory<T> {
         @Override
         public IRecipeType<BarrelFluidMixingRecipe> getRecipeType() {
             return ExDeorumJeiPlugin.BARREL_FLUID_MIXING;
-        }
-
-        @Override
-        public void draw(BarrelFluidMixingRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphicsExtractor graphics, double mouseX, double mouseY) {
-            super.draw(recipe, recipeSlotsView, graphics, mouseX, mouseY);
-
-            if (recipe.consumesAdditive()) {
-                ClientXeiUtil.renderAsterisk(graphics, 18 + 3 + 3 + 8, 0);
-            }
         }
     }
 }
