@@ -14,8 +14,8 @@ import thedarkcolour.exdeorum.tag.EItemTags;
 public class CompressedHammerLootModifier extends HammerLootModifier {
     public static final MapCodec<CompressedHammerLootModifier> CODEC = RecordCodecBuilder.mapCodec(inst -> LootModifier.codecStart(inst).apply(inst, CompressedHammerLootModifier::new));
 
-    public CompressedHammerLootModifier(LootItemCondition[] conditionsIn) {
-        super(conditionsIn, EItemTags.COMPRESSED_HAMMER_FORTUNE_BLACKLIST);
+    public CompressedHammerLootModifier(LootItemCondition[] conditionsIn, int priority) {
+        super(conditionsIn, priority, EItemTags.COMPRESSED_HAMMER_FORTUNE_BLACKLIST);
     }
 
     @Override

@@ -19,6 +19,7 @@ import thedarkcolour.exdeorum.tag.EItemTags;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 class LootModifiers extends GlobalLootModifierProvider {
@@ -33,7 +34,7 @@ class LootModifiers extends GlobalLootModifierProvider {
         add("crook", CrookLootModifier::new, EItemTags.CROOKS);
     }
 
-    private void add(String name, Function<LootItemCondition[], IGlobalLootModifier> constructor, TagKey<Item> requiredTag) {
-        add(name, constructor.apply(new LootItemCondition[]{new MatchTool(Optional.of(ItemPredicate.Builder.item().of(this.registries.lookupOrThrow(Registries.ITEM), requiredTag).build()))}), List.of());
+    private void add(String name, BiFunction<LootItemCondition[], Integer, IGlobalLootModifier> constructor, TagKey<Item> requiredTag) {
+        add(name, constructor.apply(new LootItemCondition[]{new MatchTool(Optional.of(ItemPredicate.Builder.item().of(this.registries.lookupOrThrow(Registries.ITEM), requiredTag).build()))}, 1), List.of());
     }
 }

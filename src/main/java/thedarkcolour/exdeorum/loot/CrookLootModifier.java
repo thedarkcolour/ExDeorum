@@ -43,8 +43,8 @@ import java.util.List;
 public class CrookLootModifier extends LootModifier {
     public static final MapCodec<CrookLootModifier> CODEC = RecordCodecBuilder.mapCodec(inst -> LootModifier.codecStart(inst).apply(inst, CrookLootModifier::new));
 
-    public CrookLootModifier(LootItemCondition[] conditions) {
-        super(conditions);
+    public CrookLootModifier(LootItemCondition[] conditions, int priority) {
+        super(conditions, priority);
     }
 
     @Override

@@ -44,16 +44,16 @@ public class HammerLootModifier extends LootModifier {
 
     private final TagKey<Item> fortuneBlacklistTag;
 
-    public HammerLootModifier(LootItemCondition[] conditionsIn) {
-        super(conditionsIn);
+    public HammerLootModifier(LootItemCondition[] conditionsIn, int priority) {
+        super(conditionsIn, priority);
 
         this.fortuneBlacklistTag = EItemTags.HAMMER_FORTUNE_BLACKLIST;
     }
 
-    protected HammerLootModifier(LootItemCondition[] conditionsIn, TagKey<Item> fortuneBlacklistTag) {
-        super(conditionsIn);
+    protected HammerLootModifier(LootItemCondition[] conditionsIn, int priority, TagKey<Item> fortuneBlacklistTag) {
+        super(conditionsIn, priority);
 
-        this.fortuneBlacklistTag =  fortuneBlacklistTag;
+        this.fortuneBlacklistTag = fortuneBlacklistTag;
     }
 
     @Override

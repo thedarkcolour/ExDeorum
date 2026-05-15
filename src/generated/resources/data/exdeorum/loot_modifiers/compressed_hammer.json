@@ -7,5 +7,6 @@
         "items": "#exdeorum:compressed_hammers"
       }
     }
-  ]
+  ],
+  "priority": 1
 }
