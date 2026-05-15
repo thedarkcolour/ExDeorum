@@ -18,6 +18,7 @@
 
 package thedarkcolour.exdeorum.material;
 
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -63,6 +64,10 @@ public abstract class AbstractMaterial implements ItemLike {
 
     public Item getItem() {
         return this.item.get();
+    }
+
+    public Holder<Item> getItemHolder() {
+        return this.item;
     }
 
     public Block getBlock() {

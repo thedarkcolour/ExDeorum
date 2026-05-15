@@ -1,8 +1,11 @@
 package thedarkcolour.exdeorum.compat;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.core.component.DataComponentPatch;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
@@ -13,7 +16,7 @@ import thedarkcolour.exdeorum.material.DefaultMaterials;
 
 // client-only logic shared between JEI and EMI
 public class ClientXeiUtil {
-    private static final ItemStack OAK_BARREL = new ItemStack(DefaultMaterials.OAK_BARREL.getItem());
+    private static final ItemStack OAK_BARREL_COMPOSTING = new ItemStack(DefaultMaterials.OAK_BARREL.getItemHolder(), 1, DataComponentPatch.builder().set(DataComponents.ITEM_MODEL, ExDeorum.loc("oak_barrel_composting")).build());
 
     public static void renderBlock(GuiGraphicsExtractor guiGraphics, BlockState state, float x, float y, float z, float scale) {
         var fluidState = state.getFluidState();
@@ -35,15 +38,13 @@ public class ClientXeiUtil {
     }
 
     public static void renderAsterisk(GuiGraphicsExtractor graphics, int xOffset, int yOffset) {
-        var font = net.minecraft.client.Minecraft.getInstance().font;
+        var font = Minecraft.getInstance().font;
         // 0xff5555 is Minecraft's red text color.
-        graphics.text(font, "*", xOffset + 19 - 2 - font.width("*"), yOffset + 12, 0xff5555);
+        graphics.text(font, "*", xOffset + 19 - 2 - font.width("*"), yOffset + 12, 0xffff5555);
     }
 
     public static void renderFilledCompostBarrel(GuiGraphicsExtractor guiGraphics, int xOffset, int yOffset) {
-        guiGraphics.fakeItem(OAK_BARREL, xOffset, yOffset);
-        var sprite = RenderUtil.getBlockSprite(ExDeorum.loc("block/compost_dirt"));
-        guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, sprite, xOffset + 4, yOffset + 5, 8, 8);
+        guiGraphics.fakeItem(OAK_BARREL_COMPOSTING, xOffset, yOffset);
     }
 
     // Takes a decimal probability and returns a user-friendly percentage value
