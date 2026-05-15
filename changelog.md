@@ -1,6 +1,14 @@
 ## Ex Deorum 4.0
 - Added Pale Oak Crucible, Sieve, Compressed Sieve, and Barrel
 - Added Creaking Core to turn Pale Oak Log into Creaking Heart
+- Added new Moss Block sieve drops:
+  - Pale Oak Sapling now drops from all meshes
+  - Bush now drops from Flint Mesh
+  - Resin Clump and Golden Dandelion now drop from Golden Mesh
+- Added new Dirt sieve drops:
+  - Wildflowers now drops from Flint Mesh
+- Added new Sand sieve drops:
+  - Dry Short Grass now drops from String Mesh
 
 ## Ex Deorum 3.10
 - Now requires KubeJS 7.2 to fix incompatibility (#158)
