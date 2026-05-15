@@ -10,6 +10,7 @@
   - Wildflowers now drops from Flint Mesh
 - Added new Sand sieve drops:
   - Dry Short Grass now drops from String Mesh
+- Fixed Compressed Sieves not allowing simultaneous insertion of material even when Simultaneous Compressed Sieve Usage was enabled
 
 ## Ex Deorum 3.10
 - Now requires KubeJS 7.2 to fix incompatibility (#158)
