@@ -2,7 +2,7 @@ plugins {
     id 'java'
 }
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+java.toolchain.languageVersion = JavaLanguageVersion.of(25)
 java.toolchain.vendor = JvmVendorSpec.JETBRAINS
 
 jar {
@@ -27,6 +27,5 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'net.neoforged.fancymodloader:loader:4.0.15'
-    compileOnly 'org.jetbrains:annotations:24.1.0'
+    compileOnly 'net.neoforged.fancymodloader:loader:11.0.13'
 }

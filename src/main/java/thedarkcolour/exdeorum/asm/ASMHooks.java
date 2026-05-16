@@ -33,11 +33,11 @@ import thedarkcolour.exdeorum.voidworld.VoidChunkGenerator;
 
 import java.util.Properties;
 
-// todo test that all of these patches still work properly
 @SuppressWarnings("unused")
 public final class ASMHooks {
     /**
      * Called in {@link net.minecraft.world.level.levelgen.structure.structures.EndCityStructure#findGenerationPoint(Structure.GenerationContext)}
+     * by {@link thedarkcolour.exdeorum.coremod.EndCityStructureTransformer}
      * to fix End Cities not generating in void worlds.
      */
     public static BlockPos adjustPos(BlockPos pos, Structure.GenerationContext context) {
@@ -49,20 +49,8 @@ public final class ASMHooks {
     }
 
     /**
-     * Called in {@link net.minecraft.world.level.dimension.end.EndDragonFight#spawnExitPortal(boolean)}
-     * right before {@code EndPodiumFeature.place} is called to fix End Portal not spawning fully,
-     * with part of it being generated outside the world in the void.
-     */
-    public static BlockPos prePlaceEndPodium(BlockPos pos) {
-        if (pos.getY() < 4) {
-            return pos.above(32);
-        } else {
-            return pos.immutable();
-        }
-    }
-
-    /**
      * Called in {@link net.minecraft.server.dedicated.DedicatedServerProperties#DedicatedServerProperties(Properties)}
+     * by {@link thedarkcolour.exdeorum.coremod.DedicatedServerPropertiesTransformer}
      * where {@code WorldPresets.NORMAL} is used in the line that looks like {@code WorldPresets.NORMAL.location().toString()}
      */
     public static ResourceKey<WorldPreset> overrideDefaultWorldPreset() {
