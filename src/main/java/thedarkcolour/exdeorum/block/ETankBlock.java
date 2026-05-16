@@ -21,6 +21,7 @@ package thedarkcolour.exdeorum.block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.InsideBlockEffectApplier;
+import net.minecraft.world.entity.InsideBlockEffectType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -47,7 +48,7 @@ public abstract class ETankBlock extends EBlock {
             var fluid = tank.getFluid();
 
             if (!fluid.isEmpty() && isEntityInFluid(level, pos, entity, (float) fluid.getAmount() / tank.getCapacity())) {
-                entityInFluidLogic(level, entity, fluid);
+                entityInFluidLogic(level, entity, fluid, applier);
             }
         }
     }
@@ -55,11 +56,14 @@ public abstract class ETankBlock extends EBlock {
     protected abstract boolean isEntityInFluid(Level level, BlockPos pos, Entity entity, float fillRatio);
 
     // Only call this on the server
-    public static void entityInFluidLogic(Level level, Entity entity, FluidStack fluid) {
+    public static void entityInFluidLogic(Level level, Entity entity, FluidStack fluid, InsideBlockEffectApplier applier) {
         var fluidType = fluid.getFluid();
 
         if (fluidType == Fluids.LAVA) {
-            entity.lavaHurt();
+            // matches LavaCauldronBlock
+            applier.apply(InsideBlockEffectType.CLEAR_FREEZE);
+            applier.apply(InsideBlockEffectType.LAVA_IGNITE);
+            applier.runAfter(InsideBlockEffectType.LAVA_IGNITE, Entity::lavaHurt);
         } else if (fluidType == EFluids.WITCH_WATER.get()) {
             WitchWaterBlock.witchWaterEntityEffects(level, entity);
         } else if (fluidType.getFluidType().canExtinguish(entity)) {
