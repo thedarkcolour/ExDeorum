@@ -92,7 +92,7 @@ public class HammerLootModifier extends LootModifier {
 
     @Nullable
     protected HammerRecipe getRecipe(Item itemForm) {
-        return RecipeUtil.getHammerRecipe(itemForm);
+        return RecipeUtil.getServerRecipeCaches().getHammerRecipe(itemForm);
     }
 
     @Override

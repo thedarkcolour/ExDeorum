@@ -25,6 +25,6 @@ public class CompressedHammerLootModifier extends HammerLootModifier {
 
     @Override
     protected @Nullable HammerRecipe getRecipe(Item itemForm) {
-        return RecipeUtil.getCompressedHammerRecipe(itemForm);
+        return RecipeUtil.getServerRecipeCaches().getCompressedHammerRecipe(itemForm);
     }
 }

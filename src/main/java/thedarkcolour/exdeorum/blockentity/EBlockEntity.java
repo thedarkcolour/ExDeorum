@@ -34,6 +34,10 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import thedarkcolour.exdeorum.network.VisualUpdateTracker;
+import thedarkcolour.exdeorum.recipe.RecipeCaches;
+import thedarkcolour.exdeorum.recipe.RecipeUtil;
+
+import java.util.Objects;
 
 public abstract class EBlockEntity extends BlockEntity {
     public EBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
@@ -77,5 +81,9 @@ public abstract class EBlockEntity extends BlockEntity {
 
     public InteractionResult useWithoutItem(Level level, Player player) {
         return InteractionResult.PASS;
+    }
+
+    public RecipeCaches getRecipeCaches() {
+        return RecipeUtil.getCaches(Objects.requireNonNull(this.level));
     }
 }

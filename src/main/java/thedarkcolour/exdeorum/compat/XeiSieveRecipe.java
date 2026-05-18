@@ -30,6 +30,7 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import org.apache.commons.lang3.mutable.MutableInt;
+import thedarkcolour.exdeorum.client.ClientsideCode;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.recipe.sieve.SieveRecipe;
 import thedarkcolour.exdeorum.registry.EItems;
@@ -47,7 +48,7 @@ public record XeiSieveRecipe(Ingredient ingredient, ItemStack mesh, List<Result>
     public static ImmutableList<XeiSieveRecipe> getAllRecipesGrouped(RecipeType<? extends SieveRecipe> recipeType, MutableInt maxRows) {
         int maxSieveRows = 1;
 
-        var recipes = CompatUtil.collectAllRecipes(recipeType, Function.identity());
+        var recipes = CompatUtil.collectAllRecipes(RecipeUtil.getClientRecipeManager(), recipeType, Function.identity());
         Multimap<Ingredient, SieveRecipe> ingredientGrouper = ArrayListMultimap.create();
 
         for (int i = 0; i < recipes.size(); i++) {

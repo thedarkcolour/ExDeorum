@@ -31,6 +31,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.util.Unit;
 import net.minecraft.world.level.levelgen.presets.WorldPreset;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.event.config.ModConfigEvent;
@@ -70,7 +71,7 @@ public class ClientHandler {
         fmlBus.addListener(ClientHandler::onPlayerRespawn);
         fmlBus.addListener(ClientHandler::onPlayerLogout);
         fmlBus.addListener(ClientHandler::onScreenOpen);
-        fmlBus.addListener(ClientHandler::onRecipesUpdated);
+        fmlBus.addListener(EventPriority.HIGHEST, ClientHandler::onRecipesUpdated); // We need to be at HIGH or HIGHEST to be called before JEI
 
         if (ModList.get().isLoaded(ModIds.JEI) || ModList.get().isLoaded(ModIds.EMI)) {
             modBus.addListener(ClientHandler::registerAdditionalModels);
@@ -106,6 +107,7 @@ public class ClientHandler {
 
     private static void onPlayerLogout(ClientPlayerNetworkEvent.LoggingOut event) {
         isInVoidWorld = false;
+        ClientsideCode.getRecipeCaches().unload();
     }
 
     private static void onConfigChanged(ModConfigEvent.Reloading event) {
@@ -160,9 +162,7 @@ public class ClientHandler {
     }
 
     private static void onRecipesUpdated(RecipesUpdatedEvent event) {
-        if (!Minecraft.getInstance().isSingleplayer()) {
-            RecipeUtil.reload(event.getRecipeManager());
-        }
+        ClientsideCode.getRecipeCaches().reload(event.getRecipeManager());
     }
 
     public static void disableVoidFogRendering() {

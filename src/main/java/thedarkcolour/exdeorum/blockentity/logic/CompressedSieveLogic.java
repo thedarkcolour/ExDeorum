@@ -13,6 +13,6 @@ public class CompressedSieveLogic extends SieveLogic {
 
     @Override
     protected List<? extends SieveRecipe> getDropsFor(ItemStack contents) {
-        return RecipeUtil.getCompressedSieveRecipes(this.mesh.getItem(), contents);
+        return owner.getRecipeCaches().getCompressedSieveRecipes(this.mesh.getItem(), contents);
     }
 }

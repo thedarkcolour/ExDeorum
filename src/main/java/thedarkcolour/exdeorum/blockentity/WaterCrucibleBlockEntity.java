@@ -36,7 +36,7 @@ public class WaterCrucibleBlockEntity extends AbstractCrucibleBlockEntity {
 
     @Override
     protected @Nullable CrucibleRecipe getRecipe(ItemStack item) {
-        return RecipeUtil.getWaterCrucibleRecipe(item);
+        return getRecipeCaches().getWaterCrucibleRecipe(item);
     }
 
     @Override

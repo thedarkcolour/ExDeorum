@@ -29,9 +29,11 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.storage.loot.LootContext;
 import thedarkcolour.exdeorum.config.EConfig;
+import thedarkcolour.exdeorum.recipe.RecipeCaches;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.recipe.sieve.SieveRecipe;
 import thedarkcolour.exdeorum.tag.EItemTags;
@@ -39,7 +41,7 @@ import thedarkcolour.exdeorum.tag.EItemTags;
 import java.util.List;
 
 public class SieveLogic {
-    private final Owner owner;
+    protected final Owner owner;
     private final boolean mechanical;
 
     // block currently being sifted
@@ -129,7 +131,7 @@ public class SieveLogic {
     }
 
     protected List<? extends SieveRecipe> getDropsFor(ItemStack contents) {
-        return RecipeUtil.getSieveRecipes(this.mesh.getItem(), contents);
+        return owner.getRecipeCaches().getSieveRecipes(this.mesh.getItem(), contents);
     }
 
     protected int getResultAmount(SieveRecipe recipe, LootContext context, RandomSource rand) {
@@ -237,6 +239,8 @@ public class SieveLogic {
 
     // implement on the owner of this sieve logic
     public interface Owner {
+        RecipeCaches getRecipeCaches();
+
         ServerLevel getServerLevel();
 
         // Return whether the result item was consumed

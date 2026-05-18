@@ -28,6 +28,7 @@ import thedarkcolour.exdeorum.recipe.crucible.CrucibleRecipe;
 import thedarkcolour.exdeorum.registry.EBlockEntities;
 
 import javax.annotation.Nullable;
+import java.util.Objects;
 
 public class LavaCrucibleBlockEntity extends AbstractCrucibleBlockEntity {
     public LavaCrucibleBlockEntity(BlockPos pos, BlockState state) {
@@ -36,12 +37,12 @@ public class LavaCrucibleBlockEntity extends AbstractCrucibleBlockEntity {
 
     @Override
     public int getMeltingRate() {
-        return RecipeUtil.getHeatValue(this.level.getBlockState(getBlockPos().below()));
+        return getRecipeCaches().getHeatValue(this.level.getBlockState(getBlockPos().below()));
     }
 
     @Override
     protected @Nullable CrucibleRecipe getRecipe(ItemStack item) {
-        return RecipeUtil.getLavaCrucibleRecipe(item);
+        return getRecipeCaches().getLavaCrucibleRecipe(item);
     }
 
     @Override

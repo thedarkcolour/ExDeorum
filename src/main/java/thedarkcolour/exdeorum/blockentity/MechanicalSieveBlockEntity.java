@@ -36,9 +36,12 @@ import thedarkcolour.exdeorum.blockentity.logic.SieveLogic;
 import thedarkcolour.exdeorum.config.EConfig;
 import thedarkcolour.exdeorum.data.TranslationKeys;
 import thedarkcolour.exdeorum.menu.MechanicalSieveMenu;
+import thedarkcolour.exdeorum.recipe.RecipeCaches;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.registry.EBlockEntities;
 import thedarkcolour.exdeorum.tag.EItemTags;
+
+import java.util.Objects;
 
 public class MechanicalSieveBlockEntity extends AbstractMachineBlockEntity<MechanicalSieveBlockEntity> implements SieveLogic.Owner {
     private static final Component TITLE = Component.translatable(TranslationKeys.MECHANICAL_SIEVE_SCREEN_TITLE);
@@ -181,7 +184,7 @@ public class MechanicalSieveBlockEntity extends AbstractMachineBlockEntity<Mecha
         @Override
         public boolean isItemValid(int slot, ItemStack stack) {
             if (slot == INPUT_SLOT) {
-                return !RecipeUtil.getSieveRecipes(getStackInSlot(1).getItem(), stack).isEmpty();
+                return !sieve.getRecipeCaches().getSieveRecipes(getStackInSlot(1).getItem(), stack).isEmpty();
             } else if (slot == MESH_SLOT) {
                 return stack.is(EItemTags.SIEVE_MESHES);
             } else {
@@ -202,7 +205,7 @@ public class MechanicalSieveBlockEntity extends AbstractMachineBlockEntity<Mecha
         @Override
         protected void onContentsChanged(int slot) {
             if (slot == MESH_SLOT) {
-                this.sieve.logic.setMesh(this.sieve.level.registryAccess(), this.sieve.inventory.getStackInSlot(MESH_SLOT));
+                this.sieve.logic.setMesh(Objects.requireNonNull(this.sieve.level).registryAccess(), this.sieve.inventory.getStackInSlot(MESH_SLOT));
             }
         }
 
