@@ -26,7 +26,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -37,10 +36,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.util.FakePlayer;
-import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.blockentity.logic.SieveLogic;
 import thedarkcolour.exdeorum.config.EConfig;
-import thedarkcolour.exdeorum.recipe.RecipeCaches;
 
 import java.util.function.Function;
 

@@ -30,7 +30,6 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import org.apache.commons.lang3.mutable.MutableInt;
-import thedarkcolour.exdeorum.client.ClientsideCode;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.recipe.sieve.SieveRecipe;
 import thedarkcolour.exdeorum.registry.EItems;

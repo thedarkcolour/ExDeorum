@@ -69,7 +69,7 @@ public class HammerLootModifier extends LootModifier {
             return generatedLoot;
         }
 
-        var recipe = getRecipe(itemForm);
+        var recipe = getRecipe(itemForm, context);
         if (recipe == null) {
             return generatedLoot;
         }
@@ -91,8 +91,8 @@ public class HammerLootModifier extends LootModifier {
     }
 
     @Nullable
-    protected HammerRecipe getRecipe(Item itemForm) {
-        return RecipeUtil.getServerRecipeCaches().getHammerRecipe(itemForm);
+    protected HammerRecipe getRecipe(Item itemForm, LootContext context) {
+        return RecipeUtil.getCaches(context.getLevel()).getHammerRecipe(itemForm);
     }
 
     @Override

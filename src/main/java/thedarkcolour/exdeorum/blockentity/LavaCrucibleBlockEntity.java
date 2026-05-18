@@ -23,12 +23,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.recipe.crucible.CrucibleRecipe;
 import thedarkcolour.exdeorum.registry.EBlockEntities;
 
 import javax.annotation.Nullable;
-import java.util.Objects;
 
 public class LavaCrucibleBlockEntity extends AbstractCrucibleBlockEntity {
     public LavaCrucibleBlockEntity(BlockPos pos, BlockState state) {
