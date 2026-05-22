@@ -23,9 +23,11 @@ import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -39,11 +41,13 @@ import java.util.HashSet;
 import java.util.List;
 
 public sealed abstract class CrookJeiRecipe {
+    public final ResourceLocation identifier;
     public final List<BlockState> states;
     public ItemStack result;
     public float chance;
 
-    public CrookJeiRecipe(List<BlockState> states, ItemStack result, float chance) {
+    public CrookJeiRecipe(ResourceLocation identifier, List<BlockState> states, ItemStack result, float chance) {
+        this.identifier = identifier;
         this.states = states;
         this.result = result;
         this.chance = chance;
@@ -51,13 +55,18 @@ public sealed abstract class CrookJeiRecipe {
 
     public abstract void addIngredients(IRecipeLayoutBuilder builder);
 
-    static CrookJeiRecipe create(CrookRecipe recipe) {
+    static CrookJeiRecipe create(RecipeHolder<CrookRecipe> recipeHolder) {
+        var recipe = recipeHolder.value();
+        var id = recipeHolder.id();
         switch (recipe.blockPredicate()) {
             case BlockPredicate.BlockStatePredicate state -> {
-                return new StatesRecipe(state, state.possibleStates().filter(blockState -> !blockState.hasProperty(BlockStateProperties.WATERLOGGED) || !blockState.getValue(BlockStateProperties.WATERLOGGED)).toList(), recipe.result(), recipe.chance());
+                return new StatesRecipe(id, state, state
+                        .possibleStates()
+                        .filter(blockState -> !blockState.hasProperty(BlockStateProperties.WATERLOGGED) || !blockState.getValue(BlockStateProperties.WATERLOGGED))
+                        .toList(), recipe.result(), recipe.chance());
             }
             case BlockPredicate.SingleBlockPredicate block -> {
-                return new BlockRecipe(block.block(), recipe.result(), recipe.chance());
+                return new BlockRecipe(id, block.block(), recipe.result(), recipe.chance());
             }
             case BlockPredicate.TagPredicate tag -> {
                 var list = new ArrayList<BlockState>();
@@ -68,7 +77,7 @@ public sealed abstract class CrookJeiRecipe {
                     }
                 }
 
-                return new TagRecipe(tag.tag(), List.copyOf(list), recipe.result(), recipe.chance());
+                return new TagRecipe(id, tag.tag(), List.copyOf(list), recipe.result(), recipe.chance());
             }
             default -> throw new IllegalArgumentException("Invalid crook recipe??  ->  " + recipe);
         }
@@ -78,8 +87,8 @@ public sealed abstract class CrookJeiRecipe {
         private final List<ItemStack> itemIngredients;
         public final List<Component> requirements;
 
-        StatesRecipe(@Nullable BlockPredicate.BlockStatePredicate predicate, List<BlockState> states, ItemStack result, float chance) {
-            super(states, result, chance);
+        StatesRecipe(ResourceLocation identifier, @Nullable BlockPredicate.BlockStatePredicate predicate, List<BlockState> states, ItemStack result, float chance) {
+            super(identifier, states, result, chance);
             ImmutableList.Builder<ItemStack> itemIngredients = ImmutableList.builder();
 
             var blocks = new HashSet<Block>();
@@ -112,8 +121,8 @@ public sealed abstract class CrookJeiRecipe {
     static final class TagRecipe extends StatesRecipe {
         public final TagKey<Block> tag;
 
-        public TagRecipe(TagKey<Block> tag, List<BlockState> states, ItemStack result, float chance) {
-            super(null, states, result, chance);
+        public TagRecipe(ResourceLocation identifier, TagKey<Block> tag, List<BlockState> states, ItemStack result, float chance) {
+            super(identifier, null, states, result, chance);
             this.tag = tag;
         }
     }
@@ -121,8 +130,8 @@ public sealed abstract class CrookJeiRecipe {
     static final class BlockRecipe extends CrookJeiRecipe {
         private final ItemStack itemIngredient;
 
-        BlockRecipe(Block block, ItemStack result, float chance) {
-            super(ImmutableList.of(block.defaultBlockState()), result, chance);
+        BlockRecipe(ResourceLocation identifier, Block block, ItemStack result, float chance) {
+            super(identifier, ImmutableList.of(block.defaultBlockState()), result, chance);
 
             var item = block.asItem();
             if (item == Items.AIR) {

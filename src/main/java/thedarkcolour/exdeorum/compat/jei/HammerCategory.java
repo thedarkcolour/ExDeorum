@@ -23,34 +23,38 @@ import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.RecipeType;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.recipe.hammer.HammerRecipe;
 
 import java.util.function.Supplier;
 
-class HammerCategory extends OneToOneCategory<HammerRecipe> {
-    private final RecipeType<HammerRecipe> recipeType;
+class HammerCategory<R extends HammerRecipe> extends OneToOneCategory<RecipeHolder<R>> {
+    private final RecipeType<RecipeHolder<R>> recipeType;
 
-    public HammerCategory(IGuiHelper helper, IDrawable arrow, Supplier<? extends Item> icon, Component title, RecipeType<HammerRecipe> recipeType) {
+    public HammerCategory(IGuiHelper helper, IDrawable arrow, Supplier<? extends Item> icon, Component title, RecipeType<RecipeHolder<R>> recipeType) {
         super(helper, arrow, helper.createDrawableItemStack(new ItemStack(icon.get())), title);
 
         this.recipeType = recipeType;
     }
 
     @Override
-    public RecipeType<HammerRecipe> getRecipeType() {
+    public RecipeType<RecipeHolder<R>> getRecipeType() {
         return this.recipeType;
     }
 
     @Override
-    protected void addInput(IRecipeSlotBuilder slot, HammerRecipe recipe) {
-        slot.addIngredients(recipe.ingredient());
+    protected void addInput(IRecipeSlotBuilder slot, RecipeHolder<R> holder) {
+        slot.addIngredients(holder.value().ingredient());
     }
 
     @Override
-    protected void addOutput(IRecipeSlotBuilder slot, HammerRecipe recipe) {
+    protected void addOutput(IRecipeSlotBuilder slot, RecipeHolder<R> holder) {
+        var recipe = holder.value();
         if (recipe.resultAmount instanceof ConstantValue constant) {
             slot.addItemStack(recipe.result.getCount() == 1 ? recipe.result : recipe.result.copyWithCount((int) constant.value()));
         } else {

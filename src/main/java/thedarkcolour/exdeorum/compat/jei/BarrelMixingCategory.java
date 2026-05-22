@@ -31,6 +31,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import thedarkcolour.exdeorum.compat.ClientXeiUtil;
 import thedarkcolour.exdeorum.data.TranslationKeys;
 import thedarkcolour.exdeorum.material.DefaultMaterials;
@@ -81,25 +82,26 @@ public abstract class BarrelMixingCategory<T> implements IRecipeCategory<T> {
         this.slot.draw(graphics, 78, 0);
     }
 
-    public static class Items extends BarrelMixingCategory<BarrelMixingRecipe> {
+    public static class Items extends BarrelMixingCategory<RecipeHolder<BarrelMixingRecipe>> {
         public Items(IGuiHelper helper, IDrawable plus, IDrawable arrow) {
             super(helper, plus, arrow, TranslationKeys.BARREL_MIXING_CATEGORY_TITLE, DefaultMaterials.OAK_BARREL.getItem());
         }
 
         @Override
-        public void setRecipe(IRecipeLayoutBuilder builder, BarrelMixingRecipe recipe, IFocusGroup focuses) {
+        public void setRecipe(IRecipeLayoutBuilder builder, RecipeHolder<BarrelMixingRecipe> holder, IFocusGroup focuses) {
+            var recipe = holder.value();
             JeiUtil.addFluidIngredient(builder.addSlot(RecipeIngredientRole.INPUT, 1, 1), recipe.fluid).setFluidRenderer(1000, false, 16, 16);
             builder.addSlot(RecipeIngredientRole.INPUT, 33, 1).addIngredients(recipe.ingredient());
             builder.addSlot(RecipeIngredientRole.OUTPUT, 79, 1).addItemStack(recipe.result);
         }
 
         @Override
-        public RecipeType<BarrelMixingRecipe> getRecipeType() {
+        public RecipeType<RecipeHolder<BarrelMixingRecipe>> getRecipeType() {
             return ExDeorumJeiPlugin.BARREL_MIXING;
         }
     }
 
-    public static class Fluids extends BarrelMixingCategory<BarrelFluidMixingRecipe> {
+    public static class Fluids extends BarrelMixingCategory<RecipeHolder<BarrelFluidMixingRecipe>> {
         private static final Component CONTENTS_ARE_CONSUMED_TOOLTIP = Component.translatable(TranslationKeys.BARREL_FLUID_MIXING_CONTENTS_ARE_CONSUMED).withStyle(ChatFormatting.RED);
 
         public Fluids(IGuiHelper helper, IDrawable plus, IDrawable arrow) {
@@ -107,7 +109,8 @@ public abstract class BarrelMixingCategory<T> implements IRecipeCategory<T> {
         }
 
         @Override
-        public void setRecipe(IRecipeLayoutBuilder builder, BarrelFluidMixingRecipe recipe, IFocusGroup focuses) {
+        public void setRecipe(IRecipeLayoutBuilder builder, RecipeHolder<BarrelFluidMixingRecipe> holder, IFocusGroup focuses) {
+            var recipe = holder.value();
             JeiUtil.addFluidIngredient(builder.addSlot(RecipeIngredientRole.INPUT, 1, 1), recipe.baseFluid())
                     .setFluidRenderer(1000, false, 16, 16);
             var additiveSlot = JeiUtil.addFluidIngredient(builder.addSlot(RecipeIngredientRole.INPUT, 33, 1), recipe.additiveFluid(), 1000)
@@ -119,15 +122,15 @@ public abstract class BarrelMixingCategory<T> implements IRecipeCategory<T> {
         }
 
         @Override
-        public RecipeType<BarrelFluidMixingRecipe> getRecipeType() {
+        public RecipeType<RecipeHolder<BarrelFluidMixingRecipe>> getRecipeType() {
             return ExDeorumJeiPlugin.BARREL_FLUID_MIXING;
         }
 
         @Override
-        public void draw(BarrelFluidMixingRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
-            super.draw(recipe, recipeSlotsView, graphics, mouseX, mouseY);
+        public void draw(RecipeHolder<BarrelFluidMixingRecipe> holder, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
+            super.draw(holder, recipeSlotsView, graphics, mouseX, mouseY);
 
-            if (recipe.consumesAdditive()) {
+            if (holder.value().consumesAdditive()) {
                 ClientXeiUtil.renderAsterisk(graphics, 18 + 3 + 3 + 8, 0);
             }
         }
