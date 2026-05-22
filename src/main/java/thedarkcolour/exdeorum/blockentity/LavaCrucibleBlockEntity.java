@@ -20,6 +20,7 @@ package thedarkcolour.exdeorum.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -35,11 +36,11 @@ public class LavaCrucibleBlockEntity extends AbstractCrucibleBlockEntity {
 
     @Override
     public int getMeltingRate() {
-        return getRecipeCaches().getHeatValue(this.level.getBlockState(getBlockPos().below()));
+        return getRecipeCaches().getHeatRecipe(this.level.getBlockState(getBlockPos().below())).value().heatValue();
     }
 
     @Override
-    protected @Nullable CrucibleRecipe getRecipe(ItemStack item) {
+    protected @Nullable RecipeHolder<CrucibleRecipe.Lava> getRecipe(ItemStack item) {
         return getRecipeCaches().getLavaCrucibleRecipe(item);
     }
 

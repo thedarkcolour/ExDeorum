@@ -28,6 +28,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -96,7 +97,8 @@ public class SieveLogic {
             var handledAnyDrops = false;
             var hasDrops = false;
 
-            for (SieveRecipe recipe : getDropsFor(this.contents)) {
+            for (RecipeHolder<? extends SieveRecipe> holder : getDropsFor(this.contents)) {
+                var recipe = holder.value();
                 var amount = getResultAmount(recipe, context, rand);
 
                 // Split overflowing stacks (64+) into multiple stacks
@@ -129,7 +131,7 @@ public class SieveLogic {
         this.owner.markUpdated();
     }
 
-    protected List<? extends SieveRecipe> getDropsFor(ItemStack contents) {
+    protected List<? extends RecipeHolder<? extends SieveRecipe>> getDropsFor(ItemStack contents) {
         return this.owner.getRecipeCaches().getSieveRecipes(this.mesh.getItem(), contents);
     }
 

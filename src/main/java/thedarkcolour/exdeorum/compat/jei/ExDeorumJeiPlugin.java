@@ -79,8 +79,8 @@ public class ExDeorumJeiPlugin implements IModPlugin {
     static final RecipeType<BarrelCompostRecipe> BARREL_COMPOST = recipeType("barrel_compost", BarrelCompostRecipe.class);
     static final RecipeType<BarrelMixingRecipe> BARREL_MIXING = recipeType("barrel_mixing", BarrelMixingRecipe.class);
     static final RecipeType<BarrelFluidMixingRecipe> BARREL_FLUID_MIXING = recipeType("barrel_fluid_mixing", BarrelFluidMixingRecipe.class);
-    static final RecipeType<CrucibleRecipe> LAVA_CRUCIBLE = recipeType("lava_crucible", CrucibleRecipe.class);
-    static final RecipeType<CrucibleRecipe> WATER_CRUCIBLE = recipeType("water_crucible", CrucibleRecipe.class);
+    static final RecipeType<CrucibleRecipe.Lava> LAVA_CRUCIBLE = recipeType("lava_crucible", CrucibleRecipe.Lava.class);
+    static final RecipeType<CrucibleRecipe.Water> WATER_CRUCIBLE = recipeType("water_crucible", CrucibleRecipe.Water.class);
     static final RecipeType<CrucibleHeatSourceRecipe> CRUCIBLE_HEAT_SOURCES = recipeType("crucible_heat_sources", CrucibleHeatSourceRecipe.class);
     static final RecipeType<XeiSieveRecipe> SIEVE = recipeType("sieve", XeiSieveRecipe.class);
     static final RecipeType<XeiSieveRecipe> COMPRESSED_SIEVE = recipeType("compressed_sieve", XeiSieveRecipe.class);
@@ -232,7 +232,7 @@ public class ExDeorumJeiPlugin implements IModPlugin {
             if (block instanceof WallTorchBlock) continue;
 
             if (block != Blocks.AIR) {
-                final int newValue = entry.getIntValue();
+                final int newValue = entry.getValue().value().heatValue();
 
                 values.computeInt(block, (key, value) -> {
                     if (value != null) {

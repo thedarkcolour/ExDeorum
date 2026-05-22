@@ -20,6 +20,7 @@ package thedarkcolour.exdeorum.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -35,7 +36,7 @@ public class WaterCrucibleBlockEntity extends AbstractCrucibleBlockEntity {
     }
 
     @Override
-    protected @Nullable CrucibleRecipe getRecipe(ItemStack item) {
+    protected @Nullable RecipeHolder<CrucibleRecipe.Water> getRecipe(ItemStack item) {
         return getRecipeCaches().getWaterCrucibleRecipe(item);
     }
 

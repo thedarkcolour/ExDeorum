@@ -1,7 +1,5 @@
 package thedarkcolour.exdeorum.recipe;
 
-import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import it.unimi.dsi.fastutil.objects.ObjectSet;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
@@ -15,8 +13,14 @@ import thedarkcolour.exdeorum.recipe.barrel.BarrelCompostRecipe;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelFluidMixingRecipe;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelMixingRecipe;
 import thedarkcolour.exdeorum.recipe.barrel.FluidTransformationRecipe;
-import thedarkcolour.exdeorum.recipe.cache.*;
+import thedarkcolour.exdeorum.recipe.cache.BarrelFluidMixingRecipeCache;
+import thedarkcolour.exdeorum.recipe.cache.CrookRecipeCache;
+import thedarkcolour.exdeorum.recipe.cache.CrucibleHeatRecipeCache;
+import thedarkcolour.exdeorum.recipe.cache.FluidTransformationRecipeCache;
+import thedarkcolour.exdeorum.recipe.cache.SieveRecipeCache;
+import thedarkcolour.exdeorum.recipe.cache.SingleIngredientRecipeCache;
 import thedarkcolour.exdeorum.recipe.crook.CrookRecipe;
+import thedarkcolour.exdeorum.recipe.crucible.CrucibleHeatRecipe;
 import thedarkcolour.exdeorum.recipe.crucible.CrucibleRecipe;
 import thedarkcolour.exdeorum.recipe.hammer.CompressedHammerRecipe;
 import thedarkcolour.exdeorum.recipe.hammer.HammerRecipe;
@@ -26,11 +30,13 @@ import thedarkcolour.exdeorum.registry.ERecipeTypes;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class RecipeCaches {
     private SingleIngredientRecipeCache<BarrelCompostRecipe> barrelCompostRecipeCache;
-    private SingleIngredientRecipeCache<CrucibleRecipe> lavaCrucibleRecipeCache;
-    private SingleIngredientRecipeCache<CrucibleRecipe> waterCrucibleRecipeCache;
+    private SingleIngredientRecipeCache<CrucibleRecipe.Lava> lavaCrucibleRecipeCache;
+    private SingleIngredientRecipeCache<CrucibleRecipe.Water> waterCrucibleRecipeCache;
     private SingleIngredientRecipeCache<HammerRecipe> hammerRecipeCache;
     private SingleIngredientRecipeCache<CompressedHammerRecipe> compressedHammerRecipeCache;
     private SieveRecipeCache<SieveRecipe> sieveRecipeCache;
@@ -40,31 +46,31 @@ public class RecipeCaches {
     private CrookRecipeCache crookRecipeCache;
     private CrucibleHeatRecipeCache crucibleHeatRecipeCache;
 
-    public List<SieveRecipe> getSieveRecipes(Item mesh, ItemStack item) {
+    public List<RecipeHolder<SieveRecipe>> getSieveRecipes(Item mesh, ItemStack item) {
         return this.sieveRecipeCache.getRecipe(mesh, item);
     }
 
-    public List<CompressedSieveRecipe> getCompressedSieveRecipes(Item mesh, ItemStack item) {
+    public List<RecipeHolder<CompressedSieveRecipe>> getCompressedSieveRecipes(Item mesh, ItemStack item) {
         return this.compressedSieveRecipeCache.getRecipe(mesh, item);
     }
 
     @Nullable
-    public CrucibleRecipe getLavaCrucibleRecipe(ItemStack item) {
+    public RecipeHolder<CrucibleRecipe.Lava> getLavaCrucibleRecipe(ItemStack item) {
         return this.lavaCrucibleRecipeCache.getRecipe(item);
     }
 
     @Nullable
-    public CrucibleRecipe getWaterCrucibleRecipe(ItemStack item) {
+    public RecipeHolder<CrucibleRecipe.Water> getWaterCrucibleRecipe(ItemStack item) {
         return this.waterCrucibleRecipeCache.getRecipe(item);
     }
 
     @Nullable
-    public BarrelCompostRecipe getBarrelCompostRecipe(ItemStack item) {
+    public RecipeHolder<BarrelCompostRecipe> getBarrelCompostRecipe(ItemStack item) {
         return this.barrelCompostRecipeCache.getRecipe(item);
     }
 
     @Nullable
-    public HammerRecipe getHammerRecipe(Item item) {
+    public RecipeHolder<HammerRecipe> getHammerRecipe(Item item) {
         return this.hammerRecipeCache.getRecipe(item);
     }
 
@@ -73,7 +79,7 @@ public class RecipeCaches {
     }
 
     @Nullable
-    public CompressedHammerRecipe getCompressedHammerRecipe(Item item) {
+    public RecipeHolder<CompressedHammerRecipe> getCompressedHammerRecipe(Item item) {
         return this.compressedHammerRecipeCache.getRecipe(item);
     }
 
@@ -81,7 +87,7 @@ public class RecipeCaches {
         return this.compressedHammerRecipeCache.getAllRecipes();
     }
 
-    public List<CrookRecipe> getCrookRecipes(BlockState state) {
+    public List<RecipeHolder<CrookRecipe>> getCrookRecipes(BlockState state) {
         return this.crookRecipeCache.getRecipes(state);
     }
 
@@ -89,20 +95,20 @@ public class RecipeCaches {
         return this.barrelCompostRecipeCache != null && this.barrelCompostRecipeCache.getRecipe(stack) != null;
     }
 
-    public int getHeatValue(BlockState state) {
-        return this.crucibleHeatRecipeCache.getValue(state);
+    public RecipeHolder<CrucibleHeatRecipe> getHeatRecipe(BlockState state) {
+        return this.crucibleHeatRecipeCache.getRecipe(state);
     }
 
-    public ObjectSet<Object2IntMap.Entry<BlockState>> getHeatSources() {
+    public Set<Map.Entry<BlockState, RecipeHolder<CrucibleHeatRecipe>>> getHeatSources() {
         return this.crucibleHeatRecipeCache.getEntries();
     }
 
     // todo stop using the RecipeManager
     @Nullable
-    public BarrelMixingRecipe getBarrelMixingRecipe(RecipeManager recipes, ItemStack stack, FluidStack fluid) {
+    public RecipeHolder<BarrelMixingRecipe> getBarrelMixingRecipe(RecipeManager recipes, ItemStack stack, FluidStack fluid) {
         for (var recipe : recipes.byType(ERecipeTypes.BARREL_MIXING.get())) {
             if (recipe.value().matches(stack, fluid)) {
-                return recipe.value();
+                return recipe;
             }
         }
 
@@ -110,17 +116,17 @@ public class RecipeCaches {
     }
 
     @Nullable
-    public BarrelFluidMixingRecipe getFluidMixingRecipe(FluidStack base, Fluid additive) {
-        var recipe = this.barrelFluidMixingRecipeCache.getRecipe(base.getFluid(), additive);
-        if (recipe != null && base.getAmount() >= recipe.baseFluid().amount()) {
-            return recipe;
+    public RecipeHolder<BarrelFluidMixingRecipe> getFluidMixingRecipe(FluidStack base, Fluid additive) {
+        var holder = this.barrelFluidMixingRecipeCache.getRecipe(base.getFluid(), additive);
+        if (holder != null && base.getAmount() >= holder.value().baseFluid().amount()) {
+            return holder;
         } else {
             return null;
         }
     }
 
     @Nullable
-    public FluidTransformationRecipe getFluidTransformationRecipe(Fluid baseFluid, BlockState catalystState) {
+    public RecipeHolder<FluidTransformationRecipe> getFluidTransformationRecipe(Fluid baseFluid, BlockState catalystState) {
         if (baseFluid != Fluids.EMPTY) {
             return this.fluidTransformationRecipeCache.getRecipe(baseFluid, catalystState);
         } else {

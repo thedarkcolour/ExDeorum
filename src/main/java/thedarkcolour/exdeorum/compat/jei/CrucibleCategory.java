@@ -29,7 +29,7 @@ import thedarkcolour.exdeorum.data.TranslationKeys;
 import thedarkcolour.exdeorum.material.DefaultMaterials;
 import thedarkcolour.exdeorum.recipe.crucible.CrucibleRecipe;
 
-abstract class CrucibleCategory extends OneToOneCategory<CrucibleRecipe> {
+abstract class CrucibleCategory<T extends CrucibleRecipe> extends OneToOneCategory<T> {
     public CrucibleCategory(IGuiHelper helper, IDrawable arrow, Item iconItem, String titleKey) {
         super(helper, arrow, helper.createDrawableItemStack(new ItemStack(iconItem)), Component.translatable(titleKey));
     }
@@ -45,24 +45,24 @@ abstract class CrucibleCategory extends OneToOneCategory<CrucibleRecipe> {
                 .setFluidRenderer(Math.max(1000, recipe.getResult().getAmount()), false, 16, 16);
     }
 
-    static class LavaCrucible extends CrucibleCategory {
+    static class LavaCrucible extends CrucibleCategory<CrucibleRecipe.Lava> {
         public LavaCrucible(IGuiHelper helper, IDrawable arrow) {
             super(helper, arrow, DefaultMaterials.PORCELAIN_CRUCIBLE.getItem(), TranslationKeys.LAVA_CRUCIBLE_CATEGORY_TITLE);
         }
 
         @Override
-        public RecipeType<CrucibleRecipe> getRecipeType() {
+        public RecipeType<CrucibleRecipe.Lava> getRecipeType() {
             return ExDeorumJeiPlugin.LAVA_CRUCIBLE;
         }
     }
 
-    static class WaterCrucible extends CrucibleCategory {
+    static class WaterCrucible extends CrucibleCategory<CrucibleRecipe.Water> {
         public WaterCrucible(IGuiHelper helper, IDrawable arrow) {
             super(helper, arrow, DefaultMaterials.OAK_CRUCIBLE.getItem(), TranslationKeys.WATER_CRUCIBLE_CATEGORY_TITLE);
         }
 
         @Override
-        public RecipeType<CrucibleRecipe> getRecipeType() {
+        public RecipeType<CrucibleRecipe.Water> getRecipeType() {
             return ExDeorumJeiPlugin.WATER_CRUCIBLE;
         }
     }

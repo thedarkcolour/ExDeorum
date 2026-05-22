@@ -1,6 +1,7 @@
 package thedarkcolour.exdeorum.blockentity.logic;
 
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import thedarkcolour.exdeorum.recipe.sieve.SieveRecipe;
 
 import java.util.List;
@@ -11,7 +12,7 @@ public class CompressedSieveLogic extends SieveLogic {
     }
 
     @Override
-    protected List<? extends SieveRecipe> getDropsFor(ItemStack contents) {
+    protected List<? extends RecipeHolder<? extends SieveRecipe>> getDropsFor(ItemStack contents) {
         return this.owner.getRecipeCaches().getCompressedSieveRecipes(this.mesh.getItem(), contents);
     }
 }
