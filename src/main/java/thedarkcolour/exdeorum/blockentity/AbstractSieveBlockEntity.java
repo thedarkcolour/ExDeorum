@@ -160,7 +160,7 @@ public abstract class AbstractSieveBlockEntity extends EBlockEntity implements S
                                 }
 
                                 if ((x | z) != 0) {
-                                    if (level.getBlockEntity(cursor) instanceof SieveBlockEntity other) {
+                                    if (level.getBlockEntity(cursor) instanceof AbstractSieveBlockEntity other && other.getType() == getType()) {
                                         var otherLogic = other.logic;
 
                                         if (otherLogic.getContents().isEmpty()) {
