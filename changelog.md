@@ -1,3 +1,6 @@
+## Ex Deorum 3.11
+- Fixed End Cakes crashing fake players (#178)
+
 ## Ex Deorum 3.10
 - Now requires KubeJS 7.2 to fix incompatibility (#158)
 

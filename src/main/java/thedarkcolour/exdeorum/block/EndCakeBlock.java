@@ -89,8 +89,9 @@ public class EndCakeBlock extends CakeBlock {
         return InteractionResult.PASS;
     }
 
-    // todo test
     private static boolean tryTeleport(ServerLevel level, Player player) {
+        if (player.isFakePlayer()) return false;
+
         if (level.dimension() != Level.END) {
             var endLevel = level.getServer().getLevel(Level.END);
 
