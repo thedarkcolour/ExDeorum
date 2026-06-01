@@ -1,5 +1,6 @@
 ## Ex Deorum 1.50
 - Fixed Crucible bug where pending solids could be converted to another fluid while tank was empty (#180)
+- Fixed Sieve and Hammer recipes not properly reporting missing `result_amount` (#184)
 
 ## Ex Deorum 1.49
 - Fixed more issues with _Thirst Was Taken_, thanks to pawjwp (#170)

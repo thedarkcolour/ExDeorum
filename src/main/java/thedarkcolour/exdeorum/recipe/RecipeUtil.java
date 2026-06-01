@@ -210,7 +210,14 @@ public final class RecipeUtil {
 
     public static NumberProvider readNumberProvider(JsonObject json, String key) {
         var obj = json.get(key);
-        return LootDataType.PREDICATE.parser().fromJson(obj, NumberProvider.class);
+        if (obj == null || obj.isJsonNull()) {
+            throw new JsonSyntaxException("Missing required \"" + key + "\" number provider");
+        }
+        var provider = LootDataType.PREDICATE.parser().fromJson(obj, NumberProvider.class);
+        if (provider == null) {
+            throw new JsonSyntaxException("Invalid \"" + key + "\" number provider: " + obj);
+        }
+        return provider;
     }
 
     public static void toNetworkNumberProvider(FriendlyByteBuf buffer, NumberProvider provider) {
