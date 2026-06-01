@@ -1,5 +1,7 @@
 ## Ex Deorum 3.11
 - Fixed End Cakes crashing fake players (#178)
+- Fixed Compressed Sieves not allowing simultaneous insertion of material even when Simultaneous Compressed Sieve Usage was enabled
+- Fixed Crucible bug where pending solids could be converted to another fluid while tank was empty (#180)
 
 ## Ex Deorum 3.10
 - Now requires KubeJS 7.2 to fix incompatibility (#158)
