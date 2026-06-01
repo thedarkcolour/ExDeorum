@@ -1,3 +1,6 @@
+## Ex Deorum 1.50
+- Fixed Crucible bug where pending solids could be converted to another fluid while tank was empty (#180)
+
 ## Ex Deorum 1.49
 - Fixed more issues with _Thirst Was Taken_, thanks to pawjwp (#170)
   - Fixed Dust not having a map color (#169)

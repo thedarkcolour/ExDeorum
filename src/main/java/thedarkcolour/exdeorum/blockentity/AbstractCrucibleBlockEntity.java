@@ -202,10 +202,11 @@ public abstract class AbstractCrucibleBlockEntity extends ETankBlockEntity {
         }
         var result = recipe.getResult();
         var contained = this.tank.getFluid();
+        var hadPendingSolids = this.solids > 0;
         shrinkAction.accept(item);
         this.solids = (short) Math.min(this.solids + result.getAmount(), MAX_SOLIDS);
 
-        if (contained.isEmpty()) {
+        if (contained.isEmpty() && !hadPendingSolids) {
             this.fluid = result.getFluid();
             this.needsLightUpdate = true;
         }
@@ -234,10 +235,14 @@ public abstract class AbstractCrucibleBlockEntity extends ETankBlockEntity {
             var result = recipe.getResult();
             var contained = this.tank.getFluid();
 
-            return (result.isFluidEqual(contained) || contained.isEmpty()) && result.getAmount() + this.solids <= MAX_SOLIDS;
+            return (result.isFluidEqual(contained) || (contained.isEmpty() && canAddToPendingFluid(result))) && result.getAmount() + this.solids <= MAX_SOLIDS;
         }
 
         return false;
+    }
+
+    private boolean canAddToPendingFluid(FluidStack result) {
+        return this.solids == 0 || this.fluid == null || result.getFluid() == this.fluid;
     }
 
     public abstract int getMeltingRate();
@@ -296,7 +301,7 @@ public abstract class AbstractCrucibleBlockEntity extends ETankBlockEntity {
         }
     }
 
-    private static class FluidHandler extends FluidHelper {
+    private class FluidHandler extends FluidHelper {
         public FluidHandler() {
             super(MAX_FLUID_CAPACITY);
         }
@@ -304,6 +309,16 @@ public abstract class AbstractCrucibleBlockEntity extends ETankBlockEntity {
         @Override
         public boolean isFluidValid(FluidStack stack) {
             return false;
+        }
+
+        @Override
+        protected void onContentsChanged() {
+            if (this.fluid.isEmpty() && AbstractCrucibleBlockEntity.this.solids == 0) {
+                AbstractCrucibleBlockEntity.this.fluid = null;
+            }
+
+            AbstractCrucibleBlockEntity.this.needsLightUpdate = true;
+            AbstractCrucibleBlockEntity.this.markUpdated();
         }
     }
 
