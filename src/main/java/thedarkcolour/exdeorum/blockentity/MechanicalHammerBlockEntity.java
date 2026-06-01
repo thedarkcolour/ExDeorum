@@ -229,7 +229,7 @@ public class MechanicalHammerBlockEntity extends AbstractMachineBlockEntity<Mech
         @Override
         public boolean isItemValid(int slot, ItemStack stack) {
             if (slot == INPUT_SLOT) {
-                return hammer.getRecipeCaches().getHammerRecipe(stack.getItem()) != null;
+                return this.hammer.getRecipeCaches().getHammerRecipe(stack.getItem()) != null;
             } else if (slot == HAMMER_SLOT) {
                 return stack.is(EItemTags.HAMMERS);
             } else {

@@ -71,7 +71,8 @@ public class ClientHandler {
         fmlBus.addListener(ClientHandler::onPlayerRespawn);
         fmlBus.addListener(ClientHandler::onPlayerLogout);
         fmlBus.addListener(ClientHandler::onScreenOpen);
-        fmlBus.addListener(EventPriority.HIGHEST, ClientHandler::onRecipesUpdated); // We need to be at HIGH or HIGHEST to be called before JEI
+        // we need to be at HIGH or HIGHEST to be called before JEI
+        fmlBus.addListener(EventPriority.HIGHEST, ClientHandler::onRecipesUpdated);
 
         if (ModList.get().isLoaded(ModIds.JEI) || ModList.get().isLoaded(ModIds.EMI)) {
             modBus.addListener(ClientHandler::registerAdditionalModels);

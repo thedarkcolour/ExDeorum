@@ -41,60 +41,60 @@ public class RecipeCaches {
     private CrucibleHeatRecipeCache crucibleHeatRecipeCache;
 
     public List<SieveRecipe> getSieveRecipes(Item mesh, ItemStack item) {
-        return sieveRecipeCache.getRecipe(mesh, item);
+        return this.sieveRecipeCache.getRecipe(mesh, item);
     }
 
     public List<CompressedSieveRecipe> getCompressedSieveRecipes(Item mesh, ItemStack item) {
-        return compressedSieveRecipeCache.getRecipe(mesh, item);
+        return this.compressedSieveRecipeCache.getRecipe(mesh, item);
     }
 
     @Nullable
     public CrucibleRecipe getLavaCrucibleRecipe(ItemStack item) {
-        return lavaCrucibleRecipeCache.getRecipe(item);
+        return this.lavaCrucibleRecipeCache.getRecipe(item);
     }
 
     @Nullable
     public CrucibleRecipe getWaterCrucibleRecipe(ItemStack item) {
-        return waterCrucibleRecipeCache.getRecipe(item);
+        return this.waterCrucibleRecipeCache.getRecipe(item);
     }
 
     @Nullable
     public BarrelCompostRecipe getBarrelCompostRecipe(ItemStack item) {
-        return barrelCompostRecipeCache.getRecipe(item);
+        return this.barrelCompostRecipeCache.getRecipe(item);
     }
 
     @Nullable
     public HammerRecipe getHammerRecipe(Item item) {
-        return hammerRecipeCache.getRecipe(item);
+        return this.hammerRecipeCache.getRecipe(item);
     }
 
     public Collection<RecipeHolder<HammerRecipe>> getCachedHammerRecipes() {
-        return hammerRecipeCache.getAllRecipes();
+        return this.hammerRecipeCache.getAllRecipes();
     }
 
     @Nullable
     public CompressedHammerRecipe getCompressedHammerRecipe(Item item) {
-        return compressedHammerRecipeCache.getRecipe(item);
+        return this.compressedHammerRecipeCache.getRecipe(item);
     }
 
     public Collection<RecipeHolder<CompressedHammerRecipe>> getCachedCompressedHammerRecipes() {
-        return compressedHammerRecipeCache.getAllRecipes();
+        return this.compressedHammerRecipeCache.getAllRecipes();
     }
 
     public List<CrookRecipe> getCrookRecipes(BlockState state) {
-        return crookRecipeCache.getRecipes(state);
+        return this.crookRecipeCache.getRecipes(state);
     }
 
     public boolean isCompostable(ItemStack stack) {
-        return barrelCompostRecipeCache != null && barrelCompostRecipeCache.getRecipe(stack) != null;
+        return this.barrelCompostRecipeCache != null && this.barrelCompostRecipeCache.getRecipe(stack) != null;
     }
 
     public int getHeatValue(BlockState state) {
-        return crucibleHeatRecipeCache.getValue(state);
+        return this.crucibleHeatRecipeCache.getValue(state);
     }
 
     public ObjectSet<Object2IntMap.Entry<BlockState>> getHeatSources() {
-        return crucibleHeatRecipeCache.getEntries();
+        return this.crucibleHeatRecipeCache.getEntries();
     }
 
     // todo stop using the RecipeManager
@@ -111,7 +111,7 @@ public class RecipeCaches {
 
     @Nullable
     public BarrelFluidMixingRecipe getFluidMixingRecipe(FluidStack base, Fluid additive) {
-        var recipe = barrelFluidMixingRecipeCache.getRecipe(base.getFluid(), additive);
+        var recipe = this.barrelFluidMixingRecipeCache.getRecipe(base.getFluid(), additive);
         if (recipe != null && base.getAmount() >= recipe.baseFluid().amount()) {
             return recipe;
         } else {
@@ -122,37 +122,37 @@ public class RecipeCaches {
     @Nullable
     public FluidTransformationRecipe getFluidTransformationRecipe(Fluid baseFluid, BlockState catalystState) {
         if (baseFluid != Fluids.EMPTY) {
-            return fluidTransformationRecipeCache.getRecipe(baseFluid, catalystState);
+            return this.fluidTransformationRecipeCache.getRecipe(baseFluid, catalystState);
         } else {
             return null;
         }
     }
 
     public void reload(RecipeManager recipes) {
-        barrelCompostRecipeCache = new SingleIngredientRecipeCache<>(recipes, ERecipeTypes.BARREL_COMPOST);
-        lavaCrucibleRecipeCache = new SingleIngredientRecipeCache<>(recipes, ERecipeTypes.LAVA_CRUCIBLE);
-        waterCrucibleRecipeCache = new SingleIngredientRecipeCache<>(recipes, ERecipeTypes.WATER_CRUCIBLE);
-        hammerRecipeCache = new SingleIngredientRecipeCache<>(recipes, ERecipeTypes.HAMMER).trackAllRecipes();
-        compressedHammerRecipeCache = new SingleIngredientRecipeCache<>(recipes, ERecipeTypes.COMPRESSED_HAMMER).trackAllRecipes();
-        sieveRecipeCache = new SieveRecipeCache<>(recipes, ERecipeTypes.SIEVE);
-        compressedSieveRecipeCache = new SieveRecipeCache<>(recipes, ERecipeTypes.COMPRESSED_SIEVE);
-        barrelFluidMixingRecipeCache = new BarrelFluidMixingRecipeCache(recipes);
-        fluidTransformationRecipeCache = new FluidTransformationRecipeCache(recipes);
-        crookRecipeCache = new CrookRecipeCache(recipes);
-        crucibleHeatRecipeCache = new CrucibleHeatRecipeCache(recipes);
+        this.barrelCompostRecipeCache = new SingleIngredientRecipeCache<>(recipes, ERecipeTypes.BARREL_COMPOST);
+        this.lavaCrucibleRecipeCache = new SingleIngredientRecipeCache<>(recipes, ERecipeTypes.LAVA_CRUCIBLE);
+        this.waterCrucibleRecipeCache = new SingleIngredientRecipeCache<>(recipes, ERecipeTypes.WATER_CRUCIBLE);
+        this.hammerRecipeCache = new SingleIngredientRecipeCache<>(recipes, ERecipeTypes.HAMMER).trackAllRecipes();
+        this.compressedHammerRecipeCache = new SingleIngredientRecipeCache<>(recipes, ERecipeTypes.COMPRESSED_HAMMER).trackAllRecipes();
+        this.sieveRecipeCache = new SieveRecipeCache<>(recipes, ERecipeTypes.SIEVE);
+        this.compressedSieveRecipeCache = new SieveRecipeCache<>(recipes, ERecipeTypes.COMPRESSED_SIEVE);
+        this.barrelFluidMixingRecipeCache = new BarrelFluidMixingRecipeCache(recipes);
+        this.fluidTransformationRecipeCache = new FluidTransformationRecipeCache(recipes);
+        this.crookRecipeCache = new CrookRecipeCache(recipes);
+        this.crucibleHeatRecipeCache = new CrucibleHeatRecipeCache(recipes);
     }
 
     public void unload() {
-        barrelCompostRecipeCache = null;
-        lavaCrucibleRecipeCache = null;
-        waterCrucibleRecipeCache = null;
-        hammerRecipeCache = null;
-        compressedHammerRecipeCache = null;
-        sieveRecipeCache = null;
-        compressedSieveRecipeCache = null;
-        barrelFluidMixingRecipeCache = null;
-        fluidTransformationRecipeCache = null;
-        crookRecipeCache = null;
-        crucibleHeatRecipeCache = null;
+        this.barrelCompostRecipeCache = null;
+        this.lavaCrucibleRecipeCache = null;
+        this.waterCrucibleRecipeCache = null;
+        this.hammerRecipeCache = null;
+        this.compressedHammerRecipeCache = null;
+        this.sieveRecipeCache = null;
+        this.compressedSieveRecipeCache = null;
+        this.barrelFluidMixingRecipeCache = null;
+        this.fluidTransformationRecipeCache = null;
+        this.crookRecipeCache = null;
+        this.crucibleHeatRecipeCache = null;
     }
 }

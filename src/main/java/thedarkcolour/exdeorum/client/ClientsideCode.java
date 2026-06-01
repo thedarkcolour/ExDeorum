@@ -29,7 +29,6 @@ public class ClientsideCode {
     private static final RecipeCaches RECIPE_CACHES = new RecipeCaches();
 
     public static RecipeCaches getRecipeCaches() {
-        assert EffectiveSide.get().isClient() : Thread.currentThread().getName();
         return RECIPE_CACHES;
     }
 

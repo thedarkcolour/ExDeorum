@@ -130,7 +130,7 @@ public class SieveLogic {
     }
 
     protected List<? extends SieveRecipe> getDropsFor(ItemStack contents) {
-        return owner.getRecipeCaches().getSieveRecipes(this.mesh.getItem(), contents);
+        return this.owner.getRecipeCaches().getSieveRecipes(this.mesh.getItem(), contents);
     }
 
     protected int getResultAmount(SieveRecipe recipe, LootContext context, RandomSource rand) {

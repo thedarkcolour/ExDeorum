@@ -184,7 +184,7 @@ public class MechanicalSieveBlockEntity extends AbstractMachineBlockEntity<Mecha
         @Override
         public boolean isItemValid(int slot, ItemStack stack) {
             if (slot == INPUT_SLOT) {
-                return !sieve.getRecipeCaches().getSieveRecipes(getStackInSlot(1).getItem(), stack).isEmpty();
+                return !this.sieve.getRecipeCaches().getSieveRecipes(getStackInSlot(1).getItem(), stack).isEmpty();
             } else if (slot == MESH_SLOT) {
                 return stack.is(EItemTags.SIEVE_MESHES);
             } else {

@@ -75,7 +75,7 @@ class SieveCategory implements IRecipeCategory<XeiSieveRecipe> {
 
     @Override
     public int getHeight() {
-        return XeiUtil.SIEVE_ROW_START + XeiUtil.SIEVE_ROW_HEIGHT * rows.intValue();
+        return XeiUtil.SIEVE_ROW_START + XeiUtil.SIEVE_ROW_HEIGHT * this.rows.intValue();
     }
 
     @Override
