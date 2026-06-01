@@ -47,7 +47,7 @@ public record XeiSieveRecipe(Ingredient ingredient, ItemStack mesh, List<Result>
     public static ImmutableList<XeiSieveRecipe> getAllRecipesGrouped(RecipeType<? extends SieveRecipe> recipeType, MutableInt maxRows) {
         int maxSieveRows = 1;
 
-        var recipes = CompatUtil.collectAllRecipes(recipeType, Function.identity());
+        var recipes = CompatUtil.collectAllRecipes(RecipeUtil.getClientRecipeManager(), recipeType, Function.identity());
         Multimap<Ingredient, SieveRecipe> ingredientGrouper = ArrayListMultimap.create();
 
         for (int i = 0; i < recipes.size(); i++) {

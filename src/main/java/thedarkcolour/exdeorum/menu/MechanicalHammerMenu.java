@@ -70,7 +70,7 @@ public class MechanicalHammerMenu extends AbstractMachineMenu<MechanicalHammerBl
                 if (!moveItemStackTo(clickedStack, NUM_SLOTS, NUM_SLOTS + PLAYER_SLOTS, false)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (MechanicalHammerBlockEntity.isValidInput(clickedStack)) { // attempting to move into input slot
+            } else if (MechanicalHammerBlockEntity.isValidInput(player.level(), clickedStack)) { // attempting to move into input slot
                 if (!moveItemStackTo(clickedStack, 0, 1, false)) {
                     return ItemStack.EMPTY;
                 }

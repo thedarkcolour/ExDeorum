@@ -19,52 +19,32 @@
 package thedarkcolour.exdeorum.recipe;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import it.unimi.dsi.fastutil.objects.ObjectSet;
 import net.minecraft.commands.arguments.blocks.BlockStateParser;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
-import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.providers.number.*;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.fml.loading.FMLEnvironment;
-import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.fml.util.thread.EffectiveSide;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
-import org.jetbrains.annotations.Nullable;
-import thedarkcolour.exdeorum.compat.PreferredOres;
 import thedarkcolour.exdeorum.client.ClientsideCode;
+import thedarkcolour.exdeorum.compat.PreferredOres;
 import thedarkcolour.exdeorum.loot.SummationGenerator;
-import thedarkcolour.exdeorum.recipe.barrel.BarrelCompostRecipe;
-import thedarkcolour.exdeorum.recipe.barrel.BarrelFluidMixingRecipe;
-import thedarkcolour.exdeorum.recipe.barrel.BarrelMixingRecipe;
-import thedarkcolour.exdeorum.recipe.barrel.FluidTransformationRecipe;
-import thedarkcolour.exdeorum.recipe.cache.*;
-import thedarkcolour.exdeorum.recipe.crook.CrookRecipe;
-import thedarkcolour.exdeorum.recipe.crucible.CrucibleRecipe;
-import thedarkcolour.exdeorum.recipe.hammer.CompressedHammerRecipe;
-import thedarkcolour.exdeorum.recipe.hammer.HammerRecipe;
-import thedarkcolour.exdeorum.recipe.sieve.CompressedSieveRecipe;
-import thedarkcolour.exdeorum.recipe.sieve.SieveRecipe;
 import thedarkcolour.exdeorum.registry.ENumberProviders;
-import thedarkcolour.exdeorum.registry.ERecipeTypes;
 
 import java.util.*;
 
@@ -75,85 +55,19 @@ public final class RecipeUtil {
     private static final int SUMMATION_TYPE = 4;
     private static final int UNKNOWN_TYPE = 99;
 
-    private static SingleIngredientRecipeCache<BarrelCompostRecipe> barrelCompostRecipeCache;
-    private static SingleIngredientRecipeCache<CrucibleRecipe> lavaCrucibleRecipeCache;
-    private static SingleIngredientRecipeCache<CrucibleRecipe> waterCrucibleRecipeCache;
-    private static SingleIngredientRecipeCache<HammerRecipe> hammerRecipeCache;
-    private static SingleIngredientRecipeCache<CompressedHammerRecipe> compressedHammerRecipeCache;
-    private static SieveRecipeCache<SieveRecipe> sieveRecipeCache;
-    private static SieveRecipeCache<CompressedSieveRecipe> compressedSieveRecipeCache;
-    private static BarrelFluidMixingRecipeCache barrelFluidMixingRecipeCache;
-    private static FluidTransformationRecipeCache fluidTransformationRecipeCache;
-    private static CrookRecipeCache crookRecipeCache;
-    private static CrucibleHeatRecipeCache crucibleHeatRecipeCache;
+    private static final RecipeCaches SERVER_RECIPE_CACHES = new RecipeCaches();
 
-    public static void reload(RecipeManager recipes) {
-        barrelCompostRecipeCache = new SingleIngredientRecipeCache<>(recipes, ERecipeTypes.BARREL_COMPOST);
-        lavaCrucibleRecipeCache = new SingleIngredientRecipeCache<>(recipes, ERecipeTypes.LAVA_CRUCIBLE);
-        waterCrucibleRecipeCache = new SingleIngredientRecipeCache<>(recipes, ERecipeTypes.WATER_CRUCIBLE);
-        hammerRecipeCache = new SingleIngredientRecipeCache<>(recipes, ERecipeTypes.HAMMER).trackAllRecipes();
-        compressedHammerRecipeCache = new SingleIngredientRecipeCache<>(recipes, ERecipeTypes.COMPRESSED_HAMMER).trackAllRecipes();
-        sieveRecipeCache = new SieveRecipeCache<>(recipes, ERecipeTypes.SIEVE);
-        compressedSieveRecipeCache = new SieveRecipeCache<>(recipes, ERecipeTypes.COMPRESSED_SIEVE);
-        barrelFluidMixingRecipeCache = new BarrelFluidMixingRecipeCache(recipes);
-        fluidTransformationRecipeCache = new FluidTransformationRecipeCache(recipes);
-        crookRecipeCache = new CrookRecipeCache(recipes);
-        crucibleHeatRecipeCache = new CrucibleHeatRecipeCache(recipes);
+    public static RecipeCaches getServerRecipeCaches() {
+        return getServerRecipeCaches(false);
     }
 
-    public static void unload() {
-        barrelCompostRecipeCache = null;
-        lavaCrucibleRecipeCache = null;
-        waterCrucibleRecipeCache = null;
-        hammerRecipeCache = null;
-        compressedHammerRecipeCache = null;
-        sieveRecipeCache = null;
-        compressedSieveRecipeCache = null;
-        barrelFluidMixingRecipeCache = null;
-        fluidTransformationRecipeCache = null;
-        crookRecipeCache = null;
-        crucibleHeatRecipeCache = null;
+    public static RecipeCaches getServerRecipeCaches(boolean skipAssert) {
+        assert skipAssert || EffectiveSide.get().isServer() : Thread.currentThread().getName();
+        return SERVER_RECIPE_CACHES;
     }
 
-    public static List<SieveRecipe> getSieveRecipes(Item mesh, ItemStack item) {
-        return sieveRecipeCache.getRecipe(mesh, item);
-    }
-
-    public static List<CompressedSieveRecipe> getCompressedSieveRecipes(Item mesh, ItemStack item) {
-        return compressedSieveRecipeCache.getRecipe(mesh, item);
-    }
-
-    @Nullable
-    public static CrucibleRecipe getLavaCrucibleRecipe(ItemStack item) {
-        return lavaCrucibleRecipeCache.getRecipe(item);
-    }
-
-    @Nullable
-    public static CrucibleRecipe getWaterCrucibleRecipe(ItemStack item) {
-        return waterCrucibleRecipeCache.getRecipe(item);
-    }
-
-    @Nullable
-    public static BarrelCompostRecipe getBarrelCompostRecipe(ItemStack item) {
-        return barrelCompostRecipeCache.getRecipe(item);
-    }
-
-    @Nullable
-    public static HammerRecipe getHammerRecipe(Item item) {
-        return hammerRecipeCache.getRecipe(item);
-    }
-
-    public static Collection<RecipeHolder<HammerRecipe>> getCachedHammerRecipes() {
-        return hammerRecipeCache.getAllRecipes();
-    }
-
-    @Nullable
-    public static CompressedHammerRecipe getCompressedHammerRecipe(Item item) {
-        return compressedHammerRecipeCache.getRecipe(item);
-    }
-
-    public static Collection<RecipeHolder<CompressedHammerRecipe>> getCachedCompressedHammerRecipes() {
-        return compressedHammerRecipeCache.getAllRecipes();
+    public static RecipeCaches getCaches(Level level) {
+        return level.isClientSide() ? ClientsideCode.getRecipeCaches() : getServerRecipeCaches();
     }
 
     public static void toNetworkNumberProvider(FriendlyByteBuf buffer, NumberProvider provider) {
@@ -281,41 +195,6 @@ public final class RecipeUtil {
         }
     }
 
-    public static boolean isCompostable(ItemStack stack) {
-        return barrelCompostRecipeCache != null && barrelCompostRecipeCache.getRecipe(stack) != null;
-    }
-
-    // todo stop using the RecipeManager
-    @Nullable
-    public static BarrelMixingRecipe getBarrelMixingRecipe(RecipeManager recipes, ItemStack stack, FluidStack fluid) {
-        for (var recipe : recipes.byType(ERecipeTypes.BARREL_MIXING.get())) {
-            if (recipe.value().matches(stack, fluid)) {
-                return recipe.value();
-            }
-        }
-
-        return null;
-    }
-
-    @Nullable
-    public static BarrelFluidMixingRecipe getFluidMixingRecipe(FluidStack base, Fluid additive) {
-        var recipe = barrelFluidMixingRecipeCache.getRecipe(base.getFluid(), additive);
-        if (recipe != null && base.getAmount() >= recipe.baseFluid().amount()) {
-            return recipe;
-        } else {
-            return null;
-        }
-    }
-
-    @Nullable
-    public static FluidTransformationRecipe getFluidTransformationRecipe(Fluid baseFluid, BlockState catalystState) {
-        if (baseFluid != Fluids.EMPTY) {
-            return fluidTransformationRecipeCache.getRecipe(baseFluid, catalystState);
-        } else {
-            return null;
-        }
-    }
-
     @SuppressWarnings("IfCanBeSwitch")
     public static double getExpectedValue(NumberProvider provider) {
         if (provider instanceof ConstantValue constant) {
@@ -350,18 +229,6 @@ public final class RecipeUtil {
 
     public static LootContext emptyLootContext(ServerLevel level) {
         return new LootContext.Builder(new LootParams(level, Map.of(), Map.of(), 0)).create(Optional.empty());
-    }
-
-    public static List<CrookRecipe> getCrookRecipes(BlockState state) {
-        return crookRecipeCache.getRecipes(state);
-    }
-
-    public static int getHeatValue(BlockState state) {
-        return crucibleHeatRecipeCache.getValue(state);
-    }
-
-    public static ObjectSet<Object2IntMap.Entry<BlockState>> getHeatSources() {
-        return crucibleHeatRecipeCache.getEntries();
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
@@ -410,13 +277,11 @@ public final class RecipeUtil {
         return ResourceLocation.tryParse(string) != null;
     }
 
-    /**
-     * From Forestry: Community Edition
-     * @return The global registry manager. {@code null} on server when there is no server, or when there is no world (on client).
-     */
-    @Nullable
-    public static RecipeManager getRecipeManager() {
-        MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
-        return server == null ? (FMLEnvironment.dist == Dist.CLIENT ? ClientsideCode.getRecipeManager() : null) : server.getRecipeManager();
+    public static RecipeManager getClientRecipeManager() {
+        return Objects.requireNonNull(ClientsideCode.getRecipeManager());
+    }
+
+    public static RecipeManager getServerRecipeManager() {
+        return Objects.requireNonNull(ServerLifecycleHooks.getCurrentServer()).getRecipeManager();
     }
 }

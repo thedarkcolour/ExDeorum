@@ -21,9 +21,18 @@ package thedarkcolour.exdeorum.client;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.world.item.crafting.RecipeManager;
+import net.neoforged.fml.util.thread.EffectiveSide;
 import org.jetbrains.annotations.Nullable;
+import thedarkcolour.exdeorum.recipe.RecipeCaches;
 
 public class ClientsideCode {
+    private static final RecipeCaches RECIPE_CACHES = new RecipeCaches();
+
+    public static RecipeCaches getRecipeCaches() {
+        assert EffectiveSide.get().isClient() : Thread.currentThread().getName();
+        return RECIPE_CACHES;
+    }
+
     @Nullable
     public static RecipeManager getRecipeManager() {
         ClientPacketListener connection = Minecraft.getInstance().getConnection();

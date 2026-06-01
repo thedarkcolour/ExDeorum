@@ -34,7 +34,6 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
 import net.neoforged.neoforge.common.loot.LootModifier;
-import org.jetbrains.annotations.NotNull;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.recipe.crook.CrookRecipe;
 
@@ -48,7 +47,7 @@ public class CrookLootModifier extends LootModifier {
     }
 
     @Override
-    protected @NotNull ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
+    protected ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
         var state = context.getParamOrNull(LootContextParams.BLOCK_STATE);
         var stack = context.getParamOrNull(LootContextParams.TOOL);
 
@@ -59,7 +58,7 @@ public class CrookLootModifier extends LootModifier {
                 var fortune = stack.getEnchantmentLevel(context.getLevel().holderLookup(Registries.ENCHANTMENT).getOrThrow(Enchantments.FORTUNE));
                 var rolls = Math.max(1, Mth.ceil(fortune / 3f));
 
-                for (CrookRecipe recipe : RecipeUtil.getCrookRecipes(state)) {
+                for (CrookRecipe recipe : RecipeUtil.getCaches(context.getLevel()).getCrookRecipes(state)) {
                     for (int i = 0; i < rolls; i++) {
                         if (rand.nextFloat() < recipe.chance()) {
                             generatedLoot.add(recipe.result().copy());

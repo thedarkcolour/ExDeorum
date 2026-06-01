@@ -20,20 +20,18 @@ package thedarkcolour.exdeorum.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.block.MechanicalHammerBlock;
 import thedarkcolour.exdeorum.blockentity.helper.ItemHelper;
@@ -64,8 +62,8 @@ public class MechanicalHammerBlockEntity extends AbstractMachineBlockEntity<Mech
         super(EBlockEntities.MECHANICAL_HAMMER.get(), pos, state, ItemHandler::new, EConfig.SERVER.mechanicalHammerEnergyStorage.get());
     }
 
-    public static boolean isValidInput(ItemStack stack) {
-        return RecipeUtil.getHammerRecipe(stack.getItem()) != null;
+    public static boolean isValidInput(Level level, ItemStack stack) {
+        return RecipeUtil.getCaches(level).getHammerRecipe(stack.getItem()) != null;
     }
 
     @Override
@@ -128,7 +126,7 @@ public class MechanicalHammerBlockEntity extends AbstractMachineBlockEntity<Mech
         var output = this.inventory.getStackInSlot(OUTPUT_SLOT);
 
         if (output.isEmpty() || output.getCount() < output.getMaxStackSize()) {
-            var recipe = RecipeUtil.getHammerRecipe(input.getItem());
+            var recipe = getRecipeCaches().getHammerRecipe(input.getItem());
 
             if (recipe != null && (output.isEmpty() || ItemStack.isSameItemSameComponents(recipe.result, output))) {
                 return recipe;
@@ -229,9 +227,9 @@ public class MechanicalHammerBlockEntity extends AbstractMachineBlockEntity<Mech
         }
 
         @Override
-        public boolean isItemValid(int slot, @NotNull ItemStack stack) {
+        public boolean isItemValid(int slot, ItemStack stack) {
             if (slot == INPUT_SLOT) {
-                return RecipeUtil.getHammerRecipe(stack.getItem()) != null;
+                return hammer.getRecipeCaches().getHammerRecipe(stack.getItem()) != null;
             } else if (slot == HAMMER_SLOT) {
                 return stack.is(EItemTags.HAMMERS);
             } else {

@@ -27,6 +27,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeInput;
+import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.ItemLike;
@@ -34,7 +35,6 @@ import net.minecraft.world.level.Level;
 import net.neoforged.fml.ModList;
 import thedarkcolour.exdeorum.material.DefaultMaterials;
 import thedarkcolour.exdeorum.material.MaterialRegistry;
-import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.registry.EItems;
 
 import java.util.ArrayList;
@@ -79,8 +79,8 @@ public class CompatUtil {
         return materials;
     }
 
-    public static <C extends RecipeInput, R extends Recipe<C>, T> List<T> collectAllRecipes(RecipeType<R> recipeType, Function<R, T> mapper) {
-        var byType = RecipeUtil.getRecipeManager().byType(recipeType);
+    public static <C extends RecipeInput, R extends Recipe<C>, T> List<T> collectAllRecipes(RecipeManager recipeManager, RecipeType<R> recipeType, Function<R, T> mapper) {
+        var byType = recipeManager.byType(recipeType);
         List<T> recipes = new ObjectArrayList<>(byType.size());
         for (RecipeHolder<R> value : byType) {
             recipes.add(mapper.apply(value.value()));

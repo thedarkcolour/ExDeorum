@@ -266,7 +266,7 @@ public class BarrelBlockEntity extends ETankBlockEntity {
                 var itemFluidCap = playerItem.getCapability(Capabilities.FluidHandler.ITEM);
                 if (itemFluidCap != null) {
                     var itemFluid = itemFluidCap.drain(1000, IFluidHandler.FluidAction.SIMULATE);
-                    BarrelFluidMixingRecipe recipe = RecipeUtil.getFluidMixingRecipe(this.tank.getFluid(), itemFluid.getFluid());
+                    BarrelFluidMixingRecipe recipe = getRecipeCaches().getFluidMixingRecipe(this.tank.getFluid(), itemFluid.getFluid());
 
                     // If draining item fluid was possible and tank has enough fluid to mix...
                     if (recipe != null && this.tank.getFluidAmount() >= recipe.baseFluid().amount() && itemFluid.getAmount() == 1000) {
@@ -370,7 +370,7 @@ public class BarrelBlockEntity extends ETankBlockEntity {
             return false;
         }
 
-        var recipe = RecipeUtil.getBarrelMixingRecipe(this.level.getRecipeManager(), playerItem, this.tank.getFluid());
+        var recipe = getRecipeCaches().getBarrelMixingRecipe(this.level.getRecipeManager(), playerItem, this.tank.getFluid());
 
         if (recipe != null) {
             if (!simulate) {
@@ -389,9 +389,9 @@ public class BarrelBlockEntity extends ETankBlockEntity {
 
     private boolean tryComposting(ItemStack stack, boolean simulate) {
         if (simulate) {
-            return RecipeUtil.isCompostable(stack);
+            return getRecipeCaches().isCompostable(stack);
         } else {
-            var recipe = RecipeUtil.getBarrelCompostRecipe(stack);
+            var recipe = getRecipeCaches().getBarrelCompostRecipe(stack);
             if (recipe != null) {
                 addCompost(stack, recipe.getVolume());
                 return true;
@@ -437,7 +437,7 @@ public class BarrelBlockEntity extends ETankBlockEntity {
                 var aboveFluid = aboveFluidState.getType();
 
                 if (aboveFluid != Fluids.EMPTY) {
-                    BarrelFluidMixingRecipe recipe = RecipeUtil.getFluidMixingRecipe(this.tank.getFluid(), aboveFluid instanceof FlowingFluid flowing ? flowing.getSource() : aboveFluid);
+                    BarrelFluidMixingRecipe recipe = getRecipeCaches().getFluidMixingRecipe(this.tank.getFluid(), aboveFluid instanceof FlowingFluid flowing ? flowing.getSource() : aboveFluid);
 
                     if (recipe != null) {
                         // If additive is not consumed, just craft
@@ -464,7 +464,7 @@ public class BarrelBlockEntity extends ETankBlockEntity {
                 this.currentTransformRecipe = null;
             } else {
                 var belowState = this.level.getBlockState(this.worldPosition.below());
-                this.currentTransformRecipe = RecipeUtil.getFluidTransformationRecipe(this.tank.getFluid().getFluid(), belowState);
+                this.currentTransformRecipe = getRecipeCaches().getFluidTransformationRecipe(this.tank.getFluid().getFluid(), belowState);
 
                 if (this.currentTransformRecipe != null) {
                     var color = this.currentTransformRecipe.resultColor();

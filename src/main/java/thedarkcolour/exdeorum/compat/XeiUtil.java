@@ -234,33 +234,33 @@ public class XeiUtil {
         tooltipLines.accept(Component.translatable(TranslationKeys.SIEVE_RECIPE_MAX_OUTPUT, maxFormatted).withStyle(ChatFormatting.GRAY));
     }
 
-    public interface HeatRecipeAcceptor {
-        void accept(int heat, BlockState state);
-    }
-
-    public static void addCrucibleHeatRecipes(HeatRecipeAcceptor acceptor) {
-        var values = new Object2IntOpenHashMap<Block>();
-        for (var entry : RecipeUtil.getHeatSources()) {
-            var state = entry.getKey();
-            var block = state.getBlock();
-
-            if (block instanceof WallTorchBlock) continue;
-
-            if (block != Blocks.AIR) {
-                final int newValue = entry.getIntValue();
-
-                values.computeInt(block, (key, value) -> {
-                    if (value != null) {
-                        return Math.max(value, newValue);
-                    } else {
-                        return newValue == 0 ? null : newValue;
-                    }
-                });
-            }
-        }
-
-        for (var entry : values.object2IntEntrySet()) {
-            acceptor.accept(entry.getIntValue(), entry.getKey().defaultBlockState());
-        }
-    }
+//    public interface HeatRecipeAcceptor {
+//        void accept(int heat, BlockState state);
+//    }
+//
+//    public static void addCrucibleHeatRecipes(HeatRecipeAcceptor acceptor) {
+//        var values = new Object2IntOpenHashMap<Block>();
+//        for (var entry : RecipeUtil.getHeatSources()) {
+//            var state = entry.getKey();
+//            var block = state.getBlock();
+//
+//            if (block instanceof WallTorchBlock) continue;
+//
+//            if (block != Blocks.AIR) {
+//                final int newValue = entry.getIntValue();
+//
+//                values.computeInt(block, (key, value) -> {
+//                    if (value != null) {
+//                        return Math.max(value, newValue);
+//                    } else {
+//                        return newValue == 0 ? null : newValue;
+//                    }
+//                });
+//            }
+//        }
+//
+//        for (var entry : values.object2IntEntrySet()) {
+//            acceptor.accept(entry.getIntValue(), entry.getKey().defaultBlockState());
+//        }
+//    }
 }

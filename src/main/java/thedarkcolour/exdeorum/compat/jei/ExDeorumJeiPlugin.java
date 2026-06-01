@@ -46,6 +46,7 @@ import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import thedarkcolour.exdeorum.ExDeorum;
+import thedarkcolour.exdeorum.client.ClientsideCode;
 import thedarkcolour.exdeorum.client.screen.MechanicalHammerScreen;
 import thedarkcolour.exdeorum.client.screen.MechanicalSieveScreen;
 import thedarkcolour.exdeorum.compat.CompatUtil;
@@ -215,7 +216,7 @@ public class ExDeorumJeiPlugin implements IModPlugin {
         addRecipes(registration, HAMMER, ERecipeTypes.HAMMER);
         //noinspection rawtypes,unchecked
         addRecipes(registration, COMPRESSED_HAMMER, ((DeferredHolder) ERecipeTypes.COMPRESSED_HAMMER));
-        registration.addRecipes(CROOK, CompatUtil.collectAllRecipes(ERecipeTypes.CROOK.get(), CrookJeiRecipe::create));
+        registration.addRecipes(CROOK, CompatUtil.collectAllRecipes(RecipeUtil.getClientRecipeManager(), ERecipeTypes.CROOK.get(), CrookJeiRecipe::create));
         registration.addRecipes(SIEVE, XeiSieveRecipe.getAllRecipesGrouped(ERecipeTypes.SIEVE.get(), XeiSieveRecipe.SIEVE_ROWS));
         registration.addRecipes(COMPRESSED_SIEVE, XeiSieveRecipe.getAllRecipesGrouped(ERecipeTypes.COMPRESSED_SIEVE.get(), XeiSieveRecipe.COMPRESSED_SIEVE_ROWS));
 
@@ -224,7 +225,7 @@ public class ExDeorumJeiPlugin implements IModPlugin {
 
     private static void addCrucibleHeatSources(IRecipeRegistration registration) {
         var values = new Object2IntOpenHashMap<Block>();
-        for (var entry : RecipeUtil.getHeatSources()) {
+        for (var entry : ClientsideCode.getRecipeCaches().getHeatSources()) {
             var state = entry.getKey();
             var block = state.getBlock();
 
@@ -300,6 +301,6 @@ public class ExDeorumJeiPlugin implements IModPlugin {
     }
 
     private static <C extends RecipeInput, T extends Recipe<C>> void addRecipes(IRecipeRegistration registration, RecipeType<T> category, Supplier<net.minecraft.world.item.crafting.RecipeType<T>> type) {
-        registration.addRecipes(category, CompatUtil.collectAllRecipes(type.get(), Function.identity()));
+        registration.addRecipes(category, CompatUtil.collectAllRecipes(RecipeUtil.getClientRecipeManager(), type.get(), Function.identity()));
     }
 }

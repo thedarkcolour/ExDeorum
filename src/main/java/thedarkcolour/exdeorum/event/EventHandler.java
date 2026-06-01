@@ -58,6 +58,7 @@ import net.neoforged.neoforge.fluids.FluidInteractionRegistry;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.blockentity.helper.ItemHelper;
+import thedarkcolour.exdeorum.client.ClientsideCode;
 import thedarkcolour.exdeorum.client.CompostColors;
 import thedarkcolour.exdeorum.compat.ModIds;
 import thedarkcolour.exdeorum.config.EConfig;
@@ -66,6 +67,7 @@ import thedarkcolour.exdeorum.item.WateringCanItem;
 import thedarkcolour.exdeorum.material.BarrelMaterial;
 import thedarkcolour.exdeorum.network.NetworkHandler;
 import thedarkcolour.exdeorum.network.VisualUpdateTracker;
+import thedarkcolour.exdeorum.recipe.RecipeCaches;
 import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.registry.EBlockEntities;
 import thedarkcolour.exdeorum.registry.EFluids;
@@ -95,7 +97,7 @@ public final class EventHandler {
     }
 
     private static void serverShutdown(ServerStoppingEvent event) {
-        RecipeUtil.unload();
+        RecipeUtil.getServerRecipeCaches().unload();
     }
 
     private static void handleDebugCommands(ClientChatEvent event) {
@@ -209,10 +211,6 @@ public final class EventHandler {
                     ExDeorum.LOGGER.error("Unable to grant player the Void World advancement. Ex Deorum advancements will not show");
                 }
             }
-        } else {
-            if (Minecraft.getInstance().getConnection() != null) {
-                RecipeUtil.reload(Minecraft.getInstance().getConnection().getRecipeManager());
-            }
         }
     }
 
@@ -231,7 +229,8 @@ public final class EventHandler {
         var recipes = event.getServerResources().getRecipeManager();
         event.addListener((prepBarrier, resourceManager, prepProfiler, reloadProfiler, backgroundExecutor, gameExecutor) -> {
             return prepBarrier.wait(Unit.INSTANCE).thenRunAsync(() -> {
-                RecipeUtil.reload(recipes);
+                // This is called on render thread when joining a singleplayer world, so we skip assertions
+                RecipeUtil.getServerRecipeCaches(true).reload(recipes);
             }, gameExecutor);
         });
     }
