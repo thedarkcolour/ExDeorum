@@ -41,7 +41,7 @@ final class CrucibleHeatSourceRecipe {
     }
 
     public RecipeHolder<CrucibleHeatRecipe> recipeHolder() {
-        return recipeHolder;
+        return this.recipeHolder;
     }
 
     public int meltRate() {

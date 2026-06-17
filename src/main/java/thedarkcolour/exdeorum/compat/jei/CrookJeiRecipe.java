@@ -60,10 +60,7 @@ public sealed abstract class CrookJeiRecipe {
         var id = recipeHolder.id();
         switch (recipe.blockPredicate()) {
             case BlockPredicate.BlockStatePredicate state -> {
-                return new StatesRecipe(id, state, state
-                        .possibleStates()
-                        .filter(blockState -> !blockState.hasProperty(BlockStateProperties.WATERLOGGED) || !blockState.getValue(BlockStateProperties.WATERLOGGED))
-                        .toList(), recipe.result(), recipe.chance());
+                return new StatesRecipe(id, state, state.possibleStates().filter(blockState -> !blockState.hasProperty(BlockStateProperties.WATERLOGGED) || !blockState.getValue(BlockStateProperties.WATERLOGGED)).toList(), recipe.result(), recipe.chance());
             }
             case BlockPredicate.SingleBlockPredicate block -> {
                 return new BlockRecipe(id, block.block(), recipe.result(), recipe.chance());
