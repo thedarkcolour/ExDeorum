@@ -149,6 +149,9 @@ class ModTags {
         tags.tag(ItemTags.MINING_ENCHANTABLE).addTags(EItemTags.HAMMERS, EItemTags.COMPRESSED_HAMMERS, EItemTags.CROOKS, EItemTags.SIEVE_MESHES);
         tags.tag(ItemTags.MINING_LOOT_ENCHANTABLE).addTags(EItemTags.HAMMERS, EItemTags.COMPRESSED_HAMMERS, EItemTags.CROOKS, EItemTags.SIEVE_MESHES);
         tags.tag(ItemTags.DURABILITY_ENCHANTABLE).addTags(EItemTags.HAMMERS, EItemTags.COMPRESSED_HAMMERS, EItemTags.CROOKS);
+
+        tags.tag(Tags.Items.TOOLS).addTag(EItemTags.HAMMERS);
+        tags.tag(Tags.Items.TOOLS).addTag(EItemTags.CROOKS);
     }
 
     public static void createStructureSetTags(MKTagsProvider<StructureSet> tags) {
