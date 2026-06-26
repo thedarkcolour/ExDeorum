@@ -74,7 +74,7 @@ public class PreferredOres {
             item = defaultOre;
             ExDeorum.LOGGER.debug("No preferred ore was set for tag {}. Using default choice {}", tag.location(), item.builtInRegistryHolder().key().location());
         }
-        PREFERRED_ORE_ITEMS.put(tag, defaultOre);
+        PREFERRED_ORE_ITEMS.put(tag, item);
     }
 
     /**
