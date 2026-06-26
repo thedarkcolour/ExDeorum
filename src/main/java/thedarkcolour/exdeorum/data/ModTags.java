@@ -32,6 +32,7 @@ import net.minecraft.world.level.levelgen.presets.WorldPreset;
 import net.minecraft.world.level.levelgen.structure.BuiltinStructureSets;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.material.Fluid;
+import net.neoforged.neoforge.common.Tags;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.compat.ModIds;
 import thedarkcolour.exdeorum.material.*;
@@ -67,6 +68,13 @@ class ModTags {
         }
         tags.tag(EBlockTags.MINEABLE_WITH_HAMMER)
                 .addTags(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.MINEABLE_WITH_SHOVEL);
+
+        // By default, reuse the Vanilla tags, but having it separate allows customization
+        // ex. exclude non-dirt "dirt" blocks from other mods worldgen
+        tags.tag(EBlockTags.GRASS_SEEDS_SPREADABLES).addTag(BlockTags.DIRT);
+        tags.tag(EBlockTags.MYCELIUM_SPORES_SPREADABLES).addTag(BlockTags.DIRT);
+        tags.tag(EBlockTags.WARPED_NYLIUM_SPORES_SPREADABLES).addTags(Tags.Blocks.NETHERRACKS, BlockTags.NYLIUM);
+        tags.tag(EBlockTags.CRIMSON_NYLIUM_SPORES_SPREADABLES).addTags(Tags.Blocks.NETHERRACKS, BlockTags.NYLIUM);
 
         tags.tag(BlockTags.MINEABLE_WITH_AXE)
                 .add(WOODEN_BARRELS.stream().map(BarrelMaterial::getBlock).toArray(Block[]::new))

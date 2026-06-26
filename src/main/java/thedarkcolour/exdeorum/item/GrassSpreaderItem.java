@@ -22,7 +22,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
@@ -32,6 +32,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import thedarkcolour.exdeorum.registry.EItems;
 import thedarkcolour.exdeorum.registry.ESounds;
@@ -40,10 +41,12 @@ import java.util.function.Supplier;
 
 public class GrassSpreaderItem extends Item {
     private final Supplier<BlockState> grassState;
+    private final TagKey<Block> spreadableStates;
 
-    public GrassSpreaderItem(Properties properties, Supplier<BlockState> grassState) {
+    public GrassSpreaderItem(Properties properties, Supplier<BlockState> grassState, TagKey<Block> spreadableStates) {
         super(properties);
         this.grassState = grassState;
+        this.spreadableStates = spreadableStates;
     }
 
     @Override
@@ -99,7 +102,7 @@ public class GrassSpreaderItem extends Item {
                 cow.level().addFreshEntity(mushroomCow);
 
                 if (!cow.level().isClientSide) {
-                    ((ServerLevel)cow.level()).sendParticles(ParticleTypes.EXPLOSION, cow.getX(), cow.getY(0.5D), cow.getZ(), 1, 0.0D, 0.0D, 0.0D, 0.0D);
+                    ((ServerLevel) cow.level()).sendParticles(ParticleTypes.EXPLOSION, cow.getX(), cow.getY(0.5D), cow.getZ(), 1, 0.0D, 0.0D, 0.0D, 0.0D);
                 }
                 cow.playSound(SoundEvents.MOOSHROOM_CONVERT, 2.0F, 1.0F);
             }
@@ -110,6 +113,6 @@ public class GrassSpreaderItem extends Item {
     }
 
     public boolean canSpread(BlockState state) {
-        return state.is(BlockTags.DIRT);
+        return state.is(this.spreadableStates);
     }
 }

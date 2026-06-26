@@ -1,5 +1,9 @@
-// 1.21.1	2025-01-05T13:28:28.0038743	Tags for minecraft:block mod id exdeorum
+// 1.21.1	2026-06-25T18:01:28.771375206	Tags for minecraft:block mod id exdeorum
+4f09a582d6a42af01e13556edb3fae621b815ed6 data/exdeorum/tags/block/crimson_nylium_spores_spreadables.json
+69c396cb051bbe9a130e6979b67065e5041b179d data/exdeorum/tags/block/grass_seeds_spreadables.json
 c2f6fb7224bd1e2fdb87249751113c4d66dbc21f data/exdeorum/tags/block/mineable/hammer.json
+69c396cb051bbe9a130e6979b67065e5041b179d data/exdeorum/tags/block/mycelium_spores_spreadables.json
+4f09a582d6a42af01e13556edb3fae621b815ed6 data/exdeorum/tags/block/warped_nylium_spores_spreadables.json
 77dfab311d3714c77bcac2df0397d23d4707f03b data/exdeorum/tags/block/watering_can_tickable.json
 f6a9610ebae09549baf17e27200037cd17318055 data/minecraft/tags/block/leaves.json
 133e5ec65e3916d03320a67e2f4a475188028d08 data/minecraft/tags/block/mineable/axe.json

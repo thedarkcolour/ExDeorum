@@ -27,6 +27,11 @@ public class EBlockTags {
     public static final TagKey<Block> WATERING_CAN_TICKABLE = tag("watering_can_tickable");
     public static final TagKey<Block> MINEABLE_WITH_HAMMER = tag("mineable/hammer");
 
+    public static final TagKey<Block> GRASS_SEEDS_SPREADABLES = tag("grass_seeds_spreadables");
+    public static final TagKey<Block> MYCELIUM_SPORES_SPREADABLES = tag("mycelium_spores_spreadables");
+    public static final TagKey<Block> WARPED_NYLIUM_SPORES_SPREADABLES = tag("warped_nylium_spores_spreadables");
+    public static final TagKey<Block> CRIMSON_NYLIUM_SPORES_SPREADABLES = tag("crimson_nylium_spores_spreadables");
+
     public static TagKey<Block> tag(String name) {
         return BlockTags.create(ExDeorum.loc(name));
     }
