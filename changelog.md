@@ -1,9 +1,7 @@
-## Ex Deorum 3.12
+## Ex Deorum 3.11
 - Added four new tags to customize which blocks Grass Seeds, Mycelium Spores, Warped Nylium Spores, and Crimson Nylium Spores can be used on: `grass_seeds_spreadables`, `mycelium_spores_spreadables`, `warped_nylium_spores_spreadables`, `crimson_nylium_spores_spreadables`
 - Added `#exdeorum:hammers` and `#exdeorum:crooks` tags to the `#c:tools` tag
 - PreferredOres config now properly reads specified results (#174)
-
-## Ex Deorum 3.11
 - Fixed End Cakes crashing fake players (#178)
 - Fixed Compressed Sieves not allowing simultaneous insertion of material even when Simultaneous Compressed Sieve Usage was enabled
 - Fixed Crucible bug where pending solids could be converted to another fluid while tank was empty (#180)
