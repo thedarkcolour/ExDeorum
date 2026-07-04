@@ -1,3 +1,6 @@
+## Ex Deorum 1.52
+- Avoid unsafe crucible block entity lookups during chunk loading, thanks to FrozenGalaxy/DeadSix (#186)
+
 ## Ex Deorum 1.51
 - PreferredOres config now properly reads specified results (#174)
 
