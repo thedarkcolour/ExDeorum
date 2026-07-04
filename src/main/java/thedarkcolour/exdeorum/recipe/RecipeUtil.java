@@ -444,7 +444,7 @@ public final class RecipeUtil {
     }
 
     public static int getHeatValue(BlockState state) {
-        return crucibleHeatRecipeCache.getValue(state);
+        return crucibleHeatRecipeCache == null ? 0 : crucibleHeatRecipeCache.getValue(state);
     }
 
     public static ObjectSet<Object2IntMap.Entry<BlockState>> getHeatSources() {

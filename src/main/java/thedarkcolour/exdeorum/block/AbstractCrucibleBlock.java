@@ -26,6 +26,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -50,8 +51,19 @@ public abstract class AbstractCrucibleBlock extends ETankBlock {
 
     @Override
     public int getLightEmission(BlockState state, BlockGetter level, BlockPos pos) {
-        if (level.getExistingBlockEntity(pos) instanceof AbstractCrucibleBlockEntity crucible) {
-            return crucible.getTank().getFluid().getFluid().getFluidType().getLightLevel();
+        BlockEntity blockEntity = null;
+
+        if (level instanceof LevelChunk chunk) {
+            blockEntity = chunk.getBlockEntity(pos, LevelChunk.EntityCreationType.CHECK);
+        } else if (level instanceof Level world) {
+            var chunk = world.getChunkSource().getChunkNow(pos.getX() >> 4, pos.getZ() >> 4);
+            if (chunk != null) {
+                blockEntity = chunk.getBlockEntity(pos, LevelChunk.EntityCreationType.CHECK);
+            }
+        }
+
+        if (blockEntity instanceof AbstractCrucibleBlockEntity crucible) {
+            return Mth.clamp(crucible.getTank().getFluid().getFluid().getFluidType().getLightLevel(), 0, 15);
         }
         return 0;
     }

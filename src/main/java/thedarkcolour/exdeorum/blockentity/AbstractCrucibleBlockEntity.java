@@ -357,10 +357,14 @@ public abstract class AbstractCrucibleBlockEntity extends ETankBlockEntity {
                 var tank = crucible.tank;
 
                 if ((level.getGameTime() % 10L) == 0L) {
-                    short delta = (short) Math.min(crucible.solids, crucible.getMeltingRate());
+                    if (crucible.solids <= 0) return;
+
+                    int meltingRate = crucible.getMeltingRate();
 
                     // Skip if no heat
-                    if (delta <= 0) return;
+                    if (meltingRate <= 0) return;
+
+                    short delta = (short) Math.min(crucible.solids, meltingRate);
 
                     if (tank.getSpace() >= delta) {
                         // Remove solids
