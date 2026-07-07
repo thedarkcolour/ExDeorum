@@ -29,6 +29,7 @@ import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.ExDeorum;
 
 import java.nio.file.Path;
+import java.util.Locale;
 
 public class MaterialParser {
     private final JsonObject json;
@@ -49,7 +50,7 @@ public class MaterialParser {
 
             if (soundTypeJson.isJsonPrimitive()) {
                 String soundTypeString = soundTypeJson.getAsString();
-                var soundType = SoundTypeResolver.VANILLA_SOUND_TYPES.get(soundTypeString);
+                var soundType = SoundTypeResolver.VANILLA_SOUND_TYPES.get(soundTypeString.toLowerCase(Locale.ROOT));
 
                 if (soundType == null) {
                     ExDeorum.LOGGER.error("Unknown sound type \"{}\" for material {}", soundTypeString, this.jsonPath);
