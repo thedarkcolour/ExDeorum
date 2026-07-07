@@ -1,3 +1,6 @@
+## Ex Deorum 3.12
+- Fixed typo that broke Grass Seeds, Mycelium Spores, and Warped Nylium Spores (#188)
+
 ## Ex Deorum 3.11
 - Added four new tags to customize which blocks Grass Seeds, Mycelium Spores, Warped Nylium Spores, and Crimson Nylium Spores can be used on: `grass_seeds_spreadables`, `mycelium_spores_spreadables`, `warped_nylium_spores_spreadables`, `crimson_nylium_spores_spreadables`
 - Added `#exdeorum:hammers` and `#exdeorum:crooks` tags to the `#c:tools` tag

@@ -115,8 +115,8 @@ public class EItems {
     public static final DeferredItem<Item> PORCELAIN_CLAY_BALL = registerSimpleItem("porcelain_clay_ball");
     public static final DeferredItem<Item> GRASS_SEEDS = ITEMS.register("grass_seeds", () -> new GrassSpreaderItem(props(), Blocks.GRASS_BLOCK::defaultBlockState, EBlockTags.GRASS_SEEDS_SPREADABLES));
     public static final DeferredItem<Item> MYCELIUM_SPORES = ITEMS.register("mycelium_spores", () -> new GrassSpreaderItem(props(), Blocks.MYCELIUM::defaultBlockState, EBlockTags.MYCELIUM_SPORES_SPREADABLES));
-    public static final DeferredItem<Item> WARPED_NYLIUM_SPORES = ITEMS.register("warped_nylium_spores", () -> new GrassSpreaderItem(props(), Blocks.WARPED_NYLIUM::defaultBlockState, EBlockTags.CRIMSON_NYLIUM_SPORES_SPREADABLES));
-    public static final DeferredItem<Item> CRIMSON_NYLIUM_SPORES = ITEMS.register("crimson_nylium_spores", () -> new GrassSpreaderItem(props(), Blocks.CRIMSON_NYLIUM::defaultBlockState, EBlockTags.WARPED_NYLIUM_SPORES_SPREADABLES));
+    public static final DeferredItem<Item> WARPED_NYLIUM_SPORES = ITEMS.register("warped_nylium_spores", () -> new GrassSpreaderItem(props(), Blocks.WARPED_NYLIUM::defaultBlockState, EBlockTags.WARPED_NYLIUM_SPORES_SPREADABLES));
+    public static final DeferredItem<Item> CRIMSON_NYLIUM_SPORES = ITEMS.register("crimson_nylium_spores", () -> new GrassSpreaderItem(props(), Blocks.CRIMSON_NYLIUM::defaultBlockState, EBlockTags.CRIMSON_NYLIUM_SPORES_SPREADABLES));
     public static final DeferredItem<Item> SCULK_CORE = ITEMS.register("sculk_core", () -> new SculkCoreItem(props().stacksTo(1)));
     public static final DeferredItem<Item> RANDOM_POTTERY_SHERD = ITEMS.register("random_pottery_sherd", () -> new RandomResultItem(props(), EItemTags.RANDOM_SHERD_DROPS));
     public static final DeferredItem<Item> RANDOM_ARMOR_TRIM = ITEMS.register("random_armor_trim", () -> new RandomResultItem(props(), EItemTags.RANDOM_TRIM_DROPS));
