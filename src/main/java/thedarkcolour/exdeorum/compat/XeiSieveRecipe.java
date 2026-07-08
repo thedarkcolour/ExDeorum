@@ -22,10 +22,12 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multimap;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
@@ -34,33 +36,45 @@ import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.recipe.sieve.SieveRecipe;
 import thedarkcolour.exdeorum.registry.EItems;
 
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 // Since no JEI code is used here, this can be reused for REI
-public record XeiSieveRecipe(Ingredient ingredient, ItemStack mesh, List<Result> results) {
+public record XeiSieveRecipe(ResourceLocation id, Ingredient ingredient, ItemStack mesh, List<Result> results) {
     public static final MutableInt SIEVE_ROWS = new MutableInt(0);
     public static final MutableInt COMPRESSED_SIEVE_ROWS = new MutableInt(0);
 
-    public static ImmutableList<XeiSieveRecipe> getAllRecipesGrouped(RecipeType<? extends SieveRecipe> recipeType, MutableInt maxRows) {
+    public static <T extends SieveRecipe> ImmutableList<XeiSieveRecipe> getAllRecipesGrouped(RecipeType<T> recipeType, MutableInt maxRows) {
         int maxSieveRows = 1;
 
-        var recipes = CompatUtil.collectAllRecipes(RecipeUtil.getClientRecipeManager(), recipeType, Function.identity());
-        Multimap<Ingredient, SieveRecipe> ingredientGrouper = ArrayListMultimap.create();
+        var recipeHolders = CompatUtil.collectAllRecipes(RecipeUtil.getClientRecipeManager(), recipeType, Function.identity());
+        var recipeTypeKey = Objects.requireNonNull(BuiltInRegistries.RECIPE_TYPE.getKey(recipeType));
+        Multimap<Ingredient, RecipeHolder<T>> ingredientGrouper = ArrayListMultimap.create();
 
-        for (int i = 0; i < recipes.size(); i++) {
-            var recipe = recipes.get(i);
+        for (int i = 0; i < recipeHolders.size(); i++) {
+            var holder = recipeHolders.get(i);
+            var recipe = holder.value();
 
-            ingredientGrouper.put(recipe.ingredient(), recipe);
+            ingredientGrouper.put(recipe.ingredient(), holder);
 
-            for (int j = i + 1; j < recipes.size(); j++) {
-                var other = recipes.get(j);
+            for (int j = i + 1; j < recipeHolders.size(); j++) {
+                var otherHolder = recipeHolders.get(j);
+                var other = otherHolder.value();
 
                 if (RecipeUtil.areIngredientsEqual(recipe.ingredient(), other.ingredient())) {
-                    ingredientGrouper.put(recipe.ingredient(), other);
-                    recipes.remove(other);
+                    ingredientGrouper.put(recipe.ingredient(), otherHolder);
+                    recipeHolders.remove(otherHolder);
                     j--;
                 }
             }
@@ -74,13 +88,23 @@ public record XeiSieveRecipe(Ingredient ingredient, ItemStack mesh, List<Result>
 
         // ingredients with common ingredients are grouped into lists (ex. dirt)
         for (var ingredient : ingredientGrouper.keySet()) {
-            Multimap<Item, SieveRecipe> meshGrouper = ArrayListMultimap.create();
+            Multimap<Item, RecipeHolder<T>> meshGrouper = ArrayListMultimap.create();
             var values = ingredientGrouper.get(ingredient);
 
+            // A unique ingredient ID, which can grow long. For same ingredient will always generate same ID, even over game restarts.
+            var ingredientId = "ingredient-start " + Stream
+                    .of(ingredient.getItems())
+                    .map(ItemStack::getItem)
+                    .map(BuiltInRegistries.ITEM::getKey)
+                    .map(ResourceLocation::toString)
+                    .sorted()
+                    .collect(Collectors.joining(" - ")) + " ingredient-end ";
+
             // these lists are grouped into sub lists based on their meshes (ex. dirt with string mesh)
-            for (var recipe : values) {
+            for (var holder : values) {
+                var recipe = holder.value();
                 for (var stack : recipe.mesh.getItems()) {
-                    meshGrouper.put(stack.getItem(), recipe);
+                    meshGrouper.put(stack.getItem(), holder);
                 }
             }
 
@@ -91,15 +115,22 @@ public record XeiSieveRecipe(Ingredient ingredient, ItemStack mesh, List<Result>
             for (var mesh : meshes) {
                 var meshRecipes = meshGrouper.get(mesh);
                 var results = new ArrayList<Result>(meshRecipes.size());
+                var idList = new ArrayList<String>();
+                idList.add(ingredientId);
+                idList.add(BuiltInRegistries.ITEM.getKey(mesh).toString());
 
-                for (var recipe : meshRecipes) {
-                    int resultCount = recipe.resultAmount instanceof ConstantValue constant ? Math.round(constant.value()) : 1;
-                    results.add(new Result(recipe.result.copyWithCount(resultCount), recipe.resultAmount, recipe.byHandOnly));
+                for (var holder : meshRecipes) {
+                    var recipe = holder.value();
+                    int resultCount = recipe.resultAmount instanceof ConstantValue(float value) ? Math.round(value) : 1;
+                    results.add(new Result(holder, recipe.result.copyWithCount(resultCount), recipe.resultAmount, recipe.byHandOnly));
+
+                    idList.add(holder.id().toString());
                 }
 
-                results.sort(resultSorter);
+                var id = ResourceLocation.fromNamespaceAndPath(recipeTypeKey.getNamespace(), recipeTypeKey.getPath() + "/" + hash512(idList));
 
-                var jeiRecipe = new XeiSieveRecipe(ingredient, new ItemStack(mesh), results);
+                results.sort(resultSorter);
+                var jeiRecipe = new XeiSieveRecipe(id, ingredient, new ItemStack(mesh), results);
                 jeiRecipes.add(jeiRecipe);
 
                 var rows = Mth.ceil((float) meshRecipes.size() / 9f);
@@ -132,13 +163,39 @@ public record XeiSieveRecipe(Ingredient ingredient, ItemStack mesh, List<Result>
         }
     }
 
+    /**
+     * Function to hash a collection of strings using 512 bits precision.
+     * The order of the input collection does not matter.
+     * The idea behind this is to hash all recipes that make a recipe group and give the recipe group an ID.
+     * We need to make sure the ID doesn't end up with any collisions, so we just use a cryptographic hash.
+     * It's much more likely that 100 meteors strike ones house at the same time, than that two hashes collide,
+     * so that should suffice for uniqueness...
+     */
+    private static String hash512(Collection<String> inputs) {
+        try {
+            // make a unique string out of all inputs, regardless of the order they have.
+            // we use a separator which is sure to be unique and never in any input: " ||| "
+            var sortedInputs = inputs.stream().sorted().collect(Collectors.joining(" ||| "));
+            var md = MessageDigest.getInstance("SHA-512");
+            var digest = md.digest(sortedInputs.getBytes(StandardCharsets.UTF_8));
+            // Create a bigint out of the digest and convert it to a hex string
+            var bi = new BigInteger(1, digest);
+            return bi.toString(16);
+        } catch (NoSuchAlgorithmException e) {
+            // This is pretty bad... This shouldn't happen
+            throw new Error("Your java does not support SHA-512. Wat da hell? Report this to ExDeorum", e);
+        }
+    }
+
     public static final class Result {
+        public final RecipeHolder<? extends SieveRecipe> holder;
         public final ItemStack item;
         public final NumberProvider provider;
         public final boolean byHandOnly;
         private final double expectedCount;
 
-        Result(ItemStack item, NumberProvider provider, boolean byHandOnly) {
+        Result(RecipeHolder<? extends SieveRecipe> holder, ItemStack item, NumberProvider provider, boolean byHandOnly) {
+            this.holder = holder;
             this.item = item;
             this.provider = provider;
             this.byHandOnly = byHandOnly;

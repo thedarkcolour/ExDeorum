@@ -79,11 +79,11 @@ public class CompatUtil {
         return materials;
     }
 
-    public static <C extends RecipeInput, R extends Recipe<C>, T> List<T> collectAllRecipes(RecipeManager recipeManager, RecipeType<R> recipeType, Function<R, T> mapper) {
+    public static <C extends RecipeInput, R extends Recipe<C>, T> List<T> collectAllRecipes(RecipeManager recipeManager, RecipeType<R> recipeType, Function<RecipeHolder<R>, T> mapper) {
         var byType = recipeManager.byType(recipeType);
         List<T> recipes = new ObjectArrayList<>(byType.size());
         for (RecipeHolder<R> value : byType) {
-            recipes.add(mapper.apply(value.value()));
+            recipes.add(mapper.apply(value));
         }
         return recipes;
     }

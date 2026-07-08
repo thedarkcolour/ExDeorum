@@ -18,7 +18,6 @@
 
 package thedarkcolour.exdeorum.compat.jei;
 
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.VanillaTypes;
@@ -37,6 +36,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -44,7 +44,6 @@ import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.WallTorchBlock;
 import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.registries.DeferredHolder;
 import thedarkcolour.exdeorum.ExDeorum;
 import thedarkcolour.exdeorum.client.ClientsideCode;
 import thedarkcolour.exdeorum.client.screen.MechanicalHammerScreen;
@@ -58,6 +57,7 @@ import thedarkcolour.exdeorum.recipe.RecipeUtil;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelCompostRecipe;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelFluidMixingRecipe;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelMixingRecipe;
+import thedarkcolour.exdeorum.recipe.crucible.CrucibleHeatRecipe;
 import thedarkcolour.exdeorum.recipe.crucible.CrucibleRecipe;
 import thedarkcolour.exdeorum.recipe.hammer.CompressedHammerRecipe;
 import thedarkcolour.exdeorum.recipe.hammer.HammerRecipe;
@@ -68,6 +68,7 @@ import thedarkcolour.exdeorum.tag.EItemTags;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -76,17 +77,22 @@ import java.util.function.Supplier;
 public class ExDeorumJeiPlugin implements IModPlugin {
     public static final ResourceLocation EX_DEORUM_JEI_TEXTURE = ExDeorum.loc("textures/gui/jei/enr_jei.png");
 
-    static final RecipeType<BarrelCompostRecipe> BARREL_COMPOST = recipeType("barrel_compost", BarrelCompostRecipe.class);
-    static final RecipeType<BarrelMixingRecipe> BARREL_MIXING = recipeType("barrel_mixing", BarrelMixingRecipe.class);
-    static final RecipeType<BarrelFluidMixingRecipe> BARREL_FLUID_MIXING = recipeType("barrel_fluid_mixing", BarrelFluidMixingRecipe.class);
-    static final RecipeType<CrucibleRecipe> LAVA_CRUCIBLE = recipeType("lava_crucible", CrucibleRecipe.class);
-    static final RecipeType<CrucibleRecipe> WATER_CRUCIBLE = recipeType("water_crucible", CrucibleRecipe.class);
+    static final RecipeType<RecipeHolder<BarrelCompostRecipe>> BARREL_COMPOST = recipeType("barrel_compost");
+    static final RecipeType<RecipeHolder<BarrelMixingRecipe>> BARREL_MIXING = recipeType("barrel_mixing");
+    static final RecipeType<RecipeHolder<BarrelFluidMixingRecipe>> BARREL_FLUID_MIXING = recipeType("barrel_fluid_mixing");
+    static final RecipeType<RecipeHolder<CrucibleRecipe.Lava>> LAVA_CRUCIBLE = recipeType("lava_crucible");
+    static final RecipeType<RecipeHolder<CrucibleRecipe.Water>> WATER_CRUCIBLE = recipeType("water_crucible");
     static final RecipeType<CrucibleHeatSourceRecipe> CRUCIBLE_HEAT_SOURCES = recipeType("crucible_heat_sources", CrucibleHeatSourceRecipe.class);
     static final RecipeType<XeiSieveRecipe> SIEVE = recipeType("sieve", XeiSieveRecipe.class);
     static final RecipeType<XeiSieveRecipe> COMPRESSED_SIEVE = recipeType("compressed_sieve", XeiSieveRecipe.class);
-    static final RecipeType<HammerRecipe> HAMMER = recipeType("hammer", HammerRecipe.class);
-    static final RecipeType<HammerRecipe> COMPRESSED_HAMMER = recipeType("compressed_hammer", CompressedHammerRecipe.class);
+    static final RecipeType<RecipeHolder<HammerRecipe>> HAMMER = recipeType("hammer");
+    static final RecipeType<RecipeHolder<CompressedHammerRecipe>> COMPRESSED_HAMMER = recipeType("compressed_hammer");
     static final RecipeType<CrookJeiRecipe> CROOK = recipeType("crook", CrookJeiRecipe.class);
+
+    private static <T extends Recipe<?>> RecipeType<RecipeHolder<T>> recipeType(String path) {
+        String namespace = ModList.get().isLoaded(ModIds.EMI) ? ExDeorum.ID + "_" + ModIds.EMI : ExDeorum.ID;
+        return RecipeType.createRecipeHolderType(ResourceLocation.fromNamespaceAndPath(namespace, path));
+    }
 
     private static <T> RecipeType<T> recipeType(String path, Class<? extends T> type) {
         // use alternative namespace so that EMI doesn't skip JEI compatibility
@@ -111,10 +117,10 @@ public class ExDeorumJeiPlugin implements IModPlugin {
         registration.addRecipeCategories(new CrucibleCategory.LavaCrucible(helper, arrow));
         registration.addRecipeCategories(new CrucibleCategory.WaterCrucible(helper, arrow));
         registration.addRecipeCategories(new CrucibleHeatSourcesCategory(registration.getJeiHelpers()));
-        registration.addRecipeCategories(new SieveCategory(helper));
-        registration.addRecipeCategories(new CompressedSieveCategory(helper));
-        registration.addRecipeCategories(new HammerCategory(helper, arrow, EItems.DIAMOND_HAMMER, Component.translatable(TranslationKeys.HAMMER_CATEGORY_TITLE), HAMMER));
-        registration.addRecipeCategories(new HammerCategory(helper, arrow, EItems.COMPRESSED_DIAMOND_HAMMER, Component.translatable(TranslationKeys.COMPRESSED_HAMMER_CATEGORY_TITLE), COMPRESSED_HAMMER));
+        registration.addRecipeCategories(new SieveCategory(registration.getJeiHelpers()));
+        registration.addRecipeCategories(new CompressedSieveCategory(registration.getJeiHelpers()));
+        registration.addRecipeCategories(new HammerCategory<>(helper, arrow, EItems.DIAMOND_HAMMER, Component.translatable(TranslationKeys.HAMMER_CATEGORY_TITLE), HAMMER));
+        registration.addRecipeCategories(new HammerCategory<>(helper, arrow, EItems.COMPRESSED_DIAMOND_HAMMER, Component.translatable(TranslationKeys.COMPRESSED_HAMMER_CATEGORY_TITLE), COMPRESSED_HAMMER));
         registration.addRecipeCategories(new CrookCategory(registration.getJeiHelpers(), arrow));
     }
 
@@ -214,8 +220,7 @@ public class ExDeorumJeiPlugin implements IModPlugin {
         addRecipes(registration, LAVA_CRUCIBLE, ERecipeTypes.LAVA_CRUCIBLE);
         addRecipes(registration, WATER_CRUCIBLE, ERecipeTypes.WATER_CRUCIBLE);
         addRecipes(registration, HAMMER, ERecipeTypes.HAMMER);
-        //noinspection rawtypes,unchecked
-        addRecipes(registration, COMPRESSED_HAMMER, ((DeferredHolder) ERecipeTypes.COMPRESSED_HAMMER));
+        addRecipes(registration, COMPRESSED_HAMMER, ERecipeTypes.COMPRESSED_HAMMER);
         registration.addRecipes(CROOK, CompatUtil.collectAllRecipes(RecipeUtil.getClientRecipeManager(), ERecipeTypes.CROOK.get(), CrookJeiRecipe::create));
         registration.addRecipes(SIEVE, XeiSieveRecipe.getAllRecipesGrouped(ERecipeTypes.SIEVE.get(), XeiSieveRecipe.SIEVE_ROWS));
         registration.addRecipes(COMPRESSED_SIEVE, XeiSieveRecipe.getAllRecipesGrouped(ERecipeTypes.COMPRESSED_SIEVE.get(), XeiSieveRecipe.COMPRESSED_SIEVE_ROWS));
@@ -224,7 +229,7 @@ public class ExDeorumJeiPlugin implements IModPlugin {
     }
 
     private static void addCrucibleHeatSources(IRecipeRegistration registration) {
-        var values = new Object2IntOpenHashMap<Block>();
+        var values = new HashMap<Block, RecipeHolder<CrucibleHeatRecipe>>();
         for (var entry : ClientsideCode.getRecipeCaches().getHeatSources()) {
             var state = entry.getKey();
             var block = state.getBlock();
@@ -232,14 +237,19 @@ public class ExDeorumJeiPlugin implements IModPlugin {
             if (block instanceof WallTorchBlock) continue;
 
             if (block != Blocks.AIR) {
-                final int newValue = entry.getIntValue();
+                final int newValue = entry.getValue().value().heatValue();
+                if (newValue == 0) {
+                    // we don't want to display useless heat sources
+                    // why would people even create these?
+                    continue;
+                }
 
-                values.computeInt(block, (key, value) -> {
-                    if (value != null) {
-                        return Math.max(value, newValue);
-                    } else {
-                        return newValue == 0 ? null : newValue;
+                values.compute(block, (key, value) -> {
+                    if (value != null && value.value().heatValue() > newValue) {
+                        // Existing entry is a better heat source
+                        return value;
                     }
+                    return entry.getValue();
                 });
             }
         }
@@ -247,16 +257,17 @@ public class ExDeorumJeiPlugin implements IModPlugin {
         var fluidIngredientType = fluidHelper.getFluidIngredientType();
         var recipes = new ArrayList<CrucibleHeatSourceRecipe>();
 
-        for (var entry : values.object2IntEntrySet()) {
+        for (var entry : values.entrySet()) {
+            var holder = entry.getValue();
             if (entry.getKey() instanceof LiquidBlock liquid) {
-                recipes.add(new CrucibleHeatSourceRecipe(entry.getIntValue(), entry.getKey().defaultBlockState(), fluidIngredientType, fluidHelper.create(Holder.direct(liquid.fluid), 1000)));
+                recipes.add(new CrucibleHeatSourceRecipe(holder, entry.getKey().defaultBlockState(), fluidIngredientType, fluidHelper.create(Holder.direct(liquid.fluid), 1000)));
             } else {
                 var itemForm = entry.getKey().asItem();
 
                 if (itemForm != Items.AIR) {
-                    recipes.add(new CrucibleHeatSourceRecipe(entry.getIntValue(), entry.getKey().defaultBlockState(), VanillaTypes.ITEM_STACK, new ItemStack(itemForm)));
+                    recipes.add(new CrucibleHeatSourceRecipe(holder, entry.getKey().defaultBlockState(), VanillaTypes.ITEM_STACK, new ItemStack(itemForm)));
                 } else {
-                    recipes.add(new CrucibleHeatSourceRecipe(entry.getIntValue(), entry.getKey().defaultBlockState(), null, null));
+                    recipes.add(new CrucibleHeatSourceRecipe(holder, entry.getKey().defaultBlockState(), null, null));
                 }
             }
         }
@@ -300,7 +311,7 @@ public class ExDeorumJeiPlugin implements IModPlugin {
         });
     }
 
-    private static <C extends RecipeInput, T extends Recipe<C>> void addRecipes(IRecipeRegistration registration, RecipeType<T> category, Supplier<net.minecraft.world.item.crafting.RecipeType<T>> type) {
+    private static <C extends RecipeInput, T extends Recipe<C>> void addRecipes(IRecipeRegistration registration, RecipeType<RecipeHolder<T>> category, Supplier<net.minecraft.world.item.crafting.RecipeType<T>> type) {
         registration.addRecipes(category, CompatUtil.collectAllRecipes(RecipeUtil.getClientRecipeManager(), type.get(), Function.identity()));
     }
 }

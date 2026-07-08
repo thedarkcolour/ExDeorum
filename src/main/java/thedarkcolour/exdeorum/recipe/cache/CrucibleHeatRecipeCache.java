@@ -18,45 +18,48 @@
 
 package thedarkcolour.exdeorum.recipe.cache;
 
-import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import it.unimi.dsi.fastutil.objects.ObjectSet;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
+import thedarkcolour.exdeorum.recipe.crucible.CrucibleHeatRecipe;
 import thedarkcolour.exdeorum.registry.ERecipeTypes;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 public class CrucibleHeatRecipeCache {
     private RecipeManager recipeManager;
     @Nullable
-    private Object2IntMap<BlockState> recipes;
+    private Map<BlockState, RecipeHolder<CrucibleHeatRecipe>> recipes;
 
     public CrucibleHeatRecipeCache(RecipeManager recipeManager) {
         this.recipeManager = recipeManager;
     }
 
-    public int getValue(BlockState state) {
+    public RecipeHolder<CrucibleHeatRecipe> getRecipe(BlockState state) {
         if (this.recipes == null) {
             buildRecipes();
         }
-        return this.recipes.getInt(state);
+        return this.recipes.get(state);
     }
 
     private void buildRecipes() {
-        this.recipes = new Object2IntOpenHashMap<>();
+        this.recipes = new HashMap<>();
 
         for (var holder : this.recipeManager.byType(ERecipeTypes.CRUCIBLE_HEAT_SOURCE.get())) {
             var recipe = holder.value();
-            recipe.blockPredicate().possibleStates().forEach(state -> this.recipes.put(state, recipe.heatValue()));
+            recipe.blockPredicate().possibleStates().forEach(state -> this.recipes.put(state, holder));
         }
 
         this.recipeManager = null;
     }
 
-    public ObjectSet<Object2IntMap.Entry<BlockState>> getEntries() {
+    public Set<Map.Entry<BlockState, RecipeHolder<CrucibleHeatRecipe>>> getEntries() {
         if (this.recipes == null) {
             buildRecipes();
         }
-        return this.recipes.object2IntEntrySet();
+        return this.recipes.entrySet();
     }
 }

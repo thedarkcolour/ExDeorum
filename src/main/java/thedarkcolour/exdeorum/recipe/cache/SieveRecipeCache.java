@@ -21,6 +21,7 @@ package thedarkcolour.exdeorum.recipe.cache;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 import org.jetbrains.annotations.Nullable;
@@ -43,7 +44,7 @@ public class SieveRecipeCache<T extends SieveRecipe> {
         this.recipeType = recipeType;
     }
 
-    public List<T> getRecipe(Item mesh, ItemStack input) {
+    public List<RecipeHolder<T>> getRecipe(Item mesh, ItemStack input) {
         if (this.meshCaches == null) {
             buildRecipes();
         }
@@ -53,11 +54,11 @@ public class SieveRecipeCache<T extends SieveRecipe> {
 
     private void buildRecipes() {
         // Group recipes based on their mesh
-        var tempMap = new HashMap<Item, List<T>>();
+        var tempMap = new HashMap<Item, List<RecipeHolder<T>>>();
         for (var holder : this.recipeManager.byType(this.recipeType.get())) {
             var recipe = holder.value();
             for (var stack : recipe.mesh.getItems()) {
-                tempMap.computeIfAbsent(stack.getItem(), k -> new ArrayList<>()).add(recipe);
+                tempMap.computeIfAbsent(stack.getItem(), k -> new ArrayList<>()).add(holder);
             }
         }
         this.meshCaches = new HashMap<>();
@@ -73,15 +74,16 @@ public class SieveRecipeCache<T extends SieveRecipe> {
     // certain enchantment). Thirdly, I do not see anybody needing this use case, and if they do, they should contact
     // me on GitHub or Discord so that I can get around to actually implementing it.
     private static class MeshRecipeCache<T extends SieveRecipe> {
-        private final Map<Item, List<T>> simpleRecipes;
+        private final Map<Item, List<RecipeHolder<T>>> simpleRecipes;
 
-        private MeshRecipeCache(List<T> recipes) {
+        private MeshRecipeCache(List<RecipeHolder<T>> recipes) {
             this.simpleRecipes = new HashMap<>();
-            var temp = new HashMap<Item, ImmutableList.Builder<T>>();
+            var temp = new HashMap<Item, ImmutableList.Builder<RecipeHolder<T>>>();
 
-            for (var recipe : recipes) {
+            for (var holder : recipes) {
+                var recipe = holder.value();
                 for (var item : recipe.ingredient.getItems()) {
-                    temp.computeIfAbsent(item.getItem(), k -> ImmutableList.builder()).add(recipe);
+                    temp.computeIfAbsent(item.getItem(), k -> ImmutableList.builder()).add(holder);
                 }
             }
 
@@ -90,7 +92,7 @@ public class SieveRecipeCache<T extends SieveRecipe> {
             }
         }
 
-        public List<T> getRecipes(ItemStack input) {
+        public List<RecipeHolder<T>> getRecipes(ItemStack input) {
             var result = this.simpleRecipes.get(input.getItem());
             return result == null ? List.of() : result;
         }

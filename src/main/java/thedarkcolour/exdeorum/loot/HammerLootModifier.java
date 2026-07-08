@@ -22,12 +22,14 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
@@ -69,10 +71,11 @@ public class HammerLootModifier extends LootModifier {
             return generatedLoot;
         }
 
-        var recipe = getRecipe(itemForm, context);
-        if (recipe == null) {
+        var holder = getRecipe(itemForm, context);
+        if (holder == null) {
             return generatedLoot;
         }
+        var recipe = holder.value();
 
         ObjectArrayList<ItemStack> newLoot = new ObjectArrayList<>();
         var resultAmount = recipe.resultAmount.getInt(context);
@@ -91,7 +94,7 @@ public class HammerLootModifier extends LootModifier {
     }
 
     @Nullable
-    protected HammerRecipe getRecipe(Item itemForm, LootContext context) {
+    protected RecipeHolder<? extends HammerRecipe> getRecipe(Item itemForm, LootContext context) {
         return RecipeUtil.getCaches(context.getLevel()).getHammerRecipe(itemForm);
     }
 
