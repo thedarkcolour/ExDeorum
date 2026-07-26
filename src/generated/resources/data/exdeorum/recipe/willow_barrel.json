@@ -6,7 +6,6 @@
     }
   ],
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "key": {
     "m": "biomesoplenty:willow_slab",
     "s": "biomesoplenty:willow_planks"

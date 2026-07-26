@@ -59,14 +59,14 @@ public class WitchWaterBlock extends LiquidBlock {
             var entityType = entity.getType();
 
             if (EConfig.SERVER.allowWitchWaterEntityConversion.get()) {
-                if (entityType == EntityType.VILLAGER) {
+                if (entityType == EntityTypes.VILLAGER) {
                     var villager = (Villager) entity;
 
                     if (level.getDifficulty() != Difficulty.PEACEFUL) {
                         if (!villager.isBaby() && villager.getVillagerData().profession().is(VillagerProfession.CLERIC)) {
-                            attemptToConvertEntity(level, villager, EntityType.WITCH);
+                            attemptToConvertEntity(level, villager, EntityTypes.WITCH);
                         } else {
-                            villager.convertTo(EntityType.ZOMBIE_VILLAGER, ConversionParams.single(villager, false, false), EntitySpawnReason.CONVERSION, (ZombieVillager zombieVillager) -> {
+                            villager.convertTo(EntityTypes.ZOMBIE_VILLAGER, ConversionParams.single(villager, false, false), EntitySpawnReason.CONVERSION, (ZombieVillager zombieVillager) -> {
                                 zombieVillager.setVillagerData(villager.getVillagerData());
                                 zombieVillager.setGossips(villager.getGossips().copy());
                                 zombieVillager.setTradeOffers(villager.getOffers().copy());
@@ -74,36 +74,36 @@ public class WitchWaterBlock extends LiquidBlock {
                             });
                         }
                     }
-                } else if (entityType == EntityType.SKELETON) {
-                    attemptToConvertEntity(level, entity, EntityType.WITHER_SKELETON);
-                } else if (entityType == EntityType.CREEPER) {
+                } else if (entityType == EntityTypes.SKELETON) {
+                    attemptToConvertEntity(level, entity, EntityTypes.WITHER_SKELETON);
+                } else if (entityType == EntityTypes.CREEPER) {
                     entity.getEntityData().set(Creeper.DATA_IS_POWERED, true);
-                } else if (entityType == EntityType.SPIDER) {
-                    attemptToConvertEntity(level, entity, EntityType.CAVE_SPIDER);
-                } else if (entityType == EntityType.SQUID) {
-                    attemptToConvertEntity(level, entity, EntityType.GHAST);
-                } else if (entityType == EntityType.PIG || entityType == EntityType.PIGLIN) {
-                    attemptToConvertEntity(level, entity, EntityType.ZOMBIFIED_PIGLIN);
-                } else if (entityType == EntityType.HOGLIN) {
-                    attemptToConvertEntity(level, entity, EntityType.ZOGLIN);
-                } else if (entityType == EntityType.MOOSHROOM) {
+                } else if (entityType == EntityTypes.SPIDER) {
+                    attemptToConvertEntity(level, entity, EntityTypes.CAVE_SPIDER);
+                } else if (entityType == EntityTypes.SQUID) {
+                    attemptToConvertEntity(level, entity, EntityTypes.GHAST);
+                } else if (entityType == EntityTypes.PIG || entityType == EntityTypes.PIGLIN) {
+                    attemptToConvertEntity(level, entity, EntityTypes.ZOMBIFIED_PIGLIN);
+                } else if (entityType == EntityTypes.HOGLIN) {
+                    attemptToConvertEntity(level, entity, EntityTypes.ZOGLIN);
+                } else if (entityType == EntityTypes.MOOSHROOM) {
                     setVariant((MushroomCow) entity, "setVariant", MushroomCow.Variant.class, MushroomCow.Variant.BROWN);
-                } else if (entityType == EntityType.AXOLOTL) {
+                } else if (entityType == EntityTypes.AXOLOTL) {
                     setVariant((Axolotl) entity, "setVariant", Axolotl.Variant.class, Axolotl.Variant.BLUE);
-                } else if (entityType == EntityType.RABBIT) {
+                } else if (entityType == EntityTypes.RABBIT) {
                     setVariant((Rabbit) entity, "setVariant", Rabbit.Variant.class, Rabbit.Variant.EVIL);
-                } else if (entityType == EntityType.PUFFERFISH) {
-                    attemptToConvertEntity(level, entity, EntityType.GUARDIAN);
-                } else if (entityType == EntityType.HORSE) {
+                } else if (entityType == EntityTypes.PUFFERFISH) {
+                    attemptToConvertEntity(level, entity, EntityTypes.GUARDIAN);
+                } else if (entityType == EntityTypes.HORSE) {
                     if (level.getRandom().nextBoolean()) {
-                        attemptToConvertEntity(level, entity, EntityType.ZOMBIE_HORSE);
+                        attemptToConvertEntity(level, entity, EntityTypes.ZOMBIE_HORSE);
                     } else {
-                        attemptToConvertEntity(level, entity, EntityType.SKELETON_HORSE);
+                        attemptToConvertEntity(level, entity, EntityTypes.SKELETON_HORSE);
                     }
                 }
             }
 
-            if (entityType == EntityType.PLAYER) {
+            if (entityType == EntityTypes.PLAYER) {
                 var living = (LivingEntity) entity;
                 living.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 210));
                 living.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 210, 2));

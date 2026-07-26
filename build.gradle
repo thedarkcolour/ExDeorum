@@ -1,7 +1,7 @@
 plugins {
     id 'java-library'
     id 'idea'
-    id 'net.neoforged.moddev' version '2.0.141'
+    id 'net.neoforged.moddev' version '2.0.142'
     id("com.modrinth.minotaur") version '2.+'
     id("com.matthewprenger.cursegradle") version '1.4.0'
 }
@@ -135,7 +135,7 @@ dependencies {
     //implementation("dev.latvian.mods:kubejs-neoforge:${kubejs_version}")
 
     // ModKit DEV ONLY
-    implementation('com.github.thedarkcolour:ModKit:944589c2a7')
+    implementation('com.github.thedarkcolour:ModKit:8e87f1ea8aaad70b3ff1bbe3e604c535751b3401')
 
     // Core mod
     implementation(project(':coremod'))

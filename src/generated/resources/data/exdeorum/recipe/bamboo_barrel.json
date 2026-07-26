@@ -1,6 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "key": {
     "m": "minecraft:bamboo_slab",
     "s": "minecraft:bamboo_planks"

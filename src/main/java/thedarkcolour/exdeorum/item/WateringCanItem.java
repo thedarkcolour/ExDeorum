@@ -27,6 +27,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.BlockItemTags;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -243,7 +244,7 @@ public class WateringCanItem extends Item {
 
     protected void tryWatering(ServerLevel level, BlockPos pos, BlockState state) {
         if (state.is(EBlockTags.WATERING_CAN_TICKABLE)) {
-            if (state.is(BlockTags.SAPLINGS)) {
+            if (state.is(BlockItemTags.SAPLINGS.block())) {
                 if (level.getRandom().nextInt(3) == 0) {
                     state.randomTick(level, pos, level.getRandom());
                     level.levelEvent(LevelEvent.PARTICLES_AND_SOUND_PLANT_GROWTH, pos, 0);

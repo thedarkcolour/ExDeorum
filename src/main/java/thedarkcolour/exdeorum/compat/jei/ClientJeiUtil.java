@@ -49,13 +49,13 @@ class ClientJeiUtil {
     }
 
     static <T> void showRecipes(IFocusFactory focusFactory, ITypedIngredient<T> ingredient) {
-        if (Minecraft.getInstance().screen instanceof IRecipesGui recipesGui) {
+        if (Minecraft.getInstance().gui.screen() instanceof IRecipesGui recipesGui) {
             recipesGui.show(focusFactory.createFocus(RecipeIngredientRole.OUTPUT, ingredient));
         }
     }
 
     static <T> void showUsages(IFocusFactory focusFactory, ITypedIngredient<T> ingredient) {
-        if (Minecraft.getInstance().screen instanceof IRecipesGui recipesGui) {
+        if (Minecraft.getInstance().gui.screen() instanceof IRecipesGui recipesGui) {
             // input + catalyst
             recipesGui.show(List.of(focusFactory.createFocus(RecipeIngredientRole.INPUT, ingredient), focusFactory.createFocus(RecipeIngredientRole.CRAFTING_STATION, ingredient)));
         }

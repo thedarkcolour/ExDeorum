@@ -6,7 +6,6 @@
     }
   ],
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "key": {
     "m": "biomesoplenty:jacaranda_slab",
     "s": "biomesoplenty:jacaranda_log"

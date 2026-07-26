@@ -97,7 +97,7 @@ public class EndCakeBlock extends CakeBlock {
             var endLevel = level.getServer().getLevel(Level.END);
 
             if (endLevel != null) {
-                var spawn = ServerLevel.END_SPAWN_POINT.getBottomCenter();
+                var spawn = Vec3.atBottomCenterOf(ServerLevel.END_SPAWN_POINT);
                 player.teleportTo(endLevel, spawn.x, spawn.y, spawn.z, java.util.Set.of(), player.getYRot(), player.getXRot(), false);
                 return true;
             }

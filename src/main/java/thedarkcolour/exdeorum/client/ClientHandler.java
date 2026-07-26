@@ -108,7 +108,7 @@ public class ClientHandler {
 
     private static void onConfigChanged(ModConfigEvent.Reloading event) {
         if (event.getConfig().getSpec() == EConfig.CLIENT_SPEC) {
-            Minecraft.getInstance().levelRenderer.allChanged();
+            Minecraft.getInstance().levelExtractor.allChanged();
         }
     }
 

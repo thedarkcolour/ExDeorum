@@ -18,13 +18,14 @@
 
 package thedarkcolour.exdeorum.data.recipe;
 
-import net.minecraft.advancements.criterion.StatePropertiesPredicate;
+import net.minecraft.advancements.predicates.StatePropertiesPredicate;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.tags.BlockItemTags;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
@@ -525,7 +526,7 @@ public class Recipes {
 
         waterCrucible(writer, "saplings", recipes.ingredient(ItemTags.SAPLINGS), 100);
         waterCrucible(writer, "leaves", recipes.ingredient(ItemTags.LEAVES), 250);
-        waterCrucible(writer, "small_flowers", recipes.ingredient(ItemTags.SMALL_FLOWERS), 100);
+        waterCrucible(writer, "small_flowers", recipes.ingredient(BlockItemTags.SMALL_FLOWERS.item()), 100);
         waterCrucible(writer, "tall_flowers", recipes.ingredient(TALL_FLOWERS), 200);
         waterCrucible(writer, "mushrooms", recipes.ingredient(Tags.Items.MUSHROOMS), 100);
         waterCrucible(writer, "lily_pad", ingredient(Items.LILY_PAD), 150);
@@ -659,7 +660,7 @@ public class Recipes {
         // plants
         barrelCompost(writer, "saplings", recipes.ingredient(ItemTags.SAPLINGS), 125);
         barrelCompost(writer, "leaves", recipes.ingredient(ItemTags.LEAVES), 125);
-        barrelCompost(writer, "small_flowers", recipes.ingredient(ItemTags.SMALL_FLOWERS), 100);
+        barrelCompost(writer, "small_flowers", recipes.ingredient(BlockItemTags.SMALL_FLOWERS.item()), 100);
         barrelCompost(writer, "tall_flowers", recipes.ingredient(TALL_FLOWERS), 150);
         barrelCompost(writer, "mushrooms", recipes.ingredient(Tags.Items.MUSHROOMS), 100);
         barrelCompost(writer, "lily_pad", ingredient(Items.LILY_PAD), 100);

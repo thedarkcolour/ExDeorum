@@ -6,7 +6,6 @@
     }
   ],
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "key": {
     "m": "biomesoplenty:mahogany_slab",
     "s": "biomesoplenty:mahogany_planks"

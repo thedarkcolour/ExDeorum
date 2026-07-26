@@ -689,7 +689,7 @@ class SieveRecipes {
             drops.add(Items.GOLD_NUGGET, binomial(4, 0.2f));
             drops.add(Items.MAGMA_CREAM, chance(0.08f));
             drops.add(Items.GUNPOWDER, chance(0.07f));
-            drops.add(Items.BLACK_DYE, chance(0.07f));
+            drops.add(Items.DYE.black(), chance(0.07f));
         });
         forMesh(writer, compressedVariants, CRUSHED_BLACKSTONE, EItems.FLINT_MESH, drops -> {
             drops.add(EItems.BLACKSTONE_PEBBLE.get(), binomial(4, 0.65f));
@@ -698,7 +698,7 @@ class SieveRecipes {
             drops.add(Items.GOLD_NUGGET, binomial(4, 0.225f));
             drops.add(Items.MAGMA_CREAM, chance(0.09f));
             drops.add(Items.GUNPOWDER, chance(0.09f));
-            drops.add(Items.BLACK_DYE, chance(0.08f));
+            drops.add(Items.DYE.black(), chance(0.08f));
         });
         forMesh(writer, compressedVariants, CRUSHED_BLACKSTONE, EItems.IRON_MESH, drops -> {
             drops.add(EItems.BLACKSTONE_PEBBLE.get(), binomial(5, 0.65f));
@@ -707,7 +707,7 @@ class SieveRecipes {
             drops.add(Items.GOLD_NUGGET, binomial(4, 0.25f));
             drops.add(Items.MAGMA_CREAM, chance(0.09f));
             drops.add(Items.GUNPOWDER, chance(0.09f));
-            drops.add(Items.BLACK_DYE, chance(0.08f));
+            drops.add(Items.DYE.black(), chance(0.08f));
         });
         forMesh(writer, compressedVariants, CRUSHED_BLACKSTONE, EItems.GOLDEN_MESH, drops -> {
             drops.add(EItems.BLACKSTONE_PEBBLE.get(), binomial(5, 0.7f));
@@ -716,7 +716,7 @@ class SieveRecipes {
             drops.add(Items.GOLD_NUGGET, binomial(8, 0.325f));
             drops.add(Items.MAGMA_CREAM, chance(0.1f));
             drops.add(Items.GUNPOWDER, chance(0.1f));
-            drops.add(Items.BLACK_DYE, chance(0.06f));
+            drops.add(Items.DYE.black(), chance(0.06f));
         });
         forMesh(writer, compressedVariants, CRUSHED_BLACKSTONE, EItems.DIAMOND_MESH, drops -> {
             drops.add(EItems.BLACKSTONE_PEBBLE.get(), binomial(5, 0.7f));

@@ -6,7 +6,6 @@
     }
   ],
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "key": {
     "m": "biomesoplenty:hellbark_slab",
     "s": "biomesoplenty:hellbark_planks"

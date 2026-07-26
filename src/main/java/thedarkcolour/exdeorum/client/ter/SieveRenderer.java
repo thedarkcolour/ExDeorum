@@ -105,7 +105,7 @@ public class SieveRenderer<T extends EBlockEntity & SieveLogic.Owner> implements
         }
 
         if (state.meshSprite != null) {
-            collector.submitCustomGeometry(stack, Sheets.cutoutBlockSheet(), (pose, buffer) ->
+            collector.submitCustomGeometry(stack, Sheets.cutoutBlockItemSheet(), (pose, buffer) ->
                 RenderUtil.renderFlatSprite(buffer, pose, this.meshHeight, 0xff, 0xff, 0xff, state.meshSprite, state.lightCoords, 1f)
             );
             if (state.meshHasFoil) {

@@ -6,7 +6,6 @@
     }
   ],
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "key": {
     "m": "biomesoplenty:fir_slab",
     "s": "biomesoplenty:fir_planks"

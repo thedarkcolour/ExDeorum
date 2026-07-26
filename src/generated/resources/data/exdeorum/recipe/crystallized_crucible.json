@@ -6,7 +6,6 @@
     }
   ],
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "key": {
     "m": "blue_skies:crystallized_slab",
     "s": "blue_skies:crystallized_log"

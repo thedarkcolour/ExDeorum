@@ -6,7 +6,6 @@
     }
   ],
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "key": {
     "m": "blue_skies:maple_slab",
     "s": "blue_skies:maple_planks"
