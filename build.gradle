@@ -3,7 +3,7 @@ plugins {
     id 'idea'
     id 'net.neoforged.moddev' version '2.0.142'
     id("com.modrinth.minotaur") version '2.+'
-    id("com.matthewprenger.cursegradle") version '1.4.0'
+    id('net.darkhax.curseforgegradle') version '1.3.33'
 }
 
 version = '5.0'
@@ -178,25 +178,24 @@ idea {
     }
 }
 
-if (System.getenv("CURSEFORGE_TOKEN")) {
-    curseforge {
-        apiKey = System.getenv("CURSEFORGE_TOKEN")
+if (System.getenv('CURSEFORGE_TOKEN')) {
+    tasks.register('curseforge', net.darkhax.curseforgegradle.TaskPublishCurseForge) {
+        apiKey = System.getenv('CURSEFORGE_TOKEN')
 
-        project {
-            id = "901420"
-            changelogType = "markdown"
+        def projectId = '901420'
+
+        upload(projectId, jar).with({
+            displayName = "Ex Deorum ${project.version}"
+
+            releaseType = 'release'
             changelog = getChangelog(project.version)
-
-            releaseType = "release"
+            changelogType = 'markdown'
 
             addGameVersion(mc_version)
-            addGameVersion("NeoForge")
-            addGameVersion("Java 25")
-
-            mainArtifact(jar.archiveFile) {
-                displayName = "Ex Deorum ${project.version}"
-            }
-        }
+            addModLoader('NeoForge')
+            addJavaVersion('Java 25')
+            addEnvironment('Client', 'Server')
+        })
     }
 }
 
