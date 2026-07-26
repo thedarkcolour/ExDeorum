@@ -1,3 +1,8 @@
+## Ex Deorum 5.0
+- Updated to NeoForge 26.2
+- Added more Barrel Compost and Water Crucible recipes for new plants
+- Updated bundled compost colors for Vanilla Minecraft items
+
 ## Ex Deorum 4.0
 - Added Pale Oak Crucible, Sieve, Compressed Sieve, and Barrel
 - Added Creaking Core to turn Pale Oak Log into Creaking Heart

@@ -1,8 +1,8 @@
-name: Release for 26.1.2
+name: Release for 26.2.0
 
 on:
   push:
-    branches: [ '26.1.2' ]
+    branches: [ '26.2.0' ]
   workflow_dispatch:
 
 jobs:
