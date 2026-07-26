@@ -180,7 +180,7 @@ idea {
 
 if (System.getenv('CURSEFORGE_TOKEN')) {
     tasks.register('curseforge', net.darkhax.curseforgegradle.TaskPublishCurseForge) {
-        apiKey = System.getenv('CURSEFORGE_TOKEN')
+        apiToken = System.getenv('CURSEFORGE_TOKEN')
 
         def projectId = '901420'
 
