@@ -1,5 +1,8 @@
 {
   "type": "exdeorum:barrel_compost",
-  "ingredient": "minecraft:moss_block",
+  "ingredient": [
+    "minecraft:moss_block",
+    "minecraft:pale_moss_block"
+  ],
   "volume": 150
 }

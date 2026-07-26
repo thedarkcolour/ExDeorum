@@ -1,5 +1,5 @@
 {
   "type": "exdeorum:barrel_compost",
-  "ingredient": "#minecraft:eggs",
+  "ingredient": "minecraft:pale_hanging_moss",
   "volume": 100
 }

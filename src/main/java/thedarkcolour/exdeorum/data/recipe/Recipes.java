@@ -88,7 +88,8 @@ import static thedarkcolour.modkit.data.MKRecipeProvider.*;
 
 public class Recipes {
     private static final Ingredient SPORES_AND_SEEDS = ingredient(EItems.GRASS_SEEDS, EItems.MYCELIUM_SPORES, EItems.WARPED_NYLIUM_SPORES, EItems.CRIMSON_NYLIUM_SPORES);
-    private static final TagKey<Item> TALL_FLOWERS = ItemTags.create(Identifier.withDefaultNamespace("tall_flowers"));
+    // Vanilla removed "minecraft:tall_flowers", the c tag is its replacement
+    private static final TagKey<Item> TALL_FLOWERS = Tags.Items.FLOWERS_TALL;
 
     public static void addRecipes(RecipeOutput writer, MKRecipeProvider recipes) {
         craftingRecipes(writer, recipes);
@@ -534,7 +535,11 @@ public class Recipes {
         waterCrucible(writer, "vine", ingredient(Items.VINE), 100);
         waterCrucible(writer, "seeds_and_spores", SPORES_AND_SEEDS, 50);
         waterCrucible(writer, "seeds", recipes.ingredient(Tags.Items.SEEDS), 50);
-        waterCrucible(writer, "grass", ingredient(Items.SHORT_GRASS, Items.TALL_GRASS), 100);
+        waterCrucible(writer, "grass", ingredient(Items.SHORT_GRASS, Items.TALL_GRASS, Items.DRY_SHORT_GRASS, Items.DRY_TALL_GRASS), 100);
+        waterCrucible(writer, "bush", ingredient(Items.BUSH, Items.FIREFLY_BUSH), 100);
+        waterCrucible(writer, "leaf_litter", ingredient(Items.LEAF_LITTER), 100);
+        waterCrucible(writer, "wildflowers", ingredient(Items.WILDFLOWERS), 100);
+        waterCrucible(writer, "cactus_flower", ingredient(Items.CACTUS_FLOWER), 100);
         waterCrucible(writer, "grass_block", ingredient(Items.GRASS_BLOCK), 150);
         waterCrucible(writer, "sweet_berries", ingredient(Items.SWEET_BERRIES, Items.GLOW_BERRIES), 50);
         waterCrucible(writer, "melon_slice", ingredient(Items.MELON_SLICE), 50);
@@ -547,8 +552,9 @@ public class Recipes {
         waterCrucible(writer, "melon", ingredient(Items.MELON), 250);
         waterCrucible(writer, "seagrass", ingredient(Items.SEAGRASS), 100);
         waterCrucible(writer, "sea_pickle", ingredient(Items.SEA_PICKLE), 200);
-        waterCrucible(writer, "moss", ingredient(Items.MOSS_BLOCK), 150);
-        waterCrucible(writer, "moss_carpet", ingredient(Items.MOSS_CARPET), 100);
+        waterCrucible(writer, "moss", ingredient(Items.MOSS_BLOCK, Items.PALE_MOSS_BLOCK), 150);
+        waterCrucible(writer, "moss_carpet", ingredient(Items.MOSS_CARPET, Items.PALE_MOSS_CARPET), 100);
+        waterCrucible(writer, "hanging_moss", ingredient(Items.PALE_HANGING_MOSS), 100);
         waterCrucible(writer, "spore_blossom", ingredient(Items.SPORE_BLOSSOM), 150);
     }
 
@@ -666,8 +672,12 @@ public class Recipes {
         barrelCompost(writer, "lily_pad", ingredient(Items.LILY_PAD), 100);
         barrelCompost(writer, "sugar_cane", ingredient(Items.SUGAR_CANE), 80);
         barrelCompost(writer, "vine", ingredient(Items.VINE), 100);
-        barrelCompost(writer, "grass", ingredient(Items.SHORT_GRASS, Items.FERN), 100);
-        barrelCompost(writer, "tall_grass", ingredient(Items.TALL_GRASS, Items.LARGE_FERN), 150);
+        barrelCompost(writer, "grass", ingredient(Items.SHORT_GRASS, Items.FERN, Items.DRY_SHORT_GRASS), 100);
+        barrelCompost(writer, "tall_grass", ingredient(Items.TALL_GRASS, Items.LARGE_FERN, Items.DRY_TALL_GRASS), 150);
+        barrelCompost(writer, "bush", ingredient(Items.BUSH, Items.FIREFLY_BUSH), 100);
+        barrelCompost(writer, "leaf_litter", ingredient(Items.LEAF_LITTER), 100);
+        barrelCompost(writer, "wildflowers", ingredient(Items.WILDFLOWERS), 100);
+        barrelCompost(writer, "cactus_flower", ingredient(Items.CACTUS_FLOWER), 100);
         barrelCompost(writer, "seagrass", ingredient(Items.SEAGRASS), 80);
         barrelCompost(writer, "nether_wart", ingredient(Items.NETHER_WART), 100);
         barrelCompost(writer, "seeds", recipes.ingredient(Tags.Items.SEEDS), 80);
@@ -679,8 +689,9 @@ public class Recipes {
         barrelCompost(writer, "carrots", ingredient(Items.CARROT), 100);
         barrelCompost(writer, "potatoes", ingredient(Items.POTATO, Items.BAKED_POTATO, Items.POISONOUS_POTATO), 80);
         barrelCompost(writer, "beetroot", ingredient(Items.BEETROOT), 80);
-        barrelCompost(writer, "moss_block", ingredient(Items.MOSS_BLOCK), 150);
-        barrelCompost(writer, "moss_carpet", ingredient(Items.MOSS_CARPET), 100);
+        barrelCompost(writer, "moss_block", ingredient(Items.MOSS_BLOCK, Items.PALE_MOSS_BLOCK), 150);
+        barrelCompost(writer, "moss_carpet", ingredient(Items.MOSS_CARPET, Items.PALE_MOSS_CARPET), 100);
+        barrelCompost(writer, "hanging_moss", ingredient(Items.PALE_HANGING_MOSS), 100);
         barrelCompost(writer, "spores_and_seeds", SPORES_AND_SEEDS, 80);
         barrelCompost(writer, "bamboo", ingredient(Items.BAMBOO), 100);
         barrelCompost(writer, "cactus", ingredient(Items.CACTUS), 125);
@@ -710,7 +721,7 @@ public class Recipes {
         barrelCompost(writer, "cod", ingredient(Items.COD, Items.COOKED_COD), 100);
         barrelCompost(writer, "tropical_fish", ingredient(Items.TROPICAL_FISH), 80);
         barrelCompost(writer, "pufferfish", ingredient(Items.PUFFERFISH), 80);
-        barrelCompost(writer, "egg", ingredient(Items.EGG), 100);
+        barrelCompost(writer, "egg", recipes.ingredient(ItemTags.EGGS), 100);
         // foods
         barrelCompost(writer, "melon_slice", ingredient(Items.MELON_SLICE), 40);
         barrelCompost(writer, "silk_worms", ingredient(EItems.SILKWORM.get(), EItems.COOKED_SILKWORM.get()), 40);
@@ -725,7 +736,7 @@ public class Recipes {
 
         // lol
         barrelCompost(writer, "golden_apples", ingredient(Items.GOLDEN_APPLE, Items.ENCHANTED_GOLDEN_APPLE), 1000);
-        barrelCompost(writer, "golden_carrot", ingredient(Items.GOLDEN_CARROT, Items.GOLDEN_CARROT), 500);
+        barrelCompost(writer, "golden_carrot", ingredient(Items.GOLDEN_CARROT), 500);
     }
 
     private static void barrelCompost(RecipeOutput writer, String id, Ingredient ingredient, int volume) {

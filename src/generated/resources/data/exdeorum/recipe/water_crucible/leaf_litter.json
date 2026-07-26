@@ -4,8 +4,5 @@
     "amount": 100,
     "id": "minecraft:water"
   },
-  "ingredient": [
-    "minecraft:moss_carpet",
-    "minecraft:pale_moss_carpet"
-  ]
+  "ingredient": "minecraft:leaf_litter"
 }

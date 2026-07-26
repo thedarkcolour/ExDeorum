@@ -5,7 +5,7 @@
     "id": "minecraft:water"
   },
   "ingredient": [
-    "minecraft:moss_carpet",
-    "minecraft:pale_moss_carpet"
+    "minecraft:bush",
+    "minecraft:firefly_bush"
   ]
 }

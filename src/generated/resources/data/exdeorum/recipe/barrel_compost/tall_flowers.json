@@ -1,5 +1,5 @@
 {
   "type": "exdeorum:barrel_compost",
-  "ingredient": "#minecraft:tall_flowers",
+  "ingredient": "#c:flowers/tall",
   "volume": 150
 }
