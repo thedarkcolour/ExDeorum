@@ -18,26 +18,23 @@
 
 package thedarkcolour.exdeorum.event;
 
-import net.minecraft.util.Util;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.features.TreeFeatures;
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
-import net.minecraft.util.Unit;
+import net.minecraft.util.Util;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.ItemLike;
-import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.XoroshiroRandomSource;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
@@ -49,7 +46,6 @@ import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.event.lifecycle.InterModEnqueueEvent;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
-import net.neoforged.neoforge.client.event.ClientChatEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.event.OnDatapackSyncEvent;
@@ -64,9 +60,6 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import thedarkcolour.exdeorum.ExDeorum;
-import thedarkcolour.exdeorum.blockentity.AbstractCrucibleBlockEntity;
-import thedarkcolour.exdeorum.blockentity.AbstractMachineBlockEntity;
-import thedarkcolour.exdeorum.blockentity.BarrelBlockEntity;
 import thedarkcolour.exdeorum.blockentity.helper.ItemHelper;
 import thedarkcolour.exdeorum.client.CompostColors;
 import thedarkcolour.exdeorum.compat.ModIds;
@@ -107,10 +100,6 @@ public final class EventHandler {
         fmlBus.addListener(EventHandler::serverShutdown);
         fmlBus.addListener(EventHandler::serverTick);
         modBus.addListener(EventHandler::registerCapabilities);
-
-        if (ExDeorum.DEBUG) {
-            fmlBus.addListener(EventHandler::handleDebugCommands);
-        }
     }
 
     private static void serverShutdown(ServerStoppingEvent event) {
@@ -132,23 +121,6 @@ public final class EventHandler {
     private static void onDataPackSync(OnDatapackSyncEvent event) {
         // sync all recipes
         event.sendRecipes(ERecipeTypes.RECIPE_TYPES.getEntries().stream().map(DeferredHolder::get).toArray(RecipeType[]::new));
-    }
-
-    private static void handleDebugCommands(ClientChatEvent event) {
-        if (event.getMessage().equals(".compost_colors")) {
-            event.setCanceled(true);
-
-            CompostColors.debugCompute();
-            CompostColors.export(ModIds.MINECRAFT);
-
-            CompostColors.loadColors();
-            var player = Minecraft.getInstance().player;
-            if (player != null) {
-                player.sendSystemMessage(Component.literal("Reloaded " + CompostColors.COLORS.size() + " compost colors!"));
-            }
-        } else if (event.getMessage().equals(".breakpoint")) {
-            event.setCanceled(true);
-        }
     }
 
     private static void createSpawnTree(LevelEvent.CreateSpawnPosition event) {

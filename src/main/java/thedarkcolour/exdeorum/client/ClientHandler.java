@@ -25,6 +25,7 @@ import net.minecraft.client.renderer.block.FluidModel;
 import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.levelgen.presets.WorldPreset;
@@ -40,6 +41,7 @@ import thedarkcolour.exdeorum.asm.ASMHooks;
 import thedarkcolour.exdeorum.client.screen.MechanicalHammerScreen;
 import thedarkcolour.exdeorum.client.screen.MechanicalSieveScreen;
 import thedarkcolour.exdeorum.client.ter.*;
+import thedarkcolour.exdeorum.compat.ModIds;
 import thedarkcolour.exdeorum.config.EConfig;
 import thedarkcolour.exdeorum.fluid.WitchWaterFluid;
 import thedarkcolour.exdeorum.item.WateringCanItem;
@@ -67,6 +69,10 @@ public class ClientHandler {
         fmlBus.addListener(ClientHandler::onPlayerLogout);
         fmlBus.addListener(ClientHandler::onScreenOpen);
         fmlBus.addListener(ClientHandler::onRecipesReceived);
+
+        if (ExDeorum.DEBUG) {
+            fmlBus.addListener(ClientHandler::handleDebugCommands);
+        }
     }
 
     private static void registerClientExtensions(RegisterClientExtensionsEvent event) {
@@ -152,6 +158,23 @@ public class ClientHandler {
         var level = Minecraft.getInstance().level;
         if (level != null) {
             level.clientLevelData.isFlat = true;
+        }
+    }
+
+    public static void handleDebugCommands(ClientChatEvent event) {
+        if (event.getMessage().equals(".compost_colors")) {
+            event.setCanceled(true);
+
+            ClientsideCode.debugCompute();
+            CompostColors.export(ModIds.MINECRAFT);
+
+            CompostColors.loadColors();
+            var player = Minecraft.getInstance().player;
+            if (player != null) {
+                player.sendSystemMessage(Component.literal("Reloaded " + CompostColors.COLORS.size() + " compost colors!"));
+            }
+        } else if (event.getMessage().equals(".breakpoint")) {
+            event.setCanceled(true);
         }
     }
 }

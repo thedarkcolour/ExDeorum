@@ -1,3 +1,6 @@
+## Ex Deorum 5.1
+- Fixed a startup crash on dedicated server from NeoForge's RuntimeDistCleaner (#190)
+
 ## Ex Deorum 5.0
 - Updated to NeoForge 26.2
 - Added more Barrel Compost and Water Crucible recipes for new plants
