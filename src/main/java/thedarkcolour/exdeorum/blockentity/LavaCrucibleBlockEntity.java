@@ -36,7 +36,8 @@ public class LavaCrucibleBlockEntity extends AbstractCrucibleBlockEntity {
 
     @Override
     public int getMeltingRate() {
-        return getRecipeCaches().getHeatRecipe(this.level.getBlockState(getBlockPos().below())).value().heatValue();
+        var recipe = getRecipeCaches().getHeatRecipe(this.level.getBlockState(getBlockPos().below()));
+        return recipe == null ? 0 : recipe.value().heatValue();
     }
 
     @Override

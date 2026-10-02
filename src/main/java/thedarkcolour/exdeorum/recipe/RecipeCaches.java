@@ -90,6 +90,7 @@ public class RecipeCaches {
         return this.barrelCompostRecipeCache != null && this.barrelCompostRecipeCache.getRecipe(stack) != null;
     }
 
+    @Nullable
     public RecipeHolder<CrucibleHeatRecipe> getHeatRecipe(BlockState state) {
         return this.crucibleHeatRecipeCache.getRecipe(state);
     }

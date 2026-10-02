@@ -38,6 +38,7 @@ public class CrucibleHeatRecipeCache {
         this.recipeManager = recipeManager;
     }
 
+    @Nullable
     public RecipeHolder<CrucibleHeatRecipe> getRecipe(BlockState state) {
         if (this.recipes == null) {
             buildRecipes();
