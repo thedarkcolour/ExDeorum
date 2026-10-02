@@ -43,8 +43,8 @@ public class ERecipeTypes {
     public static final DeferredHolder<RecipeType<?>, RecipeType<BarrelFluidMixingRecipe>> BARREL_FLUID_MIXING = RECIPE_TYPES.register("barrel_fluid_mixing", () -> RecipeType.simple(ERecipeTypes.BARREL_FLUID_MIXING.getId()));
     public static final DeferredHolder<RecipeType<?>, RecipeType<FluidTransformationRecipe>> BARREL_FLUID_TRANSFORMATION = RECIPE_TYPES.register("barrel_fluid_transformation", () -> RecipeType.simple(ERecipeTypes.BARREL_FLUID_TRANSFORMATION.getId()));
 
-    public static final DeferredHolder<RecipeType<?>, RecipeType<CrucibleRecipe>> LAVA_CRUCIBLE = RECIPE_TYPES.register("lava_crucible", () -> RecipeType.simple(ERecipeTypes.LAVA_CRUCIBLE.getId()));
-    public static final DeferredHolder<RecipeType<?>, RecipeType<CrucibleRecipe>> WATER_CRUCIBLE = RECIPE_TYPES.register("water_crucible", () -> RecipeType.simple(ERecipeTypes.WATER_CRUCIBLE.getId()));
+    public static final DeferredHolder<RecipeType<?>, RecipeType<CrucibleRecipe.Lava>> LAVA_CRUCIBLE = RECIPE_TYPES.register("lava_crucible", () -> RecipeType.simple(ERecipeTypes.LAVA_CRUCIBLE.getId()));
+    public static final DeferredHolder<RecipeType<?>, RecipeType<CrucibleRecipe.Water>> WATER_CRUCIBLE = RECIPE_TYPES.register("water_crucible", () -> RecipeType.simple(ERecipeTypes.WATER_CRUCIBLE.getId()));
 
     public static final DeferredHolder<RecipeType<?>, RecipeType<HammerRecipe>> HAMMER = RECIPE_TYPES.register("hammer", () -> RecipeType.simple(ERecipeTypes.HAMMER.getId()));
     public static final DeferredHolder<RecipeType<?>, RecipeType<CompressedHammerRecipe>> COMPRESSED_HAMMER = RECIPE_TYPES.register("compressed_hammer", () -> RecipeType.simple(ERecipeTypes.COMPRESSED_HAMMER.getId()));

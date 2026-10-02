@@ -31,15 +31,16 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 public class SingleIngredientRecipeCache<T extends SingleIngredientRecipe> {
     private final Supplier<RecipeType<T>> recipeType;
     private RecipeManager recipeManager;
     @Nullable
-    private Map<Item, T> simpleRecipes;
+    private Map<Item, RecipeHolder<T>> simpleRecipes;
     @Nullable
-    private List<T> complexRecipes;
+    private List<RecipeHolder<T>> complexRecipes;
     @Nullable
     private Collection<RecipeHolder<T>> allRecipes;
     private boolean trackAllRecipes;
@@ -55,12 +56,12 @@ public class SingleIngredientRecipeCache<T extends SingleIngredientRecipe> {
     }
 
     @Nullable
-    public T getRecipe(Item item) {
+    public RecipeHolder<T> getRecipe(Item item) {
         return getRecipe(new ItemStack(item));
     }
 
     @Nullable
-    public T getRecipe(ItemStack item) {
+    public RecipeHolder<T> getRecipe(ItemStack item) {
         if (this.simpleRecipes == null) {
             buildRecipes();
         }
@@ -70,7 +71,7 @@ public class SingleIngredientRecipeCache<T extends SingleIngredientRecipe> {
         // if there are complex recipes, test each one
         if (recipe == null && this.complexRecipes != null) {
             for (var complexRecipe : this.complexRecipes) {
-                if (complexRecipe.ingredient().test(item)) {
+                if (complexRecipe.value().ingredient().test(item)) {
                     return complexRecipe;
                 }
             }
@@ -86,7 +87,7 @@ public class SingleIngredientRecipeCache<T extends SingleIngredientRecipe> {
         if (this.simpleRecipes == null) {
             buildRecipes();
         }
-        return this.allRecipes;
+        return Objects.requireNonNull(this.allRecipes);
     }
 
     /**
@@ -99,7 +100,7 @@ public class SingleIngredientRecipeCache<T extends SingleIngredientRecipe> {
      */
     private void buildRecipes() {
         this.simpleRecipes = new HashMap<>();
-        var complexRecipes = ImmutableList.<T>builder();
+        var complexRecipes = ImmutableList.<RecipeHolder<T>>builder();
 
         var allRecipes = this.recipeManager.byType(this.recipeType.get());
 
@@ -109,10 +110,10 @@ public class SingleIngredientRecipeCache<T extends SingleIngredientRecipe> {
 
             if (ingredient.isSimple()) {
                 for (var item : ingredient.getItems()) {
-                    this.simpleRecipes.put(item.getItem(), recipe);
+                    this.simpleRecipes.put(item.getItem(), holder);
                 }
             } else {
-                complexRecipes.add(recipe);
+                complexRecipes.add(holder);
             }
         }
 

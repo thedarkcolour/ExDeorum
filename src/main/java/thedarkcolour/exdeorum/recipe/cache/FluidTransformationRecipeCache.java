@@ -18,6 +18,7 @@
 
 package thedarkcolour.exdeorum.recipe.cache;
 
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
@@ -31,14 +32,14 @@ import java.util.Map;
 public class FluidTransformationRecipeCache {
     private RecipeManager recipeManager;
     @Nullable
-    private Map<BlockState, Map<Fluid, FluidTransformationRecipe>> recipes;
+    private Map<BlockState, Map<Fluid, RecipeHolder<FluidTransformationRecipe>>> recipes;
 
     public FluidTransformationRecipeCache(RecipeManager manager) {
         this.recipeManager = manager;
     }
 
     @Nullable
-    public FluidTransformationRecipe getRecipe(Fluid baseFluid, BlockState catalystState) {
+    public RecipeHolder<FluidTransformationRecipe> getRecipe(Fluid baseFluid, BlockState catalystState) {
         if (this.recipes == null) {
             buildRecipes();
         }
@@ -56,12 +57,12 @@ public class FluidTransformationRecipeCache {
             var recipe = holder.value();
             recipe.catalyst().possibleStates().forEach(state -> {
                 for (var stack : recipe.baseFluid().getStacks()) {
-                    this.recipes.computeIfAbsent(state, key -> new HashMap<>()).put(stack.getFluid(), recipe);
+                    this.recipes.computeIfAbsent(state, key -> new HashMap<>()).put(stack.getFluid(), holder);
                 }
             });
         }
 
-        var dedupe = new HashMap<Map<Fluid, FluidTransformationRecipe>, Map<Fluid, FluidTransformationRecipe>>();
+        var dedupe = new HashMap<Map<Fluid, RecipeHolder<FluidTransformationRecipe>>, Map<Fluid, RecipeHolder<FluidTransformationRecipe>>>();
         for (var entry : this.recipes.entrySet()) {
             entry.setValue(dedupe.computeIfAbsent(entry.getValue(), Map::copyOf));
         }

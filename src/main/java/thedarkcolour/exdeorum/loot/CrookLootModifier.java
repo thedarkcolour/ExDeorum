@@ -26,6 +26,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -58,7 +59,8 @@ public class CrookLootModifier extends LootModifier {
                 var fortune = stack.getEnchantmentLevel(context.getLevel().holderLookup(Registries.ENCHANTMENT).getOrThrow(Enchantments.FORTUNE));
                 var rolls = Math.max(1, Mth.ceil(fortune / 3f));
 
-                for (CrookRecipe recipe : RecipeUtil.getCaches(context.getLevel()).getCrookRecipes(state)) {
+                for (RecipeHolder<CrookRecipe> holder : RecipeUtil.getCaches(context.getLevel()).getCrookRecipes(state)) {
+                    var recipe = holder.value();
                     for (int i = 0; i < rolls; i++) {
                         if (rand.nextFloat() < recipe.chance()) {
                             generatedLoot.add(recipe.result().copy());

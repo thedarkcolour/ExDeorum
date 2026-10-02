@@ -18,6 +18,7 @@
 
 package thedarkcolour.exdeorum.recipe.cache;
 
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.material.Fluid;
 import org.jetbrains.annotations.Nullable;
@@ -31,14 +32,14 @@ import java.util.Map;
 public class BarrelFluidMixingRecipeCache {
     private RecipeManager recipeManager;
     @Nullable
-    private Map<Fluid, Map<Fluid, BarrelFluidMixingRecipe>> recipes;
+    private Map<Fluid, Map<Fluid, RecipeHolder<BarrelFluidMixingRecipe>>> recipes;
 
     public BarrelFluidMixingRecipeCache(RecipeManager recipeManager) {
         this.recipeManager = recipeManager;
     }
 
     @Nullable
-    public BarrelFluidMixingRecipe getRecipe(Fluid baseFluid, Fluid additive) {
+    public RecipeHolder<BarrelFluidMixingRecipe> getRecipe(Fluid baseFluid, Fluid additive) {
         if (this.recipes == null) {
             buildRecipes();
         }
@@ -58,7 +59,7 @@ public class BarrelFluidMixingRecipeCache {
                 var map = this.recipes.computeIfAbsent(baseStack.getFluid(), key -> new HashMap<>());
 
                 for (var additiveStack : recipe.additiveFluid().getStacks()) {
-                    map.put(additiveStack.getFluid(), recipe);
+                    map.put(additiveStack.getFluid(), holder);
                 }
             }
         }

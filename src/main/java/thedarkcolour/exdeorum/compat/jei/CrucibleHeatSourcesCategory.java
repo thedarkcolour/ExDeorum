@@ -35,8 +35,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.compat.ClientXeiUtil;
 import thedarkcolour.exdeorum.data.TranslationKeys;
 import thedarkcolour.exdeorum.material.DefaultMaterials;
@@ -104,6 +106,11 @@ class CrucibleHeatSourcesCategory implements IRecipeCategory<CrucibleHeatSourceR
         graphics.drawString(font, volumeLabel, 60 - font.width(volumeLabel) / 2, 5, 0xff808080, false);
 
         ClientXeiUtil.renderBlock(graphics, recipe.blockState(), 60, 24, 10, 20F);
+    }
+
+    @Override
+    public @Nullable ResourceLocation getRegistryName(CrucibleHeatSourceRecipe recipe) {
+        return recipe.recipeHolder().id();
     }
 
     @Override

@@ -36,6 +36,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BucketPickup;
@@ -84,7 +85,7 @@ public class BarrelBlockEntity extends ETankBlockEntity {
     public final boolean transparent;
     // Current transformation recipe
     @Nullable
-    public FluidTransformationRecipe currentTransformRecipe = null;
+    public RecipeHolder<FluidTransformationRecipe> currentTransformRecipe = null;
 
     public BarrelBlockEntity(BlockPos pos, BlockState state) {
         super(EBlockEntities.BARREL.get(), pos, state);
@@ -266,11 +267,12 @@ public class BarrelBlockEntity extends ETankBlockEntity {
                 var itemFluidCap = playerItem.getCapability(Capabilities.FluidHandler.ITEM);
                 if (itemFluidCap != null) {
                     var itemFluid = itemFluidCap.drain(1000, IFluidHandler.FluidAction.SIMULATE);
-                    BarrelFluidMixingRecipe recipe = getRecipeCaches().getFluidMixingRecipe(this.tank.getFluid(), itemFluid.getFluid());
+                    var holder = getRecipeCaches().getFluidMixingRecipe(this.tank.getFluid(), itemFluid.getFluid());
 
                     // If draining item fluid was possible and tank has enough fluid to mix...
-                    if (recipe != null && this.tank.getFluidAmount() >= recipe.baseFluid().amount() && itemFluid.getAmount() == 1000) {
+                    if (holder != null && this.tank.getFluidAmount() >= holder.value().baseFluid().amount() && itemFluid.getAmount() == 1000) {
                         if (!level.isClientSide) {
+                            var recipe = holder.value();
                             this.tank.drain(recipe.baseFluid().amount(), IFluidHandler.FluidAction.EXECUTE);
                             setItem(recipe.result().copy());
 
@@ -370,9 +372,10 @@ public class BarrelBlockEntity extends ETankBlockEntity {
             return false;
         }
 
-        var recipe = getRecipeCaches().getBarrelMixingRecipe(this.level.getRecipeManager(), playerItem, this.tank.getFluid());
+        var holder = getRecipeCaches().getBarrelMixingRecipe(this.level.getRecipeManager(), playerItem, this.tank.getFluid());
 
-        if (recipe != null) {
+        if (holder != null) {
+            var recipe = holder.value();
             if (!simulate) {
                 // Empty barrel
                 this.tank.drain(recipe.fluid.amount(), IFluidHandler.FluidAction.EXECUTE);
@@ -391,9 +394,9 @@ public class BarrelBlockEntity extends ETankBlockEntity {
         if (simulate) {
             return getRecipeCaches().isCompostable(stack);
         } else {
-            var recipe = getRecipeCaches().getBarrelCompostRecipe(stack);
-            if (recipe != null) {
-                addCompost(stack, recipe.getVolume());
+            var holder = getRecipeCaches().getBarrelCompostRecipe(stack);
+            if (holder != null) {
+                addCompost(stack, holder.value().getVolume());
                 return true;
             } else {
                 return false;
@@ -437,9 +440,10 @@ public class BarrelBlockEntity extends ETankBlockEntity {
                 var aboveFluid = aboveFluidState.getType();
 
                 if (aboveFluid != Fluids.EMPTY) {
-                    BarrelFluidMixingRecipe recipe = getRecipeCaches().getFluidMixingRecipe(this.tank.getFluid(), aboveFluid instanceof FlowingFluid flowing ? flowing.getSource() : aboveFluid);
+                    var holder = getRecipeCaches().getFluidMixingRecipe(this.tank.getFluid(), aboveFluid instanceof FlowingFluid flowing ? flowing.getSource() : aboveFluid);
 
-                    if (recipe != null) {
+                    if (holder != null) {
+                        var recipe = holder.value();
                         // If additive is not consumed, just craft
                         // If additive is consumed, check that the additive can be consumed before crafting
                         if (!recipe.consumesAdditive()) {
@@ -467,7 +471,7 @@ public class BarrelBlockEntity extends ETankBlockEntity {
                 this.currentTransformRecipe = getRecipeCaches().getFluidTransformationRecipe(this.tank.getFluid().getFluid(), belowState);
 
                 if (this.currentTransformRecipe != null) {
-                    var color = this.currentTransformRecipe.resultColor();
+                    var color = this.currentTransformRecipe.value().resultColor();
                     this.r = (short) ((color >> 16) & 0xff);
                     this.g = (short) ((color >> 8) & 0xff);
                     this.b = (short) ((color) & 0xff);
@@ -501,7 +505,7 @@ public class BarrelBlockEntity extends ETankBlockEntity {
                     }
                     barrel.markUpdated();
                 } else if (barrel.currentTransformRecipe != null) {
-                    var recipe = barrel.currentTransformRecipe;
+                    var recipe = barrel.currentTransformRecipe.value();
                     var catalysts = 0;
 
                     for (var cursor : BlockPos.betweenClosed(pos.getX() - 1, pos.getY() - 1, pos.getZ() - 1, pos.getX() + 1, pos.getY() - 1, pos.getZ() + 1)) {
@@ -528,7 +532,7 @@ public class BarrelBlockEntity extends ETankBlockEntity {
                     if (catalysts == 0) {
                         barrel.currentTransformRecipe = null;
                     } else {
-                        barrel.progress += catalysts * (1.0f / barrel.currentTransformRecipe.duration());
+                        barrel.progress += catalysts * (1.0f / barrel.currentTransformRecipe.value().duration());
 
                         if (barrel.progress >= 1.0f - Mth.EPSILON) {
                             // Reset progress

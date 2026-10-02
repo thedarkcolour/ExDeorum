@@ -28,6 +28,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -122,13 +123,13 @@ public class MechanicalHammerBlockEntity extends AbstractMachineBlockEntity<Mech
     }
 
     @Nullable
-    private HammerRecipe canFitResultIntoOutput(ItemStack input) {
+    private RecipeHolder<HammerRecipe> canFitResultIntoOutput(ItemStack input) {
         var output = this.inventory.getStackInSlot(OUTPUT_SLOT);
 
         if (output.isEmpty() || output.getCount() < output.getMaxStackSize()) {
             var recipe = getRecipeCaches().getHammerRecipe(input.getItem());
 
-            if (recipe != null && (output.isEmpty() || ItemStack.isSameItemSameComponents(recipe.result, output))) {
+            if (recipe != null && (output.isEmpty() || ItemStack.isSameItemSameComponents(recipe.value().result, output))) {
                 return recipe;
             }
         }
@@ -149,13 +150,13 @@ public class MechanicalHammerBlockEntity extends AbstractMachineBlockEntity<Mech
                 if (recipe != null) {
                     @SuppressWarnings("DataFlowIssue")
                     LootContext ctx = RecipeUtil.emptyLootContext((ServerLevel) this.level);
-                    var resultCount = recipe.resultAmount.getInt(ctx);
+                    var resultCount = recipe.value().resultAmount.getInt(ctx);
                     if (!input.is(EItemTags.HAMMER_FORTUNE_BLACKLIST)) {
                         resultCount += HammerLootModifier.calculateFortuneBonus(this.level.registryAccess(), this.inventory.getStackInSlot(HAMMER_SLOT), ctx.getRandom(), resultCount == 0);
                     }
                     var output = this.inventory.getStackInSlot(OUTPUT_SLOT);
                     if (output.isEmpty()) {
-                        this.inventory.setStackInSlot(OUTPUT_SLOT, recipe.result.copyWithCount(resultCount));
+                        this.inventory.setStackInSlot(OUTPUT_SLOT, recipe.value().result.copyWithCount(resultCount));
                     } else {
                         output.setCount(Math.min(output.getMaxStackSize(), resultCount + output.getCount()));
                     }

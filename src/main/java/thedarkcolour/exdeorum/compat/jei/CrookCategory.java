@@ -36,8 +36,10 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.Nullable;
 import thedarkcolour.exdeorum.compat.ClientXeiUtil;
 import thedarkcolour.exdeorum.data.TranslationKeys;
 import thedarkcolour.exdeorum.registry.EItems;
@@ -96,6 +98,11 @@ public class CrookCategory implements IRecipeCategory<CrookJeiRecipe> {
         builder.addSlot(RecipeIngredientRole.OUTPUT, 80, 18).addItemStack(recipe.result).addRichTooltipCallback((recipeSlotView, tooltip) -> {
             tooltip.add(ClientXeiUtil.formatChance(recipe.chance));
         });
+    }
+
+    @Override
+    public @Nullable ResourceLocation getRegistryName(CrookJeiRecipe recipe) {
+        return recipe.identifier;
     }
 
     @Override

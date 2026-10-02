@@ -19,11 +19,13 @@
 package thedarkcolour.exdeorum.compat.jei;
 
 import mezz.jei.api.ingredients.IIngredientType;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
+import thedarkcolour.exdeorum.recipe.crucible.CrucibleHeatRecipe;
 
 final class CrucibleHeatSourceRecipe {
-    private final int meltRate;
+    private final RecipeHolder<CrucibleHeatRecipe> recipeHolder;
     private final BlockState blockState;
     @Nullable
     private final IIngredientType<Object> ingredientType;
@@ -31,15 +33,19 @@ final class CrucibleHeatSourceRecipe {
     private final Object ingredient;
 
     @SuppressWarnings({"rawtypes", "unchecked"})
-    CrucibleHeatSourceRecipe(int meltRate, BlockState blockState, @Nullable IIngredientType ingredientType, @Nullable Object ingredient) {
-        this.meltRate = meltRate;
+    CrucibleHeatSourceRecipe(RecipeHolder<CrucibleHeatRecipe> recipeHolder, BlockState blockState, @Nullable IIngredientType ingredientType, @Nullable Object ingredient) {
+        this.recipeHolder = recipeHolder;
         this.blockState = blockState;
         this.ingredientType = ingredientType;
         this.ingredient = ingredient;
     }
 
+    public RecipeHolder<CrucibleHeatRecipe> recipeHolder() {
+        return this.recipeHolder;
+    }
+
     public int meltRate() {
-        return this.meltRate;
+        return this.recipeHolder.value().heatValue();
     }
 
     public BlockState blockState() {

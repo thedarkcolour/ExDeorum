@@ -29,11 +29,12 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import thedarkcolour.exdeorum.compat.ClientXeiUtil;
 import thedarkcolour.exdeorum.data.TranslationKeys;
 import thedarkcolour.exdeorum.recipe.barrel.BarrelCompostRecipe;
 
-class BarrelCompostCategory implements IRecipeCategory<BarrelCompostRecipe> {
+class BarrelCompostCategory implements IRecipeCategory<RecipeHolder<BarrelCompostRecipe>> {
     public static final int WIDTH = 120;
     public static final int HEIGHT = 18;
 
@@ -50,7 +51,7 @@ class BarrelCompostCategory implements IRecipeCategory<BarrelCompostRecipe> {
     }
 
     @Override
-    public RecipeType<BarrelCompostRecipe> getRecipeType() {
+    public RecipeType<RecipeHolder<BarrelCompostRecipe>> getRecipeType() {
         return ExDeorumJeiPlugin.BARREL_COMPOST;
     }
 
@@ -70,15 +71,15 @@ class BarrelCompostCategory implements IRecipeCategory<BarrelCompostRecipe> {
     }
 
     @Override
-    public void setRecipe(IRecipeLayoutBuilder builder, BarrelCompostRecipe recipe, IFocusGroup focuses) {
-        builder.addSlot(RecipeIngredientRole.INPUT, 1, 1).addIngredients(recipe.ingredient());
+    public void setRecipe(IRecipeLayoutBuilder builder, RecipeHolder<BarrelCompostRecipe> holder, IFocusGroup focuses) {
+        builder.addSlot(RecipeIngredientRole.INPUT, 1, 1).addIngredients(holder.value().ingredient());
     }
 
     @Override
-    public void draw(BarrelCompostRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
+    public void draw(RecipeHolder<BarrelCompostRecipe> holder, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
         this.slot.draw(graphics);
 
-        var volume = recipe.getVolume();
+        var volume = holder.value().getVolume();
         var volumeLabel = Component.translatable(TranslationKeys.BARREL_COMPOST_RECIPE_VOLUME, volume);
 
         graphics.drawString(Minecraft.getInstance().font, volumeLabel, 24, 5, 0xff808080, false);

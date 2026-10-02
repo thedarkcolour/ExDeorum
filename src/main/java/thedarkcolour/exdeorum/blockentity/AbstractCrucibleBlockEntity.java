@@ -31,6 +31,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -186,7 +187,7 @@ public abstract class AbstractCrucibleBlockEntity extends ETankBlockEntity {
 
     // Gets a crucible recipe, using the cache if possible
     @Nullable
-    protected abstract CrucibleRecipe getRecipe(ItemStack item);
+    protected abstract RecipeHolder<? extends CrucibleRecipe> getRecipe(ItemStack item);
 
     /**
      * Tries to melt the specified item into the crucible.
@@ -206,7 +207,7 @@ public abstract class AbstractCrucibleBlockEntity extends ETankBlockEntity {
         if (this.level != null && this.level.isClientSide) {
             return true;
         }
-        var result = recipe.getResult();
+        var result = recipe.value().getResult();
         var contained = this.tank.getFluid();
         var hadPendingSolids = this.solids > 0;
         shrinkAction.accept(item);
@@ -240,7 +241,7 @@ public abstract class AbstractCrucibleBlockEntity extends ETankBlockEntity {
         var recipe = getRecipe(item);
 
         if (recipe != null) {
-            var result = recipe.getResult();
+            var result = recipe.value().getResult();
             var contained = this.tank.getFluid();
 
             if (FluidStack.isSameFluidSameComponents(result, contained) || (contained.isEmpty() && canAddToPendingFluid(result))) {

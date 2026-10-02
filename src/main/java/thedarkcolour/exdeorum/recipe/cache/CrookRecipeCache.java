@@ -18,6 +18,7 @@
 
 package thedarkcolour.exdeorum.recipe.cache;
 
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
@@ -29,13 +30,13 @@ import java.util.*;
 public class CrookRecipeCache {
     private RecipeManager recipeManager;
     @Nullable
-    private Map<BlockState, List<CrookRecipe>> recipes;
+    private Map<BlockState, List<RecipeHolder<CrookRecipe>>> recipes;
 
     public CrookRecipeCache(RecipeManager recipeManager) {
         this.recipeManager = recipeManager;
     }
 
-    public List<CrookRecipe> getRecipes(BlockState state) {
+    public List<RecipeHolder<CrookRecipe>> getRecipes(BlockState state) {
         if (this.recipes == null) {
             buildRecipes();
         }
@@ -46,15 +47,15 @@ public class CrookRecipeCache {
         this.recipes = new HashMap<>();
 
         // state -> set of possible recipes
-        var tempRecipes = new HashMap<BlockState, HashSet<CrookRecipe>>();
+        var tempRecipes = new HashMap<BlockState, HashSet<RecipeHolder<CrookRecipe>>>();
 
         for (var recipe : this.recipeManager.byType(ERecipeTypes.CROOK.get())) {
             recipe.value().blockPredicate().possibleStates().forEach(state -> {
-                tempRecipes.computeIfAbsent(state, key -> new HashSet<>()).add(recipe.value());
+                tempRecipes.computeIfAbsent(state, key -> new HashSet<>()).add(recipe);
             });
         }
         // map equal sets to a single list object instead of using a bunch of duplicate sets
-        var dedupeMap = new HashMap<HashSet<CrookRecipe>, List<CrookRecipe>>();
+        var dedupeMap = new HashMap<HashSet<RecipeHolder<CrookRecipe>>, List<RecipeHolder<CrookRecipe>>>();
 
         for (var entry : tempRecipes.entrySet()) {
             this.recipes.put(entry.getKey(), dedupeMap.computeIfAbsent(entry.getValue(), List::copyOf));
